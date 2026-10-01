@@ -78,7 +78,7 @@ def make_engine(home, seed=3, ratings=True):
                   ratings=Ratings(home / "home" / "ratings.json") if ratings else None)
 
 
-def run_tui(story, engine, script, size=(120, 40)):
+def run_tui(story, engine, script, size=(200, 50)):
     """Start the app on a story, run `script(app, pilot)`, and return what it returns."""
     from storywheel.tui import StorywheelApp
 

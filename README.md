@@ -20,6 +20,7 @@ install it editable instead: `pipx install --editable .`
     storywheel              start a new story (a full-screen app)
     storywheel --plain      the same, with a simple prompt instead of the app
     storywheel list         list your stories
+    storywheel show [N]     print a story as plain text
     storywheel resume [N]   pick up where you left off (N from list; default newest)
     storywheel export N --out ~/vault/Stories     copy a story's markdown somewhere
     storywheel sample western "fairy tale" -n 10   print sample stories for a genre mix
@@ -27,27 +28,44 @@ install it editable instead: `pipx install --editable .`
     storywheel universe     show what you've saved to your universe
     storywheel universe rm KEY N   remove an entry, e.g.  universe rm spine 1
 
+`list`, `show`, `export` and `sample` take `--json` (one JSON document on stdout, nothing
+else) so another program, such as a Neovim plugin, can drive the engine. Each story has
+`id`, `title`, `genre`, `mood`, `structure`, `kept` (every kept step's fields), `text`
+(plain text), `markdown`, `path`, `step`/`steps`/`done` and `resume`. `storywheel show 1
+--json`, `storywheel sample western -n 3 --seed 1 --json` and `storywheel list --json` are
+the three shapes; a seeded `sample` is repeatable. `show` exits 1 with `{"error": ...}`
+when there is no such story.
+
 ### The app
 
-    +-------------+-----------------------------------------------------------+
-    | Steps       |  the current candidate (arrow keys select a field)        |
-    |  v Genre    |    name    Wade Hollis                                    |
-    |  v Structure|    job     drover                    <- selected          |
-    |  > Title    |    want    a silver claim despite the sheriff             |
-    |  . Protag.  +-----------------------------------------------------------+
-    |  . Setting  |  History: every roll, and what changed between them       |
-    |  . ...      |    #1  Wade Hollis · 34 · a drover ...                    |
-    +-------------+  > #2  job: wheelwright                                   |
-                  +-----------------------------------------------------------+
-     space Roll  k Keep  q Quit  ? Help  f Field  e Edit  w Write  +/- Rate ...
+It is meant for a full-screen desktop terminal (it needs room for three columns).
 
-The steps on the left are marked kept (v), skipped (-), current (>) or still to do
-(.); press Enter on one to jump there. The card shows the current candidate; up and
-down select a field. The history lists every roll of the step and what changed in
-each; Tab moves between the three lists, and Enter on a history row picks that one.
-Select a field and press `h` and the history becomes **that field's own history**,
-so you can bring an old value back without losing the rest (`h` again returns to
-every roll).
+    +--------------+--------------------------+----------------------+
+    | Steps        |  card: the candidate     | The story so far     |
+    |  ✓ Genre     |    name  Wade Hollis ▲▼  |  ● Spine was built   |
+    |  ● Spine     |    job   drover      ▲▼  |    on a stand-in ... |
+    |  ▶ Premise   |  [Roll][Keep][Back]...   |                      |
+    | Universe     +--------------------------+  THE LANTERN OF ...  |
+    |  ▶ Setting   |  History: every roll     |  PROTAGONIST         |
+    | Past stories |   #1 ... #2 job: ...     |    Name  Wade ...    |
+    +--------------+--------------------------+----------------------+
+     space Roll  k Keep  q Quit  ? Help  f Field  e Edit  ...  c Copy story
+
+**Left:** the steps, your universe, and your past stories. **Middle:** the card and its
+history. **Right:** the story so far, kept content only, as plain text, with problems
+listed at the top.
+
+Step markers: `✓` kept, `–` skipped, `▶` current, `·` still to do, **yellow `●`**
+kept but built on a stand-in or on something that has since changed, **red `✗`** it
+refers to something that no longer exists (say the protagonist was skipped after the
+body was kept). Click a flagged step, or press Enter on it, to go there; the right
+column says what is wrong.
+
+The card shows the current candidate; up and down select a field. The history lists
+every roll of the step and what changed in each; Tab moves between the lists, and Enter
+on a history row picks that one. Select a field and press `h` and the history becomes
+**that field's own history**, so you can bring an old value back without losing the rest
+(`h` again returns to every roll).
 
     space / enter   roll again          k      keep it and move on
     f               reroll the field    e      edit the field in place
@@ -55,8 +73,21 @@ every roll).
     + / -           like / dislike      u / U  save to / remove from your universe
     h               history             m      the mix editor
     v               universe panel      enter  reroll the selected field
+    c               copy the story so far to the clipboard, as plain text
     b               go back a step      x      skip this step
-    q               save and quit       ?      help
+    q               quit (asks)         ?      help
+
+**Past stories** (bottom left): Enter opens one (the story you leave is saved), `d`
+deletes one after asking, `p` / `s` send its protagonist / setting to your universe.
+Buttons do the same.
+
+**Quitting:** `q` asks "Keep this story or delete it?". Keep saves it; after the app
+closes it prints the story as plain text, then the markdown path and the command to
+resume it. Delete removes the story and its markdown file (your universe is untouched).
+
+**Clipboard:** `c` copies the story so far, as plain text, with `wl-copy`, `xclip`,
+`xsel`, `pbcopy` or `clip.exe` (whichever the machine has), else through the terminal's
+own clipboard escape (OSC 52).
 
 You go through the steps in order: genre & mood, structure, title, protagonist,
 setting, premise, story body, twist. Things carry forward. The title's motif (the

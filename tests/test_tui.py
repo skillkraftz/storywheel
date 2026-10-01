@@ -52,7 +52,8 @@ def test_the_sidebar_marks_kept_skipped_current_and_pending(home):
         await press(pilot, "k")             # keep title
         return screen_text(app)
     text = run_tui(new_story(), make_engine(home), script)
-    assert "✓ 1 Genre & mood" in text and "– 2 Structure" in text and "✓ 3 Title" in text
+    assert "✓ 1 Genre & mood" in text and "– 2 Structure" in text
+    assert "✓ 3 Title" in text or "● 3 Title" in text           # (● if the title invented a stand-in name)
     assert "▶ 4 Protagonist" in text and "· 5 Setting" in text
 
 
@@ -445,6 +446,8 @@ def test_q_saves_and_quits_with_a_resume_hint(home):
         await press(pilot, "k", "k")
         await pilot.press("q")
         await pilot.pause()
+        await pilot.press("k")                      # "Keep this story or delete it?" -> keep
+        await pilot.pause()
         return app.return_value
     message = run_tui(story, make_engine(home), script)
     assert f"storywheel resume {story['id']}" in message
@@ -477,12 +480,14 @@ def test_resuming_a_story_starts_on_the_step_it_stopped_at(home):
         await press(pilot, "k", "k", "k")
         await pilot.press("q")
         await pilot.pause()
+        await pilot.press("k")                      # "Keep this story or delete it?" -> keep
+        await pilot.pause()
     run_tui(story, make_engine(home), first)
     again = store.load(story["id"])
     async def second(app, pilot):
         return app.session.step.key, screen_text(app)
     step, text = run_tui(again, make_engine(home, seed=9), second)
-    assert step == "protagonist" and "✓ 3 Title" in text
+    assert step == "protagonist" and ("✓ 3 Title" in text or "● 3 Title" in text)
 
 
 # --- the launcher ------------------------------------------------------------------------------------------------------------------------------
@@ -550,11 +555,13 @@ def test_in_a_real_terminal_the_app_starts_and_q_saves_and_quits(home):
     os.write(fd, b"k")
     drain(1.0)
     os.write(fd, b"q")
+    drain(1.0)
+    os.write(fd, b"k")
     drain(3.0)
     _, status = os.waitpid(pid, 0)
     text = out.decode("utf-8", "replace")
     assert os.WEXITSTATUS(status) == 0
-    assert "Genre" in text and "Saved. Resume with:  storywheel resume" in text
+    assert "Genre" in text and "Resume with:  storywheel resume" in text
     assert list((home / "h" / "stories").glob("*.json"))
 
 
@@ -577,7 +584,7 @@ def test_the_card_names_stand_ins_and_offers_update_when_they_go_stale(home):
         banner = " ".join(screen_text(app).split())
         await pilot.click("#ban-update"); await pilot.pause()
         return notice, stand_in, banner, s.is_stale(), " ".join(s.fields.values())
-    notice, stand_in, banner, stale, text = run_tui(new_story(), make_engine(home), script, size=(140, 45))
+    notice, stand_in, banner, stale, text = run_tui(new_story(), make_engine(home), script, size=(200, 50))
     assert "Jumped ahead" in notice and "stand-ins" in notice
     assert f"Built for {stand_in}; your protagonist is now Stacie Anderson" in banner
     assert "Update" in banner and "Reroll" in banner and "Ignore" in banner and "Keep as is" not in banner

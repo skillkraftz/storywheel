@@ -20,7 +20,7 @@ STORIES = HOME / "stories"
 UNIVERSE = HOME / "universe.json"
 
 HISTORY_LIMIT = 40
-SECTION_BREAK = '\n\n---\n<div style="page-break-after: always;"></div>\n\n'
+SECTION_BREAK = '\n\n---\n\n'
 
 
 # --- stories ------------------------------------------------------------------------
@@ -177,6 +177,71 @@ def to_markdown(story):
                      for kind, t in story["threads"].items()]
             sections.append("## Threads\n\n" + "\n".join(lines))
     return SECTION_BREAK.join(sections) + "\n"
+
+def to_plain(story, width=72):
+    """The story so far as readable plain text: only what is kept, no markup."""
+    import textwrap
+    kept = story["kept"]
+    if not kept:
+        return ""
+    shape = structures.get((kept.get("structure") or {}).get("structure"))
+    genre = kept.get("genre", {})
+    motif = kept.get("title", {}).get("motif")
+    out = []
+    if kept.get("title"):
+        out.append(title_of(story).upper())
+    line = " · ".join(x for x in (genre.get("genre"), genre.get("mood"),
+                                  shape.label if kept.get("structure") else None) if x)
+    if line:
+        out.append(line)
+    if motif:
+        out.append(f"Motif: {motif}")
+    blocks = ["\n".join(out)] if out else []
+
+    def wrap(text, indent="  "):
+        return textwrap.fill(text, width, initial_indent=indent, subsequent_indent=indent)
+
+    for step in steps_for(story):
+        fields = public(kept.get(step.key))
+        if not fields or step.key in ("genre", "title", "structure"):
+            continue
+        heading = (shape.label if step.key == "spine" else step.label).upper()
+        if step.key == "spine":
+            labels = {b.key: b.label for b in shape.beats}
+            body = "\n\n".join(wrap((f"{labels[f]}. " if shape.show_labels else "") + fields[f])
+                                for f in step.fields if f in fields)
+        elif step.single:
+            body = wrap(next(iter(fields.values())))
+        else:
+            pad = max(len(k) for k in fields)
+            body = "\n".join(textwrap.fill(v, width, initial_indent=f"  {k.replace('_', ' ').capitalize():<{pad}}  ",
+                                           subsequent_indent=" " * (pad + 4)) for k, v in fields.items())
+        blocks.append(f"{heading}\n{body}")
+    return "\n\n".join(blocks)
+
+def delete(story):
+    """Remove a story: its JSON and its markdown file. (Your universe is untouched.)"""
+    (STORIES / f"{story['id']}.json").unlink(missing_ok=True)
+    old = story.get("md_path")
+    if old:
+        Path(old).unlink(missing_ok=True)
+
+def story_json(story, path=None):
+    """Everything an outside program needs about a story, as plain data."""
+    kept = story["kept"]
+    shape = structures.get((kept.get("structure") or {}).get("structure"))
+    genre = kept.get("genre", {})
+    return {"id": story.get("id"), "title": title_of(story), "created": story.get("created"),
+            "step": story.get("step", 0), "steps": len(steps_for(story)),
+            "done": story.get("step", 0) >= len(steps_for(story)),
+            "genre": genre.get("genre"), "mood": genre.get("mood"),
+            "structure": shape.label if kept.get("structure") else None,
+            "motif": (kept.get("title") or {}).get("motif"),
+            "kept": {k: public(v) for k, v in kept.items()},
+            "threads": story.get("threads", {}),
+            "text": to_plain(story), "markdown": to_markdown(story) if kept else "",
+            "path": str(path) if path else story.get("md_path"),
+            "resume": f"storywheel resume {story['id']}" if story.get("id") else None}
 
 def export(story, out_dir=None):
     out = Path(out_dir) if out_dir else OUT

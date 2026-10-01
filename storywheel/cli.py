@@ -4,12 +4,14 @@ storywheel - roll a story one piece at a time.
     storywheel              start a new story (a full-screen app; --plain for a prompt)
     storywheel list         list your stories
     storywheel resume [N]   pick up a story (number from list, or newest)
+    storywheel show [N]     print a story as plain text   (--json on list, show, export, sample)
     storywheel export N     write a story's markdown somewhere else (--out DIR)
     storywheel universe     show what you've saved to your universe
     storywheel sample G...  print sample stories for a genre mix (-n 10, --seed 1, --structure three-act)
     storywheel report       the worst-rated lines and the frames that produced them
 """
 import argparse
+import json
 import os
 import re
 import shlex
@@ -321,8 +323,16 @@ def run(story, plain=False):
 def cmd_new(args):
     run(store.new_story(), plain=getattr(args, "plain", False))
 
+def emit(data):
+    """Machine-readable output: one JSON document on stdout, nothing else."""
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+
+
 def cmd_list(args):
     stories = store.all_stories()
+    if getattr(args, "json", False):
+        emit([dict(store.story_json(s), number=n) for n, s in enumerate(stories, 1)])
+        return
     if not stories:
         print("  No stories yet. Run  storywheel  to start one.")
         return
@@ -346,7 +356,24 @@ def cmd_export(args):
     if not story:
         print("  Couldn't find that story. Try  storywheel list")
         return
-    print(f"  Wrote {store.export(story, args.out)}")
+    path = store.export(story, args.out)
+    if getattr(args, "json", False):
+        emit(store.story_json(story, path))
+        return
+    print(f"  Wrote {path}")
+
+def cmd_show(args):
+    story = store.find(args.target)
+    if not story:
+        if getattr(args, "json", False):
+            emit({"error": "no such story", "target": args.target})
+        else:
+            print("  Couldn't find that story. Try  storywheel list")
+        raise SystemExit(1)
+    if getattr(args, "json", False):
+        emit(store.story_json(story))
+    else:
+        print(store.to_plain(story) or "  (nothing kept in that story yet)")
 
 def cmd_universe(args):
     if args.action == "rm":
@@ -372,10 +399,22 @@ def cmd_universe(args):
     print(dim(f"  Or edit {store.UNIVERSE} by hand."))
 
 def cmd_sample(args):
-    from .sample import sample
+    from .sample import build_story, sample
     if args.structure and not structures.find(args.structure):
         names = ", ".join(s.name for s in structures.registry().values())
         sys.exit(f"  No structure called '{args.structure}'. Choose one of: {names}")
+    if getattr(args, "json", False):
+        engine = Engine(seed=args.seed, user_dir=paths.HOME)
+        unknown = [g for g in args.genres if g.lower() not in engine.library.profiles]
+        if unknown:
+            print(f"(No profile for {', '.join(unknown)}: treated as a plain tag.)", file=sys.stderr)
+        stories = []
+        for _ in range(args.n):
+            story = build_story(engine, [g.lower() for g in args.genres], structure=args.structure)
+            story["id"], story["created"] = None, story["created"][:10]     # (a sample is not saved)
+            stories.append(store.story_json(story))
+        emit(stories)
+        return
     sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n, structure=args.structure)
 
 def cmd_report(args):
@@ -389,16 +428,22 @@ def main(argv=None):
                                      parents=[plain_parent])
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("new", parents=[plain_parent], help="start a new story (the default)")
-    sub.add_parser("list", help="list your stories")
+    p = sub.add_parser("list", help="list your stories")
+    p.add_argument("--json", action="store_true", help="print the stories as JSON")
     p = sub.add_parser("resume", parents=[plain_parent], help="pick up a story")
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
     p = sub.add_parser("export", help="write a story's markdown somewhere else")
     p.add_argument("target", help="number from 'list' or a story id")
     p.add_argument("--out", help="folder to write into (e.g. your Obsidian vault)")
+    p.add_argument("--json", action="store_true", help="print the story (with its markdown path) as JSON")
+    p = sub.add_parser("show", help="print a story as plain text (or JSON)")
+    p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
+    p.add_argument("--json", action="store_true", help="print the story as JSON")
     p = sub.add_parser("sample", help="print sample stories for a genre mix (nothing is saved)")
     p.add_argument("genres", nargs="+", help='e.g.  western "fairy tale"')
     p.add_argument("-n", type=int, default=5, help="how many stories (default 5)")
     p.add_argument("--seed", type=int, help="make the run repeatable")
+    p.add_argument("--json", action="store_true", help="print the stories as a JSON list")
     p.add_argument("--structure", help="force a story structure (story-spine, three-act, kishotenketsu); "
                                        "by default each story gets one at random")
     p = sub.add_parser("universe", help="show your universe, or: universe rm KEY NUMBER")
@@ -407,7 +452,7 @@ def main(argv=None):
     p = sub.add_parser("report", help="the worst-rated lines and the frames that produced them")
     p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
     args = parser.parse_args(argv)
-    {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "universe": cmd_universe,
+    {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "show": cmd_show, "universe": cmd_universe,
      "sample": cmd_sample, "report": cmd_report}.get(args.command, cmd_new)(args)
 
 

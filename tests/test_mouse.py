@@ -275,7 +275,7 @@ def test_the_help_screen_explains_the_mouse_and_shift_drag(home):
     async def script(app, pilot):
         await press(pilot, "question_mark")
         return " ".join(screen_text(app).split())
-    text = run_tui(new_story(), make_engine(home), script, size=(120, 60))
+    text = run_tui(new_story(), make_engine(home), script, size=(200, 120))
     assert "Shift" in text and "drag" in text and "right-click" in text and "scroll" in text and "Universe panel" in text
 
 

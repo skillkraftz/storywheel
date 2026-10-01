@@ -389,6 +389,38 @@ class Session:
         if count:
             self.note(f"Swapped the kept {self.steps[i].label.lower()} into {count} line(s) built on a stand-in.")
 
+    def step_problems(self, i):
+        """[(severity, message)] for a KEPT step: 'changed' when it was built on a stand-in or on a
+        value that has since changed, 'broken' when it refers to something that is no longer kept."""
+        step = self.steps[i]
+        if not self.story["kept"].get(step.key):
+            return []
+        out = []
+        for key, inp in self.story.get("inputs", {}).get(step.key, {}).items():
+            now = self.current_value(key)
+            owner = next((st.label for st in self.steps if st.key == inp["step"]), inp["step"]).lower()
+            if now is None and inp["standin"]:
+                out.append(("changed", f"{step.label} was built on a stand-in {owner} ({inp['value']}). "
+                                       f"Keep your {owner} to replace it."))
+            elif now is None:
+                out.append(("broken", f"{step.label} refers to {inp['value']}, but there is no longer a kept {owner}."))
+            elif now != inp["value"]:
+                out.append(("changed", f"{step.label} was built for {inp['value']}; your {owner} is now {now}."))
+        return out
+
+    def flag(self, i):
+        """None, 'changed' (yellow) or 'broken' (red), for the step list."""
+        problems = self.step_problems(i)
+        if any(sev == "broken" for sev, _m in problems):
+            return "broken"
+        return "changed" if problems else None
+
+    def issues(self):
+        """Every problem message across the kept steps, broken ones first."""
+        found = [(sev, m) for i in range(len(self.steps)) for sev, m in self.step_problems(i)]
+        found.sort(key=lambda p: p[0] != "broken")
+        return found
+
     def stale_tag(self, n):
         return " (stale)" if self.is_stale(n) else ""
 

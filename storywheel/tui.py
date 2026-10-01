@@ -26,13 +26,14 @@ from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
 
-from . import store, structures
+from . import clipboard, store, structures
 from . import threads as T
 from .session import Session
-from .steps import public
+from .steps import public, steps_for
 
 BOOST_LADDER = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0]
-MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("▶", "bold cyan"), "pending": ("·", "dim")}
+MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("▶", "bold cyan"), "pending": ("·", "dim"),
+         "changed": ("●", "bold yellow"), "broken": ("✗", "bold red")}
 
 HELP = """\
 [b]Keys[/b]
@@ -48,11 +49,13 @@ HELP = """\
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
   [b]v[/b]       the universe panel (see below)
+  [b]c[/b]       copy the story so far to the clipboard (plain text)
+  [b]i[/b]       ignore a stale warning
   [b]a[/b]       update a stale candidate (see below)
   [b]m[/b]       mix editor: what this story favors
   [b]b[/b]       go back a step
   [b]x[/b]       skip this step
-  [b]q[/b]       save and quit
+  [b]q[/b]       quit: keep this story or delete it
   [b]?[/b]       this help
 
 [b]Moving around[/b]
@@ -83,6 +86,16 @@ HELP = """\
 
   To select text with the mouse while this app has it,
   hold [b]Shift[/b] and drag (some terminals: Alt, or Option on a Mac).
+
+[b]Markers on the steps[/b]
+
+  ✓ kept   – skipped   ▶ current   · to do
+  [b]yellow ●[/b]  kept, but built on a stand-in or on something that changed
+  [b]red ✗[/b]     refers to something that no longer exists
+  The right-hand column says what is wrong. Click the step to go there.
+
+[b]Past stories[/b] (bottom left): enter opens one, d deletes it (asks first),
+  p / s send its protagonist / setting to your universe.
 
 [b]Universe panel[/b] (bottom left; press v)
 
@@ -329,6 +342,46 @@ def _quiet(button):
     return button
 
 
+class QuitScreen(ModalScreen):
+    """On the way out: keep this story or delete it."""
+    BINDINGS = [Binding("k,enter", "choose('keep')", "Keep"), Binding("d", "choose('delete')", "Delete"),
+                Binding("escape,c", "choose(None)", "Cancel")]
+    DEFAULT_CSS = """
+    QuitScreen { align: center middle; }
+    QuitScreen > Vertical { width: 64; height: auto; border: round $accent; background: $surface; padding: 1 2; }
+    QuitScreen Horizontal { height: 1; margin-top: 1; }
+    QuitScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    """
+
+    def __init__(self, title):
+        super().__init__()
+        self.title_text = title
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(f"Keep this story or delete it?\n\n{self.title_text}", markup=False)
+            with Horizontal():
+                yield _quiet(Button("Keep (k)", id="keep", variant="success"))
+                yield _quiet(Button("Delete (d)", id="delete", variant="error"))
+                yield _quiet(Button("Cancel (esc)", id="cancel"))
+
+    def on_button_pressed(self, event):
+        self.dismiss(None if event.button.id == "cancel" else event.button.id)
+
+    def action_choose(self, what):
+        self.dismiss(what)
+
+
+class StoryList(OptionList):
+    """Past stories: Enter opens one; d deletes (asks first); p / s send its protagonist / setting
+    to your universe."""
+    BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "+Protagonist"),
+                Binding("s", "act('setting')", "+Setting")]
+
+    def action_act(self, what):
+        self.screen.story_act(what)
+
+
 class UniverseTree(Tree):
     """Your saved entries by kind. Enter on a kind opens or closes it; on an entry, previews it."""
     BINDINGS = [Binding("n", "new", "New"), Binding("t", "mode", "No/mix/only"),
@@ -516,6 +569,7 @@ class MainScreen(Screen):
         Binding("h", "history", "Hist"),
         Binding("m", "mix", "Mix"),
         Binding("v", "focus_universe", "Universe"),
+        Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
         Binding("b", "back", "Back"),
@@ -527,7 +581,15 @@ class MainScreen(Screen):
     ]
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
-    MainScreen #left { width: 30; border: round $primary-darken-2; }
+    MainScreen #left { width: 42; border: round $primary-darken-2; }
+    MainScreen #right { width: 48; border: round $primary-darken-2; }
+    MainScreen #sofar-box { height: 1fr; }
+    MainScreen #issues { padding: 0 1; height: auto; }
+    MainScreen #sofar { padding: 0 1; height: auto; }
+    MainScreen #stories-title { margin-top: 1; }
+    MainScreen #stories { height: 1fr; }
+    MainScreen #story-buttons { height: 1; }
+    MainScreen #story-buttons Button { height: 1; border: none; min-width: 4; padding: 0 1; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
     MainScreen #uni-title { margin-top: 1; }
     MainScreen #uni-buttons { height: 1; }
@@ -569,6 +631,13 @@ class MainScreen(Screen):
                     yield _quiet(Button("Use: no  ", id="uni-mode"))
                     yield _quiet(Button("+ New", id="uni-new"))
                 yield UniverseTree("Universe", id="universe")
+                yield Static("Past stories", id="stories-title", classes="title", markup=False)
+                with Horizontal(id="story-buttons"):
+                    yield _quiet(Button("Open", id="st-open"))
+                    yield _quiet(Button("Delete", id="st-delete"))
+                    yield _quiet(Button("+Prot", id="st-protagonist"))
+                    yield _quiet(Button("+Place", id="st-setting"))
+                yield StoryList(id="stories")
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
                     yield Static("", id="hint", markup=False)
@@ -587,6 +656,11 @@ class MainScreen(Screen):
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
                     yield OptionList(id="history")
+            with Vertical(id="right"):
+                yield Static("The story so far", classes="title", markup=False)
+                with VerticalScroll(id="sofar-box"):
+                    yield Static("", id="issues", markup=False)
+                    yield Static("", id="sofar", markup=False)
         yield Static("", id="status", markup=False)
         yield Footer()
 
@@ -638,6 +712,8 @@ class MainScreen(Screen):
             self.refresh_card()
             self.refresh_history()
             self.refresh_universe()
+            self.refresh_stories()
+            self.refresh_sofar()
         finally:
             self._busy = False
         notes = self.session.take_notes()
@@ -653,13 +729,110 @@ class MainScreen(Screen):
         lst.clear_options()
         rows = []
         for n, step in enumerate(s.steps):
-            mark, style = MARKS[s.marker(n)]
+            state = s.marker(n)
+            if state == "kept":
+                state = s.flag(n) or state
+            mark, style = MARKS[state]
             t = Text()
             t.append(f"{mark} ", style=style)
             t.append(f"{n + 1} {step.label}", style="bold" if n == s.i else "")
             rows.append(Option(t, id=str(n)))
         lst.add_options(rows)
         lst.highlighted = s.i
+
+    def refresh_sofar(self):
+        """The right column: problems with kept steps on top, then the kept story as plain text."""
+        s = self.session
+        issues = Text()
+        for severity, message in s.issues():
+            mark, style = MARKS[severity]
+            issues.append(f"{mark} ", style=style)
+            issues.append(message + "\n\n")
+        self.query_one("#issues", Static).update(issues)
+        self.query_one("#issues", Static).display = bool(issues.plain)
+        text = store.to_plain(s.story, width=42)
+        self.query_one("#sofar", Static).update(text or "(nothing kept yet)")
+
+    def refresh_stories(self):
+        s = self.session
+        lst = self.stories_list
+        previous = lst.highlighted
+        lst.clear_options()
+        rows = []
+        for story in store.all_stories():
+            t = Text()
+            here = story["id"] == s.story["id"]
+            t.append("▶ " if here else "  ", style="bold cyan")
+            t.append(f"{store.title_of(story)[:20]:<20}", style="bold" if here else "")
+            done = story["step"] >= len(steps_for(story))
+            t.append(f" {story['created'][5:10]} " + ("done" if done else f"{story['step']}/{len(steps_for(story))}"),
+                     style="dim")
+            rows.append(Option(t, id=story["id"]))
+        if not rows:
+            rows.append(Option(Text("(no saved stories yet)", style="dim"), id="", disabled=True))
+        lst.add_options(rows)
+        if previous is not None:                                  # keep your place in the list
+            lst.highlighted = min(previous, len(rows) - 1)
+
+    @property
+    def stories_list(self):
+        return self.query_one("#stories", OptionList)
+
+    def story_act(self, action):
+        """Open, delete, or send the protagonist / setting of the highlighted past story."""
+        i = self.stories_list.highlighted
+        option = self.stories_list.get_option_at_index(i) if i is not None else None
+        if option is None or not option.id:
+            self.say("Select a story in the Past stories list first.")
+            return
+        try:
+            story = store.load(option.id)
+        except (OSError, ValueError):
+            self.say("Couldn't read that story.")
+            self.refresh_stories()
+            return
+        here = story["id"] == self.session.story["id"]
+        title = store.title_of(story)
+        if action == "open":
+            if here:
+                self.say("That is the story you are in.")
+            else:
+                self.switch_story(store.load(story["id"]))
+        elif action == "delete":
+            if here:
+                self.say("That is the story you are in: quit (q) and choose Delete to remove it.")
+                return
+            self.app.push_screen(ConfirmScreen(f"Delete the story '{title}'?\n\nThis can't be undone "
+                                               "(your universe is not touched)."),
+                                 lambda yes: self._story_deleted(story, yes))
+        else:
+            piece = story["kept"].get(action)
+            if not piece:
+                self.say(f"'{title}' has no kept {action}.")
+                return
+            n, added = store.add_to_universe(action, piece)
+            self.say(f"Sent the {action} of '{title}' to your universe." if added
+                     else f"That {action} is already in your universe.")
+            self.refresh_universe()
+
+    def _story_deleted(self, story, yes):
+        if yes:
+            store.delete(story)
+            self.say(f"Deleted '{store.title_of(story)}'.")
+        self.refresh_stories()
+
+    def switch_story(self, story):
+        """Leave this story (saved) and open another."""
+        old = self.session
+        old.save()
+        session = Session(story, self.app.engine, ratings=self.app.engine.ratings)
+        i = story["step"] if story["step"] < len(session.steps) else 0
+        session.enter(i)
+        self.session = self.app.session = session
+        self.hist_mode = "rolls"
+        self.refresh_all()
+        self.say(f"Opened '{store.title_of(story)}'. The story you left was saved.")
+        self.card.focus()
 
     def refresh_card(self, keep_field=True):
         s = self.session
@@ -856,6 +1029,9 @@ class MainScreen(Screen):
     def on_button_pressed(self, event):
         event.stop()
         name = event.button.id or ""
+        if name.startswith("st-"):
+            self.story_act(name[3:])
+            return
         if name == "uni-mode":
             self.universe_mode()
             return
@@ -915,7 +1091,9 @@ class MainScreen(Screen):
     def on_option_list_option_selected(self, event):
         lst = event.option_list.id
         s = self.session
-        if lst == "card":
+        if lst == "stories":
+            self.story_act("open")
+        elif lst == "card":
             self.action_reroll_field()
         elif lst == "steps":
             s.jump(int(event.option.id))
@@ -1048,9 +1226,30 @@ class MainScreen(Screen):
         self.card.focus()
 
     def action_quit_app(self):
-        path = self.session.save()
-        self.app.exit(f"Saved. Resume with:  storywheel resume {self.session.story['id']}"
-                      + (f"\nMarkdown: {path}" if path else ""))
+        title = store.title_of(self.session.story) if self.session.story["kept"] else "this story"
+        self.app.push_screen(QuitScreen(title), self._quit_chosen)
+
+    def _quit_chosen(self, choice):
+        s = self.session
+        if choice == "keep":
+            path = s.save()
+            parts = [store.to_plain(s.story)]
+            if path:
+                parts.append(f"Markdown: {path}")
+            parts.append(f"Resume with:  storywheel resume {s.story['id']}")
+            self.app.exit("\n\n".join(p for p in parts if p))
+        elif choice == "delete":
+            store.delete(s.story)
+            self.app.exit(f"Deleted '{store.title_of(s.story)}'. Nothing was kept.")
+
+    def action_copy_story(self):
+        text = store.to_plain(self.session.story)
+        if not text:
+            self.say("Nothing is kept yet, so there is nothing to copy.")
+            return
+        how = clipboard.copy(text, self.app)
+        self.say(f"Copied the story so far ({len(text)} characters) via {how}." if how
+                 else "Couldn't reach a clipboard (install wl-clipboard or xclip).")
 
 
 class StorywheelApp(App):
