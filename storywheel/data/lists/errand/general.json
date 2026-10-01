@@ -1,6 +1,0 @@
-{
-  "_note": "Fills {ERRAND} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
-  "slot": "errand",
-  "tags": ["general"],
-  "entries": ["hide {THING}", "deliver {THING} to {landmark}", "lie to the authorities", "keep a secret", "go into business together", "pretend to be married", "testify", "find someone who doesn't want to be found", "look after {THING} for a week", "throw the county fair", "break into {landmark}", "take the blame", "sing at a funeral"]
-}

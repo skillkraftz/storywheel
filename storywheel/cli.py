@@ -6,7 +6,7 @@ storywheel - roll a story one piece at a time.
     storywheel resume [N]   pick up a story (number from list, or newest)
     storywheel export N     write a story's markdown somewhere else (--out DIR)
     storywheel universe     show what you've saved to your universe
-    storywheel sample G...  print sample stories for a genre mix (-n 10, --seed 1)
+    storywheel sample G...  print sample stories for a genre mix (-n 10, --seed 1, --structure three-act)
 """
 import argparse
 import os
@@ -22,7 +22,8 @@ from . import paths, store
 from .engine import Engine
 from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
-from .steps import STEPS, public
+from . import structures
+from .steps import STEPS, public, steps_for
 
 try:
     import readline                      # arrow keys + pre-filled edits on Linux/Mac
@@ -37,11 +38,18 @@ bold, dim, cyan = _style("1"), _style("2"), _style("36")
 _engine = None
 
 def get_engine():
-    """One engine per run: it remembers recent picks so rerolls stay fresh."""
+    """One engine per run. It remembers recent picks, in ~/.storywheel/recent.json, so
+    the same lines don't turn up session after session."""
     global _engine
     if _engine is None:
-        _engine = Engine(user_dir=paths.HOME)
+        _engine = Engine(user_dir=paths.HOME, persist=True)
     return _engine
+
+def _save(story):
+    """Save the story and the memory of recent picks."""
+    path = store.save(story)
+    get_engine().save_memory()
+    return path
 
 UNIVERSE_CHANCE = 0.35       # how often "mix" mode pulls from your universe
 SOURCE_TAGS = {"edited": " (your edit)", "universe": " (from your universe)", "kept": " (kept)"}
@@ -114,10 +122,10 @@ def edit_in_editor(fields):
 
 # --- display -------------------------------------------------------------------------------
 
-def show(step, i, hist, cur):
+def show(step, i, hist, cur, total=len(STEPS)):
     cand = hist[cur]
     fields = public(cand)
-    print("\n" + bold(cyan(f"── {step.label.upper()}  ({i + 1}/{len(STEPS)}) ")) + cyan("─" * 30))
+    print("\n" + bold(cyan(f"── {step.label.upper()}  ({i + 1}/{total}) ")) + cyan("─" * 30))
     print(dim(textwrap.fill(step.hint, 72, initial_indent="  ", subsequent_indent="  ")))
     print(bold(f"\n  #{cur + 1} of {len(hist)}") + dim(SOURCE_TAGS.get(cand.get("_src"), "")))
     if step.single:
@@ -131,6 +139,11 @@ def show(step, i, hist, cur):
                                 subsequent_indent=" " * len(label)))
     opts = "[enter] roll  [k]eep  " + ("" if step.single else "[f]ield  ") + \
            "[e]dit  [w]rite  [p]ick #  [h]istory  [u]/[U]niverse  [b]ack  [x] skip  [q]uit  [?]"
+    if step.key == "structure":
+        found = structures.find(fields["structure"])
+        print(dim("\n  " + textwrap.fill(found.blurb if found else
+                                          "Not one of the known structures; the Story Spine will be used.",
+                                          72, subsequent_indent="  ")))
     if cand.get("_threads"):
         print(dim("\n  threads  " + T.describe(cand["_threads"])))
     print(dim("\n  " + opts))
@@ -218,7 +231,7 @@ def show_field_history(step, hist, cand, field):
 def run_step(story, i):
     """Roll one step until the user keeps, skips, goes back or quits.
     Returns the next step index."""
-    step = STEPS[i]
+    step = steps_for(story)[i]
     hist = story["history"].setdefault(step.key, [])
     kept = story["kept"].get(step.key)
     if kept and (not hist or public(hist[-1]) != public(kept)):
@@ -243,9 +256,18 @@ def run_step(story, i):
         elif cmd == "k":
             old = story["kept"].get(step.key)
             new = public(cand)
+            if step.key == "structure" and structures.find(new["structure"]):
+                new["structure"] = structures.find(new["structure"]).label     # "kishotenketsu" -> "Kishōtenketsu"
             for k, v in cand.get("_made", {}).items():
                 story["seeds"].setdefault(k, v)
             story["kept"][step.key] = new
+            if step.key == "structure" and old and structures.get(old["structure"]) is not structures.get(new["structure"]):
+                for gone in ("spine",):                 # the old body doesn't fit the new shape
+                    story["kept"].pop(gone, None)
+                    story["history"].pop(gone, None)
+                    story["atoms"].pop(gone, None)
+                story["threads"] = {}
+                print(dim("  New structure: the story body will be rolled again when you get to it."))
             if old and old != new:
                 n = substitute(story, i, old, new)
                 if step.threads:
@@ -254,8 +276,9 @@ def run_step(story, i):
                     print(dim(f"  Updated {n} mention(s) in later steps."))
             if step.threads:
                 story["threads"] = cand.get("_threads", {})
+            story["atoms"][step.key] = [a for lst in cand.get("_atoms", {}).values() for a in lst]
             story["step"] = max(story["step"], i + 1)
-            store.save(story)
+            _save(story)
             return i + 1
 
         elif cmd == "f" and not step.single:
@@ -321,15 +344,16 @@ def run_step(story, i):
             if i == 0:
                 print("  This is the first step.")
             else:
-                store.save(story)
+                _save(story)
                 return i - 1
 
         elif cmd == "x":
             story["kept"].pop(step.key, None)
             if step.threads:
                 story["threads"] = {}
+            story["atoms"].pop(step.key, None)
             story["step"] = max(story["step"], i + 1)
-            store.save(story)
+            _save(story)
             return i + 1
 
         elif cmd == "q":
@@ -358,12 +382,12 @@ def run(story):
         while i < len(STEPS):
             i = run_step(story, i)
     except Quit:
-        path = store.save(story)
+        path = _save(story)
         print(f"\n  Saved. Resume with:  storywheel resume {story['id']}")
         if path:
             print(f"  Markdown: {path}")
         return
-    path = store.save(story)
+    path = _save(story)
     print(bold(f"\n  Done: {store.title_of(story)}"))
     if path:
         print(f"  Markdown: {path}")
@@ -436,7 +460,10 @@ def cmd_universe(args):
 
 def cmd_sample(args):
     from .sample import sample
-    sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n)
+    if args.structure and not structures.find(args.structure):
+        names = ", ".join(s.name for s in structures.registry().values())
+        sys.exit(f"  No structure called '{args.structure}'. Choose one of: {names}")
+    sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n, structure=args.structure)
 
 def main():
     parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.")
@@ -452,6 +479,8 @@ def main():
     p.add_argument("genres", nargs="+", help='e.g.  western "fairy tale"')
     p.add_argument("-n", type=int, default=5, help="how many stories (default 5)")
     p.add_argument("--seed", type=int, help="make the run repeatable")
+    p.add_argument("--structure", help="force a story structure (story-spine, three-act, kishotenketsu); "
+                                       "by default each story gets one at random")
     p = sub.add_parser("universe", help="show your universe, or: universe rm KEY NUMBER")
     p.add_argument("action", nargs="?", choices=["rm"])
     p.add_argument("rest", nargs="*")

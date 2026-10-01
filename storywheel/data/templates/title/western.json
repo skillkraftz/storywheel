@@ -1,6 +1,0 @@
-{
-  "_note": "Title templates. Placeholders work as everywhere else; {TITLE_ADJ}/{TITLE_NOUN} draw from the title word lists.",
-  "slot": "title",
-  "tags": ["western", "historical"],
-  "entries": ["The Long Ride to {place}", "Dust and {TITLE_NOUN}", "{last}'s {TITLE_NOUN}", "The Last {TITLE_NOUN} in {place}", "Riders of {place}", "Silver and {TITLE_NOUN}", "{PLACE_ADJ} {TITLE_NOUN}", "The {TITLE_ADJ} {TITLE_NOUN} of {place}", "Three Graves for {first}", "The Day the {TITLE_NOUN} Came to {place}", "Sundown at {place}", "{TITLE_ADJ} {TITLE_NOUN}", "{TITLE_ADJ} {TITLE_NOUN}", "A {TITLE_NOUN} for {first}", "The {TITLE_ADJ} {title_nouns}", "The {job}'s {TITLE_NOUN}"]
-}

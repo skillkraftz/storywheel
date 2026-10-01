@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "act_crisis",
+  "tags": ["general"],
+  "entries": ["The {rival} {ACT_PERSON} {CLOSE}, and {first} lost {LOSS}.", "{first} {ACT_THING} {THING} {MANNER}, and {PRIZE} slipped away.", "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.", "{SOMEONE} {ACT_PERSON} {first} {MANNER}, and {CLOSE} left.", "{DISASTER} took everything; only {THING} remained.", "{first} {ACT_MESSAGE} {MESSAGE} and knew {SOMEONE} had won.", "{the_someone} took {the_thing}, and {first} had nothing left to bargain with.", "{the_disaster} came back {MANNER}, and {CLOSE} paid for {first}'s choices."]
+}

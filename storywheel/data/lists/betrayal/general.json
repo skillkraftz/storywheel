@@ -2,5 +2,5 @@
   "_note": "Fills {BETRAYAL} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "betrayal",
   "tags": ["general"],
-  "entries": ["working for the {rival}", "a liar", "{first}'s long-lost sibling", "the one who started it", "a lot more dangerous than they looked", "in love with {first}", "already dead"]
+  "entries": ["working for the {rival}", "a liar", "{first}'s long-lost sibling", "the instigator", "far more dangerous", "in love with {first}", "already dead", "the real culprit", "a spy", "a thief", "an impostor", "wanted by the law", "the {rival}'s cousin", "an old enemy in disguise", "secretly rich", "a forger", "a traitor", "a fraud", "the true heir", "someone else entirely", "in debt to the {rival}", "a deserter", "the anonymous sender", "only pretending", "a witness", "the {rival}'s spy"]
 }

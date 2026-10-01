@@ -1,90 +1,42 @@
 {
-  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "reaction",
   "tags": ["general"],
   "entries": [
-    "went looking for answers at {landmark}",
-    "broke their oldest rule",
-    "made a deal with the {rival}: {DEAL}",
-    "made a deal with {SOMEONE}: {DEAL}",
-    "lied to {CLOSE} about it",
-    "teamed up with {SOMEONE}",
-    "tried to fix it alone",
-    "packed a bag and left {place}",
-    "told {CLOSE} the truth, and immediately regretted it",
-    "hid {THING} {HIDING}",
-    "spent every cent they had",
-    "agreed to {ERRAND}",
-    "started asking questions nobody in {place} wanted answered",
-    "pretended to be someone else",
-    "went to the {rival} for help",
-    "followed {SOMEONE} to {landmark}",
-    "dug up {THING}",
-    "stopped sleeping",
-    "quit their job as a {job}",
-    "wrote a letter to {CLOSE} and actually sent it",
-    "started carrying {THING} everywhere",
-    "turned {place} upside down looking for {SOMEONE}",
-    "decided, for once, to say yes",
-    "traded {THING} for {ODDITY}",
-    {"text": "saddled up and rode out before dawn", "tags": ["western", "historical"]},
-    {"text": "buried something and told no one where", "tags": ["western", "historical"]},
-    {
-      "text": "sold the horse to buy {THING}",
-      "tags": ["western", "historical"]
-    },
-    {"text": "strapped on the old gun belt", "tags": ["western", "historical"]},
-    {
-      "text": "paid a visit to the {rival}",
-      "tags": ["western", "historical"]
-    },
-    {"text": "wired a friend two territories away", "tags": ["western", "historical"]},
-    {
-      "text": "bluffed their way into {landmark}",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "took the first stage out of {place}, then got off at the next stop",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "put the word out that they were looking for {SOMEONE}",
-      "tags": ["western", "historical"]
-    },
-    {"text": "followed the path into the wood", "tags": ["fairy tale", "fantasy"]},
-    {"text": "knocked on the witch's door", "tags": ["fairy tale", "fantasy"]},
-    {
-      "text": "made a bargain with {SOMEONE} and didn't read the terms",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "sewed {THING} into the hem of a coat",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {"text": "asked the crows for help", "tags": ["fairy tale", "fantasy"]},
-    {"text": "set out across the hills with a loaf of bread and a bad feeling", "tags": ["fairy tale", "fantasy"]},
-    {
-      "text": "told no one and went to {landmark} by night",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "gave away the last coin and kept {THING}",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "tried to hide {THING} from the {rival}, and did it badly",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    "hid {the_thing} {HIDING}",
-    "took {the_thing} to {landmark}",
-    "went looking for {the_someone}",
-    "trusted {the_someone} with {the_thing}",
-    "tried to return {the_thing}",
+    "{ACT_PERSON} {SOMEONE} {MANNER}",
+    "{ACT_THING} {THING} {HIDING}",
+    "{ACT_PLACE} {landmark} {MANNER}, looking for {SOMEONE}",
+    "made a deal with {SOMEONE} for {PRIZE}",
+    "told {CLOSE} about {TOPIC}, and regretted it",
+    "{ACT_THING} {THING} to pay for {PRIZE}",
+    "{ACT_PERSON} {CLOSE} out of {MOTIVE}",
+    "set out to {DO_THING} {THING} {DEADLINE}",
+    "hired {SOMEONE} to {DO_PERSON} {CLOSE}",
+    "let {VICE} decide what to do about {SOMEONE}",
+    "put {VALUE} at risk for {TEMPTATION}",
+    "went to the {rival} and asked for {PRIZE}",
+    "{ACT_THING} {the_thing} {HIDING}",
+    "{ACT_PERSON} {the_someone} {MANNER}",
+    "{ACT_PLACE} {landmark} with {the_thing}",
+    "{ACT_MESSAGE} {the_message} {MANNER}",
+    "{ACT_EVENT} {the_disaster} {MANNER}",
     "asked {CLOSE} about {the_thing}",
-    "kept {the_message} a secret from {CLOSE}",
-    "followed {the_someone} to {landmark}",
-    "dealt with the aftermath of {the_disaster}",
-    "told {the_someone} everything",
-    "read {the_message} again and again, looking for what it left out"
+    "trusted {the_someone} with {TOPIC}",
+    {
+      "text": "saddled up and rode to {landmark} {MANNER}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "wired {SOMEONE}, asking about {TOPIC}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "asked the crows to {DO_PERSON} {SOMEONE}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "set out for {landmark} with {THING}",
+      "tags": ["fairy tale", "fantasy"]
+    }
   ]
 }

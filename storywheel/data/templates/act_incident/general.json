@@ -1,0 +1,24 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "act_incident",
+  "tags": ["general"],
+  "entries": [
+    "{SOMEONE} arrived in {place} {MANNER} with {THING}, and {first} could not look away.",
+    "{DISASTER} hit {place}, and the {rival} blamed {first}.",
+    "{first} found {THING} {HIDING}, with {MESSAGE} tucked inside.",
+    "{SOMEONE} offered {first} {PRIZE} {DEADLINE}, in exchange for {THING}.",
+    "{CLOSE} vanished {MANNER}, and only {THING} was left behind.",
+    "{first} received {MESSAGE} from {SOMEONE}, demanding {PRIZE} {DEADLINE}.",
+    "{SOMEONE} accused {first} of {CRIME}, and the {rival} believed it.",
+    "{first} won {WINDFALL}, and {SOMEONE} came to collect.",
+    "{first} came home to find {SOMEONE} waiting {MANNER}.",
+    {
+      "text": "A posse came through {place} hunting {SOMEONE}, and {first} knew where to find {THING}.",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{SOMEONE} came out of the wood with {THING}, asking for {first} by name.",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
+}

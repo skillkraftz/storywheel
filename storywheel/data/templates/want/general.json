@@ -1,0 +1,34 @@
+{
+  "_note": "A noun phrase after 'wanted': Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "want",
+  "tags": ["general"],
+  "entries": [
+    "{PRIZE} {DEADLINE}",
+    "{PRIZE} despite the {rival}",
+    "{PRIZE} for {CLOSE}",
+    "{PRIZE} and {VALUE}",
+    "revenge on the {rival} {DEADLINE}",
+    "back {THING} from {SOMEONE}",
+    "a way out of {place} {DEADLINE}",
+    "{THING} and {PRIZE}",
+    "peace for {CLOSE} after {DISASTER}",
+    "{VALUE} and {PRIZE}",
+    "{PRIZE} without the {rival}",
+    {
+      "text": "{PRIZE} before the {rival} arrives",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{THING} and {PRIZE} out West",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{PRIZE} and an end to {DISASTER}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{PRIZE} for {CLOSE} and {VALUE}",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
+}

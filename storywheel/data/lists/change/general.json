@@ -1,6 +1,0 @@
-{
-  "_note": "Fills {CHANGE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
-  "slot": "change",
-  "tags": ["general"],
-  "entries": ["doesn't lie anymore, mostly", "keeps the shop open late", "laughs more than they used to", "has a new name", "lives at {landmark}", "visits {CLOSE} every week", "has stopped waiting for permission"]
-}

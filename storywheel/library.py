@@ -46,19 +46,20 @@ class Entry:
 class WordList:
     """One JSON file: entries for one slot, plus tags describing their flavor."""
 
-    def __init__(self, id, slot, tags, entries=(), generator=None, markov=0.0):
+    def __init__(self, id, slot, tags, entries=(), generator=None, markov=0.0, is_template=False):
         self.id = id                          # e.g. "job/frontier-trades"
         self.slot = slot
         self.tags = tuple(norm_tag(t) for t in tags)
         self.entries = list(entries)
         self.generator = generator            # e.g. "faker.city"; None for a plain list
+        self.is_template = is_template        # lives under templates/: whole sentences with slots, not atoms
         self.markov = markov                  # share of picks invented by a name maker trained on the entries
 
     def __repr__(self):
         return f"WordList({self.id!r}, tags={list(self.tags)})"
 
 
-def _read_list(path, root):
+def _read_list(path, root, is_template=False):
     list_id = path.relative_to(root).with_suffix("").as_posix()
     try:
         doc = json.loads(path.read_text(encoding="utf-8"))
@@ -93,7 +94,7 @@ def _read_list(path, root):
         raise DataError(f'{path}: "markov" should be a number between 0 and 1')
     if markov and not entries:
         raise DataError(f'{path}: "markov" needs entries to learn from')
-    return WordList(list_id, slot, tags, entries, generator, markov)
+    return WordList(list_id, slot, tags, entries, generator, markov, is_template)
 
 
 def load_lists(roots):
@@ -104,7 +105,7 @@ def load_lists(roots):
         if not root.is_dir():
             continue
         for path in sorted(root.rglob("*.json")):
-            wl = _read_list(path, root)
+            wl = _read_list(path, root, root.name == "templates")
             found[wl.id] = wl
     return found
 

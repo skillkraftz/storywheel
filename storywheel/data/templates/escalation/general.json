@@ -1,83 +1,45 @@
 {
-  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "escalation",
   "tags": ["general"],
   "entries": [
-    "everything got worse, mostly because {first} {flaw}",
-    "{SOMEONE} found out about {TOPIC}",
-    "the {rival} found out about {TOPIC}",
-    "the whole town turned against {first}",
-    "{first} lost {LOSS}",
-    "{CLOSE} stopped speaking to {first}",
-    "{CLOSE} got hurt, and it was {first}'s fault",
-    "the secret came out: {first} {secret}",
-    "it turned out the rumor was true: {rumor}",
-    "{DISASTER} hit {place}",
-    "{SOMEONE} turned up at {landmark}, asking for {first} by name",
+    "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
+    "{CLOSE} {ACT_PERSON} {first} out of {MOTIVE}",
+    "{SOMEONE} learned about {TOPIC} and told the {rival}",
+    "{THING} went missing, and {SOMEONE} blamed {first}",
+    "{first} lost {LOSS}, and {SOMEONE} took {THING}",
     "{SOMEONE} turned out to be {BETRAYAL}",
-    "the {rival} {RIVAL_MOVE}",
-    "{first} had to {ERRAND}, and it went badly",
-    "{THING} went missing, and {first} was the last one seen with it",
-    "the deadline moved up to the end of {season}",
-    "{first} was accused of {CRIME}",
-    "the money ran out",
-    "{first} discovered {TOPIC} was all a lie",
+    "{SOMEONE} accused {first} of {CRIME}",
+    "the {rival} demanded {PRIZE} {DEADLINE}",
+    "{DISASTER} struck {landmark}, and {CLOSE} paid for it",
+    "the {rival} {ACT_THING} {THING} {MANNER}",
+    "{first} {ACT_PLACE} {landmark} {MANNER}, but {SOMEONE} was already there",
+    "everything got worse, mostly because {first} {flaw}",
+    "the secret came out: {first} {secret}",
+    "{CLOSE} found out about {TOPIC} from {SOMEONE}",
+    "{the_someone} came back {MANNER}, demanding {PRIZE}",
+    "the {rival} demanded {the_thing} {DEADLINE}",
+    "the damage from {the_disaster} reached {landmark}",
+    "{the_message} reached {SOMEONE} {MANNER}",
+    "{the_thing} turned out to belong to {SOMEONE}",
+    "the {rival} {ACT_PERSON} {the_someone} out of {MOTIVE}",
+    "{the_someone} told the {rival} about {TOPIC}",
+    "{the_thing} was stolen, and {the_someone} was the only suspect",
     {
       "text": "the {rival} sent riders after {first}",
       "tags": ["western", "historical"]
     },
-    {"text": "a rumor reached the next town and came back bigger", "tags": ["western", "historical"]},
     {
-      "text": "{CLOSE} was caught in the crossfire",
+      "text": "{SOMEONE} showed up at {landmark} {MANNER}, hunting {first}",
       "tags": ["western", "historical"]
-    },
-    {
-      "text": "the creek went dry just when {first} needed it most",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "the saloon went quiet whenever {first} walked in",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{SOMEONE} showed up at {landmark} with a warrant",
-      "tags": ["western", "historical"]
-    },
-    {"text": "the posse came back with the wrong person", "tags": ["western", "historical"]},
-    {
-      "text": "{first}'s horse went lame in the middle of nowhere",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "the wood closed in behind {first}",
-      "tags": ["fairy tale", "fantasy"]
     },
     {
       "text": "the {rival} learned the true name of {THING}",
       "tags": ["fairy tale", "fantasy"]
     },
-    {"text": "the bell tolled thirteen times", "tags": ["fairy tale", "fantasy"]},
     {
-      "text": "{CLOSE} was turned into something small and feathered",
+      "text": "{first}'s wish for {PRIZE} came true, at the price of {VALUE}",
       "tags": ["fairy tale", "fantasy"]
-    },
-    {"text": "the road forgot where it led", "tags": ["fairy tale", "fantasy"]},
-    {"text": "night fell and refused to leave", "tags": ["fairy tale", "fantasy"]},
-    {"text": "the first of three tasks proved harder than it sounded", "tags": ["fairy tale", "fantasy"]},
-    {
-      "text": "{first}'s wish came true, in the worst possible way",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    "{the_someone} came back, angrier than before",
-    "{the_thing} turned out to be worth more than anyone had guessed",
-    "{the_thing} turned out to belong to the {rival}",
-    "{the_someone} told the {rival} everything",
-    "the {rival} demanded {the_thing}",
-    "the damage from {the_disaster} got worse",
-    "{the_message} turned out to be a forgery",
-    "{the_message} reached the wrong person",
-    "{first} found out who had sent {the_message}",
-    "{the_someone} turned out to know more about {the_thing} than {first} did",
-    "{the_thing} was stolen, and {the_someone} was the only suspect"
+    }
   ]
 }

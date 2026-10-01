@@ -1,0 +1,23 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "act_climax",
+  "tags": ["general"],
+  "entries": [
+    "{first} {ACT_PERSON} {SOMEONE} at {landmark} {MANNER}, and chose {VALUE}.",
+    "{first} stood before the {rival} with {THING} and finally told the truth about {TOPIC}.",
+    "With {THING} in hand, {first} {ACT_PLACE} {landmark} and faced {SOMEONE}.",
+    "{first} gave up {PRIZE} to save {CLOSE}, and {SOMEONE} watched.",
+    "{first} used {THING} against {SOMEONE} {MANNER}.",
+    "{first} {ACT_PERSON} {the_someone} with {the_thing} in hand.",
+    "{first} {ACT_MESSAGE} {the_message} in front of the {rival}.",
+    "{first} walked into {the_disaster} to save {CLOSE}.",
+    {
+      "text": "{first} walked out to meet the {rival} {MANNER}, with {THING} and nothing else.",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{first} outwitted {SOMEONE} and broke the hold of {VICE}.",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
+}

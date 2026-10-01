@@ -3,16 +3,16 @@
   "slot": "message",
   "tags": ["general"],
   "entries": [
-    "a letter addressed to someone who died years ago",
-    {"text": "a phone call from a number that doesn't exist", "tags": ["modern"]},
-    "a wedding invitation from an ex",
+    "a letter to the dead",
+    {"text": "a call from nowhere", "tags": ["modern"]},
+    "an ex's wedding invitation",
     "an eviction notice",
-    "a package with no return address",
-    "a postcard in their own handwriting",
+    "an unmarked package",
+    "a postcard from nowhere",
     "a ransom note",
-    "a job offer from the one person they'd sworn never to work for",
-    "a confession, unsigned",
+    "an enemy's job offer",
+    "an unsigned confession",
     "a summons to court",
-    "an invitation to a party nobody else was invited to"
+    "a private party invitation"
   ]
 }

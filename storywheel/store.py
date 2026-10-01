@@ -12,7 +12,8 @@ from pathlib import Path
 
 from .mix import new_mix, sync_base
 from .paths import HOME, OUT
-from .steps import STEPS, public
+from . import structures
+from .steps import STEPS, public, steps_for
 from .threads import BEAT_LABELS
 
 STORIES = HOME / "stories"
@@ -28,12 +29,18 @@ def new_story():
     now = datetime.datetime.now()
     return {"id": now.strftime("%Y%m%d-%H%M%S"), "created": now.isoformat(timespec="minutes"),
             "step": 0, "kept": {}, "history": {}, "seeds": {}, "universe_mode": "n",
-            "mix": new_mix(), "threads": {}}
+            "mix": new_mix(), "threads": {}, "atoms": {}, "steps_v": 2}
 
 def upgrade(story):
     """Bring a story from an older file up to date (v1 files have no mix)."""
     sync_base(story)
     story.setdefault("threads", {})
+    story.setdefault("atoms", {})
+    if story.get("steps_v") != 2:               # older files predate the structure step
+        story["steps_v"] = 2
+        if story.get("step", 0) >= 1 or "genre" in story["kept"]:
+            story["kept"].setdefault("structure", {"structure": structures.registry()[structures.DEFAULT].label})
+            story["step"] = story.get("step", 0) + 1
     return story
 
 def save(story):
@@ -120,9 +127,12 @@ def to_markdown(story):
     genre = kept.get("genre", {})
     motif = kept.get("title", {}).get("motif")
 
+    shape = structures.get((kept.get("structure") or {}).get("structure"))
     front = ["---", f'title: "{title}"']
     if genre:
         front += [f'genre: "{genre.get("genre", "")}"', f'mood: "{genre.get("mood", "")}"']
+    if kept.get("structure"):
+        front.append(f'structure: "{shape.label}"')
     if motif:
         front.append(f'motif: "{motif}"')
     front += [f"created: {story['created'][:10]}", "tags: [storywheel]", "---", ""]
@@ -134,17 +144,19 @@ def to_markdown(story):
         head.append(f"*Motif: {motif}*")
 
     sections = ["\n".join(front + head).rstrip()]
-    for step in STEPS:
+    for step in steps_for(story):
         fields = public(kept.get(step.key))
-        if not fields or step.key in ("genre", "title"):
+        if not fields or step.key in ("genre", "title", "structure"):
             continue
         if step.key == "spine":
-            body = "\n\n".join(fields[f] for f in step.fields if f in fields)
+            labels = {b.key: b.label for b in shape.beats}
+            body = "\n\n".join((f"**{labels[f]}.** " if shape.show_labels else "") + fields[f]
+                                for f in step.fields if f in fields)
         elif step.single:
             body = next(iter(fields.values()))
         else:
             body = "\n".join(f"- **{k.replace('_', ' ').title()}:** {v}" for k, v in fields.items())
-        sections.append(f"## {step.label}\n\n{body}")
+        sections.append(f"## {step.label if step.key != 'spine' else shape.label}\n\n{body}")
         if step.key == "spine" and story.get("threads"):
             lines = [f"- **{kind.title()}:** {t['text']} *(introduced: {BEAT_LABELS.get(t['beat'], t['beat'])})*"
                      for kind, t in story["threads"].items()]

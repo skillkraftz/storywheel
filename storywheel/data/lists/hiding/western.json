@@ -2,5 +2,5 @@
   "_note": "Where something is hidden.",
   "slot": "hiding",
   "tags": ["western", "historical"],
-  "entries": ["in a saddlebag", "under the floor of the saloon", "in a hollow cottonwood", "in the lining of a coat", "at the bottom of a dry well", "in a sack of flour", "buried at {landmark}", "behind a loose stone in the chimney", "in the stagecoach's false bottom", "in a coffin that was supposed to be empty", "under the church pew", "in a boot", "in the hayloft"]
+  "entries": ["in a saddlebag", "under the saloon floor", "in a hollow cottonwood", "in a coat lining", "down a dry well", "in a sack of flour", "buried at {landmark}", "behind the chimney stones", "in the stagecoach's false bottom", "in an empty coffin", "under the church pew", "in a boot", "in the hayloft"]
 }

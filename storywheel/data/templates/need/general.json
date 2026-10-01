@@ -1,0 +1,6 @@
+{
+  "_note": "An infinitive after 'needs': Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "need",
+  "tags": ["general"],
+  "entries": ["to put {VALUE} before {PRIZE}", "to {DO_PERSON} {CLOSE}", "to stop hiding {FEELING} behind {VICE}", "to {DO_PERSON} {SOMEONE} {MANNER}", "to trust {SOMEONE} with {TOPIC}", "to give up {VICE} for {VALUE}", "to forgive {CLOSE} for {CRIME}", "to face {FEELING} and {DO_PERSON} the {rival}", "to choose {VALUE} over {VICE}", "to say sorry to {CLOSE} about {TOPIC}", "to learn that {VALUE} outweighs {PRIZE}"]
+}

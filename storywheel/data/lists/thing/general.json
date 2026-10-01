@@ -4,12 +4,12 @@
   "tags": ["general"],
   "entries": [
     "a locked box",
-    "a map with one town missing",
+    "an incomplete map",
     "an old photograph",
     "a suitcase full of cash",
     "a love letter",
-    "a pocket watch that runs backwards",
-    "a key nobody could match to a lock",
+    "a backwards pocket watch",
+    "a lockless key",
     "a jar of teeth",
     "a recipe",
     "a stolen painting",
@@ -19,15 +19,15 @@
     {"text": "a cassette tape", "tags": ["modern"]},
     "a pistol with one bullet",
     "a birth certificate",
-    "a deed to land that doesn't exist",
-    "a book with the last page torn out",
+    "a deed to nowhere",
+    "an unfinished book",
     "a bag of seeds",
     {"text": "a lottery ticket", "tags": ["modern"]},
     "a bloody glove",
     "a music box",
     "a set of blueprints",
     "a child's drawing",
-    "a bottle of very old whiskey",
+    "a bottle of old whiskey",
     "a typewriter",
     "a carved wooden bird",
     "a telescope",
@@ -35,6 +35,6 @@
     "a red umbrella",
     {"text": "a cursed mirror", "tags": ["horror", "fantasy", "fairy tale"]},
     {"text": "a silver bullet", "tags": ["horror", "western"]},
-    {"text": "a crystal that hums", "tags": ["sci-fi", "fantasy"]}
+    {"text": "a humming crystal", "tags": ["sci-fi", "fantasy"]}
   ]
 }

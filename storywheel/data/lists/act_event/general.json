@@ -1,0 +1,32 @@
+{
+  "_note": "Past tense, followed by a disaster. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
+  "slot": "act_event",
+  "tags": ["general"],
+  "entries": [
+    "survived",
+    "fled",
+    "predicted",
+    "caused",
+    "exploited",
+    "blamed",
+    "rebuilt after",
+    "profited from",
+    "prepared for",
+    "reported",
+    "ignored",
+    "escaped",
+    "outlasted",
+    "mourned",
+    "forgot",
+    "lied about",
+    "remembered",
+    {"text": "rode out", "tags": ["western", "historical"]},
+    {"text": "outran", "tags": ["western", "historical"]},
+    {"text": "wished away", "tags": ["fairy tale", "fantasy"]},
+    {"text": "sang against", "tags": ["fairy tale", "fantasy"]},
+    "made jokes about",
+    "wrote songs about",
+    "took shelter from",
+    "blamed the {rival} for"
+  ]
+}

@@ -56,13 +56,26 @@ def motif_from(title, fallback):
     return singular(chunk[-1]) if chunk else fallback()
 
 
-def pronouns(text, first):
+_OBJECT_WORDS = ("to", "for", "with", "about", "at", "on", "against", "from", "believed", "trusted", "told",
+                 "asked", "hired", "followed", "met")
+
+
+def pronouns(text, first, extra=()):
     """After a character's first mention, use 'their'/'them' instead of repeating
-    their name: 'Christina let Christina's mother go' -> 'Christina let their mother go'."""
+    their name: 'Christina let Christina's mother go' -> 'Christina let their mother go'.
+    `extra` are more words that take the character as an object ('betrayed', 'outwitted')."""
     if not first or text.count(first) < 2:
         return text
     i = text.index(first) + len(first)
     head, tail = text[:i], text[i:]
+    words = "|".join(re.escape(w) for w in sorted(set(_OBJECT_WORDS) | set(extra), key=len, reverse=True))
     tail = re.sub(rf"\b{re.escape(first)}'s\b", "their", tail)
-    tail = re.sub(rf"\b(to|for|with|about|at|on|against|from|believed|trusted|told|asked|hired|followed|met) {re.escape(first)}\b", r"\1 them", tail)
+    tail = re.sub(rf"\b({words}) {re.escape(first)}\b", r"\1 them", tail)
     return head + tail
+
+
+def implicit(text, first):
+    """Text about a character that is shown on their own card: 'Vesna's sister' -> 'their sister'."""
+    if not first or first not in text:
+        return text
+    return pronouns(first + " " + text, first)[len(first) + 1:]

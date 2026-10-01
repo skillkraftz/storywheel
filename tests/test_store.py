@@ -28,7 +28,7 @@ def test_markdown_has_frontmatter_and_page_break_sections():
     assert '<div style="page-break-after: always;"></div>' in md
     assert "## Protagonist\n\n- **Name:** Wade Hollis\n- **Job:** drover" in md
     assert "## Premise\n\nA drover finds a lantern." in md
-    assert "## Story spine\n\nOnce upon a time, Wade lived.\n\nEvery day, Wade worked." in md
+    assert "## Story Spine\n\nOnce upon a time, Wade lived.\n\nEvery day, Wade worked." in md
 
 
 def test_skipped_steps_are_left_out():

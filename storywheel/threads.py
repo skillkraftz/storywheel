@@ -27,9 +27,9 @@ PREFERRED = 6.0            # how much likelier a template that uses a live threa
 
 _REF = re.compile(r"\{the_(%s)\}" % "|".join(THREAD_KINDS))
 
-BEAT_LABELS = {"once": "Once upon a time", "every_day": "Every day", "one_day": "One day",
-               "because_1": "Because of that", "because_2": "Because of that",
-               "until_finally": "Until finally", "ever_since": "Ever since then"}
+from . import structures
+
+BEAT_LABELS = structures.beat_labels()    # beat key -> label, across every structure
 
 
 def definite(text):

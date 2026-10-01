@@ -1,0 +1,14 @@
+{
+  "_note": "Kishotenketsu, the four-part structure from East Asian storytelling. It needs no central conflict: ki introduces, sho develops, ten turns the story with something unexpected, ketsu brings it together and shows what it means.",
+  "name": "kishotenketsu",
+  "label": "Kishōtenketsu",
+  "blurb": "Four beats and no required conflict: introduce, develop, a surprising turn, then reconcile. Quiet stories where the twist changes how everything reads.",
+  "order": 3,
+  "show_labels": true,
+  "beats": [
+    {"key": "ki",    "slot": "ki",    "label": "Ki (introduction)"},
+    {"key": "sho",   "slot": "sho",   "label": "Shō (development)"},
+    {"key": "ten",   "slot": "ten",   "label": "Ten (twist)"},
+    {"key": "ketsu", "slot": "ketsu", "label": "Ketsu (reconciliation)"}
+  ]
+}

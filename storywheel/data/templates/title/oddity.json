@@ -2,5 +2,5 @@
   "_note": "A deliberate wildcard: random dictionary words, so a title is occasionally strange. Tagged 'wildcard', which no genre profile mentions, so it only appears through the floor.",
   "slot": "title",
   "tags": ["wildcard"],
-  "entries": ["{ODDITY}", "{first} and {ODDITY}", "{ALLITERATION}", "{ALLITERATION}", "The {noun} from {noun2}", "{adj} {noun}"]
+  "entries": ["{ODDITY} for {first}", "{first} and {ODDITY}", "{ALLITERATION} of {place}", "{ALLITERATION} for {first}", "{adj} {noun}", "The {noun} from {noun2}"]
 }

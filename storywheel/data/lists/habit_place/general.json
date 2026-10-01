@@ -1,0 +1,31 @@
+{
+  "_note": "Present tense, followed by a place: 'visits the old mill'. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
+  "slot": "habit_place",
+  "tags": ["general"],
+  "entries": [
+    "returns to",
+    "visits",
+    "avoids",
+    "tends",
+    "repaints",
+    "guards",
+    "rebuilds",
+    "walks past",
+    "sleeps at",
+    "rents out",
+    "sketches",
+    "never enters",
+    "sweeps",
+    "locks up",
+    "opens up",
+    {"text": "rides past", "tags": ["western", "historical"]},
+    {"text": "sits on the porch of", "tags": ["western", "historical"]},
+    {"text": "lights a candle at", "tags": ["fairy tale", "fantasy"]},
+    {"text": "circles three times", "tags": ["fairy tale", "fantasy"]},
+    {"text": "blesses", "tags": ["fairy tale", "fantasy"]},
+    {"text": "waters the horses at", "tags": ["western", "historical"]},
+    {"text": "tips a hat at", "tags": ["western", "historical"]},
+    {"text": "leaves flowers at", "tags": ["fairy tale", "fantasy"]},
+    {"text": "whistles past", "tags": ["fairy tale", "fantasy"]}
+  ]
+}

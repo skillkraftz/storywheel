@@ -6,7 +6,7 @@ from storywheel.engine import Engine
 from storywheel.library import Library
 from storywheel.markov import NameMaker
 from storywheel.sample import build_story, render, sample
-from storywheel.steps import STEPS, Ctx
+from storywheel.steps import STEPS, Ctx, step_by_key
 
 
 def test_name_maker_invents_new_names_that_look_like_the_list():
@@ -48,7 +48,7 @@ def test_title_motif_is_the_title_noun():
     nouns = {e.text for wl in engine.library.by_slot["title_noun"] for e in wl.entries}
     checked = 0
     for _ in range(200):
-        cand = STEPS[1].roll(engine, story)
+        cand = step_by_key("title").roll(engine, story)
         if cand["motif"] in nouns:
             checked += 1
             assert cand["motif"][:4].lower() in cand["title"].lower()   # plurals: bounty / Bounties
@@ -59,8 +59,8 @@ def test_whole_sentence_steps_start_with_a_capital():
     engine = Engine(seed=2)
     story = {"kept": {}, "seeds": {}}
     for _ in range(100):
-        for key in (4, 6):                                    # premise, twist
-            text = next(iter(STEPS[key].roll(engine, story, fresh=True).values()))
+        for key in ("premise", "twist"):
+            text = next(iter(step_by_key(key).roll(engine, story, fresh=True).values()))
             assert text[0].isupper(), text
 
 

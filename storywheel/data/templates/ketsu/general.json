@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "ketsu",
+  "tags": ["general"],
+  "entries": ["So {first} {ACT_PERSON} {SOMEONE} and {ACT_PLACE} {landmark}, and {place} felt new.", "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE}.", "{first} and {SOMEONE} {ACT_THING} {THING} together {MANNER}, and the {season} went on.", "By {season}, {first} {HABIT_PERSON} {CLOSE} and {HABIT_THING} {THING} {HIDING}.", "{first} {HABIT_THING} {the_thing} {HIDING}, and {HABIT_PERSON} {the_someone}.", "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "{first} wanted {want}, and found {VALUE} instead."]
+}

@@ -69,59 +69,111 @@ and places across stories.
 
 ## Make it yours
 
-All the words live in JSON files, not Python. Open them, add lines, save.
+Stories are **assembled from parts**, not dealt from a deck of ready-made ideas. Two
+kinds of file, both plain JSON:
 
-    storywheel/data/lists/<slot>/<name>.json       word lists (jobs, things, places, ...)
-    storywheel/data/templates/<slot>/<name>.json   sentence templates (beats, premises, titles, twists)
-    storywheel/data/genres.json                    what each genre favors
+* **Atoms** (`storywheel/data/lists/<slot>/<name>.json`) are short pieces: a noun
+  phrase, a verb, a prize, a deadline, a motive. Five words at most, no full clauses.
+* **Templates** (`storywheel/data/templates/<slot>/<name>.json`) are generic sentence
+  frames with at least two slots, like `{first} {ACT_PERSON} {SOMEONE} {MANNER}`. A
+  template may not hold more than six fixed words in a row, so the ideas come from
+  the atoms and not from the frame.
 
-Your own lists go in `~/.storywheel/lists/<slot>/` (and templates in
-`~/.storywheel/templates/<slot>/`). They are merged with the built-in ones, and
-a file at the same path as a built-in one replaces it. That's how you build
-your own world over time. Run `pipx install --editable .` to edit the built-in
-files and see changes at once.
+One template with three slots over pools of fifty atoms is over a hundred thousand
+sentences. Add atoms freely; they improve every template that uses them. Genre
+lives on the atoms (a `western` verb, a `fairy tale` prize), so a template written once
+reads right in any genre.
 
-### A list
+Your own files go in `~/.storywheel/lists/<slot>/`, `~/.storywheel/templates/<slot>/` and
+`~/.storywheel/structures/`. They are merged with the built-in ones, and a file at the
+same path as a built-in one replaces it. Run `pipx install --editable .` to edit the
+built-in files and see changes at once.
+
+`pytest` includes a lint that enforces those rules on every file, so a line that is too
+long, a clause where an atom should be, or a frozen template fails the build.
+
+### An atom list
 
     { "_note": "anything you like",
-      "slot": "job",
-      "tags": ["western", "historical"],
-      "entries": ["drover", "saloon keeper", "marshal",
-                  {"text": "bounty hunter", "tags": ["noir"]}] }
+      "slot": "act_person",
+      "tags": ["general"],
+      "entries": ["trusted", "lied to", "teamed up with",
+                  {"text": "outdrew", "tags": ["western"]}] }
 
-* `slot` is the kind of thing the list supplies: `job`, `thing`, `someone`,
-  `place`, `landmark`, `disaster`, and so on. Many lists can share a slot.
-* `tags` describe the list's flavor. Plain strings inherit them. An entry
-  written as `{"text": ..., "tags": [...]}` carries its own tags instead.
-* A list can say `"generator": "faker.city"` instead of `entries`; it is then
-  made up at run time. Built in: `faker.first_name`, `faker.last_name`,
-  `faker.city`, `faker.job`, `wonderwords.adjective`, `wonderwords.noun`,
-  `wonderwords.verb`. (Faker lists are tagged `modern`.)
+* `slot` is the kind of part: `someone`, `thing`, `message`, `disaster`, `hiding`, `close`,
+  `landmark`, verbs (`act_person`, `act_thing`, `act_place`, `act_message`, `act_event` in
+  the past tense; `do_thing`, `do_person` in the base form; `habit_thing`, `habit_person`,
+  `habit_place` in the present), and abstractions (`prize`, `deadline`, `motive`, `vice`,
+  `value`, `temptation`, `feeling`, `manner`, `topic`, `crime`, `loss`). Many lists can share
+  a slot. Verbs take their object directly ("trusted" + a person), and atoms never say
+  "their" or "them", because they are reused in many sentences.
+* `tags` describe the list's flavor. Plain strings inherit them. An entry written as
+  `{"text": ..., "tags": [...]}` carries its own tags instead.
+* A list can say `"generator": "faker.city"` instead of `entries`; it is then made up
+  at run time. Built in: `faker.first_name`, `faker.last_name`, `faker.city`, `faker.job`,
+  `wonderwords.adjective`, `wonderwords.noun`, `wonderwords.verb`. (Faker lists are
+  tagged `modern`.)
 * Invented names skip anything under four letters and ordinary dictionary words
   (no "Thistle" or "Bell" from a surname list).
-* A list of names can say `"markov": 0.5`: that share of picks is then a new
-  name invented by a small Markov-chain name maker trained on the list's own
-  entries (so `Calloway, Hollis, Pruitt` can yield `Callis` or `Pruden`); the
-  rest are the real entries. Good for name lists with 40+ entries.
-* Place names can be built from parts. A `place` entry may contain building
-  blocks, e.g. `"{PLACE_ADJ} {PLACE_FEATURE}"` draws from the `place_adj` and
-  `place_feature` lists, so a few dozen words make thousands of towns.
+* A list of names can say `"markov": 0.5`: that share of picks is then a new name
+  invented by a small Markov-chain name maker trained on the list's own entries (so
+  `Calloway, Hollis, Pruitt` can yield `Callis` or `Pruden`); the rest are the real
+  entries. Good for name lists with 40+ entries.
+* Place names can be built from parts. A `place` entry may contain slots, e.g.
+  `"{PLACE_ADJ} {PLACE_FEATURE}"`, so a few dozen words make thousands of towns.
 
 ### A template
 
-Same shape, in `templates/`. Slots are `title`, `premise`, `twist`, and the
-spine beats `once`, `routine`, `inciting`, `reaction`, `escalation`, `climax`,
-`resolution`. Inside a template:
+    { "slot": "reaction", "tags": ["general"],
+      "entries": ["{ACT_PERSON} {SOMEONE} {MANNER}",
+                  "made a deal with {SOMEONE} for {PRIZE}",
+                  {"text": "saddled up and rode to {landmark} {MANNER}", "tags": ["western"]}] }
 
-* `{UPPERCASE}` is a building block: a fresh draw from the slot of the same
-  name every time it appears (`{THING}` draws from the `thing` lists).
-  `{ODDITY}` (a random adjective and noun) and `{ALLITERATION}` are built in.
-* `{lowercase}` refers to what the story has already kept (`{first}`, `{name}`,
-  `{place}`, `{landmark}`, `{motif}`, `{rival}`, ...) and stays the same
-  throughout. If the story doesn't have it yet, it's invented on the spot from
-  the slot of that name.
+* `{UPPERCASE}` is an atom slot: a fresh draw from the slot of the same name every time
+  it appears (`{SOMEONE}` draws from the `someone` lists). `{ODDITY}` (a random
+  adjective and noun) and `{ALLITERATION}` are built in.
+* `{lowercase}` refers to what the story has already kept (`{first}`, `{name}`, `{place}`,
+  `{landmark}`, `{motif}`, `{rival}`, `{want}`, `{need}`, `{flaw}`, `{secret}`...) and stays
+  the same throughout. If the story doesn't have it yet, it's invented on the spot from
+  the slot of that name. `want`, `need`, `flaw`, `secret` and `rumor` are themselves
+  template slots, so even the character's inner life is assembled.
+* The template slots are `title`, `premise`, `twist`, `want`, `need`, `flaw`, `secret`,
+  `rumor`, and the beats of each structure (below).
 
-Add a line to a block and every template that uses it improves.
+### Nothing repeats
+
+* **Within a story, no atom is used twice.** Each kept step records the atoms it used;
+  later steps and rerolls avoid them (and a reroll avoids what the rest of its own item
+  uses). Only if a list truly runs out does the rule relax.
+* **Across sessions, recent picks are remembered** in `~/.storywheel/recent.json`: an
+  entry isn't offered again until about half its list has been used, even next week.
+  (`storywheel sample` never reads or writes it, so a seed always means the same stories.)
+
+### Structures
+
+A story's body is shaped by a **structure**: an ordered list of beats, each with its own
+templates, built from the same atoms. Three ship in `storywheel/data/structures/`:
+
+* **Story Spine**: Once upon a time, Every day, One day, Because of that (twice), Until
+  finally, Ever since then. The fixed openers are the only frozen text anywhere.
+* **Three-Act Outline**: setup, inciting incident, first turn; rising action, midpoint,
+  crisis; climax, resolution.
+* **Kishōtenketsu**: introduction, development, a surprising turn, reconciliation. No
+  conflict required.
+
+In a session, the **Structure** step comes right after Genre & mood; roll to see another,
+`k` to keep. Changing it later rolls the story body again. `storywheel sample` picks one
+at random per story; force one with `--structure three-act`.
+
+A structure is a small file, so you can add your own:
+
+    { "name": "five-beats", "label": "Five Beats", "blurb": "One line about its shape.",
+      "show_labels": true, "order": 4,
+      "beats": [ {"key": "hook", "slot": "five_hook", "label": "The hook"},
+                 {"key": "dig", "slot": "five_dig"}, ... ] }
+
+Each beat's `slot` names a template list (`templates/five_hook/*.json`). A beat may also
+have an `"opening"` ("Once upon a time, ") and a `"closing"` (default `"."`).
 
 ### Threads
 
@@ -189,7 +241,7 @@ Each story keeps its own copy of the adjustments (excluded tags, excluded
 lists, boosts) in its JSON file under `"mix"`. They never change the genre
 profiles, so the next story in the same genre starts from the defaults.
 
-`storywheel/steps.py` holds the step list. Reorder `STEPS` to change the flow,
+`storywheel/steps.py` holds the step list (`steps_for`). Reorder it to change the flow,
 or add a new `Step` with its own fields.
 
 ### Trying a genre mix
@@ -202,6 +254,15 @@ quickest way to judge a list you've just written. `--seed` makes it repeatable.
 
 Which words belong to which genre is spelled out in `SOURCES.md`, along with
 where every list came from and its license.
+
+### Is it assembled, or dealt?
+
+    python tools/repetition_report.py western "fairy tale" -n 200 --seed 101
+
+rolls 200 stories in memory and reports the entries picked far more often than their
+fair share, the rendered lines seen again and again (names blanked out), and any
+frozen templates or over-long atoms. A healthy run has no line seen five times. The
+same check runs in the test suite.
 
 ## Development
 

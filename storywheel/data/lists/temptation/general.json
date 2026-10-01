@@ -1,0 +1,27 @@
+{
+  "_note": "What they cannot resist, as a noun phrase. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
+  "slot": "temptation",
+  "tags": ["general"],
+  "entries": [
+    "a dare",
+    "an easy win",
+    "a good bargain",
+    "a closed door",
+    "a stranger's praise",
+    "a quick fortune",
+    "a locked drawer",
+    "a rumor",
+    "a shortcut",
+    "a bet",
+    "a free drink",
+    "a secret",
+    {"text": "a card game", "tags": ["western", "historical"]},
+    {"text": "a fast horse", "tags": ["western", "historical"]},
+    {"text": "a loaded die", "tags": ["western", "historical"]},
+    {"text": "a riddle", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a wish", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a shiny thing", "tags": ["fairy tale", "fantasy"]},
+    {"text": "an open gate", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a strange path", "tags": ["fairy tale", "fantasy"]}
+  ]
+}

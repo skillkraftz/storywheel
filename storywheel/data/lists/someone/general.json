@@ -5,7 +5,7 @@
   "entries": [
     "a stranger",
     "an old friend",
-    "a woman in a red coat",
+    "a woman in red",
     "two men in suits",
     "a traveling salesman",
     "a lawyer from the city",
@@ -20,7 +20,7 @@
     "a nervous accountant",
     "{first}'s first love",
     "a debt collector",
-    "a soldier back from the war",
+    "a returned soldier",
     "an inspector from the state",
     "a twin",
     "the new neighbor",
@@ -29,7 +29,7 @@
     "a con artist",
     {"text": "a knight with no horse", "tags": ["fantasy", "fairy tale"]},
     {"text": "a gunslinger", "tags": ["western"]},
-    {"text": "a robot with a library card", "tags": ["sci-fi"]},
-    {"text": "a pale girl who never blinks", "tags": ["horror", "ghost story"]}
+    {"text": "a library robot", "tags": ["sci-fi"]},
+    {"text": "a pale unblinking girl", "tags": ["horror", "ghost story"]}
   ]
 }

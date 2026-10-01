@@ -1,0 +1,31 @@
+{
+  "_note": "Past tense, followed by a letter or note. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
+  "slot": "act_message",
+  "tags": ["general"],
+  "entries": [
+    "read",
+    "burned",
+    "forged",
+    "answered",
+    "ignored",
+    "hid",
+    "delivered",
+    "copied",
+    "mailed",
+    "memorized",
+    "traced",
+    "intercepted",
+    "tore up",
+    "kept",
+    "translated",
+    "pinned up",
+    "sold",
+    "returned",
+    {"text": "wired back", "tags": ["western", "historical"]},
+    {"text": "nailed up", "tags": ["western", "historical"]},
+    {"text": "rode off with", "tags": ["western", "historical"]},
+    {"text": "whispered", "tags": ["fairy tale", "fantasy"]},
+    {"text": "sang", "tags": ["fairy tale", "fantasy"]},
+    {"text": "sealed", "tags": ["fairy tale", "fantasy"]}
+  ]
+}

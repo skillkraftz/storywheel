@@ -1,6 +1,95 @@
 {
-  "_note": "Title templates. Placeholders work as everywhere else; {TITLE_ADJ}/{TITLE_NOUN} draw from the title word lists.",
+  "_note": "Title templates: Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "title",
   "tags": ["general"],
-  "entries": ["The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} of {place}", "{first}'s {TITLE_NOUN}", "The Last {TITLE_NOUN}", "{TITLE_NOUN} and {TITLE_NOUN}", "A {TITLE_NOUN} for {first}", "{TITLE_ADJ} {title_nouns}", "The {job}'s {TITLE_NOUN}", "{TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} on the {TITLE_NOUN}", "The {TITLE_ADJ} {title_nouns} of {first} {last}", "A {TITLE_ADJ} Kind of {TITLE_NOUN}"]
+  "entries": [
+    "The {TITLE_ADJ} {TITLE_NOUN}",
+    "The {TITLE_ADJ} {TITLE_NOUN}",
+    "The {TITLE_NOUN} of {place}",
+    "{first}'s {TITLE_NOUN}",
+    "The Last {TITLE_NOUN} in {place}",
+    "{TITLE_NOUN} and {TITLE_NOUN}",
+    "A {TITLE_NOUN} for {first}",
+    "{TITLE_ADJ} {title_nouns}",
+    "The {job}'s {TITLE_NOUN}",
+    "The {TITLE_NOUN} on the {TITLE_NOUN}",
+    "A {TITLE_ADJ} Kind of {TITLE_NOUN}",
+    "The {TITLE_ADJ} {title_nouns} of {first} {last}",
+    {
+      "text": "The {TITLE_ADJ} Ride to {place}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{PLACE_ADJ} and {TITLE_NOUN}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{last}'s {TITLE_NOUN}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{title_nouns} of {place}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "Three {title_nouns} for {first}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "The Day the {TITLE_NOUN} Came to {place}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{PLACE_ADJ} {TITLE_NOUN}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{TITLE_ADJ} {TITLE_NOUN}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The {job} and the {TITLE_NOUN}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The Three {TITLE_ADJ} {title_nouns}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "Seven {TITLE_ADJ} {title_nouns}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{first} of the {TITLE_NOUN}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The {TITLE_ADJ} Wolf of {place}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The {TITLE_NOUN} in {landmark}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{TITLE_ADJ} {title_nouns}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The Last {TITLE_NOUN} of {place}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The Twelve {title_nouns} of {first}",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
 }

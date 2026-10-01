@@ -1,0 +1,6 @@
+{
+  "_note": "A verb phrase after the character's name: Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "flaw",
+  "tags": ["general"],
+  "entries": ["lets {VICE} get in the way of {VALUE}", "will risk {VALUE} for {TEMPTATION}", "hides {FEELING} behind {VICE}", "gives in to {VICE} whenever {TEMPTATION} appears", "puts {VICE} ahead of {CLOSE}", "keeps {TOPIC} secret out of {VICE}", "would sooner {DO_THING} {THING} than admit {FEELING}", "mistakes {VICE} for {VALUE}", "is ruled by {VICE} and {FEELING}", "trades {VALUE} for {PRIZE} too readily", "can't resist {TEMPTATION} when {FEELING} is high"]
+}

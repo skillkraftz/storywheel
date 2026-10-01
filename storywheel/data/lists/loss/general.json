@@ -2,5 +2,5 @@
   "_note": "Fills {LOSS} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "loss",
   "tags": ["general"],
-  "entries": ["their job", "their house", "their voice", "the {motif}", "a bet", "everything they'd saved", "their nerve", "their memory of one whole day", "their best friend", "their reputation", "the family business"]
+  "entries": ["their job", "their house", "their voice", "the {motif}", "a bet", "everything they'd saved", "their nerve", "a day of memory", "their best friend", "their reputation", "the family business", "their savings", "their good horse", "their workshop", "their only friend", "their temper", "their map", "their license", "their balance", "their standing in town", "their spare key", "their appetite", "their nerve for it"]
 }

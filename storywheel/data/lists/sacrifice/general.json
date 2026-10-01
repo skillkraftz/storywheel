@@ -1,6 +1,0 @@
-{
-  "_note": "Fills {SACRIFICE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
-  "slot": "sacrifice",
-  "tags": ["general"],
-  "entries": ["gave {the_motif} away", "gave up {want}", "took the blame for everything", "let {CLOSE} go", "walked away from {place} for good", "spent the last of the money on someone else"]
-}

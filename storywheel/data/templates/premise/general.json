@@ -1,63 +1,34 @@
 {
-  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
+  "_note": "One sentence: Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "premise",
   "tags": ["general"],
   "entries": [
-    "When {SOMEONE} arrives in {place} with {THING}, a {trait} {job} named {first} has to decide how much {want} is really worth.",
-    "{name}, a {trait} {job}, has one {season} to clear their name after being accused of {CRIME}.",
-    "After {DISASTER} hits {place}, {first} finds {THING} {HIDING}, and the {rival} wants it badly.",
-    "{first} receives {MESSAGE}, and suddenly the quiet life of a {job} in {place} is over.",
-    "A {trait} {job} agrees to {ERRAND} for {SOMEONE}. It should be simple. It isn't.",
+    "When {SOMEONE} arrives in {place} with {THING}, a {trait} {job} named {first} must choose between {PRIZE} and {VALUE}.",
+    "{first}, a {trait} {job} in {place}, must {DO_THING} {THING} {DEADLINE}, or lose {PRIZE}.",
+    "After {DISASTER} hit {place}, {first} {ACT_THING} {THING} {HIDING}, and the {rival} wanted it.",
+    "{first}, a {job} in {place}, receives {MESSAGE} from {SOMEONE}, and nothing is quiet again.",
+    "A {trait} {job} agrees to {DO_THING} {THING} for {SOMEONE}, but {DISASTER} gets in the way.",
     "{first} has spent years hiding {TOPIC} from {CLOSE}. Then {SOMEONE} comes to {place}.",
-    "When {name}, a {trait} {job} in {place}, finds {the_motif}, they have until the end of {season} to decide what it's worth.",
-    "Everyone in {place} is obsessed with the {motif}. Everyone except {first}, a {trait} {job} who only wants {want}.",
-    "{first} has been the only {job} in {place} for twenty years. Then a stranger shows up carrying {the_motif}.",
-    "The {motif} has gone missing from {landmark}, and {name}, a {trait} {job}, is the only one who knows why.",
-    "{name} inherits {the_motif} and a debt to the people of {place}. Only one of them can be paid off.",
-    "The {rival} of {place} wants {first} gone. {first}, a {trait} {job}, has other plans, and they all involve the {motif}.",
-    "{first} {secret}. In a town as small as {place}, that won't stay hidden for long.",
+    "{first}, a {trait} {job} in {place}, finds {the_motif} and must decide its fate {DEADLINE}.",
+    "Everyone in {place} wants {PRIZE}. Everyone except {first}, a {trait} {job} who only wants {want}.",
+    "The {rival} of {place} wants {first} gone. {first}, a {trait} {job}, has other plans, and they involve {THING}.",
+    "{name} inherits {the_motif} and a debt to {SOMEONE}.",
+    "{first} {secret}. In {place}, that cannot stay hidden for long.",
+    "{first}, a {trait} {job}, wants {want}. {SOMEONE} wants {THING}. Only one of them can win.",
     {
-      "text": "A {trait} {job} has to solve a death at {landmark} before the {rival} pins it on them.",
-      "tags": ["mystery", "noir", "thriller"]
-    },
-    {
-      "text": "{first} moves into the house by {landmark} and starts hearing someone say their name at night.",
-      "tags": ["horror", "ghost story"]
-    },
-    {
-      "text": "{first}, a {trait} {job}, falls for the one person in {place} who could ruin them.",
-      "tags": ["romance"]
-    },
-    {
-      "text": "When {SOMEONE} rides into {place} with {THING}, a {trait} {job} named {first} has until sundown to decide whose side to be on.",
+      "text": "When {SOMEONE} rides into {place} {MANNER} with {THING}, a {trait} {job} named {first} must choose a side.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "The {rival} wants the land {first}, a {trait} {job}, was born on. {first} wants it more.",
+      "text": "A {trait} {job} in {place} takes in {SOMEONE} carrying {THING}, and the {rival} arrives soon after.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "{first}, a {trait} {job}, is the only person in {place} who knows what is buried at {landmark}, and the wrong people have started digging.",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "A {trait} {job} in {place} takes in a stranger carrying {THING}, and the law arrives a day later.",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{first}, a {trait} {job}, finds {THING} {HIDING} and learns it comes with a curse.",
+      "text": "To save {place} from {DISASTER}, a {trait} {job} named {first} must carry {THING} {DEADLINE}.",
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "To save {place} from {DISASTER}, a {trait} {job} named {first} must carry {THING} through the wood before the third night.",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "{SOMEONE} offers {first}, a {trait} {job}, a single wish in exchange for something {first} doesn't realize they have.",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "The {rival} of {place} has taken everything from {first}, a {trait} {job}, except the one thing {first} will not give up: {want}.",
+      "text": "{SOMEONE} offers {first}, a {trait} {job}, {PRIZE} in exchange for {THING}.",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

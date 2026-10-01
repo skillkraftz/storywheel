@@ -4,14 +4,17 @@
   "tags": ["general"],
   "entries": [
     "the old cannery",
-    {"text": "a diner that never closes", "tags": ["modern"]},
+    {"text": "an all-night diner", "tags": ["modern"]},
     "the bridge nobody uses",
     "the lighthouse",
     {"text": "an empty mall", "tags": ["modern"]},
-    "a statue nobody remembers putting up",
+    "a forgotten statue",
     "the lake",
     {"text": "a motel off the highway", "tags": ["modern"]},
-    {"text": "the abandoned {noun} factory", "tags": ["modern"]},
+    {
+      "text": "the abandoned {noun} factory",
+      "tags": ["modern"]
+    },
     "the county fairgrounds",
     "the train station",
     {"text": "the cemetery on the hill", "tags": ["horror", "ghost story", "mystery"]},

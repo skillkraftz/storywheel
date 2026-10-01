@@ -4,7 +4,7 @@
   "tags": ["general"],
   "entries": [
     "theft",
-    "a murder they didn't commit",
+    "a false murder charge",
     "cheating at the fair",
     "stealing {the_motif}",
     "arson",
@@ -12,6 +12,17 @@
     "witchcraft",
     {"text": "running over the mayor's cat", "tags": ["modern"]},
     "forgery",
-    "lying under oath"
+    "lying under oath",
+    "smuggling",
+    "horse theft",
+    "blackmail",
+    "trespassing",
+    "perjury",
+    "poaching",
+    "counterfeiting",
+    "bribery",
+    "desertion",
+    "kidnapping",
+    "vandalism"
   ]
 }

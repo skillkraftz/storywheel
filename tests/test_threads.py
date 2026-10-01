@@ -36,8 +36,8 @@ class FakeSpine:
     def __init__(self, value, introduced):
         self.value, self.introduced = value, introduced
 
-    def reroll_value(self, engine, story, current, field, threads=None):
-        return self.value, self.introduced
+    def reroll_value(self, engine, story, current, field, threads=None, atoms=None, made=None):
+        return self.value, self.introduced, []
 
 
 # --- the small pieces ------------------------------------------------------------------
@@ -162,7 +162,7 @@ def test_a_beat_cannot_pick_up_a_thread_from_a_later_beat():
     later = {"text": "a zeppelin made of cheese", "beat": "until_finally"}
     current = {k: "x" for k in SPINE.fields}
     for _ in range(150):
-        value, introduced = SPINE.reroll_value(engine, story, current, "one_day", {"thing": later})
+        value, introduced, _atoms = SPINE.reroll_value(engine, story, current, "one_day", {"thing": later})
         assert "zeppelin" not in value
         assert "thing" not in introduced              # already introduced further on: not ours
 

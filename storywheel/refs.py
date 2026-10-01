@@ -10,7 +10,7 @@ import copy
 import re
 
 from . import threads as T
-from .steps import STEPS, public
+from .steps import public, steps_for
 
 
 def change_pairs(old, new):
@@ -42,10 +42,10 @@ def substitute(story, i, old, new):
     """After changing step i, swap old names/places/etc. in later steps."""
     pairs = change_pairs(old, new)
     return sum(apply_pairs(story["kept"][s.key], pairs)
-               for s in STEPS[i + 1:] if story["kept"].get(s.key))
+               for s in steps_for(story)[i + 1:] if story["kept"].get(s.key))
 
 
-def with_field(cand, field, value, src=None, settle=True):
+def with_field(cand, field, value, src=None, settle=True, atoms=None):
     """A copy of a candidate with one field changed. Other fields that mentioned
     the old value get the new one, so a new landmark updates the rumor too.
     Threads travel with the candidate and are re-checked against its new text."""
@@ -58,6 +58,11 @@ def with_field(cand, field, value, src=None, settle=True):
         new["_threads"] = copy.deepcopy(cand["_threads"])
         if settle:
             T.settle(new)
+    if "_made" in cand:
+        new["_made"] = dict(cand["_made"])
+    if "_atoms" in cand:                        # the field changed, so its atoms are now `atoms`
+        new["_atoms"] = copy.deepcopy(cand["_atoms"])
+        new["_atoms"][field] = atoms or []
     return new
 
 
@@ -66,6 +71,10 @@ def inherit(new, old):
     if "_threads" in old:
         new["_threads"] = copy.deepcopy(old["_threads"])
         T.settle(new)
+    if "_atoms" in old:
+        new["_atoms"] = copy.deepcopy(old["_atoms"])
+    if "_made" in old:
+        new["_made"] = dict(old["_made"])
     return new
 
 
@@ -77,12 +86,14 @@ def reroll_field(step, engine, story, cand, field):
     swapped for the new one in the other beats) and otherwise lets it RETIRE once
     no other beat mentions it (see threads.py)."""
     if not step.threads:
-        value, _ = step.reroll_value(engine, story, public(cand), field)
-        return with_field(cand, field, value)
+        value, _, atoms = step.reroll_value(engine, story, public(cand), field, atoms=cand.get("_atoms"),
+                                            made=cand.get("_made"))
+        return with_field(cand, field, value, atoms=atoms)
     old = cand.get("_threads", {})
     standing = {k: copy.deepcopy(t) for k, t in old.items() if t["beat"] != field}
-    value, introduced = step.reroll_value(engine, story, public(cand), field, standing)
-    new = with_field(cand, field, value, settle=False)
+    value, introduced, atoms = step.reroll_value(engine, story, public(cand), field, standing,
+                                                 atoms=cand.get("_atoms"), made=cand.get("_made"))
+    new = with_field(cand, field, value, settle=False, atoms=atoms)
     threads = dict(standing)
     for kind, t in old.items():
         if t["beat"] != field:
@@ -107,7 +118,7 @@ def carry_threads(story, i, old, new):
             pairs += T.swap_pairs(t, n)
     pairs.sort(key=lambda p: -len(p[0]))
     count = 0
-    for step in STEPS[i + 1:]:
+    for step in steps_for(story)[i + 1:]:
         for key, value in (story["kept"].get(step.key) or {}).items():
             if isinstance(value, str):
                 for a, b in pairs:

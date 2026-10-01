@@ -1,0 +1,24 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "act_setup",
+  "tags": ["general"],
+  "entries": [
+    "In {place}, {first} was a {trait} {job} who wanted {want} and feared {FEELING}.",
+    "{first}, a {trait} {job} in {place}, kept {THING} {HIDING} and told {CLOSE} nothing about {TOPIC}.",
+    "{first} was a {job} in {place}, and {VICE} kept {first} from {want}.",
+    "The {rival} held power over {place}, and {first}, a {trait} {job}, had {THING} to lose.",
+    "For {first}, a {job} in {place}, {VALUE} mattered more than {PRIZE}, and {CLOSE} knew it.",
+    "Everyone in {place} knew {first}, a {trait} {job}, and nobody knew about {TOPIC}.",
+    "{first}, a {trait} {job}, {HABIT_PLACE} {landmark} in {place}, hoping for {PRIZE}.",
+    "{first} {flaw}, and in {place} that was a problem for a {job}.",
+    "{first} {secret}, and the {rival} of {place} did not know it yet.",
+    {
+      "text": "{first} rode into {place} {MANNER}, a {trait} {job} with {THING} and no plan.",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "In {place}, {first}, a {trait} {job}, kept {THING} {HIDING} and wished for {PRIZE}.",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
+}

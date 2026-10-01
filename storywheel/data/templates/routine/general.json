@@ -1,70 +1,26 @@
 {
-  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "routine",
   "tags": ["general"],
   "entries": [
-    "opened up before dawn and closed after dark",
-    "ate lunch alone at the same table",
-    "avoided {landmark}",
-    "argued with the {rival}",
-    "practiced a speech they never gave",
-    "checked the mail for a letter that never came",
-    "did exactly what was expected of them",
-    "pretended everything was fine",
-    "worked harder than everyone else and got less credit",
-    "took the long way home to avoid the {rival}",
-    "visited {landmark} and talked to no one",
-    "fed a stray dog that wasn't theirs",
-    "wrote in a diary nobody would ever read",
-    "counted the money twice",
+    "{ACT_PLACE} {landmark} {MANNER}",
+    "{ACT_THING} {THING} {MANNER}",
+    "{ACT_PERSON} {CLOSE} {MANNER}",
+    "{ACT_PERSON} the {rival} out of {MOTIVE}",
+    "{ACT_THING} {THING} and dreamed of {PRIZE}",
+    "{ACT_PLACE} {landmark} and wondered about {TOPIC}",
+    "worked toward {PRIZE}, held back by {VICE}",
+    "{ACT_PERSON} {SOMEONE} {MANNER}, and hoped nobody noticed",
+    "put {VALUE} aside for {PRIZE}",
+    "feared {FEELING} more than {DISASTER}",
+    "kept {THING} within reach, afraid of {SOMEONE}",
     {
-      "text": "called {CLOSE} and hung up before anyone answered",
-      "tags": ["modern"]
-    },
-    "told the same three jokes to the same three customers",
-    "kept {THING} in their coat pocket, just in case",
-    "watched the road out of {place} like it owed them something",
-    "fixed things for other people and nothing for themselves",
-    "lied a little, just to keep the peace",
-    "walked past {landmark} and wondered",
-    "made plans to leave {place} and then unpacked again",
-    "waited for {CLOSE} to apologize",
-    "looked after {CLOSE}, whether they wanted it or not",
-    "kept their head down and their mouth shut",
-    {"text": "played the same song on the radio until someone complained", "tags": ["modern"]},
-    "polished {THING} that nobody else cared about",
-    "lost a little more money to the {rival}",
-    {"text": "watered the horses before the sun got hot", "tags": ["western", "historical"]},
-    {"text": "walked the length of Main Street and nodded at nobody", "tags": ["western", "historical"]},
-    {"text": "cleaned a gun that hadn't been fired in years", "tags": ["western", "historical"]},
-    {"text": "watched the stage roll in and roll out", "tags": ["western", "historical"]},
-    {
-      "text": "paid a little more of the debt to the {rival}",
+      "text": "rode out to {landmark} and {ACT_THING} {THING}",
       "tags": ["western", "historical"]
     },
-    {"text": "sat on the porch and watched the road", "tags": ["western", "historical"]},
-    {"text": "mended fences that nobody else would", "tags": ["western", "historical"]},
-    {"text": "checked the telegraph for news that never came", "tags": ["western", "historical"]},
-    {"text": "sharpened a knife on a stone and thought about leaving", "tags": ["western", "historical"]},
     {
-      "text": "rode out to {landmark} and sat there until dark",
-      "tags": ["western", "historical"]
-    },
-    {"text": "fed the birds before eating breakfast", "tags": ["fairy tale", "fantasy"]},
-    {"text": "swept the doorstep and watched the wood", "tags": ["fairy tale", "fantasy"]},
-    {"text": "walked to the well and listened to the water", "tags": ["fairy tale", "fantasy"]},
-    {"text": "counted the stars from the window", "tags": ["fairy tale", "fantasy"]},
-    {"text": "told the crows what the day would bring", "tags": ["fairy tale", "fantasy"]},
-    {
-      "text": "carried water to the old woman at the edge of {place}",
+      "text": "walked to {landmark} and {ACT_THING} {THING}",
       "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "walked the path to {landmark} and back",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {"text": "kept a candle burning in the window", "tags": ["fairy tale", "fantasy"]},
-    {"text": "spun, stirred and stitched until the light failed", "tags": ["fairy tale", "fantasy"]},
-    {"text": "left a saucer of milk out for something that never came", "tags": ["fairy tale", "fantasy"]}
+    }
   ]
 }

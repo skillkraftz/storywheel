@@ -1,73 +1,33 @@
 {
-  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
   "slot": "once",
   "tags": ["general"],
   "entries": [
-    "in {place}, there lived a {trait} {job} named {first} who wanted {want}",
-    "in {place}, there lived a {trait} {job} named {first}, who had one problem: {first} {flaw}",
+    "in {place}, there lived a {trait} {job} named {first}, who wanted {want}",
     "there was a {job} in {place} named {first}, and all {first} wanted was {want}",
     "{name} was the most {trait} {job} in all of {place}",
     "in {place}, a {trait} {job} named {first} kept a secret: {first} {secret}",
-    "{first} was {age}, a {job}, and stuck in {place} with the {rival} breathing down their neck",
-    "in the {season} of a very strange year, a {trait} {job} named {first} lived quietly in {place}",
+    "{first}, a {trait} {job}, was stuck in {place} with the {rival} breathing down their neck",
+    "a {trait} {job} named {first} {HABIT_PLACE} {landmark} in {place}, hoping for {PRIZE}",
+    "{first}, a {trait} {job} from {place}, wanted {want} and feared {FEELING}",
+    "the {rival} {ACT_PERSON} {first}, a {trait} {job} in {place}, out of {MOTIVE}",
+    "in {place}, {first}, a {trait} {job}, kept {THING} {HIDING}",
+    "{first} was {age}, a {job} in {place}, and wanted {want}",
+    "in {place}, a {trait} {job} named {first} had one problem: {first} {flaw}",
     {
-      "text": "in a kingdom called {place}, there lived a {trait} {job} named {first}",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "out past the edge of {place}, there lived a {trait} {job} named {first}",
-      "tags": ["western", "adventure"]
-    },
-    {
-      "text": "in {place}, where the dead don't always stay put, there lived a {job} named {first}",
-      "tags": ["horror", "ghost story"]
-    },
-    {
-      "text": "in {place}, a dusty town with more saloons than churches, there lived a {trait} {job} named {first}",
+      "text": "{first}, a {trait} {job}, rode into {place} {MANNER} with {THING}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "{first}, a {trait} {job}, rode into {place} with a bad reputation and an empty saddlebag",
+      "text": "in {place}, a {trait} {job} named {first} ran from {TOPIC}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "the {rival} owned most of {place}, and {first}, a {trait} {job}, owned the rest",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{name}, a {trait} {job}, kept a quiet corner of {place} where the law rarely bothered to look",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{first}, a {trait} {job}, had lived in {place} longer than the railroad had",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "out where the water ran thin, a {trait} {job} named {first} wanted {want}",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "in a cottage at the edge of {place}, there lived a {trait} {job} named {first}",
+      "text": "in a cottage near {place}, {first}, a {trait} {job}, kept {THING} {HIDING}",
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "beyond the seven hills and the dark wood, in {place}, lived a {trait} {job} named {first}",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "in {place}, where the bells rang backwards at midnight, there lived a {trait} {job} named {first}",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "a {trait} {job} named {first} lived at the end of the lane in {place}, with {want} and not much else",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "in {place}, where everyone knew everyone's business, {first}, a {trait} {job}, kept one secret: {first} {secret}",
-      "tags": ["fairy tale", "fantasy"]
-    },
-    {
-      "text": "the youngest {job} in {place} was {first}, who was {trait} and wanted {want}",
+      "text": "beyond the wood, in {place}, lived a {trait} {job} named {first}, who feared {FEELING}",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

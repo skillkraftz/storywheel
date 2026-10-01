@@ -6,14 +6,17 @@
     "under the floorboards",
     "at {landmark}",
     {"text": "in a library book", "tags": ["modern"]},
-    "at the bottom of the lake",
-    {"text": "in the back of the {rival}'s car", "tags": ["modern"]},
+    "under the lake",
+    {
+      "text": "in the {rival}'s car",
+      "tags": ["modern"]
+    },
     "inside the walls",
-    "in their late father's coat",
+    "in a dead man's coat",
     "buried in the garden",
     {"text": "in a safety deposit box", "tags": ["modern"]},
     "in the church organ",
     {"text": "taped under a table", "tags": ["modern"]},
-    {"text": "in a box of Christmas decorations", "tags": ["modern"]}
+    {"text": "in a decoration box", "tags": ["modern"]}
   ]
 }

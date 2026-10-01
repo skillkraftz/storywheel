@@ -1,0 +1,23 @@
+{
+  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "slot": "act_turn",
+  "tags": ["general"],
+  "entries": [
+    "{first} decided to {DO_THING} {THING} {DEADLINE}, whatever {VICE} said.",
+    "{first} gave up {VALUE} for {PRIZE} and left {place} {MANNER}.",
+    "With {CLOSE} watching, {first} {ACT_PLACE} {landmark} and could not turn back.",
+    "{first} struck a bargain with {SOMEONE}: {PRIZE} in return for {THING}.",
+    "{first} set out {MANNER} to {DO_PERSON} {SOMEONE} {DEADLINE}.",
+    "{first} chose {PRIZE} over {VALUE}, and {CLOSE} was left behind.",
+    "Out of {MOTIVE}, {first} {ACT_PERSON} {SOMEONE} and burned every bridge.",
+    "{first} {ACT_THING} {THING} {MANNER} and committed to {PRIZE}.",
+    {
+      "text": "{first} saddled up {MANNER} and rode for {landmark} with {THING}.",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{first} followed a strange path to {landmark}, carrying {THING}.",
+      "tags": ["fairy tale", "fantasy"]
+    }
+  ]
+}
