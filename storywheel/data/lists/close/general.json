@@ -1,0 +1,6 @@
+{
+  "_note": "Fills {CLOSE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "close",
+  "tags": ["general"],
+  "entries": ["{first}'s sister", "{first}'s oldest friend", "{first}'s son", "{first}'s daughter", "{first}'s business partner", "{first}'s mother", "{first}'s father", "{first}'s spouse", "{first}'s apprentice", "{first}'s ex", "{first}'s dog", "{first}'s best customer", "the only person who ever believed {first}"]
+}

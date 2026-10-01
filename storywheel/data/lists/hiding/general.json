@@ -1,0 +1,6 @@
+{
+  "_note": "Fills {HIDING} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "hiding",
+  "tags": ["general"],
+  "entries": ["under the floorboards", "at {landmark}", "in a library book", "at the bottom of the lake", "in the back of the {rival}'s car", "inside the walls", "in their late father's coat", "buried in the garden", "in a safety deposit box", "in the church organ", "taped under a table", "in a box of Christmas decorations"]
+}

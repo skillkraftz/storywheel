@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "era",
+  "tags": ["general"],
+  "entries": ["present day", "the 1920s", "the 1970s", "the near future", "a hundred years from now", "the 1880s", "the late 90s", "wartime"]
+}

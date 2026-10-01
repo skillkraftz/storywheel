@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "reaction",
+  "tags": ["general"],
+  "entries": ["went looking for answers at {landmark}", "broke their oldest rule", "made a deal with the {rival}: {DEAL}", "made a deal with {SOMEONE}: {DEAL}", "lied to {CLOSE} about it", "teamed up with {SOMEONE}", "tried to fix it alone", "packed a bag and left {place}", "told {CLOSE} the truth, and immediately regretted it", "hid {THING} {HIDING}", "spent every cent they had", "agreed to {ERRAND}", "started asking questions nobody in {place} wanted answered", "pretended to be someone else", "went to the {rival} for help", "followed {SOMEONE} to {landmark}", "dug up {THING}", "stopped sleeping", "quit their job as a {job}", "wrote a letter to {CLOSE} and actually sent it", "started carrying {THING} everywhere", "turned {place} upside down looking for {SOMEONE}", "decided, for once, to say yes", "traded {THING} for {ODDITY}"]
+}

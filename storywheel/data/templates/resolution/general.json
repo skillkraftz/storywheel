@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "resolution",
+  "tags": ["general"],
+  "entries": ["{first} has been learning {need}", "{place} has never been quite the same", "{THING} sits on {first}'s shelf where everyone can see it", "{first} and the {rival} have an understanding", "nobody goes near {landmark} after dark", "{first} takes the short way home", "{first} and {CLOSE} have dinner every Sunday", "{first} {CHANGE}", "every {season}, {first} goes back to {landmark}", "the people of {place} tell the story wrong, and {first} lets them", "{first} keeps {THING} in the drawer, and doesn't open it", "{first} still {flaw}, but less", "the {rival} crosses the street when they see {first} coming", "there's a plaque at {landmark}, and the name on it is spelled wrong", "{first} has a new {job}'s license, and a new reason to stay in {place}"]
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "title",
+  "tags": ["general"],
+  "entries": ["{adj} {noun}", "{nouns} from {noun}", "the {adj} {noun} of {place}", "the {noun} of {place}", "{first}'s {adj} {noun}", "the {noun} who would not {verb}", "{adj} {nouns}", "the last {noun}", "{noun} and {noun2}", "a {noun} for {first}", "the {adj} {nouns} of {first} {last}", "{nouns} in the {noun}", "never {verb} the {noun}", "{ALLITERATION}"]
+}

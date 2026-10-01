@@ -1,0 +1,20 @@
+{
+  "_note": "Genre profiles: default weights for tags. A list's weight in a story is the biggest weight among its tags; a tag not mentioned gets only the small wildcard floor. Picking 'western' and 'fairy tale' blends those two profiles equally. A genre name not listed here still works: it becomes a tag with weight 3. Add your own in ~/.storywheel/genres.json.",
+  "_floor": 0.12,
+  "_default": {"general": 1, "modern": 0.5},
+
+  "mystery":       {"mystery": 3, "noir": 1, "thriller": 1, "urban": 0.5, "general": 1, "modern": 0.5},
+  "romance":       {"romance": 3, "comedy": 0.5, "domestic": 1, "general": 1, "modern": 0.5},
+  "horror":        {"horror": 3, "ghost story": 1.5, "mythological": 0.5, "rural": 0.5, "general": 1, "modern": 0.3},
+  "western":       {"western": 3, "historical": 2, "rural": 1, "adventure": 0.5, "general": 1, "modern": 0.2},
+  "sci-fi":        {"sci-fi": 3, "modern": 1, "urban": 0.5, "general": 1},
+  "comedy":        {"comedy": 3, "romance": 0.5, "domestic": 1, "general": 1, "modern": 1},
+  "fairy tale":    {"fairy tale": 3, "fantasy": 2, "mythological": 1, "medieval": 1, "rural": 1, "general": 1, "modern": 0.2},
+  "heist":         {"heist": 3, "thriller": 1, "urban": 1, "general": 1, "modern": 1},
+  "ghost story":   {"ghost story": 3, "horror": 1.5, "mystery": 0.5, "historical": 0.5, "rural": 0.5, "general": 1, "modern": 0.3},
+  "coming-of-age": {"coming-of-age": 3, "domestic": 1, "rural": 0.5, "adventure": 0.5, "general": 1, "modern": 1},
+  "noir":          {"noir": 3, "mystery": 1.5, "thriller": 1, "urban": 1, "historical": 0.5, "general": 1, "modern": 0.5},
+  "thriller":      {"thriller": 3, "mystery": 1, "noir": 0.5, "urban": 0.5, "general": 1, "modern": 1},
+  "fantasy":       {"fantasy": 3, "mythological": 2, "medieval": 2, "fairy tale": 1, "general": 1, "modern": 0.2},
+  "adventure":     {"adventure": 3, "western": 0.5, "historical": 0.5, "general": 1, "modern": 0.5}
+}

@@ -1,0 +1,22 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "landmark",
+  "tags": ["general"],
+  "entries": [
+    "the old cannery",
+    "a diner that never closes",
+    "the bridge nobody uses",
+    "the lighthouse",
+    "an empty mall",
+    "a statue nobody remembers putting up",
+    "the lake",
+    "a motel off the highway",
+    "the abandoned {noun} factory",
+    "the county fairgrounds",
+    "the train station",
+    {"text": "the cemetery on the hill", "tags": ["horror", "ghost story", "mystery"]},
+    {"text": "the saloon", "tags": ["western"]},
+    {"text": "the observatory", "tags": ["sci-fi"]},
+    {"text": "the castle ruins", "tags": ["fantasy", "fairy tale"]}
+  ]
+}

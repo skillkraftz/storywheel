@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "need",
+  "tags": ["general"],
+  "entries": ["to forgive themselves", "to ask for help", "to let go of the past", "to tell the truth", "to trust someone again", "to stop running", "to accept who they are", "to put someone else first", "to grieve properly", "to admit they were wrong", "to stand up for themselves"]
+}

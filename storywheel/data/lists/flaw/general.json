@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "flaw",
+  "tags": ["general"],
+  "entries": ["can't say no", "lies when nervous", "holds grudges forever", "needs to be the smartest in the room", "runs from conflict", "trusts the wrong people", "is too proud to ask for help", "gambles", "can't keep a secret", "never finishes anything", "has a terrible temper", "hides from their feelings"]
+}

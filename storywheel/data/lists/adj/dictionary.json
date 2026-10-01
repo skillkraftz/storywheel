@@ -1,0 +1,6 @@
+{
+  "_note": "A random dictionary word, for title templates and as a fallback.",
+  "slot": "adj",
+  "tags": ["general"],
+  "generator": "wonderwords.adjective"
+}

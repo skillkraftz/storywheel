@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "climax",
+  "tags": ["general"],
+  "entries": ["{first} had to choose between {want} and learning {need}", "{first} had to choose between {want} and {CLOSE}", "{first} faced the {rival} at {landmark} with nothing left to lose", "{first} confronted {SOMEONE} at {landmark}", "the truth about {TOPIC} came out in front of everyone", "{first} stopped running and did the one thing they'd sworn they never would", "{first} {SACRIFICE}", "{first} asked for help, out loud, for the first time", "{DISASTER} forced everyone in {place} into the same room", "{first} told {CLOSE} the whole truth", "{first} went back to {landmark}, alone, at night", "{first} gave up {want} to save {CLOSE}", "{first} stood up in front of the whole town and said it", "{first} and the {rival} needed each other to survive", "{first} burned {THING}"]
+}

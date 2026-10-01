@@ -1,0 +1,23 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "premise",
+  "tags": ["general"],
+  "entries": [
+    "When {SOMEONE} arrives in {place} with {THING}, a {trait} {job} named {first} has to decide how much {want} is really worth.",
+    "{name}, a {trait} {job}, has one {season} to clear their name after being accused of {CRIME}.",
+    "After {DISASTER} hits {place}, {first} finds {THING} {HIDING}, and the {rival} wants it badly.",
+    "{first} receives {MESSAGE}, and suddenly the quiet life of a {job} in {place} is over.",
+    "A {trait} {job} agrees to {ERRAND} for {SOMEONE}. It should be simple. It isn't.",
+    "{first} has spent years hiding {TOPIC} from {CLOSE}. Then {SOMEONE} comes to {place}.",
+    "When {name}, a {trait} {job} in {place}, finds the {motif}, they have until the end of {season} to decide what it's worth.",
+    "Everyone in {place} is obsessed with the {motif}. Everyone except {first}, a {trait} {job} who only wants {want}.",
+    "{first} has been the only {job} in {place} for twenty years. Then a stranger shows up carrying the {motif}.",
+    "The {motif} has gone missing from {landmark}, and {name}, a {trait} {job}, is the only one who knows why.",
+    "{name} inherits the {motif} and a debt to the people of {place}. Only one of them can be paid off.",
+    "The {rival} of {place} wants {first} gone. {first}, a {trait} {job}, has other plans, and they all involve the {motif}.",
+    "{first} {secret}. In a town as small as {place}, that won't stay hidden for long.",
+    {"text": "A {trait} {job} has to solve a death at {landmark} before the {rival} pins it on them.", "tags": ["mystery", "noir", "thriller"]},
+    {"text": "{first} moves into the house by {landmark} and starts hearing someone say their name at night.", "tags": ["horror", "ghost story"]},
+    {"text": "{first}, a {trait} {job}, falls for the one person in {place} who could ruin them.", "tags": ["romance"]}
+  ]
+}

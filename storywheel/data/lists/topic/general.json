@@ -1,0 +1,6 @@
+{
+  "_note": "Fills {TOPIC} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "topic",
+  "tags": ["general"],
+  "entries": ["the {motif}", "{first}'s past", "the money", "the affair", "what really happened at {landmark}", "the will", "the fire", "{first}'s real name", "the deal with the {rival}", "the second family"]
+}

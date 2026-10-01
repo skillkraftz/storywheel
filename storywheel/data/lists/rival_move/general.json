@@ -1,0 +1,6 @@
+{
+  "_note": "Fills {RIVAL_MOVE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "rival_move",
+  "tags": ["general"],
+  "entries": ["called in an old debt", "bought {landmark}", "told everyone", "set the deadline for the end of {season}", "made {first} an offer", "hired {SOMEONE}", "took {CLOSE}'s side"]
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "Fills {DISASTER} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "disaster",
+  "tags": ["general"],
+  "entries": ["a flood", "a fire", "a blackout", "a strange illness", "a heat wave", "a scandal", "a traveling circus", "a hurricane", "a bank failure", "a sinkhole", "a plague of crows", "a stock market crash", "a blizzard", "a factory closing", "a royal visit"]
+}

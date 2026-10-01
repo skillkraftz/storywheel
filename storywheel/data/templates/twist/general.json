@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "twist",
+  "tags": ["general"],
+  "entries": ["{CLOSE} was {BETRAYAL} the whole time.", "{SOMEONE} was {BETRAYAL} the whole time.", "{THING} was a fake, and the real one is still {HIDING}.", "{first} caused {DISASTER}, and has always known it.", "The {rival} and {CLOSE} are the same person.", "Everything that happened was a test set up by {SOMEONE}.", "The story everyone in {place} believes about {TOPIC} is backwards.", "The {motif} belonged to {first} all along.", "The {rival} has been secretly helping the whole time.", "There were two of them, not one.", "Nobody else in {place} can see the {motif}.", "It turns out {first} {secret}.", "It already happened once, forty years ago, in {place}.", "The person {first} is protecting is the one causing it.", "The {motif} is alive.", "{first} wrote the letter themselves and forgot.", "The rumor was started by {first}."]
+}

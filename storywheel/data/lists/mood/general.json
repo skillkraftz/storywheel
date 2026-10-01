@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "mood",
+  "tags": ["general"],
+  "entries": ["cozy", "eerie", "bittersweet", "absurd", "tense", "melancholy", "hopeful", "gritty", "whimsical", "quiet"]
+}

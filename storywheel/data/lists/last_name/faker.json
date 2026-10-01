@@ -1,0 +1,6 @@
+{
+  "_note": "No entries here: this list is generated at run time. Tagged modern because Faker produces modern people and places.",
+  "slot": "last_name",
+  "tags": ["modern"],
+  "generator": "faker.last_name"
+}

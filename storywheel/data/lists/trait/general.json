@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "trait",
+  "tags": ["general"],
+  "entries": ["stubborn", "gentle", "reckless", "nervous", "cheerful", "bitter", "curious", "proud", "lonely", "charming", "loyal", "ambitious", "grumpy", "dreamy", "meticulous", "impulsive", "shy", "sarcastic", "kind-hearted", "restless", "secretive", "optimistic", "weary", "fussy", "brave", "awkward"]
+}

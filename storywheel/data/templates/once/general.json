@@ -1,0 +1,17 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "once",
+  "tags": ["general"],
+  "entries": [
+    "in {place}, there lived a {trait} {job} named {first} who wanted {want}",
+    "in {place}, there lived a {trait} {job} named {first}, who had one problem: {first} {flaw}",
+    "there was a {job} in {place} named {first}, and all {first} wanted was {want}",
+    "{name} was the most {trait} {job} in all of {place}",
+    "in {place}, a {trait} {job} named {first} kept a secret: {first} {secret}",
+    "{first} was {age}, a {job}, and stuck in {place} with the {rival} breathing down their neck",
+    "in the {season} of a very strange year, a {trait} {job} named {first} lived quietly in {place}",
+    {"text": "in a kingdom called {place}, there lived a {trait} {job} named {first}", "tags": ["fairy tale", "fantasy"]},
+    {"text": "out past the edge of {place}, there lived a {trait} {job} named {first}", "tags": ["western", "adventure"]},
+    {"text": "in {place}, where the dead don't always stay put, there lived a {job} named {first}", "tags": ["horror", "ghost story"]}
+  ]
+}

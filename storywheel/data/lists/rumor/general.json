@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "rumor",
+  "tags": ["general"],
+  "entries": ["something is buried under {landmark}", "the mayor isn't really the mayor", "nobody who leaves {place} ever comes back", "the {rival} is broke", "a famous outlaw once lived here in hiding", "{landmark} is haunted", "the town was named after a murderer", "there's a second {place} somewhere, exactly like this one"]
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "slot": "escalation",
+  "tags": ["general"],
+  "entries": ["everything got worse, mostly because {first} {flaw}", "{SOMEONE} found out about {TOPIC}", "the {rival} found out about {TOPIC}", "the whole town turned against {first}", "{first} lost {LOSS}", "{CLOSE} stopped speaking to {first}", "{CLOSE} got hurt, and it was {first}'s fault", "the secret came out: {first} {secret}", "it turned out the rumor was true: {rumor}", "{DISASTER} hit {place}", "{SOMEONE} turned up at {landmark}, asking for {first} by name", "{SOMEONE} turned out to be {BETRAYAL}", "the {rival} {RIVAL_MOVE}", "{first} had to {ERRAND}, and it went badly", "{THING} went missing, and {first} was the last one seen with it", "the deadline moved up to the end of {season}", "{first} was accused of {CRIME}", "the money ran out", "{first} discovered {TOPIC} was all a lie"]
+}

@@ -1,0 +1,6 @@
+{
+  "_note": "A random dictionary word, for title templates and as a fallback.",
+  "slot": "verb",
+  "tags": ["general"],
+  "generator": "wonderwords.verb"
+}

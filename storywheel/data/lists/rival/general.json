@@ -1,0 +1,6 @@
+{
+  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "slot": "rival",
+  "tags": ["general"],
+  "entries": ["mayor", "landlord", "older brother", "local newspaper", "ex", "neighbor", "church choir", "police chief", "best friend", "new boss", "family next door"]
+}
