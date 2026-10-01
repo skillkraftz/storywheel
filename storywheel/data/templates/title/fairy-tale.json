@@ -2,5 +2,5 @@
   "_note": "Title templates. Placeholders work as everywhere else; {TITLE_ADJ}/{TITLE_NOUN} draw from the title word lists.",
   "slot": "title",
   "tags": ["fairy tale", "fantasy"],
-  "entries": ["The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_ADJ} {TITLE_NOUN}", "{first} and the {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} of {place}", "The {job}'s {TITLE_NOUN}", "The Three {title_nouns}", "Seven {title_nouns}", "The {job} and the {TITLE_NOUN}", "A Crown of {title_nouns}", "{first} of the {TITLE_NOUN}", "The Wolf of {place}", "The {TITLE_NOUN} in the Wood", "{TITLE_ADJ} {title_nouns}", "The Last {TITLE_NOUN} of {place}", "A {TITLE_NOUN} for {first}", "The Twelve {title_nouns}", "{first} and the {TITLE_NOUN}", "The {TITLE_ADJ} {job}", "Hollow {TITLE_NOUN}"]
+  "entries": ["The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_ADJ} {TITLE_NOUN}", "{first} and the {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} of {place}", "The {job}'s {TITLE_NOUN}", "The Three {title_nouns}", "Seven {title_nouns}", "The {job} and the {TITLE_NOUN}", "A Crown of {title_nouns}", "{first} of the {TITLE_NOUN}", "The Wolf of {place}", "The {TITLE_NOUN} in the Wood", "{TITLE_ADJ} {title_nouns}", "The Last {TITLE_NOUN} of {place}", "A {TITLE_NOUN} for {first}", "The Twelve {title_nouns}", "{first} and the {TITLE_NOUN}", "Hollow {TITLE_NOUN}"]
 }

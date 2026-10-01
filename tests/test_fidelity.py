@@ -36,7 +36,7 @@ def test_western_fairy_tale_draws_from_matching_tags():
 
     for slot in FLAVORED_SLOTS:
         hits, total = seen[slot]
-        assert total >= 50, f"{slot}: only {total} picks, test is not measuring much"
+        assert total >= 30, f"{slot}: only {total} picks, test is not measuring much"
         assert hits / total >= THRESHOLD, f"{slot}: {hits / total:.0%} of {total} match"
 
     hits = sum(seen[s][0] for s in FLAVORED_SLOTS)

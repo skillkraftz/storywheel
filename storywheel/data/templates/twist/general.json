@@ -1,6 +1,61 @@
 {
-  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
   "slot": "twist",
   "tags": ["general"],
-  "entries": ["{CLOSE} was {BETRAYAL} the whole time.", "{SOMEONE} was {BETRAYAL} the whole time.", "{THING} was a fake, and the real one is still {HIDING}.", "{first} caused {DISASTER}, and has always known it.", "The {rival} and {CLOSE} are the same person.", "Everything that happened was a test set up by {SOMEONE}.", "The story everyone in {place} believes about {TOPIC} is backwards.", "The {motif} belonged to {first} all along.", "The {rival} has been secretly helping the whole time.", "There were two of them, not one.", "Nobody else in {place} can see the {motif}.", "It turns out {first} {secret}.", "It already happened once, forty years ago, in {place}.", "The person {first} is protecting is the one causing it.", "The {motif} is alive.", "{first} wrote the letter themselves and forgot.", "The rumor was started by {first}."]
+  "entries": [
+    "{CLOSE} was {BETRAYAL} the whole time.",
+    "{SOMEONE} was {BETRAYAL} the whole time.",
+    "{THING} was a fake, and the real one is still {HIDING}.",
+    "{first} caused {DISASTER}, and has always known it.",
+    "The {rival} and {CLOSE} are the same person.",
+    "Everything that happened was a test set up by {SOMEONE}.",
+    "The story everyone in {place} believes about {TOPIC} is backwards.",
+    "{the_motif} belonged to {first} all along.",
+    "The {rival} has been secretly helping the whole time.",
+    "There were two of them, not one.",
+    "Nobody else in {place} can see the {motif}.",
+    "It turns out {first} {secret}.",
+    "It already happened once, forty years ago, in {place}.",
+    "The person {first} is protecting is the one causing it.",
+    "The {motif} is alive.",
+    "{first} wrote the letter themselves and forgot.",
+    "The rumor was started by {first}.",
+    {
+      "text": "The {rival} and the outlaw are the same person.",
+      "tags": ["western", "historical"]
+    },
+    {"text": "The gold was never in the mine; it was in the bank all along.", "tags": ["western", "historical"]},
+    {
+      "text": "{first} was the one who sent for {SOMEONE}.",
+      "tags": ["western", "historical"]
+    },
+    {"text": "The whole town was in on it.", "tags": ["western", "historical"]},
+    {"text": "The law that arrived was never the law.", "tags": ["western", "historical"]},
+    {
+      "text": "{first} is the missing heir.",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The wood was only ever trying to lead {first} home.",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "The curse was {first}'s own wish, granted long ago.",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{SOMEONE} was the one under the spell all along.",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "Nothing was stolen; the {rival} was only trying to keep {first} safe.",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    "{the_thing} was a fake, and the real one is still {HIDING}.",
+    "{the_someone} was {BETRAYAL} the whole time.",
+    "{the_message} was written by {first}, years ago.",
+    "{the_disaster} was no accident.",
+    "{the_thing} belonged to {the_someone} all along.",
+    "{the_someone} sent {the_message}, and has been waiting ever since."
+  ]
 }

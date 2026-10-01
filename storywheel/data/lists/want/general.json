@@ -1,6 +1,49 @@
 {
-  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "_note": "Plain strings fit any story. Entries with their own tags are favored in those genres (western, fairy tale...) and rare elsewhere.",
   "slot": "want",
   "tags": ["general"],
-  "entries": ["a way out of {place}", "revenge on the {rival}", "their family's respect", "a quiet life", "the {motif}", "their old job back", "enough money to start over", "first prize at the county fair", "a second chance with an old love", "proof that they were right all along", "peace and quiet", "one moment of fame"]
+  "entries": [
+    "a way out of {place}",
+    "revenge on the {rival}",
+    "their family's respect",
+    "a quiet life",
+    "the {motif}",
+    "their old job back",
+    "enough money to start over",
+    "first prize at the county fair",
+    "a second chance with an old love",
+    "proof that they were right all along",
+    "peace and quiet",
+    "one moment of fame",
+    {"text": "land of their own", "tags": ["western", "historical"]},
+    {
+      "text": "a clean name in {place}",
+      "tags": ["western", "historical"]
+    },
+    {"text": "a stake in the silver claim", "tags": ["western", "historical"]},
+    {"text": "a place on the next cattle drive", "tags": ["western", "historical"]},
+    {"text": "enough gold to go back East", "tags": ["western", "historical"]},
+    {"text": "the deed to the old homestead", "tags": ["western", "historical"]},
+    {"text": "a horse of their own", "tags": ["western", "historical"]},
+    {"text": "justice for a dead brother", "tags": ["western", "historical"]},
+    {
+      "text": "a seat at the poker table in {place}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "back the land the {rival} took",
+      "tags": ["western", "historical"]
+    },
+    {"text": "a place at the king's table", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a love that breaks the curse", "tags": ["fairy tale", "fantasy"]},
+    {"text": "three wishes", "tags": ["fairy tale", "fantasy"]},
+    {"text": "their true name back", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a home in the wood", "tags": ["fairy tale", "fantasy"]},
+    {"text": "the end of the long winter", "tags": ["fairy tale", "fantasy"]},
+    {"text": "freedom from the curse", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a kingdom of their own", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a family at last", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a spell to undo what they did", "tags": ["fairy tale", "fantasy"]},
+    {"text": "bread for the winter", "tags": ["fairy tale", "fantasy"]}
+  ]
 }

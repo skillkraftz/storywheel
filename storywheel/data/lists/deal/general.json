@@ -2,5 +2,5 @@
   "_note": "Fills {DEAL} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "deal",
   "tags": ["general"],
-  "entries": ["silence in exchange for money", "one favor, no questions asked", "the {motif} for a way out", "a week of help for a lifetime of debt", "their name on the deed", "they'd never speak of it again"]
+  "entries": ["silence in exchange for money", "one favor, no questions asked", "{the_motif} for a way out", "a week of help for a lifetime of debt", "their name on the deed", "they'd never speak of it again"]
 }

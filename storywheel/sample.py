@@ -10,6 +10,7 @@ from . import store
 from .mix import sync_base
 from .steps import STEPS, public
 from .text import fix_articles
+from .threads import describe
 
 
 def build_story(engine, genres, exclude_tags=()):
@@ -24,6 +25,8 @@ def build_story(engine, genres, exclude_tags=()):
         for k, v in cand.get("_made", {}).items():      # what keeping does
             story["seeds"].setdefault(k, v)
         story["kept"][step.key] = public(cand)
+        if step.threads:
+            story["threads"] = cand["_threads"]
     return story
 
 
@@ -48,6 +51,8 @@ def render(story, number=None, width=78):
            ""]
     out += [wrap(text) for text in k["spine"].values()]
     out += ["", wrap("Twist: " + k["twist"]["twist"])]
+    if story.get("threads"):
+        out.append(wrap("Threads: " + describe(story["threads"]), "    "))
     return "\n".join(out)
 
 

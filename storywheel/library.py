@@ -28,12 +28,16 @@ def norm_tag(tag):
     return str(tag).strip().lower()
 
 
-class Entry:
-    __slots__ = ("text", "tags")
+KINDS = ("object", "person", "place", "creature", "idea")
 
-    def __init__(self, text, tags=()):
+
+class Entry:
+    __slots__ = ("text", "tags", "kind")
+
+    def __init__(self, text, tags=(), kind=None):
         self.text = text
         self.tags = tuple(norm_tag(t) for t in tags)
+        self.kind = kind                      # object, person, place, creature or idea; None if unsaid
 
     def __repr__(self):
         return f"Entry({self.text!r}, {list(self.tags)})"
@@ -67,12 +71,18 @@ def _read_list(path, root):
     if not isinstance(tags, list):
         raise DataError(f'{path}: "tags" should be a list like ["western", "rural"]')
     generator = doc.get("generator")
+    list_kind = doc.get("kind")
+    if list_kind is not None and list_kind not in KINDS:
+        raise DataError(f'{path}: "kind" should be one of {", ".join(KINDS)}')
     entries = []
     for raw in doc.get("entries", []):
         if isinstance(raw, str):
-            entries.append(Entry(raw))
+            entries.append(Entry(raw, kind=list_kind))
         elif isinstance(raw, dict) and "text" in raw:
-            entries.append(Entry(raw["text"], raw.get("tags", [])))
+            kind = raw.get("kind", list_kind)
+            if kind is not None and kind not in KINDS:
+                raise DataError(f'{path}: entry {raw["text"]!r} has kind {kind!r}; use one of {", ".join(KINDS)}')
+            entries.append(Entry(raw["text"], raw.get("tags", []), kind))
         else:
             raise DataError(f'{path}: bad entry {raw!r} (use "text" or {{"text": ..., "tags": [...]}})')
     if not entries and not generator:
@@ -106,17 +116,19 @@ def _read_profiles(path):
         if not name.startswith("_"):
             profiles[name.strip().lower()] = {norm_tag(t): float(w) for t, w in weights.items()}
     default = {norm_tag(t): float(w) for t, w in doc.get("_default", {}).items()}
-    return profiles, default, doc.get("_floor")
+    floors = {slot: float(f) for slot, f in doc.get("_floors", {}).items()}
+    return profiles, default, doc.get("_floor"), floors
 
 
 class Library:
     """Everything loaded from disk: lists by slot, genre profiles, the floor."""
 
-    def __init__(self, lists, profiles, default_profile=None, floor=DEFAULT_FLOOR):
+    def __init__(self, lists, profiles, default_profile=None, floor=DEFAULT_FLOOR, floors=None):
         self.lists = lists                                  # id -> WordList
         self.profiles = profiles                            # genre -> {tag: weight}
         self.default_profile = default_profile or {"general": 1.0}
-        self.floor = floor
+        self.floor = floor                                  # wildcard share for one-off slots
+        self.floors = floors or {}                          # slot -> its own (usually lower) share
         self.by_slot = {}
         for wl in lists.values():
             self.by_slot.setdefault(wl.slot, []).append(wl)
@@ -124,17 +136,18 @@ class Library:
     @classmethod
     def load(cls, user_dir=None):
         roots = [DATA / "lists", DATA / "templates"]
-        profiles, default, floor = _read_profiles(DATA / "genres.json")
+        profiles, default, floor, floors = _read_profiles(DATA / "genres.json")
         if user_dir:
             user_dir = Path(user_dir)
             roots += [user_dir / "lists", user_dir / "templates"]
             if (user_dir / "genres.json").exists():
-                more, more_default, more_floor = _read_profiles(user_dir / "genres.json")
+                more, more_default, more_floor, more_floors = _read_profiles(user_dir / "genres.json")
                 profiles.update(more)
                 default = more_default or default
                 floor = more_floor if more_floor is not None else floor
+                floors.update(more_floors)
         return cls(load_lists(roots), profiles, default,
-                   DEFAULT_FLOOR if floor is None else float(floor))
+                   DEFAULT_FLOOR if floor is None else float(floor), floors)
 
     @property
     def genre_names(self):

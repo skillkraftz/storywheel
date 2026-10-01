@@ -20,7 +20,8 @@ import textwrap
 
 from . import paths, store
 from .engine import Engine
-from .refs import substitute, with_field
+from . import threads as T
+from .refs import carry_threads, inherit, reroll_field, substitute, with_field
 from .steps import STEPS, public
 
 try:
@@ -130,6 +131,8 @@ def show(step, i, hist, cur):
                                 subsequent_indent=" " * len(label)))
     opts = "[enter] roll  [k]eep  " + ("" if step.single else "[f]ield  ") + \
            "[e]dit  [w]rite  [p]ick #  [h]istory  [u]/[U]niverse  [b]ack  [x] skip  [q]uit  [?]"
+    if cand.get("_threads"):
+        print(dim("\n  threads  " + T.describe(cand["_threads"])))
     print(dim("\n  " + opts))
 
 def summary(step, cand):
@@ -245,8 +248,12 @@ def run_step(story, i):
             story["kept"][step.key] = new
             if old and old != new:
                 n = substitute(story, i, old, new)
+                if step.threads:
+                    n += carry_threads(story, i, story.get("threads"), cand.get("_threads"))
                 if n:
                     print(dim(f"  Updated {n} mention(s) in later steps."))
+            if step.threads:
+                story["threads"] = cand.get("_threads", {})
             story["step"] = max(story["step"], i + 1)
             store.save(story)
             return i + 1
@@ -254,8 +261,7 @@ def run_step(story, i):
         elif cmd == "f" and not step.single:
             field = choose_field(step, arg)
             if field:
-                new = fresh_candidate(lambda: with_field(
-                    cand, field, step.roll_field(get_engine(), story, public(cand), field)[field]), hist)
+                new = fresh_candidate(lambda: reroll_field(step, get_engine(), story, cand, field), hist)
                 hist.append(new)
                 cur = len(hist) - 1
 
@@ -270,7 +276,7 @@ def run_step(story, i):
         elif cmd == "E":
             new = edit_in_editor(public(cand))
             if new != public(cand):
-                hist.append(dict(new, _src="edited"))
+                hist.append(inherit(dict(new, _src="edited"), cand))
                 cur = len(hist) - 1
 
         elif cmd == "w":
@@ -282,7 +288,7 @@ def run_step(story, i):
                 label = f"  {k.replace('_', ' ')}" + ("" if step.single else dim(f" [{v}]"))
                 new[k] = ask(label + ": ").strip() or v
             if new != fields:
-                hist.append(dict(new, _src="edited"))
+                hist.append(inherit(dict(new, _src="edited"), cand))
                 cur = len(hist) - 1
 
         elif cmd == "p":
@@ -320,6 +326,8 @@ def run_step(story, i):
 
         elif cmd == "x":
             story["kept"].pop(step.key, None)
+            if step.threads:
+                story["threads"] = {}
             story["step"] = max(story["step"], i + 1)
             store.save(story)
             return i + 1

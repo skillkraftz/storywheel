@@ -14,8 +14,9 @@ How weights work (the one place this is decided):
 * Excluding a tag zeroes every list and entry that carries it. Exclusion is
   absolute: the wildcard floor never brings it back.
 * Wildcard floor: lists that are not excluded but whose tags the mix doesn't
-  mention (weight 0) share a small slice of each pick, `floor` (12% by
-  default), so off-genre surprises still happen. If a slot has no mentioned
+  mention (weight 0) share a small slice of each pick (12% by default), so
+  off-genre surprises still happen. Slots that repeat all through a story
+  (rival, job, place, names) get a lower floor, set per slot in genres.json. If a slot has no mentioned
   lists they get everything; if it has no wildcard lists the mentioned ones do.
 * Inside a list, a plain string has weight 1. An entry with its own tags uses
   those tags' weight instead (so a "western" entry is 3x likelier in a
@@ -57,6 +58,7 @@ class Mix:
         self.profiles = library.profiles
         self.default = library.default_profile
         self.floor = library.floor
+        self.floors = library.floors
 
     @classmethod
     def for_story(cls, story, library):
@@ -111,6 +113,11 @@ class Mix:
             return 0.0
         return self.tags_weight(entry.tags, weights) or OFF_WEIGHT
 
+    def floor_for(self, slot):
+        """The wildcard share for a slot: anchor slots that repeat through a story
+        (rival, job, place, names...) get a lower one than one-off blocks."""
+        return self.floors.get(slot, self.floor)
+
     # --- picking probabilities -------------------------------------------------------
 
     def list_probabilities(self, lists):
@@ -126,7 +133,8 @@ class Mix:
         w = {wl.id: self.list_weight(wl, weights) for wl in live}
         mentioned = [wl for wl in live if w[wl.id] > 0]
         wild = [wl for wl in live if w[wl.id] <= 0]
-        wild_share = 0.0 if not wild else (1.0 if not mentioned else self.floor)
+        floor = self.floor_for(lists[0].slot)
+        wild_share = 0.0 if not wild else (1.0 if not mentioned else floor)
         total = sum(w[wl.id] for wl in mentioned)
         probs = []
         for wl in lists:

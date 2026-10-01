@@ -12,6 +12,7 @@ import random
 from collections import deque
 
 from . import library as lib
+from .library import Entry
 from .markov import NameMaker
 
 
@@ -24,6 +25,9 @@ class Engine:
         self._words = None
         self.trace = None                  # set to [] to record every pick (see pick_entry)
         self._makers = {}
+        self._kinds = None
+        self._dictionary = None
+        self.last_entry = None             # the Entry behind the most recent pick
         self.notices = []                  # things the user should hear about (see take_notices)
 
     def notify(self, message):
@@ -40,9 +44,11 @@ class Engine:
     def has_slot(self, slot):
         return self.library.has_slot(slot)
 
-    def pick(self, slot, mix):
-        """Raw text for a slot (placeholders still unexpanded)."""
-        return self.pick_entry(self.pick_list(slot, mix), mix)
+    def pick(self, slot, mix, adjust=None):
+        """Raw text for a slot (placeholders still unexpanded). `adjust`, if given,
+        is a function text -> factor that scales an entry's weight (0 rules it out);
+        the story uses it to prefer templates that pick up its threads."""
+        return self.pick_entry(self.pick_list(slot, mix), mix, adjust).text
 
     def pick_list(self, slot, mix):
         lists = self.library.by_slot[slot]
@@ -53,15 +59,17 @@ class Engine:
             return lists[0]
         return self.rng.choices(lists, weights=mix.list_probabilities(lists))[0]
 
-    def pick_entry(self, wl, mix):
+    def pick_entry(self, wl, mix, adjust=None):
+        """The chosen Entry (generated names and words come back as a plain Entry)."""
         if wl.generator:
-            return self._record(wl, (), self.generate(wl.generator))
+            return self._record(wl, Entry(self.generate(wl.generator), kind=None))
         if wl.markov and self.rng.random() < wl.markov:
-            name = self.maker(wl).make(self.rng)
+            name = self.maker(wl).make(self.rng, reject=self.dictionary)
             if name:
-                return self._record(wl, (), name)
+                return self._record(wl, Entry(name))
         weights = mix.weights()
-        options = [(e, mix.entry_weight(e, weights)) for e in wl.entries]
+        options = [(e, mix.entry_weight(e, weights) * (adjust(e.text) if adjust else 1.0))
+                   for e in wl.entries]
         live = [(e, w) for e, w in options if w > 0]
         if not live:
             self.notify(f"Every entry in '{wl.id}' is excluded in this mix, "
@@ -71,17 +79,40 @@ class Engine:
         fresh = [(e, w) for e, w in options if e.text not in recent] or options
         entry = self.rng.choices([e for e, _ in fresh], weights=[w for _, w in fresh])[0]
         recent.append(entry.text)
-        return self._record(wl, entry.tags, entry.text)
+        return self._record(wl, entry)
 
     def maker(self, wl):
         if wl.id not in self._makers:
             self._makers[wl.id] = NameMaker([e.text for e in wl.entries])
         return self._makers[wl.id]
 
-    def _record(self, wl, entry_tags, text):
+    def _record(self, wl, entry):
         if self.trace is not None:
-            self.trace.append((wl.slot, wl.id, set(wl.tags) | set(entry_tags), text))
-        return text
+            self.trace.append((wl.slot, wl.id, set(wl.tags) | set(entry.tags), entry.text))
+        self.last_entry = entry
+        return entry
+
+    # --- what kind of thing is a title noun? --------------------------------------------
+
+    def motif_kind(self, motif):
+        """object, person, place, creature or idea, for a motif that came from a title
+        noun. Anything else (a word the writer typed, a dictionary word) counts as an
+        object, which is what templates assume by default."""
+        if self._kinds is None:
+            self._kinds = {}
+            for wl in self.library.by_slot.get("title_noun", []):
+                for e in wl.entries:
+                    self._kinds.setdefault(e.text.lower(), e.kind or "object")
+        return self._kinds.get((motif or "").lower(), "object")
+
+    @property
+    def dictionary(self):
+        """Ordinary English words, so invented names aren't just 'Thistle' or 'Bell'."""
+        if self._dictionary is None:
+            from wonderwords import RandomWord
+            self._dictionary = {w.lower() for w in RandomWord().filter(
+                include_parts_of_speech=["nouns", "adjectives", "verbs"])}
+        return self._dictionary
 
     # --- generated lists ------------------------------------------------------------------
 

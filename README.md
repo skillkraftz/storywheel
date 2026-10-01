@@ -97,6 +97,8 @@ files and see changes at once.
   made up at run time. Built in: `faker.first_name`, `faker.last_name`,
   `faker.city`, `faker.job`, `wonderwords.adjective`, `wonderwords.noun`,
   `wonderwords.verb`. (Faker lists are tagged `modern`.)
+* Invented names skip anything under four letters and ordinary dictionary words
+  (no "Thistle" or "Bell" from a surname list).
 * A list of names can say `"markov": 0.5`: that share of picks is then a new
   name invented by a small Markov-chain name maker trained on the list's own
   entries (so `Calloway, Hollis, Pruitt` can yield `Callis` or `Pruden`); the
@@ -121,6 +123,38 @@ spine beats `once`, `routine`, `inciting`, `reaction`, `escalation`, `climax`,
 
 Add a line to a block and every template that uses it improves.
 
+### Threads
+
+When a spine beat draws a {THING}, {SOMEONE}, {MESSAGE} or {DISASTER}, the story
+remembers it as a **thread**. Later beats can say `{the_thing}`,
+`{the_someone}`, `{the_message}` or `{the_disaster}`, which come out as "the
+locked box", "the stranger": the same one, now definite. A template that uses a
+thread is six times likelier while that thread exists, and never used when it
+doesn't, so what "One day" brings in comes back in "Because of that" and "Until
+finally". Threads are listed on the spine card, saved in the story file, and
+written to the markdown under "Threads".
+
+Rerolling the beat that introduced a thread (`f`) keeps the story straight: if
+the new beat brings in a new one of that kind, the thread is updated and every
+mention of the old one is swapped; if not, the old one lives on as long as a
+later beat still mentions it (that mention turns back into an introduction) and
+is retired when none does.
+
+### Motif kinds
+
+A title noun can say what kind of thing it is, so the story doesn't try to
+"find the marshal" or "bury the mesa":
+
+    "entries": ["lantern", {"text": "marshal", "kind": "person"},
+                {"text": "raven", "kind": "creature"}, {"text": "mesa", "kind": "place"},
+                {"text": "curse", "kind": "idea"}]
+
+Kinds are `object` (the default), `person`, `creature`, `place`, `idea`; a whole
+list can have a `"kind"` too. In templates, `{the_motif}` is "the lantern" when
+the motif is an object, and otherwise falls back to the story's thing (or a fresh
+{THING}). Plain `the {motif}` is for places where any kind will do. A person or
+creature motif is sometimes offered as a {SOMEONE} ("the marshal rode in").
+
 ### Genres, tags and the story mix
 
 `genres.json` gives each genre default weights for tags:
@@ -139,8 +173,10 @@ story's mix**. Rolling a slot then works in two stages:
    much likelier in a western story.
 
 **Wildcard floor:** a list the mix doesn't mention still gets a small slice of
-each pick (12%, set by `_floor` in `genres.json`), so off-genre surprises
-still turn up. **Exclusion is absolute:** a tag or list you exclude gets weight
+each pick (12%, `_floor` in `genres.json`), so off-genre surprises still turn
+up. Slots that repeat all through a story (rival, job, place, names, landmark)
+get a lower one, 4%, set per slot under `_floors`, so an off-genre rival doesn't
+appear in half the sentences. **Exclusion is absolute:** a tag or list you exclude gets weight
 zero and the floor never brings it back. (One exception so rolls never come
 up empty: if *every* list for a slot is excluded, the exclusions are ignored
 for that slot.)

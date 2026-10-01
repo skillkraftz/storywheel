@@ -24,8 +24,16 @@ def singular(w):
     return w
 
 
+# Words that start with a vowel but sound like a consonant (a one-armed, a unicorn), and
+# words that start with a consonant but sound like a vowel (an hour, an honest).
+_CONSONANT_SOUND = r"(?:one|once|uni|use|used|useful|usual|euro|ewe|ubiq)"
+_VOWEL_SOUND = r"(?:hour|honest|honor|heir)"
+
+
 def fix_articles(text):
-    return re.sub(r"\b([Aa]) (?=[aeiouAEIOU])", r"\1n ", text)
+    text = re.sub(rf"\b([Aa]) (?=(?!{_CONSONANT_SOUND}\b|{_CONSONANT_SOUND}-|uni)[aeiouAEIOU])", r"\1n ", text)
+    text = re.sub(rf"\b([Aa])n (?=(?:{_CONSONANT_SOUND}\b|{_CONSONANT_SOUND}-|uni[a-z]))", r"\1 ", text)
+    return re.sub(rf"\b([Aa]) (?={_VOWEL_SOUND})", r"\1n ", text)
 
 
 def title_case(text):

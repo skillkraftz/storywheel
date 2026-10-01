@@ -57,6 +57,12 @@ def test_articles():
     assert fix_articles("a owl and A apple, a pear") == "an owl and An apple, a pear"
 
 
+def test_articles_know_consonant_and_vowel_sounds():
+    assert fix_articles("a one-armed blacksmith, an one-armed cook") == "a one-armed blacksmith, a one-armed cook"
+    assert fix_articles("a unicorn, an unicorn, a used cart") == "a unicorn, a unicorn, a used cart"
+    assert fix_articles("a hour, a honest man, a umbrella") == "an hour, an honest man, an umbrella"
+
+
 def test_plurals_and_singulars():
     assert plural("story") == "stories" and plural("fox") == "foxes" and plural("cat") == "cats"
     assert singular("stags") == "stag" and singular("stories") == "story" and singular("glass") == "glass"

@@ -35,7 +35,7 @@ def test_markov_lists_mix_real_and_invented_names():
     from storywheel.mix import Mix, new_mix
     mix = Mix(new_mix(["western"]), engine.library)
     real = {e.text for e in wl.entries}
-    picks = [engine.pick_entry(wl, mix) for _ in range(400)]
+    picks = [engine.pick_entry(wl, mix).text for _ in range(400)]
     invented = [p for p in picks if p not in real]
     assert 0.35 < len(invented) / len(picks) < 0.65
 
@@ -51,7 +51,7 @@ def test_title_motif_is_the_title_noun():
         cand = STEPS[1].roll(engine, story)
         if cand["motif"] in nouns:
             checked += 1
-            assert cand["motif"].lower() in cand["title"].lower()
+            assert cand["motif"][:4].lower() in cand["title"].lower()   # plurals: bounty / Bounties
     assert checked > 100
 
 
@@ -102,3 +102,18 @@ def test_every_list_is_documented_in_sources():
     # everything not covered by a group heading must be named; groups are written as slot/*
     missing = [i for i in missing if i.split("/")[0] + "/*" not in sources]
     assert not missing, missing
+
+
+def test_a_seed_gives_the_same_stories_in_every_process():
+    """Python randomizes string hashing per process; nothing in a seeded run may depend on it."""
+    import os
+    import subprocess
+    import sys
+    outputs = set()
+    for hash_seed in ("1", "2", "3"):
+        env = dict(os.environ, PYTHONHASHSEED=hash_seed)
+        out = subprocess.run([sys.executable, "-m", "storywheel", "sample", "western", "fairy tale",
+                              "-n", "6", "--seed", "1"], capture_output=True, text=True, env=env,
+                             cwd=os.path.dirname(os.path.dirname(__file__)), check=True)
+        outputs.add(out.stdout)
+    assert len(outputs) == 1

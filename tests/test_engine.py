@@ -90,7 +90,8 @@ def test_genre_steers_entry_picks():
 # --- the shipped data ---------------------------------------------------------------------------
 
 KNOWN_FIELDS = {"first", "last", "name", "age", "place", "motif", "title", "genre", "nouns",
-                "title_nouns", "adj2", "noun2"}
+                "title_nouns", "adj2", "noun2", "the_motif",
+                "the_thing", "the_someone", "the_message", "the_disaster"}
 SPECIAL_BLOCKS = {"ODDITY", "ALLITERATION"}
 
 

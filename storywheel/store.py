@@ -13,6 +13,7 @@ from pathlib import Path
 from .mix import new_mix, sync_base
 from .paths import HOME, OUT
 from .steps import STEPS, public
+from .threads import BEAT_LABELS
 
 STORIES = HOME / "stories"
 UNIVERSE = HOME / "universe.json"
@@ -27,11 +28,12 @@ def new_story():
     now = datetime.datetime.now()
     return {"id": now.strftime("%Y%m%d-%H%M%S"), "created": now.isoformat(timespec="minutes"),
             "step": 0, "kept": {}, "history": {}, "seeds": {}, "universe_mode": "n",
-            "mix": new_mix()}
+            "mix": new_mix(), "threads": {}}
 
 def upgrade(story):
     """Bring a story from an older file up to date (v1 files have no mix)."""
     sync_base(story)
+    story.setdefault("threads", {})
     return story
 
 def save(story):
@@ -143,6 +145,10 @@ def to_markdown(story):
         else:
             body = "\n".join(f"- **{k.replace('_', ' ').title()}:** {v}" for k, v in fields.items())
         sections.append(f"## {step.label}\n\n{body}")
+        if step.key == "spine" and story.get("threads"):
+            lines = [f"- **{kind.title()}:** {t['text']} *(introduced: {BEAT_LABELS.get(t['beat'], t['beat'])})*"
+                     for kind, t in story["threads"].items()]
+            sections.append("## Threads\n\n" + "\n".join(lines))
     return SECTION_BREAK.join(sections) + "\n"
 
 def export(story, out_dir=None):

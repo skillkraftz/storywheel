@@ -1,12 +1,12 @@
 {
-  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "_note": "Templates. {UPPERCASE} blocks are drawn fresh; {lowercase} fields are what the story kept; {the_thing}, {the_someone}, {the_message}, {the_disaster} pick up something an earlier beat introduced (favored when it exists, never used when it doesn't). Entries with tags are favored in those genres.",
   "slot": "inciting",
   "tags": ["general"],
   "entries": [
     "{SOMEONE} arrived in {place} carrying {THING}",
     "{SOMEONE} arrived in {place} asking about the {motif}",
     "{first} found {THING} {HIDING}",
-    "{first} found the {motif} {HIDING}",
+    "{first} found {the_motif} {HIDING}",
     "{first} received {MESSAGE}",
     "{DISASTER} hit {place}",
     "{SOMEONE} asked {first} to {ERRAND}",
@@ -21,20 +21,115 @@
     "{first} saw {SOMEONE} at {landmark} who was supposed to be dead",
     "{first} was handed {ODDITY} and told to keep it safe",
     "{first} made a promise to {SOMEONE} without thinking it through",
-    {"text": "a body turned up at {landmark}", "tags": ["mystery", "noir", "thriller"]},
-    {"text": "{first} witnessed something at {landmark} they weren't meant to see", "tags": ["mystery", "noir", "thriller"]},
-    {"text": "the lights at {landmark} came on by themselves", "tags": ["horror", "ghost story"]},
-    {"text": "{first} heard their own voice coming from {landmark}", "tags": ["horror", "ghost story"]},
-    {"text": "{first} met someone who seemed to know them better than they knew themselves", "tags": ["romance"]},
-    {"text": "{first} was stuck at {landmark} overnight with {SOMEONE}", "tags": ["romance", "comedy"]},
-    {"text": "a signal started coming from {landmark}", "tags": ["sci-fi"]},
-    {"text": "{first} woke up and it was the same day again", "tags": ["sci-fi", "fantasy", "comedy"]},
-    {"text": "a wanted poster went up with {first}'s face on it", "tags": ["western"]},
-    {"text": "a stagecoach arrived with {THING} and no driver", "tags": ["western"]},
+    {
+      "text": "a body turned up at {landmark}",
+      "tags": ["mystery", "noir", "thriller"]
+    },
+    {
+      "text": "{first} witnessed something at {landmark} they weren't meant to see",
+      "tags": ["mystery", "noir", "thriller"]
+    },
+    {
+      "text": "the lights at {landmark} came on by themselves",
+      "tags": ["horror", "ghost story"]
+    },
+    {
+      "text": "{first} heard their own voice coming from {landmark}",
+      "tags": ["horror", "ghost story"]
+    },
+    {
+      "text": "{first} met someone who seemed to know them better than they knew themselves",
+      "tags": ["romance"]
+    },
+    {
+      "text": "{first} was stuck at {landmark} overnight with {SOMEONE}",
+      "tags": ["romance", "comedy"]
+    },
+    {
+      "text": "a signal started coming from {landmark}",
+      "tags": ["sci-fi"]
+    },
+    {
+      "text": "{first} woke up and it was the same day again",
+      "tags": ["sci-fi", "fantasy", "comedy"]
+    },
+    {
+      "text": "a wanted poster went up with {first}'s face on it",
+      "tags": ["western"]
+    },
+    {
+      "text": "a stagecoach arrived with {THING} and no driver",
+      "tags": ["western"]
+    },
     {"text": "a door appeared where there had never been a door", "tags": ["fantasy", "fairy tale"]},
-    {"text": "an animal spoke to {first}, and it was not polite", "tags": ["fantasy", "fairy tale", "comedy"]},
-    {"text": "a crew of professionals asked {first} to help steal {THING}", "tags": ["heist"]},
-    {"text": "{first} was mistaken for someone famous", "tags": ["comedy"]},
-    {"text": "{first} got the chance to leave {place} for good", "tags": ["coming-of-age", "adventure"]}
+    {
+      "text": "an animal spoke to {first}, and it was not polite",
+      "tags": ["fantasy", "fairy tale", "comedy"]
+    },
+    {
+      "text": "a crew of professionals asked {first} to help steal {THING}",
+      "tags": ["heist"]
+    },
+    {
+      "text": "{first} was mistaken for someone famous",
+      "tags": ["comedy"]
+    },
+    {
+      "text": "{first} got the chance to leave {place} for good",
+      "tags": ["coming-of-age", "adventure"]
+    },
+    {
+      "text": "a dust cloud on the horizon turned out to be {SOMEONE}, riding hard",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{SOMEONE} rode into {place} with {THING} and a story that didn't add up",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "the telegraph brought {MESSAGE}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{first} found {THING} in the bottom of a dead man's saddlebag",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "a posse came through {place} looking for {SOMEONE}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{DISASTER} hit {place}, and the {rival} blamed {first}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "the {rival} offered {first} more money than anyone had ever offered, for {THING}",
+      "tags": ["western", "historical"]
+    },
+    {
+      "text": "{SOMEONE} came out of the wood carrying {THING}",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {"text": "a raven landed on the windowsill with a folded letter in its beak", "tags": ["fairy tale", "fantasy"]},
+    {
+      "text": "{first} found {THING} {HIDING}, humming faintly",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "the well in {place} began to whisper {first}'s name",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{SOMEONE} knocked on the door at midnight and asked for a bed",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{first} was granted a wish, and made it without thinking",
+      "tags": ["fairy tale", "fantasy"]
+    },
+    {
+      "text": "{DISASTER} fell on {place}, and the old tales said only one kind of person could end it",
+      "tags": ["fairy tale", "fantasy"]
+    }
   ]
 }
