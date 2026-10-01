@@ -56,5 +56,5 @@ def pronouns(text, first):
     i = text.index(first) + len(first)
     head, tail = text[:i], text[i:]
     tail = re.sub(rf"\b{re.escape(first)}'s\b", "their", tail)
-    tail = re.sub(rf"\b(to|for|with|about|at|on|against|from) {re.escape(first)}\b", r"\1 them", tail)
+    tail = re.sub(rf"\b(to|for|with|about|at|on|against|from|believed|trusted|told|asked|hired|followed|met) {re.escape(first)}\b", r"\1 them", tail)
     return head + tail

@@ -1,6 +1,6 @@
 {
-  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "_note": "Mostly modern work, so it is tagged modern as well as general.",
   "slot": "job",
-  "tags": ["general"],
+  "tags": ["general", "modern"],
   "entries": ["lighthouse keeper", "baker", "mail carrier", "night-shift nurse", "retired boxer", "beekeeper", "tow-truck driver", "piano teacher", "small-town lawyer", "taxidermist", "school janitor", "radio DJ", "ferry captain", "wedding photographer", "pawnshop owner", "substitute teacher", "locksmith", "diner cook", "museum guard", "insurance adjuster", "librarian", "mechanic", "florist", "vet"]
 }

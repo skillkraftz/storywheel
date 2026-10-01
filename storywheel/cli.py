@@ -6,6 +6,7 @@ storywheel - roll a story one piece at a time.
     storywheel resume [N]   pick up a story (number from list, or newest)
     storywheel export N     write a story's markdown somewhere else (--out DIR)
     storywheel universe     show what you've saved to your universe
+    storywheel sample G...  print sample stories for a genre mix (-n 10, --seed 1)
 """
 import argparse
 import os
@@ -224,6 +225,8 @@ def run_step(story, i):
     cur = len(hist) - 1
 
     while True:
+        for note in get_engine().take_notices():
+            print(dim(f"  Note: {note}"))
         show(step, i, hist, cur)
         raw = ask(bold("  > ")).strip()
         m = re.match(r"^([A-Za-z?])\s*(.*)$", raw)
@@ -423,6 +426,10 @@ def cmd_universe(args):
     print(dim("\n  Remove one with:  storywheel universe rm KEY NUMBER   (e.g. rm spine 1)"))
     print(dim(f"  Or edit {store.UNIVERSE} by hand."))
 
+def cmd_sample(args):
+    from .sample import sample
+    sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n)
+
 def main():
     parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.")
     sub = parser.add_subparsers(dest="command")
@@ -433,12 +440,16 @@ def main():
     p = sub.add_parser("export", help="write a story's markdown somewhere else")
     p.add_argument("target", help="number from 'list' or a story id")
     p.add_argument("--out", help="folder to write into (e.g. your Obsidian vault)")
+    p = sub.add_parser("sample", help="print sample stories for a genre mix (nothing is saved)")
+    p.add_argument("genres", nargs="+", help='e.g.  western "fairy tale"')
+    p.add_argument("-n", type=int, default=5, help="how many stories (default 5)")
+    p.add_argument("--seed", type=int, help="make the run repeatable")
     p = sub.add_parser("universe", help="show your universe, or: universe rm KEY NUMBER")
     p.add_argument("action", nargs="?", choices=["rm"])
     p.add_argument("rest", nargs="*")
     args = parser.parse_args()
     {"list": cmd_list, "resume": cmd_resume, "export": cmd_export,
-     "universe": cmd_universe}.get(args.command, cmd_new)(args)
+     "universe": cmd_universe, "sample": cmd_sample}.get(args.command, cmd_new)(args)
 
 
 if __name__ == "__main__":

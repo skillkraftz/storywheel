@@ -21,6 +21,7 @@ install it editable instead: `pipx install --editable .`
     storywheel list         list your stories
     storywheel resume [N]   pick up where you left off (N from list; default newest)
     storywheel export N --out ~/vault/Stories     copy a story's markdown somewhere
+    storywheel sample western "fairy tale" -n 10   print sample stories for a genre mix
     storywheel universe     show what you've saved to your universe
     storywheel universe rm KEY N   remove an entry, e.g.  universe rm spine 1
 
@@ -96,6 +97,13 @@ files and see changes at once.
   made up at run time. Built in: `faker.first_name`, `faker.last_name`,
   `faker.city`, `faker.job`, `wonderwords.adjective`, `wonderwords.noun`,
   `wonderwords.verb`. (Faker lists are tagged `modern`.)
+* A list of names can say `"markov": 0.5`: that share of picks is then a new
+  name invented by a small Markov-chain name maker trained on the list's own
+  entries (so `Calloway, Hollis, Pruitt` can yield `Callis` or `Pruden`); the
+  rest are the real entries. Good for name lists with 40+ entries.
+* Place names can be built from parts. A `place` entry may contain building
+  blocks, e.g. `"{PLACE_ADJ} {PLACE_FEATURE}"` draws from the `place_adj` and
+  `place_feature` lists, so a few dozen words make thousands of towns.
 
 ### A template
 
@@ -148,7 +156,27 @@ profiles, so the next story in the same genre starts from the defaults.
 `storywheel/steps.py` holds the step list. Reorder `STEPS` to change the flow,
 or add a new `Step` with its own fields.
 
+### Trying a genre mix
+
+    storywheel sample western "fairy tale" -n 10 --seed 1
+
+prints whole stories (title, protagonist, setting, premise, spine, twist) for
+that mix without an interactive session and without saving anything. It's the
+quickest way to judge a list you've just written. `--seed` makes it repeatable.
+
+Which words belong to which genre is spelled out in `SOURCES.md`, along with
+where every list came from and its license.
+
 ## Development
 
     pip install -e '.[dev]'
     pytest
+
+### Building lists
+
+Hand-writing a list straight into `storywheel/data/lists/` is often best. For
+broad pools, scripts in `tools/` fetch raw candidates into `data/raw/` (never at
+run time); trim them by hand, put the cleaned result in `storywheel/data/lists/`,
+and note it in `SOURCES.md`. Check a source's license before using anything from
+it. For example, `python tools/fetch_corpora.py` gets two files from the CC0
+corpora repository.

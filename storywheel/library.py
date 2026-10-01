@@ -42,12 +42,13 @@ class Entry:
 class WordList:
     """One JSON file: entries for one slot, plus tags describing their flavor."""
 
-    def __init__(self, id, slot, tags, entries=(), generator=None):
+    def __init__(self, id, slot, tags, entries=(), generator=None, markov=0.0):
         self.id = id                          # e.g. "job/frontier-trades"
         self.slot = slot
         self.tags = tuple(norm_tag(t) for t in tags)
         self.entries = list(entries)
         self.generator = generator            # e.g. "faker.city"; None for a plain list
+        self.markov = markov                  # share of picks invented by a name maker trained on the entries
 
     def __repr__(self):
         return f"WordList({self.id!r}, tags={list(self.tags)})"
@@ -76,7 +77,13 @@ def _read_list(path, root):
             raise DataError(f'{path}: bad entry {raw!r} (use "text" or {{"text": ..., "tags": [...]}})')
     if not entries and not generator:
         raise DataError(f'{path}: needs "entries" (or a "generator")')
-    return WordList(list_id, slot, tags, entries, generator)
+    try:
+        markov = float(doc.get("markov", 0))
+    except (TypeError, ValueError):
+        raise DataError(f'{path}: "markov" should be a number between 0 and 1')
+    if markov and not entries:
+        raise DataError(f'{path}: "markov" needs entries to learn from')
+    return WordList(list_id, slot, tags, entries, generator, markov)
 
 
 def load_lists(roots):

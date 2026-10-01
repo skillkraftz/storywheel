@@ -1,0 +1,7 @@
+{
+  "_note": "Frontier-era first names, men and women together. About half of all picks are invented by a Markov name maker trained on this list.",
+  "slot": "first_name",
+  "tags": ["western", "historical"],
+  "markov": 0.5,
+  "entries": ["Wade", "Cullen", "Amos", "Silas", "Eli", "Jeb", "Hank", "Cal", "Tobias", "Wyatt", "Clyde", "Ezra", "Gideon", "Harlan", "Jasper", "Levi", "Moses", "Nate", "Orville", "Pete", "Rufus", "Seth", "Thaddeus", "Virgil", "Walt", "Zeke", "Abel", "Barnaby", "Chester", "Dutch", "Emmett", "Fenton", "Garrett", "Hollis", "Ike", "Jonas", "Kit", "Lyle", "Mercer", "Nolan", "Ollie", "Pike", "Quincy", "Rhett", "Sterling", "Vance", "Waylon", "Josiah", "Lemuel", "Rafael", "Joaquin", "Mateo", "Ignacio", "Abigail", "Cora", "Dell", "Edna", "Florence", "Hattie", "Ida", "Josephine", "Kate", "Lottie", "Mabel", "Nellie", "Opal", "Pearl", "Rosalie", "Sadie", "Temperance", "Una", "Violet", "Winifred", "Clementine", "Dolly", "Effie", "Ginny", "Hester", "Ivy", "Lula", "Minnie", "Nora", "Ruth", "Susannah", "Etta", "Belle", "Luz", "Ines", "Marisol", "Esperanza"]
+}

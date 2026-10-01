@@ -2,5 +2,5 @@
   "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "want",
   "tags": ["general"],
-  "entries": ["a way out of {place}", "revenge on the {rival}", "their family's respect", "a quiet life", "the {motif}", "their old job back", "enough money to start over", "first prize at the county fair", "a second chance with an old love", "proof that they were right all along", "to be left alone", "to be famous, just once"]
+  "entries": ["a way out of {place}", "revenge on the {rival}", "their family's respect", "a quiet life", "the {motif}", "their old job back", "enough money to start over", "first prize at the county fair", "a second chance with an old love", "proof that they were right all along", "peace and quiet", "one moment of fame"]
 }

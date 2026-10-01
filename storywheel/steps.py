@@ -19,6 +19,8 @@ def public(d):
 # Lowercase placeholders that borrow another slot's lists.
 ALIASES = {"first": "first_name", "last": "last_name", "adj2": "adj",
            "noun2": "noun", "motif": "noun"}
+# {title_nouns} is the plural of one draw from title_noun, and so on.
+PLURALS = {"nouns": "noun", "title_nouns": "title_noun"}
 
 
 # --- the context ------------------------------------------------------------------
@@ -50,10 +52,14 @@ class Ctx(dict):
         self.update(self.kept)
         self.update(public(current))
         self.made = {}
+        self.hints = {}                         # e.g. the title noun, offered as the motif
 
     def draw(self, slot):
         """Raw text from a slot, chosen through the story mix."""
-        return self.engine.pick(slot, self.mix)
+        text = self.engine.pick(slot, self.mix)
+        if slot == "title_noun":
+            self.hints["motif"] = text          # a title's last noun is what it is 'about'
+        return text
 
     def __missing__(self, key):
         if key.isupper():                       # a building block: fresh every time
@@ -88,8 +94,8 @@ class Ctx(dict):
             return str(e.rng.randint(17, 84))
         if key == "genre":
             return " / ".join(e.rng.sample(e.library.genre_names, 2))
-        if key == "nouns":
-            return plural(self.draw("noun"))
+        if key in PLURALS:
+            return plural(fill(self, self.draw(PLURALS[key])))
         if key == "title":
             return title_case(fill(self, self.draw("title")))
         slot = ALIASES.get(key, key)
@@ -117,7 +123,10 @@ def fill(c, template):
 
 
 def beat(opening, slot, closing="."):
-    return lambda c: fill(c, opening + c.draw(slot) + closing)
+    def make(c):
+        text = fill(c, opening + c.draw(slot) + closing)
+        return text if opening else text[:1].upper() + text[1:]   # whole-sentence steps start with a capital
+    return make
 
 def field(key):
     """A field made the ordinary way: reuse a seed, or invent from the slot."""
@@ -161,7 +170,7 @@ STEPS = [
          "A title is a promise about tone. The motif is the thing the title is "
          "about; later steps will keep bringing it back.",
          {"title": field("title"),
-          "motif": lambda c: motif_from(c["title"], lambda: c.draw("noun"))},
+          "motif": lambda c: c.hints.get("motif") or motif_from(c["title"], lambda: c.draw("noun"))},
          reroll={"motif": lambda c: c.draw("noun")}),
 
     Step("protagonist", "Protagonist",

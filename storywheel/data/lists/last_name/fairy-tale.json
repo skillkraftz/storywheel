@@ -1,0 +1,7 @@
+{
+  "_note": "Storybook surnames: trades, trees, birds, a few German ones. Half of all picks are invented.",
+  "slot": "last_name",
+  "tags": ["fairy tale", "fantasy", "medieval"],
+  "markov": 0.5,
+  "entries": ["Miller", "Thatcher", "Fletcher", "Cooper", "Ashwood", "Brightwater", "Fernsby", "Hawthorne", "Larkspur", "Marrow", "Nettle", "Oakhart", "Rooke", "Sorrel", "Thorne", "Underwood", "Vane", "Wickerby", "Yarrow", "Aldermoor", "Bramblewick", "Crowhurst", "Dunmere", "Elderby", "Fenwright", "Greenholt", "Hollowell", "Ironside", "Kestrel", "Lindgren", "Mossop", "Pennywhistle", "Quill", "Ravenscroft", "Shadwell", "Thistlewood", "Ashby", "Weaver", "Wolfsbane", "Barleycorn", "Applegate", "Brandt", "Eberhardt", "Falkner", "Grimsby", "Holtz", "Immel", "Kraus", "Lindenmann", "Nachtigall"]
+}

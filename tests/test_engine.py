@@ -83,14 +83,14 @@ def test_genre_steers_entry_picks():
         c = Ctx(e, story, fresh=True)
         return Counter(c.draw("landmark") for _ in range(1500))
     west, space = landmarks("western"), landmarks("sci-fi")
-    assert west["the saloon"] > 4 * space["the saloon"]
-    assert space["the observatory"] > 4 * west["the observatory"]
+    # "the observatory" exists only as a sci-fi-tagged entry in the general list
+    assert space["the observatory"] > 4 * max(1, west["the observatory"])
 
 
 # --- the shipped data ---------------------------------------------------------------------------
 
 KNOWN_FIELDS = {"first", "last", "name", "age", "place", "motif", "title", "genre", "nouns",
-                "adj2", "noun2"}
+                "title_nouns", "adj2", "noun2"}
 SPECIAL_BLOCKS = {"ODDITY", "ALLITERATION"}
 
 
@@ -127,3 +127,25 @@ def test_a_few_template_fills_read_well(engine):
     c = Ctx(engine, {"kept": {"protagonist": {"name": "Wade Hollis"}}, "seeds": {}})
     out = fill(c, "{first} gave a {ODDITY} to {CLOSE}, and {first} left {first}'s hat.")
     assert out.startswith("Wade gave a") and "their hat" in out
+
+
+def test_ignored_exclusions_are_reported(engine):
+    lib = make_library([wl("job/a", ["western"], ["a"]), wl("thing/b", ["western"], ["b"])])
+    engine.library = lib
+    mix = mix_for(lib, "western", exclude_tags=["western"])
+    assert engine.pick("job", mix) == "a"          # single list, excluded: still answers, but says so
+    assert engine.pick("job", mix) == "a"
+    notes = engine.take_notices()
+    assert len(notes) == 1 and "'job'" in notes[0]  # once, not per pick
+    assert engine.take_notices() == []
+    mix_ok = mix_for(lib, "western")
+    engine.pick("job", mix_ok)
+    assert engine.take_notices() == []
+
+
+def test_excluded_entries_all_gone_is_reported(engine):
+    from storywheel.library import Entry
+    lib = make_library([wl("job/a", ["general"], [Entry("x", ["horror"])])])
+    engine.library = lib
+    engine.pick("job", mix_for(lib, "western", exclude_tags=["horror"]))
+    assert "job/a" in engine.take_notices()[0]

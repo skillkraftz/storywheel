@@ -1,0 +1,6 @@
+{
+  "_note": "Trouble that can hit a frontier town. Phrased to follow 'a' or stand alone: '{DISASTER} hit {place}'.",
+  "slot": "disaster",
+  "tags": ["western", "historical"],
+  "entries": ["a drought", "a prairie fire", "a cattle stampede", "a smallpox outbreak", "a bank robbery", "a flash flood", "a range war", "a blizzard", "a railroad strike", "a cave-in at the mine", "a swarm of locusts", "a hanging", "a gold strike", "a land rush", "a dust storm", "a cholera outbreak", "a barn fire", "a bitter winter", "a jailbreak", "a cattle sickness", "a tornado", "a fire that took half of Main Street", "a shootout in the street", "the closing of the mine", "a failed harvest", "a feud between two families", "a cut telegraph line", "a river that jumped its banks", "a rail line bypassing the town", "a stagecoach robbery"]
+}

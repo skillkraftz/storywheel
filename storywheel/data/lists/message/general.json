@@ -2,5 +2,17 @@
   "_note": "Fills {MESSAGE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "message",
   "tags": ["general"],
-  "entries": ["a letter addressed to someone who died years ago", "a phone call from a number that doesn't exist", "a wedding invitation from an ex", "an eviction notice", "a package with no return address", "a postcard in their own handwriting", "a ransom note", "a job offer from the one person they'd sworn never to work for", "a confession, unsigned", "a summons to court", "an invitation to a party nobody else was invited to"]
+  "entries": [
+    "a letter addressed to someone who died years ago",
+    {"text": "a phone call from a number that doesn't exist", "tags": ["modern"]},
+    "a wedding invitation from an ex",
+    "an eviction notice",
+    "a package with no return address",
+    "a postcard in their own handwriting",
+    "a ransom note",
+    "a job offer from the one person they'd sworn never to work for",
+    "a confession, unsigned",
+    "a summons to court",
+    "an invitation to a party nobody else was invited to"
+  ]
 }

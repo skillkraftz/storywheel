@@ -2,5 +2,16 @@
   "_note": "Fills {CRIME} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "crime",
   "tags": ["general"],
-  "entries": ["theft", "a murder they didn't commit", "cheating at the fair", "stealing the {motif}", "arson", "fraud", "witchcraft", "running over the mayor's cat", "forgery", "lying under oath"]
+  "entries": [
+    "theft",
+    "a murder they didn't commit",
+    "cheating at the fair",
+    "stealing the {motif}",
+    "arson",
+    "fraud",
+    "witchcraft",
+    {"text": "running over the mayor's cat", "tags": ["modern"]},
+    "forgery",
+    "lying under oath"
+  ]
 }

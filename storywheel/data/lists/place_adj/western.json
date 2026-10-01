@@ -1,0 +1,6 @@
+{
+  "_note": "First half of a frontier town name: {PLACE_ADJ} {PLACE_FEATURE}.",
+  "slot": "place_adj",
+  "tags": ["western", "historical"],
+  "entries": ["Dry", "Red", "Broken", "Lone", "Silver", "Dead Man's", "Gold", "Rattlesnake", "Cottonwood", "Dusty", "Painted", "Bitter", "Crooked", "Sweetwater", "Buzzard", "Coyote", "Salt", "Iron", "Copper", "Wagon", "Hangman's", "Lucky", "Rustler's", "Powder", "Whiskey", "Sagebrush", "Antelope", "Thunder", "Willow", "Bone", "Cinder", "Hard", "Windy", "Last Chance", "Burnt", "Yellow"]
+}

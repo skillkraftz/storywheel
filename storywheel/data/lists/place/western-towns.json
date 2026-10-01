@@ -1,0 +1,6 @@
+{
+  "_note": "Frontier towns: built from parts (so there are thousands) plus a few hand-picked names.",
+  "slot": "place",
+  "tags": ["western", "historical"],
+  "entries": ["{PLACE_ADJ} {PLACE_FEATURE}", "{PLACE_ADJ} {PLACE_FEATURE}", "{PLACE_ADJ} {PLACE_FEATURE}", "{PLACE_ADJ} {PLACE_FEATURE}", "{LAST_NAME} {PLACE_FEATURE}", "{LAST_NAME} {PLACE_FEATURE}", "{LAST_NAME}'s {PLACE_FEATURE}", "Perdition", "Providence", "Redemption", "Lonesome", "Calvary", "Purgatory", "Mercy", "Last Chance", "Bitter Wells", "Eden", "Prosperity", "Sundown", "Shiloh", "Paradise Flats", "Gomorrah Springs", "Hope", "Penance", "Salvation", "Harmony", "Jubilee", "Fortune", "Rest", "Tin Cup", "Spur", "Mulberry"]
+}

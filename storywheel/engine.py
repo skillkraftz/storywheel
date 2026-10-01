@@ -12,6 +12,7 @@ import random
 from collections import deque
 
 from . import library as lib
+from .markov import NameMaker
 
 
 class Engine:
@@ -21,6 +22,18 @@ class Engine:
         self._recent = {}                  # list id -> deque of recent entry texts
         self._faker = None
         self._words = None
+        self.trace = None                  # set to [] to record every pick (see pick_entry)
+        self._makers = {}
+        self.notices = []                  # things the user should hear about (see take_notices)
+
+    def notify(self, message):
+        if message not in self.notices:
+            self.notices.append(message)
+
+    def take_notices(self):
+        """Messages queued since the last call, for the UI to show once."""
+        out, self.notices = self.notices, []
+        return out
 
     # --- picking ---------------------------------------------------------------------
 
@@ -33,20 +46,41 @@ class Engine:
 
     def pick_list(self, slot, mix):
         lists = self.library.by_slot[slot]
-        if len(lists) == 1:
+        if all(mix.is_list_excluded(wl) for wl in lists):
+            self.notify(f"Everything for '{slot.replace('_', ' ')}' is excluded in this mix, "
+                        f"so the exclusions were ignored for it.")
+        elif len(lists) == 1:
             return lists[0]
         return self.rng.choices(lists, weights=mix.list_probabilities(lists))[0]
 
     def pick_entry(self, wl, mix):
         if wl.generator:
-            return self.generate(wl.generator)
+            return self._record(wl, (), self.generate(wl.generator))
+        if wl.markov and self.rng.random() < wl.markov:
+            name = self.maker(wl).make(self.rng)
+            if name:
+                return self._record(wl, (), name)
         weights = mix.weights()
-        options = [(e.text, mix.entry_weight(e, weights)) for e in wl.entries]
-        options = [(t, w) for t, w in options if w > 0] or [(e.text, 1.0) for e in wl.entries]
+        options = [(e, mix.entry_weight(e, weights)) for e in wl.entries]
+        live = [(e, w) for e, w in options if w > 0]
+        if not live:
+            self.notify(f"Every entry in '{wl.id}' is excluded in this mix, "
+                        f"so the exclusions were ignored for it.")
+        options = live or [(e, 1.0) for e in wl.entries]
         recent = self._recent.setdefault(wl.id, deque(maxlen=max(1, len(wl.entries) // 2)))
-        fresh = [(t, w) for t, w in options if t not in recent] or options
-        text = self.rng.choices([t for t, _ in fresh], weights=[w for _, w in fresh])[0]
-        recent.append(text)
+        fresh = [(e, w) for e, w in options if e.text not in recent] or options
+        entry = self.rng.choices([e for e, _ in fresh], weights=[w for _, w in fresh])[0]
+        recent.append(entry.text)
+        return self._record(wl, entry.tags, entry.text)
+
+    def maker(self, wl):
+        if wl.id not in self._makers:
+            self._makers[wl.id] = NameMaker([e.text for e in wl.entries])
+        return self._makers[wl.id]
+
+    def _record(self, wl, entry_tags, text):
+        if self.trace is not None:
+            self.trace.append((wl.slot, wl.id, set(wl.tags) | set(entry_tags), text))
         return text
 
     # --- generated lists ------------------------------------------------------------------

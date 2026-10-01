@@ -2,5 +2,12 @@
   "_note": "Fills {WINDFALL} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "windfall",
   "tags": ["general"],
-  "entries": ["the lottery", "a contest they didn't enter", "a house in {place}", "a fortune from a stranger", "a ticket out of {place}", "an award they didn't deserve"]
+  "entries": [
+    {"text": "the lottery", "tags": ["modern"]},
+    "a contest they didn't enter",
+    "a house in {place}",
+    "a fortune from a stranger",
+    "a ticket out of {place}",
+    "an award they didn't deserve"
+  ]
 }

@@ -1,6 +1,6 @@
 {
-  "_note": "Templates. UPPERCASE {BLOCKS} are drawn fresh each time they appear; lowercase {fields} refer to what the story has already kept.",
+  "_note": "Title templates. Placeholders work as everywhere else; {TITLE_ADJ}/{TITLE_NOUN} draw from the title word lists.",
   "slot": "title",
   "tags": ["general"],
-  "entries": ["{adj} {noun}", "{nouns} from {noun}", "the {adj} {noun} of {place}", "the {noun} of {place}", "{first}'s {adj} {noun}", "the {noun} who would not {verb}", "{adj} {nouns}", "the last {noun}", "{noun} and {noun2}", "a {noun} for {first}", "the {adj} {nouns} of {first} {last}", "{nouns} in the {noun}", "never {verb} the {noun}", "{ALLITERATION}"]
+  "entries": ["The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} of {place}", "{first}'s {TITLE_NOUN}", "The Last {TITLE_NOUN}", "{TITLE_NOUN} and {TITLE_NOUN}", "A {TITLE_NOUN} for {first}", "{TITLE_ADJ} {title_nouns}", "The {job}'s {TITLE_NOUN}", "{TITLE_ADJ} {TITLE_NOUN}", "The {TITLE_NOUN} on the {TITLE_NOUN}", "The {TITLE_ADJ} {title_nouns} of {first} {last}", "A {TITLE_ADJ} Kind of {TITLE_NOUN}"]
 }
