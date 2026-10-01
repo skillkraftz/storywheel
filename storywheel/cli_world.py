@@ -1,0 +1,111 @@
+"""Commands for the library: universes, entities and stories (all with --json for other programs)."""
+import json
+import sys
+
+from . import migrate, schemas, vault
+
+
+def emit(data):
+    print(json.dumps(data, indent=2, ensure_ascii=False))
+
+
+def entity_json(e, universe=None):
+    out = {"id": e.id, "type": e.type, "name": e.name, "fields": e.fields, "custom": e.custom, "notes": e.body,
+           "universe": universe.slug if universe else None}
+    if e.type == "note":
+        out["notes"] = e.fields.get("body", "")
+    return out
+
+
+def story_json(s):
+    meta, sections = s.load_outline()
+    return {"id": s.slug, "universe": s.universe.slug, "title": s.title, "meta": meta, "outline": sections,
+            "scenes": [p.name for p in s.scenes()], "words": s.word_count(), "path": str(s.path),
+            "manuscript": str(s.manuscript_dir)}
+
+
+def universe_json(u):
+    s = u.settings()
+    return {"slug": u.slug, "name": s["name"], "genres": s["genres"], "path": str(u.path),
+            "counts": {t: len(u.entities(t)) for t in schemas.load()},
+            "stories": [x.slug for x in u.stories()]}
+
+
+def _universe(slug):
+    u = vault.get_universe(slug) if slug else None
+    if not u:
+        msg = f"No universe '{slug}'. Known: " + ", ".join(x.slug for x in vault.list_universes())
+        sys.exit(msg)
+    return u
+
+
+def cmd_universes(args):
+    migrate_lines = migrate.migrate_universe_json()
+    if args.action == "new":
+        u = vault.create_universe(args.name or "Untitled Universe", args.genres or ())
+        emit(universe_json(u)) if args.json else print(f"  Created {u.name} ({u.path})")
+        return
+    unis = vault.list_universes()
+    if args.json:
+        emit([universe_json(u) for u in unis])
+        return
+    for line in migrate_lines:
+        print("  " + line)
+    if not unis:
+        print("  No universes yet. Promote a story from the Wheel, or:  storywheel universes new NAME")
+    for u in unis:
+        print(f"  {u.slug:<24} {u.name}   ({len(u.entities())} entities, {len(u.stories())} stories)")
+
+
+def cmd_entity(args):
+    u = _universe(args.universe)
+    if args.action == "show":
+        e = u.entity(args.id)
+        if not e:
+            sys.exit(f"No entity '{args.id}' in {u.slug}")
+        emit(entity_json(e, u))
+        return
+    items = u.entities(args.type)
+    if args.json:
+        emit([entity_json(e, u) for e in items])
+        return
+    for e in items:
+        print(f"  {e.type:<10} {e.id:<28} {e.name}")
+
+
+def cmd_story(args):
+    if args.action == "list":
+        unis = [_universe(args.universe)] if args.universe else vault.list_universes()
+        stories = [s for u in unis for s in u.stories()]
+        if args.json:
+            emit([story_json(s) for s in stories])
+        else:
+            for s in stories:
+                print(f"  {s.universe.slug}/{s.slug:<28} {s.title}  ({s.word_count()} words)")
+        return
+    uni, _, slug = (args.target or "").partition("/")
+    u = _universe(uni)
+    s = u.story(slug)
+    if not s:
+        sys.exit(f"No story '{slug}' in {u.slug}")
+    emit(story_json(s)) if args.json else print(json.dumps(story_json(s), indent=2, ensure_ascii=False))
+
+
+def add_parsers(sub):
+    p = sub.add_parser("universes", help="list your universes (or: universes new NAME)")
+    p.add_argument("action", nargs="?", choices=["list", "new"], default="list")
+    p.add_argument("name", nargs="?")
+    p.add_argument("--genres", nargs="*")
+    p.add_argument("--json", action="store_true")
+    p = sub.add_parser("entity", help="entities in a universe:  entity list UNIVERSE [--type character] --json")
+    p.add_argument("action", choices=["list", "show"])
+    p.add_argument("universe")
+    p.add_argument("id", nargs="?")
+    p.add_argument("--type", choices=list(schemas.TYPES))
+    p.add_argument("--json", action="store_true")
+    p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
+    p.add_argument("action", choices=["list", "show"])
+    p.add_argument("target", nargs="?", help="for show: universe/story")
+    p.add_argument("--universe")
+    p.add_argument("--json", action="store_true")
+    return {"universes": cmd_universes, "entity": cmd_entity, "story": cmd_story}

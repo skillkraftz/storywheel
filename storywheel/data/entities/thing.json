@@ -1,0 +1,50 @@
+{
+ "type": "thing",
+ "label": "Thing",
+ "plural": "Things",
+ "folder": "things",
+ "fields": [
+  {
+   "key": "name",
+   "label": "Name",
+   "kind": "short",
+   "fill": {
+    "slot": "thing"
+   }
+  },
+  {
+   "key": "description",
+   "label": "Description",
+   "kind": "long",
+   "fill": {
+    "write": true
+   }
+  },
+  {
+   "key": "features",
+   "label": "Features",
+   "kind": "short",
+   "fill": {
+    "write": true
+   },
+   "hint": "portable, magic, buryable..."
+  },
+  {
+   "key": "owner",
+   "label": "Owner",
+   "kind": "link",
+   "target": "character",
+   "fill": {
+    "link": "character"
+   }
+  },
+  {
+   "key": "history",
+   "label": "History",
+   "kind": "long",
+   "fill": {
+    "write": true
+   }
+  }
+ ]
+}

@@ -451,7 +451,12 @@ def main(argv=None):
     p.add_argument("rest", nargs="*")
     p = sub.add_parser("report", help="the worst-rated lines and the frames that produced them")
     p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
+    from . import cli_world
+    world = cli_world.add_parsers(sub)
     args = parser.parse_args(argv)
+    if args.command in world:
+        world[args.command](args)
+        return
     {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "show": cmd_show, "universe": cmd_universe,
      "sample": cmd_sample, "report": cmd_report}.get(args.command, cmd_new)(args)
 

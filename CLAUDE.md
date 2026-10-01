@@ -569,3 +569,13 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - The markdown export has no page-break divs. Page layout belongs to the
   manuscript export.
 - Textual is required; the plain prompt (`--plain`) remains as a fallback.
+- Entity frontmatter is read and written by a small built-in reader (text in double quotes, lists as JSON,
+  one level of nested "custom"), not a YAML library. It is valid YAML, so Obsidian reads it.
+- A new blank entity gets a placeholder id (`character-1`). The first time it has a name it is renamed to a
+  slug of the name and links to it are rewritten. After that the id never changes, even if the name does.
+- Link fields hold an entity id; if the value isn't an id of an existing entity it is shown as plain text.
+- Deleting a universe, entity or story moves it to `<library>/.trash/`. (The UI still asks first.)
+- The old `universe.json` is renamed to `universe.json.migrated-DATE` after migration (that is the backup).
+- Group names have no natural list, so they roll from `title_noun` as "The {noun} Company".
+- Settings are TOML, read with `tomllib` when Python has it and a small reader otherwise.
+

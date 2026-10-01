@@ -46,6 +46,8 @@ def home(tmp_path, monkeypatch):
     monkeypatch.setattr(store, "OUT", tmp_path / "out")
     monkeypatch.setattr(store, "STORIES", tmp_path / "home" / "stories")
     monkeypatch.setattr(store, "UNIVERSE", tmp_path / "home" / "universe.json")
+    monkeypatch.setenv("STORYWHEEL_HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("STORYWHEEL_LIBRARY", str(tmp_path / "library"))
     return tmp_path
 
 

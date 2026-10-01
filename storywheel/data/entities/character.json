@@ -1,0 +1,116 @@
+{
+ "_note": "Fields of a character. 'fill' says how the generator can fill a field: {step, field} = what the Wheel's step makes for that field; {slot} = an atom list; {link} = may point at an existing entity of that type; {write: true} = write only. 'name' is what the entity is called.",
+ "type": "character",
+ "label": "Character",
+ "plural": "Characters",
+ "folder": "characters",
+ "fields": [
+  {
+   "key": "name",
+   "label": "Name",
+   "kind": "short",
+   "fill": {
+    "step": "protagonist",
+    "field": "name"
+   }
+  },
+  {
+   "key": "role",
+   "label": "Role",
+   "kind": "choice",
+   "choices": [
+    "protagonist",
+    "rival",
+    "ally",
+    "supporting",
+    "minor"
+   ],
+   "fill": {
+    "write": true
+   }
+  },
+  {
+   "key": "age",
+   "label": "Age",
+   "kind": "short",
+   "fill": {
+    "step": "protagonist",
+    "field": "age"
+   }
+  },
+  {
+   "key": "job",
+   "label": "Job",
+   "kind": "short",
+   "fill": {
+    "step": "protagonist",
+    "field": "job"
+   }
+  },
+  {
+   "key": "trait",
+   "label": "Trait",
+   "kind": "short",
+   "fill": {
+    "step": "protagonist",
+    "field": "trait"
+   }
+  },
+  {
+   "key": "want",
+   "label": "Want",
+   "kind": "long",
+   "fill": {
+    "step": "protagonist",
+    "field": "want"
+   }
+  },
+  {
+   "key": "need",
+   "label": "Need",
+   "kind": "long",
+   "fill": {
+    "step": "protagonist",
+    "field": "need"
+   }
+  },
+  {
+   "key": "flaw",
+   "label": "Flaw",
+   "kind": "long",
+   "fill": {
+    "step": "protagonist",
+    "field": "flaw"
+   }
+  },
+  {
+   "key": "secret",
+   "label": "Secret",
+   "kind": "long",
+   "fill": {
+    "step": "protagonist",
+    "field": "secret"
+   }
+  },
+  {
+   "key": "rival",
+   "label": "Rival",
+   "kind": "link",
+   "target": "character",
+   "fill": {
+    "step": "protagonist",
+    "field": "rival",
+    "link": "character"
+   }
+  },
+  {
+   "key": "relationships",
+   "label": "Relationships",
+   "kind": "links",
+   "target": "character",
+   "fill": {
+    "write": true
+   }
+  }
+ ]
+}

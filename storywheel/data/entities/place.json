@@ -1,0 +1,68 @@
+{
+ "type": "place",
+ "label": "Place",
+ "plural": "Places",
+ "folder": "places",
+ "fields": [
+  {
+   "key": "name",
+   "label": "Name",
+   "kind": "short",
+   "fill": {
+    "step": "setting",
+    "field": "place"
+   }
+  },
+  {
+   "key": "kind",
+   "label": "Kind",
+   "kind": "choice",
+   "choices": [
+    "town",
+    "landmark",
+    "building",
+    "wild place",
+    "region"
+   ],
+   "fill": {
+    "write": true
+   }
+  },
+  {
+   "key": "parent",
+   "label": "Inside",
+   "kind": "link",
+   "target": "place",
+   "fill": {
+    "link": "place"
+   }
+  },
+  {
+   "key": "era",
+   "label": "Era",
+   "kind": "short",
+   "fill": {
+    "step": "setting",
+    "field": "era"
+   }
+  },
+  {
+   "key": "feature",
+   "label": "Feature",
+   "kind": "short",
+   "fill": {
+    "step": "setting",
+    "field": "landmark"
+   }
+  },
+  {
+   "key": "rumor",
+   "label": "Rumor",
+   "kind": "long",
+   "fill": {
+    "step": "setting",
+    "field": "rumor"
+   }
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "type": "note",
+ "label": "Note",
+ "plural": "Notes",
+ "folder": "notes",
+ "fields": [
+  {
+   "key": "name",
+   "label": "Title",
+   "kind": "short",
+   "fill": {
+    "write": true
+   }
+  },
+  {
+   "key": "body",
+   "label": "Body",
+   "kind": "long",
+   "fill": {
+    "write": true
+   },
+   "body": true
+  }
+ ]
+}

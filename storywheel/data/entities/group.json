@@ -1,0 +1,61 @@
+{
+ "type": "group",
+ "label": "Group",
+ "plural": "Groups",
+ "folder": "groups",
+ "fields": [
+  {
+   "key": "name",
+   "label": "Name",
+   "kind": "short",
+   "fill": {
+    "slot": "title_noun",
+    "format": "The {x} Company"
+   }
+  },
+  {
+   "key": "kind",
+   "label": "Kind",
+   "kind": "choice",
+   "choices": [
+    "family",
+    "guild",
+    "gang",
+    "government",
+    "church",
+    "company",
+    "other"
+   ],
+   "fill": {
+    "write": true
+   }
+  },
+  {
+   "key": "goal",
+   "label": "Goal",
+   "kind": "long",
+   "fill": {
+    "step": "protagonist",
+    "field": "want"
+   }
+  },
+  {
+   "key": "leader",
+   "label": "Leader",
+   "kind": "link",
+   "target": "character",
+   "fill": {
+    "link": "character"
+   }
+  },
+  {
+   "key": "members",
+   "label": "Members",
+   "kind": "links",
+   "target": "character",
+   "fill": {
+    "write": true
+   }
+  }
+ ]
+}
