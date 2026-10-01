@@ -83,9 +83,23 @@ class Ctx(dict):
         """Text from a slot, chosen through the story mix and remembered (nothing used in
         this story is drawn again). Templates that use a thread we have are favored, and
         ones that need a thread we lack are skipped."""
-        wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn,
-                                          commit=False)
+        wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
+                                          commit=False, bias=self.bias(slot, ()))
         return self.finish_atom(slot, wl, entry)
+
+    def adjuster(self, slot):
+        """How much likelier or rarer each entry of a slot is, for threads and for ratings."""
+        ratings = self.engine.ratings
+        if ratings is None or not any(wl.is_template for wl in self.engine.library.by_slot.get(slot, [])):
+            return self.thread_weight
+        return lambda text: self.thread_weight(text) * ratings.frame_factor(slot, text)
+
+    def bias(self, slot, others):
+        """A rating-based factor for an atom, given the atoms already chosen beside it."""
+        ratings = self.engine.ratings
+        if ratings is None:
+            return None
+        return lambda e: ratings.atom_bias(slot, e.text, others)
 
     def pick_atom(self, slot, accept, local=()):
         """(list, entry) for a slot that satisfies `accept`, not yet remembered; None if none does.
@@ -96,7 +110,8 @@ class Ctx(dict):
                           else ("human",))
             if accept is None or accept(guest):
                 return None, guest
-        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept, commit=False)
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept, commit=False,
+                                     bias=self.bias(slot, local))
 
     def finish_atom(self, slot, wl, entry):
         """Remember a pick, and return its text. Things and people that a spine beat brings in
@@ -120,7 +135,7 @@ class Ctx(dict):
         the story can't satisfy is set aside and another drawn."""
         skip = set()
         for _ in range(frames.MAX_ATTEMPTS):
-            wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight,
+            wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot),
                                               self.used | self.drawn | skip, commit=False)
             body = entry.text
             end = "" if body.rstrip().endswith((".", "!", "?")) else closing
@@ -138,6 +153,9 @@ class Ctx(dict):
                             relax=True)
         self.finish_atom(slot, wl, entry)
         return text
+
+    def can_resolve(self, name):
+        return frames.is_known(self.engine.library, name)
 
     def field_features(self, name):
         """What the story's own field is, for frames: the character, a rival, a landmark, a thread."""
@@ -290,7 +308,11 @@ def fill(c, template):
 
 def beat(opening, slot, closing="."):
     def make(c):
-        text = fill(c, c.sentence(slot, opening, closing))
+        for _ in range(6):                      # a leaked slot name must never reach the writer
+            text = fill(c, c.sentence(slot, opening, closing))
+            if not frames.leaks(c.engine.library, text):
+                break
+            c.engine.notify(f"A '{slot}' template left an unfilled slot in the text; it was redrawn.")
         if not opening:
             text = text[:1].upper() + text[1:]                    # whole-sentence steps start with a capital
         return re.sub(r"([.!?] )([a-z])", lambda m: m.group(1) + m.group(2).upper(), text)   # and so does every sentence

@@ -15,6 +15,7 @@ Nothing here touches the network; Faker and wonderwords are used offline.
 """
 import json
 import random
+import re
 from collections import deque
 from pathlib import Path
 
@@ -23,13 +24,21 @@ from .library import Entry
 from .markov import NameMaker
 
 
+# Stems of dictionary words the random-word wildcard must never use.
+BLOCKED_WORDS = re.compile(
+    r"^(?:racis\w*|sexis\w*|nazi\w*|nigg\w*|fagg\w*|retard\w*|cunt\w*|whore\w*|rape[sd]?|raping|rapist\w*|slut\w*|"
+    r"bitch\w*|fuck\w*|shit\w*|genocid\w*|holocaust|pedo\w*|molest\w*|tranny|dyke|spic|kike|chink|gook|coon|"
+    r"wetback|incest\w*|lynch\w*)$", re.IGNORECASE)
+
+
 class Engine:
-    def __init__(self, seed=None, library=None, user_dir=None, rng=None, persist=False):
+    def __init__(self, seed=None, library=None, user_dir=None, rng=None, persist=False, ratings=None):
         """`persist=True` loads and saves the recent-picks memory in user_dir. Leave it
         off for anything that must be repeatable from a seed (sample, tests)."""
         self.rng = rng or random.Random(seed)
         self.library = library or lib.Library.load(user_dir)
         self._recent = {}                  # list id -> deque of recent entry texts
+        self.ratings = ratings             # what the writer has rated; down-weights what keeps getting - (ratings.py)
         self._memory_path = Path(user_dir) / "recent.json" if persist and user_dir else None
         self._remembered = self._load_memory()
         self._faker = None
@@ -65,7 +74,7 @@ class Engine:
         a set of (slot, text) already used in this story."""
         return self.pick_item(slot, mix, adjust, avoid)[1].text
 
-    def pick_item(self, slot, mix, adjust=None, avoid=None, accept=None, commit=True):
+    def pick_item(self, slot, mix, adjust=None, avoid=None, accept=None, commit=True, bias=None):
         """(list, entry) for a slot, or None if no entry satisfies `accept` (a function
         Entry -> bool, used by frames to demand features). With commit=False nothing is
         remembered until you call commit(): a frame that has to be redrawn leaves no trace."""
@@ -78,7 +87,7 @@ class Engine:
             pool = list(lists)
             while pool:
                 wl = pool[0] if len(pool) == 1 else self.rng.choices(pool, weights=self._list_weights(pool, mix, accept))[0]
-                entry = self.choose_entry(wl, mix, adjust, avoid, accept, reuse)
+                entry = self.choose_entry(wl, mix, adjust, avoid, accept, reuse, bias)
                 if entry is not None:
                     if commit:
                         self.commit(wl, entry)
@@ -114,7 +123,7 @@ class Engine:
         self.commit(wl, entry)
         return entry
 
-    def choose_entry(self, wl, mix, adjust=None, avoid=None, accept=None, reuse=True):
+    def choose_entry(self, wl, mix, adjust=None, avoid=None, accept=None, reuse=True, bias=None):
         """An Entry from this list (None if none satisfies `accept`), with no side effects
         beyond using the random generator. With reuse=False, entries already used in this
         story (`avoid`) are not offered at all."""
@@ -127,7 +136,7 @@ class Engine:
                 entry = Entry(name)
                 return entry if not accept or accept(entry) else None
         weights = mix.weights()
-        options = [(e, mix.entry_weight(e, weights) * (adjust(e.text) if adjust else 1.0))
+        options = [(e, mix.entry_weight(e, weights) * (adjust(e.text) if adjust else 1.0) * (bias(e) if bias else 1.0))
                    for e in wl.entries if not accept or accept(e)]
         if not options:
             return None
@@ -265,8 +274,13 @@ class Engine:
         return self._faker
 
     def word(self, pos, starts_with=""):
-        """A random dictionary word: pos is 'adjectives', 'nouns' or 'verbs'."""
+        """A random dictionary word: pos is 'adjectives', 'nouns' or 'verbs'. A few words are never
+        offered (slurs, hate and sexual-violence terms): a random title must not be able to say them."""
         if self._words is None:
             from wonderwords import RandomWord
             self._words = RandomWord(rng=self.rng)
-        return self._words.word(include_parts_of_speech=[pos], starts_with=starts_with)
+        for _ in range(20):
+            word = self._words.word(include_parts_of_speech=[pos], starts_with=starts_with)
+            if not BLOCKED_WORDS.search(word):
+                return word
+        return self._words.word(include_parts_of_speech=[pos], starts_with=starts_with) if not starts_with else "quiet"

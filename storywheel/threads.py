@@ -25,7 +25,7 @@ import re
 THREAD_KINDS = ("thing", "someone", "message", "disaster")
 PREFERRED = 6.0            # how much likelier a template that uses a live thread is
 
-_REF = re.compile(r"\{the_(%s)(?::[^{}|]*)?\}" % "|".join(THREAD_KINDS))     # {the_thing} or {the_thing:!living}
+_REF = re.compile(r"\{the_(%s)(?::[^{}]*)?\}" % "|".join(THREAD_KINDS))     # {the_thing} or {the_thing:!living}
 
 from . import structures
 

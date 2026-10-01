@@ -26,7 +26,7 @@ from .steps import public
 MAX_ATOM_WORDS = 5
 MIN_TEMPLATE_SLOTS = 2
 MAX_FIXED_RUN = 6          # a template may not hold more than this many words in a row without a slot
-_PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z_0-9]*(?::[^{}|]*)?(?:\|[^{}]*)?\}")   # {x}, {X:req}, {lies|lie}
+_PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z_0-9]*(?::[^{}]*|\|[^{}]*)?\}")   # {x}, {X:req}, {lies|lie}
 # Atoms are reused in many sentences, so they can't know who "their" would mean. Exception:
 # losses, which are always things the protagonist lost ("lost their house").
 _PRONOUNS = {"they", "them", "their", "theirs", "themselves", "he", "she", "him", "her", "his", "hers"}
@@ -75,6 +75,12 @@ def lint(library):
                 clause = _CLAUSE_WORDS & words
                 if clause:
                     problems.append((wl.id, e.text, f"atom is a clause ({', '.join(sorted(clause))})"))
+    for wl in library.lists.values():                   # a placeholder nothing can fill would leak into the text
+        if wl.is_template:
+            from . import frames as _frames
+            for e in wl.entries:
+                for name in _frames.unknown_names(library, e.text):
+                    problems.append((wl.id, e.text, f"nothing can fill {{{name}}}"))
     problems += reframe_problems(library)
     from . import frames
     problems += frames.lint(library)                    # can every frame be filled?

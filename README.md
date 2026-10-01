@@ -17,41 +17,99 @@ install it editable instead: `pipx install --editable .`
 
 ## Use
 
-    storywheel              start a new story
+    storywheel              start a new story (a full-screen app)
+    storywheel --plain      the same, with a simple prompt instead of the app
     storywheel list         list your stories
     storywheel resume [N]   pick up where you left off (N from list; default newest)
     storywheel export N --out ~/vault/Stories     copy a story's markdown somewhere
     storywheel sample western "fairy tale" -n 10   print sample stories for a genre mix
+    storywheel report       the worst-rated lines and the frames that produced them
     storywheel universe     show what you've saved to your universe
     storywheel universe rm KEY N   remove an entry, e.g.  universe rm spine 1
 
-You go through the steps in order: genre & mood, title, protagonist, setting,
-premise, story spine, twist. At each step:
+### The app
+
+    +-------------+-----------------------------------------------------------+
+    | Steps       |  the current candidate (arrow keys select a field)        |
+    |  v Genre    |    name    Wade Hollis                                    |
+    |  v Structure|    job     drover                    <- selected          |
+    |  > Title    |    want    a silver claim despite the sheriff             |
+    |  . Protag.  +-----------------------------------------------------------+
+    |  . Setting  |  History: every roll, and what changed between them       |
+    |  . ...      |    #1  Wade Hollis · 34 · a drover ...                    |
+    +-------------+  > #2  job: wheelwright                                   |
+                  +-----------------------------------------------------------+
+     space Roll  k Keep  q Quit  ? Help  f Field  e Edit  w Write  +/- Rate ...
+
+The steps on the left are marked kept (v), skipped (-), current (>) or still to do
+(.); press Enter on one to jump there. The card shows the current candidate; up and
+down select a field. The history lists every roll of the step and what changed in
+each; Tab moves between the three lists, and Enter on a history row picks that one.
+Select a field and press `h` and the history becomes **that field's own history**,
+so you can bring an old value back without losing the rest (`h` again returns to
+every roll).
+
+    space / enter   roll again          k      keep it and move on
+    f               reroll the field    e      edit the field in place
+    E               edit in $EDITOR     w      write your own
+    + / -           like / dislike      u / U  save to / remove from your universe
+    h               history             m      the mix editor
+    b               go back a step      x      skip this step
+    q               save and quit       ?      help
+
+You go through the steps in order: genre & mood, structure, title, protagonist,
+setting, premise, story body, twist. Things carry forward. The title's motif (the
+thing it's "about") turns up in the premise, body and twist. A name or place invented
+inside a title usually becomes your protagonist or setting. Genre nudges later steps
+toward fitting ideas. If you go back and change something, later steps get the new
+name or place swapped in automatically. Rerolling or editing one field also updates
+other fields in the same item that mentioned it, so a new landmark changes the rumor
+about it too.
+
+### The mix editor
+
+Press `m` for this story's mix: every tag with its genre default, your boost, and its
+weight now, and (Tab) every list. `e` excludes a tag or list, `+`/`-` boost or soften a
+tag, `0` clears a boost, `r` resets to the genre defaults. **It edits this story only**
+and says so on screen: the genre profiles never change, and it affects future rolls,
+not what you have kept.
+
+### Ratings
+
+Press `+` or `-` on a line (the selected field; on a one-field step, the whole thing).
+A ▲ or ▼ marks it. Each rating is saved in `~/.storywheel/ratings.json` with the frame
+(template) and atoms that produced the line. Over time the tool leans away from what
+keeps getting `-`, gently: one dislike is no evidence at all; a frame, or a pair of
+atoms ("buried" + "a mule"), with a net score of -2 is drawn a fifth less often, and so
+on down to a floor of 25%, never to zero. A single atom is only touched at net -3, and
+less. Press the same key again to clear a rating. `storywheel report` lists the
+worst-rated lines, the frames that produced them (and how far each is down-weighted),
+and the atom pairs that keep getting `-`. A seeded `storywheel sample` ignores ratings,
+so it stays repeatable.
+
+### The plain prompt
+
+`storywheel --plain` (also used automatically when there is no terminal, as in a
+pipe) is the original prompt loop. It works on a dumb terminal over a slow link:
 
     enter / r   roll again              k        keep it and move on
     f [field]   reroll one field        e [field]  edit a field in place
     E           edit in $EDITOR         w        write your own
-    p N         pick earlier roll #N    h        every roll so far (what changed), pick one
+    + / - [field]  like / dislike       p N      pick earlier roll #N
+    h           every roll so far (what changed), pick one
     h [field]   every value one field has had, pick one
     u / U       save to / remove from your universe
     b           go back a step
     x           skip this step          q        save and quit
     ?           help
 
-Things carry forward. The title's motif (the thing it's "about") turns up in
-the premise, spine and twist. A name or place invented inside a title usually
-becomes your protagonist or setting. Genre nudges later steps toward fitting
-ideas. If you go back and change something, later steps get the new name or
-place swapped in automatically.
-
 Commands work with or without a space: `f 4` and `f4` both reroll field 4.
-Rerolling or editing one field also updates other fields in the same item
-that mentioned it, so a new landmark changes the rumor about it too.
 
 ## Where things live
 
 - Stories: `~/.storywheel/stories/` (one JSON file each)
 - Your universe: `~/.storywheel/universe.json`
+- Ratings: `~/.storywheel/ratings.json`; recent picks: `~/.storywheel/recent.json`
 - Markdown: `~/storywheel/`, rewritten on every keep
 
 Point the markdown straight into your vault so stories show up in Obsidian as

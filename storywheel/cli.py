@@ -1,16 +1,16 @@
 """
 storywheel - roll a story one piece at a time.
 
-    storywheel              start a new story
+    storywheel              start a new story (a full-screen app; --plain for a prompt)
     storywheel list         list your stories
     storywheel resume [N]   pick up a story (number from list, or newest)
     storywheel export N     write a story's markdown somewhere else (--out DIR)
     storywheel universe     show what you've saved to your universe
     storywheel sample G...  print sample stories for a genre mix (-n 10, --seed 1, --structure three-act)
+    storywheel report       the worst-rated lines and the frames that produced them
 """
 import argparse
 import os
-import random
 import re
 import shlex
 import subprocess
@@ -18,12 +18,12 @@ import sys
 import tempfile
 import textwrap
 
-from . import paths, store
-from .engine import Engine
+from . import paths, store, structures
+from . import ratings as ratings_mod
 from . import threads as T
-from .refs import carry_threads, inherit, reroll_field, substitute, with_field
-from . import structures
-from .steps import STEPS, public, steps_for
+from .engine import Engine
+from .session import Session
+from .steps import STEPS, public
 
 try:
     import readline                      # arrow keys + pre-filled edits on Linux/Mac
@@ -37,22 +37,16 @@ bold, dim, cyan = _style("1"), _style("2"), _style("36")
 
 _engine = None
 
+def get_ratings():
+    return ratings_mod.Ratings.load(paths.HOME)
+
 def get_engine():
-    """One engine per run. It remembers recent picks, in ~/.storywheel/recent.json, so
-    the same lines don't turn up session after session."""
+    """One engine per run. It remembers recent picks, in ~/.storywheel/recent.json, so the
+    same lines don't turn up session after session, and it leans away from what you rated -."""
     global _engine
     if _engine is None:
-        _engine = Engine(user_dir=paths.HOME, persist=True)
+        _engine = Engine(user_dir=paths.HOME, persist=True, ratings=get_ratings())
     return _engine
-
-def _save(story):
-    """Save the story and the memory of recent picks."""
-    path = store.save(story)
-    get_engine().save_memory()
-    return path
-
-UNIVERSE_CHANCE = 0.35       # how often "mix" mode pulls from your universe
-SOURCE_TAGS = {"edited": " (your edit)", "universe": " (from your universe)", "kept": " (kept)"}
 
 HELP = """
   enter / r     roll again
@@ -61,6 +55,8 @@ HELP = """
   e [field]     edit a field in place (single-field steps skip the question)
   E             edit the whole thing in your $EDITOR (nano by default)
   w             write your own from scratch
+  + / -         like / dislike a field (or the whole thing on a one-field step);
+                disliked frames and atom pairs come up a little less. Same key clears it.
   p N           pick an earlier candidate, e.g.  p 2
   h             list every roll for this step (shows what changed), then pick one
   h [field]     list every value one field has had, then pick one, e.g.  h 6
@@ -122,23 +118,22 @@ def edit_in_editor(fields):
 
 # --- display -------------------------------------------------------------------------------
 
-def show(step, i, hist, cur, total=len(STEPS)):
-    cand = hist[cur]
+def show(sess):
+    step, i, cand = sess.step, sess.i, sess.cand
     fields = public(cand)
+    total = len(sess.steps)
     print("\n" + bold(cyan(f"── {step.label.upper()}  ({i + 1}/{total}) ")) + cyan("─" * 30))
     print(dim(textwrap.fill(step.hint, 72, initial_indent="  ", subsequent_indent="  ")))
-    print(bold(f"\n  #{cur + 1} of {len(hist)}") + dim(SOURCE_TAGS.get(cand.get("_src"), "")))
+    print(bold(f"\n  #{sess.cur + 1} of {len(sess.hist)}") + dim(sess.source_tag(sess.cur)))
     if step.single:
-        print(textwrap.fill(next(iter(fields.values())), 72,
-                            initial_indent="    ", subsequent_indent="    "))
+        print(textwrap.fill(next(iter(fields.values())), 72, initial_indent="    ", subsequent_indent="    "))
     else:
         width = max(len(k) for k in fields) + 2
         for n, (k, v) in enumerate(fields.items(), 1):
             label = f"  {n} {k.replace('_', ' '):<{width}}"
-            print(textwrap.fill(v, 76, initial_indent=label,
-                                subsequent_indent=" " * len(label)))
+            print(textwrap.fill(v, 76, initial_indent=label, subsequent_indent=" " * len(label)))
     opts = "[enter] roll  [k]eep  " + ("" if step.single else "[f]ield  ") + \
-           "[e]dit  [w]rite  [p]ick #  [h]istory  [u]/[U]niverse  [b]ack  [x] skip  [q]uit  [?]"
+           "[e]dit  [w]rite  [p]ick #  [h]istory  [+/-] rate  [u]/[U]niverse  [b]ack  [x] skip  [q]uit  [?]"
     if step.key == "structure":
         found = structures.find(fields["structure"])
         print(dim("\n  " + textwrap.fill(found.blurb if found else
@@ -148,33 +143,17 @@ def show(step, i, hist, cur, total=len(STEPS)):
         print(dim("\n  threads  " + T.describe(cand["_threads"])))
     print(dim("\n  " + opts))
 
-def summary(step, cand):
-    vals = list(public(cand).values())
+def _summary(step, entry):
+    vals = list(public(entry).values())
     text = vals[0] if step.single else " · ".join(vals[:3])
     return text if len(text) < 70 else text[:67] + "..."
 
 
-# --- the roll loop ---------------------------------------------------------------------------
+# --- the plain prompt loop ---------------------------------------------------------------------
 
-def fresh_candidate(make, hist, tries=6):
-    """Call make() until it gives something not already in this step's history."""
-    seen = [public(c) for c in hist]
-    for _ in range(tries):
-        cand = make()
-        if public(cand) not in seen:
-            break
-    return cand
-
-def roll(step, story, fresh=True):
-    entries = store.load_universe().get(step.key, [])
-    mode = story.get("universe_mode", "n")
-    if entries and (mode == "o" or (mode == "m" and random.random() < UNIVERSE_CHANCE)):
-        return dict(random.choice(entries), _src="universe")
-    return step.roll(get_engine(), story, fresh=fresh)
-
-def choose_field(step, arg):
-    names = list(step.fields)
-    if step.single:
+def choose_field(sess, arg):
+    names = sess.field_names
+    if sess.step.single:
         return names[0]
     arg = arg or ask("  which field? (name or number) ").strip()
     if arg.isdigit() and 1 <= int(arg) <= len(names):
@@ -184,9 +163,6 @@ def choose_field(step, arg):
     print(f"  No field '{arg}'. Fields: {', '.join(names)}")
     return None
 
-def short(text, n=60):
-    return text if len(text) <= n else text[:n - 3] + "..."
-
 def pick_from_list(count):
     """Ask for a number from a list just shown. Returns a 0-based index or None."""
     choice = ask(dim("\n  pick # (enter to go back) ")).strip()
@@ -194,177 +170,86 @@ def pick_from_list(count):
         return int(choice) - 1
     return None
 
-def show_history(step, hist, cur):
+def show_history(sess):
     """Whole candidates. For multi-field steps, show only what changed each time."""
     print()
-    for n, c in enumerate(hist):
-        marker = "→" if n == cur else " "
-        if step.single or n == 0:
-            text = summary(step, c)
-        else:
-            prev = public(hist[n - 1])
-            changed = [k for k, v in public(c).items() if prev.get(k) != v]
-            if not changed:
-                text = "(same as previous)"
-            elif len(changed) > 2:
-                text = summary(step, c)
-            else:
-                text = "; ".join(f"{k.replace('_', ' ')}: {short(c[k], 70 // len(changed))}" for k in changed)
-        print(f"  {marker} #{n + 1:<3}{text}" + dim(SOURCE_TAGS.get(c.get("_src"), "")))
-    if not step.single:
+    for n in range(len(sess.hist)):
+        marker = "→" if n == sess.cur else " "
+        print(f"  {marker} #{n + 1:<3}{sess.change_summary(n)}" + dim(sess.source_tag(n)))
+    if not sess.step.single:
         print(dim("\n  Tip: h 3 lists every value field 3 has had."))
-    return pick_from_list(len(hist))
+    return pick_from_list(len(sess.hist))
 
-def show_field_history(step, hist, cand, field):
-    """Every distinct value one field has had, so you can bring back an old one."""
-    values = []
-    for c in hist:
-        if c.get(field) and c[field] not in values:
-            values.append(c[field])
+def show_field_history(sess, field):
+    values = sess.field_values(field)
     print(f"\n  every {field.replace('_', ' ')} so far:")
     for n, v in enumerate(values, 1):
-        marker = "→" if v == cand.get(field) else " "
+        marker = "→" if v == sess.cand.get(field) else " "
         print(textwrap.fill(v, 76, initial_indent=f"  {marker} {n:<3}", subsequent_indent=" " * 8))
     idx = pick_from_list(len(values))
     return None if idx is None else values[idx]
 
-def run_step(story, i):
-    """Roll one step until the user keeps, skips, goes back or quits.
-    Returns the next step index."""
-    step = steps_for(story)[i]
-    hist = story["history"].setdefault(step.key, [])
-    kept = story["kept"].get(step.key)
-    if kept and (not hist or public(hist[-1]) != public(kept)):
-        hist.append(dict(public(kept), _src="kept"))
-    if not hist:
-        hist.append(roll(step, story, fresh=False))     # first roll may reuse seeds
-    cur = len(hist) - 1
+def handle(sess, raw):
+    """Do what one typed command says."""
+    m = re.match(r"^([A-Za-z?+\-=])\s*(.*)$", raw)
+    cmd, arg = (m.group(1), m.group(2).strip()) if m else (raw, "")
+    step, cand = sess.step, sess.cand
 
-    while True:
-        for note in get_engine().take_notices():
-            print(dim(f"  Note: {note}"))
-        show(step, i, hist, cur)
-        raw = ask(bold("  > ")).strip()
-        m = re.match(r"^([A-Za-z?])\s*(.*)$", raw)
-        cmd, arg = (m.group(1), m.group(2).strip()) if m else (raw, "")
-        cand = hist[cur]
-
-        if cmd in ("", "r"):
-            hist.append(fresh_candidate(lambda: roll(step, story), hist))
-            cur = len(hist) - 1
-
-        elif cmd == "k":
-            old = story["kept"].get(step.key)
-            new = public(cand)
-            if step.key == "structure" and structures.find(new["structure"]):
-                new["structure"] = structures.find(new["structure"]).label     # "kishotenketsu" -> "Kishōtenketsu"
-            for k, v in cand.get("_made", {}).items():
-                story["seeds"].setdefault(k, v)
-            story["kept"][step.key] = new
-            if step.key == "structure" and old and structures.get(old["structure"]) is not structures.get(new["structure"]):
-                for gone in ("spine",):                 # the old body doesn't fit the new shape
-                    story["kept"].pop(gone, None)
-                    story["history"].pop(gone, None)
-                    story["atoms"].pop(gone, None)
-                story["threads"] = {}
-                print(dim("  New structure: the story body will be rolled again when you get to it."))
-            if old and old != new:
-                n = substitute(story, i, old, new)
-                if step.threads:
-                    n += carry_threads(story, i, story.get("threads"), cand.get("_threads"))
-                if n:
-                    print(dim(f"  Updated {n} mention(s) in later steps."))
-            if step.threads:
-                story["threads"] = cand.get("_threads", {})
-            story["atoms"][step.key] = [a for lst in cand.get("_atoms", {}).values() for a in lst]
-            story["step"] = max(story["step"], i + 1)
-            _save(story)
-            return i + 1
-
-        elif cmd == "f" and not step.single:
-            field = choose_field(step, arg)
-            if field:
-                new = fresh_candidate(lambda: reroll_field(step, get_engine(), story, cand, field), hist)
-                hist.append(new)
-                cur = len(hist) - 1
-
-        elif cmd == "e":
-            field = choose_field(step, arg)
-            if field:
-                text = ask(f"  {field}: ", prefill=cand[field]).strip()
-                if text and text != cand[field]:
-                    hist.append(with_field(cand, field, text, src="edited"))
-                    cur = len(hist) - 1
-
-        elif cmd == "E":
-            new = edit_in_editor(public(cand))
-            if new != public(cand):
-                hist.append(inherit(dict(new, _src="edited"), cand))
-                cur = len(hist) - 1
-
-        elif cmd == "w":
-            fields = public(cand)
-            if not step.single:
-                print(dim("  Type a new value for each field, or press enter to keep the current one."))
-            new = {}
-            for k, v in fields.items():
-                label = f"  {k.replace('_', ' ')}" + ("" if step.single else dim(f" [{v}]"))
-                new[k] = ask(label + ": ").strip() or v
-            if new != fields:
-                hist.append(inherit(dict(new, _src="edited"), cand))
-                cur = len(hist) - 1
-
-        elif cmd == "p":
-            if arg.isdigit() and 1 <= int(arg) <= len(hist):
-                cur = int(arg) - 1
-            else:
-                print(f"  Pick a number from 1 to {len(hist)}, e.g.  p 2")
-
-        elif cmd == "h":
-            if arg and not step.single:
-                field = choose_field(step, arg)
-                value = field and show_field_history(step, hist, cand, field)
-                if value and value != cand[field]:
-                    hist.append(with_field(cand, field, value))
-                    cur = len(hist) - 1
-            else:
-                idx = show_history(step, hist, cur)
-                cur = cur if idx is None else idx
-
-        elif cmd == "u":
-            n, added = store.add_to_universe(step.key, cand)
-            what = f"{n} {step.label.lower()} entr{'y' if n == 1 else 'ies'}"
-            print(dim(f"  {'Saved to' if added else 'Already in'} your universe ({what}). U removes it."))
-
-        elif cmd == "U":
-            removed = store.remove_from_universe(step.key, cand)
-            print(dim("  Removed from your universe." if removed else "  This one isn't in your universe."))
-
-        elif cmd == "b":
-            if i == 0:
-                print("  This is the first step.")
-            else:
-                _save(story)
-                return i - 1
-
-        elif cmd == "x":
-            story["kept"].pop(step.key, None)
-            if step.threads:
-                story["threads"] = {}
-            story["atoms"].pop(step.key, None)
-            story["step"] = max(story["step"], i + 1)
-            _save(story)
-            return i + 1
-
-        elif cmd == "q":
-            raise Quit
-
-        elif cmd == "?":
-            print(HELP)
-            ask(dim("  (enter to continue) "))
-
+    if cmd in ("", "r"):
+        sess.roll()
+    elif cmd == "k":
+        sess.keep()
+    elif cmd == "f" and not step.single:
+        field = choose_field(sess, arg)
+        if field:
+            sess.reroll_field(field)
+    elif cmd == "e":
+        field = choose_field(sess, arg)
+        if field:
+            sess.edit_field(field, ask(f"  {field}: ", prefill=cand[field]))
+    elif cmd == "E":
+        sess.replace_fields(edit_in_editor(public(cand)))
+    elif cmd == "w":
+        fields = public(cand)
+        if not step.single:
+            print(dim("  Type a new value for each field, or press enter to keep the current one."))
+        new = {}
+        for k, v in fields.items():
+            label = f"  {k.replace('_', ' ')}" + ("" if step.single else dim(f" [{v}]"))
+            new[k] = ask(label + ": ").strip() or v
+        sess.replace_fields(new)
+    elif cmd == "p":
+        if not (arg.isdigit() and sess.pick(int(arg) - 1)):
+            print(f"  Pick a number from 1 to {len(sess.hist)}, e.g.  p 2")
+    elif cmd == "h":
+        if arg and not step.single:
+            field = choose_field(sess, arg)
+            value = field and show_field_history(sess, field)
+            if value:
+                sess.pick_value(field, value)
         else:
-            print(f"  Unknown command '{raw}'. Type ? for help.")
+            idx = show_history(sess)
+            if idx is not None:
+                sess.pick(idx)
+    elif cmd in "+-=" and cmd:
+        field = choose_field(sess, arg) if (arg or not step.single) else None
+        if field or step.single:
+            sess.rate(1 if cmd in "+=" else -1, field)
+    elif cmd == "u":
+        sess.universe_add()
+    elif cmd == "U":
+        sess.universe_remove()
+    elif cmd == "b":
+        sess.back()
+    elif cmd == "x":
+        sess.skip()
+    elif cmd == "q":
+        raise Quit
+    elif cmd == "?":
+        print(HELP)
+        ask(dim("  (enter to continue) "))
+    else:
+        print(f"  Unknown command '{raw}'. Type ? for help.")
 
 
 def ask_universe_mode(story):
@@ -376,42 +261,63 @@ def ask_universe_mode(story):
     answer = ask("  Pull from it? [n]o / [m]ix it in / [o]nly from it: ").strip().lower()[:1]
     story["universe_mode"] = answer if answer in ("m", "o") else "n"
 
-def run(story):
-    i = story["step"] if story["step"] < len(STEPS) else 0
+def run_plain(story):
+    sess = Session(story, get_engine(), ratings=get_engine().ratings)
+    i = story["step"] if story["step"] < len(sess.steps) else 0
+    sess.enter(i)
     try:
-        while i < len(STEPS):
-            i = run_step(story, i)
+        while not sess.done:
+            for note in sess.take_notes():
+                print(dim(f"  {note}"))
+            show(sess)
+            handle(sess, ask(bold("  > ")).strip())
     except Quit:
-        path = _save(story)
+        path = sess.save()
         print(f"\n  Saved. Resume with:  storywheel resume {story['id']}")
         if path:
             print(f"  Markdown: {path}")
         return
-    path = _save(story)
+    path = sess.save()
     print(bold(f"\n  Done: {store.title_of(story)}"))
     if path:
         print(f"  Markdown: {path}")
     print(dim(f"  Change anything later with:  storywheel resume {story['id']}"))
 
 
-# --- subcommands ---------------------------------------------------------------------------
+# --- choosing between the app and the prompt -------------------------------------------------------
 
-def cmd_new(args):
-    story = store.new_story()
-    print(bold("\n  storywheel") + dim("  ·  type ? at any prompt for help"))
+def run(story, plain=False):
+    """Roll a story: in the full-screen app when the terminal can, else with prompts."""
+    if not plain and sys.stdin.isatty() and sys.stdout.isatty():
+        try:
+            from .tui import run_app
+        except ImportError:
+            print(dim("  (The full-screen app needs the 'textual' package; using the prompt instead.)"))
+        else:
+            run_app(story, get_engine())
+            return
+    if not story["kept"]:
+        print(bold("\n  storywheel") + dim("  ·  type ? at any prompt for help"))
     try:
         ask_universe_mode(story)
     except Quit:
         return
-    run(story)
+    run_plain(story)
+
+
+# --- subcommands ---------------------------------------------------------------------------
+
+def cmd_new(args):
+    run(store.new_story(), plain=getattr(args, "plain", False))
 
 def cmd_list(args):
     stories = store.all_stories()
     if not stories:
         print("  No stories yet. Run  storywheel  to start one.")
         return
+    total = len(STEPS)
     for n, s in enumerate(stories, 1):
-        done = "done" if s["step"] >= len(STEPS) else f"step {s['step'] + 1}/{len(STEPS)}"
+        done = "done" if s["step"] >= total else f"step {s['step'] + 1}/{total}"
         print(f"  {n:>3}  {s['id']}  {store.title_of(s):<40} {dim(done)}")
 
 def cmd_resume(args):
@@ -422,11 +328,7 @@ def cmd_resume(args):
     if story["step"] >= len(STEPS):
         print(dim("  This story is finished; starting from the first step so you can change things."))
         story["step"] = 0
-    try:
-        ask_universe_mode(story)
-    except Quit:
-        return
-    run(story)
+    run(story, plain=getattr(args, "plain", False))
 
 def cmd_export(args):
     story = store.find(args.target)
@@ -454,7 +356,7 @@ def cmd_universe(args):
         step = labels.get(key)
         print(bold(f"\n  {step.label if step else key}") + dim(f"  ({len(entries)})  key: {key}"))
         for n, e in enumerate(entries, 1):
-            print(f"    {n:>2}  {summary(step, e) if step else e}")
+            print(f"    {n:>2}  {_summary(step, e) if step else e}")
     print(dim("\n  Remove one with:  storywheel universe rm KEY NUMBER   (e.g. rm spine 1)"))
     print(dim(f"  Or edit {store.UNIVERSE} by hand."))
 
@@ -465,12 +367,19 @@ def cmd_sample(args):
         sys.exit(f"  No structure called '{args.structure}'. Choose one of: {names}")
     sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n, structure=args.structure)
 
-def main():
-    parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.")
+def cmd_report(args):
+    print(ratings_mod.format_report(get_ratings(), args.n))
+
+def main(argv=None):
+    plain_parent = argparse.ArgumentParser(add_help=False)
+    plain_parent.add_argument("--plain", action="store_true",
+                              help="use the simple prompt instead of the full-screen app")
+    parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.",
+                                     parents=[plain_parent])
     sub = parser.add_subparsers(dest="command")
-    sub.add_parser("new", help="start a new story (the default)")
+    sub.add_parser("new", parents=[plain_parent], help="start a new story (the default)")
     sub.add_parser("list", help="list your stories")
-    p = sub.add_parser("resume", help="pick up a story")
+    p = sub.add_parser("resume", parents=[plain_parent], help="pick up a story")
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
     p = sub.add_parser("export", help="write a story's markdown somewhere else")
     p.add_argument("target", help="number from 'list' or a story id")
@@ -484,9 +393,11 @@ def main():
     p = sub.add_parser("universe", help="show your universe, or: universe rm KEY NUMBER")
     p.add_argument("action", nargs="?", choices=["rm"])
     p.add_argument("rest", nargs="*")
-    args = parser.parse_args()
-    {"list": cmd_list, "resume": cmd_resume, "export": cmd_export,
-     "universe": cmd_universe, "sample": cmd_sample}.get(args.command, cmd_new)(args)
+    p = sub.add_parser("report", help="the worst-rated lines and the frames that produced them")
+    p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
+    args = parser.parse_args(argv)
+    {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "universe": cmd_universe,
+     "sample": cmd_sample, "report": cmd_report}.get(args.command, cmd_new)(args)
 
 
 if __name__ == "__main__":

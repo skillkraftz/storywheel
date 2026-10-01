@@ -104,7 +104,40 @@ VERBS["hiding"] = (("thing", "message"), None)       # a hiding place has the hi
 AGREE = {"is": ("is", "are"), "was": ("was", "were"), "has": ("has", "have"), "does": ("does", "do")}
 SPECIAL_BLOCKS = {"ODDITY", "ALLITERATION"}
 
-_PLACEHOLDER = re.compile(r"\{([A-Za-z_][A-Za-z_0-9]*)(?::([^{}|]*))?(?:\|([^{}]*))?\}")
+# {name}  {name:requirements}  {singular|plural}. Requirements may themselves contain "|" ("a|b").
+_PLACEHOLDER = re.compile(r"\{([A-Za-z_][A-Za-z_0-9]*)(?::([^{}]*)|\|([^{}]*))?\}")
+
+# Lowercase names a story can always fill, besides the slots of the library.
+KNOWN_FIELDS = {"first", "last", "name", "age", "place", "era", "season", "landmark", "rumor", "rival", "job",
+                "trait", "want", "need", "flaw", "secret", "motif", "title", "genre", "mood", "structure",
+                "nouns", "title_nouns", "adj2", "noun2", "the_motif", "the_thing", "the_someone",
+                "the_message", "the_disaster"}
+
+
+def is_known(library, name):
+    """Can the story fill a placeholder of this name? (Anything else would leak into the text.)"""
+    if name in SPECIAL_BLOCKS or name in AGREE:
+        return True
+    if name.isupper():
+        return library.has_slot(name.lower())
+    return name in KNOWN_FIELDS or library.has_slot(name)
+
+
+def unknown_names(library, text):
+    """Placeholders in `text` that nothing can fill."""
+    return [m.group(1) for m in _PLACEHOLDER.finditer(text)
+            if m.group(3) is None and not is_known(library, m.group(1))]
+
+
+def leaks(library, text):
+    """Pieces of a rendered text that look like an unresolved slot: a braced name, an UPPERCASE
+    slot name, a name_with_underscores, a [KEY] marker, or a stray | . Should always be []."""
+    found = re.findall(r"[{}|]", text)
+    found += re.findall(r"\[[A-Za-z_]+\]", text)
+    found += re.findall(r"\b[A-Za-z]+_[A-Za-z_]+\b", text)
+    slots = {n.upper() for n in library.by_slot} | SPECIAL_BLOCKS
+    found += [w for w in re.findall(r"\b[A-Z][A-Z_]{2,}\b", text) if w in slots]
+    return found
 
 
 class Starved(Exception):
@@ -196,6 +229,9 @@ def solve(ctx, text, relax=False):
     slots = parse(text, lib)
     if not slots:
         return text
+    for sl in slots:                                       # a name nothing can fill would leak into the text
+        if not sl.agree and not (sl.atom or sl.field) and not ctx.can_resolve(sl.name):
+            raise Starved(f"nothing fills {{{sl.name}}}")
     bindings = bind(slots)
 
     values = {}                                            # slot index -> (features, plural)

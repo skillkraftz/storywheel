@@ -53,3 +53,38 @@ def write_json(path, doc):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(doc))
     return path
+
+
+# --- helpers for the full-screen app ----------------------------------------------------------------------
+
+import asyncio  # noqa: E402
+import re  # noqa: E402
+
+
+def screen_text(app):
+    """The text on the app's screen right now, line by line (read from a screenshot)."""
+    svg = app.export_screenshot()
+    lines = {}
+    for y, t in re.findall(r'<text class="[^"]*" x="[\d.]+" y="([\d.]+)"[^>]*>([^<]*)</text>', svg):
+        t = t.replace("&#160;", " ").replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&#x27;", "'")
+        lines.setdefault(float(y), []).append(t)
+    return "\n".join("".join(v).rstrip() for _y, v in sorted(lines.items()))
+
+
+def make_engine(home, seed=3, ratings=True):
+    from storywheel.engine import Engine
+    from storywheel.ratings import Ratings
+    return Engine(seed=seed, user_dir=home / "home",
+                  ratings=Ratings(home / "home" / "ratings.json") if ratings else None)
+
+
+def run_tui(story, engine, script, size=(120, 40)):
+    """Start the app on a story, run `script(app, pilot)`, and return what it returns."""
+    from storywheel.tui import StorywheelApp
+
+    async def go():
+        app = StorywheelApp(story, engine)
+        async with app.run_test(size=size) as pilot:
+            await pilot.pause()
+            return await script(app, pilot)
+    return asyncio.run(go())
