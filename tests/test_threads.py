@@ -36,7 +36,7 @@ class FakeSpine:
     def __init__(self, value, introduced):
         self.value, self.introduced = value, introduced
 
-    def reroll_value(self, engine, story, current, field, threads=None, atoms=None, made=None):
+    def reroll_value(self, engine, story, current, field, threads=None, atoms=None, made=None, **_):
         return self.value, self.introduced, []
 
 

@@ -54,6 +54,7 @@ every roll).
     E               edit in $EDITOR     w      write your own
     + / -           like / dislike      u / U  save to / remove from your universe
     h               history             m      the mix editor
+    v               universe panel      enter  reroll the selected field
     b               go back a step      x      skip this step
     q               save and quit       ?      help
 
@@ -65,6 +66,47 @@ toward fitting ideas. If you go back and change something, later steps get the n
 name or place swapped in automatically. Rerolling or editing one field also updates
 other fields in the same item that mentioned it, so a new landmark changes the rumor
 about it too.
+
+### Stand-ins and stale candidates
+
+The sidebar lets you jump ahead. If you roll a step before the ones it builds on are
+kept (the story body before the protagonist, say), it invents **stand-ins** (a first
+name, a job, a place) and the card says so. Each candidate remembers which earlier
+fields it was built from. When you later keep those steps, a candidate built on a
+stand-in shows a banner, "Built for Mark; your protagonist is now Stacie Anderson",
+with **Update** (`a`: swap the kept values into a copy), **Reroll**, and **Ignore** (dismiss the banner; the candidate stays as it is).
+Stale rows in the history are marked. A single-field reroll always uses what you have
+kept, never an old stand-in. If you keep a step that was built on a stand-in and then
+keep the real one, the kept text is updated for you.
+
+### The mouse
+
+The app has the mouse (over SSH too, in most terminals). On the card:
+
+    click a field        reroll just that field (like f)
+    right-click a field  edit it in place (like e)
+    scroll over a field  step through that field's earlier values
+    click ▲ or ▼         rate that line (like + and -)
+
+Enter on a highlighted field rerolls that field, the same as a click; space rolls the
+whole step. A row of buttons under the card does Roll, Keep, Back, Skip and Mix. Click a
+step to jump to it and a history row to pick it. While the app has the mouse, select
+text in the terminal by holding **Shift** while you drag (some terminals use Alt, or
+Option on a Mac).
+
+### The universe panel
+
+The bottom half of the left column holds your universe, grouped by kind (Protagonist,
+Setting, ...); Enter or a click opens and closes a group. `v` moves the keyboard there.
+
+    enter / click an entry   preview it
+      in the preview:  enter or u = use in this story,  e = edit,  d = delete (asks first)
+    n or [+ New]             write a new entry from scratch, in that kind's fields
+    t or [Use: ...]          for this story: no / mix it in / only from the universe
+
+"Use in this story" adds the entry as a new candidate for its step (jumping there if you
+are elsewhere). Nothing is kept until you press `k`, and kept steps never change. Blank
+boxes in a hand-written entry are filled in with an ordinary roll when it is used.
 
 ### The mix editor
 

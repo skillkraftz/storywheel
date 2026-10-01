@@ -2,24 +2,31 @@
 The full-screen app (Textual). It drives a Session (session.py), the same engine room the
 plain prompt uses, so the keys do exactly what they do there.
 
-    steps (left)        which are kept, skipped, current; Enter jumps to one
+    steps (left)        which are kept, skipped, current; Enter or a click jumps to one
+    universe (left)     what you have saved, by kind; Enter previews, v focuses it
     card (middle)       the current candidate; up/down select a field
+    buttons             Roll, Keep, Back, Skip, Mix
     history (below)     every roll and what changed; with h, the selected field's own history
     footer              the keys
 
-Tab moves between the three lists. Space rolls; k keeps; f rerolls the selected field;
+Tab moves between the lists. Space rolls; k keeps; f (or Enter) rerolls the selected field;
 e edits it; E opens $EDITOR; w writes your own; + and - rate; u / U universe; m mix editor;
 h history; b back; x skip; q saves and quits; ? help.
+
+The mouse works on the card too: click a field to reroll it, right-click to edit it, scroll
+over it to step through its earlier values, click its ▲ or ▼ to rate it.
 """
+from rich.style import Style
 from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
+from textual.message import Message
 from textual.screen import ModalScreen, Screen
-from textual.widgets import DataTable, Footer, Header, Input, Label, OptionList, Static
+from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
 
-from . import structures
+from . import store, structures
 from . import threads as T
 from .session import Session
 from .steps import public
@@ -32,7 +39,7 @@ HELP = """\
 
   [b]space[/b]   roll again
   [b]k[/b]       keep this and move on
-  [b]f[/b]       reroll the selected field
+  [b]f[/b]       reroll the selected field (so does enter)
   [b]e[/b]       edit the selected field
   [b]E[/b]       edit it all in $EDITOR
   [b]w[/b]       write your own
@@ -40,6 +47,8 @@ HELP = """\
           and atom pairs come up a little less. Again clears it.
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
+  [b]v[/b]       the universe panel (see below)
+  [b]a[/b]       update a stale candidate (see below)
   [b]m[/b]       mix editor: what this story favors
   [b]b[/b]       go back a step
   [b]x[/b]       skip this step
@@ -50,22 +59,103 @@ HELP = """\
 
   [b]up down[/b]  move within a list
   [b]tab[/b]      next list: steps, card, history
-  [b]enter[/b]    card: roll.  history: pick that one.  steps: jump there.
+  [b]enter[/b]    card: reroll the field.  history: pick that one.
+          steps: jump there.  universe: preview an entry.
   [b]esc[/b]      back to the card
+
+[b]Stand-ins and stale candidates[/b]
+
+  If you roll a step before the ones it builds on are kept (say the story body before the
+  protagonist), it invents [b]stand-ins[/b] and the card says so. When you later keep those
+  steps, a candidate built on a stand-in shows a banner, "Built for Mark; your protagonist is
+  now Stacie Anderson", with [b]Update[/b] (swap the kept values into a copy), [b]Reroll[/b] and
+  [b]Ignore[/b] (dismiss the banner; the candidate stays as it is). Stale rows in the history are marked. Rerolling one field always uses
+  what you have kept.
+
+[b]Mouse[/b]
+
+  [b]click[/b] a field       reroll just that field (like f)
+  [b]right-click[/b] a field edit it (like e)
+  [b]scroll[/b] over a field step through its earlier values
+  [b]▲ ▼[/b] at the end of a line rate it (like + and -)
+  buttons under the card: Roll, Keep, Back, Skip, Mix
+  click a step to jump to it, a history row to pick it
+
+  To select text with the mouse while this app has it,
+  hold [b]Shift[/b] and drag (some terminals: Alt, or Option on a Mac).
+
+[b]Universe panel[/b] (bottom left; press v)
+
+  Entries are grouped by kind; enter opens or closes a group.
+  [b]enter[/b]  preview an entry: then enter or u uses it in this story
+          (as a new candidate; nothing is kept until you press k),
+          e edits it, d deletes it (with a confirm)
+  [b]n[/b]      add a new entry from scratch    [b]t[/b]  no / mix / only for this story
 
 Press esc to close.
 """
 
 
 def _row(label, value, rating=0):
+    """One line of the card. It ends in clickable ▲ ▼ (the click is recognised by the meta on them)."""
     text = Text()
     if label:
         text.append(label, style="bold cyan")
         text.append("  ")
     text.append(value)
-    if rating:
-        text.append("  ▲" if rating > 0 else "  ▼", style="bold green" if rating > 0 else "bold red")
+    text.append(" ")
+    text.append(" ▲ ", style=Style(color="green" if rating > 0 else "grey50", bold=rating > 0, meta={"rate": 1}))
+    text.append(" ▼ ", style=Style(color="red" if rating < 0 else "grey50", bold=rating < 0, meta={"rate": -1}))
     return text
+
+
+class CardList(OptionList):
+    """The card's lines. A click is not 'select': left-click rerolls the field, right-click edits it,
+    the wheel steps through its earlier values, and the ▲ ▼ rate it. (Enter still selects.)"""
+
+    class Field(Message):
+        def __init__(self, index, button):
+            super().__init__()
+            self.index, self.button = index, button
+
+    class Rate(Message):
+        def __init__(self, index, value):
+            super().__init__()
+            self.index, self.value = index, value
+
+    class Scrolled(Message):
+        def __init__(self, index, direction):
+            super().__init__()
+            self.index, self.direction = index, direction
+
+    def on_click(self, event):
+        event.stop()
+        event.prevent_default()                       # not the base class's "click means select"
+        meta = event.style.meta
+        index = meta.get("option")
+        if index is None:
+            return
+        self.highlighted = index
+        if meta.get("rate"):
+            self.post_message(self.Rate(index, meta["rate"]))
+        else:
+            self.post_message(self.Field(index, event.button))
+
+    def _wheel(self, event, direction):
+        event.stop()
+        event.prevent_default()
+        index = event.style.meta.get("option")
+        if index is None:
+            index = self.highlighted
+        if index is not None:
+            self.highlighted = index
+            self.post_message(self.Scrolled(index, direction))
+
+    def on_mouse_scroll_up(self, event):
+        self._wheel(event, -1)                        # up: older values
+
+    def on_mouse_scroll_down(self, event):
+        self._wheel(event, 1)
 
 
 # --- dialogs ----------------------------------------------------------------------------------------
@@ -112,11 +202,13 @@ class HelpScreen(ModalScreen):
     BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
     DEFAULT_CSS = """
     HelpScreen { align: center middle; }
-    HelpScreen > Static { width: 78; height: auto; border: round $accent; background: $surface; padding: 1 2; }
+    HelpScreen > VerticalScroll { width: 78; max-width: 100%; height: auto; max-height: 100%;
+                                  border: round $accent; background: $surface; padding: 1 2; }
     """
 
     def compose(self) -> ComposeResult:
-        yield Static(HELP)
+        with VerticalScroll():
+            yield Static(HELP)
 
     def action_close(self):
         self.dismiss(None)
@@ -163,6 +255,99 @@ class DoneScreen(ModalScreen):
 
     def action_keep_going(self):
         self.dismiss("stay")
+
+
+class ConfirmScreen(ModalScreen):
+    BINDINGS = [Binding("y", "answer(True)", "Yes"), Binding("n,escape", "answer(False)", "No")]
+    DEFAULT_CSS = """
+    ConfirmScreen { align: center middle; }
+    ConfirmScreen > Vertical { width: 60; height: auto; border: round $error; background: $surface; padding: 1 2; }
+    ConfirmScreen Horizontal { height: 1; margin-top: 1; }
+    ConfirmScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    """
+
+    def __init__(self, question):
+        super().__init__()
+        self.question = question
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(self.question, markup=False)
+            with Horizontal():
+                yield _quiet(Button("Yes (y)", id="yes", variant="error"))
+                yield _quiet(Button("No (n)", id="no"))
+
+    def on_button_pressed(self, event):
+        self.dismiss(event.button.id == "yes")
+
+    def action_answer(self, yes):
+        self.dismiss(yes)
+
+
+class UniverseEntryScreen(ModalScreen):
+    """A look at one saved entry, with what you can do with it."""
+    BINDINGS = [Binding("enter,u", "choose('use')", "Use in this story"), Binding("e", "choose('edit')", "Edit"),
+                Binding("d", "choose('delete')", "Delete"), Binding("escape,q", "choose(None)", "Close")]
+    DEFAULT_CSS = """
+    UniverseEntryScreen { align: center middle; }
+    UniverseEntryScreen > Vertical { width: 80%; max-width: 90; height: auto; max-height: 90%;
+                                     border: round $accent; background: $surface; padding: 1 2; }
+    UniverseEntryScreen Horizontal { height: 1; margin-top: 1; }
+    UniverseEntryScreen #dlg Button { height: 1; border: none; margin-right: 1; min-width: 8; }
+    UniverseEntryScreen .keys { color: $text-muted; }
+    """
+
+    def __init__(self, label, fields):
+        super().__init__()
+        self.label, self.fields = label, fields
+
+    def compose(self) -> ComposeResult:
+        text = Text()
+        text.append(f"{self.label}, saved in your universe\n\n", style="bold")
+        for k, v in self.fields.items():
+            text.append(k.replace("_", " ") + "  ", style="bold cyan")
+            text.append(f"{v}\n")
+        with Vertical(id="dlg"):
+            yield Static(text)
+            with Horizontal():
+                yield _quiet(Button("Use in this story", id="use", variant="primary"))
+                yield _quiet(Button("Edit", id="edit"))
+                yield _quiet(Button("Delete", id="delete", variant="error"))
+                yield _quiet(Button("Close", id="close"))
+            yield Static("enter: use   e: edit   d: delete   esc: close", classes="keys")
+
+    def on_button_pressed(self, event):
+        self.dismiss(None if event.button.id == "close" else event.button.id)
+
+    def action_choose(self, what):
+        self.dismiss(what)
+
+
+def _quiet(button):
+    """A button for the mouse only: it never takes the keyboard focus (keys do the same things)."""
+    button.can_focus = False
+    return button
+
+
+class UniverseTree(Tree):
+    """Your saved entries by kind. Enter on a kind opens or closes it; on an entry, previews it."""
+    BINDINGS = [Binding("n", "new", "New"), Binding("t", "mode", "No/mix/only"),
+                Binding("d", "delete", "Delete"), Binding("e", "edit", "Edit"), Binding("u", "use", "Use")]
+
+    def action_new(self):
+        self.screen.universe_new()
+
+    def action_mode(self):
+        self.screen.universe_mode()
+
+    def action_delete(self):
+        self.screen.universe_act("delete")
+
+    def action_edit(self):
+        self.screen.universe_act("edit")
+
+    def action_use(self):
+        self.screen.universe_act("use")
 
 
 # --- the mix editor ----------------------------------------------------------------------------------
@@ -330,6 +515,9 @@ class MainScreen(Screen):
         Binding("minus", "rate(-1)", "Dislike", show=False),
         Binding("h", "history", "Hist"),
         Binding("m", "mix", "Mix"),
+        Binding("v", "focus_universe", "Universe"),
+        Binding("a", "update_inputs", "Update", show=False),
+        Binding("i", "ignore", "Ignore", show=False),
         Binding("b", "back", "Back"),
         Binding("x", "skip", "Skip"),
         Binding("u", "universe_add", "Univ", key_display="u/U"),
@@ -339,7 +527,17 @@ class MainScreen(Screen):
     ]
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
-    MainScreen #left { width: 24; border: round $primary-darken-2; }
+    MainScreen #left { width: 30; border: round $primary-darken-2; }
+    MainScreen #steps { height: auto; max-height: 10; }
+    MainScreen #uni-title { margin-top: 1; }
+    MainScreen #uni-buttons { height: 1; }
+    MainScreen #uni-buttons Button { height: 1; border: none; min-width: 6; margin-right: 1; }
+    MainScreen #universe { height: 1fr; }
+    MainScreen #banner { background: $warning 30%; color: $text; padding: 0 1; height: auto; }
+    MainScreen #banner-buttons { height: 1; padding: 0 1; }
+    MainScreen #banner-buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; }
+    MainScreen #buttons { height: 1; padding: 0 1; }
+    MainScreen #buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; }
     MainScreen #main { width: 1fr; }
     MainScreen #card-box { height: 3fr; border: round $primary; }
     MainScreen #hist-box { height: 2fr; border: round $primary-darken-2; }
@@ -366,12 +564,26 @@ class MainScreen(Screen):
             with Vertical(id="left"):
                 yield Static("Steps", classes="title")
                 yield OptionList(id="steps")
+                yield Static("Universe", id="uni-title", classes="title", markup=False)
+                with Horizontal(id="uni-buttons"):
+                    yield _quiet(Button("Use: no  ", id="uni-mode"))
+                    yield _quiet(Button("+ New", id="uni-new"))
+                yield UniverseTree("Universe", id="universe")
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
                     yield Static("", id="hint", markup=False)
+                    yield Static("", id="banner", markup=False)
+                    with Horizontal(id="banner-buttons"):
+                        yield _quiet(Button("Update", id="ban-update", variant="warning"))
+                        yield _quiet(Button("Reroll", id="ban-reroll"))
+                        yield _quiet(Button("Ignore", id="ban-ignore"))
                     yield Static("", id="meta", markup=False)
-                    yield OptionList(id="card")
+                    yield CardList(id="card")
                     yield Static("", id="extra", markup=False)
+                    with Horizontal(id="buttons"):
+                        for label, name in (("Roll", "roll"), ("Keep", "keep"), ("Back", "back"),
+                                            ("Skip", "skip"), ("Mix", "mix")):
+                            yield _quiet(Button(label, id=f"btn-{name}"))
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
                     yield OptionList(id="history")
@@ -381,6 +593,7 @@ class MainScreen(Screen):
     def on_mount(self):
         i = self.session.story["step"]
         self.session.enter(i if i < len(self.session.steps) else 0)
+        self.query_one("#universe", Tree).show_root = False
         self.refresh_all()
         self.query_one("#card", OptionList).focus()
         total = self.session.universe_total()
@@ -390,6 +603,7 @@ class MainScreen(Screen):
     def _universe_chosen(self, answer):
         self.session.set_universe_mode(answer or "n")
         self.say("Pulling from your universe." if answer in ("m", "o") else "")
+        self.refresh_universe()
 
     # --- showing the session --------------------------------------------------------------------------------
 
@@ -423,6 +637,7 @@ class MainScreen(Screen):
             self.refresh_steps()
             self.refresh_card()
             self.refresh_history()
+            self.refresh_universe()
         finally:
             self._busy = False
         notes = self.session.take_notes()
@@ -463,7 +678,13 @@ class MainScreen(Screen):
         self.card.clear_options()
         self.card.add_options(rows)
         self.card.highlighted = min(previous or 0, len(rows) - 1)
+        banner = s.stale_banner()
+        self.query_one("#banner", Static).update(banner + "   (a: update, or choose below)" if banner else "")
+        self.query_one("#banner", Static).display = bool(banner)
+        self.query_one("#banner-buttons").display = bool(banner)
         extra = []
+        if s.standin_line():
+            extra.append(s.standin_line())
         if step.key == "structure":
             found = structures.find(fields["structure"])
             extra.append(found.blurb if found else "Not one of the known structures; the Story Spine will be used.")
@@ -487,6 +708,7 @@ class MainScreen(Screen):
                 t.append(f"#{n + 1}  ", style="dim")
                 t.append(s.change_summary(n, 90), style="bold" if n == s.cur else "")
                 t.append(s.source_tag(n), style="dim")
+                t.append(s.stale_tag(n), style="bold yellow")
                 rows.append(Option(t, id=str(n)))
             lst.add_options(rows)
             lst.highlighted = s.cur
@@ -502,6 +724,179 @@ class MainScreen(Screen):
             lst.add_options(rows)
             values = s.field_values(field)
             lst.highlighted = values.index(current) if current in values else len(values) - 1
+
+    MODE_WORDS = {"n": "no", "m": "mix", "o": "only"}
+
+    def refresh_universe(self):
+        """The universe panel: the mode for this story, and the entries by kind (groups stay as you left them)."""
+        s = self.session
+        tree = self.query_one("#universe", UniverseTree)
+        universe = {k: v for k, v in store.load_universe().items() if v}
+        self.query_one("#uni-title", Static).update(f"Universe ({sum(len(v) for v in universe.values())})")
+        button = self.query_one("#uni-mode", Button)
+        button.label = f"Use: {self.MODE_WORDS[s.universe_mode]:<4}"          # same width every time
+        button.refresh(layout=True)
+        if not hasattr(self, "_open_groups"):
+            self._open_groups = set()
+        tree.clear()
+        order = [st.key for st in s.steps] + [k for k in universe if k not in [st.key for st in s.steps]]
+        for key in order:
+            entries = universe.get(key)
+            if not entries:
+                continue
+            group = tree.root.add(f"{s.universe_label(key)} ({len(entries)})", data=("group", key),
+                                  expand=key in self._open_groups)
+            for n, fields in enumerate(entries):
+                group.add_leaf(" · ".join(str(v) for v in list(fields.values())[:3]), data=("entry", key, n))
+        if not universe:
+            tree.root.add_leaf("(nothing saved yet: u saves a piece)", data=("none",))
+
+    def on_tree_node_collapsed(self, event):
+        if event.node.data and event.node.data[0] == "group":
+            self._open_groups.discard(event.node.data[1])
+
+    def on_tree_node_expanded(self, event):
+        if event.node.data and event.node.data[0] == "group":
+            self._open_groups.add(event.node.data[1])
+
+    def on_tree_node_selected(self, event):
+        data = event.node.data
+        if data and data[0] == "entry":
+            self.universe_act(None, data)
+
+    def _chosen_entry(self):
+        node = self.query_one("#universe", UniverseTree).cursor_node
+        data = node.data if node else None
+        return data if data and data[0] == "entry" else None
+
+    def universe_act(self, action, data=None):
+        """Preview (action None), or use / edit / delete, the highlighted entry."""
+        data = data or self._chosen_entry()
+        if not data:
+            self.say("Select an entry in the universe panel first.")
+            return
+        _tag, key, n = data
+        entries = store.load_universe().get(key, [])
+        if n >= len(entries):
+            return
+        fields = entries[n]
+        if action is None:
+            label = self.session.universe_label(key)
+            self.app.push_screen(UniverseEntryScreen(label, fields),
+                                 lambda what: self.universe_act(what, data) if what else None)
+        elif action == "use":
+            if self.session.use_universe_entry(key, fields):
+                self.hist_mode = "rolls"
+                self.after()
+                self.card.focus()
+            else:
+                self.after()
+        elif action == "edit":
+            self.app.push_screen(EditScreen(f"Edit saved {self.session.universe_label(key).lower()}", dict(fields)),
+                                 lambda out: self._universe_edited(key, n, fields, out))
+        elif action == "delete":
+            summary = " · ".join(str(v) for v in list(fields.values())[:3])
+            self.app.push_screen(ConfirmScreen(f"Delete this from your universe?\n\n{summary}"),
+                                 lambda yes: self._universe_deleted(key, n, yes))
+
+    def _universe_edited(self, key, n, old, out):
+        if out is not None:
+            new = {k: (v.strip() or old[k]) for k, v in out.items()}
+            if store.update_universe_entry(key, n, new):
+                self.say("Universe entry updated.")
+        self.refresh_universe()
+
+    def _universe_deleted(self, key, n, yes):
+        if yes and store.remove_universe_entry(key, n) is not None:
+            self.say("Deleted from your universe.")
+        self.refresh_universe()
+
+    def universe_new(self):
+        """Write a new entry from scratch, in the fields of the selected group's step (else this step)."""
+        node = self.query_one("#universe", UniverseTree).cursor_node
+        data = node.data if node else None
+        key = data[1] if data and data[0] in ("group", "entry") else self.session.step.key
+        names = self.session.universe_fields(key)
+        if not names:
+            self.say("No fields known for that kind of entry.")
+            return
+        self.app.push_screen(EditScreen(f"New {self.session.universe_label(key).lower()} for your universe "
+                                        "(blank boxes are filled in when it is used)", {n: "" for n in names}),
+                             lambda out: self._universe_created(key, out))
+
+    def _universe_created(self, key, out):
+        if out is not None:
+            fields = {k: v.strip() for k, v in out.items() if v.strip()}
+            if fields:
+                self._open_groups.add(key)
+                _n, added = store.add_universe_entry(key, fields)
+                self.say("Added to your universe." if added else "That is already in your universe.")
+            else:
+                self.say("Nothing written, so nothing added.")
+        self.refresh_universe()
+
+    def universe_mode(self):
+        mode = self.session.cycle_universe_mode()
+        self.refresh_universe()
+        self.say({"n": "Not pulling from your universe in this story.",
+                  "m": "Mixing your universe in (about a third of rolls).",
+                  "o": "Rolling only from your universe."}[mode])
+
+    def action_ignore(self):
+        self.session.ignore_stale()
+        self.after()
+
+    def action_update_inputs(self):
+        self.session.update_inputs()
+        self.after()
+
+    def action_focus_universe(self):
+        self.query_one("#universe", UniverseTree).focus()
+
+    def on_button_pressed(self, event):
+        event.stop()
+        name = event.button.id or ""
+        if name == "uni-mode":
+            self.universe_mode()
+            return
+        if name == "uni-new":
+            self.universe_new()
+            return
+        if name.startswith("ban-"):
+            {"ban-update": self.action_update_inputs, "ban-reroll": self.action_roll,
+             "ban-ignore": self.action_ignore}[name]()
+            self.card.focus()
+            return
+        if name.startswith("btn-"):
+            getattr(self, f"action_{name[4:]}")()
+            if name != "btn-mix":
+                self.card.focus()
+
+    # --- the mouse on the card ---------------------------------------------------------------------------
+
+    def _field_at(self, index):
+        names = self.session.field_names
+        return None if self.session.step.single else names[min(index, len(names) - 1)]
+
+    def on_card_list_field(self, event):
+        if event.button == 3:
+            self.action_edit()
+        else:
+            self.action_reroll_field()
+
+    def on_card_list_rate(self, event):
+        self.session.rate(event.value, self._field_at(event.index))
+        self.after()
+        self.card.highlighted = min(event.index, len(self.session.field_names) - 1)
+
+    def on_card_list_scrolled(self, event):
+        s = self.session
+        field = self._field_at(event.index) or s.field_names[0]
+        if s.step_value(field, event.direction):
+            self.after()
+            self.card.highlighted = s.field_names.index(field) if not s.step.single else 0
+        else:
+            self.say("That is the " + ("oldest" if event.direction < 0 else "newest") + " value this field has had.")
 
     def after(self, message=None):
         """Show the new state; say something if there is something to say."""
@@ -521,7 +916,7 @@ class MainScreen(Screen):
         lst = event.option_list.id
         s = self.session
         if lst == "card":
-            self.action_roll()
+            self.action_reroll_field()
         elif lst == "steps":
             s.jump(int(event.option.id))
             self.hist_mode = "rolls"
@@ -571,6 +966,8 @@ class MainScreen(Screen):
             self.session.reroll_field(field)
             self.after()
             self.card.highlighted = self.session.field_names.index(field)
+            if self.hist_mode == "field":
+                self.refresh_history()
 
     def action_edit(self):
         s = self.session

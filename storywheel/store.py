@@ -29,13 +29,14 @@ def new_story():
     now = datetime.datetime.now()
     return {"id": now.strftime("%Y%m%d-%H%M%S"), "created": now.isoformat(timespec="minutes"),
             "step": 0, "kept": {}, "history": {}, "seeds": {}, "universe_mode": "n",
-            "mix": new_mix(), "threads": {}, "atoms": {}, "steps_v": 2}
+            "mix": new_mix(), "threads": {}, "atoms": {}, "inputs": {}, "steps_v": 2}
 
 def upgrade(story):
     """Bring a story from an older file up to date (v1 files have no mix)."""
     sync_base(story)
     story.setdefault("threads", {})
     story.setdefault("atoms", {})
+    story.setdefault("inputs", {})
     if story.get("steps_v") != 2:               # older files predate the structure step
         story["steps_v"] = 2
         if story.get("step", 0) >= 1 or "genre" in story["kept"]:
@@ -105,6 +106,20 @@ def remove_from_universe(step_key, fields):
         _save_universe(universe)
         return True
     return False
+
+def update_universe_entry(step_key, index, fields):
+    """Replace one saved entry's fields. Returns True if there was such an entry."""
+    universe = load_universe()
+    entries = universe.get(step_key, [])
+    if 0 <= index < len(entries):
+        entries[index] = public(fields)
+        _save_universe(universe)
+        return True
+    return False
+
+def add_universe_entry(step_key, fields):
+    """Add an entry written by hand. Returns (number of entries for that step, whether it was new)."""
+    return add_to_universe(step_key, fields)
 
 def remove_universe_entry(step_key, index):
     universe = load_universe()

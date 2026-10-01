@@ -64,6 +64,10 @@ class Ctx(dict):
         self.update(self.kept)
         self.update(public(current))
         self.made = {}
+        self.made_by = {}                       # which field's work invented each key of `made`
+        self.inputs = {}                        # earlier steps' values this roll read (see record_read)
+        self._depth = 0
+        self.step_key = exclude
         self.hints = {}                         # e.g. the title noun, offered as the motif
         # Threads: what the spine has introduced so far. A spine roll (record=True)
         # starts empty and adds to it; other steps read the story's kept threads.
@@ -184,6 +188,30 @@ class Ctx(dict):
     def thread_weight(self, template):
         return T.weight(template, self.threads)
 
+    def is_kept(self, key):
+        """Is this earlier-step value one the writer has kept (as opposed to a stand-in)?"""
+        if key in ("first", "last"):
+            key = "name"
+        return key in self.kept
+
+    def __getitem__(self, key):
+        self._depth += 1
+        try:
+            value = super().__getitem__(key)
+        finally:
+            self._depth -= 1
+        if self._depth == 0:
+            self.record_read(key, value)
+        return value
+
+    def record_read(self, key, value):
+        """Note a value from ANOTHER step that this roll used, and whether it was kept or a stand-in
+        (the roll had to invent it because that step isn't kept). Candidates carry this as _inputs."""
+        owner = OWNER.get(key)
+        if owner is None or owner == self.step_key or key in self.inputs:
+            return
+        self.inputs[key] = {"value": value, "step": owner, "standin": not self.is_kept(key)}
+
     def __missing__(self, key):
         if key.isupper():                       # a building block: fresh every time
             return self.block(key)
@@ -196,6 +224,7 @@ class Ctx(dict):
             return self["name"].split()[-1]
         value = self.seeded(key)
         self[key] = self.made[key] = value
+        self.made_by[key] = self.field
         return value
 
     def block(self, key):
@@ -345,15 +374,20 @@ class Step:
             out[name] = c[name] = str(gen(c))
             c.verify_threads(name, out[name])
         out["_made"] = c.made
+        out["_made_by"] = c.made_by
+        out["_inputs"] = c.inputs
         out["_atoms"] = atoms_by_field(c)
         if self.threads:
             out["_threads"] = c.threads
         return out
 
-    def reroll_value(self, engine, story, current, field_name, threads=None, atoms=None, made=None):
+    def reroll_value(self, engine, story, current, field_name, threads=None, atoms=None, made=None,
+                     made_by=None, report=None):
         """A new value for one field. For a threaded step, `threads` are the ones the
         other beats still depend on; `atoms` are what the item's other fields already use.
-        Returns (value, threads this beat introduced, atoms this field drew)."""
+        `made` / `made_by` are what the item invented earlier and which field did.
+        Returns (value, threads this beat introduced, atoms this field drew). If `report` is a dict
+        it is filled with what this reroll invented and read: report["made"], ["made_by"], ["inputs"]."""
         rest = {k: v for k, v in current.items() if k != field_name and not k.startswith("_")}
         threads = threads or {}
         order = list(self.fields)
@@ -363,12 +397,14 @@ class Step:
         others = {k: v for k, v in (atoms or {}).items() if k != field_name}
         c = Ctx(engine, story, exclude=self.key, current=rest, fresh=True,
                 threads=dict(earlier) if self.threads else None, record=self.threads, atoms=others)
-        c.update(made or {})                        # names etc. the other fields already invented
+        c.update(reusable_made(c, made, made_by, field_name, rest))
         c.later = set(threads) - set(earlier)       # already introduced further on: not ours to record
         c.field = field_name
         gen = self.reroll.get(field_name, self.fields[field_name])
         value = str(gen(c))
         mine = atoms_by_field(c).get(field_name, [])
+        if report is not None:
+            report.update(made=dict(c.made), made_by=dict(c.made_by), inputs=dict(c.inputs))
         if not self.threads:
             return value, {}, mine
         c.verify_threads(field_name, value)
@@ -377,6 +413,34 @@ class Step:
     def roll_field(self, engine, story, current, field_name):
         value, _, _ = self.reroll_value(engine, story, current, field_name)
         return dict(current, **{field_name: value})
+
+
+PRODUCER_GUESS = {"first": "name", "last": "name"}      # for items saved before we recorded who made what
+
+
+def reusable_made(c, made, made_by, field_name, rest):
+    """Which of an item's earlier inventions (its _made) a single-field reroll may reuse.
+
+    Never what the rerolled field invented itself (a reroll of `name` must not rebuild the name from
+    the first/last it made), never what another field's current text already settles, and never a
+    stand-in for a step that has since been kept: the kept value is used instead. What remains is
+    stand-ins for steps that are still unkept, which the other fields use too, so the item stays consistent."""
+    out = {}
+    for key, value in (made or {}).items():
+        producer = (made_by or {}).get(key) or PRODUCER_GUESS.get(key)
+        owner = OWNER.get(key)
+        if key in rest or (key in ("first", "last") and "name" in rest):
+            continue
+        if owner and owner != c.step_key and c.is_kept(key):
+            continue                                # a stand-in for a step that is kept now: use the kept one
+        if producer == field_name:
+            # What this field invented is its own to redo (rerolling `name` makes a new first and last).
+            # The exception is a stand-in the other fields also use: they say "Perdition", so does this.
+            shared = owner != c.step_key and any(re.search(r"\b" + re.escape(value) + r"\b", v) for v in rest.values() if isinstance(v, str))
+            if not shared:
+                continue
+        out[key] = value
+    return out
 
 
 STORY_SPINE_HINT = ("Each 'Because of that' should be caused by the beat before it, not "
@@ -441,3 +505,10 @@ def step_by_key(key, story=None):
 
 
 STEPS = steps_for({})        # the default shape, for code that doesn't have a story in hand
+
+# Which step supplies each field (first and last come from the protagonist's name, a spine beat
+# from the body). A value a roll reads from a different step is one of its inputs.
+OWNER = {name: st.key for st in STEPS for name in st.fields}
+OWNER.update(first="protagonist", last="protagonist")
+for _st in structures.registry().values():
+    OWNER.update({b.key: "spine" for b in _st.beats})

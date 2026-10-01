@@ -185,3 +185,55 @@ def test_the_mix_belongs_to_the_story(sess):
     mix = sess.mix()
     mix.exclude_tag("rural")
     assert sess.story["mix"]["exclude_tags"] == ["rural"]
+
+
+# --- browsing a field, and the universe ----------------------------------------------------------------------
+
+def test_step_value_browses_without_piling_up_candidates(sess):
+    to_step(sess, "protagonist")
+    sess.reroll_field("job")
+    sess.reroll_field("job")
+    values = sess.field_values("job")
+    n = len(sess.hist)
+    assert sess.step_value("job", -1) and sess.fields["job"] == values[1] and len(sess.hist) == n + 1
+    assert sess.step_value("job", -1) and sess.fields["job"] == values[0] and len(sess.hist) == n + 1
+    assert not sess.step_value("job", -1)                               # nothing older
+    assert sess.step_value("job", 1) and sess.fields["job"] == values[1]
+    sess.reroll_field("job")                                            # a real reroll starts a new stop
+    assert len(sess.hist) == n + 2
+
+
+def test_the_universe_mode_cycles_and_belongs_to_the_story(sess):
+    assert [sess.cycle_universe_mode() for _ in range(4)] == ["m", "o", "n", "m"]
+    assert sess.story["universe_mode"] == "m"
+
+
+def test_using_a_universe_entry_adds_a_candidate_and_keeps_nothing(sess):
+    to_step(sess, "premise")
+    kept = {k: dict(v) for k, v in sess.story["kept"].items()}
+    assert sess.use_universe_entry("setting", {"place": "Dry Fork"})
+    assert sess.step.key == "setting" and sess.fields["place"] == "Dry Fork"
+    assert sess.cand["_src"] == "universe" and all(sess.fields.values())      # blanks filled
+    assert sess.story["kept"] == kept                                   # even the setting kept earlier is as it was
+    assert not sess.use_universe_entry("nonsense", {"x": "y"}) and "no 'nonsense' step" in sess.take_notes()[-1]
+
+
+def test_a_hand_written_entry_with_blanks_is_completed_when_rolled(sess, home):
+    from storywheel import store
+    store.add_to_universe("setting", {"place": "Pinewood"})
+    sess.story["universe_mode"] = "o"
+    to_step(sess, "setting")
+    sess.roll()
+    assert sess.fields["place"] == "Pinewood" and all(sess.fields.values()) and sess.cand["_src"] == "universe"
+
+
+def test_universe_fields_and_labels(sess):
+    assert sess.universe_fields("setting") == ["place", "era", "season", "landmark", "rumor"]
+    assert sess.universe_label("setting") == "Setting" and sess.universe_label("odd_kind") == "Odd Kind"
+
+
+def test_updating_a_universe_entry(home):
+    from storywheel import store
+    store.add_to_universe("setting", {"place": "A"})
+    assert store.update_universe_entry("setting", 0, {"place": "B", "_x": 1}) and store.load_universe() == {"setting": [{"place": "B"}]}
+    assert not store.update_universe_entry("setting", 3, {"place": "C"})

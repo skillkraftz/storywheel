@@ -9,13 +9,18 @@ pick from history, go back, skip, save to your universe, rate a line.
 Anything the user should hear about ("Updated 2 mentions in later steps") is queued
 with note() and collected with take_notes().
 """
+import copy
 import random
+import re
 
 from . import store, structures
 from . import ratings as R
+from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
-from .steps import public, steps_for
+from .steps import OWNER, public, steps_for
+from .text import fix_articles
 
+HEADLINE = ("name", "first", "last", "place", "title", "motif", "genre", "structure")     # what a banner names
 UNIVERSE_CHANCE = 0.35       # how often "mix" mode pulls from your universe
 SOURCE_TAGS = {"edited": " (your edit)", "universe": " (from your universe)", "kept": " (kept)"}
 
@@ -84,6 +89,11 @@ class Session:
     def jump(self, i):
         self.save()
         self.enter(i)
+        before = [st.label for n, st in enumerate(self.steps[:i]) if not self.story["kept"].get(st.key)]
+        if before:
+            self.note(f"Jumped ahead: {', '.join(before)} {'is' if len(before) == 1 else 'are'} not kept yet, "
+                      "so this uses stand-ins for what it needs from "
+                      f"{'it' if len(before) == 1 else 'them'}.")
 
     def back(self):
         if self.i == 0:
@@ -102,6 +112,7 @@ class Session:
     def skip(self):
         step, story = self.step, self.story
         story["kept"].pop(step.key, None)
+        story.get("inputs", {}).pop(step.key, None)
         if step.threads:
             story["threads"] = {}
         story["atoms"].pop(step.key, None)
@@ -116,8 +127,18 @@ class Session:
         entries = store.load_universe().get(step.key, [])
         mode = self.story.get("universe_mode", "n")
         if entries and (mode == "o" or (mode == "m" and self.rng.random() < UNIVERSE_CHANCE)):
-            return dict(self.rng.choice(entries), _src="universe")
+            return self._complete(step, dict(self.rng.choice(entries), _src="universe"))
         return step.roll(self.engine, self.story, fresh=fresh)
+
+    def _complete(self, step, cand):
+        """An entry written by hand may leave fields blank: fill them from an ordinary roll."""
+        if all(cand.get(name) for name in step.fields):
+            return cand
+        base = step.roll(self.engine, self.story)
+        for name in step.fields:
+            if not cand.get(name):
+                cand[name] = base[name]
+        return cand
 
     def _fresh(self, make, tries=6):
         """Call make() until it gives something not already in this step's history."""
@@ -175,6 +196,24 @@ class Session:
             return True
         return False
 
+    def step_value(self, field, direction):
+        """Step one field through the values it has had: direction -1 goes to an older one, +1 to a
+        newer. Browsing replaces its own last stop instead of piling up a candidate per step."""
+        values = self.field_values(field)
+        current = self.cand.get(field)
+        if current not in values:
+            return False
+        target = values.index(current) + (1 if direction > 0 else -1)
+        if not 0 <= target < len(values):
+            return False
+        new = with_field(self.cand, field, values[target])
+        new["_browse"] = field
+        if self.cur == len(self.hist) - 1 and self.cand.get("_browse") == field:
+            self.hist[self.cur] = new                      # still browsing this field: replace, don't add
+        else:
+            self._add(new)
+        return True
+
     def change_summary(self, n, width=70):
         """What candidate n changed from the one before it (all of it, for the first)."""
         c = self.hist[n]
@@ -225,9 +264,133 @@ class Session:
         if step.threads:
             story["threads"] = cand.get("_threads", {})
         story["atoms"][step.key] = [a for lst in cand.get("_atoms", {}).values() for a in lst]
+        story.setdefault("inputs", {})[step.key] = copy.deepcopy(cand.get("_inputs", {}))
+        self._swap_standins(i, new)
         story["step"] = max(story["step"], i + 1)
         self.save()
         self._advance()
+
+    # --- what a candidate was built from -----------------------------------------------------------------
+    #
+    # Every candidate records the earlier fields it read (its _inputs), each marked kept or stand-in
+    # (a stand-in is a value the roll had to invent because that step wasn't kept). Comparing them to
+    # what is kept now says whether a candidate is stale, and what to swap to bring it up to date.
+
+    def current_value(self, key):
+        """The kept value of an earlier field now (first and last come from the kept name), or None."""
+        owner = OWNER.get(key)
+        kept = self.story["kept"].get(owner) or {}
+        if key in ("first", "last"):
+            name = kept.get("name")
+            return (name.split()[0 if key == "first" else -1] if name else None)
+        return kept.get(key)
+
+    def input_changes(self, cand=None):
+        """[(key, step key, the value it was built with, the value kept now)] for each input that is
+        out of date. (An input built from a stand-in is out of date once its step is kept differently.)"""
+        out = []
+        for key, inp in (cand if cand is not None else self.cand).get("_inputs", {}).items():
+            now = self.current_value(key)
+            if now is not None and now != inp["value"] and (cand if cand is not None else self.cand).get("_ack", {}).get(key) != now:
+                out.append((key, inp["step"], inp["value"], now))
+        return out
+
+    def ignore_stale(self):
+        """Dismiss the banner for this candidate: it stays as it is, and is not flagged again for
+        these values (a different kept value brings the banner back)."""
+        changes = self.input_changes()
+        if not changes:
+            return False
+        self.cand["_ack"] = dict(self.cand.get("_ack", {}), **{k: now for k, _s, _o, now in changes})
+        self.note("Ignoring the change. This candidate stays as it is.")
+        return True
+
+    def standins(self, cand=None):
+        """{step key: [stand-in values]} for steps this candidate used stand-ins for that are still not kept."""
+        out = {}
+        for key, inp in (cand if cand is not None else self.cand).get("_inputs", {}).items():
+            if inp["standin"] and self.current_value(key) is None:
+                out.setdefault(inp["step"], []).append(inp["value"])
+        return out
+
+    def is_stale(self, n=None):
+        return bool(self.input_changes(self.hist[self.cur if n is None else n]))
+
+    def stale_banner(self, cand=None):
+        """'Built for Mark; your protagonist is now Stacie Anderson', or '' if nothing is out of date."""
+        changes = self.input_changes(cand)
+        if not changes:
+            return ""
+        parts = []
+        for owner in dict.fromkeys(step for _k, step, _o, _n in changes):
+            mine = [c for c in changes if c[1] == owner]
+            main = [c for c in mine if c[0] in HEADLINE] or mine[:1]       # name, not every detail that changes too
+            old = " ".join(dict.fromkeys(c[2] for c in main))
+            new = self.story["kept"][owner].get("name") if owner == "protagonist" else \
+                " / ".join(dict.fromkeys(c[3] for c in main))
+            label = next((st.label for st in self.steps if st.key == owner), owner).lower()
+            parts.append(f"Built for {old}; your {label} is now {new}")
+        return "; ".join(parts)
+
+    def standin_line(self, cand=None):
+        """A plain statement when the candidate used stand-ins, else ''."""
+        used = self.standins(cand)
+        if not used:
+            return ""
+        what = "; ".join(f"{next((st.label for st in self.steps if st.key == k), k).lower()} "
+                         f"({', '.join(dict.fromkeys(v))})" for k, v in used.items())
+        return f"Uses stand-ins for steps you haven't kept: {what}. They are placeholders, not your choices."
+
+    def update_inputs(self):
+        """Swap the old values for the kept ones in a copy of the showing candidate (a new candidate)."""
+        changes = self.input_changes()
+        if not changes:
+            self.note("Nothing to update: this was built from what you have kept.")
+            return False
+        new = self.update_candidate(self.cand, changes)
+        self._add(new)
+        self.note(f"Updated this candidate to your kept {', '.join(sorted({self.universe_label(c[1]).lower() for c in changes}))}.")
+        return True
+
+    def update_candidate(self, cand, changes):
+        pairs = sorted({(old, now) for _k, _s, old, now in changes if old and now and len(old) >= 2},
+                       key=lambda p: -len(p[0]))
+        new = copy.deepcopy(cand)
+        for key in [k for k in new if not k.startswith("_") and isinstance(new[k], str)]:
+            for old, now in pairs:
+                new[key] = re.sub(r"\b" + re.escape(old) + r"\b", lambda _m, now=now: now, new[key])
+            new[key] = fix_articles(new[key])
+        for t in (new.get("_threads") or {}).values():
+            for old, now in pairs:
+                t["text"] = re.sub(r"\b" + re.escape(old) + r"\b", lambda _m, now=now: now, t["text"])
+        new["_inputs"] = {k: (dict(v, value=self.current_value(k), standin=False)
+                              if self.current_value(k) is not None else v)
+                          for k, v in new.get("_inputs", {}).items()}
+        new["_made"] = {k: v for k, v in new.get("_made", {}).items() if self.current_value(k) is None}
+        return new
+
+    def _swap_standins(self, i, new):
+        """Step i was just kept. Later steps that were kept with a stand-in for it (or for what it
+        replaced) get the kept value swapped in, so the story doesn't carry a placeholder name."""
+        story, count = self.story, 0
+        for st in self.steps[i + 1:]:
+            kept = story["kept"].get(st.key)
+            recorded = story.get("inputs", {}).get(st.key)
+            if not kept or not recorded:
+                continue
+            changes = [(k, v["step"], v["value"], self.current_value(k)) for k, v in recorded.items()
+                       if v["step"] == self.steps[i].key and self.current_value(k) not in (None, v["value"])]
+            if not changes:
+                continue
+            fixed = self.update_candidate(dict(kept, _inputs=recorded), changes)
+            count += sum(1 for k, v in kept.items() if fixed[k] != v)
+            story["kept"][st.key] = public(fixed)
+            story["inputs"][st.key] = fixed["_inputs"]
+        if count:
+            self.note(f"Swapped the kept {self.steps[i].label.lower()} into {count} line(s) built on a stand-in.")
+
+    def stale_tag(self, n):
+        return " (stale)" if self.is_stale(n) else ""
 
     def save(self):
         """Write the story, its markdown, and the memory of recent picks."""
@@ -242,6 +405,45 @@ class Session:
 
     def set_universe_mode(self, answer):
         self.story["universe_mode"] = answer if answer in ("m", "o") else "n"
+
+    @property
+    def universe_mode(self):
+        return self.story.get("universe_mode", "n")
+
+    def cycle_universe_mode(self):
+        """no -> mix it in -> only from it -> no, for this story. Returns the new mode."""
+        order = ["n", "m", "o"]
+        self.story["universe_mode"] = order[(order.index(self.universe_mode) + 1) % 3]
+        return self.story["universe_mode"]
+
+    def use_universe_entry(self, step_key, fields):
+        """Offer a saved entry as a candidate for its step in this story, jumping there if need be.
+        Nothing is kept: the story's kept steps are untouched until you press k."""
+        index = next((n for n, st in enumerate(self.steps) if st.key == step_key), None)
+        if index is None:
+            self.note(f"This story has no '{step_key}' step.")
+            return False
+        if index != self.i:
+            self.jump(index)
+        cand = dict(public(fields), _src="universe")
+        for name in self.field_names:                      # an entry written by hand may leave fields blank
+            if not cand.get(name):
+                cand[name] = self.cand.get(name, "")
+        self._add(cand)
+        self.note("Added from your universe as a new candidate. Press k to keep it.")
+        return True
+
+    def universe_fields(self, step_key):
+        """The field names an entry for this step has (for writing a new one from scratch)."""
+        step = next((st for st in self.steps if st.key == step_key), None)
+        if step:
+            return list(step.fields)
+        entries = store.load_universe().get(step_key) or [{}]
+        return list(entries[0])
+
+    def universe_label(self, step_key):
+        step = next((st for st in self.steps if st.key == step_key), None)
+        return step.label if step else step_key.replace("_", " ").title()
 
     def universe_add(self):
         step = self.step

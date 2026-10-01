@@ -10,7 +10,7 @@ import copy
 import re
 
 from . import threads as T
-from .steps import public, steps_for
+from .steps import PRODUCER_GUESS, public, steps_for
 
 
 def change_pairs(old, new):
@@ -58,8 +58,14 @@ def with_field(cand, field, value, src=None, settle=True, atoms=None):
         new["_threads"] = copy.deepcopy(cand["_threads"])
         if settle:
             T.settle(new)
-    if "_made" in cand:
-        new["_made"] = dict(cand["_made"])
+    if "_made" in cand:                         # what the edited field itself invented no longer holds
+        made_by = cand.get("_made_by", {})
+        new["_made"] = {k: v for k, v in cand["_made"].items()
+                        if (made_by.get(k) or PRODUCER_GUESS.get(k)) != field}
+        new["_made_by"] = {k: made_by.get(k) for k in new["_made"] if made_by.get(k)}
+    for key in ("_inputs", "_ack"):
+        if key in cand:
+            new[key] = copy.deepcopy(cand[key])
     if "_atoms" in cand:                        # the field changed, so its atoms are now `atoms`
         new["_atoms"] = copy.deepcopy(cand["_atoms"])
         new["_atoms"][field] = atoms or []
@@ -73,8 +79,25 @@ def inherit(new, old):
         T.settle(new)
     if "_atoms" in old:
         new["_atoms"] = copy.deepcopy(old["_atoms"])
-    if "_made" in old:
-        new["_made"] = dict(old["_made"])
+    for key in ("_made", "_made_by", "_inputs", "_ack"):
+        if key in old:
+            new[key] = copy.deepcopy(old[key])
+    return new
+
+
+def _rerolled(cand, new, field, report):
+    """What a single-field reroll learned goes onto the new candidate: what it invented, and what it
+    read. An input the item already recorded keeps its older value, so an item built for a stand-in
+    still shows as stale even though this one beat now says the kept name."""
+    made = dict(new.get("_made", {}))
+    made.update(report.get("made", {}))
+    new["_made"] = made
+    made_by = dict(new.get("_made_by", {}))
+    made_by.update(report.get("made_by", {}))
+    new["_made_by"] = made_by
+    inputs = dict(report.get("inputs", {}))
+    inputs.update(new.get("_inputs", {}))
+    new["_inputs"] = inputs
     return new
 
 
@@ -85,15 +108,18 @@ def reroll_field(step, engine, story, cand, field):
     UPDATES it when the new beat introduces another of that kind (the old text is
     swapped for the new one in the other beats) and otherwise lets it RETIRE once
     no other beat mentions it (see threads.py)."""
+    report = {}
     if not step.threads:
         value, _, atoms = step.reroll_value(engine, story, public(cand), field, atoms=cand.get("_atoms"),
-                                            made=cand.get("_made"))
-        return with_field(cand, field, value, atoms=atoms)
+                                            made=cand.get("_made"), made_by=cand.get("_made_by"), report=report)
+        return _rerolled(cand, with_field(cand, field, value, atoms=atoms), field, report)
     old = cand.get("_threads", {})
     standing = {k: copy.deepcopy(t) for k, t in old.items() if t["beat"] != field}
     value, introduced, atoms = step.reroll_value(engine, story, public(cand), field, standing,
-                                                 atoms=cand.get("_atoms"), made=cand.get("_made"))
+                                                 atoms=cand.get("_atoms"), made=cand.get("_made"),
+                                                 made_by=cand.get("_made_by"), report=report)
     new = with_field(cand, field, value, settle=False, atoms=atoms)
+    _rerolled(cand, new, field, report)
     threads = dict(standing)
     for kind, t in old.items():
         if t["beat"] != field:

@@ -556,3 +556,29 @@ def test_in_a_real_terminal_the_app_starts_and_q_saves_and_quits(home):
     assert os.WEXITSTATUS(status) == 0
     assert "Genre" in text and "Saved. Resume with:  storywheel resume" in text
     assert list((home / "h" / "stories").glob("*.json"))
+
+
+# --- stand-ins and stale candidates ---------------------------------------------------------------------------
+
+def test_the_card_names_stand_ins_and_offers_update_when_they_go_stale(home):
+    async def script(app, pilot):
+        s = app.session
+        await go_to(app, pilot, "title")
+        await press(pilot, "k")                                   # protagonist showing, unkept
+        steps = s.steps
+        await pilot.click("#steps", offset=(4, 6)); await pilot.pause()      # jump ahead to the spine
+        assert s.step.key == "spine"
+        notice = screen_text(app)
+        stand_in = s.cand["_made"]["first"]
+        await pilot.click("#steps", offset=(4, 3)); await pilot.pause()      # back to the protagonist
+        s.edit_field("name", "Stacie Anderson"); app.main.after()
+        await press(pilot, "k")
+        await pilot.click("#steps", offset=(4, 6)); await pilot.pause()
+        banner = " ".join(screen_text(app).split())
+        await pilot.click("#ban-update"); await pilot.pause()
+        return notice, stand_in, banner, s.is_stale(), " ".join(s.fields.values())
+    notice, stand_in, banner, stale, text = run_tui(new_story(), make_engine(home), script, size=(140, 45))
+    assert "Jumped ahead" in notice and "stand-ins" in notice
+    assert f"Built for {stand_in}; your protagonist is now Stacie Anderson" in banner
+    assert "Update" in banner and "Reroll" in banner and "Ignore" in banner and "Keep as is" not in banner
+    assert not stale and "Stacie" in text and stand_in not in text

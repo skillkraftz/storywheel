@@ -33,7 +33,7 @@ except ImportError:                      # pragma: no cover (Windows)
 TTY = sys.stdout.isatty()
 def _style(code):
     return (lambda s: f"\033[{code}m{s}\033[0m") if TTY else (lambda s: s)
-bold, dim, cyan = _style("1"), _style("2"), _style("36")
+bold, dim, cyan, yellow = _style("1"), _style("2"), _style("36"), _style("33")
 
 _engine = None
 
@@ -57,6 +57,8 @@ HELP = """
   w             write your own from scratch
   + / -         like / dislike a field (or the whole thing on a one-field step);
                 disliked frames and atom pairs come up a little less. Same key clears it.
+  a             update a stale candidate to what you have kept
+  i             ignore the stale warning (the candidate stays as it is)
   p N           pick an earlier candidate, e.g.  p 2
   h             list every roll for this step (shows what changed), then pick one
   h [field]     list every value one field has had, then pick one, e.g.  h 6
@@ -124,6 +126,9 @@ def show(sess):
     total = len(sess.steps)
     print("\n" + bold(cyan(f"── {step.label.upper()}  ({i + 1}/{total}) ")) + cyan("─" * 30))
     print(dim(textwrap.fill(step.hint, 72, initial_indent="  ", subsequent_indent="  ")))
+    stale = sess.stale_banner()
+    if stale:
+        print(yellow(f"\n  ! {stale}.") + dim("  [a] update this, [enter] reroll it, [i] ignore it, or [k]eep it as is."))
     print(bold(f"\n  #{sess.cur + 1} of {len(sess.hist)}") + dim(sess.source_tag(sess.cur)))
     if step.single:
         print(textwrap.fill(next(iter(fields.values())), 72, initial_indent="    ", subsequent_indent="    "))
@@ -141,6 +146,8 @@ def show(sess):
                                           72, subsequent_indent="  ")))
     if cand.get("_threads"):
         print(dim("\n  threads  " + T.describe(cand["_threads"])))
+    if sess.standin_line():
+        print(dim("\n  " + textwrap.fill(sess.standin_line(), 72, subsequent_indent="  ")))
     print(dim("\n  " + opts))
 
 def _summary(step, entry):
@@ -175,7 +182,7 @@ def show_history(sess):
     print()
     for n in range(len(sess.hist)):
         marker = "→" if n == sess.cur else " "
-        print(f"  {marker} #{n + 1:<3}{sess.change_summary(n)}" + dim(sess.source_tag(n)))
+        print(f"  {marker} #{n + 1:<3}{sess.change_summary(n)}" + dim(sess.source_tag(n)) + yellow(sess.stale_tag(n)))
     if not sess.step.single:
         print(dim("\n  Tip: h 3 lists every value field 3 has had."))
     return pick_from_list(len(sess.hist))
@@ -207,6 +214,10 @@ def handle(sess, raw):
         field = choose_field(sess, arg)
         if field:
             sess.edit_field(field, ask(f"  {field}: ", prefill=cand[field]))
+    elif cmd == "a":
+        sess.update_inputs()
+    elif cmd == "i":
+        sess.ignore_stale()
     elif cmd == "E":
         sess.replace_fields(edit_in_editor(public(cand)))
     elif cmd == "w":
