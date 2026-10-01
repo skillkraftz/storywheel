@@ -53,6 +53,11 @@ def save(story):
     if story["kept"]:
         return export(story)
 
+def save_draft(story):
+    """Write a draft's JSON only (no markdown), for bookkeeping like 'promoted'."""
+    STORIES.mkdir(parents=True, exist_ok=True)
+    (STORIES / f"{story['id']}.json").write_text(json.dumps(story, indent=2))
+
 def load(story_id):
     return upgrade(json.loads((STORIES / f"{story_id}.json").read_text()))
 

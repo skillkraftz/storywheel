@@ -274,6 +274,42 @@ def ask_universe_mode(story):
     answer = ask("  Pull from it? [n]o / [m]ix it in / [o]nly from it: ").strip().lower()[:1]
     story["universe_mode"] = answer if answer in ("m", "o") else "n"
 
+def offer_promotion(story):
+    """On leaving the plain prompt with something kept: the same three choices as in the app."""
+    if not story["kept"] or story.get("promoted"):
+        return
+    from . import promote, vault
+    print(bold("\n  Bringing this story into the Universe Builder"))
+    print(dim(textwrap.fill("It grows into a world of characters, places and things, and into a manuscript.",
+                            72, initial_indent="  ", subsequent_indent="  ")))
+    try:
+        answer = ask("  [n]ew universe / [e]xisting universe / [l]ater (not now): ").strip().lower()[:1]
+    except Quit:
+        return
+    universe, new_name = None, None
+    if answer == "e" and vault.list_universes():
+        unis = vault.list_universes()
+        for n, u in enumerate(unis, 1):
+            print(f"    {n}. {u.name}")
+        pick = ask("  which? ").strip()
+        if not (pick.isdigit() and 1 <= int(pick) <= len(unis)):
+            print("  Not promoted.")
+            return
+        universe = unis[int(pick) - 1]
+    elif answer in ("n", "e"):
+        new_name = ask(f"  name for the new universe [{store.title_of(story)}]: ").strip() or store.title_of(story)
+    else:
+        return
+    plan = promote.build_plan(story, universe, get_engine(), new_name)
+    print("\n".join("  " + l for l in plan.lines()))
+    if ask("  Go ahead? [Y/n] ").strip().lower() in ("n", "no"):
+        print("  Not promoted.")
+        return
+    saved, report = promote.apply_plan(plan, universe, story)
+    store.save_draft(story)
+    print("\n".join("  " + l for l in report))
+
+
 def run_plain(story):
     sess = Session(story, get_engine(), ratings=get_engine().ratings)
     i = story["step"] if story["step"] < len(sess.steps) else 0
@@ -286,11 +322,13 @@ def run_plain(story):
             handle(sess, ask(bold("  > ")).strip())
     except Quit:
         path = sess.save()
+        offer_promotion(story)
         print(f"\n  Saved. Resume with:  storywheel resume {story['id']}")
         if path:
             print(f"  Markdown: {path}")
         return
     path = sess.save()
+    offer_promotion(story)
     print(bold(f"\n  Done: {store.title_of(story)}"))
     if path:
         print(f"  Markdown: {path}")

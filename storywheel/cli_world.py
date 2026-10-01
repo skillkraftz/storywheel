@@ -91,6 +91,28 @@ def cmd_story(args):
     emit(story_json(s)) if args.json else print(json.dumps(story_json(s), indent=2, ensure_ascii=False))
 
 
+def cmd_promote(args):
+    from . import promote, store
+    from .engine import Engine
+    from . import paths
+    draft = store.find(args.target)
+    if not draft or not draft["kept"]:
+        sys.exit("No such draft, or nothing kept in it.")
+    universe = _universe(args.universe) if args.universe else None
+    plan = promote.build_plan(draft, universe, Engine(user_dir=paths.home()), args.new)
+    if args.dry_run:
+        emit({"lines": plan.lines()}) if args.json else print("\n".join("  " + l for l in plan.lines()))
+        return
+    if not args.yes:
+        print("\n".join("  " + l for l in plan.lines()))
+        if input("  Promote? [y/N] ").strip().lower() != "y":
+            return
+    story, report = promote.apply_plan(plan, universe, draft)
+    store.save_draft(draft)
+    emit({"universe": story.universe.slug, "story": story.slug, "report": report}) if args.json else \
+        print("\n".join("  " + l for l in report))
+
+
 def add_parsers(sub):
     p = sub.add_parser("universes", help="list your universes (or: universes new NAME)")
     p.add_argument("action", nargs="?", choices=["list", "new"], default="list")
@@ -108,4 +130,11 @@ def add_parsers(sub):
     p.add_argument("target", nargs="?", help="for show: universe/story")
     p.add_argument("--universe")
     p.add_argument("--json", action="store_true")
-    return {"universes": cmd_universes, "entity": cmd_entity, "story": cmd_story}
+    p = sub.add_parser("promote", help="bring a Wheel draft into a universe:  promote N --new NAME | --universe SLUG")
+    p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
+    p.add_argument("--universe", help="an existing universe (default: make a new one)")
+    p.add_argument("--new", help="name for the new universe (default: the story's title)")
+    p.add_argument("--dry-run", action="store_true", help="show what would be created")
+    p.add_argument("--yes", action="store_true", help="don't ask")
+    p.add_argument("--json", action="store_true")
+    return {"universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

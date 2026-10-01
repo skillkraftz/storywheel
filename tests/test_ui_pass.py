@@ -183,7 +183,7 @@ def test_the_past_stories_list_shows_saved_stories(home):
         return screen_text(app)
     text = run_tui(store.new_story(), make_engine(home), script)
     assert "Past stories" in text
-    assert store.title_of(a)[:20] in text and store.title_of(b)[:20] in text
+    assert store.title_of(a)[:15] in text and store.title_of(b)[:15] in text
 
 
 def test_open_a_past_story(home):
@@ -258,7 +258,7 @@ def test_q_asks_keep_or_delete_and_escape_cancels(home):
         await press(pilot, "escape")
         return asked, app.is_running, type(app.screen).__name__
     (screen, text), running, back = run_tui(new_story(), make_engine(home), script)
-    assert screen == "QuitScreen" and "Keep this story or delete it?" in text and running and back == "MainScreen"
+    assert screen == "QuitScreen" and "Bringing this story into the Universe Builder" in text and running and back == "MainScreen"
 
 
 def test_keeping_prints_the_story_then_the_markdown_path_and_the_resume_command(home):

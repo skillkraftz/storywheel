@@ -342,9 +342,17 @@ def _quiet(button):
     return button
 
 
+PROMOTE_MESSAGE = ("This story is about to be brought into the Universe Builder, where it grows into a "
+                   "world of characters, places and things, and into a manuscript.\n\n"
+                   "Bring it into a new universe, into an existing one, or not now (it stays a draft; "
+                   "you can promote it later from Past stories).")
+
+
 class QuitScreen(ModalScreen):
-    """On the way out: keep this story or delete it."""
-    BINDINGS = [Binding("k,enter", "choose('keep')", "Keep"), Binding("d", "choose('delete')", "Delete"),
+    """On the way out: keep this story or delete it. A story with something kept is also offered
+    promotion into a universe."""
+    BINDINGS = [Binding("k,enter", "choose('keep')", "Not now / keep"), Binding("d", "choose('delete')", "Delete"),
+                Binding("n", "choose('new')", "New universe"), Binding("e", "choose('existing')", "Existing universe"),
                 Binding("escape,c", "choose(None)", "Cancel")]
     DEFAULT_CSS = """
     QuitScreen { align: center middle; }
@@ -353,30 +361,138 @@ class QuitScreen(ModalScreen):
     QuitScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
     """
 
-    def __init__(self, title):
+    def __init__(self, title, promotable=False):
         super().__init__()
-        self.title_text = title
+        self.title_text, self.promotable = title, promotable
 
     def compose(self) -> ComposeResult:
         with Vertical(id="dlg"):
-            yield Static(f"Keep this story or delete it?\n\n{self.title_text}", markup=False)
-            with Horizontal():
-                yield _quiet(Button("Keep (k)", id="keep", variant="success"))
-                yield _quiet(Button("Delete (d)", id="delete", variant="error"))
-                yield _quiet(Button("Cancel (esc)", id="cancel"))
+            if self.promotable:
+                yield Static(f"Bringing this story into the Universe Builder\n\n{self.title_text}\n\n"
+                             f"{PROMOTE_MESSAGE}", markup=False)
+                with Horizontal():
+                    yield _quiet(Button("New universe (n)", id="new", variant="success"))
+                    yield _quiet(Button("Existing universe (e)", id="existing", variant="primary"))
+                    yield _quiet(Button("Not now (k)", id="keep"))
+                with Horizontal():
+                    yield _quiet(Button("Delete the draft (d)", id="delete", variant="error"))
+                    yield _quiet(Button("Cancel (esc)", id="cancel"))
+            else:
+                yield Static(f"Keep this story or delete it?\n\n{self.title_text}", markup=False)
+                with Horizontal():
+                    yield _quiet(Button("Keep (k)", id="keep", variant="success"))
+                    yield _quiet(Button("Delete (d)", id="delete", variant="error"))
+                    yield _quiet(Button("Cancel (esc)", id="cancel"))
 
     def on_button_pressed(self, event):
         self.dismiss(None if event.button.id == "cancel" else event.button.id)
 
     def action_choose(self, what):
+        if what in ("new", "existing") and not self.promotable:
+            return
         self.dismiss(what)
+
+
+class PickUniverseScreen(ModalScreen):
+    """Choose an existing universe."""
+    BINDINGS = [Binding("escape", "cancel", "Cancel")]
+    DEFAULT_CSS = """
+    PickUniverseScreen { align: center middle; }
+    PickUniverseScreen > Vertical { width: 60; height: auto; max-height: 80%; border: round $accent;
+                                    background: $surface; padding: 1 2; }
+    PickUniverseScreen OptionList { height: auto; max-height: 20; }
+    """
+
+    def __init__(self, universes):
+        super().__init__()
+        self.universes = universes
+
+    def compose(self) -> ComposeResult:
+        with Vertical():
+            yield Static("Bring it into which universe?  (enter picks, esc cancels)", markup=False)
+            yield OptionList(*[Option(f"{u.name}   ({len(u.entities())} entities)", id=u.slug) for u in self.universes])
+
+    def on_mount(self):
+        self.query_one(OptionList).focus()
+
+    def on_option_list_option_selected(self, event):
+        self.dismiss(event.option.id)
+
+    def action_cancel(self):
+        self.dismiss(None)
+
+
+class PromotePreviewScreen(ModalScreen):
+    """What promotion will create, before it does. Enter (or a click) on a duplicate switches between
+    merging into the existing entity and creating another."""
+    BINDINGS = [Binding("p", "go", "Promote"), Binding("escape", "cancel", "Cancel")]
+    DEFAULT_CSS = """
+    PromotePreviewScreen { align: center middle; }
+    PromotePreviewScreen > Vertical { width: 90%; max-width: 110; height: auto; max-height: 90%; border: round $accent;
+                                      background: $surface; padding: 1 2; }
+    PromotePreviewScreen OptionList { height: auto; max-height: 24; }
+    PromotePreviewScreen Horizontal { height: 1; margin-top: 1; }
+    PromotePreviewScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    """
+
+    def __init__(self, plan):
+        super().__init__()
+        self.plan = plan
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static("Here is what will be created. Nothing is written until you press Promote.", markup=False)
+            yield OptionList(id="plan")
+            yield Static("", id="plan-note", markup=False)
+            with Horizontal():
+                yield _quiet(Button("Promote (p)", id="go", variant="success"))
+                yield _quiet(Button("Cancel (esc)", id="cancel"))
+
+    def on_mount(self):
+        self.rebuild()
+        self.query_one("#plan", OptionList).focus()
+
+    def rebuild(self):
+        lst = self.query_one("#plan", OptionList)
+        keep = lst.highlighted
+        lst.clear_options()
+        rows = []
+        if self.plan.new_universe_name:
+            rows.append(Option(Text(f"New universe '{self.plan.new_universe_name}'"
+                                    + (f", leaning {' / '.join(self.plan.genres)}" if self.plan.genres else ""),
+                                    style="bold"), disabled=True))
+        rows.append(Option(Text(f"Story '{self.plan.story_title}': outline, settings, empty manuscript", style="bold"),
+                           disabled=True))
+        for n, item in enumerate(self.plan.items):
+            style = "yellow" if item.existing else ""
+            rows.append(Option(Text(("  ↔ " if item.existing else "  + ") + item.line(), style=style), id=str(n)))
+        lst.add_options(rows)
+        if keep is not None:
+            lst.highlighted = min(keep, len(rows) - 1)
+        note = "Yellow rows are same-name duplicates: enter switches merge / create another." if self.plan.duplicates() else ""
+        self.query_one("#plan-note", Static).update(note)
+
+    def on_option_list_option_selected(self, event):
+        item = self.plan.items[int(event.option.id)]
+        if item.existing:
+            item.merge = not item.merge
+            self.rebuild()
+
+    def on_button_pressed(self, event):
+        self.dismiss(event.button.id == "go")
+
+    def action_go(self):
+        self.dismiss(True)
+
+    def action_cancel(self):
+        self.dismiss(False)
 
 
 class StoryList(OptionList):
     """Past stories: Enter opens one; d deletes (asks first); p / s send its protagonist / setting
     to your universe."""
     BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "+Protagonist"),
-                Binding("s", "act('setting')", "+Setting")]
+                Binding("s", "act('setting')", "+Setting"), Binding("P", "act('promote')", "Promote")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -634,9 +750,10 @@ class MainScreen(Screen):
                 yield Static("Past stories", id="stories-title", classes="title", markup=False)
                 with Horizontal(id="story-buttons"):
                     yield _quiet(Button("Open", id="st-open"))
-                    yield _quiet(Button("Delete", id="st-delete"))
+                    yield _quiet(Button("Del", id="st-delete"))
                     yield _quiet(Button("+Prot", id="st-protagonist"))
                     yield _quiet(Button("+Place", id="st-setting"))
+                    yield _quiet(Button("Promote", id="st-promote"))
                 yield StoryList(id="stories")
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
@@ -763,10 +880,12 @@ class MainScreen(Screen):
             t = Text()
             here = story["id"] == s.story["id"]
             t.append("▶ " if here else "  ", style="bold cyan")
-            t.append(f"{store.title_of(story)[:20]:<20}", style="bold" if here else "")
+            t.append(f"{store.title_of(story)[:15]:<15}", style="bold" if here else "")
             done = story["step"] >= len(steps_for(story))
             t.append(f" {story['created'][5:10]} " + ("done" if done else f"{story['step']}/{len(steps_for(story))}"),
                      style="dim")
+            if story.get("promoted"):
+                t.append(f" ⇢{story['promoted']['universe'][:10]}", style="green")
             rows.append(Option(t, id=story["id"]))
         if not rows:
             rows.append(Option(Text("(no saved stories yet)", style="dim"), id="", disabled=True))
@@ -798,6 +917,16 @@ class MainScreen(Screen):
                 self.say("That is the story you are in.")
             else:
                 self.switch_story(store.load(story["id"]))
+        elif action == "promote":
+            if story.get("promoted"):
+                self.say(f"'{title}' was already promoted to the universe '{story['promoted']['universe']}'.")
+            elif not story["kept"]:
+                self.say(f"'{title}' has nothing kept yet, so there is nothing to promote.")
+            else:
+                if here:
+                    self.session.save()
+                    story = self.session.story
+                self.promote_flow(story, None, "ask")
         elif action == "delete":
             if here:
                 self.say("That is the story you are in: quit (q) and choose Delete to remove it.")
@@ -1226,21 +1355,86 @@ class MainScreen(Screen):
         self.card.focus()
 
     def action_quit_app(self):
-        title = store.title_of(self.session.story) if self.session.story["kept"] else "this story"
-        self.app.push_screen(QuitScreen(title), self._quit_chosen)
+        s = self.session
+        kept = bool(s.story["kept"])
+        promotable = kept and not s.story.get("promoted")
+        title = store.title_of(s.story) if kept else "this story"
+        self.app.push_screen(QuitScreen(title, promotable), self._quit_chosen)
 
     def _quit_chosen(self, choice):
         s = self.session
         if choice == "keep":
-            path = s.save()
-            parts = [store.to_plain(s.story)]
-            if path:
-                parts.append(f"Markdown: {path}")
-            parts.append(f"Resume with:  storywheel resume {s.story['id']}")
-            self.app.exit("\n\n".join(p for p in parts if p))
+            self._finish()
+        elif choice in ("new", "existing"):
+            self.promote_flow(s.story, choice, "exit")
         elif choice == "delete":
             store.delete(s.story)
             self.app.exit(f"Deleted '{store.title_of(s.story)}'. Nothing was kept.")
+
+    def _finish(self, extra=None):
+        """Save the story and leave, printing it as plain text, then where it went."""
+        s = self.session
+        path = s.save()
+        parts = [store.to_plain(s.story)]
+        if extra:
+            parts.append(extra)
+        if path:
+            parts.append(f"Markdown: {path}")
+        parts.append(f"Resume with:  storywheel resume {s.story['id']}")
+        self.app.exit("\n\n".join(p for p in parts if p))
+
+    # --- promotion: bringing a draft into a universe -------------------------------------------------------
+
+    def promote_flow(self, draft, choice, then):
+        """choice: 'new', 'existing' or None (ask). then: 'exit' to leave after, 'ask'/'stay' to remain."""
+        from . import vault
+        if choice is None or choice == "ask":
+            self.app.push_screen(QuitScreen(store.title_of(draft), True), lambda c: self._promote_choice(draft, c, then)
+                                 if c in ("new", "existing") else None)
+            return
+        if choice == "new":
+            self.app.push_screen(EditScreen("Name the new universe", {"name": store.title_of(draft)}),
+                                 lambda out: self._promote_named(draft, out, then))
+        else:
+            unis = vault.list_universes()
+            if not unis:
+                self.say("There is no universe yet, so this one will go into a new universe.")
+                return self.promote_flow(draft, "new", then)
+            self.app.push_screen(PickUniverseScreen(unis), lambda slug: self._promote_picked(draft, slug, then))
+
+    def _promote_choice(self, draft, c, then):
+        self.promote_flow(draft, c, then)
+
+    def _promote_named(self, draft, out, then):
+        if out is None:
+            return
+        self._preview(draft, None, out["name"].strip() or store.title_of(draft), then)
+
+    def _promote_picked(self, draft, slug, then):
+        from . import vault
+        if slug:
+            self._preview(draft, vault.get_universe(slug), None, then)
+
+    def _preview(self, draft, universe, new_name, then):
+        from . import promote
+        plan = promote.build_plan(draft, universe, self.app.engine, new_name)
+        self.app.push_screen(PromotePreviewScreen(plan), lambda go: self._promote_go(draft, plan, universe, go, then))
+
+    def _promote_go(self, draft, plan, universe, go, then):
+        from . import promote
+        if not go:
+            self.say("Not promoted. The draft is as it was.")
+            return
+        story, report = promote.apply_plan(plan, universe, draft)
+        u = story.universe
+        store.save_draft(draft)
+        self.app.next = ("builder", {"universe": u.slug, "story": story.slug})
+        message = f"Promoted into the universe '{u.name}' as the story '{story.title}'.\n" + "\n".join(report)
+        if then == "exit":
+            self._finish(message)
+        else:
+            self.say(f"Promoted into '{u.name}'.")
+            self.refresh_stories()
 
     def action_copy_story(self):
         text = store.to_plain(self.session.story)
@@ -1262,6 +1456,7 @@ class StorywheelApp(App):
         self.story, self.engine = story, engine
         self.session = Session(story, engine, ratings=engine.ratings)
         self.main = MainScreen(self.session)
+        self.next = None                  # where to go after the app closes: ("builder", {...}) or None
 
     def on_mount(self):
         self.push_screen(self.main)
