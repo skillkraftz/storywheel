@@ -167,7 +167,8 @@ class Library:
             self.by_slot.setdefault(wl.slot, []).append(wl)
 
     @classmethod
-    def load(cls, user_dir=None):
+    def load(cls, user_dir=None, extra_roots=()):
+        """Built-in data, then your own in user_dir, then `extra_roots` (a universe's own lists folder)."""
         roots = [DATA / "lists", DATA / "templates"]
         profiles, default, floor, floors = _read_profiles(DATA / "genres.json")
         if user_dir:
@@ -179,6 +180,7 @@ class Library:
                 default = more_default or default
                 floor = more_floor if more_floor is not None else floor
                 floors.update(more_floors)
+        roots += [Path(r) for r in extra_roots]
         return cls(load_lists(roots), profiles, default,
                    DEFAULT_FLOOR if floor is None else float(floor), floors)
 

@@ -579,3 +579,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Group names have no natural list, so they roll from `title_noun` as "The {noun} Company".
 - Settings are TOML, read with `tomllib` when Python has it and a small reader otherwise.
 
+- Builder entity tabs are a `Tabs` bar over one shared list and card (keys 1-5), not five separate panes.
+- Renames: matching is case-sensitive and whole-word (possessives included); the entity's `id:` and `name:` lines are
+  never rewritten as text. "One at a time" is done by toggling matches in the preview list.
+- Entity field history in the Builder lives for the session only.
+- Ratings on Builder fields are recorded but do not (yet) down-weight anything.

@@ -1,0 +1,1258 @@
+"""
+The Universe Builder (Textual): grow a kept idea into a world.
+
+    left     universes (create, rename, delete) and the open universe's stories
+    middle   the universe overview, or a story's outline, in boxes; below, tabs for Characters, Places,
+             Things, Groups, Notes with a list and the selected entity as a card of fields
+    right    the selected entity's notes (editable), its links, and the stories it appears in
+
+The card works like the Wheel's: left-click (or f) rolls a field, right-click (or e) writes it, the wheel
+steps through that field's history, space rolls every blank field, R rolls the whole entity again (asks).
+Mode keys everywhere: F1 Wheel, F2 Builder, F3 Writer.
+"""
+from rich.style import Style
+from rich.text import Text
+from textual.app import App, ComposeResult
+from textual.binding import Binding
+from textual.containers import Horizontal, Vertical, VerticalScroll
+from textual.screen import ModalScreen, Screen
+from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, Tabs, Tab, TextArea
+from textual.widgets.option_list import Option
+
+from . import fill, paths, promote, rename, schemas, settings, state, vault
+from .tui import CardList, ConfirmScreen, EditScreen, _quiet
+
+MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer"
+TYPE_ORDER = ["character", "place", "thing", "group", "note"]
+
+HELP = f"""\
+[b]Universe Builder[/b]        {MODE_KEYS}
+
+[b]Entities[/b] (the tabs: 1-5 switch)
+  [b]n[/b]        new entity (starts blank)         [b]d[/b]  delete (asks first)
+  [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
+  [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
+  [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
+  [b]+[/b] [b]-[/b]      like / dislike the line
+
+[b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
+         [b]▲ ▼[/b] rate.  Fields marked ✎ are write-only (the generator can't fill them).
+
+[b]Universe and stories[/b]
+  [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
+  [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
+  [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it   [b]W[/b]  new Wheel draft
+  [b]q[/b]  quit   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
+
+Roll results use the universe's genre leanings, the entity's other fields, and existing entities
+(a rival, owner, parent place or leader can be a real entity).
+"""
+
+SETTINGS_FIELDS = [("format", "format (short-story / novel / screenplay)"), ("font", "font"),
+                   ("column_width", "column width (characters)"), ("daily_goal", "daily word goal"),
+                   ("title_keyword", "short title for page headers"), ("indent_display", "show paragraph indent (true/false)"),
+                   ("typewriter", "typewriter mode (true/false)"), ("invisibles", "show invisibles (true/false)"),
+                   ("spellcheck", "spellcheck (true/false)")]
+GLOBAL_FIELDS = [("legal_name", "legal name (first page, top left)"), ("author_name", "byline / pen name"),
+                 ("address", "address (use \\n for new lines)"), ("email", "email"), ("phone", "phone")]
+
+
+def _as_bool(text, default=False):
+    t = str(text).strip().lower()
+    return True if t in ("true", "yes", "1", "on") else False if t in ("false", "no", "0", "off") else default
+
+
+def _as_int(text, default):
+    try:
+        return int(str(text).strip())
+    except ValueError:
+        return default
+
+
+class ChoiceScreen(ModalScreen):
+    """Pick one of some options (or several): returns the value, a list for multi, or None if cancelled."""
+    BINDINGS = [Binding("escape", "cancel", "Cancel"), Binding("space", "toggle", "Toggle", show=False),
+                Binding("d", "done", "Done", show=False)]
+    DEFAULT_CSS = """
+    ChoiceScreen { align: center middle; }
+    ChoiceScreen > Vertical { width: 64; height: auto; max-height: 80%; border: round $accent;
+                              background: $surface; padding: 1 2; }
+    ChoiceScreen OptionList { height: auto; max-height: 22; }
+    ChoiceScreen Horizontal { height: 1; margin-top: 1; }
+    ChoiceScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
+    """
+
+    def __init__(self, title, options, multi=False, selected=()):
+        super().__init__()
+        self.title_text, self.options, self.multi = title, list(options), multi
+        self.selected = list(selected)
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(self.title_text, markup=False)
+            yield OptionList(id="choices")
+            if self.multi:
+                yield Static("space or click toggles; d (or Done) finishes", markup=False)
+                with Horizontal():
+                    yield _quiet(Button("Done (d)", id="done", variant="success"))
+
+    def on_mount(self):
+        self.refill()
+        self.query_one("#choices", OptionList).focus()
+
+    def refill(self):
+        lst = self.query_one("#choices", OptionList)
+        keep = lst.highlighted
+        lst.clear_options()
+        rows = []
+        for n, (label, value) in enumerate(self.options):
+            mark = ("[x] " if value in self.selected else "[ ] ") if self.multi else ""
+            rows.append(Option(Text(mark + label), id=str(n)))
+        lst.add_options(rows)
+        lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
+
+    def on_option_list_option_selected(self, event):
+        value = self.options[int(event.option.id)][1]
+        if not self.multi:
+            self.dismiss(value)
+        else:
+            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
+            self.refill()
+
+    def action_toggle(self):
+        lst = self.query_one("#choices", OptionList)
+        if self.multi and lst.highlighted is not None:
+            value = self.options[lst.highlighted][1]
+            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
+            self.refill()
+
+    def action_done(self):
+        if self.multi:
+            self.dismiss(self.selected)
+
+    def on_button_pressed(self, event):
+        self.dismiss(self.selected)
+
+    def action_cancel(self):
+        self.dismiss(None)
+
+
+class RenamePreviewScreen(ModalScreen):
+    """Every place the old name appears. Enter / click toggles one; a accepts all, n none; p replaces the accepted."""
+    BINDINGS = [Binding("a", "all", "All"), Binding("n", "none", "None"), Binding("p", "go", "Replace"),
+                Binding("escape", "cancel", "Cancel")]
+    DEFAULT_CSS = """
+    RenamePreviewScreen { align: center middle; }
+    RenamePreviewScreen > Vertical { width: 92%; max-width: 130; height: auto; max-height: 92%; border: round $accent;
+                                     background: $surface; padding: 1 2; }
+    RenamePreviewScreen OptionList { height: auto; max-height: 28; }
+    RenamePreviewScreen Horizontal { height: 1; margin-top: 1; }
+    RenamePreviewScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
+    """
+
+    def __init__(self, old, new, matches):
+        super().__init__()
+        self.old, self.new, self.matches = old, new, matches
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(f"Rename '{self.old}' to '{self.new}'. These places mention the old name. "
+                         "Enter toggles one; a = all, n = none, p = replace the checked ones, esc = rename only the entity.",
+                         markup=False)
+            yield OptionList(id="matches")
+            with Horizontal():
+                yield _quiet(Button("Replace all (a, then p)", id="all", variant="success"))
+                yield _quiet(Button("Replace checked (p)", id="go", variant="primary"))
+                yield _quiet(Button("Only rename (esc)", id="cancel"))
+
+    def on_mount(self):
+        self.refill()
+        self.query_one("#matches", OptionList).focus()
+
+    def refill(self):
+        lst = self.query_one("#matches", OptionList)
+        keep = lst.highlighted
+        lst.clear_options()
+        rows = []
+        for n, m in enumerate(self.matches):
+            t = Text()
+            t.append("[x] " if m.accepted else "[ ] ", style="green" if m.accepted else "dim")
+            t.append(f"{m.label}", style="bold")
+            t.append(f"  line {m.line_no}: ", style="dim")
+            t.append(m.context)
+            rows.append(Option(t, id=str(n)))
+        lst.add_options(rows)
+        lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
+
+    def on_option_list_option_selected(self, event):
+        m = self.matches[int(event.option.id)]
+        m.accepted = not m.accepted
+        self.refill()
+
+    def action_all(self):
+        for m in self.matches:
+            m.accepted = True
+        self.refill()
+
+    def action_none(self):
+        for m in self.matches:
+            m.accepted = False
+        self.refill()
+
+    def action_go(self):
+        self.dismiss(True)
+
+    def on_button_pressed(self, event):
+        if event.button.id == "all":
+            self.action_all()
+            self.dismiss(True)
+        else:
+            self.dismiss(event.button.id == "go")
+
+    def action_cancel(self):
+        self.dismiss(False)
+
+
+class BuilderHelp(ModalScreen):
+    BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
+    DEFAULT_CSS = """
+    BuilderHelp { align: center middle; }
+    BuilderHelp > VerticalScroll { width: 100; max-width: 100%; height: auto; max-height: 100%;
+                                   border: round $accent; background: $surface; padding: 1 2; }
+    """
+
+    def compose(self) -> ComposeResult:
+        with VerticalScroll():
+            yield Static(HELP)
+
+    def action_close(self):
+        self.dismiss(None)
+
+
+class UniverseList(OptionList):
+    BINDINGS = [Binding("n", "act('new')", "New"), Binding("r", "act('rename')", "Rename"),
+                Binding("d", "act('delete')", "Delete")]
+
+    def action_act(self, what):
+        self.screen.universe_act(what)
+
+
+class EntityList(OptionList):
+    pass
+
+
+class StoryOptions(OptionList):
+    BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
+                Binding("x", "act('export')", "Export")]
+
+    def action_act(self, what):
+        self.screen.story_act(what)
+
+
+class BuilderScreen(Screen):
+    BINDINGS = [
+        Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
+        Binding("f3", "writer", "Writer", key_display="F3"),
+        Binding("space", "roll_blank", "Roll blanks"),
+        Binding("f", "roll_field", "Roll"),
+        Binding("e", "write_field", "Write"),
+        Binding("n", "new_entity", "New"),
+        Binding("d", "delete_entity", "Delete"),
+        Binding("r", "rename", "Rename"),
+        Binding("R", "reroll_all", "Reroll all", show=False),
+        Binding("c", "custom_field", "Custom field", show=False),
+        Binding("plus,equals_sign", "rate(1)", "Rate", key_display="+/-"),
+        Binding("minus", "rate(-1)", "Dislike", show=False),
+        Binding("1", "tab(0)", "Characters", show=False), Binding("2", "tab(1)", "Places", show=False),
+        Binding("3", "tab(2)", "Things", show=False), Binding("4", "tab(3)", "Groups", show=False),
+        Binding("5", "tab(4)", "Notes", show=False),
+        Binding("N", "new_universe", "New universe", show=False),
+        Binding("s", "universe_settings", "Universe settings", show=False),
+        Binding("S", "story_settings", "Story settings", show=False),
+        Binding("G", "global_settings", "Your details", show=False),
+        Binding("o", "overview", "Overview", show=False),
+        Binding("w", "writer", "Write story", show=False),
+        Binding("x", "export", "Export", show=False),
+        Binding("W", "new_draft", "New Wheel draft", show=False),
+        Binding("q", "quit_app", "Quit"),
+        Binding("question_mark", "help", "Help", key_display="?"),
+        Binding("escape", "focus_card", "", show=False),
+    ]
+    DEFAULT_CSS = """
+    BuilderScreen #body { height: 1fr; }
+    BuilderScreen #left { width: 36; border: round $primary-darken-2; }
+    BuilderScreen #mid { width: 1fr; }
+    BuilderScreen #right { width: 46; border: round $primary-darken-2; }
+    BuilderScreen .title { background: $primary-darken-2; color: $text; padding: 0 1; height: 1; }
+    BuilderScreen #universes { height: auto; max-height: 12; }
+    BuilderScreen #stories { height: 1fr; }
+    BuilderScreen .btns { height: 1; }
+    BuilderScreen .btns Button { height: 1; border: none; min-width: 6; padding: 0 1; margin-right: 1; }
+    BuilderScreen #top-box { height: 14; border: round $primary-darken-2; }
+    BuilderScreen #top { height: 1fr; }
+    BuilderScreen #tabs { height: 3; }
+    BuilderScreen #work { height: 1fr; }
+    BuilderScreen #entities { width: 30; border: round $primary-darken-2; }
+    BuilderScreen #card-box { width: 1fr; border: round $primary; }
+    BuilderScreen #card { height: 1fr; border: none; }
+    BuilderScreen #notes { height: 1fr; min-height: 8; }
+    BuilderScreen #links, BuilderScreen #appears { padding: 0 1; height: auto; max-height: 12; }
+    BuilderScreen #status { height: 1; padding: 0 1; background: $boost; }
+    BuilderScreen OptionList:focus { border: none; }
+    """
+
+    def __init__(self, app_ref, universe_slug=None, story_slug=None):
+        super().__init__()
+        self.b = app_ref
+        self.universe = None
+        self.story = None                  # the story whose outline fills the top boxes (None = universe overview)
+        self.type = "character"
+        self.entity = None
+        self.hist = {}                     # (entity id, field key) -> every value that field has had
+        self.start = (universe_slug, story_slug)
+        self.filler = None
+        self._busy = False
+
+    # --- layout ---------------------------------------------------------------------------------------------
+
+    def compose(self) -> ComposeResult:
+        yield Header()
+        with Horizontal(id="body"):
+            with Vertical(id="left"):
+                yield Static("Universes", classes="title")
+                yield UniverseList(id="universes")
+                with Horizontal(classes="btns"):
+                    yield _quiet(Button("+New", id="u-new"))
+                    yield _quiet(Button("Rename", id="u-rename"))
+                    yield _quiet(Button("Del", id="u-delete"))
+                yield Static("Stories", id="stories-title", classes="title", markup=False)
+                with Horizontal(classes="btns"):
+                    yield _quiet(Button("Outline", id="s-open"))
+                    yield _quiet(Button("Write", id="s-write"))
+                    yield _quiet(Button("Export", id="s-export"))
+                    yield _quiet(Button("+Draft", id="s-draft"))
+                yield StoryOptions(id="stories")
+            with Vertical(id="mid"):
+                with Vertical(id="top-box"):
+                    yield Static("", id="top-title", classes="title", markup=False)
+                    yield CardList(id="top")
+                yield Tabs(*[Tab(schemas.get(t)["plural"], id=f"tab-{t}") for t in TYPE_ORDER], id="tabs")
+                with Horizontal(id="work"):
+                    with Vertical(id="entities"):
+                        yield Static("", id="entities-title", classes="title", markup=False)
+                        yield EntityList(id="entity-list")
+                        with Horizontal(classes="btns"):
+                            yield _quiet(Button("+New", id="e-new"))
+                            yield _quiet(Button("Roll blanks", id="e-blank"))
+                            yield _quiet(Button("Del", id="e-delete"))
+                    with Vertical(id="card-box"):
+                        yield Static("", id="card-title", classes="title", markup=False)
+                        yield CardList(id="card")
+            with Vertical(id="right"):
+                yield Static("Notes", classes="title")
+                yield TextArea("", id="notes")
+                yield Static("Links", classes="title")
+                yield Static("", id="links", markup=False)
+                yield Static("Appears in", classes="title")
+                yield Static("", id="appears", markup=False)
+        yield Static("", id="status", markup=False)
+        yield Footer()
+
+    def on_mount(self):
+        slug, story = self.start
+        unis = vault.list_universes()
+        self.universe = vault.get_universe(slug) if slug else (unis[0] if unis else None)
+        if self.universe and story:
+            self.story = self.universe.story(story)
+        self.refresh_all()
+        self.query_one("#card", CardList).focus()
+
+    # --- small accessors ---------------------------------------------------------------------------------------
+
+    @property
+    def card(self):
+        return self.query_one("#card", CardList)
+
+    @property
+    def top(self):
+        return self.query_one("#top", CardList)
+
+    @property
+    def elist(self):
+        return self.query_one("#entity-list", OptionList)
+
+    def say(self, message):
+        self.query_one("#status", Static).update(message)
+
+    def get_filler(self):
+        if self.filler is None or self.filler.universe.slug != self.universe.slug:
+            self.filler = fill.Filler(self.universe, self.b.make_engine(self.universe))
+        return self.filler
+
+    def field_key(self):
+        """The key of the highlighted card row ('custom:eye' for your own fields)."""
+        if not self.entity:
+            return None
+        rows = self.rows()
+        i = self.card.highlighted
+        return rows[min(i or 0, len(rows) - 1)][0] if rows else None
+
+    # --- showing things ------------------------------------------------------------------------------------------
+
+    def rows(self):
+        """[(key, label, value text, spec or None, rating)] for the selected entity's card."""
+        e = self.entity
+        if not e:
+            return []
+        out = []
+        for spec in schemas.get(e.type)["fields"]:
+            if spec.get("body"):
+                continue
+            out.append((spec["key"], spec["label"], self.display(e, spec), spec))
+        for k, v in e.custom.items():
+            out.append((f"custom:{k}", k, str(v), None))
+        return out
+
+    def display(self, e, spec):
+        value = e.fields.get(spec["key"])
+        if spec.get("kind") == "link":
+            t = self.universe.resolve(value)
+            return f"→ {t.name}" if t else (value or "")
+        if spec.get("kind") == "links":
+            return ", ".join((self.universe.resolve(v).name if self.universe.resolve(v) else v) for v in (value or []))
+        return value or ""
+
+    def refresh_all(self):
+        self._busy = True
+        try:
+            self.refresh_universes()
+            self.refresh_stories()
+            self.refresh_top()
+            self.refresh_entities()
+            self.refresh_card()
+            self.refresh_right()
+        finally:
+            self._busy = False
+        self.app.title = "storywheel · Universe Builder"
+        self.app.sub_title = (self.universe.name if self.universe else "no universe yet") + \
+            (f" / {self.story.title}" if self.story else "")
+        self.b.remember(self)
+
+    def refresh_universes(self):
+        lst = self.query_one("#universes", OptionList)
+        lst.clear_options()
+        rows = []
+        for u in vault.list_universes():
+            here = self.universe and u.slug == self.universe.slug
+            t = Text()
+            t.append("▶ " if here else "  ", style="bold cyan")
+            t.append(u.name, style="bold" if here else "")
+            t.append(f"  {len(u.entities())}", style="dim")
+            rows.append(Option(t, id=u.slug))
+        if not rows:
+            rows.append(Option(Text("(none yet: press N)", style="dim"), id="", disabled=True))
+        lst.add_options(rows)
+        if self.universe:
+            slugs = [u.slug for u in vault.list_universes()]
+            if self.universe.slug in slugs:
+                lst.highlighted = slugs.index(self.universe.slug)
+
+    def refresh_stories(self):
+        lst = self.query_one("#stories", OptionList)
+        lst.clear_options()
+        rows = []
+        if self.universe:
+            for s in self.universe.stories():
+                t = Text()
+                t.append("▶ " if self.story and s.slug == self.story.slug else "  ", style="bold cyan")
+                t.append(s.title)
+                t.append(f"  {s.word_count()}w", style="dim")
+                rows.append(Option(t, id=s.slug))
+        if not rows:
+            rows.append(Option(Text("(no stories in this universe)", style="dim"), id="", disabled=True))
+        lst.add_options(rows)
+        self.query_one("#stories-title", Static).update(
+            f"Stories in {self.universe.name}" if self.universe else "Stories")
+
+    def top_rows(self):
+        """The boxes at the top: the universe overview, or the open story's outline."""
+        rows = []
+        if self.story:
+            meta, sections = self.story.load_outline()
+            rows.append(("meta:title", "Title", meta.get("title", "")))
+            rows.append(("meta:genre", "Genre", " · ".join(x for x in (meta.get("genre"), meta.get("mood")) if x)))
+            rows.append(("meta:structure", "Structure", meta.get("structure", "")))
+            for heading, text in sections.items():
+                rows.append((f"section:{heading}", heading, text.replace("\n\n", "  ")))
+            st = settings.load_story(self.story.path)
+            rows.append(("settings", "Settings", f"{st['format']} · {st['font']} · goal {st['daily_goal']}/day · "
+                                                 f"column {st['column_width']}"))
+            rows.append(("words", "Manuscript", f"{self.story.word_count()} words in {len(self.story.scenes())} scene file(s)"))
+        elif self.universe:
+            s = self.universe.settings()
+            rows.append(("u:name", "Name", s["name"]))
+            rows.append(("u:genres", "Genre leanings", ", ".join(s["genres"]) or "(none: the generator uses everything)"))
+            rows.append(("u:mix", "Mix changes", "; ".join(
+                x for x in (("exclude " + ", ".join(s["exclude_tags"])) if s["exclude_tags"] else "",
+                            ("lists off: " + ", ".join(s["exclude_lists"])) if s["exclude_lists"] else "",
+                            ("boost " + ", ".join(f"{k} {v}" for k, v in s["boost"].items())) if s["boost"] else "") if x)
+                or "(none)"))
+            rows.append(("u:notes", "Notes", s["notes"].replace("\n", "  ") or "(write the world's overview here)"))
+            counts = "  ".join(f"{len(self.universe.entities(t))} {schemas.get(t)['plural'].lower()}" for t in TYPE_ORDER)
+            rows.append(("u:counts", "Contents", counts))
+        return rows
+
+    def refresh_top(self):
+        rows = self.top_rows()
+        self.query_one("#top-title", Static).update(
+            f"Story outline: {self.story.title}   (o: universe overview)" if self.story
+            else (f"Universe: {self.universe.name}" if self.universe else "No universe"))
+        lst = self.top
+        keep = lst.highlighted
+        lst.clear_options()
+        if not rows:
+            lst.add_options([Option(Text("Promote a Wheel story, or press N to make a universe.", style="dim"), id="none")])
+            return
+        width = max(len(r[1]) for r in rows)
+        lst.add_options([Option(_text_row(label.ljust(width), value, rated=None), id=key) for key, label, value in rows])
+        if keep is not None:
+            lst.highlighted = min(keep, len(rows) - 1)
+
+    def refresh_entities(self):
+        lst = self.elist
+        keep_id = self.entity.id if self.entity else None
+        lst.clear_options()
+        items = self.universe.entities(self.type) if self.universe else []
+        self.items = items
+        rows = []
+        for e in items:
+            t = Text()
+            t.append(e.name or f"(blank {e.type})", style="" if e.name else "dim italic")
+            rows.append(Option(t, id=e.id))
+        if not rows:
+            rows.append(Option(Text("(none yet: n)", style="dim"), id="", disabled=True))
+        lst.add_options(rows)
+        ids = [e.id for e in items]
+        if keep_id in ids:
+            lst.highlighted = ids.index(keep_id)
+            self.entity = items[ids.index(keep_id)]
+        elif items:
+            lst.highlighted = 0
+            self.entity = items[0]
+        else:
+            self.entity = None
+        label = schemas.get(self.type)["plural"]
+        self.query_one("#entities-title", Static).update(f"{label} ({len(items)})")
+        tabs = self.query_one("#tabs", Tabs)
+        if tabs.active != f"tab-{self.type}":
+            tabs.active = f"tab-{self.type}"
+
+    def refresh_card(self):
+        e = self.entity
+        lst = self.card
+        keep = lst.highlighted
+        lst.clear_options()
+        title = self.query_one("#card-title", Static)
+        if not e:
+            title.update("")
+            lst.add_options([Option(Text("No entity selected. Press n for a new one.", style="dim"), id="none")])
+            return
+        title.update(f"{schemas.get(e.type)['label']}: {e.name or '(blank)'}   "
+                     "click/f: roll   right-click/e: write   wheel: history   space: roll blanks")
+        rows = self.rows()
+        width = max(len(r[1]) for r in rows) + 2
+        options = []
+        for key, label, value, spec in rows:
+            write_only = spec is not None and not schemas.can_roll(spec)
+            rating = self.b.rating(self.universe, e, key)
+            options.append(Option(_text_row((label + (" ✎" if write_only or spec is None else "")).ljust(width), value,
+                                            rated=rating), id=key))
+        lst.add_options(options)
+        if keep is not None:
+            lst.highlighted = min(keep, len(options) - 1)
+
+    def refresh_right(self):
+        e = self.entity
+        notes = self.query_one("#notes", TextArea)
+        links, appears = self.query_one("#links", Static), self.query_one("#appears", Static)
+        if not e:
+            notes.load_text("")
+            links.update("")
+            appears.update("")
+            return
+        body = e.fields.get("body", "") if e.type == "note" else e.body
+        if notes.text != body:
+            self._busy = True
+            try:
+                notes.load_text(body)
+            finally:
+                self._busy = False
+        lines = []
+        for label, target in self.universe.links_from(e):
+            lines.append(f"{label} → {target.name if hasattr(target, 'name') else target}")
+        for label, other in self.universe.links_to(e):
+            lines.append(f"← {other.name or other.id} ({label.lower()})")
+        links.update("\n".join(lines) or "(no links yet)")
+        found = self.universe.appearances(e)
+        appears.update("\n".join(s.title for s in found) or "(no story mentions it yet)")
+
+    # --- events -----------------------------------------------------------------------------------------------------
+
+    def on_text_area_changed(self, event):
+        """Notes are saved as you type."""
+        e = self.entity
+        if self._busy or e is None or event.text_area.id != "notes":
+            return
+        text = event.text_area.text
+        current = e.fields.get("body", "") if e.type == "note" else e.body
+        if text != current:
+            if e.type == "note":
+                e.fields["body"] = text
+            else:
+                e.body = text
+            self.universe.save_entity(e)
+
+    def on_tabs_tab_activated(self, event):
+        if self._busy or not event.tab:
+            return
+        t = event.tab.id.replace("tab-", "")
+        if t != self.type:
+            self.type, self.entity = t, None
+            self.refresh_entities()
+            self.refresh_card()
+            self.refresh_right()
+            self.b.remember(self)
+
+    def on_option_list_option_highlighted(self, event):
+        if self._busy:
+            return
+        lst = event.option_list.id
+        if lst == "entity-list" and event.option.id and (not self.entity or event.option.id != self.entity.id):
+            self.entity = self.universe.entity(event.option.id)
+            self.refresh_card()
+            self.refresh_right()
+            self.b.remember(self)
+
+    def on_option_list_option_selected(self, event):
+        lst, oid = event.option_list.id, event.option.id
+        if lst == "universes" and oid:
+            self.open_universe(oid)
+        elif lst == "stories" and oid:
+            self.story = self.universe.story(oid)
+            self.refresh_all()
+        elif lst == "entity-list":
+            self.card.focus()
+
+    def open_universe(self, slug):
+        self.universe, self.story, self.entity = vault.get_universe(slug), None, None
+        self.filler = None
+        self.refresh_all()
+
+    def on_card_list_field(self, event):
+        if event.source.id == "top":
+            return self.edit_top(event.index)
+        key = self._key_at(event.index)
+        if event.button == 3:
+            self.write_field(key)
+        else:
+            self.roll_field(key)
+
+    def on_card_list_rate(self, event):
+        if event.source.id == "top":
+            return
+        self.b.rate(self.universe, self.entity, self._key_at(event.index), event.value)
+        self.refresh_card()
+
+    def on_card_list_scrolled(self, event):
+        if event.source.id == "top":
+            return
+        self.step_history(self._key_at(event.index), event.direction)
+
+    def _key_at(self, index):
+        rows = self.rows()
+        return rows[min(index, len(rows) - 1)][0] if rows else None
+
+    def on_button_pressed(self, event):
+        event.stop()
+        name = event.button.id or ""
+        {"u-new": self.action_new_universe, "u-rename": lambda: self.universe_act("rename"),
+         "u-delete": lambda: self.universe_act("delete"), "s-open": lambda: self.story_act("open"),
+         "s-write": self.action_writer, "s-export": self.action_export, "s-draft": self.action_new_draft,
+         "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
+         "e-delete": self.action_delete_entity}.get(name, lambda: None)()
+
+    # --- field operations --------------------------------------------------------------------------------------------
+
+    def _set(self, key, value, via):
+        """Set a field value on the selected entity, recording history. Renaming goes through a preview."""
+        e = self.entity
+        if key.startswith("custom:"):
+            e.custom[key[7:]] = value
+            self.universe.save_entity(e)
+        else:
+            old = e.fields.get(key)
+            if key == "name" and old and old != value and isinstance(old, str):
+                return self._rename(e, value)
+            e.fields[key] = value
+            self.universe.save_entity(e)
+        self._remember(e, key)
+        self.entity = self.universe.entity(e.id) or self.universe.entity(e.type + "-x") or e
+        self.refresh_all()
+        if via:
+            self.say(via)
+
+    def _remember(self, e, key):
+        seq = self.hist.setdefault((e.id, key), [])
+        v = e.custom.get(key[7:]) if key.startswith("custom:") else e.fields.get(key)
+        if v not in ("", None, []) and v not in seq:
+            seq.append(v)
+
+    def roll_field(self, key):
+        e = self.entity
+        if not e or not key:
+            return
+        if key.startswith("custom:"):
+            self.say("Your own fields are write-only: right-click or press e to write it.")
+            return
+        spec = schemas.field_spec(e.type, key)
+        if not schemas.can_roll(spec):
+            self.say(f"'{spec['label']}' is write-only: the generator can't fill it. Right-click or press e to write it.")
+            return
+        old_id = e.id
+        self._remember(e, key)                                    # keep what is there, so it can be brought back
+        try:
+            value = self.get_filler().roll(e, key)
+        except fill.NothingToLink as err:
+            self.say(str(err))
+            return
+        self.hist.setdefault((e.id, key), [])
+        self._apply_roll(e, key, value, old_id)
+
+    def _apply_roll(self, e, key, value, old_id):
+        if key == "name" and e.fields.get("name") and e.fields["name"] != value:
+            self._rename(e, value)
+            return
+        e.fields[key] = value
+        self.universe.save_entity(e)
+        self._after_save(e, key, old_id)
+
+    def _after_save(self, e, key, old_id):
+        seq = self.hist.setdefault((e.id, key), [])
+        v = e.fields.get(key)
+        if v not in ("", None, []) and v not in seq:
+            seq.append(v)
+        for (eid, k) in list(self.hist):
+            if eid == old_id and old_id != e.id:                  # a placeholder id became a real one: history follows
+                self.hist[(e.id, k)] = self.hist.pop((eid, k))
+        self.entity = self.universe.entity(e.id)
+        self.refresh_all()
+
+    def write_field(self, key):
+        e = self.entity
+        if not e or not key:
+            return
+        if key.startswith("custom:"):
+            return self.app.push_screen(EditScreen(f"Write {key[7:]}", {key[7:]: e.custom.get(key[7:], "")}),
+                                        lambda out: self._written_custom(key, out))
+        spec = schemas.field_spec(e.type, key)
+        kind = spec.get("kind")
+        if kind == "link":
+            options = [("(clear)", "")] + [(f"{o.name or o.id} ({o.type})", o.id) for o in
+                                           self.universe.entities(spec.get("target")) if o.id != e.id] + \
+                      [("(write plain text instead)", "\x00text")]
+            return self.app.push_screen(ChoiceScreen(f"{spec['label']}: link to…", options),
+                                        lambda v: self._written_link(key, spec, v))
+        if kind == "links":
+            options = [(f"{o.name or o.id}", o.id) for o in self.universe.entities(spec.get("target")) if o.id != e.id]
+            if not options:
+                self.say(f"There is no {schemas.get(spec['target'])['label'].lower()} here to link to yet.")
+                return
+            return self.app.push_screen(ChoiceScreen(f"{spec['label']}: choose any", options, True,
+                                                     e.fields.get(key) or []),
+                                        lambda v: self._written_value(key, v) if v is not None else None)
+        if kind == "choice":
+            options = [(c, c) for c in spec["choices"]] + [("(clear)", "")]
+            return self.app.push_screen(ChoiceScreen(f"{spec['label']}:", options),
+                                        lambda v: self._written_value(key, v) if v is not None else None)
+        current = e.fields.get(key, "")
+        self.app.push_screen(EditScreen(f"Write {spec['label'].lower()}", {key: current}),
+                             lambda out: self._written_text(key, out))
+
+    def _written_text(self, key, out):
+        if out is not None and out[key] != self.entity.fields.get(key, ""):
+            self._written_value(key, out[key].strip())
+
+    def _written_custom(self, key, out):
+        if out is not None:
+            self._set(key, out[key[7:]].strip(), "Written.")
+
+    def _written_link(self, key, spec, value):
+        if value is None:
+            return
+        if value == "\x00text":
+            self.app.push_screen(EditScreen(f"{spec['label']} (plain text)", {key: ""}),
+                                 lambda out: self._written_text(key, out))
+            return
+        self._written_value(key, value)
+
+    def _written_value(self, key, value):
+        e = self.entity
+        old_id = e.id
+        if key == "name" and e.fields.get("name") and e.fields["name"] != value:
+            return self._rename(e, value)
+        e.fields[key] = value
+        self.universe.save_entity(e)
+        self._after_save(e, key, old_id)
+        self.say("Written.")
+
+    def step_history(self, key, direction):
+        e = self.entity
+        if not e or not key:
+            return
+        seq = self.hist.get((e.id, key), [])
+        current = e.custom.get(key[7:]) if key.startswith("custom:") else e.fields.get(key)
+        if current not in seq:
+            if current not in ("", None, []):
+                seq = seq + [current]
+                self.hist[(e.id, key)] = seq
+        if current not in seq or len(seq) < 2:
+            self.say("This field has no earlier values yet.")
+            return
+        target = seq.index(current) + (1 if direction > 0 else -1)
+        if not 0 <= target < len(seq):
+            self.say("That is the " + ("oldest" if direction < 0 else "newest") + " value this field has had.")
+            return
+        value = seq[target]
+        if key.startswith("custom:"):
+            e.custom[key[7:]] = value
+            self.universe.save_entity(e)
+            self.refresh_card()
+        elif key == "name" and e.fields.get("name") and e.fields["name"] != value:
+            self._rename(e, value)
+        else:
+            e.fields[key] = value
+            self.universe.save_entity(e)
+            self.refresh_card()
+            self.refresh_right()
+
+    def _rename(self, e, new_name):
+        """A name changed on an entity that had one: show every match of the old name, then apply."""
+        old = e.name
+        matches = rename.find_matches(self.universe, e, old)
+        if not matches:
+            n = rename.rename_entity(self.universe, e, new_name, [])
+            self._renamed(e, old, new_name, n)
+            return
+        self.app.push_screen(RenamePreviewScreen(old, new_name, matches),
+                             lambda go: self._rename_done(e, old, new_name, matches, go))
+
+    def _rename_done(self, e, old, new, matches, go):
+        for m in matches:
+            m.accepted = m.accepted and bool(go)
+        n = rename.rename_entity(self.universe, e, new, matches)
+        self._renamed(e, old, new, n)
+
+    def _renamed(self, e, old, new, n):
+        self._remember(e, "name")
+        self.entity = self.universe.entity(e.id)
+        self.refresh_all()
+        self.say(f"Renamed '{old}' to '{new}'." + (f" Rewrote {n} mention(s); reload any open Writer buffers." if n else ""))
+        self.b.changed = True
+
+    # --- actions ------------------------------------------------------------------------------------------------------------
+
+    def action_roll_field(self):
+        self.roll_field(self.field_key())
+
+    def action_write_field(self):
+        self.write_field(self.field_key())
+
+    def action_roll_blank(self):
+        e = self.entity
+        if not e:
+            self.say("No entity selected. Press n for a new one.")
+            return
+        old_id = e.id
+        done = self.get_filler().roll_blank(e)
+        if not done:
+            self.say("Nothing to roll: every field the generator can fill already has a value.")
+            return
+        self.universe.save_entity(e)
+        for k in done:
+            self._after_save(e, k, old_id)
+            old_id = e.id
+        self.say(f"Rolled {len(done)} blank field(s): {', '.join(done)}.")
+
+    def action_reroll_all(self):
+        e = self.entity
+        if not e:
+            return
+        self.app.push_screen(ConfirmScreen(f"Roll every field of '{e.name or 'this entity'}' again?\n\n"
+                                           "Write-only fields are kept. Names are not searched for in other files."),
+                             self._rerolled_all)
+
+    def _rerolled_all(self, yes):
+        if not yes:
+            return
+        e = self.entity
+        for spec in schemas.get(e.type)["fields"]:
+            if schemas.can_roll(spec):
+                self._remember(e, spec["key"])
+        old_id = e.id
+        done = self.get_filler().reroll_all(e)
+        self.universe.save_entity(e)
+        for k in done:
+            self._after_save(e, k, old_id)
+            old_id = e.id
+        self.say(f"Rolled {len(done)} field(s) again.")
+
+    def action_new_entity(self):
+        if not self.universe:
+            self.say("Make a universe first (N).")
+            return
+        e = self.universe.new_entity(self.type)
+        self.entity = e
+        self.refresh_all()
+        self.say(f"A blank {self.type}. space rolls every blank field; f rolls one; e writes one.")
+        self.card.focus()
+
+    def action_delete_entity(self):
+        e = self.entity
+        if e:
+            self.app.push_screen(ConfirmScreen(f"Delete '{e.name or e.id}'?\n\nIt moves to the library's .trash folder, "
+                                               "and links to it are cleared."), lambda yes: self._deleted(e, yes))
+
+    def _deleted(self, e, yes):
+        if yes:
+            self.universe.delete_entity(e)
+            self.entity = None
+            self.refresh_all()
+            self.say(f"Deleted '{e.name or e.id}' (it is in .trash).")
+
+    def action_rename(self):
+        e = self.entity
+        if e:
+            self.app.push_screen(EditScreen(f"Rename {e.name or e.id}", {"name": e.name}),
+                                 lambda out: self._written_value("name", out["name"].strip())
+                                 if out and out["name"].strip() and out["name"].strip() != e.name else None)
+
+    def action_custom_field(self):
+        e = self.entity
+        if e:
+            self.app.push_screen(EditScreen("Add your own field to this entity", {"field name": "", "value": ""}),
+                                 self._custom_added)
+
+    def _custom_added(self, out):
+        if out and out["field name"].strip():
+            self.entity.custom[out["field name"].strip()] = out["value"].strip()
+            self.universe.save_entity(self.entity)
+            self.refresh_card()
+            self.say("Added. Your own fields are write-only.")
+
+    def action_rate(self, value):
+        key = self.field_key()
+        if self.entity and key:
+            self.b.rate(self.universe, self.entity, key, int(value))
+            self.refresh_card()
+
+    def action_tab(self, i):
+        self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
+
+    def action_overview(self):
+        self.story = None
+        self.refresh_all()
+
+    def action_focus_card(self):
+        self.card.focus()
+
+    def action_help(self):
+        self.app.push_screen(BuilderHelp())
+
+    def action_mode(self, which):
+        self.b.go(which)
+
+    def action_quit_app(self):
+        self.b.go("quit")
+
+    # --- universes and stories ----------------------------------------------------------------------------------------------
+
+    def action_new_universe(self):
+        self.app.push_screen(EditScreen("New universe", {"name": "", "genres (comma separated, optional)": ""}),
+                             self._universe_made)
+
+    def _universe_made(self, out):
+        if out and out["name"].strip():
+            genres = [g.strip() for g in out["genres (comma separated, optional)"].split(",") if g.strip()]
+            u = vault.create_universe(out["name"].strip(), genres)
+            self.open_universe(u.slug)
+            self.say(f"Created '{u.name}'. Press n to add an entity.")
+
+    def universe_act(self, what):
+        lst = self.query_one("#universes", OptionList)
+        i = lst.highlighted
+        opt = lst.get_option_at_index(i) if i is not None else None
+        if what == "new":
+            return self.action_new_universe()
+        u = vault.get_universe(opt.id) if opt and opt.id else self.universe
+        if not u:
+            return
+        if what == "rename":
+            self.app.push_screen(EditScreen(f"Rename universe {u.name}", {"name": u.name}),
+                                 lambda out: self._universe_renamed(u, out))
+        elif what == "delete":
+            self.app.push_screen(ConfirmScreen(f"Delete the universe '{u.name}' with all its entities, stories and "
+                                               "manuscripts?\n\nIt moves to the library's .trash folder."),
+                                 lambda yes: self._universe_deleted(u, yes))
+
+    def _universe_renamed(self, u, out):
+        if out and out["name"].strip():
+            vault.rename_universe(u, out["name"].strip())
+            self.refresh_all()
+            self.say(f"Renamed to '{out['name'].strip()}'.")
+
+    def _universe_deleted(self, u, yes):
+        if yes:
+            u.delete()
+            if self.universe and self.universe.slug == u.slug:
+                rest = vault.list_universes()
+                self.universe, self.story, self.entity = (rest[0] if rest else None), None, None
+            self.refresh_all()
+            self.say(f"Deleted '{u.name}' (moved to .trash).")
+
+    def story_act(self, what):
+        lst = self.query_one("#stories", OptionList)
+        i = lst.highlighted
+        opt = lst.get_option_at_index(i) if i is not None else None
+        s = self.universe.story(opt.id) if opt and opt.id and self.universe else self.story
+        if not s:
+            self.say("This universe has no story yet. Promote one from the Wheel.")
+            return
+        if what == "open":
+            self.story = s
+            self.refresh_all()
+        elif what == "write":
+            self.story = s
+            self.action_writer()
+        elif what == "export":
+            self.story = s
+            self.action_export()
+        elif what == "delete":
+            self.app.push_screen(ConfirmScreen(f"Delete the story '{s.title}' and its manuscript?\n\n"
+                                               "It moves to the library's .trash folder."),
+                                 lambda yes: self._story_deleted(s, yes))
+
+    def _story_deleted(self, s, yes):
+        if yes:
+            s.delete()
+            if self.story and self.story.slug == s.slug:
+                self.story = None
+            self.refresh_all()
+            self.say(f"Deleted '{s.title}' (moved to .trash).")
+
+    def edit_top(self, index):
+        rows = self.top_rows()
+        if not rows:
+            return
+        key, label, value = rows[min(index, len(rows) - 1)]
+        if key == "settings":
+            return self.action_story_settings()
+        if key in ("words", "meta:structure", "u:counts"):
+            self.say({"words": "Words are counted from the manuscript files.", "meta:structure": "The structure was set in the Wheel.",
+                      "u:counts": "Counts come from the tabs below."}[key])
+            return
+        if key == "u:genres" or key == "u:mix":
+            return self.action_universe_settings()
+        if key.startswith("meta:") or key.startswith("section:"):
+            raw = self.story.meta.get(key[5:], "") if key.startswith("meta:") else self.story.sections().get(key[8:], "")
+            return self.app.push_screen(EditScreen(f"Edit {label.lower()}", {label: raw}),
+                                        lambda out: self._top_written(key, label, out))
+        if key.startswith("u:"):
+            sett = self.universe.settings()
+            raw = sett["name"] if key == "u:name" else sett["notes"]
+            self.app.push_screen(EditScreen(f"Edit {label.lower()}", {label: raw}),
+                                 lambda out: self._top_written(key, label, out))
+
+    def _top_written(self, key, label, out):
+        if out is None:
+            return
+        text = out[label].strip()
+        if key.startswith("meta:"):
+            self.story.set_meta(**{key[5:]: text})
+        elif key.startswith("section:"):
+            self.story.set_section(key[8:], text)
+        elif key == "u:name":
+            vault.rename_universe(self.universe, text or self.universe.name)
+        elif key == "u:notes":
+            self.universe.save_settings(notes=text)
+        self.refresh_all()
+
+    def action_universe_settings(self):
+        if not self.universe:
+            return
+        s = self.universe.settings()
+        fields = {"genre leanings (comma separated)": ", ".join(s["genres"]),
+                  "exclude tags (comma separated)": ", ".join(s["exclude_tags"]),
+                  "exclude lists (comma separated, e.g. job/western)": ", ".join(s["exclude_lists"]),
+                  "boosts (tag=1.5, tag=2)": ", ".join(f"{k}={v}" for k, v in s["boost"].items()),
+                  "universe atoms boost (how much likelier its own people and places are)": str(s["atom_boost"])}
+        self.app.push_screen(EditScreen(f"Universe settings: {self.universe.name}   (own lists: {self.universe.lists_dir}"
+                                        "  - put atom files there)", fields), self._universe_settings_done)
+
+    def _universe_settings_done(self, out):
+        if out is None:
+            return
+        vals = list(out.values())
+        split = lambda t: [x.strip() for x in t.split(",") if x.strip()]
+        boost = {}
+        for part in split(vals[3]):
+            if "=" in part:
+                k, _, v = part.partition("=")
+                try:
+                    boost[k.strip().lower()] = float(v)
+                except ValueError:
+                    self.say(f"Ignored boost '{part}' (use tag=1.5).")
+        try:
+            atom_boost = float(vals[4])
+        except ValueError:
+            atom_boost = 3.0
+        self.universe.save_settings(genres=[g.lower() for g in split(vals[0])], exclude_tags=[t.lower() for t in split(vals[1])],
+                                    exclude_lists=split(vals[2]), boost=boost, atom_boost=atom_boost)
+        self.universe.lists_dir.mkdir(exist_ok=True)
+        self.filler = None
+        self.refresh_all()
+        self.say("Universe settings saved. They apply to the next roll.")
+
+    def action_story_settings(self):
+        if not self.story:
+            self.say("Open a story's outline first.")
+            return
+        st = settings.load_story(self.story.path)
+        fields = {label: str(st.get(key, "")) for key, label in SETTINGS_FIELDS}
+        self.app.push_screen(EditScreen(f"Story settings: {self.story.title}   (the Writer reads them on its next start)", fields),
+                             self._story_settings_done)
+
+    def _story_settings_done(self, out):
+        if out is None:
+            return
+        st = settings.load_story(self.story.path)
+        vals = dict(zip([k for k, _ in SETTINGS_FIELDS], out.values()))
+        st["format"] = vals["format"].strip() or st["format"]
+        st["font"] = vals["font"].strip() or st["font"]
+        st["column_width"] = _as_int(vals["column_width"], st["column_width"])
+        st["daily_goal"] = _as_int(vals["daily_goal"], st["daily_goal"])
+        st["title_keyword"] = vals["title_keyword"].strip()
+        for k in ("indent_display", "typewriter", "invisibles", "spellcheck"):
+            st[k] = _as_bool(vals[k], st[k])
+        settings.save_story(self.story.path, st)
+        self.refresh_top()
+        self.say("Story settings saved.")
+
+    def action_global_settings(self):
+        g = settings.load_global()
+        fields = {label: str(g.get(key, "")).replace("\n", "\\n") for key, label in GLOBAL_FIELDS}
+        self.app.push_screen(EditScreen(f"Your details (settings.toml): used on the manuscript's first page", fields),
+                             self._global_done)
+
+    def _global_done(self, out):
+        if out is None:
+            return
+        g = settings.load_global()
+        for (key, _label), value in zip(GLOBAL_FIELDS, out.values()):
+            g[key] = value.replace("\\n", "\n").strip()
+        settings.save_global(g)
+        self.say("Saved to settings.toml.")
+
+    def action_writer(self):
+        self.b.open_writer(self)
+
+    def action_export(self):
+        self.b.export(self)
+
+    def action_new_draft(self):
+        self.b.go("wheel", {"universe": self.universe.slug if self.universe else None})
+
+
+def _text_row(label, value, rated):
+    """One line of a card: label, value, and (for entity fields) the clickable ▲ ▼."""
+    t = Text()
+    t.append(label, style="bold cyan")
+    t.append("  ")
+    if value:
+        t.append(value)
+    else:
+        t.append("(blank)", style="dim italic")
+    if rated is not None:
+        t.append(" ")
+        t.append(" ▲ ", style=Style(color="green" if rated > 0 else "grey50", bold=rated > 0, meta={"rate": 1}))
+        t.append(" ▼ ", style=Style(color="red" if rated < 0 else "grey50", bold=rated < 0, meta={"rate": -1}))
+    return t
+
+
+class BuilderApp(App):
+    TITLE = "storywheel · Universe Builder"
+    ENABLE_COMMAND_PALETTE = False
+    BINDINGS = []
+
+    def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None):
+        super().__init__()
+        self.engine_factory = engine_factory
+        self.ratings = ratings
+        self.start = (universe, story)
+        self.next = None                   # ("wheel", {...}) / ("quit", {}) after the app closes
+        self.changed = False
+        self.screen_ref = None
+        self.state_store = state_store
+
+    def make_engine(self, universe):
+        return self.engine_factory(universe) if self.engine_factory else fill.make_engine(universe, ratings=self.ratings)
+
+    def on_mount(self):
+        self.screen_ref = BuilderScreen(self, *self.start)
+        self.push_screen(self.screen_ref)
+
+    # --- hooks the screen calls ---------------------------------------------------------------------------------------
+
+    def go(self, where, payload=None):
+        self.next = (where, payload or {})
+        self.exit()
+
+    def remember(self, screen):
+        """Record where we are (state.json), so plain `storywheel` comes back here."""
+        if self.state_store is not None:
+            try:
+                self.state_store.update(mode="builder", universe=screen.universe.slug if screen.universe else None,
+                                        story=screen.story.slug if screen.story else None, tab=screen.type,
+                                        entity=screen.entity.id if screen.entity else None)
+            except OSError:
+                pass
+
+    def rating(self, universe, entity, key):
+        if self.ratings is None:
+            return 0
+        text = entity.custom.get(key[7:], "") if key.startswith("custom:") else entity.fields.get(key, "")
+        if isinstance(text, list):
+            text = ", ".join(text)
+        return self.ratings.rating_of(f"universe:{universe.slug}", entity.type, key, str(text))
+
+    def rate(self, universe, entity, key, value):
+        if self.ratings is None:
+            return 0
+        text = entity.custom.get(key[7:], "") if key.startswith("custom:") else entity.fields.get(key, "")
+        if isinstance(text, list):
+            text = ", ".join(text)
+        if not text:
+            return 0
+        return self.ratings.rate(f"universe:{universe.slug}", entity.type, key, str(text), value, None, (),
+                                 title=universe.name)
+
+    def open_writer(self, screen):
+        screen.say("The Writer isn't connected yet.")
+
+    def export(self, screen):
+        screen.say("Export isn't connected yet.")
+
+
+def run_builder(universe=None, story=None, ratings=None, state_store=None):
+    app = BuilderApp(ratings=ratings, universe=universe, story=story, state_store=state_store)
+    app.run()
+    return app

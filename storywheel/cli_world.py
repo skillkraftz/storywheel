@@ -113,6 +113,14 @@ def cmd_promote(args):
         print("\n".join("  " + l for l in report))
 
 
+def cmd_builder(args):
+    from . import builder, state
+    from .cli import get_ratings
+    for line in migrate.migrate_universe_json():
+        print("  " + line)
+    builder.run_builder(args.universe, args.story, get_ratings(), state.State())
+
+
 def add_parsers(sub):
     p = sub.add_parser("universes", help="list your universes (or: universes new NAME)")
     p.add_argument("action", nargs="?", choices=["list", "new"], default="list")
@@ -137,4 +145,7 @@ def add_parsers(sub):
     p.add_argument("--dry-run", action="store_true", help="show what would be created")
     p.add_argument("--yes", action="store_true", help="don't ask")
     p.add_argument("--json", action="store_true")
-    return {"universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    p = sub.add_parser("builder", help="open the Universe Builder")
+    p.add_argument("universe", nargs="?")
+    p.add_argument("story", nargs="?")
+    return {"builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

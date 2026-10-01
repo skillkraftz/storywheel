@@ -24,7 +24,19 @@ _Updated after each area. Status: **Works** / **Partial** / **Stub** / **Not sta
 | (extra) `storywheel promote N --new NAME / --universe SLUG [--dry-run] [--json]` | Works | |
 
 Not done here: after promotion the app records `app.next = ("builder", ...)`, but there is no Builder to go to yet (next area).
-### Universe Builder -- Not started
+### Universe Builder (tag `foundation-builder`)
+| Item | Status | Notes |
+|---|---|---|
+| Left: universes (create, rename, delete with confirm) and their stories | Works | delete moves to `.trash`; story list opens an outline, `w` writes (Writer not connected yet) |
+| Middle: overview / outline boxes + tabs Characters, Places, Things, Groups, Notes with entity cards | Works | the tabs are a `Tabs` bar over one list + card (keys 1-5); boxes are editable (right-click / e) |
+| Right: notes (editable, saved as you type), links both ways, appearances | Works | appearances = recorded at promotion, or a whole-word name match in the outline/manuscript |
+| New entities blank; click/f rolls, right-click/e writes, space rolls blanks, per-field history + wheel | Works | history is kept for the session (not saved to disk) |
+| Rolls use the universe's mix, the entity's other fields, and existing entities | Works | rival / owner / parent / leader link to real entities; universe entities as *atoms in the Wheel* is the next area |
+| Write-only fields marked; custom per-entity fields | Works | ✎ marks write-only; `c` adds a field |
+| Rename with a preview (notes, outlines, manuscripts), confirm all or one at a time | Works | matches are toggled one by one (Enter), `a` all, `n` none, `p` apply; case-sensitive whole-word, possessives handled; any name change (rolled, scrolled, written) goes through it |
+| Universe settings: genre leanings, exclusions/boosts, own lists folder | Works | `s`; own lists are files you drop in `<universe>/lists/` (used by Builder rolls); no in-app list editor |
+| Ratings on entity fields | Partial | recorded (+/-, ▲▼) but do not yet affect Builder rolls (no frame/atom provenance for entity fields) |
+| Entry point | Partial | `storywheel builder [universe] [story]`; plain `storywheel` still opens the Wheel until the switching area |
 ### Universes in the Wheel -- Not started
 ### Writer (Neovim) -- Not started
 ### Switching and state -- Not started
@@ -37,6 +49,8 @@ Not done here: after promotion the app records `app.next = ("builder", ...)`, bu
 | Storage (`tests/test_storage.py`) | 25 |
 | Promotion logic and CLI (`tests/test_promote.py`) | 12 |
 | Promotion in the app (`tests/test_promote_ui.py`) | 10 |
+| Filling fields and renames (`tests/test_fill_rename.py`) | 17 |
+| Builder in the app (`tests/test_builder.py`) | 28 |
 
 ## 3. Manual test script
 _(filled in as areas land)_

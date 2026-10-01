@@ -16,6 +16,8 @@ h history; b back; x skip; q saves and quits; ? help.
 The mouse works on the card too: click a field to reroll it, right-click to edit it, scroll
 over it to step through its earlier values, click its ▲ or ▼ to rate it.
 """
+import re
+
 from rich.style import Style
 from rich.text import Text
 from textual.app import App, ComposeResult
@@ -127,19 +129,19 @@ class CardList(OptionList):
     the wheel steps through its earlier values, and the ▲ ▼ rate it. (Enter still selects.)"""
 
     class Field(Message):
-        def __init__(self, index, button):
+        def __init__(self, index, button, source=None):
             super().__init__()
-            self.index, self.button = index, button
+            self.index, self.button, self.source = index, button, source
 
     class Rate(Message):
-        def __init__(self, index, value):
+        def __init__(self, index, value, source=None):
             super().__init__()
-            self.index, self.value = index, value
+            self.index, self.value, self.source = index, value, source
 
     class Scrolled(Message):
-        def __init__(self, index, direction):
+        def __init__(self, index, direction, source=None):
             super().__init__()
-            self.index, self.direction = index, direction
+            self.index, self.direction, self.source = index, direction, source
 
     def on_click(self, event):
         event.stop()
@@ -150,9 +152,9 @@ class CardList(OptionList):
             return
         self.highlighted = index
         if meta.get("rate"):
-            self.post_message(self.Rate(index, meta["rate"]))
+            self.post_message(self.Rate(index, meta["rate"], self))
         else:
-            self.post_message(self.Field(index, event.button))
+            self.post_message(self.Field(index, event.button, self))
 
     def _wheel(self, event, direction):
         event.stop()
@@ -162,7 +164,7 @@ class CardList(OptionList):
             index = self.highlighted
         if index is not None:
             self.highlighted = index
-            self.post_message(self.Scrolled(index, direction))
+            self.post_message(self.Scrolled(index, direction, self))
 
     def on_mouse_scroll_up(self, event):
         self._wheel(event, -1)                        # up: older values
@@ -186,6 +188,8 @@ class EditScreen(ModalScreen):
     def __init__(self, title, fields):
         super().__init__()
         self.title_text, self.fields = title, fields
+        # widget ids may not hold spaces or brackets, so name the boxes from the field names, made safe
+        self.ids = {name: "in-" + re.sub(r"[^A-Za-z0-9_-]+", "-", name).strip("-") for name in fields}
 
     def compose(self) -> ComposeResult:
         with Vertical():
@@ -193,7 +197,7 @@ class EditScreen(ModalScreen):
             with VerticalScroll():
                 for name, value in self.fields.items():
                     yield Label(name.replace("_", " "))
-                    yield Input(value, id=f"in-{name}")
+                    yield Input(value, id=self.ids[name])
             yield Label("enter: next / done     esc: cancel")
 
     def on_mount(self):
@@ -205,7 +209,7 @@ class EditScreen(ModalScreen):
         if i + 1 < len(inputs):
             inputs[i + 1].focus()
         else:
-            self.dismiss({name: self.query_one(f"#in-{name}", Input).value for name in self.fields})
+            self.dismiss({name: self.query_one("#" + self.ids[name], Input).value for name in self.fields})
 
     def action_cancel(self):
         self.dismiss(None)
