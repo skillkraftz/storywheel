@@ -20,7 +20,7 @@ from textual.widgets import Button, Footer, Header, Input, Label, OptionList, St
 from textual.widgets.option_list import Option
 
 from . import fill, paths, promote, rename, schemas, settings, state, vault
-from .tui import CardList, ConfirmScreen, EditScreen, _quiet
+from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer"
 TYPE_ORDER = ["character", "place", "thing", "group", "note"]
@@ -67,74 +67,6 @@ def _as_int(text, default):
         return int(str(text).strip())
     except ValueError:
         return default
-
-
-class ChoiceScreen(ModalScreen):
-    """Pick one of some options (or several): returns the value, a list for multi, or None if cancelled."""
-    BINDINGS = [Binding("escape", "cancel", "Cancel"), Binding("space", "toggle", "Toggle", show=False),
-                Binding("d", "done", "Done", show=False)]
-    DEFAULT_CSS = """
-    ChoiceScreen { align: center middle; }
-    ChoiceScreen > Vertical { width: 64; height: auto; max-height: 80%; border: round $accent;
-                              background: $surface; padding: 1 2; }
-    ChoiceScreen OptionList { height: auto; max-height: 22; }
-    ChoiceScreen Horizontal { height: 1; margin-top: 1; }
-    ChoiceScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
-    """
-
-    def __init__(self, title, options, multi=False, selected=()):
-        super().__init__()
-        self.title_text, self.options, self.multi = title, list(options), multi
-        self.selected = list(selected)
-
-    def compose(self) -> ComposeResult:
-        with Vertical(id="dlg"):
-            yield Static(self.title_text, markup=False)
-            yield OptionList(id="choices")
-            if self.multi:
-                yield Static("space or click toggles; d (or Done) finishes", markup=False)
-                with Horizontal():
-                    yield _quiet(Button("Done (d)", id="done", variant="success"))
-
-    def on_mount(self):
-        self.refill()
-        self.query_one("#choices", OptionList).focus()
-
-    def refill(self):
-        lst = self.query_one("#choices", OptionList)
-        keep = lst.highlighted
-        lst.clear_options()
-        rows = []
-        for n, (label, value) in enumerate(self.options):
-            mark = ("[x] " if value in self.selected else "[ ] ") if self.multi else ""
-            rows.append(Option(Text(mark + label), id=str(n)))
-        lst.add_options(rows)
-        lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
-
-    def on_option_list_option_selected(self, event):
-        value = self.options[int(event.option.id)][1]
-        if not self.multi:
-            self.dismiss(value)
-        else:
-            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
-            self.refill()
-
-    def action_toggle(self):
-        lst = self.query_one("#choices", OptionList)
-        if self.multi and lst.highlighted is not None:
-            value = self.options[lst.highlighted][1]
-            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
-            self.refill()
-
-    def action_done(self):
-        if self.multi:
-            self.dismiss(self.selected)
-
-    def on_button_pressed(self, event):
-        self.dismiss(self.selected)
-
-    def action_cancel(self):
-        self.dismiss(None)
 
 
 class RenamePreviewScreen(ModalScreen):
@@ -1114,7 +1046,7 @@ class BuilderScreen(Screen):
         try:
             atom_boost = float(vals[4])
         except ValueError:
-            atom_boost = 3.0
+            atom_boost = 1.5
         self.universe.save_settings(genres=[g.lower() for g in split(vals[0])], exclude_tags=[t.lower() for t in split(vals[1])],
                                     exclude_lists=split(vals[2]), boost=boost, atom_boost=atom_boost)
         self.universe.lists_dir.mkdir(exist_ok=True)

@@ -292,26 +292,8 @@ def test_the_equals_key_works_as_plus(home):
 
 # --- the universe ----------------------------------------------------------------------------------------------------------------
 
-def test_u_and_capital_u_save_to_and_remove_from_the_universe(home):
-    async def script(app, pilot):
-        await go_to(app, pilot, "setting")
-        await press(pilot, "u")
-        saved = screen_text(app)
-        n = len(store.load_universe().get("setting", []))
-        await press(pilot, "U")
-        return saved, n, len(store.load_universe().get("setting", []))
-    saved, n, after = run_tui(new_story(), make_engine(home), script)
-    assert "Saved to your universe" in saved and (n, after) == (1, 0)
 
 
-def test_a_story_asks_about_the_universe_when_you_have_one(home):
-    store.add_to_universe("setting", {"place": "Oakhaven", "era": "x", "season": "autumn", "landmark": "y", "rumor": "z"})
-    async def script(app, pilot):
-        asked = screen_text(app)
-        await press(pilot, "o")
-        return asked, app.session.story["universe_mode"]
-    asked, mode = run_tui(new_story(), make_engine(home), script)
-    assert "saved in your universe" in asked and mode == "o"
 
 
 # --- dialogs don't leak keys -------------------------------------------------------------------------------------------------------

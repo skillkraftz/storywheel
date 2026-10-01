@@ -184,6 +184,16 @@ class Library:
         return cls(load_lists(roots), profiles, default,
                    DEFAULT_FLOOR if floor is None else float(floor), floors)
 
+    def replace_lists(self, prefix, new_lists):
+        """Swap every list whose id starts with `prefix` for `new_lists` (used for universe atoms)."""
+        for list_id in [i for i in self.lists if i.startswith(prefix)]:
+            del self.lists[list_id]
+        for wl in new_lists:
+            self.lists[wl.id] = wl
+        self.by_slot = {}
+        for wl in self.lists.values():
+            self.by_slot.setdefault(wl.slot, []).append(wl)
+
     @property
     def genre_names(self):
         return list(self.profiles)

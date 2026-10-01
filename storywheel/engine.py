@@ -52,6 +52,36 @@ class Engine:
         self._feature_index = None
         self.last_entry = None             # the Entry behind the most recent pick
         self.notices = []                  # things the user should hear about (see take_notices)
+        self.universes = []                # universes the generator may draw from (see set_universes)
+
+    def set_universes(self, universes):
+        """Let the generator draw from these universes: their entities become atoms (boosted), and their
+        genre leanings blend into every story's mix. An empty list removes them again."""
+        from . import universe_atoms
+        lists = []
+        for u in universes:
+            lists += universe_atoms.build_lists(u)
+        self.library.replace_lists("universe:", lists)
+        self.universes = list(universes)
+        self._feature_index = None
+
+    def mix_for(self, story):
+        """The mix for rolling this story: its own, plus the selected universes' genres and atom boosts.
+        (The story's saved mix is not changed.)"""
+        from . import universe_atoms
+        from .mix import Mix, story_mix
+        data = story_mix(story)
+        if not self.universes:
+            return Mix(data, self.library)
+        merged = {"base": list(data["base"]), "exclude_tags": list(data["exclude_tags"]),
+                  "exclude_lists": list(data["exclude_lists"]), "boost": dict(data["boost"])}
+        for u in self.universes:
+            s = u.settings()
+            for g in s["genres"]:
+                if g.lower() not in merged["base"]:
+                    merged["base"].append(g.lower())
+            merged["boost"][universe_atoms.tag(u)] = merged["boost"].get(universe_atoms.tag(u), 1.0) * s["atom_boost"]
+        return Mix(merged, self.library)
 
     def notify(self, message):
         if message not in self.notices:

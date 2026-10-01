@@ -232,21 +232,6 @@ def test_the_story_you_are_in_cannot_be_deleted_from_the_list(home):
     assert screen == "MainScreen"
 
 
-def test_send_a_past_storys_protagonist_and_setting_to_the_universe(home):
-    a, b = two_stories(home)
-    async def script(app, pilot):
-        lst = app.main.stories_list
-        ids = [lst.get_option_at_index(i).id for i in range(lst.option_count)]
-        other = next(i for i in ids if i != app.session.story["id"])
-        lst.focus(); await pilot.pause()
-        lst.highlighted = ids.index(other)
-        await press(pilot, "p", "s", "p")
-        await pilot.click("#st-setting"); await pilot.pause(0.4)
-        return store.load(other), store.load_universe(), screen_text(app)
-    story, universe, text = run_tui(store.new_story(), make_engine(home), script)
-    assert universe["protagonist"] == [tui.public(story["kept"]["protagonist"])]
-    assert universe["setting"] == [tui.public(story["kept"]["setting"])]
-    assert "already in your universe" in text or "Sent the setting" in text
 
 
 # --- leaving ----------------------------------------------------------------------------------------------------------

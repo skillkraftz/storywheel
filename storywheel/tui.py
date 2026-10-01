@@ -231,27 +231,6 @@ class HelpScreen(ModalScreen):
         self.dismiss(None)
 
 
-class UniverseScreen(ModalScreen):
-    """Whether to pull from your universe in this story."""
-    BINDINGS = [Binding("n", "pick('n')", "No"), Binding("m", "pick('m')", "Mix it in"),
-                Binding("o", "pick('o')", "Only from it"), Binding("escape", "pick('n')", "No")]
-    DEFAULT_CSS = """
-    UniverseScreen { align: center middle; }
-    UniverseScreen > Static { width: 60; height: auto; border: round $accent; background: $surface; padding: 1 2; }
-    """
-
-    def __init__(self, total):
-        super().__init__()
-        self.total = total
-
-    def compose(self) -> ComposeResult:
-        yield Static(f"You have {self.total} thing(s) saved in your universe.\n\nPull from it?\n\n"
-                     "  [b]n[/b]  no\n  [b]m[/b]  mix it in (about a third of rolls)\n  [b]o[/b]  only from it")
-
-    def action_pick(self, answer):
-        self.dismiss(answer)
-
-
 class DoneScreen(ModalScreen):
     BINDINGS = [Binding("q,enter", "quit_app", "Quit"), Binding("escape", "keep_going", "Keep editing")]
     DEFAULT_CSS = """
@@ -302,9 +281,8 @@ class ConfirmScreen(ModalScreen):
 
 
 class UniverseEntryScreen(ModalScreen):
-    """A look at one saved entry, with what you can do with it."""
-    BINDINGS = [Binding("enter,u", "choose('use')", "Use in this story"), Binding("e", "choose('edit')", "Edit"),
-                Binding("d", "choose('delete')", "Delete"), Binding("escape,q", "choose(None)", "Close")]
+    """A look at one entity of a universe, and the one thing to do with it here: use it in this story."""
+    BINDINGS = [Binding("enter,u", "choose('use')", "Use in this story"), Binding("escape,q", "choose(None)", "Close")]
     DEFAULT_CSS = """
     UniverseEntryScreen { align: center middle; }
     UniverseEntryScreen > Vertical { width: 80%; max-width: 90; height: auto; max-height: 90%;
@@ -314,13 +292,13 @@ class UniverseEntryScreen(ModalScreen):
     UniverseEntryScreen .keys { color: $text-muted; }
     """
 
-    def __init__(self, label, fields):
+    def __init__(self, label, fields, source=""):
         super().__init__()
-        self.label, self.fields = label, fields
+        self.label, self.fields, self.source = label, fields, source
 
     def compose(self) -> ComposeResult:
         text = Text()
-        text.append(f"{self.label}, saved in your universe\n\n", style="bold")
+        text.append(f"{self.label}" + (f", from the universe {self.source}" if self.source else "") + "\n\n", style="bold")
         for k, v in self.fields.items():
             text.append(k.replace("_", " ") + "  ", style="bold cyan")
             text.append(f"{v}\n")
@@ -328,10 +306,8 @@ class UniverseEntryScreen(ModalScreen):
             yield Static(text)
             with Horizontal():
                 yield _quiet(Button("Use in this story", id="use", variant="primary"))
-                yield _quiet(Button("Edit", id="edit"))
-                yield _quiet(Button("Delete", id="delete", variant="error"))
                 yield _quiet(Button("Close", id="close"))
-            yield Static("enter: use   e: edit   d: delete   esc: close", classes="keys")
+            yield Static("enter: use as a new candidate   esc: close", classes="keys")
 
     def on_button_pressed(self, event):
         self.dismiss(None if event.button.id == "close" else event.button.id)
@@ -492,6 +468,74 @@ class PromotePreviewScreen(ModalScreen):
         self.dismiss(False)
 
 
+class ChoiceScreen(ModalScreen):
+    """Pick one of some options (or several): returns the value, a list for multi, or None if cancelled."""
+    BINDINGS = [Binding("escape", "cancel", "Cancel"), Binding("space", "toggle", "Toggle", show=False),
+                Binding("d", "done", "Done", show=False)]
+    DEFAULT_CSS = """
+    ChoiceScreen { align: center middle; }
+    ChoiceScreen > Vertical { width: 64; height: auto; max-height: 80%; border: round $accent;
+                              background: $surface; padding: 1 2; }
+    ChoiceScreen OptionList { height: auto; max-height: 22; }
+    ChoiceScreen Horizontal { height: 1; margin-top: 1; }
+    ChoiceScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
+    """
+
+    def __init__(self, title, options, multi=False, selected=()):
+        super().__init__()
+        self.title_text, self.options, self.multi = title, list(options), multi
+        self.selected = list(selected)
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(self.title_text, markup=False)
+            yield OptionList(id="choices")
+            if self.multi:
+                yield Static("space or click toggles; d (or Done) finishes", markup=False)
+                with Horizontal():
+                    yield _quiet(Button("Done (d)", id="done", variant="success"))
+
+    def on_mount(self):
+        self.refill()
+        self.query_one("#choices", OptionList).focus()
+
+    def refill(self):
+        lst = self.query_one("#choices", OptionList)
+        keep = lst.highlighted
+        lst.clear_options()
+        rows = []
+        for n, (label, value) in enumerate(self.options):
+            mark = ("[x] " if value in self.selected else "[ ] ") if self.multi else ""
+            rows.append(Option(Text(mark + label), id=str(n)))
+        lst.add_options(rows)
+        lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
+
+    def on_option_list_option_selected(self, event):
+        value = self.options[int(event.option.id)][1]
+        if not self.multi:
+            self.dismiss(value)
+        else:
+            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
+            self.refill()
+
+    def action_toggle(self):
+        lst = self.query_one("#choices", OptionList)
+        if self.multi and lst.highlighted is not None:
+            value = self.options[lst.highlighted][1]
+            self.selected = [v for v in self.selected if v != value] if value in self.selected else self.selected + [value]
+            self.refill()
+
+    def action_done(self):
+        if self.multi:
+            self.dismiss(self.selected)
+
+    def on_button_pressed(self, event):
+        self.dismiss(self.selected)
+
+    def action_cancel(self):
+        self.dismiss(None)
+
+
 class StoryList(OptionList):
     """Past stories: Enter opens one; d deletes (asks first); p / s send its protagonist / setting
     to your universe."""
@@ -503,24 +547,25 @@ class StoryList(OptionList):
 
 
 class UniverseTree(Tree):
-    """Your saved entries by kind. Enter on a kind opens or closes it; on an entry, previews it."""
-    BINDINGS = [Binding("n", "new", "New"), Binding("t", "mode", "No/mix/only"),
-                Binding("d", "delete", "Delete"), Binding("e", "edit", "Edit"), Binding("u", "use", "Use")]
-
-    def action_new(self):
-        self.screen.universe_new()
+    """Entities of the selected universes, by kind. Enter on a kind opens or closes it; on an entity, previews it."""
+    BINDINGS = [Binding("t", "mode", "No/mix/only"), Binding("u", "use", "Use in this story")]
 
     def action_mode(self):
         self.screen.universe_mode()
 
-    def action_delete(self):
-        self.screen.universe_act("delete")
-
-    def action_edit(self):
-        self.screen.universe_act("edit")
-
     def action_use(self):
         self.screen.universe_act("use")
+
+
+class UniverseChecklist(OptionList):
+    """Universes the generator may draw from for this draft: Enter, space or a click ticks one."""
+    BINDINGS = [Binding("space", "toggle", "Tick"), Binding("t", "mode", "No/mix/only")]
+
+    def action_toggle(self):
+        self.action_select()
+
+    def action_mode(self):
+        self.screen.universe_mode()
 
 
 # --- the mix editor ----------------------------------------------------------------------------------
@@ -689,6 +734,8 @@ class MainScreen(Screen):
         Binding("h", "history", "Hist"),
         Binding("m", "mix", "Mix"),
         Binding("v", "focus_universe", "Universe"),
+        Binding("f2", "mode('builder')", "Builder", key_display="F2"),
+        Binding("f3", "mode('writer')", "Writer", key_display="F3"),
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
@@ -746,10 +793,11 @@ class MainScreen(Screen):
             with Vertical(id="left"):
                 yield Static("Steps", classes="title")
                 yield OptionList(id="steps")
-                yield Static("Universe", id="uni-title", classes="title", markup=False)
+                yield Static("Universes to draw from", id="uni-title", classes="title", markup=False)
+                yield UniverseChecklist(id="uni-check")
                 with Horizontal(id="uni-buttons"):
                     yield _quiet(Button("Use: no  ", id="uni-mode"))
-                    yield _quiet(Button("+ New", id="uni-new"))
+                    yield _quiet(Button("Builder (F2)", id="uni-builder"))
                 yield UniverseTree("Universe", id="universe")
                 yield Static("Past stories", id="stories-title", classes="title", markup=False)
                 with Horizontal(id="story-buttons"):
@@ -791,14 +839,6 @@ class MainScreen(Screen):
         self.query_one("#universe", Tree).show_root = False
         self.refresh_all()
         self.query_one("#card", OptionList).focus()
-        total = self.session.universe_total()
-        if total and not self.session.story["kept"]:
-            self.app.push_screen(UniverseScreen(total), self._universe_chosen)
-
-    def _universe_chosen(self, answer):
-        self.session.set_universe_mode(answer or "n")
-        self.say("Pulling from your universe." if answer in ("m", "o") else "")
-        self.refresh_universe()
 
     # --- showing the session --------------------------------------------------------------------------------
 
@@ -943,10 +983,22 @@ class MainScreen(Screen):
             if not piece:
                 self.say(f"'{title}' has no kept {action}.")
                 return
-            n, added = store.add_to_universe(action, piece)
-            self.say(f"Sent the {action} of '{title}' to your universe." if added
-                     else f"That {action} is already in your universe.")
-            self.refresh_universe()
+            unis = self.session.available_universes()
+            if not unis:
+                self.say("There is no universe yet. Promote a story or make one in the Builder (F2).")
+                return
+            self.app.push_screen(ChoiceScreen(f"Send the {action} of '{title}' to which universe?",
+                                              [(u.name, u.slug) for u in unis]),
+                                 lambda slug: self._sent_piece(story, action, piece, slug))
+
+    def _sent_piece(self, story, action, piece, slug):
+        from . import universe_atoms, vault
+        if not slug:
+            return
+        step = next(st for st in steps_for(story) if st.key == action)
+        _e, message = universe_atoms.save_piece(vault.get_universe(slug), action, step.label, public(piece))
+        self.say(message)
+        self.refresh_universe()
 
     def _story_deleted(self, story, yes):
         if yes:
@@ -1034,28 +1086,46 @@ class MainScreen(Screen):
     MODE_WORDS = {"n": "no", "m": "mix", "o": "only"}
 
     def refresh_universe(self):
-        """The universe panel: the mode for this story, and the entries by kind (groups stay as you left them)."""
+        """The universe panel: a checklist of universes to draw from, the mode for whole-step candidates, and
+        the entities of the ticked universes (characters offer the protagonist step, places the setting step)."""
         s = self.session
-        tree = self.query_one("#universe", UniverseTree)
-        universe = {k: v for k, v in store.load_universe().items() if v}
-        self.query_one("#uni-title", Static).update(f"Universe ({sum(len(v) for v in universe.values())})")
+        chosen = set(s.story.get("universes", []))
+        unis = s.available_universes()
+        check = self.query_one("#uni-check", OptionList)
+        keep = check.highlighted
+        check.clear_options()
+        rows = []
+        for u in unis:
+            on = u.slug in chosen
+            t = Text()
+            t.append("☑ " if on else "☐ ", style="bold green" if on else "dim")
+            t.append(u.name, style="bold" if on else "")
+            t.append(f"  {len(u.entities('character'))}c {len(u.entities('place'))}p {len(u.entities('thing'))}t", style="dim")
+            rows.append(Option(t, id=u.slug))
+        if not rows:
+            rows.append(Option(Text("(no universes yet: promote a story)", style="dim"), id="", disabled=True))
+        check.add_options(rows)
+        check.highlighted = min(keep, len(rows) - 1) if keep is not None else (0 if unis else None)
+        self.query_one("#uni-title", Static).update(f"Universes to draw from ({len(chosen)} ticked)")
         button = self.query_one("#uni-mode", Button)
         button.label = f"Use: {self.MODE_WORDS[s.universe_mode]:<4}"          # same width every time
         button.refresh(layout=True)
+        tree = self.query_one("#universe", UniverseTree)
         if not hasattr(self, "_open_groups"):
             self._open_groups = set()
         tree.clear()
-        order = [st.key for st in s.steps] + [k for k in universe if k not in [st.key for st in s.steps]]
-        for key in order:
-            entries = universe.get(key)
+        for step_key, label in (("protagonist", "Characters"), ("setting", "Places")):
+            entries = s.universe_entries(step_key)
             if not entries:
                 continue
-            group = tree.root.add(f"{s.universe_label(key)} ({len(entries)})", data=("group", key),
-                                  expand=key in self._open_groups)
-            for n, fields in enumerate(entries):
-                group.add_leaf(" · ".join(str(v) for v in list(fields.values())[:3]), data=("entry", key, n))
-        if not universe:
-            tree.root.add_leaf("(nothing saved yet: u saves a piece)", data=("none",))
+            group = tree.root.add(f"{label} ({len(entries)})", data=("group", step_key), expand=step_key in self._open_groups)
+            for u, e, fields in entries:
+                prefix = f"{u.name}: " if len(chosen) > 1 else ""
+                group.add_leaf(prefix + e.name, data=("entity", step_key, u.slug, e.id))
+        if not chosen:
+            tree.root.add_leaf("(tick a universe above to see its people and places)", data=("none",))
+        elif not tree.root.children:
+            tree.root.add_leaf("(nothing in the ticked universes yet)", data=("none",))
 
     def on_tree_node_collapsed(self, event):
         if event.node.data and event.node.data[0] == "group":
@@ -1067,86 +1137,49 @@ class MainScreen(Screen):
 
     def on_tree_node_selected(self, event):
         data = event.node.data
-        if data and data[0] == "entry":
+        if data and data[0] == "entity":
             self.universe_act(None, data)
 
     def _chosen_entry(self):
         node = self.query_one("#universe", UniverseTree).cursor_node
         data = node.data if node else None
-        return data if data and data[0] == "entry" else None
+        return data if data and data[0] == "entity" else None
 
     def universe_act(self, action, data=None):
-        """Preview (action None), or use / edit / delete, the highlighted entry."""
+        """Preview (action None), or use, the highlighted entity."""
         data = data or self._chosen_entry()
         if not data:
-            self.say("Select an entry in the universe panel first.")
+            self.say("Select a person or place in the universe panel first.")
             return
-        _tag, key, n = data
-        entries = store.load_universe().get(key, [])
-        if n >= len(entries):
+        _tag, step_key, slug, eid = data
+        found = next(((u, e, f) for u, e, f in self.session.universe_entries(step_key) if u.slug == slug and e.id == eid), None)
+        if not found:
             return
-        fields = entries[n]
+        u, e, fields = found
         if action is None:
-            label = self.session.universe_label(key)
-            self.app.push_screen(UniverseEntryScreen(label, fields),
+            self.app.push_screen(UniverseEntryScreen(self.session.universe_label(step_key), fields, u.name),
                                  lambda what: self.universe_act(what, data) if what else None)
         elif action == "use":
-            if self.session.use_universe_entry(key, fields):
+            if self.session.use_universe_entry(step_key, fields):
                 self.hist_mode = "rolls"
                 self.after()
                 self.card.focus()
             else:
                 self.after()
-        elif action == "edit":
-            self.app.push_screen(EditScreen(f"Edit saved {self.session.universe_label(key).lower()}", dict(fields)),
-                                 lambda out: self._universe_edited(key, n, fields, out))
-        elif action == "delete":
-            summary = " · ".join(str(v) for v in list(fields.values())[:3])
-            self.app.push_screen(ConfirmScreen(f"Delete this from your universe?\n\n{summary}"),
-                                 lambda yes: self._universe_deleted(key, n, yes))
-
-    def _universe_edited(self, key, n, old, out):
-        if out is not None:
-            new = {k: (v.strip() or old[k]) for k, v in out.items()}
-            if store.update_universe_entry(key, n, new):
-                self.say("Universe entry updated.")
-        self.refresh_universe()
-
-    def _universe_deleted(self, key, n, yes):
-        if yes and store.remove_universe_entry(key, n) is not None:
-            self.say("Deleted from your universe.")
-        self.refresh_universe()
-
-    def universe_new(self):
-        """Write a new entry from scratch, in the fields of the selected group's step (else this step)."""
-        node = self.query_one("#universe", UniverseTree).cursor_node
-        data = node.data if node else None
-        key = data[1] if data and data[0] in ("group", "entry") else self.session.step.key
-        names = self.session.universe_fields(key)
-        if not names:
-            self.say("No fields known for that kind of entry.")
-            return
-        self.app.push_screen(EditScreen(f"New {self.session.universe_label(key).lower()} for your universe "
-                                        "(blank boxes are filled in when it is used)", {n: "" for n in names}),
-                             lambda out: self._universe_created(key, out))
-
-    def _universe_created(self, key, out):
-        if out is not None:
-            fields = {k: v.strip() for k, v in out.items() if v.strip()}
-            if fields:
-                self._open_groups.add(key)
-                _n, added = store.add_universe_entry(key, fields)
-                self.say("Added to your universe." if added else "That is already in your universe.")
-            else:
-                self.say("Nothing written, so nothing added.")
-        self.refresh_universe()
 
     def universe_mode(self):
         mode = self.session.cycle_universe_mode()
         self.refresh_universe()
-        self.say({"n": "Not pulling from your universe in this story.",
-                  "m": "Mixing your universe in (about a third of rolls).",
-                  "o": "Rolling only from your universe."}[mode])
+        self.say({"n": "Whole-step candidates never come from your universes (their people and places still appear in rolls).",
+                  "m": "Mixing universe characters and places in as whole candidates (about a third of rolls).",
+                  "o": "Whole-step candidates come only from the ticked universes."}[mode])
+
+    def toggle_universe_row(self, slug):
+        on = self.session.toggle_universe(slug)
+        self.refresh_universe()
+        names = [u.name for u in self.session.selected_universes()]
+        self.say((f"Drawing from: {', '.join(names)}." if names else "Not drawing from any universe.")
+                 + ("" if not on else " Their people, places and things are boosted in the next rolls."))
 
     def action_ignore(self):
         self.session.ignore_stale()
@@ -1157,7 +1190,14 @@ class MainScreen(Screen):
         self.after()
 
     def action_focus_universe(self):
-        self.query_one("#universe", UniverseTree).focus()
+        self.query_one("#uni-check", OptionList).focus()
+
+    def action_mode(self, which):
+        """F1 / F2 / F3: save this draft and leave for another mode."""
+        self.session.save()
+        slug = (self.session.story.get("universes") or [None])[0]
+        self.app.next = (which, {"universe": slug})
+        self.app.exit(None)
 
     def on_button_pressed(self, event):
         event.stop()
@@ -1168,8 +1208,8 @@ class MainScreen(Screen):
         if name == "uni-mode":
             self.universe_mode()
             return
-        if name == "uni-new":
-            self.universe_new()
+        if name == "uni-builder":
+            self.action_mode("builder")
             return
         if name.startswith("ban-"):
             {"ban-update": self.action_update_inputs, "ban-reroll": self.action_roll,
@@ -1224,7 +1264,10 @@ class MainScreen(Screen):
     def on_option_list_option_selected(self, event):
         lst = event.option_list.id
         s = self.session
-        if lst == "stories":
+        if lst == "uni-check":
+            if event.option.id:
+                self.toggle_universe_row(event.option.id)
+        elif lst == "stories":
             self.story_act("open")
         elif lst == "card":
             self.action_reroll_field()
@@ -1314,12 +1357,28 @@ class MainScreen(Screen):
         self.after()
 
     def action_universe_add(self):
-        self.session.universe_add()
-        self.after()
+        """Save the showing candidate into a universe: the ticked one if there is just one, else ask."""
+        s = self.session
+        unis = s.available_universes()
+        if not unis:
+            self.say("There is no universe yet. Promote a story (leave with q) or make one in the Builder (F2).")
+            return
+        ticked = s.selected_universes()
+        if len(ticked) == 1:
+            s.save_to_universe(ticked[0])
+            self.after()
+            return
+        self.app.push_screen(ChoiceScreen("Save to which universe?", [(u.name, u.slug) for u in unis]),
+                             self._saved_to)
+
+    def _saved_to(self, slug):
+        if slug:
+            from . import vault
+            self.session.save_to_universe(vault.get_universe(slug))
+            self.after()
 
     def action_universe_remove(self):
-        self.session.universe_remove()
-        self.after()
+        self.say("To remove a person or place from a universe, open it in the Builder (F2): deleting is done there, with a confirm.")
 
     def action_history(self):
         if self.hist_mode == "rolls" and self.card_field() is not None:

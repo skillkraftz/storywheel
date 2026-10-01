@@ -13,7 +13,7 @@ import copy
 import random
 import re
 
-from . import store, structures
+from . import promote, store, structures, universe_atoms, vault
 from . import ratings as R
 from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
@@ -33,6 +33,7 @@ class Session:
         self.hist, self.cur = [], 0
         self.done = False
         self.notes = []
+        self.engine.set_universes(self.selected_universes())
 
     # --- what is showing ---------------------------------------------------------------------
 
@@ -124,10 +125,11 @@ class Session:
 
     def _roll(self, fresh=True):
         step = self.step
-        entries = store.load_universe().get(step.key, [])
+        entries = self.universe_entries(step.key)
         mode = self.story.get("universe_mode", "n")
         if entries and (mode == "o" or (mode == "m" and self.rng.random() < UNIVERSE_CHANCE)):
-            return self._complete(step, dict(self.rng.choice(entries), _src="universe"))
+            _u, _e, fields = self.rng.choice(entries)
+            return self._complete(step, dict(fields, _src="universe"))
         return step.roll(self.engine, self.story, fresh=fresh)
 
     def _complete(self, step, cand):
@@ -430,13 +432,42 @@ class Session:
         self.engine.save_memory()
         return path
 
-    # --- the universe --------------------------------------------------------------------------------
+    # --- universes the generator may draw from ---------------------------------------------------------
 
-    def universe_total(self):
-        return sum(len(v) for v in store.load_universe().values())
+    def available_universes(self):
+        return vault.list_universes()
 
-    def set_universe_mode(self, answer):
-        self.story["universe_mode"] = answer if answer in ("m", "o") else "n"
+    def selected_universes(self):
+        out = []
+        for slug in self.story.get("universes", []):
+            u = vault.get_universe(slug)
+            if u:
+                out.append(u)
+        return out
+
+    def _sync_engine(self):
+        self.engine.set_universes(self.selected_universes())
+
+    def set_universes(self, slugs):
+        self.story["universes"] = [s for s in slugs if vault.get_universe(s)]
+        self._sync_engine()
+
+    def toggle_universe(self, slug):
+        """Tick or untick a universe for this draft. Returns True if it is selected now."""
+        chosen = list(self.story.get("universes", []))
+        if slug in chosen:
+            chosen.remove(slug)
+        elif vault.get_universe(slug):
+            chosen.append(slug)
+        self.set_universes(chosen)
+        return slug in self.story["universes"]
+
+    def universe_entries(self, step_key):
+        """[(universe, entity, fields)] that selected universes can offer for a whole step."""
+        out = []
+        for u in self.selected_universes():
+            out += [(u, e, f) for e, f in universe_atoms.step_candidates(u, step_key)]
+        return out
 
     @property
     def universe_mode(self):
@@ -449,7 +480,7 @@ class Session:
         return self.story["universe_mode"]
 
     def use_universe_entry(self, step_key, fields):
-        """Offer a saved entry as a candidate for its step in this story, jumping there if need be.
+        """Offer a universe entity as a candidate for its step in this story, jumping there if need be.
         Nothing is kept: the story's kept steps are untouched until you press k."""
         index = next((n for n, st in enumerate(self.steps) if st.key == step_key), None)
         if index is None:
@@ -458,34 +489,22 @@ class Session:
         if index != self.i:
             self.jump(index)
         cand = dict(public(fields), _src="universe")
-        for name in self.field_names:                      # an entry written by hand may leave fields blank
+        for name in self.field_names:                      # an entity may leave fields blank
             if not cand.get(name):
                 cand[name] = self.cand.get(name, "")
         self._add(cand)
         self.note("Added from your universe as a new candidate. Press k to keep it.")
         return True
 
-    def universe_fields(self, step_key):
-        """The field names an entry for this step has (for writing a new one from scratch)."""
-        step = next((st for st in self.steps if st.key == step_key), None)
-        if step:
-            return list(step.fields)
-        entries = store.load_universe().get(step_key) or [{}]
-        return list(entries[0])
-
     def universe_label(self, step_key):
         step = next((st for st in self.steps if st.key == step_key), None)
         return step.label if step else step_key.replace("_", " ").title()
 
-    def universe_add(self):
-        step = self.step
-        n, added = store.add_to_universe(step.key, self.cand)
-        what = f"{n} {step.label.lower()} entr{'y' if n == 1 else 'ies'}"
-        self.note(f"{'Saved to' if added else 'Already in'} your universe ({what}). U removes it.")
-
-    def universe_remove(self):
-        removed = store.remove_from_universe(self.step.key, self.cand)
-        self.note("Removed from your universe." if removed else "This one isn't in your universe.")
+    def save_to_universe(self, universe):
+        """Save the showing candidate into a universe (see universe_atoms.save_piece)."""
+        e, message = universe_atoms.save_piece(universe, self.step.key, self.step.label, self.fields)
+        self.note(message)
+        return e
 
     # --- ratings ------------------------------------------------------------------------------------------
 

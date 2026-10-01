@@ -274,7 +274,7 @@ class Universe:
         return {"name": meta.get("name") or self.name, "genres": list(meta.get("genres") or []),
                 "exclude_tags": list(meta.get("exclude_tags") or []), "exclude_lists": list(meta.get("exclude_lists") or []),
                 "boost": {k: float(v) for k, v in (meta.get("boost") or {}).items()},
-                "atom_boost": float(meta.get("atom_boost", 3.0) or 3.0), "notes": body,
+                "atom_boost": float(meta.get("atom_boost", 1.5) or 1.5), "notes": body,
                 "created": meta.get("created", "")}
 
     def save_settings(self, **changes):

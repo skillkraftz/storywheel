@@ -54,7 +54,7 @@ class Ctx(dict):
                  threads=None, record=False, atoms=None):
         super().__init__()
         self.engine = engine
-        self.mix = Mix.for_story(story, engine.library)
+        self.mix = engine.mix_for(story)
         self.seeds = story.get("seeds", {})
         self.fresh = fresh
         self.kept = {}
@@ -80,6 +80,10 @@ class Ctx(dict):
         self.used = {tuple(a) for key, lst in story.get("atoms", {}).items() if key != exclude
                      for a in lst}
         self.drawn = {tuple(a) for lst in (atoms or {}).values() for a in lst}
+        # a universe character who is the protagonist is not also drawn as a passing stranger
+        pro = (story.get("kept", {}).get("protagonist") or {}).get("name")
+        if pro and exclude != "protagonist":
+            self.used |= {(slot, pro) for slot in ("someone", "close", "rival")}
         self.atom_log = []                      # (field, slot, text) in the order drawn
         self._motif_offered = False
 

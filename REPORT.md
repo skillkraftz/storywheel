@@ -37,7 +37,16 @@ Not done here: after promotion the app records `app.next = ("builder", ...)`, bu
 | Universe settings: genre leanings, exclusions/boosts, own lists folder | Works | `s`; own lists are files you drop in `<universe>/lists/` (used by Builder rolls); no in-app list editor |
 | Ratings on entity fields | Partial | recorded (+/-, ▲▼) but do not yet affect Builder rolls (no frame/atom provenance for entity fields) |
 | Entry point | Partial | `storywheel builder [universe] [story]`; plain `storywheel` still opens the Wheel until the switching area |
-### Universes in the Wheel -- Not started
+### Universes in the Wheel (tag `foundation-universes-wheel`)
+| Item | Status | Notes |
+|---|---|---|
+| Universe panel becomes a checklist of universes to draw from, saved per draft | Works | `v` focuses it; Enter / space / click ticks; stored as `story["universes"]`; a draft started from the Builder (`W`) starts with that universe ticked; no startup question any more |
+| Selected universes' entities become atoms in matching slots, boosted | Works | characters -> `someone`, `close`, `rival`, `first_name`, `last_name`; places -> `place` / `landmark`; things -> `thing`; tagged `universe:<slug>` and boosted by the universe's `atom_boost` (default 1.5, editable in universe settings); their genre leanings blend into the mix; a protagonist taken from a universe is not also drawn as a stranger |
+| no / mix / only whole-step candidates from selected universes | Works | protagonist <- characters, setting <- places; blanks are completed with an ordinary roll; the panel still previews an entity and "use in this story" adds a candidate without touching kept steps |
+| `u` saves a piece into a universe | Works | protagonist -> character, setting -> place (+ landmark), other -> note; merges by name |
+| Past stories: send protagonist / setting to a universe | Works | asks which universe |
+
+Rough edges: a character used in the `rival` slot reads as "the Sheriff Lund" (the templates say "the {rival}"); removing an entity from a universe is done in the Builder only (`U` says so).
 ### Writer (Neovim) -- Not started
 ### Switching and state -- Not started
 ### Export -- Not started
@@ -51,6 +60,8 @@ Not done here: after promotion the app records `app.next = ("builder", ...)`, bu
 | Promotion in the app (`tests/test_promote_ui.py`) | 10 |
 | Filling fields and renames (`tests/test_fill_rename.py`) | 17 |
 | Builder in the app (`tests/test_builder.py`) | 28 |
+| Universes in the Wheel (`tests/test_universes_wheel.py`) | 32 |
+| (removed) the old global-pool panel tests, replaced by the above | -14 |
 
 ## 3. Manual test script
 _(filled in as areas land)_

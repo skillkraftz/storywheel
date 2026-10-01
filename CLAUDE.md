@@ -584,3 +584,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   never rewritten as text. "One at a time" is done by toggling matches in the preview list.
 - Entity field history in the Builder lives for the session only.
 - Ratings on Builder fields are recorded but do not (yet) down-weight anything.
+- The Wheel's universe panel no longer asks a question on start. A draft's universes are ticked in the panel and saved
+  with the draft (`universes`), default none; no/mix/only (`universe_mode`) still governs whole-step candidates.
+- Universe atoms are tagged `universe:<slug>` and boosted through the story's mix (never saved into it). The
+  universe's `atom_boost` defaults to 1.5, which gives its lists roughly the share of a strong genre list.
+- A universe character used as the protagonist is added to the "used" atoms for `someone`, `close` and `rival`.
+- `u` in the Wheel saves into the single ticked universe, or asks which; `U` only explains that deleting happens in
+  the Builder.

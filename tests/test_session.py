@@ -124,16 +124,6 @@ def test_a_change_to_an_earlier_step_updates_later_ones(sess):
     assert first not in spine or "Zed" in spine
 
 
-def test_universe_add_and_remove(sess):
-    to_step(sess, "setting")
-    sess.universe_add()
-    assert "Saved to your universe" in sess.take_notes()[0]
-    sess.universe_add()
-    assert "Already in" in sess.take_notes()[0]
-    sess.universe_remove()
-    assert "Removed" in sess.take_notes()[0]
-    sess.universe_remove()
-    assert "isn't in your universe" in sess.take_notes()[0]
 
 
 def test_finishing_the_last_step_sets_done(sess):
@@ -203,37 +193,10 @@ def test_step_value_browses_without_piling_up_candidates(sess):
     assert len(sess.hist) == n + 2
 
 
-def test_the_universe_mode_cycles_and_belongs_to_the_story(sess):
-    assert [sess.cycle_universe_mode() for _ in range(4)] == ["m", "o", "n", "m"]
-    assert sess.story["universe_mode"] == "m"
 
 
-def test_using_a_universe_entry_adds_a_candidate_and_keeps_nothing(sess):
-    to_step(sess, "premise")
-    kept = {k: dict(v) for k, v in sess.story["kept"].items()}
-    assert sess.use_universe_entry("setting", {"place": "Dry Fork"})
-    assert sess.step.key == "setting" and sess.fields["place"] == "Dry Fork"
-    assert sess.cand["_src"] == "universe" and all(sess.fields.values())      # blanks filled
-    assert sess.story["kept"] == kept                                   # even the setting kept earlier is as it was
-    assert not sess.use_universe_entry("nonsense", {"x": "y"}) and "no 'nonsense' step" in sess.take_notes()[-1]
 
 
-def test_a_hand_written_entry_with_blanks_is_completed_when_rolled(sess, home):
-    from storywheel import store
-    store.add_to_universe("setting", {"place": "Pinewood"})
-    sess.story["universe_mode"] = "o"
-    to_step(sess, "setting")
-    sess.roll()
-    assert sess.fields["place"] == "Pinewood" and all(sess.fields.values()) and sess.cand["_src"] == "universe"
 
 
-def test_universe_fields_and_labels(sess):
-    assert sess.universe_fields("setting") == ["place", "era", "season", "landmark", "rumor"]
-    assert sess.universe_label("setting") == "Setting" and sess.universe_label("odd_kind") == "Odd Kind"
 
-
-def test_updating_a_universe_entry(home):
-    from storywheel import store
-    store.add_to_universe("setting", {"place": "A"})
-    assert store.update_universe_entry("setting", 0, {"place": "B", "_x": 1}) and store.load_universe() == {"setting": [{"place": "B"}]}
-    assert not store.update_universe_entry("setting", 3, {"place": "C"})

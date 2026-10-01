@@ -249,9 +249,9 @@ def handle(sess, raw):
         if field or step.single:
             sess.rate(1 if cmd in "+=" else -1, field)
     elif cmd == "u":
-        sess.universe_add()
+        save_to_universe_plain(sess)
     elif cmd == "U":
-        sess.universe_remove()
+        print("  To remove something from a universe, open the Builder:  storywheel builder")
     elif cmd == "b":
         sess.back()
     elif cmd == "x":
@@ -265,14 +265,41 @@ def handle(sess, raw):
         print(f"  Unknown command '{raw}'. Type ? for help.")
 
 
-def ask_universe_mode(story):
-    universe = store.load_universe()
-    total = sum(len(v) for v in universe.values())
-    if not total:
+def save_to_universe_plain(sess):
+    from . import vault
+    unis = vault.list_universes()
+    if not unis:
+        print("  No universe yet. Promote a story when you leave, or:  storywheel universes new NAME")
         return
-    print(f"\n  You have {total} thing(s) saved in your universe.")
-    answer = ask("  Pull from it? [n]o / [m]ix it in / [o]nly from it: ").strip().lower()[:1]
-    story["universe_mode"] = answer if answer in ("m", "o") else "n"
+    ticked = sess.selected_universes()
+    if len(ticked) == 1:
+        target = ticked[0]
+    else:
+        for n, u in enumerate(unis, 1):
+            print(f"    {n}. {u.name}")
+        pick = ask("  Save to which universe? ").strip()
+        if not (pick.isdigit() and 1 <= int(pick) <= len(unis)):
+            return
+        target = unis[int(pick) - 1]
+    sess.save_to_universe(target)
+
+
+def ask_universe_mode(story):
+    """Which universes may the generator draw from for this draft? (None by default.)"""
+    from . import vault
+    unis = vault.list_universes()
+    if not unis or story.get("universes"):
+        return
+    print(f"\n  You have {len(unis)} universe(s). The generator can draw their people, places and things into this story.")
+    for n, u in enumerate(unis, 1):
+        print(f"    {n}. {u.name}")
+    answer = ask("  Draw from which? (numbers like '1 2', or enter for none): ").strip()
+    picks = [unis[int(w) - 1].slug for w in answer.replace(",", " ").split() if w.isdigit() and 1 <= int(w) <= len(unis)]
+    story["universes"] = picks
+    if picks:
+        mode = ask("  Whole candidates too? [n]o / [m]ix them in / [o]nly from them: ").strip().lower()[:1]
+        story["universe_mode"] = mode if mode in ("m", "o") else "n"
+
 
 def offer_promotion(story):
     """On leaving the plain prompt with something kept: the same three choices as in the app."""
@@ -414,27 +441,12 @@ def cmd_show(args):
         print(store.to_plain(story) or "  (nothing kept in that story yet)")
 
 def cmd_universe(args):
-    if args.action == "rm":
-        if len(args.rest) != 2 or not args.rest[1].isdigit():
-            print("  Usage:  storywheel universe rm STEP NUMBER   (e.g. rm spine 1)")
-            return
-        entry = store.remove_universe_entry(args.rest[0], int(args.rest[1]) - 1)
-        print("  Removed." if entry else "  No such entry. Run  storywheel universe  to see numbers.")
-        return
-    universe = store.load_universe()
-    if not any(universe.values()):
-        print("  Your universe is empty. Press [u] while rolling to save something to it.")
-        return
-    labels = {s.key: s for s in STEPS}
-    for key, entries in universe.items():
-        if not entries:
-            continue
-        step = labels.get(key)
-        print(bold(f"\n  {step.label if step else key}") + dim(f"  ({len(entries)})  key: {key}"))
-        for n, e in enumerate(entries, 1):
-            print(f"    {n:>2}  {_summary(step, e) if step else e}")
-    print(dim("\n  Remove one with:  storywheel universe rm KEY NUMBER   (e.g. rm spine 1)"))
-    print(dim(f"  Or edit {store.UNIVERSE} by hand."))
+    """The old single universe. Its contents live in the library now, as universes of entities."""
+    from . import cli_world, migrate
+    for line in migrate.migrate_universe_json():
+        print("  " + line)
+    print(dim("  The single universe is gone: universes are folders of characters, places and things now."))
+    cli_world.cmd_universes(argparse.Namespace(action="list", json=False, name=None, genres=None))
 
 def cmd_sample(args):
     from .sample import build_story, sample
