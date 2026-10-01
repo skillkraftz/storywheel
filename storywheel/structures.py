@@ -12,6 +12,10 @@ for its beats.
       "show_labels": true, "order": 3,
       "beats": [ {"key": "ki", "label": "Ki (introduction)", "slot": "ki"}, ... ] }
 
+A beat with `"reframe": true` (kishotenketsu's *ten*) may only reinterpret something already
+established in the story: its templates may use threads and the story's own fields, never a fresh
+person, object or event.
+
 `show_labels` puts each beat's label in front of its text in the output; the
 Story Spine doesn't need it because its openers already say where you are.
 """
@@ -27,9 +31,10 @@ class StructureError(Exception):
 
 
 class Beat:
-    def __init__(self, key, slot, label, opening="", closing="."):
+    def __init__(self, key, slot, label, opening="", closing=".", reframe=False):
         self.key, self.slot, self.label = key, slot, label
         self.opening, self.closing = opening, closing
+        self.reframe = reframe        # may only reinterpret what is already established (see report.lint)
 
 
 class Structure:
@@ -46,7 +51,7 @@ def _read(path):
     try:
         doc = json.loads(path.read_text(encoding="utf-8"))
         beats = [Beat(b["key"], b.get("slot", b["key"]), b.get("label", b["key"]),
-                      b.get("opening", ""), b.get("closing", ".")) for b in doc["beats"]]
+                      b.get("opening", ""), b.get("closing", "."), bool(b.get("reframe"))) for b in doc["beats"]]
         keys = [b.key for b in beats]
         if not beats or len(set(keys)) != len(keys):
             raise StructureError(f"{path}: needs at least one beat, and beat keys must be unique")

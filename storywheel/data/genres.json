@@ -2,7 +2,7 @@
   "_note": "Genre profiles: default weights for tags. A list's weight in a story is the biggest weight among its tags; a list whose tags the mix does not mention gets only the wildcard floor. Picking 'western' and 'fairy tale' blends those two profiles equally. A genre name not listed here still works: it becomes a tag with weight 3. Add your own in ~/.storywheel/genres.json.",
   "_floor": 0.12,
   "_floors_note": "The floor is the share of picks that go to lists the mix does not mention. 0.12 suits one-off blocks (a disaster, a stranger). Slots that repeat all through a story (rival, job, place, names, landmark) get a lower one here, so an off-genre rival does not show up in half the sentences.",
-  "_floors": {"rival": 0.04, "job": 0.04, "place": 0.04, "first_name": 0.04, "last_name": 0.04, "landmark": 0.04},
+  "_floors": {"rival": 0.04, "job": 0.04, "place": 0.04, "first_name": 0.04, "last_name": 0.04, "landmark": 0.04, "era": 0.02},
   "_default": {"general": 1, "modern": 0.5},
 
   "mystery":       {"mystery": 3, "noir": 1, "thriller": 1, "urban": 0.5, "general": 0.3, "modern": 0.1},

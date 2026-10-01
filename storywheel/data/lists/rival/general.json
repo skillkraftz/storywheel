@@ -2,5 +2,17 @@
   "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "rival",
   "tags": ["general"],
-  "entries": ["mayor", "landlord", "older brother", "local newspaper", "ex", "neighbor", "church choir", "police chief", "best friend", "new boss", "family next door"]
+  "entries": [
+    {"text": "mayor", "features": ["human", "authority"]},
+    {"text": "landlord", "features": ["human", "authority"]},
+    "older brother",
+    {"text": "local newspaper", "features": []},
+    "ex",
+    "neighbor",
+    {"text": "church choir", "features": []},
+    {"text": "police chief", "features": ["human", "authority"]},
+    {"text": "best friend", "features": ["human", "friendly"]},
+    {"text": "new boss", "features": ["human", "authority"]},
+    {"text": "family next door", "features": []}
+  ]
 }

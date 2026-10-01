@@ -1,28 +1,28 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "After 'One day, '. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "inciting",
   "tags": ["general"],
   "entries": [
     "{SOMEONE} arrived in {place} carrying {THING}",
     "{first} found {THING} {HIDING}",
-    "{first} received {MESSAGE} from {SOMEONE}",
-    "{DISASTER} hit {place}, and {SOMEONE} blamed {first}",
-    "{SOMEONE} asked {first} to {DO_THING} {THING} {DEADLINE}",
+    "{first} received {MESSAGE} from {SOMEONE:human}",
+    "{DISASTER:strikes} hit {place}, and {SOMEONE:human} blamed {first}",
+    "{SOMEONE:human} asked {first} to {DO_THING} {THING} {DEADLINE}",
     "{first} crossed paths with {SOMEONE} {MANNER}",
-    "{CLOSE} vanished {MANNER}, leaving only {THING}",
-    "{SOMEONE} offered {first} {PRIZE} in exchange for {THING}",
-    "the {rival} promised {PRIZE} to anyone who could {DO_THING} {THING}",
-    "{first} lost {LOSS} to {SOMEONE}",
-    "someone broke into {landmark} and took {THING}",
-    "{first} won {WINDFALL}, and {SOMEONE} wanted a share",
-    "{SOMEONE} accused {first} of {CRIME}",
+    "{CLOSE} vanished {MANNER}, leaving only {THING:!living}",
+    "{SOMEONE:human} offered {first} {PRIZE:!inner} in exchange for {THING}",
+    "the {rival} promised {PRIZE:!inner} to anyone who could {DO_THING} {THING}",
+    "{first} lost {LOSS} to {SOMEONE:human}",
+    "someone broke into {landmark:built,indoor} and took {THING}",
+    "{first} won {WINDFALL}, and {SOMEONE:human} wanted a share",
+    "{SOMEONE:human} accused {first} of {CRIME}",
     "{first} came home to find {SOMEONE} waiting {MANNER}",
     {
-      "text": "a posse came through {place} hunting {SOMEONE}",
+      "text": "a posse came through {place} hunting {SOMEONE:human}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "{SOMEONE} rode into {place} {MANNER} with {THING}",
+      "text": "{SOMEONE:human} rode into {place} {MANNER} with {THING}",
       "tags": ["western", "historical"]
     },
     {
@@ -30,11 +30,11 @@
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "a raven brought {first} {MESSAGE}",
+      "text": "a raven brought {first} {MESSAGE:physical}",
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "{first} was granted {PRIZE}, but only {DEADLINE}",
+      "text": "{first} was granted {PRIZE:!inner}, but only {DEADLINE}",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

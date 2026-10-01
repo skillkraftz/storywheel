@@ -213,7 +213,8 @@ def test_verb_and_abstract_atoms_follow_the_genre_too():
     for slot in ("act_person", "act_thing", "manner", "prize", "deadline", "vice", "value"):
         picks = [t for t in engine.trace if t[0] == slot]
         assert len(picks) >= 60, slot
-        assert sum(bool(t[2] & flavor) for t in picks) / len(picks) > 0.2, slot
+        # frames now ask for particular kinds of verb, which leans on the general ones
+        assert sum(bool(t[2] & flavor) for t in picks) / len(picks) > 0.15, slot
 
 
 def test_thread_templates_exist_for_the_later_beats():

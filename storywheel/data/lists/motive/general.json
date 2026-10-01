@@ -24,15 +24,13 @@
     "kindness",
     "pity",
     {"text": "honor", "tags": ["western", "historical"]},
-    {"text": "a debt", "tags": ["western", "historical"]},
-    {"text": "a promise", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a wish", "tags": ["fairy tale", "fantasy"]},
     {"text": "enchantment", "tags": ["fairy tale", "fantasy"]},
     {"text": "a grudge", "tags": ["western", "historical"]},
-    {"text": "the badge", "tags": ["western", "historical"]},
-    {"text": "hard luck", "tags": ["western", "historical"]},
-    {"text": "a curse", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a dare", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a fairy's favor", "tags": ["fairy tale", "fantasy"]}
+    {"text": "hard pride", "tags": ["western", "historical"]},
+    {"text": "hunger", "tags": ["western", "historical"]},
+    {"text": "bitterness", "tags": ["western", "historical"]},
+    {"text": "mischief", "tags": ["fairy tale", "fantasy"]},
+    {"text": "wonder", "tags": ["fairy tale", "fantasy"]},
+    {"text": "devotion", "tags": ["fairy tale", "fantasy"]}
   ]
 }

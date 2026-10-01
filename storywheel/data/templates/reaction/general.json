@@ -1,41 +1,41 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "After 'Because of that, {first} '. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "reaction",
   "tags": ["general"],
   "entries": [
     "{ACT_PERSON} {SOMEONE} {MANNER}",
-    "{ACT_THING} {THING} {HIDING}",
+    "{ACT_THING:stows} {THING} {HIDING}",
     "{ACT_PLACE} {landmark} {MANNER}, looking for {SOMEONE}",
-    "made a deal with {SOMEONE} for {PRIZE}",
-    "told {CLOSE} about {TOPIC}, and regretted it",
-    "{ACT_THING} {THING} to pay for {PRIZE}",
-    "{ACT_PERSON} {CLOSE} out of {MOTIVE}",
+    "made a deal with {SOMEONE:human} for {PRIZE:!inner}",
+    "told {CLOSE:human} about {TOPIC}, and regretted it",
+    "{ACT_THING:trades} {THING} to pay for {PRIZE:material}",
+    "{ACT_PERSON} {CLOSE:human} out of {MOTIVE}",
     "set out to {DO_THING} {THING} {DEADLINE}",
-    "hired {SOMEONE} to {DO_PERSON} {CLOSE}",
+    "hired {SOMEONE:human} to {DO_PERSON:!inner} {CLOSE}",
     "let {VICE} decide what to do about {SOMEONE}",
     "put {VALUE} at risk for {TEMPTATION}",
-    "went to the {rival} and asked for {PRIZE}",
-    "{ACT_THING} {the_thing} {HIDING}",
+    "went to the {rival:authority} and asked for {PRIZE:social}",
+    "{ACT_THING:stows} {the_thing} {HIDING}",
     "{ACT_PERSON} {the_someone} {MANNER}",
-    "{ACT_PLACE} {landmark} with {the_thing}",
+    "{ACT_PLACE} {landmark} with {the_thing:portable}",
     "{ACT_MESSAGE} {the_message} {MANNER}",
     "{ACT_EVENT} {the_disaster} {MANNER}",
-    "asked {CLOSE} about {the_thing}",
-    "trusted {the_someone} with {TOPIC}",
+    "asked {CLOSE:human} about {the_thing}",
+    "trusted {the_someone:!threatening} with {TOPIC}",
     {
       "text": "saddled up and rode to {landmark} {MANNER}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "wired {SOMEONE}, asking about {TOPIC}",
+      "text": "wired {SOMEONE:human}, asking about {TOPIC}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "asked the crows to {DO_PERSON} {SOMEONE}",
+      "text": "asked the crows to {DO_PERSON:!inner} {SOMEONE}",
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "set out for {landmark} with {THING}",
+      "text": "set out for {landmark} with {THING:portable}",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

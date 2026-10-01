@@ -1,22 +1,22 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "Act II: the midpoint reversal. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "act_midpoint",
   "tags": ["general"],
   "entries": [
-    "{first} learned that {SOMEONE} was {BETRAYAL}, and nothing was the same.",
-    "The truth about {TOPIC} came out: {SOMEONE} {ACT_THING} {THING} all along.",
+    "{first} learned that {SOMEONE:!plural} {was} {BETRAYAL}, and nothing was the same.",
+    "The truth about {TOPIC} came out: {SOMEONE} {ACT_THING:stows} {THING} all along.",
     "{first} won a small victory over the {rival}, then lost {LOSS}.",
-    "Halfway to {PRIZE}, {first} found {THING} {HIDING}, and the stakes changed.",
-    "{MESSAGE} revealed {TOPIC} to everyone in {place}.",
-    "{first} saw that {PRIZE} would cost {VALUE}, and kept going {MANNER}.",
-    "{the_someone} turned out to be {BETRAYAL}, and {first} {ACT_THING} {the_thing} in anger.",
-    "{the_message} revealed that {SOMEONE} had been watching {MANNER}.",
+    "Halfway to {PRIZE:!inner}, {first} found {THING} {HIDING}, and the stakes changed.",
+    "{MESSAGE:physical} revealed {TOPIC} to everyone in {place}.",
+    "{first} saw that {PRIZE:!inner} would cost {VALUE}, and kept going {MANNER}.",
+    "{the_someone:!plural} turned out to be {BETRAYAL}, and {first} {ACT_THING} {the_thing} in anger.",
+    "{the_message:physical} revealed that {SOMEONE:human} had been watching {MANNER}.",
     {
-      "text": "At high noon, {first} faced the {rival} and walked away with {THING}.",
+      "text": "At high noon, {first} faced the {rival:human} and walked away with {THING}.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "At the stroke of midnight, {first} learned the true name of {THING}.",
+      "text": "At the stroke of midnight, {first} learned the true name of {THING:magic}.",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

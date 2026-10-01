@@ -12,6 +12,16 @@ A list file looks like:
       "entries": ["drover", "marshal", {"text": "bounty hunter", "tags": ["noir"]}] }
 
 or, for a generated list, `"generator": "faker.job"` instead of entries.
+
+Atoms can also carry FEATURES (what they are: "buryable", "magic", "human"...) and,
+for verbs, requirements on their SUBJECT and OBJECT. See frames.py for the vocabulary:
+
+    {"text": "buried", "object": ["buryable"]}
+    {"text": "enchanted", "subject": ["magic"], "object": ["!living"]}
+    {"text": "a black stallion", "features": ["living"]}
+
+A list can set defaults for all its entries with "features", "subject" and "object". An entry's own
+"features" replace the list's; its "subject" and "object" requirements are added to the list's.
 """
 import json
 from pathlib import Path
@@ -31,13 +41,25 @@ def norm_tag(tag):
 KINDS = ("object", "person", "place", "creature", "idea")
 
 
-class Entry:
-    __slots__ = ("text", "tags", "kind")
+# What an atom is assumed to be when its file doesn't say. Anything else must be declared.
+SLOT_FEATURES = {
+    "thing": ("portable", "buryable"),
+    "someone": ("human",), "close": ("human", "friendly"), "rival": ("human",),
+    "landmark": ("outdoor",),
+    "message": ("physical",),
+}
 
-    def __init__(self, text, tags=(), kind=None):
+
+class Entry:
+    __slots__ = ("text", "tags", "kind", "features", "subject", "object")
+
+    def __init__(self, text, tags=(), kind=None, features=None, subject=(), object=()):
         self.text = text
         self.tags = tuple(norm_tag(t) for t in tags)
         self.kind = kind                      # object, person, place, creature or idea; None if unsaid
+        self.features = None if features is None else tuple(features)   # what it is; None = unknown (generated)
+        self.subject = tuple(subject)         # what a verb needs of its subject
+        self.object = tuple(object)           # ... and of its object
 
     def __repr__(self):
         return f"Entry({self.text!r}, {list(self.tags)})"
@@ -72,22 +94,32 @@ def _read_list(path, root, is_template=False):
     if not isinstance(tags, list):
         raise DataError(f'{path}: "tags" should be a list like ["western", "rural"]')
     generator = doc.get("generator")
+    list_features = doc.get("features", SLOT_FEATURES.get(slot, () if not is_template else None))
+    list_subject, list_object = doc.get("subject", []), doc.get("object", [])
     list_kind = doc.get("kind")
     if list_kind is not None and list_kind not in KINDS:
         raise DataError(f'{path}: "kind" should be one of {", ".join(KINDS)}')
     entries = []
     for raw in doc.get("entries", []):
         if isinstance(raw, str):
-            entries.append(Entry(raw, kind=list_kind))
+            entries.append(Entry(raw, kind=list_kind, features=list_features,
+                                 subject=list_subject, object=list_object))
         elif isinstance(raw, dict) and "text" in raw:
             kind = raw.get("kind", list_kind)
             if kind is not None and kind not in KINDS:
                 raise DataError(f'{path}: entry {raw["text"]!r} has kind {kind!r}; use one of {", ".join(KINDS)}')
-            entries.append(Entry(raw["text"], raw.get("tags", []), kind))
+            entries.append(Entry(raw["text"], raw.get("tags", []), kind,
+                                 raw.get("features", list_features),
+                                 list(list_subject) + list(raw.get("subject", [])),     # a list's requirements
+                                 list(list_object) + list(raw.get("object", []))))      # add to the entry's own
         else:
             raise DataError(f'{path}: bad entry {raw!r} (use "text" or {{"text": ..., "tags": [...]}})')
     if not entries and not generator:
         raise DataError(f'{path}: needs "entries" (or a "generator")')
+    from . import frames
+    for e in entries:                                   # catch typos in the feature vocabulary
+        for problem in frames.check_vocabulary(e):
+            raise DataError(f"{path}: {e.text!r}: {problem}")
     try:
         markov = float(doc.get("markov", 0))
     except (TypeError, ValueError):

@@ -77,7 +77,7 @@ def test_spine_rolls_record_threads_that_match_their_beats():
             assert kind in T.THREAD_KINDS
             forms = T.intro_forms(t)
             assert any(f in cand[t["beat"]] for f in forms), (t, cand[t["beat"]])
-            first = next(n for n, v in cand.items() if not n.startswith("_") and any(f in v for f in forms))
+            first = next(n for n, v in cand.items() if not n.startswith("_") and any(T.mentions(v, f) for f in forms))
             assert first == t["beat"]                      # introduced where it says
             seen += 1
     assert seen > 150
@@ -231,3 +231,13 @@ def test_settle_does_not_mutate_when_nothing_changed():
     c = cand_with_box()
     before = copy.deepcopy(c)
     assert T.settle(c) == before
+
+
+def test_a_thread_is_not_mistaken_for_a_longer_phrase():
+    assert T.mentions("a stranger asked", "a stranger")
+    assert not T.mentions("gives in whenever a stranger's praise appears", "a stranger")
+    assert not T.mentions("two strangers met", "a stranger")
+    assert T.mentions("They left the locked box here.", "the locked box")
+    c = {"once": "Krista gives in whenever a stranger's praise appears.", "one_day": "A stranger asked Krista to leave.",
+         "_threads": {"someone": {"text": "a stranger", "beat": "one_day"}}}
+    assert T.settle(c)["_threads"]["someone"]["beat"] == "one_day"

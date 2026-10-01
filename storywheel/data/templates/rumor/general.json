@@ -1,25 +1,25 @@
 {
-  "_note": "What the town whispers: Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "What the town whispers. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "rumor",
   "tags": ["general"],
   "entries": [
-    "{THING} lies buried near {landmark}",
+    "{THING:buryable} {lies|lie} buried near {landmark}",
     "the {rival} is hiding {THING} {HIDING}",
-    "{DISASTER} was started by {SOMEONE}",
-    "nobody has seen {SOMEONE} since {DISASTER}",
-    "{landmark} was built over {THING}",
-    "{SOMEONE} owes the {rival} {PRIZE}",
+    "{DISASTER:manmade|magic} {was} started by {SOMEONE:!plural}",
+    "nobody has seen {SOMEONE} since {DISASTER:strikes}",
+    "{landmark:built} {was} built over {THING:buryable}",
+    "{SOMEONE} owes the {rival} {PRIZE:material}",
     "{SOMEONE} once {ACT_THING} {THING} at {landmark}",
-    "{place} was cursed by {SOMEONE} after {DISASTER}",
-    "{SOMEONE} is looking for {THING} near {place}",
+    "{place} {was} cursed by {SOMEONE:magic} after {DISASTER:strikes}",
+    "{SOMEONE} {is} looking for {THING} near {place}",
     "the {rival} {ACT_PERSON} {SOMEONE} {MANNER}",
-    "{landmark} is where {SOMEONE} {ACT_THING} {THING}",
+    "{landmark} {is} where {SOMEONE} {ACT_THING} {THING}",
     {
-      "text": "{SOMEONE} robbed {landmark} and left {THING} behind",
+      "text": "{SOMEONE:human} robbed {landmark:built,indoor} and left {THING:!living} behind",
       "tags": ["western", "historical"]
     },
     {
-      "text": "{SOMEONE} traded {THING} for {PRIZE} at {landmark}",
+      "text": "{SOMEONE:magic} traded {THING:magic} for {PRIZE:material} at {landmark}",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

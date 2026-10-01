@@ -4,7 +4,7 @@
   "tags": ["general"],
   "entries": [
     "a letter to the dead",
-    {"text": "a call from nowhere", "tags": ["modern"]},
+    {"text": "a call from nowhere", "tags": ["modern"], "features": []},
     "an ex's wedding invitation",
     "an eviction notice",
     "an unmarked package",

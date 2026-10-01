@@ -2,5 +2,35 @@
   "_note": "Fills {CLOSE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "close",
   "tags": ["general"],
-  "entries": ["{first}'s sister", "{first}'s oldest friend", "{first}'s son", "{first}'s daughter", "{first}'s business partner", "{first}'s mother", "{first}'s father", "{first}'s spouse", "{first}'s apprentice", "{first}'s ex", "{first}'s dog", "{first}'s best customer", "{first}'s one true ally", "{first}'s brother", "{first}'s cousin", "{first}'s landlady", "{first}'s godmother", "{first}'s old teacher", "{first}'s neighbor", "{first}'s only customer", "{first}'s twin", "{first}'s grandmother", "{first}'s foster sibling"]
+  "entries": [
+    "{first}'s sister",
+    "{first}'s oldest friend",
+    "{first}'s son",
+    "{first}'s daughter",
+    "{first}'s business partner",
+    "{first}'s mother",
+    "{first}'s father",
+    "{first}'s spouse",
+    "{first}'s apprentice",
+    {
+      "text": "{first}'s ex",
+      "features": ["human"]
+    },
+    {
+      "text": "{first}'s dog",
+      "features": ["creature", "friendly"]
+    },
+    "{first}'s best customer",
+    "{first}'s one true ally",
+    "{first}'s brother",
+    "{first}'s cousin",
+    "{first}'s landlady",
+    "{first}'s godmother",
+    "{first}'s old teacher",
+    "{first}'s neighbor",
+    "{first}'s only customer",
+    "{first}'s twin",
+    "{first}'s grandmother",
+    "{first}'s foster sibling"
+  ]
 }

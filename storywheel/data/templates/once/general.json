@@ -1,5 +1,5 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "After 'Once upon a time, '. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "once",
   "tags": ["general"],
   "entries": [
@@ -8,7 +8,7 @@
     "{name} was the most {trait} {job} in all of {place}",
     "in {place}, a {trait} {job} named {first} kept a secret: {first} {secret}",
     "{first}, a {trait} {job}, was stuck in {place} with the {rival} breathing down their neck",
-    "a {trait} {job} named {first} {HABIT_PLACE} {landmark} in {place}, hoping for {PRIZE}",
+    "a {trait} {job} named {first} {ACT_PLACE:mundane} {landmark} in {place}, hoping for {PRIZE:!inner}",
     "{first}, a {trait} {job} from {place}, wanted {want} and feared {FEELING}",
     "the {rival} {ACT_PERSON} {first}, a {trait} {job} in {place}, out of {MOTIVE}",
     "in {place}, {first}, a {trait} {job}, kept {THING} {HIDING}",

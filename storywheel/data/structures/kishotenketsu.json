@@ -8,7 +8,7 @@
   "beats": [
     {"key": "ki",    "slot": "ki",    "label": "Ki (introduction)"},
     {"key": "sho",   "slot": "sho",   "label": "Shō (development)"},
-    {"key": "ten",   "slot": "ten",   "label": "Ten (twist)"},
+    {"key": "ten",   "slot": "ten",   "label": "Ten (twist)", "reframe": true},
     {"key": "ketsu", "slot": "ketsu", "label": "Ketsu (reconciliation)"}
   ]
 }

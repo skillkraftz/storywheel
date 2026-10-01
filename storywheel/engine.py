@@ -35,10 +35,12 @@ class Engine:
         self._faker = None
         self._words = None
         self.trace = None                  # set to [] to record every pick (see pick_entry)
+        self.frame_log = None              # set to [] to record every frame the solver fills (tests)
         self._makers = {}
         self._kinds = None
         self._dictionary = None
         self._object_words = None
+        self._feature_index = None
         self.last_entry = None             # the Entry behind the most recent pick
         self.notices = []                  # things the user should hear about (see take_notices)
 
@@ -61,33 +63,83 @@ class Engine:
         is a function text -> factor that scales an entry's weight (0 rules it out);
         the story uses it to prefer templates that pick up its threads. `avoid` is
         a set of (slot, text) already used in this story."""
-        return self.pick_entry(self.pick_list(slot, mix), mix, adjust, avoid).text
+        return self.pick_item(slot, mix, adjust, avoid)[1].text
 
-    def pick_list(self, slot, mix):
-        lists = self.library.by_slot[slot]
+    def pick_item(self, slot, mix, adjust=None, avoid=None, accept=None, commit=True):
+        """(list, entry) for a slot, or None if no entry satisfies `accept` (a function
+        Entry -> bool, used by frames to demand features). With commit=False nothing is
+        remembered until you call commit(): a frame that has to be redrawn leaves no trace."""
+        lists = list(self.library.by_slot[slot])
         if all(mix.is_list_excluded(wl) for wl in lists):
             self.notify(f"Everything for '{slot.replace('_', ' ')}' is excluded in this mix, "
                         f"so the exclusions were ignored for it.")
-        elif len(lists) == 1:
+        # First look in every list for something fresh in this story; only if nothing is, reuse.
+        for reuse in ((False, True) if avoid else (True,)):
+            pool = list(lists)
+            while pool:
+                wl = pool[0] if len(pool) == 1 else self.rng.choices(pool, weights=self._list_weights(pool, mix, accept))[0]
+                entry = self.choose_entry(wl, mix, adjust, avoid, accept, reuse)
+                if entry is not None:
+                    if commit:
+                        self.commit(wl, entry)
+                    return wl, entry
+                pool = [other for other in pool if other is not wl]      # nothing there fits: try another list
+        return None
+
+    def _list_weights(self, pool, mix, accept):
+        """How likely each list is to be chosen. When a frame demands features, a list counts only
+        for the share of it that fits: otherwise a list with a single acceptable entry would hand
+        that one entry the list's whole probability (and 'a fortune teller' would be everywhere)."""
+        probs = mix.list_probabilities(pool)
+        if not accept:
+            return probs
+        fits = []
+        for wl in pool:
+            if wl.generator or not wl.entries:
+                fits.append(1.0)
+            else:
+                fits.append(sum(1 for e in wl.entries if accept(e)) / len(wl.entries))
+        weights = [p * f for p, f in zip(probs, fits)]
+        return weights if sum(weights) > 0 else probs
+
+    def pick_list(self, slot, mix):
+        lists = self.library.by_slot[slot]
+        if len(lists) == 1:
             return lists[0]
         return self.rng.choices(lists, weights=mix.list_probabilities(lists))[0]
 
     def pick_entry(self, wl, mix, adjust=None, avoid=None):
-        """The chosen Entry (generated names and words come back as a plain Entry)."""
+        """Choose from one list and remember the choice."""
+        entry = self.choose_entry(wl, mix, adjust, avoid, None)
+        self.commit(wl, entry)
+        return entry
+
+    def choose_entry(self, wl, mix, adjust=None, avoid=None, accept=None, reuse=True):
+        """An Entry from this list (None if none satisfies `accept`), with no side effects
+        beyond using the random generator. With reuse=False, entries already used in this
+        story (`avoid`) are not offered at all."""
         if wl.generator:
-            return self._record(wl, Entry(self.generate(wl.generator), kind=None))
+            entry = Entry(self.generate(wl.generator), kind=None)
+            return entry if not accept or accept(entry) else None
         if wl.markov and self.rng.random() < wl.markov:
             name = self.maker(wl).make(self.rng, reject=self.dictionary)
             if name:
-                return self._record(wl, Entry(name))
+                entry = Entry(name)
+                return entry if not accept or accept(entry) else None
         weights = mix.weights()
         options = [(e, mix.entry_weight(e, weights) * (adjust(e.text) if adjust else 1.0))
-                   for e in wl.entries]
+                   for e in wl.entries if not accept or accept(e)]
+        if not options:
+            return None
         live = [(e, w) for e, w in options if w > 0]
         if not live:
             self.notify(f"Every entry in '{wl.id}' is excluded in this mix, "
                         f"so the exclusions were ignored for it.")
-        options = live or [(e, 1.0) for e in wl.entries]
+        options = live or [(e, 1.0) for e, _ in options]
+        if not reuse and avoid:                          # nothing already used in this story
+            options = [(e, w) for e, w in options if (wl.slot, e.text) not in avoid]
+            if not options:
+                return None
         recent = self._recent_for(wl)
         used = lambda e: bool(avoid) and (wl.slot, e.text) in avoid
         # fresh in this story and not picked lately; relax memory first, then the story's set
@@ -98,8 +150,12 @@ class Engine:
             fresh = [(e, w) for e, w in options if keep(e)]
             if fresh:
                 break
-        entry = self.rng.choices([e for e, _ in fresh], weights=[w for _, w in fresh])[0]
-        recent.append(entry.text)
+        return self.rng.choices([e for e, _ in fresh], weights=[w for _, w in fresh])[0]
+
+    def commit(self, wl, entry):
+        """Remember a choice: it joins the recent picks and the trace."""
+        if any(e is entry for e in wl.entries):
+            self._recent_for(wl).append(entry.text)
         return self._record(wl, entry)
 
     # --- the recent-picks memory ----------------------------------------------------------
@@ -154,6 +210,17 @@ class Engine:
                 for e in wl.entries:
                     self._kinds.setdefault(e.text.lower(), e.kind or "object")
         return self._kinds.get((motif or "").lower(), "object")
+
+    def features_of(self, slot, text):
+        """The features of a known atom, found by its text (None if it isn't one we know,
+        for example something the writer typed)."""
+        if self._feature_index is None:
+            self._feature_index = {}
+            for wl in self.library.lists.values():
+                if not wl.is_template and not wl.generator:
+                    for e in wl.entries:
+                        self._feature_index.setdefault((wl.slot, e.text.lower()), e.features)
+        return self._feature_index.get((slot, (text or "").lower()))
 
     @property
     def object_words(self):

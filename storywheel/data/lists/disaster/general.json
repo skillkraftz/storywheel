@@ -2,5 +2,21 @@
   "_note": "Fills {DISASTER} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
   "slot": "disaster",
   "tags": ["general"],
-  "entries": ["a flood", "a fire", "a blackout", "a strange illness", "a heat wave", "a scandal", "a traveling circus", "a hurricane", "a bank failure", "a sinkhole", "a plague of crows", "a stock market crash", "a blizzard", "a factory closing", "a royal visit"]
+  "entries": [
+    {"text": "a flood", "features": ["natural", "strikes"]},
+    {"text": "a fire", "features": ["natural", "manmade", "strikes"]},
+    {"text": "a blackout", "features": ["manmade", "strikes"]},
+    {"text": "a strange illness", "features": ["natural", "strikes"]},
+    {"text": "a heat wave", "features": ["natural", "strikes"]},
+    {"text": "a scandal", "features": ["manmade", "strikes"]},
+    {"text": "a traveling circus", "features": ["manmade", "strikes"]},
+    {"text": "a hurricane", "features": ["natural", "strikes"]},
+    {"text": "a bank failure", "features": ["manmade", "strikes"]},
+    {"text": "a sinkhole", "features": ["natural", "strikes"]},
+    {"text": "a plague of crows", "features": ["natural", "strikes"]},
+    {"text": "a stock market crash", "features": ["manmade", "strikes"]},
+    {"text": "a blizzard", "features": ["natural", "strikes"]},
+    {"text": "a factory closing", "features": ["manmade"]},
+    {"text": "a royal visit", "features": ["manmade", "strikes"]}
+  ]
 }

@@ -1,25 +1,25 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "After 'Every day, ' (only everyday verbs). Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "routine",
   "tags": ["general"],
   "entries": [
-    "{ACT_PLACE} {landmark} {MANNER}",
-    "{ACT_THING} {THING} {MANNER}",
-    "{ACT_PERSON} {CLOSE} {MANNER}",
-    "{ACT_PERSON} the {rival} out of {MOTIVE}",
-    "{ACT_THING} {THING} and dreamed of {PRIZE}",
-    "{ACT_PLACE} {landmark} and wondered about {TOPIC}",
-    "worked toward {PRIZE}, held back by {VICE}",
-    "{ACT_PERSON} {SOMEONE} {MANNER}, and hoped nobody noticed",
-    "put {VALUE} aside for {PRIZE}",
-    "feared {FEELING} more than {DISASTER}",
-    "kept {THING} within reach, afraid of {SOMEONE}",
+    "{ACT_PLACE:mundane} {landmark} {MANNER}",
+    "{ACT_THING:mundane} {THING} {MANNER}",
+    "{ACT_PERSON:mundane} {CLOSE} {MANNER}",
+    "{ACT_PERSON:mundane} the {rival} out of {MOTIVE}",
+    "{ACT_THING:mundane} {THING} and dreamed of {PRIZE:!inner}",
+    "{ACT_PLACE:mundane} {landmark} and wondered about {TOPIC}",
+    "worked toward {PRIZE:!inner}, held back by {VICE}",
+    "{ACT_PERSON:mundane} {SOMEONE:!threatening} {MANNER}, and hoped nobody noticed",
+    "put {VALUE} aside for {PRIZE:!inner}",
+    "was haunted by {FEELING} more than by {DISASTER:strikes}",
+    "kept {THING} within reach, afraid of {SOMEONE:threatening}",
     {
-      "text": "rode out to {landmark} and {ACT_THING} {THING}",
+      "text": "rode out to {landmark} and {ACT_THING:mundane} {THING}",
       "tags": ["western", "historical"]
     },
     {
-      "text": "walked to {landmark} and {ACT_THING} {THING}",
+      "text": "walked to {landmark} and {ACT_THING:mundane} {THING}",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

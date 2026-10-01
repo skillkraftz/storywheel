@@ -1,34 +1,34 @@
 {
-  "_note": "One sentence: Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "One sentence. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "premise",
   "tags": ["general"],
   "entries": [
-    "When {SOMEONE} arrives in {place} with {THING}, a {trait} {job} named {first} must choose between {PRIZE} and {VALUE}.",
-    "{first}, a {trait} {job} in {place}, must {DO_THING} {THING} {DEADLINE}, or lose {PRIZE}.",
-    "After {DISASTER} hit {place}, {first} {ACT_THING} {THING} {HIDING}, and the {rival} wanted it.",
-    "{first}, a {job} in {place}, receives {MESSAGE} from {SOMEONE}, and nothing is quiet again.",
-    "A {trait} {job} agrees to {DO_THING} {THING} for {SOMEONE}, but {DISASTER} gets in the way.",
-    "{first} has spent years hiding {TOPIC} from {CLOSE}. Then {SOMEONE} comes to {place}.",
+    "When {SOMEONE:!plural} arrives in {place} with {THING}, a {trait} {job} named {first} must choose between {PRIZE:!inner} and {VALUE}.",
+    "{first}, a {trait} {job} in {place}, must {DO_THING} {THING} {DEADLINE}, or lose {PRIZE:!inner}.",
+    "After {DISASTER:strikes} hit {place}, {first} {ACT_THING:stows} {THING} {HIDING}, and the {rival} wanted it.",
+    "{first}, a {job} in {place}, receives {MESSAGE} from {SOMEONE:human}, and nothing is quiet again.",
+    "A {trait} {job} agrees to {DO_THING} {THING} for {SOMEONE:human}, but {DISASTER:strikes} {gets|get} in the way.",
+    "{first} has spent years hiding {TOPIC} from {CLOSE:human}. Then {SOMEONE:!plural} comes to {place}.",
     "{first}, a {trait} {job} in {place}, finds {the_motif} and must decide its fate {DEADLINE}.",
-    "Everyone in {place} wants {PRIZE}. Everyone except {first}, a {trait} {job} who only wants {want}.",
+    "Everyone in {place} wants {PRIZE:!inner}. Everyone except {first}, a {trait} {job} who only wants {want}.",
     "The {rival} of {place} wants {first} gone. {first}, a {trait} {job}, has other plans, and they involve {THING}.",
-    "{name} inherits {the_motif} and a debt to {SOMEONE}.",
+    "{name} inherits {the_motif} and a debt to {SOMEONE:human}.",
     "{first} {secret}. In {place}, that cannot stay hidden for long.",
-    "{first}, a {trait} {job}, wants {want}. {SOMEONE} wants {THING}. Only one of them can win.",
+    "{first}, a {trait} {job}, wants {want}. {SOMEONE:!plural} wants {THING}. Only one of them can win.",
     {
-      "text": "When {SOMEONE} rides into {place} {MANNER} with {THING}, a {trait} {job} named {first} must choose a side.",
+      "text": "When {SOMEONE:human,!plural} rides into {place} {MANNER} with {THING}, a {trait} {job} named {first} must choose a side.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "A {trait} {job} in {place} takes in {SOMEONE} carrying {THING}, and the {rival} arrives soon after.",
+      "text": "A {trait} {job} in {place} takes in {SOMEONE:!threatening} carrying {THING}, and the {rival} arrives soon after.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "To save {place} from {DISASTER}, a {trait} {job} named {first} must carry {THING} {DEADLINE}.",
+      "text": "To save {place} from {DISASTER:strikes}, a {trait} {job} named {first} must carry {THING:portable} {DEADLINE}.",
       "tags": ["fairy tale", "fantasy"]
     },
     {
-      "text": "{SOMEONE} offers {first}, a {trait} {job}, {PRIZE} in exchange for {THING}.",
+      "text": "{SOMEONE:magic,!plural} offers {first}, a {trait} {job}, {PRIZE:!inner} in exchange for {THING}.",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

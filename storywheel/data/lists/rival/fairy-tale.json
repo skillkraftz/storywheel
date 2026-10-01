@@ -2,5 +2,26 @@
   "_note": "Who stands in the protagonist's way. Phrased to follow 'the': 'the baron'.",
   "slot": "rival",
   "tags": ["fairy tale", "fantasy", "medieval"],
-  "entries": ["wicked stepmother", "baron", "queen", "king's steward", "village witch", "guild master", "miller", "innkeeper", "huntsman", "royal vizier", "neighboring king", "tax collector", "elder sister", "witch next door", "wolf", "troll under the bridge", "village elder", "gamekeeper", "bishop", "prince"]
+  "entries": [
+    {"text": "wicked stepmother", "features": ["human", "threatening"]},
+    {"text": "baron", "features": ["human", "authority"]},
+    {"text": "queen", "features": ["human", "authority"]},
+    {"text": "king's steward", "features": ["human", "authority"]},
+    {"text": "village witch", "features": ["human", "magic"]},
+    {"text": "guild master", "features": ["human", "authority"]},
+    "miller",
+    "innkeeper",
+    "huntsman",
+    {"text": "royal vizier", "features": ["human", "authority"]},
+    {"text": "neighboring king", "features": ["human", "authority"]},
+    {"text": "tax collector", "features": ["human", "authority"]},
+    "elder sister",
+    {"text": "witch next door", "features": ["human", "magic"]},
+    {"text": "wolf", "features": ["creature", "threatening"]},
+    {"text": "troll under the bridge", "features": ["creature", "threatening"]},
+    {"text": "village elder", "features": ["human", "authority"]},
+    "gamekeeper",
+    {"text": "bishop", "features": ["human", "authority"]},
+    {"text": "prince", "features": ["human", "authority"]}
+  ]
 }

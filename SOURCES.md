@@ -53,7 +53,10 @@ general, unowned descriptions of story shape.
 - `disaster/western`
 - `do_person/general`
 - `do_thing/general`
+- `era/early-century`
 - `era/fairy-tale`
+- `era/future`
+- `era/modern`
 - `era/western`
 - `feeling/general`
 - `first_name/fairy-tale`
@@ -121,4 +124,4 @@ suggested by corpora's monsters list. Both are CC0.
 
 Hand-written by the project owner for v1, moved into JSON in Stage 1, and since
 shortened and retagged where they were too long or too specific. Grouped by slot:
-`betrayal/*`, `climax/*`, `close/*`, `crime/*`, `disaster/*`, `era/*`, `escalation/*`, `flaw/*`, `hiding/*`, `inciting/*`, `job/*`, `landmark/*`, `loss/*`, `message/*`, `mood/*`, `need/*`, `once/*`, `premise/*`, `reaction/*`, `resolution/*`, `rival/*`, `routine/*`, `rumor/*`, `season/*`, `secret/*`, `someone/*`, `thing/*`, `title/*`, `topic/*`, `trait/*`, `twist/*`, `want/*`, `windfall/*`.
+`betrayal/*`, `climax/*`, `close/*`, `crime/*`, `disaster/*`, `escalation/*`, `flaw/*`, `hiding/*`, `inciting/*`, `job/*`, `landmark/*`, `loss/*`, `message/*`, `mood/*`, `need/*`, `once/*`, `premise/*`, `reaction/*`, `resolution/*`, `rival/*`, `routine/*`, `rumor/*`, `season/*`, `secret/*`, `someone/*`, `thing/*`, `title/*`, `topic/*`, `trait/*`, `twist/*`, `want/*`, `windfall/*`.

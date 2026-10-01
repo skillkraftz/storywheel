@@ -25,7 +25,7 @@ import re
 THREAD_KINDS = ("thing", "someone", "message", "disaster")
 PREFERRED = 6.0            # how much likelier a template that uses a live thread is
 
-_REF = re.compile(r"\{the_(%s)\}" % "|".join(THREAD_KINDS))
+_REF = re.compile(r"\{the_(%s)(?::[^{}|]*)?\}" % "|".join(THREAD_KINDS))     # {the_thing} or {the_thing:!living}
 
 from . import structures
 
@@ -98,6 +98,12 @@ def swap(fields, old, new, skip=()):
     return count
 
 
+def mentions(text, form):
+    """Does `text` mention `form` as a whole phrase? "a stranger" is in "a stranger arrived"
+    but not in "a stranger's praise" or "a strangers' club"."""
+    return re.search(r"(?<![\w'])" + re.escape(form) + r"(?![\w]|'s\b|s\b)", text, re.IGNORECASE) is not None
+
+
 def settle(cand):
     """Bring a candidate's threads in line with its text, in place.
 
@@ -114,11 +120,10 @@ def settle(cand):
         for name, value in cand.items():
             if name.startswith("_") or not isinstance(value, str):
                 continue
-            low = value.lower()
-            if any(f.lower() in low for f in intro):
+            if any(mentions(value, f) for f in intro):
                 kept[kind] = dict(t, beat=name)
                 break
-            hit = next((definite(f) for f in intro if definite(f) != f and definite(f).lower() in low), None)
+            hit = next((definite(f) for f in intro if definite(f) != f and mentions(value, definite(f))), None)
             if hit:
                 cand[name] = replace_text(value, hit, intro[0])[0]
                 kept[kind] = dict(t, beat=name)

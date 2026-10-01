@@ -2,5 +2,22 @@
   "_note": "Where something is hidden.",
   "slot": "hiding",
   "tags": ["western", "historical"],
-  "entries": ["in a saddlebag", "under the saloon floor", "in a hollow cottonwood", "in a coat lining", "down a dry well", "in a sack of flour", "buried at {landmark}", "behind the chimney stones", "in the stagecoach's false bottom", "in an empty coffin", "under the church pew", "in a boot", "in the hayloft"]
+  "entries": [
+    {"text": "in a saddlebag", "subject": ["!living", "!bulky"]},
+    {"text": "under the saloon floor", "subject": ["!living"]},
+    {"text": "in a hollow cottonwood", "subject": ["!living"]},
+    {"text": "in a coat lining", "subject": ["!living", "!bulky"]},
+    {"text": "down a dry well", "subject": ["!living"]},
+    {"text": "in a sack of flour", "subject": ["!living", "!bulky"]},
+    {
+      "text": "buried at {landmark}",
+      "subject": ["buryable"]
+    },
+    {"text": "behind the chimney stones", "subject": ["!living", "!bulky"]},
+    {"text": "in the stagecoach's false bottom", "subject": ["!living"]},
+    {"text": "in an empty coffin", "subject": ["!living"]},
+    {"text": "under the church pew", "subject": ["!living", "!bulky"]},
+    {"text": "in a boot", "subject": ["!living", "!bulky"]},
+    "in the hayloft"
+  ]
 }

@@ -1,22 +1,22 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "Ki: introduce the character and the quiet of their world. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "ki",
   "tags": ["general"],
   "entries": [
-    "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE} for someone else.",
-    "In {place}, {first} {ACT_PLACE} {landmark} {MANNER}, as {first} did every {season}.",
+    "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
+    "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as {first} did every {season}.",
     "{first}, a {trait} {job}, loved {THING} and feared {FEELING}.",
-    "Every {season}, {first} {ACT_THING} {THING} {MANNER}, and {CLOSE} watched.",
-    "{first} {ACT_PERSON} {CLOSE} and {ACT_THING} {THING} {MANNER}, as quiet as any day in {place}.",
+    "Every {season}, {first} {ACT_THING:mundane} {THING} {MANNER}, and {CLOSE} watched.",
+    "{first} {ACT_PERSON:mundane} {CLOSE} and {ACT_THING:mundane} {THING} {MANNER}, as quiet as any day in {place}.",
     "{first} wanted {want}, but for now was content to {DO_THING} {THING}.",
     "Nobody in {place} thought much of {first}, a {trait} {job} with {THING}.",
-    "{first} {HABIT_PLACE} {landmark} in {place}, a {trait} {job} with {want} on their mind.",
+    "{first} {ACT_PLACE:mundane} {landmark} in {place}, a {trait} {job} with {want} on their mind.",
     {
       "text": "{first} rode out {MANNER} as always, a {trait} {job} with nothing but {THING}.",
       "tags": ["western", "historical"]
     },
     {
-      "text": "In {place}, {first} {ACT_THING} {THING} by the hearth {MANNER}, as the {season} began.",
+      "text": "In {place}, {first} {ACT_THING:mundane} {THING} by the hearth {MANNER}, as the {season} began.",
       "tags": ["fairy tale", "fantasy"]
     }
   ]

@@ -3,20 +3,21 @@
   "slot": "hiding",
   "tags": ["general"],
   "entries": [
-    "under the floorboards",
+    {"text": "under the floorboards", "subject": ["!living"]},
     "at {landmark}",
-    {"text": "in a library book", "tags": ["modern"]},
-    "under the lake",
+    {"text": "in a library book", "tags": ["modern"], "subject": ["paper"]},
+    {"text": "under the lake", "subject": ["!living"]},
     {
       "text": "in the {rival}'s car",
-      "tags": ["modern"]
+      "tags": ["modern"],
+      "subject": ["!living"]
     },
-    "inside the walls",
-    "in a dead man's coat",
-    "buried in the garden",
-    {"text": "in a safety deposit box", "tags": ["modern"]},
-    "in the church organ",
-    {"text": "taped under a table", "tags": ["modern"]},
-    {"text": "in a decoration box", "tags": ["modern"]}
+    {"text": "inside the walls", "subject": ["!living", "!bulky"]},
+    {"text": "in a dead man's coat", "subject": ["!living", "!bulky"]},
+    {"text": "buried in the garden", "subject": ["buryable"]},
+    {"text": "in a safety deposit box", "tags": ["modern"], "subject": ["!living", "!bulky"]},
+    {"text": "in the church organ", "subject": ["!living"]},
+    {"text": "taped under a table", "tags": ["modern"], "subject": ["paper|!bulky", "!living"]},
+    {"text": "in a decoration box", "tags": ["modern"], "subject": ["!living", "!bulky"]}
   ]
 }

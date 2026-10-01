@@ -96,7 +96,14 @@ SPECIAL_BLOCKS = {"ODDITY", "ALLITERATION"}
 
 
 def placeholders(text):
-    return [f for _, f, _, _ in string.Formatter().parse(text) if f]
+    """Names of the slots in a template, ignoring requirements and agreement tokens."""
+    from storywheel.frames import AGREE, _PLACEHOLDER
+    out = []
+    for m in _PLACEHOLDER.finditer(text):
+        name = m.group(1)
+        if m.group(3) is None and name not in AGREE:
+            out.append(name)
+    return out
 
 
 def test_every_placeholder_in_the_shipped_data_resolves():

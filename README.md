@@ -140,6 +140,81 @@ long, a clause where an atom should be, or a frozen template fails the build.
 * The template slots are `title`, `premise`, `twist`, `want`, `need`, `flaw`, `secret`,
   `rumor`, and the beats of each structure (below).
 
+### Making sentences make sense: features and frames
+
+Random parts can be grammatical and still meaningless ("enchanted the wicked stepmother",
+"the hot springs was built over a black stallion"). So atoms carry a few **features**, and
+frames **require** them. The whole vocabulary is small and lives in `storywheel/frames.py`:
+
+| | Feature | Means |
+|---|---|---|
+| things | `portable` | one person can carry it (the default) |
+| | `buryable` | can be buried or hidden underground (the default) |
+| | `magic` | magical; for a person, able to do magic |
+| | `valuable` | worth money |
+| | `living` | an animal: not buried, burned or locked in a box |
+| | `bulky` | too big for a pocket or a small hiding place |
+| | `paper` | letters, maps, deeds, books: can be forged or copied |
+| people | `human` | a person (the default for `someone`) |
+| | `creature` | not human: a talking fox, a troll |
+| | `friendly`, `threatening` | kindly, or dangerous |
+| | `authority` | holds office or power: a sheriff, a queen |
+| places | `built`, `natural` | a made structure, or not |
+| | `indoor`, `outdoor` | roofed, or open air (the default for landmarks) |
+| | `diggable` | has ground something can be buried in |
+| disasters | `manmade` | caused by people (a robbery, a feud) |
+| | `strikes` | can hit a place (weather, plague, war), unlike "the death of the king" |
+| messages | `physical` | something you can hold (the default for messages) |
+| prizes | `material`, `social`, `inner` | owned, a standing among people, or not something to be given |
+| verbs | `mundane` | an everyday action: what routines are made of |
+| | `gentle` | a kind or reconciling act, for endings |
+| | `stows`, `trades` | puts something somewhere; gives something up for something |
+| anything | `plural` | takes "are" and "were": "the stockyards", "two scarred brothers" |
+
+An atom lists its own features (a list sets defaults for its entries); anything not listed
+gets its slot's default:
+
+    {"text": "a black stallion", "features": ["living", "valuable"]}
+
+**Verbs say what they need** of whoever does them and whoever they are done to. Requirements
+are lists: `"buryable"` has it, `"!living"` must not, `"magic|authority"` either:
+
+    {"text": "buried",    "object": ["buryable"]}
+    {"text": "enchanted", "subject": ["magic"]}
+    {"text": "hid",       "object": ["!living"], "features": ["stows"]}
+
+The frame doesn't say which slots those are; the order of the sentence does. A verb's subject
+is the nearest person before it who isn't already some other verb's object (the opener's
+`{first}` counts) and its object is the next slot after it of the right kind (a person, thing,
+place, message or disaster). A hiding place's subject is the thing it hides. So
+`{first} {ACT_THING} {THING} {HIDING}` can only ever say "buried a locked box in a hollow
+oak", never "buried a mule in a boot".
+
+**Frames can demand features of any slot**, with a colon:
+
+    {THING:buryable}     {CLOSE:human}     {PRIZE:!inner}     {SOMEONE:authority}
+    {ACT_THING:mundane}  {landmark:built}  {the_thing:!living}
+
+A frame whose requirement the story can't meet (a `{landmark:built}` frame in a story whose
+landmark is a lake) is simply set aside for that story. Character fields are strict this way:
+a **want** is something a person could actually get (`{PRIZE:!inner}`), a **need** is an inner
+lesson only (`{DO_PERSON:inner}`: forgive, trust, make peace with), a **routine** uses only
+`mundane` verbs, and a **secret** is something a person could hide.
+
+**Agreement**: `{is}`, `{was}`, `{has}` and `{does}` agree with the noun before them ("the
+stockyards **were** built over..."), and `{lies|lie}` picks its first form for a singular
+subject, the second for a plural one. Present-tense verbs take only singular subjects.
+
+The solver fills the nouns first, then picks verbs that fit the nouns it got, and starts
+over when a verb has nothing to fit. **`pytest` checks every frame in the data**: each
+slot can be satisfied by at least 3 atoms, and at least half of all draws succeed first time,
+so a restriction can never starve a slot. A further test re-verifies every choice the
+solver makes across thousands of real stories.
+
+A **reframing** beat (kishotenketsu's *ten*) goes further: it may only reinterpret something
+already established, so its templates use threads and the story's own fields, never a fresh
+person, object or event.
+
 ### Nothing repeats
 
 * **Within a story, no atom is used twice.** Each kept step records the atoms it used;

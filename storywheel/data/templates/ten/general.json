@@ -1,24 +1,6 @@
 {
-  "_note": "Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres.",
+  "_note": "Ten: reframe something already established (a thread or one of the story's own fields). Never introduces a fresh fact: only threads, kept fields, and abstractions. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
   "slot": "ten",
   "tags": ["general"],
-  "entries": [
-    "Then {THING} turned up {HIDING}, and nothing about {TOPIC} made sense any more.",
-    "Then {SOMEONE} turned out to be {BETRAYAL}, and {first} had to see {CLOSE} differently.",
-    "Then {first} saw {landmark} anew: it was built over {THING}.",
-    "Then {DISASTER} ended suddenly, and {SOMEONE} was gone.",
-    "Then {MESSAGE} arrived {MANNER}, written to {first} years before.",
-    "Then, {MANNER}, {SOMEONE} {ACT_THING} {THING} and left {place} forever.",
-    "Then {the_someone} {ACT_THING} {the_thing} {MANNER}, and everything looked different.",
-    "Then {the_message} revealed {TOPIC}.",
-    "Then {first} learned who had caused {the_disaster}: {SOMEONE}.",
-    {
-      "text": "Then, at high noon, {SOMEONE} rode in and handed {first} {THING}.",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "Then, at midnight, {SOMEONE} knocked and asked for {THING} back.",
-      "tags": ["fairy tale", "fantasy"]
-    }
-  ]
+  "entries": ["Then {first} saw {the_thing} anew; it had never been about {want}.", "Then {first} understood that {the_someone} had acted out of {MOTIVE} all along.", "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.", "Then {first} saw that {the_disaster} had pulled {place} and {the_someone} together.", "Then {first} saw why {first} {flaw}: it was {FEELING} all along.", "Then {first} understood that wanting {want} had meant {VALUE} all along.", "Then {first} saw that the {rival} had only ever feared {FEELING}.", "Then {first} saw {landmark} anew; it had always been about {VALUE}.", "Then {first} saw that the {motif} had stood for {VALUE} all along.", "Then {first} saw {the_thing} through {the_someone}, and both looked different.", "Then {first} understood {the_message} at last, and {the_someone} was forgiven."]
 }

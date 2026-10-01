@@ -26,7 +26,7 @@ from .steps import public
 MAX_ATOM_WORDS = 5
 MIN_TEMPLATE_SLOTS = 2
 MAX_FIXED_RUN = 6          # a template may not hold more than this many words in a row without a slot
-_PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z_0-9]*\}")
+_PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z_0-9]*(?::[^{}|]*)?(?:\|[^{}]*)?\}")   # {x}, {X:req}, {lies|lie}
 # Atoms are reused in many sentences, so they can't know who "their" would mean. Exception:
 # losses, which are always things the protagonist lost ("lost their house").
 _PRONOUNS = {"they", "them", "their", "theirs", "themselves", "he", "she", "him", "her", "his", "hers"}
@@ -75,7 +75,32 @@ def lint(library):
                 clause = _CLAUSE_WORDS & words
                 if clause:
                     problems.append((wl.id, e.text, f"atom is a clause ({', '.join(sorted(clause))})"))
+    problems += reframe_problems(library)
+    from . import frames
+    problems += frames.lint(library)                    # can every frame be filled?
     return problems
+
+
+REFRAME_ATOMS = {"motive", "vice", "value", "feeling", "manner"}      # abstractions: no new facts
+ESTABLISHED = {"want", "need", "flaw", "secret", "rumor", "rival", "landmark", "motif"}
+
+
+def reframe_problems(library):
+    """Templates for a reframing beat (kishotenketsu's ten) must lean on what the story has
+    already established, and introduce no fresh person, object or event."""
+    from . import structures
+    slots = {b.slot for st in structures.registry().values() for b in st.beats if b.reframe}
+    out = []
+    for wl in library.lists.values():
+        if wl.is_template and wl.slot in slots:
+            for e in wl.entries:
+                names = [m.group(0).strip("{}").split(":")[0].split("|")[0] for m in _PLACEHOLDER.finditer(e.text)]
+                fresh = [n for n in names if n.isupper() and n.lower() not in REFRAME_ATOMS]
+                if fresh:
+                    out.append((wl.id, e.text, f"reframe template introduces a fresh fact ({', '.join(fresh)})"))
+                if not any(n.startswith("the_") or n in ESTABLISHED for n in names):
+                    out.append((wl.id, e.text, "reframe template refers to nothing already established"))
+    return out
 
 
 def roll_batch(genres, stories, seed, structure=None, engine=None):
@@ -125,12 +150,17 @@ def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5,
     for (lid, _t), n in counts.items():
         per_list[lid] += n
 
+    # Frames restrict what a slot may take (only 'stows' verbs go with a hiding place), so the
+    # fair share is among the entries that were used at all, not the whole list.
+    active = defaultdict(float)
+    for (lid, text), n in counts.items():
+        active[lid] += shares.get((lid, text), 0.0)
     rows = []
     for (lid, text), n in counts.items():
         share = shares.get((lid, text))
         if not share:
             continue                                     # invented names, generated words
-        expected = per_list[lid] * share
+        expected = per_list[lid] * share / (active[lid] or 1.0)
         rows.append((n / expected, n, expected, lid, text))
     flagged = [r for r in rows if r[0] > factor and r[1] >= min_count]
     flagged.sort(reverse=True)

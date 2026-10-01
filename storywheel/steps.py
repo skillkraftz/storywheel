@@ -10,8 +10,9 @@ they are put together.
 """
 import re
 
-from . import structures
+from . import frames, structures
 from . import threads as T
+from .library import Entry
 from .mix import Mix
 from .text import fix_articles, implicit, motif_from, plural, pronouns, title_case
 
@@ -79,14 +80,88 @@ class Ctx(dict):
         self._motif_offered = False
 
     def draw(self, slot):
-        """Raw text from a slot, chosen through the story mix. Templates that use a
-        thread we have are favored (and ones that need a thread we lack are skipped)."""
-        text = self.engine.pick(slot, self.mix, self.thread_weight, self.used | self.drawn)
-        self.drawn.add((slot, text))
-        self.atom_log.append((self.field, slot, text))
+        """Text from a slot, chosen through the story mix and remembered (nothing used in
+        this story is drawn again). Templates that use a thread we have are favored, and
+        ones that need a thread we lack are skipped."""
+        wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn,
+                                          commit=False)
+        return self.finish_atom(slot, wl, entry)
+
+    def pick_atom(self, slot, accept, local=()):
+        """(list, entry) for a slot that satisfies `accept`, not yet remembered; None if none does.
+        Frames use this while they are still working out which atoms fit together."""
+        if slot == "someone" and self.offer_motif():
+            motif = dict.get(self, "motif")
+            guest = Entry(f"the {motif}", features=("creature",) if self.engine.motif_kind(motif) == "creature"
+                          else ("human",))
+            if accept is None or accept(guest):
+                return None, guest
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept, commit=False)
+
+    def finish_atom(self, slot, wl, entry):
+        """Remember a pick, and return its text. Things and people that a spine beat brings in
+        become threads."""
+        if wl is not None:
+            self.engine.commit(wl, entry)
+            self.drawn.add((slot, entry.text))
+            self.atom_log.append((self.field, slot, entry.text))
         if slot == "title_noun":
-            self.hints["motif"] = text          # a title's last noun is what it is 'about'
+            self.hints["motif"] = entry.text    # a title's last noun is what it is 'about'
+        text = entry.text
+        if slot in T.THREAD_KINDS:
+            text = fill(self, text)             # settle the exact words, so later beats can repeat them
+            if self.record and slot not in self.threads and slot not in self.later:
+                self.threads[slot] = {"text": text, "beat": self.field,
+                                      "features": list(entry.features or ())}
         return text
+
+    def sentence(self, slot, opening="", closing="."):
+        """A template from `slot`, with its atoms chosen to fit (see frames.py). A template
+        the story can't satisfy is set aside and another drawn."""
+        skip = set()
+        for _ in range(frames.MAX_ATTEMPTS):
+            wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight,
+                                              self.used | self.drawn | skip, commit=False)
+            body = entry.text
+            end = "" if body.rstrip().endswith((".", "!", "?")) else closing
+            try:
+                text = frames.solve(self, opening + body + end)
+            except frames.Starved:
+                skip.add((slot, body))
+                continue
+            self.finish_atom(slot, wl, entry)
+            return text
+        wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn, commit=False)
+        body = entry.text
+        self.engine.notify(f"Could not fit every restriction in a '{slot}' frame; one was relaxed.")
+        text = frames.solve(self, opening + body + ("" if body.rstrip().endswith((".", "!", "?")) else closing),
+                            relax=True)
+        self.finish_atom(slot, wl, entry)
+        return text
+
+    def field_features(self, name):
+        """What the story's own field is, for frames: the character, a rival, a landmark, a thread."""
+        e = self.engine
+        if name in ("first", "name", "job"):
+            feats = {"human"}
+            job = dict.get(self, "job")
+            if job and "magic" in (e.features_of("job", job) or ()):
+                feats.add("magic")
+            return feats
+        if name == "rival":
+            return e.features_of("rival", self["rival"])
+        if name == "landmark":
+            return e.features_of("landmark", self["landmark"])
+        if name == "place":
+            return {"outdoor"}
+        value = self[name]                      # a thread or the motif: make sure it exists
+        kind = name[4:]
+        if kind == "motif":
+            if e.motif_kind(self["motif"]) == "object":
+                return {"portable", "buryable"}
+            kind = "thing"
+        thread = self.threads.get(kind)
+        return None if thread is None else thread.get("features")
 
     def thread_weight(self, template):
         return T.weight(template, self.threads)
@@ -115,13 +190,7 @@ class Ctx(dict):
             return f"[{key}]"
         if key == "SOMEONE" and self.offer_motif():
             return f"the {dict.get(self, 'motif')}"
-        text = self.draw(slot)
-        if slot not in T.THREAD_KINDS:
-            return text
-        text = fill(self, text)                 # settle the exact words, so later beats can repeat them
-        if self.record and slot not in self.threads and slot not in self.later:
-            self.threads[slot] = {"text": text, "beat": self.field}
-        return text
+        return self.draw(slot)
 
     def verify_threads(self, field, beat_text):
         """Threads this beat introduced must be findable in its finished text. Normally
@@ -180,10 +249,11 @@ class Ctx(dict):
         if key in PLURALS:
             return plural(fill(self, self.draw(PLURALS[key])))
         if key == "title":
-            return title_case(fill(self, self.draw("title")))
+            return title_case(fill(self, self.sentence("title", "", "")))
         slot = ALIASES.get(key, key)
         if e.has_slot(slot):
-            text = fill(self, self.draw(slot))
+            is_template = any(wl.is_template for wl in e.library.by_slot[slot])
+            text = fill(self, self.sentence(slot, "", "") if is_template else self.draw(slot))
             if key in ABOUT_THE_CHARACTER:
                 name = dict.get(self, "name", "")
                 text = implicit(text, dict.get(self, "first") or (name.split() or [""])[0])
@@ -220,12 +290,7 @@ def fill(c, template):
 
 def beat(opening, slot, closing="."):
     def make(c):
-        body = c.draw(slot)
-        if body.rstrip().endswith((".", "!", "?")):     # a template that ends its own sentence
-            closing_ = ""
-        else:
-            closing_ = closing
-        text = fill(c, opening + body + closing_)
+        text = fill(c, c.sentence(slot, opening, closing))
         if not opening:
             text = text[:1].upper() + text[1:]                    # whole-sentence steps start with a capital
         return re.sub(r"([.!?] )([a-z])", lambda m: m.group(1) + m.group(2).upper(), text)   # and so does every sentence
