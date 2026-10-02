@@ -521,3 +521,5 @@ _Tags `b1-header`, `b1-homeend`, `b1-verify`, `b1-replace`, `b1-dictionary-core`
 6. Click the title bar in every mode.
 7. Settings > Writer: turn on Use Neovide and try the font settings; tell me how it looks.
 
+
+Full suite at the end of batch 1: **998 passed**.
