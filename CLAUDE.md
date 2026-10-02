@@ -711,4 +711,17 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Word banks are `wordbank.json` in a story or universe folder; "Save as atom list" writes `<universe>/lists/<slot>/wordbank-<name>.json`
   tagged with the universe's genres (atoms are at most five words). Overused words are stem-counted, leave out everyday words, and report
   scene, line and a snippet for each place.
+- Words mode now has four tabs: Lookup, Vocabulary (words worth learning, picked by `wordfreq` frequency from WordNet's single words:
+  difficulty bands in Zipf terms, part of speech, subject), My words (Known / Learning, flashcards, state in `vocabulary.json`) and
+  Overused. The topic explorer and the per-story/universe word banks were removed (banks migrate into My words). "Add to this universe's
+  word list" puts a word on `<universe>/lists/<slot>/words-added.json`. `wordfreq` is a dependency (Apache-2.0 code, CC BY-SA 4.0 data,
+  not copied); the index is schema 3 (each meaning's WordNet lexicographer file = its subject kind).
+- Appearance: the Textual apps use the ANSI theme (every background is the terminal's default) unless Settings > Appearance turns
+  transparency off; titles are bold accent text, not colored bars. The Writer sets `bg = NONE` on every background group and takes the
+  text and accent colors; Neovide has its own `neovide_opacity`. Checked by rendering each mode in a terminal and counting default-background cells.
+- Manuscripts keep STRAIGHT quotes and apostrophes (the spellchecker can't read ’ inside a word). Typing and pasting straighten curly marks;
+  existing files are converted once per story (backup); the export makes quotes curly by context (`quotes.smarten`, setting on by default).
+- Spellcheck is on by default; autocorrect (a short list, whole words, on the delimiter that ends the word, skipped if keys are queued) is a
+  setting; each universe has a generated names list (`spell/names.utf-8.add`, with possessives) and a user list (`spell/en.utf-8.add`,
+  written by Add to Dictionary); both are compiled with `mkspell!` at Writer start. `spelllang`/`spellfile` are set on every manuscript buffer.
 

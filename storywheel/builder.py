@@ -87,7 +87,7 @@ class RenamePreviewScreen(ModalScreen):
                                      background: $surface; padding: 1 2; }
     RenamePreviewScreen OptionList { height: auto; max-height: 28; }
     RenamePreviewScreen Horizontal { height: 1; margin-top: 1; }
-    RenamePreviewScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
+    RenamePreviewScreen #dlg Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 2; }
     """
 
     def __init__(self, old, new, matches):
@@ -233,7 +233,7 @@ class BuilderScreen(Screen):
     BuilderScreen #universes { height: auto; max-height: 12; }
     BuilderScreen #stories { height: 1fr; }
     BuilderScreen .btns { height: 1; }
-    BuilderScreen .btns Button { height: 1; border: none; min-width: 4; padding: 0; margin-right: 1; }
+    BuilderScreen .btns Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     BuilderScreen #mid { overflow: hidden; }
     BuilderScreen #left, BuilderScreen #right { overflow: hidden; }
     BuilderScreen #top-box { height: 8; border: round $primary-darken-2; }

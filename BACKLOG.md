@@ -101,6 +101,23 @@ Built in batches 1 and 2a (see Done). Still open:
 - **The dictionary index must be rebuilt** after upgrading to batch 2a (schema 2): `storywheel dictionary install`.
   Lookups say so plainly if the index is older. *Note.*
 
+## 4c. Found in batch 2b
+
+- **Curly quotes while writing** (optional in the brief): the Writer could *show* ' and \" as curly marks without changing the file (a
+  concealed overlay per mark). *Idea.* Not done: the export already makes them curly.
+- **Spellcheck on by default** applies to stories that have no remembered choice: a story whose Writer remembered "off" (the Writer
+  keeps toggles between visits) stays off until you turn it on once. *Note.*
+- **Autocorrect** is a short list (about 45 slips) and never changes capitals at the start of a sentence. *Idea:* capitalize sentence
+  starts; a list you can edit in Settings.
+- **wordfreq is a dependency** (about 57 MB installed). `pipx inject storywheel wordfreq` adds it to an existing install; a fresh
+  `pipx install .` brings it. Words > Vocabulary says so if it is missing. *Note.*
+- **Vocabulary**: "forget what I've seen" (start the batches over) and an editable word to learn by hand. *Missing.* The subject list
+  uses WordNet's categories (Animals, Moving...) plus the most used subject areas; a plainer set would be friendlier.
+- **Transparent background**: selected rows, cursor and scrollbars still use solid colors (deliberately: they must stay visible).
+  Textual's ANSI theme uses your terminal's own colors for text and accents unless you set Text color / Accent color. *Note.*
+- **Add to this universe's word list** appends to `lists/<slot>/words-added.json`; there is no screen to review or remove those entries
+  (edit the file). *Missing.*
+
 ## 5. Content and generator
 
 - **The other twelve genres.** Write and annotate atom lists, templates and
@@ -122,6 +139,71 @@ Built in batches 1 and 2a (see Done). Still open:
   would make Ctrl+I italic work outside Neovide. Not code; a setup note.
 
 
+## 7. Review: what a writer would find confusing (batch 2b)
+
+I walked the Wheel, Builder, Settings, Words and the Writer as a writer would. Each row: the control, what it really does, and what is
+unclear about it. Nothing here was changed in batch 2b (these are for you to decide); "Fix" is my suggestion.
+
+### The Wheel
+| Control | What it does | What is unclear / fix |
+|---|---|---|
+| **Use: no** button (universe panel) | Cycles how the generator uses ticked universes for whole-step candidates: no / mix in (about a third of rolls) / only from them | The label says nothing about *what* it uses. Fix: "Whole characters and places from them: no / sometimes / only" |
+| **Builder (F2)** button (universe panel) | Leaves for the Builder | Looks like it belongs to the universe list; the F2 key already does this. Fix: drop the button or label it "Open this universe in the Builder" |
+| **Mix** button | Opens the mix editor: which kinds of material (tags, lists) this story leans toward or avoids | "Mix" means nothing to a new user. Fix: "Flavors" or "Tune the flavor" |
+| **▲ ▼** beside each line | Like / dislike that line; disliked wording and word pairs are used less in later rolls | Never explained on screen. Fix: tooltip and a first-use hint |
+| **Skip** / **Back** | Skip leaves the step empty and moves on; Back returns to the previous step | Clear, but Skip's effect on later steps (stand-ins) isn't |
+| **Send to Builder** (card) vs **Send** (Past stories) vs **+Prot / +Place** | Send to Builder promotes the current story into a universe; Send does the same for a past story; +Prot / +Place copy a past story's protagonist / setting into the current one | Three near-identical words with different meanings. Fix: "Promote to a universe", "Use its protagonist", "Use its setting" |
+| **Hist** and the history panel | Lists every roll of this step (what changed) or the selected field's earlier values (h toggles) | The panel title explains h but the footer calls it "Hist" |
+| `3/8`, `done` in Past stories | Steps kept out of 8, or finished | "3/8" means *kept*, not the current step; add a hint |
+| Quit (q) | Asks Keep or Delete, then leaves the whole program | In every other mode q means "back". Fix: show "q Quit program" vs "q Back" consistently |
+
+### The Universe Builder
+| Control | What it does | What is unclear / fix |
+|---|---|---|
+| Left column **+New / Rename / Del** (universes) and the entity column's **+New / Roll blanks / Del** | New / rename / delete a *universe*; new / fill every blank field of / delete an *entity* | Same labels in two places with different targets. Fix: put the target in the label ("+Universe", "+Entity") |
+| **Outline / Write / Export / +Draft** (stories) | Open the story's outline in the right column; open the Writer; make a .docx/.md/...; start a new Wheel draft inside this universe | "Outline" duplicates the right column's Outline tab; "+Draft" doesn't say it is a *Wheel* draft. Fix: "+Wheel draft" |
+| Right column tabs **Outline / Scenes / Notes** and entity tabs **Groups / Notes** | Story outline / the story's scenes / the selected entity's own notes; entity types Groups and Notes | Two different things are called "Notes". Fix: rename the right-hand one "Entity notes" |
+| **Roll blanks** | Fills every empty field of the selected entity with generated values | Not clear it never overwrites what you wrote |
+| **▲ ▼ and ✎** on a field | Rate the generated value; ✎ = the generator can't fill this field (write it yourself) | ✎ is explained only in help |
+| Top **Writing** box | Today's words against the goal, streak, story and universe totals | Not interactive; looks like a status bar. Fine, but the title could say "Your writing" |
+| Title text "(o: universe overview)" | Pressing o shows the universe's overview in this panel | Easy to miss; the key isn't in the footer |
+
+### Settings
+| Control | What it does | What is unclear / fix |
+|---|---|---|
+| Tab **Universes** | One setting: how much more likely a universe's own people and places are in rolls | Label is a sentence-long question; fix: "Preference for your own names (1.5)" with a short hint |
+| **Quick export file type** | The file type the Writer's one-key export uses | "Quick export" isn't a thing elsewhere. Fix: "Default export type" |
+| **Terminal: blank lines between paragraphs** | A visual gap (not typed) between paragraph lines in a terminal Writer | Odd wording. Fix: "Space between paragraphs (terminal)" |
+| **Default format** | short-story / novel / screenplay for new stories | Novel and screenplay are partial / a stub: say so in the hint |
+| **Keys** tab | Writer shortcuts; changes apply the next time the Writer starts | Fine; the fixed keys listed below the fields are easy to miss |
+| **Library folder** | Where universes live; "Changing it does not move anything" | Users expect a move. Fix: offer to move (BACKLOG section 2) |
+
+### Words
+| Control | What it does | What is unclear / fix |
+|---|---|---|
+| Lookup **Use in Writer** | Goes back to the Writer and replaces the word you were on | Disabled unless you came from the Writer (F5 there); the reason is only in the status line. Fix: grey text under the button |
+| Lookup **Add to My words** vs **Add to universe word list** | Keeps the word to learn / puts it on the universe's list for a slot so the Wheel and Builder use it | Both are "word lists" to a reader. Fix: "Learn this word" and "Use in this universe's stories" |
+| Vocabulary markers **★ ✓** | ★ = Learning (in My words), ✓ = Known (never offered again) | No legend. Fix: a one-line legend under the list |
+| Vocabulary **difficulty** (any / uncommon / rare / very rare) | How uncommon the words are by how often people use them | Names are relative; a hint with examples ("lantern", "serendipity", "gallivant") would help |
+| **New batch** | A fresh 20 words never shown before | "Forget what I've seen" (to start over) isn't offered yet |
+| Overused **Analyze** | Reads the story and lists frequent words and close repeats | Needs a story chosen; the empty list says nothing until Analyze is pressed |
+
+### The Writer
+| Control | What it does | What is unclear / fix |
+|---|---|---|
+| **F12 / Alt+M** menu | A list of Writer actions | Long (20+ items) and unsorted: group it with separators (Edit, Look up, Story, Leave) |
+| **Switch to Vim keys (this session)** | Turns notepad mode off until you leave | Sounds permanent / dangerous; the permanent switch is in Settings. Fix: "Use Vim keys for now" |
+| **This story's settings.toml** | Opens the raw settings file in the editor | Not for a writer. Fix: link to Settings (F4) instead |
+| **Peek at the name under the cursor** (F8) | Shows a character/place card | Nothing says which names it knows; names from the universe only |
+| **Ctrl+Q** vs **F2** | Both go back to the Builder | Fine, but the status line doesn't show either |
+| Status line `scene / manuscript / today` | Words in this scene, in the story, and written today against the goal | The three numbers aren't labelled in the narrow layout |
+| The pad windows | Blank columns either side that centre the text | Invisible; clicking in them does nothing |
+
+### Everywhere
+- The footer shows different things per mode and `q` means Quit in the Wheel and Builder but Back in Settings and Words.
+- F1-F5 are the modes everywhere, but only the Wheel's footer labels them as "modes"; elsewhere they look like commands.
+- Messages about missing tools (dictionary, wordfreq, Neovim, LibreOffice) are good but each is worded differently.
+
 ## Suggested batches
 
 1. ~~Bugs (section 1), the verify items, find and replace, and the dictionary
@@ -133,6 +215,22 @@ Built in batches 1 and 2a (see Done). Still open:
 
 
 ## Done
+
+### Batch 2b: corrections to Words, appearance and spellcheck
+
+- **Topic explorer and word bank removed**; "Add to this universe's word list" (pick the slot) on any word in Lookup and My words; old word
+  banks migrated into My words — `b2b-vocab-remove`.
+- **Vocabulary for learning words** (word, part of speech, one-line meaning; click opens the Lookup entry) — `b2b-vocab-learn`; chosen by
+  frequency with the wordfreq package (license recorded in SOURCES.md), filters for difficulty, part of speech and subject —
+  `b2b-wordfreq`; new batch without repeats, Known / Learning, My words with definitions, flashcards — `b2b-mywords`.
+- **Transparent background** in every Textual mode (the terminal's default background; checked cell by cell in a terminal) —
+  `b2b-transparent-tui`; the Writer clears every background group and the Neovide window gets its own opacity —
+  `b2b-transparent-writer`; **Settings > Appearance** (transparent, text color, accent color, Neovide opacity) — `b2b-appearance-settings`.
+- **Spellcheck:** straight quotes in manuscripts (curly ones typed, pasted or already in files are made straight, with a backup; the export makes
+  them curly, setting on by default) — `b2b-straight-quotes`; autocorrect — `b2b-autocorrect`; a spelling list per universe built from
+  names and the outline's proper nouns, and right-click > Add to Dictionary — `b2b-spell-universe`; the spell language is set on the writing
+  buffer — `b2b-spell-buffer`; spellcheck is on by default — `b2b-spell-default`.
+- **Review of every mode** (section 7) — `b2b-review`.
 
 - **Title bar clicks** (`prevent_default()`; pilot test in every mode; the old code goes 1 → 3) — `b1-header`.
 - **Home and End** act on the visible wrapped line; Home again goes to the paragraph start — `b1-homeend`.

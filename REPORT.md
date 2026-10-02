@@ -589,3 +589,50 @@ id and Textual refused the list. Every row in the Lookup and Vocabulary lists no
 26 words (whisper, run, light, set, take, bank, left, spring... plus misspellings) and eight vocabulary topics on the real index in
 the Words screen without an error, and added tests for a word in several lists and a word in two vocabulary groups. Tag `b2a-fix-duplicate-id`.
 That slipped through because the test dictionary was too small to repeat a word across lists; the new tests build exactly that case.
+
+---
+
+# Batch 2b: corrections to Words, appearance and spellcheck
+
+_Tags `b2b-vocab-remove`, `b2b-vocab-learn`, `b2b-wordfreq`, `b2b-mywords`, `b2b-transparent-tui`, `b2b-transparent-writer`, `b2b-appearance-settings`, `b2b-straight-quotes`, `b2b-autocorrect`, `b2b-spell-universe`, `b2b-spell-buffer`, `b2b-spell-default`, `b2b-review`._
+
+**Two things to do:** run `storywheel dictionary install` once more (the index now also holds each meaning's subject kind, schema 3) and add the
+frequency package: `pipx inject storywheel wordfreq` (a fresh `pipx install .` brings it). Words says so plainly if either is missing.
+
+## K1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Remove the topic explorer and the word bank | Works | the tab, the CLI `vocabulary`, `dictionary.vocabulary()` and the bank screens are gone. Old word banks (per story and per universe) are moved into My words the first time Words opens (their files are renamed `wordbank.json.migrated`, nothing deleted) and it says how many |
+| "Add to this universe's word list" | Works | `w` (or the button) on any word in Lookup and My words opens a small picker for the slot (job, thing, place... with plain hints) and adds the word to `<universe>/lists/<slot>/words-added.json`, tagged with the universe's genres; the Wheel and Builder draw it (tested). Without a universe it says to open one in the Builder |
+| Vocabulary tab for learning words | Works | rows are word, part of speech, one-line meaning (WordNet's gloss: the first clause, no parenthetical); Enter / click opens the full Lookup entry; markers ★ Learning, ✓ Known |
+| wordfreq, offline; license recorded | Works | `learn.py` reads the Zipf frequency of WordNet's single words (a random sample is checked until twenty fit, ~10 ms). **Licenses (SOURCES.md):** wordfreq's code is Apache-2.0; its data files are CC BY-SA 4.0 (plus the terms of its public sources, listed in its README); storywheel doesn't copy the data, it is a dependency read at run time |
+| Filters | Works | difficulty: uncommon (Zipf 3.0-3.8), rare (2.3-3.0), very rare (1.5-2.3), any (1.5-3.8): "house" is 5.7, "lantern" 3.6, "serendipity" 2.7, "sesquipedalian" 1.2; part of speech; subject = WordNet's kinds of meaning in plain words (Animals, Moving, Feelings...) plus the 30 most used subject areas (law, medicine, music...) |
+| New batch, Known / Learning, My words, flashcards | Works | "New batch" never shows a word again (seen, known or already being learned are excluded; if the filter runs out it says so); `l` Learning adds to My words with its meaning, `k` Known removes it from the list for good; My words shows meanings (taken from the dictionary for migrated words); flashcards: the word, Space shows the meaning, `k` I know it, `n` next. State is in `~/.storywheel/vocabulary.json` |
+| Transparent background (TUI) | Works | the apps use Textual's ANSI theme (`ansi-dark`: every background is `ansi_default`), the title bars are bold accent text instead of blue bars. Checked cell by cell in a terminal (pyte): 99+% of the screen's cells have the terminal's default background in the Wheel, Builder, Settings, Words **and the Writer**; only selected rows, the cursor and scrollbars keep a color |
+| Writer: `guibg=NONE` everywhere | Works | Normal, NormalNC/NormalFloat, FloatBorder/Title/Footer, SignColumn, EndOfBuffer, WinSeparator, StatusLine(NC), MsgArea, Pmenu (the chosen entry is shown by reversing, not by a color), the pad windows, sidebar, cards (they link to these), re-applied on ColorScheme |
+| Settings > Appearance | Works | Transparent background (default on), Text color, Accent color (names or hex; blank = your terminal's / the usual), Neovide opacity (its own setting, used when transparent is on; 1 otherwise). Changes apply live to Settings itself and to the other modes when they open; the Writer takes them on its next start. The accent is used for titles, borders, scene breaks, search and the chosen item in the Writer |
+| Curly apostrophes | Works | typed curly marks become straight as you type (InsertCharPre); pasting straightens them; existing manuscripts are converted once per story with a backup (`.backups/quotes-DATE/`, a message says how many marks); **the export makes them curly** by context ("don't", `"hello"`, `'90s`, `'em`, italics and brackets handled), in the .docx, .md and .txt, the title and the header; setting `export_curly_quotes` (default on). Verified with `spellbadword`: couldn't, I've, we'll, don't, it's pass; couldn’t is flagged. Showing curly marks in the Writer without changing the file is not done (BACKLOG 4c) |
+| Autocorrect | Works | i → I, im / i'm → I'm, ive / i've → I've, i'll, i'd, dont/doesnt/didnt/isnt/wasnt/arent/werent/cant/couldnt/wouldnt/shouldnt/hasnt/havent/hadnt/wont, thats, theyre, youre, a few more and common typos (teh, adn...); on the space or punctuation that ends the word, keeping a capital first letter; only whole words; setting `autocorrect` (default on). A fix is skipped if more was typed already (keys queued up), so it can never mangle text |
+| Spell list per universe; Add to Dictionary | Works | at Writer start `<universe>/spell/names.utf-8.add` is written from entity names (all types), and the story outline's proper nouns, with possessives ("Glasswater's": Vim doesn't guess them); right-click > Add to Dictionary (also in the F12 menu) saves to `<universe>/spell/en.utf-8.add`, which is never overwritten and is seen by every story in the universe and by no other universe (tested) |
+| `set_spell` language on the writing buffer | Works | it set `spelllang` on whatever buffer was current (a card, the sidebar); now spell is set on the writing window and the language and word lists on every manuscript buffer (also when it is opened later) |
+| Spellcheck on by default | Works | the default is on. A story whose Writer remembered "off" keeps that until toggled once (BACKLOG 4c) |
+| Broader review | Done | BACKLOG.md section 7: every mode's controls with a one-line description of what each does and what is unclear. Nothing there was changed in this batch |
+
+## K2. Tests added in batch 2b
+| Area | File | Tests |
+|---|---|---|
+| Words worth learning, Known/Learning, migration, universe word list | `test_learn.py` | 17 |
+| Words screens (Vocabulary, My words, flashcards, slot picker) | `test_words.py` | 11 new, old bank tests removed |
+| Quotes | `test_quotes.py`, `test_spelling.py` | 15 + 26 |
+| Transparency in a real terminal, themes, Writer highlights | `test_appearance.py` | 16 |
+
+## K3. Manual test script
+1. `storywheel dictionary install`, then `pipx inject storywheel wordfreq` (if the second isn't already there).
+2. F5 > Vocabulary > New batch: try uncommon / rare / very rare, a part of speech, a subject. Press `l` and `k` on a few; look at My words; try flashcards.
+3. In Lookup press `w` on a word, pick a slot, then roll in the Builder/Wheel in that universe.
+4. Settings > Appearance: with kitty's `background_opacity 0.85` every mode and the Writer should show the translucency; try a text and an accent color.
+5. In the Writer: type `couldn't` and `it’s` (curly); no red underlines; autocorrect `i dont` + space; right-click a name or odd word > Add to Dictionary. Export and look for curly quotes in the .docx.
+6. Neovide: Settings > Appearance > Neovide opacity.
+
+
+Full suite at the end of batch 2b: **1240 passed**.

@@ -268,7 +268,7 @@ class ConfirmScreen(ModalScreen):
     ConfirmScreen { align: center middle; }
     ConfirmScreen > Vertical { width: 60; height: auto; border: round $error; background: $surface; padding: 1 2; }
     ConfirmScreen Horizontal { height: 1; margin-top: 1; }
-    ConfirmScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    ConfirmScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 8; }
     """
 
     def __init__(self, question):
@@ -297,7 +297,7 @@ class UniverseEntryScreen(ModalScreen):
     UniverseEntryScreen > Vertical { width: 80%; max-width: 90; height: auto; max-height: 90%;
                                      border: round $accent; background: $surface; padding: 1 2; }
     UniverseEntryScreen Horizontal { height: 1; margin-top: 1; }
-    UniverseEntryScreen #dlg Button { height: 1; border: none; margin-right: 1; min-width: 8; }
+    UniverseEntryScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 1; min-width: 8; }
     UniverseEntryScreen .keys { color: $text-muted; }
     """
 
@@ -347,7 +347,7 @@ class QuitScreen(ModalScreen):
     QuitScreen { align: center middle; }
     QuitScreen > Vertical { width: 64; height: auto; border: round $accent; background: $surface; padding: 1 2; }
     QuitScreen Horizontal { height: 1; margin-top: 1; }
-    QuitScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    QuitScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 8; }
     """
 
     def __init__(self, title, promotable=False):
@@ -421,7 +421,7 @@ class PromotePreviewScreen(ModalScreen):
                                       background: $surface; padding: 1 2; }
     PromotePreviewScreen OptionList { height: auto; max-height: 24; }
     PromotePreviewScreen Horizontal { height: 1; margin-top: 1; }
-    PromotePreviewScreen #dlg Button { height: 1; border: none; margin-right: 2; min-width: 8; }
+    PromotePreviewScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 8; }
     """
 
     def __init__(self, plan):
@@ -487,7 +487,7 @@ class ChoiceScreen(ModalScreen):
                               background: $surface; padding: 1 2; }
     ChoiceScreen OptionList { height: auto; max-height: 22; }
     ChoiceScreen Horizontal { height: 1; margin-top: 1; }
-    ChoiceScreen #dlg Button { height: 1; border: none; min-width: 8; margin-right: 2; }
+    ChoiceScreen #dlg Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 2; }
     """
 
     def __init__(self, title, options, multi=False, selected=()):
@@ -769,17 +769,17 @@ class MainScreen(Screen):
     MainScreen #stories-title { margin-top: 1; }
     MainScreen #stories { height: 1fr; }
     MainScreen #story-buttons { height: 1; }
-    MainScreen #story-buttons Button { height: 1; border: none; min-width: 4; padding: 0; margin-right: 1; }
+    MainScreen #story-buttons Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
     MainScreen #uni-title { margin-top: 1; }
     MainScreen #uni-buttons { height: 1; }
-    MainScreen #uni-buttons Button { height: 1; border: none; min-width: 6; margin-right: 1; padding: 0; }
+    MainScreen #uni-buttons Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
     MainScreen #universe { height: 1fr; }
     MainScreen #banner { background: $warning 30%; color: $text; padding: 0 1; height: auto; }
     MainScreen #banner-buttons { height: 1; padding: 0 1; }
-    MainScreen #banner-buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; padding: 0; }
+    MainScreen #banner-buttons Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 1; padding: 0; }
     MainScreen #buttons { height: 1; padding: 0 1; }
-    MainScreen #buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; padding: 0; }
+    MainScreen #buttons Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 1; padding: 0; }
     MainScreen #main { width: 1fr; }
     MainScreen #card-box { height: 3fr; border: round $primary; }
     MainScreen #hist-box { height: 2fr; border: round $primary-darken-2; }

@@ -269,6 +269,19 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
+### Look and feel (Settings > Appearance)
+
+By default the background is your terminal's own, so a translucent terminal (kitty `background_opacity 0.85`...) shows through in every
+mode and in the Writer. Turn it off for solid colors. You can set a text color and an accent color (a name like `cream` or `amber`, or a
+hex color), and Neovide's window opacity.
+
+### Spelling
+
+Spellcheck is on. The manuscript keeps straight quotes (`'` and `"`), because the spellchecker can't read `’` in "couldn’t"; typed or pasted
+curly marks become straight, and the export makes them curly (Settings > Export). Autocorrect fixes common slips as you finish a word
+(`i` → `I`, `im` → `I'm`, `dont` → `don't`). The universe's names (people, places, things, and the proper nouns in the story's outline) are
+known to the spellchecker; right-click > **Add to Dictionary** teaches it more, for every story in that universe.
+
 ### Dictionary and thesaurus
 
 Look up any word without leaving the program, offline: meanings by part of speech, examples, similar words and opposite words.
@@ -283,9 +296,14 @@ Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 3
     words ("a kind of" / "types of it"), parts, related forms. Enter or a click on a word looks it up; back and forward remember your
     path; `/` filters. **Use in Writer** (`u`) goes back to the Writer and replaces the word you were on with the one you picked, in
     the same form (running → sprinting, geese → swans, happier → gladder), keeping capital letters.
-  - *Vocabulary*: from a word or topic, gather types of it, parts of it, terms from its subject, and related words; choose the ones
-    you like into a *word bank*, kept per story or per universe. **Save as atom list** writes the bank into the universe's lists for a
-    slot (job, thing, place...), so the Wheel and the Builder roll with it.
+  - *Vocabulary*: words worth **learning** (not everyday, not obscure), a fresh batch of twenty at a time, each with its part of speech and
+    a one-line meaning. Choose how rare (uncommon / rare / very rare), the part of speech and the subject. Enter opens the full entry in
+    Lookup; `l` marks a word *Learning* (it goes to My words), `k` marks it *Known* (never offered again). How common a word is comes from the
+    offline `wordfreq` package.
+  - *My words*: the words you are learning, with their meanings; Enter looks one up, `k` Known, `d` remove, `f` flashcards (the word first,
+    Space shows the meaning).
+  - *Add to this universe's word list* (`w` on any word in Lookup or My words): pick the slot (job, thing, place...) and the word goes on the
+    universe's own list, so the Wheel and the Builder roll with it.
   - *Overused*: a story's most frequent words (everyday words left out) and words repeated close together, with where they are;
     Enter on a place opens the Writer there.
 - **Writer card:** **F7** on the word under the cursor (or a selection) opens a card grouped by meaning, then the full list of

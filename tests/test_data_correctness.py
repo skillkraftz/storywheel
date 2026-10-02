@@ -167,10 +167,10 @@ def test_possessives_survive_wheel_promotion_outline_builder_and_export(home):
     docx = pytest.importorskip("docx")
     result = export.export(story, "docx")
     paragraphs = [p.text for p in docx.Document(result["path"]).paragraphs]
-    assert paragraphs[paragraphs.index("by A. Writer") - 1] == "The Sorcerer's Apprentice"
-    assert "The sorcerer's apprentice knocked. Maeve O'Brien opened the witch's door." in paragraphs
-    assert "sorcerer's apprentice" in export.plain_text(story) and "O'Brien" in Path(export.export(story, "md")["path"]).read_text()
-    assert "witch's door" in Path(export.export(story, "txt")["path"]).read_text()
+    assert paragraphs[paragraphs.index("by A. Writer") - 1] == "The Sorcerer\u2019s Apprentice"                 # (the export makes quotes curly)
+    assert "The sorcerer\u2019s apprentice knocked. Maeve O\u2019Brien opened the witch\u2019s door." in paragraphs
+    assert "sorcerer\u2019s apprentice" in export.plain_text(story) and "O\u2019Brien" in Path(export.export(story, "md")["path"]).read_text(encoding="utf-8")
+    assert "witch\u2019s door" in Path(export.export(story, "txt")["path"]).read_text(encoding="utf-8")
 
 
 def test_the_wheel_itself_keeps_possessives_when_an_earlier_step_changes(home):
