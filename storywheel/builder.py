@@ -16,7 +16,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
-from . import appearance, navigation, tools
+from . import appearance, fieldhistory, navigation, tools
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -341,7 +341,7 @@ class BuilderScreen(Screen):
         self.story = None                  # the story whose outline fills the top boxes (None = universe overview)
         self.type = "character"
         self.entity = None
-        self.hist = {}                     # (entity id, field key) -> every value that field has had
+        self.hist = fieldhistory.FieldHistory()     # (entity id, field key) -> every value that field has had (kept beside the entity)
         self.start = (universe_slug, story_slug)
         self.start_entity = None
         self.filler = None
@@ -817,6 +817,7 @@ class BuilderScreen(Screen):
     def _set(self, key, value, via):
         """Set a field value on the selected entity, recording history. Renaming goes through a preview."""
         e = self.entity
+        old_id = e.id
         if key.startswith("custom:"):
             e.custom[key[7:]] = value
             self.universe.save_entity(e)
@@ -826,6 +827,9 @@ class BuilderScreen(Screen):
                 return self._rename(e, value)
             e.fields[key] = value
             self.universe.save_entity(e)
+        self.hist.use(self.universe)
+        if e.id != old_id:                                          # (a blank entity got its first name: its id, and its history, move)
+            self.hist.rename(old_id, e.id)
         self._remember(e, key)
         self.entity = self.universe.entity(e.id) or self.universe.entity(e.type + "-x") or e
         self.refresh_all(light=(key != "name"))
@@ -833,10 +837,12 @@ class BuilderScreen(Screen):
             self.say(via)
 
     def _remember(self, e, key):
+        self.hist.use(self.universe)
         seq = self.hist.setdefault((e.id, key), [])
         v = e.custom.get(key[7:]) if key.startswith("custom:") else e.fields.get(key)
         if v not in ("", None, []) and v not in seq:
             seq.append(v)
+            self.hist.save(e.id)
 
     def roll_field(self, key):
         e = self.entity
@@ -880,13 +886,14 @@ class BuilderScreen(Screen):
         lst.call_after_refresh(restore)
 
     def _after_save(self, e, key, old_id):
+        self.hist.use(self.universe)
+        if old_id != e.id:                                        # a placeholder id became a real one: history follows
+            self.hist.rename(old_id, e.id)
         seq = self.hist.setdefault((e.id, key), [])
         v = e.fields.get(key)
         if v not in ("", None, []) and v not in seq:
             seq.append(v)
-        for (eid, k) in list(self.hist):
-            if eid == old_id and old_id != e.id:                  # a placeholder id became a real one: history follows
-                self.hist[(e.id, k)] = self.hist.pop((eid, k))
+        self.hist.save(e.id)
         self.entity = self.universe.entity(e.id)
         renamed = key == "name" or e.id != old_id
         self.refresh_all(lists=renamed, light=not renamed)
@@ -953,12 +960,14 @@ class BuilderScreen(Screen):
         e = self.entity
         if not e or not key:
             return
+        self.hist.use(self.universe)
         seq = self.hist.get((e.id, key), [])
         current = e.custom.get(key[7:]) if key.startswith("custom:") else e.fields.get(key)
         if current not in seq:
             if current not in ("", None, []):
                 seq = seq + [current]
-                self.hist[(e.id, key)] = seq
+                dict.__setitem__(self.hist, (e.id, key), seq)
+                self.hist.save(e.id)
         if current not in seq or len(seq) < 2:
             self.say("This field has no earlier values yet.")
             return
@@ -1085,6 +1094,7 @@ class BuilderScreen(Screen):
     def _deleted(self, e, yes):
         if yes:
             self.universe.delete_entity(e)
+            fieldhistory.drop(self.universe, e.id)
             self.entity = None
             self.refresh_all()
             self.say(f"Deleted '{e.name or e.id}' (it is in .trash).")
