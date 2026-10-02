@@ -59,6 +59,13 @@ class HelpScreen(ModalScreen):
 
 # --- the rows (pure: used by the screen and the tests) -------------------------------------------------------------------------
 
+def parse_id(oid):
+    """(kind, word, pos) of a row id: 'w:word|pos\x1f7', 'v:word\x1f7' or 'b:word'."""
+    kind, body = oid[:1], oid[2:].split("\x1f")[0]
+    word, _, pos = body.partition("|")
+    return kind, word, pos or None
+
+
 def _opt(text, id_=None, disabled=False, style=""):
     return Option(Text(text, style=style), id=id_, disabled=disabled or id_ is None)
 
@@ -76,7 +83,7 @@ def lookup_rows(result, filter_text=""):
 
     def word(w, pos="", note=""):
         if not f or f in w.lower():
-            rows.append((f"    {w}" + (f"   ({note})" if note else ""), f"w:{w}|{pos}", ""))
+            rows.append((f"    {w}" + (f"   ({note})" if note else ""), f"w:{w}|{pos}\x1f{len(rows)}", ""))      # (the same word can be in several lists: ids must differ)
             return True
         return False
 
@@ -314,14 +321,14 @@ class WordsScreen(Screen):
             if lst.has_focus and lst.highlighted is not None:
                 oid = lst.get_option_at_index(lst.highlighted).id
                 if oid and oid[:2] in ("w:", "v:", "b:"):
-                    w, _, pos = oid[2:].partition("|")
-                    return w, pos or None
+                    _k, w, pos = parse_id(oid)
+                    return w, pos
         lst = self.query_one("#results", OptionList)
         if lst.highlighted is not None:
             oid = lst.get_option_at_index(lst.highlighted).id
             if oid and oid.startswith("w:"):
-                w, _, pos = oid[2:].partition("|")
-                return w, pos or None
+                _k, w, pos = parse_id(oid)
+                return w, pos
         return None, None
 
     def on_input_submitted(self, event):
@@ -342,7 +349,7 @@ class WordsScreen(Screen):
     def on_option_list_option_selected(self, event):
         lst, oid = event.option_list.id, event.option.id
         if lst == "results" and oid and oid.startswith("w:"):
-            self.lookup(oid[2:].partition("|")[0])
+            self.lookup(parse_id(oid)[1])
         elif lst == "vocab" and oid and oid.startswith("v:"):
             self.toggle_vocab(event.option_list.highlighted)
         elif lst == "over" and oid:
@@ -448,14 +455,14 @@ class WordsScreen(Screen):
         for title, words in vocab_groups(self.vocab) if self.vocab and self.vocab["found"] else []:
             self.vocab_rows.append((title, None))
             for w in words:
-                self.vocab_rows.append((w, f"v:{w}"))
+                self.vocab_rows.append((w, f"v:{w}\x1f{len(self.vocab_rows)}"))
         lst.clear_options()
         options = []
         for text, oid in self.vocab_rows:
             if oid is None:
                 options.append(_opt(text, None, style="bold"))
             else:
-                w = oid[2:]
+                w = parse_id(oid)[1]
                 options.append(_opt(f"  [{'x' if w.lower() in self.chosen else ' '}] {w}", oid))
         lst.add_options(options)
         if previous is not None:
@@ -466,7 +473,7 @@ class WordsScreen(Screen):
     def toggle_vocab(self, index):
         if index is None or index >= len(self.vocab_rows) or not self.vocab_rows[index][1]:
             return
-        w = self.vocab_rows[index][1][2:].lower()
+        w = parse_id(self.vocab_rows[index][1])[1].lower()
         self.chosen.symmetric_difference_update({w})
         self.render_vocab()
 
@@ -487,7 +494,7 @@ class WordsScreen(Screen):
         end = i + 1
         while end < len(self.vocab_rows) and self.vocab_rows[end][1]:
             end += 1
-        group = {r[1][2:].lower() for r in self.vocab_rows[start + 1:end] if r[1]}
+        group = {parse_id(r[1])[1].lower() for r in self.vocab_rows[start + 1:end] if r[1]}
         if group <= self.chosen:
             self.chosen -= group
         else:
@@ -500,14 +507,14 @@ class WordsScreen(Screen):
             i = lst.highlighted
             if i is not None and self.vocab_rows[i][1]:
                 self.query_one(TabbedContent).active = "t-lookup"
-                self.lookup(self.vocab_rows[i][1][2:])
+                self.lookup(parse_id(self.vocab_rows[i][1])[1])
 
     def vocab_add(self):
         if not self.chosen:
             self.say("Choose some words first (Enter or space on a word, g for a group).")
             return
         # keep the writer's own spelling/capitalization from the list
-        spelled = {r[1][2:].lower(): r[1][2:] for r in self.vocab_rows if r[1]}
+        spelled = {parse_id(r[1])[1].lower(): parse_id(r[1])[1] for r in self.vocab_rows if r[1]}
         self.bank_add([spelled.get(w, w) for w in sorted(self.chosen)], note=(self.vocab or {}).get("topic", ""))
         self.chosen = set()
         self.render_vocab()

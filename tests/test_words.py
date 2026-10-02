@@ -44,9 +44,14 @@ def run(script, payload=None, back="builder", size=(180, 50)):
     return asyncio.run(go())
 
 
+def plain(oid):
+    """A row id without the number that keeps it unique."""
+    return oid.split("\x1f")[0] if oid else oid
+
+
 def options(app, ident):
     lst = app.screen.query_one(f"#{ident}", OptionList)
-    return [(lst.get_option_at_index(i).id, str(lst.get_option_at_index(i).prompt)) for i in range(lst.option_count)]
+    return [(plain(lst.get_option_at_index(i).id), str(lst.get_option_at_index(i).prompt)) for i in range(lst.option_count)]
 
 
 async def show_tab(app, pilot, tab):
@@ -72,16 +77,16 @@ def test_lookup_rows_hold_every_kind_of_word(index):
     for needle in ("1. a domesticated canine", "similar words:", "a kind of (wider)", "types of it (narrower)", "parts of it", "More similar words (4)",
                    "Related forms (derivation)"):
         assert needle in text
-    ids = [i for _t, i, _s in rows if i]
+    ids = [plain(i) for _t, i, _s in rows if i]
     assert "w:puppy|" in ids and "w:tail|" in ids and "w:canine|" in ids and "w:hound|" in ids and "w:doggy|" in ids
     assert len(ids) == len(set(i for i in ids)) or True
     filtered = words_app.lookup_rows(dictionary.lookup("dog"), "ou")
-    assert [i for _t, i, _s in filtered if i] == ["w:hound|"]
+    assert [plain(i) for _t, i, _s in filtered if i] == ["w:hound|"]
 
 
 def test_lookup_rows_for_a_missing_word_offer_spellings(index):
     rows = words_app.lookup_rows(dictionary.lookup("hapyp"))
-    assert rows[0][0] == "No entry for 'hapyp'." and "w:happy|" in [i for _t, i, _s in rows]
+    assert rows[0][0] == "No entry for 'hapyp'." and "w:happy|" in [plain(i) for _t, i, _s in rows]
 
 
 def test_vocabulary_groups(index):
@@ -409,3 +414,29 @@ def test_overused_lists_words_and_places_and_opens_the_writer_there(index, world
     assert "Most frequent words" in text and "lantern" in text and "×4" in text and "Repeated close together" in text
     assert len(occ) == 4 and "line 1" in occ[0][1] and "line 4" in occ[-1][1]
     assert nxt[0] == "writer" and nxt[1]["scene"]["line"] == 4 and nxt[1]["scene"]["path"].endswith("manuscript.md")
+
+
+def test_a_word_in_several_lists_does_not_break_the_screen(index, world):
+    """Regression: 'whispering' was a similar word of two meanings, so two rows had the same id (DuplicateID)."""
+    async def script(app, pilot):
+        await type_word(app, pilot, "dog")
+        ids = [o.id for o in (app.screen.query_one("#results", OptionList).get_option_at_index(i)
+                              for i in range(app.screen.query_one("#results", OptionList).option_count)) if o.id]
+        assert len(ids) == len(set(ids))
+        words = [plain(i) for i in ids]
+        return len(words) != len(set(words))
+    assert run(script) in (True, False)
+    rows = words_app.lookup_rows({"found": True, "query": "x", "word": "x", "suggestions": [], "entries": [{
+        "word": "x", "form_of": None, "wide_synonyms": ["a"], "antonyms": ["a"], "indirect_antonyms": [], "related_forms": {"derivation": ["a"]},
+        "parts": [{"pos": "noun", "senses": [{"definition": "d", "examples": [], "synonyms": ["a"], "kind_of": ["a"], "types_of": [], "parts": [], "part_of": []}]}]}]})
+    ids = [i for _t, i, _s in rows if i]
+    assert len(ids) == 5 and len(set(ids)) == 5 and {plain(i) for i in ids} == {"w:a|noun", "w:a|"}
+
+
+def test_a_word_in_two_vocabulary_groups_can_be_chosen_once(index, world):
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        await type_word(app, pilot, "dog", box="topic")
+        ids = [o.id for o in (app.screen.query_one("#vocab", OptionList).get_option_at_index(i) for i in range(app.screen.query_one("#vocab", OptionList).option_count)) if o.id]
+        return len(ids) == len(set(ids))
+    assert run(script, {"universe": "thornwood"})

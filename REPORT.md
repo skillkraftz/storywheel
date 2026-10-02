@@ -582,3 +582,10 @@ _Tags `b2a-ctrl-keys`, `b2a-fkeys`, `b2a-replace-key`, `b2a-shift-home`, `b2a-un
 
 
 Full suite at the end of batch 2a: **1162 passed**.
+
+## Fix after batch 2a: Words crashed on a word that is in two lists
+`DuplicateID` while looking up "whisper": a word such as "whispering" is a similar word of two meanings, so two rows had the same
+id and Textual refused the list. Every row in the Lookup and Vocabulary lists now has a unique id (a number after the word). I looked up
+26 words (whisper, run, light, set, take, bank, left, spring... plus misspellings) and eight vocabulary topics on the real index in
+the Words screen without an error, and added tests for a word in several lists and a word in two vocabulary groups. Tag `b2a-fix-duplicate-id`.
+That slipped through because the test dictionary was too small to repeat a word across lists; the new tests build exactly that case.
