@@ -234,3 +234,12 @@ def _best_pos(db, word, kind):
         if p in have:
             return p
     return "verb" if kind in ("past", "pp", "ing") else "adjective" if kind in ("er", "est") else None
+
+
+def apply_case(original, new):
+    """The new word with the original's capitals: Dog -> Hound, DOG -> HOUND, dog -> hound."""
+    if len(original) > 1 and original.isupper():
+        return new.upper()
+    if original[:1].isupper():
+        return new[:1].upper() + new[1:]
+    return new

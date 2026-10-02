@@ -66,8 +66,10 @@ def run_writer(st, payload):
     note = writer.neovide_note(story)
     if note:
         print("  " + note)
-    where = writer.run(story)
-    st.update(mode="builder" if where != "wheel" else "wheel")
+    where = writer.run(story, payload.get("scene"), payload.get("replace"))
+    st.update(mode="builder" if where not in ("wheel", "words") else where)
+    if where == "words":                                   # F5 in the Writer: the word under the cursor goes along
+        return ("words", {"universe": u.slug, "story": story.slug, "handover": writer.run.handover, "back": "writer"})
     return (where or "builder", {"universe": u.slug, "story": story.slug})
 
 
@@ -77,22 +79,32 @@ def run_settings(st, payload):
     return settings_app.run_settings(st, back)
 
 
+def run_words(st, payload):
+    from . import words_app
+    back = payload.get("back") or st.get("back") or ("builder" if vault.list_universes() else "wheel")
+    if not payload.get("universe"):
+        payload = dict(payload, universe=st.get("universe"), story=st.get("story"))
+    return words_app.run_words(st, back, payload)
+
+
 def run(start=None, get_engine=None, get_ratings=None):
     """Run modes until the writer quits. `start` is (mode, payload) or None (use the saved state)."""
     st = state_mod.State()
     mode, payload = start or (st.get("mode") or "wheel", {})
-    while mode in ("wheel", "builder", "writer", "settings"):
+    while mode in ("wheel", "builder", "writer", "settings", "words"):
         if mode == "wheel":
             nxt = run_wheel(st, payload, get_engine)
         elif mode == "builder":
             nxt = run_builder(st, payload, get_ratings)
         elif mode == "writer":
             nxt = run_writer(st, payload)
+        elif mode == "words":
+            nxt = run_words(st, payload)
         else:
             nxt = run_settings(st, payload)
-        if not nxt or nxt[0] not in ("wheel", "builder", "writer", "settings"):
+        if not nxt or nxt[0] not in ("wheel", "builder", "writer", "settings", "words"):
             break
         came_from = mode
         mode, payload = nxt
-        if mode == "settings":
-            payload = dict(payload, back=came_from)         # q in Settings goes back to where F4 was pressed
+        if mode in ("settings", "words") and "back" not in payload:
+            payload = dict(payload, back=came_from)         # q in Settings or Words goes back to where F4 / F5 was pressed

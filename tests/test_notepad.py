@@ -402,7 +402,7 @@ def test_ctrl_delete_deletes_the_next_word(home, story):
     assert run(story, setup, "<C-Del>", LINES)["lines"][0] in ("Hello world", "Hello  world", "Hello brave world"[:6] + "world")
 
 
-@pytest.mark.parametrize("key", ["<F5>", "<F10>", "<F11>", "<S-F5>", "<C-F6>", "<A-F7>", "<F9>x"])
+@pytest.mark.parametrize("key", ["<F10>", "<F11>", "<S-F5>", "<C-F6>", "<A-F7>", "<F9>x"])
 def test_unmapped_function_keys_do_nothing(home, story, key):
     settings.save_story(story.path, {"key_sidebar": "<A-d>", "key_lookup": "<A-l>", "key_lookup_word": "<A-k>"})     # (F9, F7 and F6 freed for the test)
     setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello' })\nvim.api.nvim_win_set_cursor(0, { 1, 5 })"

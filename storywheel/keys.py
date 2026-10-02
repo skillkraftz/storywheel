@@ -24,7 +24,7 @@ RESERVED = {
     "<C-c>": "copy", "<C-x>": "cut", "<C-v>": "paste", "<C-z>": "undo", "<C-y>": "redo", "<C-s>": "save",
     "<C-a>": "select all", "<C-f>": "find", "<C-g>": "find next", "<A-g>": "find previous", "<A-j>": "join lines",
     "<C-i>": "Tab (some terminals can't tell it from Ctrl+I)", "<C-m>": "Enter", "<C-j>": "Enter",
-    "<C-[>": "Escape", "<F1>": "the Wheel", "<F2>": "the Builder", "<F3>": "the Writer", "<F4>": "Settings",
+    "<C-[>": "Escape", "<F1>": "the Wheel", "<F2>": "the Builder", "<F3>": "the Writer", "<F4>": "Settings", "<F5>": "Words",
     "<A-m>": "the Writer menu (always works)", "<C-b>": "bold (always works)",
     "<C-h>": "delete the previous word (Ctrl+Backspace)", "<C-BS>": "delete the previous word", "<C-Del>": "delete the next word",
 }

@@ -355,9 +355,9 @@ function M.disable_keys(buf)
     if not KEEP[ch] then nop("<C-" .. ch .. ">") end
   end
   for _, lhs in ipairs({ "<C-@>", "<C-]>", "<C-^>", "<C-_>", "<C-\\>", "<C-Space>" }) do nop(lhs) end
-  -- a function key nobody mapped must not type its own name ("<F5>") into the story. F1-F4 are the modes (mapped globally).
+  -- a function key nobody mapped must not type its own name ("<F5>") into the story. F1-F5 are the modes (mapped globally).
   for _, lhs in ipairs(FUNCTION_KEYS) do
-    if not lhs:match("^<F[1-4]>$") then nop(lhs) end
+    if not lhs:match("^<F[1-5]>$") then nop(lhs) end
   end
 end
 

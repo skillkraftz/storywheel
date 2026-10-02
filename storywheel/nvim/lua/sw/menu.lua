@@ -26,6 +26,7 @@ local function actions()
     { "Export anonymous manuscript (.docx)", function() sw.export("docx", true) end },
     { "Copy manuscript as plain text", function() sw.copy_manuscript() end },
     { "This story's settings.toml", function() sw.edit_settings() end },
+    { "Words (F5): look up, vocabulary, word bank, overused", function() sw.words() end },
     { "Settings (F4)", function() sw.leave("settings") end },
     { "Back to the Builder (F2)", function() sw.leave("builder") end },
     { "To the Wheel (F1)", function() sw.leave("wheel") end },

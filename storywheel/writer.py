@@ -139,8 +139,11 @@ def command(story, return_file=None):
     return argv, environment(story, return_file)
 
 
-def run(story, scene=None):
-    """Run the Writer on a story and wait. Returns where the writer asked to go next: 'builder', 'wheel', or None."""
+def run(story, scene=None, replace=None):
+    """Run the Writer on a story and wait. Returns where the writer asked to go next: 'builder', 'wheel', 'words' or None.
+    `replace` ({file, row, start, end, text, new}) is applied before the first screen: the word at that place becomes `new`.
+    When the Writer hands a word over (F5), it is left in `run.handover`."""
+    import json
     problem = check()
     if problem:
         raise WriterError(problem)
@@ -152,6 +155,17 @@ def run(story, scene=None):
     run.note = note
     if scene:                                   # open at this scene: "<file>:<line>"
         env["STORYWHEEL_SCENE"] = f"{scene['path']}:{scene.get('line', 1)}"
+    if replace:
+        env["STORYWHEEL_REPLACE"] = json.dumps(replace)
+    data_file = Path(str(return_file) + ".data")
+    data_file.unlink(missing_ok=True)
+    run.handover = None
     subprocess.call(argv, env=env)
     where = return_file.read_text().strip() if return_file.exists() else ""
+    if data_file.exists():
+        try:
+            run.handover = json.loads(data_file.read_text(encoding="utf-8"))
+        except ValueError:
+            run.handover = None
+        data_file.unlink(missing_ok=True)
     return where or None

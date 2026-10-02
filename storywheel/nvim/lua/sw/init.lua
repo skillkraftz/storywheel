@@ -14,13 +14,14 @@ local session = require("sw.session")
 local M = {}
 
 M.HELP = {
-  "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer   F4 Settings",
+  "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words",
   "",
   "Notepad mode (the default; a setting turns Vim keys back on)",
   "  You are always typing: Escape does nothing.  The mouse and Shift+arrows select; typing replaces the selection.",
   "  Ctrl+C / X / V  copy / cut / paste (system clipboard)    Ctrl+Z / Ctrl+Y  undo / redo    Ctrl+S  save",
   "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+R  find and replace    Ctrl+Q  back to the Builder",
   "  Ctrl+Backspace (Ctrl+H)  delete the previous word    Ctrl+Delete  delete the next word    Other Ctrl keys: nothing happens",
+  "  F5  Words mode, carrying the word under the cursor (Use in Writer there brings a chosen word back, in the same form)",
   "  F7  dictionary and thesaurus card for the word under the cursor (Enter on a similar word replaces it)    F6  look up a typed word",
   "  F12 or Alt+M  a menu of everything below (export, sidebar, toggles, settings...)    Right-click  edit menu",
   "  F9  scene sidebar    F8  peek at the name under the cursor",
@@ -95,7 +96,7 @@ end
 -- --- leaving ----------------------------------------------------------------------------------------------
 
 -- Save everything, remember where we were, say where to go next, and quit.
-function M.leave(where)
+function M.leave(where, extra)
   local ok = pcall(backup.save_all)
   for _, b in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(b) and vim.bo[b].modified and vim.bo[b].buftype == "" and vim.api.nvim_buf_get_name(b) ~= "" then
@@ -107,9 +108,43 @@ function M.leave(where)
   stats.save()
   session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell })
   local rf = os.getenv("STORYWHEEL_RETURN_FILE")
-  if rf and rf ~= "" then util.write(rf, where or "") end
+  if rf and rf ~= "" then
+    util.write(rf, where or "")
+    if extra then util.write(rf .. ".data", vim.json.encode(extra)) end          -- what the next mode is handed (a word, and where it was)
+  end
   vim.cmd("qa!")
   return true
+end
+
+-- F5: Words, with the word under the cursor (or the selection) and where it is, so "Use in Writer" can replace it.
+function M.words()
+  local data = { universe = story.universe, story = story.slug }
+  local word, target = require("sw.lookup").word_at_cursor()
+  if word then
+    data.word = word
+    data.replace = { file = vim.api.nvim_buf_get_name(0), row = target[1], start = target[2], ["end"] = target[3], text = word }
+  end
+  return M.leave("words", data)
+end
+
+-- A word chosen in Words ("Use in Writer") replaces the one it was chosen for, before the first screen. Returns the file and
+-- cursor to open at, or nil.
+function M.apply_pending_replace()
+  local raw = os.getenv("STORYWHEEL_REPLACE")
+  if not raw or raw == "" then return nil end
+  local ok, r = pcall(vim.json.decode, raw)
+  if not ok or type(r) ~= "table" or not r.file or not util.exists(r.file) then return nil end
+  local buf = util.load_buffer(r.file)
+  local row, s, e = r.row, r.start, r["end"]
+  local now = vim.api.nvim_buf_get_text(buf, row, s, row, e, {})[1]
+  if now ~= r.text then
+    vim.api.nvim_echo({ { "The text changed since you picked the word; nothing replaced.", "WarningMsg" } }, true, {})
+    return { r.file, { row + 1, s } }
+  end
+  vim.api.nvim_buf_set_text(buf, row, s, row, e, { r.new })
+  vim.api.nvim_buf_call(buf, function() vim.cmd("silent! write") end)
+  vim.api.nvim_echo({ { "Replaced “" .. r.text .. "” with “" .. r.new .. "”.", "Normal" } }, true, {})
+  return { r.file, { row + 1, s + #r.new } }
 end
 
 -- --- the toggles and commands ---------------------------------------------------------------------------
@@ -266,10 +301,11 @@ function M.map_global()
   local function map(modes, lhs, fn, desc)
     vim.keymap.set(modes, lhs, fn, { silent = true, desc = desc })
   end
-  map({ "n", "i", "x" }, "<F1>", function() M.leave("wheel") end, "to the Wheel")
-  map({ "n", "i", "x" }, "<F2>", function() M.leave("builder") end, "to the Builder")
-  map({ "n", "i", "x" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
-  map({ "n", "i", "x" }, "<F4>", function() M.leave("settings") end, "to Settings")
+  map({ "n", "i", "x", "s" }, "<F1>", function() M.leave("wheel") end, "to the Wheel")
+  map({ "n", "i", "x", "s" }, "<F2>", function() M.leave("builder") end, "to the Builder")
+  map({ "n", "i", "x", "s" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
+  map({ "n", "i", "x", "s" }, "<F4>", function() M.leave("settings") end, "to Settings")
+  map({ "n", "i", "x", "s" }, "<F5>", function() M.words() end, "to Words")
   map({ "n", "i" }, story.setting("key_sidebar", "<F9>"), function() sidebar.toggle() end, "scene sidebar")
   map({ "n", "i" }, story.setting("key_peek", "<F8>"), function() world.peek() end, "peek")
   local leader = {
@@ -341,6 +377,8 @@ function M.start()
       if sc then cursor = { sc.body, 0 } end                   -- not on the marker itself, on the first line of text
     end
   end
+  local replaced = M.apply_pending_replace()
+  if replaced then start, cursor = replaced[1], replaced[2] end
   M.open_scene(start, cursor)
   for _, p in ipairs(saved.open or {}) do          -- scenes that were open come back as (hidden) buffers
     if p ~= start and util.exists(p) then pcall(util.load_buffer, p) end

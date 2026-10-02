@@ -157,12 +157,12 @@ def test_the_writer_mode_without_a_story_says_so_and_goes_somewhere_sensible(hom
 def test_the_writer_mode_runs_neovim_and_returns_where_it_asked(home, world, monkeypatch):
     u, s = world
     ran = []
-    monkeypatch.setattr(writer, "run", lambda story: ran.append(story.slug) or "wheel")
+    monkeypatch.setattr(writer, "run", lambda story, scene=None, replace=None: ran.append(story.slug) or "wheel")
     monkeypatch.setattr(writer, "check", lambda: None)
     st = state.State()
     nxt = modes.run_writer(st, {"universe": "thornwood", "story": "the-last-clause"})
     assert ran == ["the-last-clause"] and nxt[0] == "wheel" and st.get("universe") == "thornwood"
-    monkeypatch.setattr(writer, "run", lambda story: None)
+    monkeypatch.setattr(writer, "run", lambda story, scene=None, replace=None: None)
     assert modes.run_writer(st, {"universe": "thornwood"})[0] == "builder"                 # :q returns to the Builder
 
 
