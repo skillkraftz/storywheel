@@ -162,8 +162,8 @@ def test_the_cli_and_the_builder_have_an_anonymous_choice(home):
 def test_one_space_after_periods_is_optional(home):
     text = "He left.  She stayed!  Why?  Nobody knew.  \"Quoted.\"  Then 3.5  apples.\n"
     s = make(text)
-    assert read(s)[0].paragraphs[-2].text == "He left.  She stayed!  Why?  Nobody knew.  \"Quoted.\"  Then 3.5  apples."
+    assert read(s)[0].paragraphs[-2].text == "He left.  She stayed!  Why?  Nobody knew.  \u201cQuoted.\u201d  Then 3.5  apples."
     settings.save_story(s.path, {"export_one_space": True})
     d, _ = read(s)
-    assert d.paragraphs[-2].text == "He left. She stayed! Why? Nobody knew. \"Quoted.\" Then 3.5  apples."
+    assert d.paragraphs[-2].text == "He left. She stayed! Why? Nobody knew. \u201cQuoted.\u201d Then 3.5  apples."
     assert "He left. She stayed!" in Path(export.export(s, "txt")["path"]).read_text()
