@@ -39,6 +39,7 @@ class Filler:
         self.universe = universe
         self.engine = engine or make_engine(universe)
         self.rng = rng or self.engine.rng
+        self.last_atoms = []               # [[slot, text], ...] the last roll drew (what a rating needs to know)
 
     # --- context --------------------------------------------------------------------------------------
 
@@ -70,6 +71,7 @@ class Filler:
         """A new value for one field (not applied). Raises NothingToLink for a link-only field with nothing to link."""
         spec = schemas.field_spec(entity.type, key)
         fill = (spec or {}).get("fill") or {}
+        self.last_atoms = []
         if not spec or fill.get("write") or not fill:
             raise ValueError(f"'{key}' is write-only")
         link = fill.get("link")
@@ -85,12 +87,16 @@ class Filler:
             from .steps import step_by_key
             story = self._pseudo_story()
             step = step_by_key(fill["step"], story)
-            value, _t, _a = step.reroll_value(self.engine, story, self._context(entity, spec), fill["field"])
+            value, _t, atoms = step.reroll_value(self.engine, story, self._context(entity, spec), fill["field"])
+            self.last_atoms = [list(a) for a in atoms]
             return value
         if fill.get("slot"):
             from .mix import Mix
             mix = Mix(self.universe.mix_dict(), self.engine.library)
-            wl, entry = self.engine.pick_item(fill["slot"], mix)
+            ratings = self.engine.ratings
+            bias = (lambda e: ratings.atom_bias(fill["slot"], e.text, ())) if ratings is not None else None     # ratings change rolls here too
+            wl, entry = self.engine.pick_item(fill["slot"], mix, bias=bias)
+            self.last_atoms = [[fill["slot"], entry.text]]
             text = promote.tidy(entry.text) if spec["key"] == "name" else entry.text
             if fill.get("format"):
                 text = fill["format"].replace("{x}", entry.text.split()[-1].capitalize())

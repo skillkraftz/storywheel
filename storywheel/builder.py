@@ -17,6 +17,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
 from . import appearance, fieldhistory, navigation, tools
+from . import ratings as R
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -789,7 +790,7 @@ class BuilderScreen(Screen):
     def on_card_list_rate(self, event):
         if event.source.id == "outline":
             return
-        self.b.rate(self.universe, self.entity, self._key_at(event.index), event.value)
+        self._rate(self._key_at(event.index), event.value)
         self.refresh_card()
 
     def on_card_list_scrolled(self, event):
@@ -863,6 +864,10 @@ class BuilderScreen(Screen):
             self.say(str(err))
             return
         self.hist.setdefault((e.id, key), [])
+        filler = self.get_filler()
+        if filler.last_atoms and isinstance(value, str):
+            frame, atoms = R.provenance(filler.engine.library, filler.last_atoms)
+            self.hist.set_provenance(e.id, key, value, frame, [list(a) for a in atoms])
         self._apply_roll(e, key, value, old_id)
 
     def _apply_roll(self, e, key, value, old_id):
@@ -1119,10 +1124,25 @@ class BuilderScreen(Screen):
             self.refresh_card()
             self.say("Added. Your own fields are write-only.")
 
+    def _rate(self, key, value):
+        """+1 or -1 on a field. A value the generator rolled carries what made it (its frame and atoms), so the rating changes later rolls
+        just as it does in the Wheel."""
+        e = self.entity
+        self.hist.use(self.universe)
+        text = e.custom.get(key[7:], "") if key.startswith("custom:") else e.fields.get(key, "")
+        frame, atoms = self.hist.provenance(e.id, key, text) if isinstance(text, str) else (None, [])
+        now = self.b.rate(self.universe, e, key, value, frame, atoms)
+        if now == -1 and (frame or atoms):
+            self.say("Marked down: that wording will come up a little less in later rolls (it takes a few to show).")
+        elif now == 1:
+            self.say("Liked.")
+        elif now == 0 and self.b.ratings is not None:
+            self.say("Rating cleared.")
+
     def action_rate(self, value):
         key = self.field_key()
         if self.entity and key:
-            self.b.rate(self.universe, self.entity, key, int(value))
+            self._rate(key, int(value))
             self.refresh_card()
 
     def action_tab(self, i):
@@ -1460,7 +1480,7 @@ class BuilderApp(App):
             text = ", ".join(text)
         return self.ratings.rating_of(f"universe:{universe.slug}", entity.type, key, str(text))
 
-    def rate(self, universe, entity, key, value):
+    def rate(self, universe, entity, key, value, frame=None, atoms=()):
         if self.ratings is None:
             return 0
         text = entity.custom.get(key[7:], "") if key.startswith("custom:") else entity.fields.get(key, "")
@@ -1468,7 +1488,7 @@ class BuilderApp(App):
             text = ", ".join(text)
         if not text:
             return 0
-        return self.ratings.rate(f"universe:{universe.slug}", entity.type, key, str(text), value, None, (),
+        return self.ratings.rate(f"universe:{universe.slug}", entity.type, key, str(text), value, frame, atoms,
                                  title=universe.name)
 
     def open_writer(self, screen, scene=None):
