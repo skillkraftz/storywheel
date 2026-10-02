@@ -344,7 +344,7 @@ Clicked through the Wheel, Builder (every tab) and Settings (every tab) at 200x5
 | Possessives through the whole pipeline, singular/plural round trip, motif follows title, Season | `test_data_correctness.py` | 26 |
 | Drafts: no empty files, tidy to .trash, progress, finished reopen, promoted read-only + copy | `test_drafts.py` | 11 |
 
-Full suite before the final commit: see the line at the end of this section.
+Full suite before the final commit: **811 passed** (all tests, including the real-terminal ones).
 
 ## T3. Manual test script (things tests can't see)
 1. Click every list in the Builder, the Wheel and Settings: nothing should shift a row or change size, only the highlight colour changes.
