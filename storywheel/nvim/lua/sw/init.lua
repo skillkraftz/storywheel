@@ -149,7 +149,7 @@ function M.export(format)
   vim.api.nvim_echo({ { "Exporting…", "Normal" } }, false, {})
   local data, err = util.cli_json(args)
   if data and data.path then
-    vim.api.nvim_echo({ { "Exported: " .. data.path .. ((data.warnings and #data.warnings > 0) and ("  (" .. table.concat(data.warnings, "; ") .. ")") or ""), "Normal" } }, true, {})
+    vim.api.nvim_echo({ { "Exported " .. (data.shown or data.path) .. ((data.warnings and #data.warnings > 0) and ("  (" .. table.concat(data.warnings, "; ") .. ")") or ""), "Normal" } }, true, {})
     return data
   end
   vim.api.nvim_echo({ { "Export failed: " .. tostring(err), "ErrorMsg" } }, true, {})

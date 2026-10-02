@@ -2,7 +2,7 @@
 Compiling a manuscript and exporting it.
 
     compile_text(story)         the scenes as one markdown text
-    export(story, "docx")       writes <story>/exports/<title>.docx  (also md, txt, odt, pdf, fountain)
+    export(story, "docx")       writes <manuscripts>/<Title>/<Title> <date>.docx  (also md, txt, odt, pdf, fountain)
 
 The .docx follows William Shunn's "Proper Manuscript Format" for a short story (shunn.net/format/story.html),
 built directly with python-docx:
@@ -18,12 +18,13 @@ A novel gets the same pages with each scene file starting a new chapter on a new
 clearly marked stub: the manuscript is written out as a .fountain file, unformatted.
 .odt and .pdf are made from the .docx with LibreOffice (`soffice`) if it is installed; without it you get a message.
 """
+import datetime
 import re
 import shutil
 import subprocess
 from pathlib import Path
 
-from . import settings, vault
+from . import paths, settings, vault
 
 FORMATS = ("docx", "odt", "pdf", "md", "txt", "fountain")
 INDENT_INCHES = 0.5
@@ -111,10 +112,10 @@ def author_info(story, g=None):
     byline = g.get("author_name") or g.get("legal_name") or ""
     if not legal:
         legal = byline = "Your Name"
-        warnings.append("No author name yet: put your name in settings.toml (Builder: G) to fill the first page.")
+        warnings.append("No author name yet: add it in Settings (F4) > You.")
     lines = [legal] + [l for l in (g.get("address") or "").split("\n") if l.strip()]
     if not g.get("address"):
-        warnings.append("No address in settings.toml: the first page has none.")
+        warnings.append("No address yet (Settings (F4) > You): the first page has none.")
     if g.get("email"):
         lines.append(g["email"])
     if g.get("phone"):
@@ -300,6 +301,61 @@ def build_fountain(story, path):
     return warnings + ["Screenplay export is a stub: the manuscript is written out unformatted as a .fountain file."]
 
 
+MARKER = ".storywheel-story"
+
+
+def clean_name(text, fallback="Untitled"):
+    """A title as a file or folder name: readable, with the characters file systems refuse removed."""
+    text = re.sub(r'[\\/:*?"<>|\x00-\x1f]', "", text or "")
+    text = re.sub(r"\s+", " ", text).strip(" .")
+    return text or fallback
+
+
+def story_id(story):
+    return f"{story.universe.slug}/{story.slug}"
+
+
+def export_folder(story):
+    """<manuscripts>/<Story Title>/ for this story. A hidden marker in the folder says which story owns it; if another
+    story (or nobody we know) owns the folder, the universe's name is added. Never inside or equal to the library."""
+    root = paths.manuscripts_root()
+    lib = paths.library_root()
+    if root == lib or lib in root.parents:
+        raise ExportError(f"The manuscripts folder ({paths.tilde(root)}) is inside your library. Choose another in Settings (F4) > Export.")
+    me = story_id(story)
+    title = clean_name(story.title)
+    universe = clean_name(story.universe.name, "Universe")
+    candidates = [title, f"{title} ({universe})"] + [f"{title} ({universe}) {n}" for n in range(2, 50)]
+    for name in candidates:
+        folder = root / name
+        if folder == lib or lib in folder.parents or folder in lib.parents:
+            continue
+        marker = folder / MARKER
+        if marker.exists():
+            if marker.read_text(encoding="utf-8").strip() == me:
+                return folder
+            continue
+        if not folder.exists() or not any(folder.iterdir()):
+            folder.mkdir(parents=True, exist_ok=True)
+            marker.write_text(me + "\n", encoding="utf-8")
+            return folder
+    raise ExportError("Couldn't find a free folder name for this story under " + paths.tilde(root))
+
+
+def file_stem(story):
+    return f"{clean_name(story.title)} {datetime.date.today().isoformat()}"
+
+
+def unique_stem(folder, stem, exts):
+    """The stem, or 'stem -2', 'stem -3'... so that no file of any of the extensions gets overwritten."""
+    n = 1
+    while True:
+        s = stem if n == 1 else f"{stem} -{n}"
+        if not any((folder / f"{s}.{e}").exists() for e in exts):
+            return s
+        n += 1
+
+
 def convert(path, fmt):
     """Convert a .docx to .odt or .pdf with LibreOffice. Returns the new path."""
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
@@ -324,9 +380,10 @@ def export(story, fmt="docx", out_dir=None):
         raise ExportError(f"Unknown format '{fmt}'. Choose one of: {', '.join(FORMATS)}")
     if not story.files() or not compile_text(story).strip():
         raise ExportError("The manuscript is empty: write something first.")
-    out = Path(out_dir) if out_dir else story.exports_dir
+    out = Path(out_dir) if out_dir else export_folder(story)
     out.mkdir(parents=True, exist_ok=True)
-    base = out / vault.slugify(story.title, "manuscript")
+    exts = {"docx": ["docx"], "odt": ["docx", "odt"], "pdf": ["docx", "pdf"], "md": ["md"], "txt": ["txt"], "fountain": ["fountain"]}[fmt]
+    base = out / unique_stem(out, file_stem(story), exts)
     warnings = []
     words = vault.count_words(compile_text(story))
     st = settings.load_story(story.path)
@@ -351,4 +408,4 @@ def export(story, fmt="docx", out_dir=None):
     else:
         path = base.with_suffix(".fountain")
         warnings += build_fountain(story, path)
-    return {"path": str(path), "format": fmt, "words": words, "warnings": warnings}
+    return {"path": str(path), "shown": paths.tilde(path), "format": fmt, "words": words, "warnings": warnings}

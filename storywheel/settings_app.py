@@ -45,6 +45,8 @@ SECTIONS = [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
         ("format", "Default format", "choice", ["short-story", "novel", "screenplay"], "A story can choose its own."),
         ("export_format", "Quick export file type", "choice", ["docx", "odt", "pdf", "md", "txt"], ""),
+        ("manuscripts_dir", "Manuscripts folder", "path", None,
+         "Exports go here, one folder per story: <folder>/<Story Title>/<Story Title> <date>.docx. Default ~/Writing."),
     ]),
     ("Universes", [
         ("atom_boost", "How much likelier a universe's own people and places are", "float", None,
@@ -126,6 +128,7 @@ class SettingsScreen(Screen):
         yield Header()
         g = settings.load_global()
         g["library"] = str(paths.library_root())
+        g["manuscripts_dir"] = str(paths.manuscripts_root())
         self.values = g
         with TabbedContent(id="tabs"):
             for title, fields in SECTIONS:
@@ -188,10 +191,32 @@ class SettingsScreen(Screen):
     def save(self, key, value):
         if key == "library":
             return self.save_library(value)
+        if key == "manuscripts_dir":
+            return self.save_manuscripts(value)
         g = settings.load_global()
         g[key] = value
         settings.save_global(g)
         self.say(f"Saved: {key} = {value!r}")
+
+    def save_manuscripts(self, text):
+        new = text.strip()
+        if not new:
+            return
+        from pathlib import Path
+        target = Path(new).expanduser()
+        lib = paths.library_root()
+        if target == lib or lib in target.parents:
+            self.say("That is inside your library. Choose a folder outside it (the default is ~/Writing).")
+            return
+        try:
+            target.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            self.say(f"Can't use that folder: {e}")
+            return
+        g = settings.load_global()
+        g["manuscripts_dir"] = str(target)
+        settings.save_global(g)
+        self.say(f"Exports go to {paths.tilde(target)}.")
 
     def save_library(self, text):
         new = text.strip()
@@ -233,7 +258,7 @@ class SettingsScreen(Screen):
     def on_input_submitted(self, event):
         key = (event.input.id or "")[2:]
         if self.kind_of(key) == "path":
-            self.save_library(event.value)
+            (self.save_manuscripts if key == "manuscripts_dir" else self.save_library)(event.value)
 
     def on_switch_changed(self, event):
         key = (event.switch.id or "")[2:]

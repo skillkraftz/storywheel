@@ -36,5 +36,29 @@ def library_root():
     return default_library()
 
 
+def manuscripts_root():
+    """Where exported manuscripts go, one folder per story: STORYWHEEL_MANUSCRIPTS, then `manuscripts_dir = "..."` in
+    ~/.storywheel/settings.toml (Settings > Export), then ~/Writing. The library's own layout is not touched."""
+    env = os.environ.get("STORYWHEEL_MANUSCRIPTS")
+    if env:
+        return Path(env).expanduser()
+    try:
+        import re
+        text = (home() / "settings.toml").read_text(encoding="utf-8")
+        m = re.search(r'^manuscripts_dir\s*=\s*"((?:[^"\\]|\\.)*)"', text, re.M)
+        if m and m.group(1).strip():
+            return Path(m.group(1).encode().decode("unicode_escape")).expanduser()
+    except OSError:
+        pass
+    return Path.home() / "Writing"
+
+
+def tilde(path):
+    """A path as it is shown in messages: ~/Writing/... instead of /home/andy/Writing/..."""
+    p = str(path)
+    h = str(Path.home())
+    return "~" + p[len(h):] if p == h or p.startswith(h + os.sep) else p
+
+
 def default_library():
     return Path.home() / "Writing" / "storywheel"

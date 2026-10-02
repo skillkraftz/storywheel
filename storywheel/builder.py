@@ -1383,8 +1383,7 @@ class BuilderApp(App):
         except exporter.ExportError as e:
             screen.say(str(e))
             return
-        screen.say(f"Exported {result['words']:,} words to {result['path']}" +
-                   "".join(f"   Note: {w}" for w in result["warnings"]))
+        screen.say(f"Exported {result['words']:,} words to {result['shown']}" + "".join(f"   Note: {w}" for w in result["warnings"]))
         screen.last_export = result
 
     def copy_manuscript(self, screen):

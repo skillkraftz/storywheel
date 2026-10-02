@@ -155,7 +155,7 @@ def cmd_manuscript(args):
 
 
 def cmd_migrate(args):
-    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts()
+    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports()
     print("\n".join("  " + l for l in lines) if lines else "  Nothing to migrate.")
 
 
@@ -168,7 +168,7 @@ def cmd_settings(args):
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
-    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts():
+    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports():
         print("  " + line)
     from . import modes
     from .cli import get_engine
@@ -203,7 +203,7 @@ def add_parsers(sub):
     p.add_argument("action", choices=["export", "text"])
     p.add_argument("target", help="universe/story")
     p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
-    p.add_argument("--out", help="folder to write into (default: the story's exports folder)")
+    p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
     p.add_argument("--json", action="store_true")
     sub.add_parser("migrate", help="bring old data up to date (the old universe.json, scene files -> one manuscript file)")
     sub.add_parser("settings", help="open Settings (who you are, goals, Writer preferences, export, library, stats)")

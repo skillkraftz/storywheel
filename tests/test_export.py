@@ -1,4 +1,5 @@
 """Export: the Shunn .docx is read back and checked against the format; the other formats; the commands."""
+import datetime
 import json
 import os
 import shutil
@@ -14,6 +15,7 @@ from docx.shared import Inches, Pt
 
 from storywheel import export, settings, vault
 
+TODAY = datetime.date.today().isoformat()
 ROOT = Path(__file__).resolve().parent.parent
 TEXT = ("Stacie ran down the road, past the mill and the dry creek bed, and did not look back once. "
         "It was *very* dry, and **nothing** moved.")
@@ -243,7 +245,7 @@ def test_without_libreoffice_odt_and_pdf_say_so_and_keep_the_docx(story, monkeyp
     monkeypatch.setattr(export.shutil, "which", lambda name: None)
     with pytest.raises(export.ExportError, match="LibreOffice"):
         export.export(story, "pdf")
-    assert (story.exports_dir / "the-last-clause.docx").exists()
+    assert (Path(os.environ["STORYWHEEL_MANUSCRIPTS"]) / "The Last Clause" / f"The Last Clause {TODAY}.docx").exists()
 
 
 def test_a_screenplay_is_a_marked_stub(story):
@@ -268,9 +270,9 @@ def cli(args, home):
 def test_manuscript_export_and_text_commands(home, story):
     res = cli(["manuscript", "export", "thornwood/the-last-clause", "--format", "docx", "--json"], home)
     data = json.loads(res.stdout)
-    assert data["format"] == "docx" and data["path"].endswith("the-last-clause.docx") and Path(data["path"]).exists()
+    assert data["format"] == "docx" and data["path"].endswith(f"The Last Clause/The Last Clause {TODAY}.docx") and Path(data["path"]).exists()
     out = cli(["manuscript", "export", "thornwood/the-last-clause", "--format", "md", "--out", str(home / "elsewhere")], home)
-    assert "Wrote" in out.stdout and (home / "elsewhere" / "the-last-clause.md").exists()
+    assert "Wrote" in out.stdout and (home / "elsewhere" / f"The Last Clause {TODAY}.md").exists()
     plain = cli(["manuscript", "text", "thornwood/the-last-clause"], home).stdout
     assert plain.startswith("Stacie ran") and "*" not in plain
     bad = cli(["manuscript", "export", "thornwood/the-last-clause", "--format", "rtf", "--json"], home)
@@ -295,7 +297,7 @@ def test_the_builder_exports_with_a_chosen_format_and_shows_where(home, story):
             from conftest import screen_text
             return asked, " ".join(screen_text(app).split()), app.screen_ref.last_export
     asked, text, result = asyncio.run(go())
-    assert asked == "ChoiceScreen" and "Exported" in text and "the-last-clause.docx" in text
+    assert asked == "ChoiceScreen" and "Exported" in text and f"The Last Clause {TODAY}.docx" in text
     assert Path(result["path"]).exists()
 
 

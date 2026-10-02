@@ -23,6 +23,39 @@ def migrate_manuscripts():
     return lines
 
 
+def migrate_exports():
+    """Exports used to sit in each story's folder inside the library. Move them to the manuscripts folder (one folder per
+    story, named '<Title> <date>.<ext>', the date being the file's own) and say so. Returns report lines."""
+    import datetime
+    from . import export, paths
+    moved = 0
+    notes = []
+    for u in vault.list_universes():
+        for s in u.stories():
+            old = s.exports_dir
+            files = [f for f in old.iterdir() if f.is_file()] if old.is_dir() else []
+            if not files:
+                continue
+            try:
+                dest = export.export_folder(s)
+            except export.ExportError as e:
+                notes.append(f"{s.title}: exports left where they are ({e})")
+                continue
+            for f in sorted(files):
+                day = datetime.date.fromtimestamp(f.stat().st_mtime).isoformat()
+                stem = export.unique_stem(dest, f"{export.clean_name(s.title)} {day}", [f.suffix.lstrip(".")])
+                f.replace(dest / (stem + f.suffix))
+                moved += 1
+            try:
+                old.rmdir()
+            except OSError:
+                pass
+    if moved:
+        notes.insert(0, f"Moved {moved} export{'s' if moved != 1 else ''} out of your library to {paths.tilde(paths.manuscripts_root())} "
+                        "(one folder per story).")
+    return notes
+
+
 def migrate_universe_json():
     """Returns a short report (a list of lines), or [] when there was nothing to do.
     The old file is kept as universe.json.migrated-<date>; running again does nothing."""
