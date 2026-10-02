@@ -191,6 +191,29 @@ function M.paste()
   return true
 end
 
+-- Home and End act on the line you SEE (a wrapped paragraph is several screen lines). Home at the start of a screen line goes
+-- on to the start of the paragraph; End goes to the end of the screen line (after the last character on the last one).
+function M.home()
+  if M.has_selection() then leave_selection() end
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  vim.cmd("normal! g0")
+  local r2, c2 = unpack(vim.api.nvim_win_get_cursor(0))
+  if r2 == row and c2 == col then vim.api.nvim_win_set_cursor(0, { row, 0 }) end      -- already there: the paragraph's start
+  M.insert(true)
+end
+
+function M.line_end()
+  if M.has_selection() then leave_selection() end
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local line = vim.api.nvim_get_current_line()
+  vim.cmd("normal! g$")
+  local r2, c2 = unpack(vim.api.nvim_win_get_cursor(0))
+  if r2 == row and #line > 0 and c2 + 1 + vim.str_utf_end(line, c2 + 1) >= #line then
+    vim.api.nvim_win_set_cursor(0, { row, #line })                                    -- the last screen line: after the last character
+  end
+  M.insert(true)
+end
+
 -- Ctrl+A
 -- Select mode with an EXCLUSIVE selection cannot take in the very last character of the buffer (Vim leaves it out when
 -- the selection is replaced), so selecting everything uses an inclusive selection until the selection ends.
@@ -276,6 +299,8 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, "<C-y>", function() M.redo() end)
   map({ "i", "s", "x", "n" }, "<C-s>", function() M.save() end)
   map({ "i", "s", "x", "n" }, "<C-a>", function() M.select_all() end)
+  map({ "i", "s", "x" }, "<Home>", function() M.home() end)
+  map({ "i", "s", "x" }, "<End>", function() M.line_end() end)
   map({ "i", "s", "x", "n" }, "<C-f>", function() M.find() end)
   map({ "i", "s", "x", "n" }, "<C-g>", function() M.find_next(1) end)
   map({ "i", "s", "x", "n" }, "<A-g>", function() M.find_next(-1) end)

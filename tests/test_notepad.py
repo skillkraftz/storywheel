@@ -284,3 +284,46 @@ def test_help_describes_notepad_mode(home, story):
     r = run(story, "", "", "R.help = table.concat(require('sw').HELP, '\\n')")
     for needle in ("Notepad mode", "Escape does nothing", "Ctrl+C / X / V", "F12 or Alt+M", "Right-click"):
         assert needle in r["help"], needle
+
+
+# --- Home and End -------------------------------------------------------------------------------------------------------
+
+LONG = " ".join(["word%02d" % i for i in range(60)])         # 420 characters: several screen lines in a 72 column window
+
+
+def seg_starts():
+    return """
+        local nums = {}
+        local w = require('sw.layout').main
+        R.width = vim.api.nvim_win_get_width(w)
+    """
+
+
+def test_home_goes_to_the_start_of_the_visible_line_then_the_paragraph(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { %s })\nvim.api.nvim_win_set_cursor(0, { 1, 200 })" % json.dumps(LONG)
+    r = run(story, setup, "<Home>", "R.col = vim.api.nvim_win_get_cursor(0)[2]; R.mode = vim.fn.mode(); R.width = vim.api.nvim_win_get_width(require('sw.layout').main)")
+    assert 0 < r["col"] < 200 and 200 - r["col"] < r["width"] and r["mode"] == "i"
+    assert LONG[r["col"] - 1] == " "                                   # the screen line starts right after a space
+    first = r["col"]
+    r = run(story, setup, "<Home><Home>", "R.col = vim.api.nvim_win_get_cursor(0)[2]")
+    assert r["col"] == 0                                               # Home again: the paragraph's start (the lines in between are one press each)
+
+
+def test_end_goes_to_the_end_of_the_visible_line_and_after_the_last_character_on_the_last(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { %s })\nvim.api.nvim_win_set_cursor(0, { 1, 5 })" % json.dumps(LONG)
+    r = run(story, setup, "<End>", "R.col = vim.api.nvim_win_get_cursor(0)[2]; R.width = vim.api.nvim_win_get_width(require('sw.layout').main)")
+    assert 5 < r["col"] < 100 and r["col"] <= r["width"]               # not the end of the 419-character paragraph
+    r = run(story, setup + "\nvim.api.nvim_win_set_cursor(0, { 1, 400 })", "<End>", "R.col = vim.api.nvim_win_get_cursor(0)[2]")
+    assert r["col"] == len(LONG)
+
+
+def test_home_and_end_on_a_short_line_are_the_line_start_and_end(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'short line here' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    assert run(story, setup, "<Home>", "R.col = vim.api.nvim_win_get_cursor(0)[2]")["col"] == 0
+    assert run(story, setup, "<End>", "R.col = vim.api.nvim_win_get_cursor(0)[2]")["col"] == 15
+
+
+def test_home_and_end_leave_a_selection_and_you_keep_typing(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'short line here' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    r = run(story, setup, "<S-Right><S-Right><End>X", LINES + "; R.mode = vim.fn.mode()")
+    assert r["lines"] == ["short line hereX"] and r["mode"] == "i"
