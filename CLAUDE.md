@@ -604,3 +604,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   Vim's `:mksession`.
 - Backups are copies named `HHMM-<scene>.md` in `<story>/.backups/<date>/`, made when a scene changed and at least
   15 minutes after the previous copy; 30 days of folders are kept.
+- Each mode is its own Textual app (or Neovim); `storywheel/modes.py` loops between them using what each says it wants
+  next (F1/F2/F3, promotion). Only Builder -> Writer uses Textual's suspend, as the brief asks; the Wheel hands over by
+  closing and being reopened.
+- Leaving Neovim with `:q` (not F2) returns to the Builder; F1 in Neovim goes to the Wheel.
+- Plain `storywheel` only resumes the saved mode in an interactive terminal; with `--plain` or a pipe it is still the
+  plain prompt for a new draft.

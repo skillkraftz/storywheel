@@ -372,7 +372,12 @@ def run(story, plain=False):
         except ImportError:
             print(dim("  (The full-screen app needs the 'textual' package; using the prompt instead.)"))
         else:
-            run_app(story, get_engine())
+            from . import modes, state as state_mod
+            st = state_mod.State()
+            st.update(mode="wheel", draft=story["id"])
+            nxt = run_app(story, get_engine(), st)
+            if nxt:                                  # F2 / F3, or a promotion: carry on into the next mode
+                modes.run(nxt, get_engine, get_ratings)
             return
     if not story["kept"]:
         print(bold("\n  storywheel") + dim("  ·  type ? at any prompt for help"))
@@ -387,6 +392,28 @@ def run(story, plain=False):
 
 def cmd_new(args):
     run(store.new_story(), plain=getattr(args, "plain", False))
+
+def interactive():
+    return sys.stdin.isatty() and sys.stdout.isatty()
+
+def cmd_open(args):
+    """Plain `storywheel`: back to exactly where you left off (the Wheel on a new draft the first time)."""
+    if getattr(args, "plain", False) or not interactive():
+        return cmd_new(args)
+    try:
+        import textual  # noqa: F401
+    except ImportError:
+        return cmd_new(args)
+    from . import cli_world, migrate, modes
+    for line in migrate.migrate_universe_json():
+        print("  " + line)
+    modes.run(None, get_engine, get_ratings)
+
+def cmd_wheel(args):
+    if getattr(args, "plain", False) or not interactive():
+        return cmd_new(args)
+    from . import modes
+    modes.run(("wheel", {}), get_engine, get_ratings)
 
 def emit(data):
     """Machine-readable output: one JSON document on stdout, nothing else."""
@@ -477,7 +504,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.",
                                      parents=[plain_parent])
     sub = parser.add_subparsers(dest="command")
-    sub.add_parser("new", parents=[plain_parent], help="start a new story (the default)")
+    sub.add_parser("new", parents=[plain_parent], help="start a new Wheel draft")
+    sub.add_parser("wheel", parents=[plain_parent], help="open the Wheel (on the draft you were on)")
     p = sub.add_parser("list", help="list your stories")
     p.add_argument("--json", action="store_true", help="print the stories as JSON")
     p = sub.add_parser("resume", parents=[plain_parent], help="pick up a story")
@@ -508,7 +536,7 @@ def main(argv=None):
         world[args.command](args)
         return
     {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "show": cmd_show, "universe": cmd_universe,
-     "sample": cmd_sample, "report": cmd_report}.get(args.command, cmd_new)(args)
+     "sample": cmd_sample, "report": cmd_report, "new": cmd_new, "wheel": cmd_wheel}.get(args.command, cmd_open)(args)
 
 
 if __name__ == "__main__":

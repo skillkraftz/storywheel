@@ -62,7 +62,15 @@ Rough edges: a character used in the `rival` slot reads as "the Sheriff Lund" (t
 | Autosave plus rolling backups | Works | on leaving insert mode, focus loss, idle, quitting; copies in `<story>/.backups/<date>/HHMM-<scene>.md` when changed, at most every 15 minutes, 30 days kept |
 | Story settings read from settings.toml, editable from the Builder | Works | the Writer reads them through `storywheel story show --json`; saving settings.toml inside the Writer applies it at once; the Builder's `S` edits them |
 | (extra) copy manuscript as plain text; `:SWExport` | Partial | copy works; `:SWExport` calls the export command, which arrives in the Export area |
-### Switching and state -- Not started
+### Switching and state (tag `foundation-switching`)
+| Item | Status | Notes |
+|---|---|---|
+| Builder hotkey suspends the app and opens the story in the Writer; a Neovim hotkey saves and returns; the Builder refreshes | Works | F3 (or `w`) in the Builder -> Neovim; F2 in Neovim saves everything and quits back; the Builder reloads its counts and says "Back from the Writer". Tested for real in a pseudo-terminal (Builder -> Neovim -> typed text -> F2 -> Builder) |
+| Neovim restores open scenes and cursor per story | Works | per-story JSON under `~/.storywheel/nvim/state/.../sw/` (not Vim sessions) |
+| state.json; plain `storywheel` reopens exactly where I left off | Works | mode, draft and step, universe, story, tab, entity; `storywheel` with no arguments in a terminal reopens it (the Wheel the first time); `wheel`, `new`, `builder`, `writer` commands reach each mode directly; without a terminal `storywheel` is still the plain prompt |
+| Consistent mode keys (F1 Wheel / F2 Builder / F3 Writer) in every help screen | Works | Wheel help, Builder help, Writer help; promotion and a Writer "F1" carry on into the next mode |
+
+Not tested for real: the *look* of the terminal handing over between the Textual app and Neovim (flicker, scrollback) -- see the manual script.
 ### Export -- Not started
 
 ## 2. Tests added
@@ -76,6 +84,7 @@ Rough edges: a character used in the `rival` slot reads as "the Sheriff Lund" (t
 | Builder in the app (`tests/test_builder.py`) | 28 |
 | Universes in the Wheel (`tests/test_universes_wheel.py`) | 32 |
 | Writer, headless Neovim plus one real-terminal run (`tests/test_writer.py`) | 55 |
+| Switching and state, including real-terminal hand-overs (`tests/test_switching.py`) | 21 |
 | (removed) the old global-pool panel tests, replaced by the above | -14 |
 
 ## 3. Manual test script

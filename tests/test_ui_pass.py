@@ -275,6 +275,8 @@ def test_deleting_on_exit_removes_the_story_and_its_markdown(home):
 
 def test_run_app_prints_what_the_app_returns(home, capsys, monkeypatch):
     class Fake:
+        next = None
+
         def __init__(self, *a):
             pass
         def run(self):

@@ -126,12 +126,20 @@ def cmd_promote(args):
         print("\n".join("  " + l for l in report))
 
 
+def cmd_writer(args):
+    from . import modes
+    from .cli import get_engine, get_ratings
+    modes.run(("writer", {"universe": args.universe, "story": args.story}), get_engine, get_ratings)
+
+
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
     for line in migrate.migrate_universe_json():
         print("  " + line)
-    builder.run_builder(args.universe, args.story, get_ratings(), state.State())
+    from . import modes
+    from .cli import get_engine
+    modes.run(("builder", {"universe": args.universe, "story": args.story}), get_engine, get_ratings)
 
 
 def add_parsers(sub):
@@ -161,4 +169,7 @@ def add_parsers(sub):
     p = sub.add_parser("builder", help="open the Universe Builder")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
+    p.add_argument("universe", nargs="?")
+    p.add_argument("story", nargs="?")
+    return {"writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

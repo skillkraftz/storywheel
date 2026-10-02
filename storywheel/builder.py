@@ -8,7 +8,7 @@ The Universe Builder (Textual): grow a kept idea into a world.
 
 The card works like the Wheel's: left-click (or f) rolls a field, right-click (or e) writes it, the wheel
 steps through that field's history, space rolls every blank field, R rolls the whole entity again (asks).
-Mode keys everywhere: F1 Wheel, F2 Builder, F3 Writer.
+Mode keys everywhere: F1 Wheel, F2 Builder, F3 Writer (and in the Writer, F2 comes back here).
 """
 from rich.style import Style
 from rich.text import Text
@@ -184,6 +184,7 @@ class StoryOptions(OptionList):
 class BuilderScreen(Screen):
     BINDINGS = [
         Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
+        Binding("f2", "noop_builder", "Builder", key_display="F2"),
         Binding("f3", "writer", "Writer", key_display="F3"),
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
@@ -242,6 +243,7 @@ class BuilderScreen(Screen):
         self.entity = None
         self.hist = {}                     # (entity id, field key) -> every value that field has had
         self.start = (universe_slug, story_slug)
+        self.start_entity = None
         self.filler = None
         self._busy = False
 
@@ -268,7 +270,8 @@ class BuilderScreen(Screen):
                 with Vertical(id="top-box"):
                     yield Static("", id="top-title", classes="title", markup=False)
                     yield CardList(id="top")
-                yield Tabs(*[Tab(schemas.get(t)["plural"], id=f"tab-{t}") for t in TYPE_ORDER], id="tabs")
+                yield Tabs(*[Tab(schemas.get(t)["plural"], id=f"tab-{t}") for t in TYPE_ORDER], id="tabs",
+                           active=f"tab-{self.type}")
                 with Horizontal(id="work"):
                     with Vertical(id="entities"):
                         yield Static("", id="entities-title", classes="title", markup=False)
@@ -296,6 +299,8 @@ class BuilderScreen(Screen):
         self.universe = vault.get_universe(slug) if slug else (unis[0] if unis else None)
         if self.universe and story:
             self.story = self.universe.story(story)
+        if self.universe and self.start_entity:
+            self.entity = self.universe.entity(self.start_entity)
         self.refresh_all()
         self.query_one("#card", CardList).focus()
 
@@ -1094,6 +1099,9 @@ class BuilderScreen(Screen):
         settings.save_global(g)
         self.say("Saved to settings.toml.")
 
+    def action_noop_builder(self):
+        self.say("You are in the Universe Builder.")
+
     def action_writer(self):
         self.b.open_writer(self)
 
@@ -1101,7 +1109,7 @@ class BuilderScreen(Screen):
         self.b.export(self)
 
     def action_new_draft(self):
-        self.b.go("wheel", {"universe": self.universe.slug if self.universe else None})
+        self.b.go("wheel", {"universe": self.universe.slug if self.universe else None, "new": True})
 
 
 def _text_row(label, value, rated):
@@ -1125,8 +1133,10 @@ class BuilderApp(App):
     ENABLE_COMMAND_PALETTE = False
     BINDINGS = []
 
-    def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None):
+    def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None, tab=None,
+                 entity=None):
         super().__init__()
+        self.start_tab, self.start_entity = tab, entity
         self.engine_factory = engine_factory
         self.ratings = ratings
         self.start = (universe, story)
@@ -1140,6 +1150,9 @@ class BuilderApp(App):
 
     def on_mount(self):
         self.screen_ref = BuilderScreen(self, *self.start)
+        if self.start_tab in TYPE_ORDER:
+            self.screen_ref.type = self.start_tab
+        self.screen_ref.start_entity = self.start_entity
         self.push_screen(self.screen_ref)
 
     # --- hooks the screen calls ---------------------------------------------------------------------------------------
@@ -1178,13 +1191,36 @@ class BuilderApp(App):
                                  title=universe.name)
 
     def open_writer(self, screen):
-        screen.say("The Writer isn't connected yet.")
+        """Suspend this app, run Neovim on the story, and come back to exactly where we were."""
+        from . import writer
+        story = screen.story
+        if story is None and screen.universe is not None and screen.universe.stories():
+            story = screen.universe.stories()[0]
+        if story is None:
+            screen.say("This universe has no story to write yet. Promote one from the Wheel (leave it with q).")
+            return
+        problem = writer.check()
+        if problem:
+            screen.say(problem)
+            return
+        screen.story = story
+        story.manuscript_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_store is not None:
+            self.state_store.update(mode="writer", universe=screen.universe.slug, story=story.slug)
+        with self.suspend():
+            where = writer.run(story)
+        if self.state_store is not None:
+            self.state_store.update(mode="builder")
+        screen.refresh_all()
+        screen.say(f"Back from the Writer ({story.word_count()} words in {story.title}).")
+        if where == "wheel":
+            self.go("wheel", {})
 
     def export(self, screen):
         screen.say("Export isn't connected yet.")
 
 
-def run_builder(universe=None, story=None, ratings=None, state_store=None):
-    app = BuilderApp(ratings=ratings, universe=universe, story=story, state_store=state_store)
+def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None):
+    app = BuilderApp(ratings=ratings, universe=universe, story=story, state_store=state_store, tab=tab, entity=entity)
     app.run()
     return app

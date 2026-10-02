@@ -50,6 +50,7 @@ HELP = """\
           and atom pairs come up a little less. Again clears it.
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
+  [b]F1[/b] [b]F2[/b] [b]F3[/b]   Wheel, Universe Builder, Writer (this is the Wheel)
   [b]v[/b]       the universe panel (see below)
   [b]c[/b]       copy the story so far to the clipboard (plain text)
   [b]i[/b]       ignore a stale warning
@@ -881,6 +882,7 @@ class MainScreen(Screen):
         if notes:
             self.say("  ".join(notes))
         title = self.session.story["kept"].get("title", {}).get("title")
+        self.app.remember(self.session)
         self.app.title = f"storywheel · {title}" if title else "storywheel"
         self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
 
@@ -1514,20 +1516,31 @@ class StorywheelApp(App):
     ENABLE_COMMAND_PALETTE = False
     BINDINGS = []
 
-    def __init__(self, story, engine):
+    def __init__(self, story, engine, state_store=None):
         super().__init__()
         self.story, self.engine = story, engine
+        self.state_store = state_store
         self.session = Session(story, engine, ratings=engine.ratings)
         self.main = MainScreen(self.session)
         self.next = None                  # where to go after the app closes: ("builder", {...}) or None
+
+    def remember(self, session):
+        """Record where we are (state.json), so plain `storywheel` comes back here."""
+        if self.state_store is not None:
+            try:
+                self.state_store.update(mode="wheel", draft=session.story["id"], step=session.i)
+            except OSError:
+                pass
 
     def on_mount(self):
         self.push_screen(self.main)
 
 
-def run_app(story, engine):
-    """Run the app on a story; prints where it was saved when you quit."""
-    app = StorywheelApp(story, engine)
+def run_app(story, engine, state_store=None):
+    """Run the app on a story; prints where it was saved when you quit. Returns where to go next, if the writer
+    asked for another mode: ("builder", {...}), ("writer", {...}) or None."""
+    app = StorywheelApp(story, engine, state_store)
     message = app.run()
     if message:
         print("\n  " + str(message).replace("\n", "\n  "))
+    return app.next
