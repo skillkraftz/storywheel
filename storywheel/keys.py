@@ -13,7 +13,7 @@ WRITER_KEYS = {
     "key_sidebar": ("Scenes sidebar", "<F9>"),
     "key_peek": ("Peek at a name", "<F8>"),
     "key_builder": ("Back to the Builder", "<C-q>"),
-    "key_replace": ("Find and replace", "<C-h>"),
+    "key_replace": ("Find and replace", "<C-r>"),
     "key_lookup": ("Dictionary and thesaurus card", "<F7>"),
     "key_lookup_word": ("Look up a typed word", "<F6>"),
 }
@@ -26,6 +26,7 @@ RESERVED = {
     "<C-i>": "Tab (some terminals can't tell it from Ctrl+I)", "<C-m>": "Enter", "<C-j>": "Enter",
     "<C-[>": "Escape", "<F1>": "the Wheel", "<F2>": "the Builder", "<F3>": "the Writer", "<F4>": "Settings",
     "<A-m>": "the Writer menu (always works)", "<C-b>": "bold (always works)",
+    "<C-h>": "delete the previous word (Ctrl+Backspace)", "<C-BS>": "delete the previous word", "<C-Del>": "delete the next word",
 }
 
 _MODS = {"alt": "A", "meta": "A", "a": "A", "ctrl": "C", "control": "C", "c": "C", "shift": "S", "s": "S"}

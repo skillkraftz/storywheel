@@ -208,10 +208,60 @@ function M.line_end()
   local line = vim.api.nvim_get_current_line()
   vim.cmd("normal! g$")
   local r2, c2 = unpack(vim.api.nvim_win_get_cursor(0))
-  if r2 == row and #line > 0 and c2 + 1 + vim.str_utf_end(line, c2 + 1) >= #line then
+  if r2 == row and #line > 0 and (c2 >= #line or c2 + 1 + vim.str_utf_end(line, c2 + 1) >= #line) then
     vim.api.nvim_win_set_cursor(0, { row, #line })                                    -- the last screen line: after the last character
   end
   M.insert(true)
+end
+
+-- Shift+Home / Shift+End: select to the start / end of the visible line (the other end stays where it was).
+function M.shift_line(which)
+  vim.o.selection = "exclusive"
+  local was_insert = vim.fn.mode() == "i"
+  local anchor, cur
+  if M.has_selection() then
+    local a, c = vim.fn.getpos("v"), vim.fn.getpos(".")
+    anchor, cur = { a[2], a[3] - 1 }, { c[2], c[3] - 1 }
+    leave_selection()
+  else
+    cur = vim.api.nvim_win_get_cursor(0)
+    anchor = cur
+  end
+  vim.api.nvim_win_set_cursor(0, cur)
+  local line = vim.api.nvim_get_current_line()
+  local target, inclusive = nil, false
+  if which == "home" then
+    vim.cmd("normal! g0")
+    target = vim.api.nvim_win_get_cursor(0)
+    if target[1] == cur[1] and target[2] == cur[2] then target = { cur[1], 0 } end
+  else
+    -- the last character of the visible line is part of the selection, so this one is inclusive (until the selection ends)
+    vim.cmd("normal! g$")
+    target = vim.api.nvim_win_get_cursor(0)
+    if #line > 0 then target = { target[1], math.min(target[2], #line - 1 + vim.str_utf_start(line, #line)) } end    -- (the last character, not past it)
+    inclusive = true
+  end
+  vim.cmd("stopinsert")
+  if target[1] == anchor[1] and target[2] == anchor[2] and not inclusive then
+    vim.api.nvim_win_set_cursor(0, target)
+    M.insert(true)
+    return
+  end
+  if inclusive and anchor[1] == target[1] and anchor[2] > target[2] then
+    vim.api.nvim_win_set_cursor(0, anchor)
+    M.insert(true)                                  -- already at or past the end: nothing to select
+    return
+  end
+  if inclusive then vim.o.selection = "inclusive" end
+  vim.api.nvim_win_set_cursor(0, anchor)
+  vim.cmd("normal! v")
+  -- (leaving Insert mode, which is still pending in here, moves the cursor one to the left: aim one further)
+  local pending_leave = was_insert and target[2] > 0
+  vim.api.nvim_win_set_cursor(0, { target[1], math.min(target[2] + (pending_leave and 1 or 0), #line) })
+  vim.cmd("normal! \7")
+  if inclusive then
+    vim.api.nvim_create_autocmd("ModeChanged", { once = true, pattern = "s:*", callback = function() vim.o.selection = "exclusive" end })
+  end
 end
 
 -- Ctrl+A
@@ -285,12 +335,47 @@ end
 
 -- --- keys, menus ----------------------------------------------------------------------------------------------------
 
+-- In notepad mode the Ctrl keys are an ordinary editor's, not Neovim's: Ctrl+U would delete a line, Ctrl+W a word, Ctrl+T indent,
+-- Ctrl+D unindent, Ctrl+O/R/K/E/N/P/L/J ... all insert-mode commands nobody asked for. Every one that is not deliberately mapped
+-- below does nothing. (Mappings made after this replace these; Ctrl+M is Enter, Ctrl+I is Tab, Ctrl+[ is Escape: left alone.)
+local KEEP = { m = true, i = true }                         -- Enter and Tab are these keys
+local FUNCTION_KEYS = {}
+for n = 1, 12 do
+  for _, prefix in ipairs({ "", "S-", "C-", "A-", "C-S-", "C-A-", "S-A-" }) do
+    FUNCTION_KEYS[#FUNCTION_KEYS + 1] = string.format("<%sF%d>", prefix, n)
+  end
+end
+
+function M.disable_keys(buf)
+  local function nop(lhs)
+    pcall(vim.keymap.set, { "i", "s" }, lhs, "<Nop>", { buffer = buf, silent = true })
+  end
+  for c = string.byte("a"), string.byte("z") do
+    local ch = string.char(c)
+    if not KEEP[ch] then nop("<C-" .. ch .. ">") end
+  end
+  for _, lhs in ipairs({ "<C-@>", "<C-]>", "<C-^>", "<C-_>", "<C-\\>", "<C-Space>" }) do nop(lhs) end
+  -- a function key nobody mapped must not type its own name ("<F5>") into the story. F1-F4 are the modes (mapped globally).
+  for _, lhs in ipairs(FUNCTION_KEYS) do
+    if not lhs:match("^<F[1-4]>$") then nop(lhs) end
+  end
+end
+
 function M.map_buffer(buf)
   if not M.enabled then return end
   local function map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { buffer = buf, silent = true }, opts or {}))
   end
-  map("i", "<Esc>", function() return M.escape() end, { expr = true, replace_keycodes = false })
+  M.disable_keys(buf)
+  -- Ctrl+Backspace (many terminals send it as Ctrl+H) deletes the previous word; Ctrl+Delete the next
+  map("i", "<C-h>", "<C-w>")
+  map("i", "<C-BS>", "<C-w>")
+  map("i", "<C-Del>", "<C-o>dw")
+  map("s", "<C-h>", function() M.delete_selection() M.insert(true) end)
+  map("s", "<C-BS>", function() M.delete_selection() M.insert(true) end)
+  -- <C-n>/<C-p> only walk a completion list
+  map("i", "<C-n>", function() return vim.fn.pumvisible() == 1 and vim.api.nvim_replace_termcodes("<C-n>", true, false, true) or "" end, { expr = true, replace_keycodes = false })
+  map("i", "<C-p>", function() return vim.fn.pumvisible() == 1 and vim.api.nvim_replace_termcodes("<C-p>", true, false, true) or "" end, { expr = true, replace_keycodes = false })  map("i", "<Esc>", function() return M.escape() end, { expr = true, replace_keycodes = false })
   -- clipboard, undo, save, select all, find
   map({ "i", "s", "x", "n" }, "<C-c>", function() M.copy() end)
   map({ "i", "s", "x", "n" }, "<C-x>", function() M.cut() end)
@@ -301,9 +386,11 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, "<C-a>", function() M.select_all() end)
   map({ "i", "s", "x" }, "<Home>", function() M.home() end)
   map({ "i", "s", "x" }, "<End>", function() M.line_end() end)
+  map({ "i", "s", "x" }, "<S-Home>", function() M.shift_line("home") end)
+  map({ "i", "s", "x" }, "<S-End>", function() M.shift_line("end") end)
   map({ "i", "s", "x", "n" }, "<C-f>", function() M.find() end)
   map({ "i", "s", "x", "n" }, "<C-g>", function() M.find_next(1) end)
-  map({ "i", "s", "x", "n" }, story.setting("key_replace", "<C-h>"), function() require("sw.replace").open() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_replace", "<C-r>"), function() require("sw.replace").open() end)
   map({ "i", "s", "x", "n" }, story.setting("key_lookup", "<F7>"), function() require("sw.lookup").word() end)
   map({ "i", "s", "x", "n" }, story.setting("key_lookup_word", "<F6>"), function() require("sw.lookup").ask() end)
   map({ "i", "s", "x", "n" }, "<A-g>", function() M.find_next(-1) end)

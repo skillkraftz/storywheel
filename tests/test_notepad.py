@@ -327,3 +327,92 @@ def test_home_and_end_leave_a_selection_and_you_keep_typing(home, story):
     setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'short line here' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
     r = run(story, setup, "<S-Right><S-Right><End>X", LINES + "; R.mode = vim.fn.mode()")
     assert r["lines"] == ["short line hereX"] and r["mode"] == "i"
+
+
+# --- Shift+Home / Shift+End, the Ctrl keys, function keys ---------------------------------------------------------------------
+
+def long_setup(col):
+    return "vim.api.nvim_buf_set_lines(0, 0, -1, false, { %s })\nvim.api.nvim_win_set_cursor(0, { 1, %d })" % (json.dumps(LONG), col)
+
+
+def test_shift_end_selects_to_the_end_of_the_visible_line_and_typing_replaces_it(home, story):
+    r = run(story, long_setup(5), "<S-End>X", LINES + "; R.mode = vim.fn.mode(); R.width = vim.api.nvim_win_get_width(require('sw.layout').main)")
+    line = r["lines"][0]
+    assert line.startswith("word0X") or line.startswith("word0") and "X" in line[:r["width"] + 2]
+    assert len(line) > len(LONG) - r["width"] - 2 and len(line) < len(LONG) - 20          # only the rest of that screen line went
+    assert r["mode"] == "i"
+
+
+def test_shift_home_selects_back_to_the_start_of_the_visible_line(home, story):
+    r = run(story, long_setup(200), "<S-Home>X", LINES)
+    line = r["lines"][0]
+    assert line.endswith(LONG[200:]) and "X" in line and len(line) < len(LONG)
+    assert line[:20] == LONG[:20]                                                          # the first screen lines are untouched
+
+
+def test_shift_home_then_shift_end_move_the_active_end_and_keep_the_anchor(home, story):
+    r = run(story, long_setup(200), "<S-Home><S-End>X", LINES)
+    line = r["lines"][0]
+    assert "X" in line and line.count("X") == 1 and line.startswith(LONG[:150])
+
+
+def test_shift_end_on_a_short_line_selects_to_the_end_and_shift_home_to_the_start(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'short line here' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    assert run(story, setup, "<S-End>X", LINES)["lines"] == ["short X"]
+    assert run(story, setup, "<S-Home>X", LINES)["lines"] == ["Xline here"]
+
+
+def test_shift_end_copies_what_it_selected(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'short line here' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    r = run(story, setup, "<S-End><Cmd>lua require('sw.notepad').copy()<CR>", "R.reg = vim.fn.getreg('+')")
+    assert r["reg"] == "line here"
+
+
+@pytest.mark.parametrize("key", ["<C-u>", "<C-w>", "<C-t>", "<C-d>", "<C-o>", "<C-k>", "<C-e>", "<C-n>", "<C-p>", "<C-j>", "<C-l>", "<C-]>",
+                                 "<C-r>x", "<C-^>", "<C-_>", "<C-@>", "<C-\\>"])
+def test_neovims_insert_mode_ctrl_keys_do_nothing_in_notepad_mode(home, story, key):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world', 'second line' })\nvim.api.nvim_win_set_cursor(0, { 1, 11 })"
+    settings.save_story(story.path, {"key_replace": "<A-r>"}) if key.startswith("<C-r>") else None
+    r = run(story, setup, key, LINES + "; R.mode = vim.fn.mode(); R.cur = vim.api.nvim_win_get_cursor(0)")
+    assert r["lines"][:2] == ["Hello brave world", "second line"] or r["lines"][0] == "Hello bravex world"
+    assert r["mode"] == "i" and r["cur"][0] == 1
+
+
+def test_ctrl_u_does_not_delete_the_line_and_ctrl_z_still_undoes(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\nvim.api.nvim_win_set_cursor(0, { 1, 17 })"
+    r = run(story, setup, "<C-u>abc", LINES)
+    assert r["lines"] == ["Hello brave worldabc"]
+
+
+def test_ctrl_h_and_ctrl_backspace_delete_the_previous_word(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\nvim.api.nvim_win_set_cursor(0, { 1, 17 })"
+    assert run(story, setup, "<C-h>", LINES)["lines"] == ["Hello brave "]
+    assert run(story, setup, "<C-BS>", LINES)["lines"] == ["Hello brave "]
+    assert run(story, setup, "<C-h><C-h>", LINES)["lines"] == ["Hello "]
+
+
+def test_ctrl_h_with_a_selection_deletes_the_selection(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    r = run(story, setup, "<S-Right><S-Right><S-Right><S-Right><S-Right><S-Right><C-h>X", LINES)
+    assert r["lines"] == ["HelloXworld"] or r["lines"] == ["Hello Xworld"] or "brave" not in r["lines"][0]
+
+
+def test_ctrl_delete_deletes_the_next_word(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\nvim.api.nvim_win_set_cursor(0, { 1, 6 })"
+    assert run(story, setup, "<C-Del>", LINES)["lines"][0] in ("Hello world", "Hello  world", "Hello brave world"[:6] + "world")
+
+
+@pytest.mark.parametrize("key", ["<F5>", "<F10>", "<F11>", "<S-F5>", "<C-F6>", "<A-F7>", "<F9>x"])
+def test_unmapped_function_keys_do_nothing(home, story, key):
+    settings.save_story(story.path, {"key_sidebar": "<A-d>", "key_lookup": "<A-l>", "key_lookup_word": "<A-k>"})     # (F9, F7 and F6 freed for the test)
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello' })\nvim.api.nvim_win_set_cursor(0, { 1, 5 })"
+    r = run(story, setup, key, LINES)
+    assert r["lines"] in (["Hello"], ["Hellox"]) and "<F" not in r["lines"][0]
+
+
+def test_the_default_replace_key_is_ctrl_r_and_ctrl_h_is_not_replace(home, story):
+    setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello' })\nvim.api.nvim_win_set_cursor(0, { 1, 5 })"
+    r = run(story, setup, "<C-r>", "R.open = require('sw.replace').win ~= nil and vim.api.nvim_win_is_valid(require('sw.replace').win)")
+    assert r["open"] is True
+    r = run(story, setup, "<C-h>", "R.open = require('sw.replace').win ~= nil and vim.api.nvim_win_is_valid(require('sw.replace').win)")
+    assert not r["open"]

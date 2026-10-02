@@ -61,7 +61,7 @@ def test_replace_one_walks_through_the_text(home, story):
 
 
 def test_the_form_opens_with_the_selection_and_shows_the_count(home, story):
-    r = run(story, lua(AT % (1, 4)), "<S-Right><S-Right><S-Right><C-h>", """
+    r = run(story, lua(AT % (1, 4)), "<S-Right><S-Right><S-Right><C-r>", """
         R.find = vim.api.nvim_buf_get_lines(require('sw.replace').buf, 0, 1, false)[1]
         R.title = vim.api.nvim_win_get_config(require('sw.replace').win).title[1][1]
         R.mode = vim.fn.mode()
@@ -71,21 +71,21 @@ def test_the_form_opens_with_the_selection_and_shows_the_count(home, story):
 
 
 def test_type_find_and_replace_then_alt_a_replaces_all_and_esc_returns_to_typing(home, story):
-    r = run(story, lua(AT % (1, 0)), "<C-h>cat<Tab>dog<A-w><A-a><Esc>X",
+    r = run(story, lua(AT % (1, 0)), "<C-r>cat<Tab>dog<A-w><A-a><Esc>X",
             MAIN + "; R.mode = vim.fn.mode(); R.main = vim.api.nvim_get_current_win() == require('sw.layout').main")
     assert r["lines"][0] == "XThe dog sat. the dog ran; category catalog dog's tail."
     assert r["lines"][1] == "Concatenate: a dog, a dog." and r["main"] and r["mode"] == "i"
 
 
 def test_enter_finds_next_and_alt_r_replaces_that_one(home, story):
-    r = run(story, lua(AT % (1, 0)), "<C-h>cat<Tab>X<Up><A-w><CR><CR><A-r>",
+    r = run(story, lua(AT % (1, 0)), "<C-r>cat<Tab>X<Up><A-w><CR><CR><A-r>",
             MAIN)
     assert sum(l.count("X") for l in r["lines"]) == 1 and r["lines"][0] != TEXT[0] or r["lines"][1] != TEXT[1]
     assert "".join(r["lines"]).count("X") == 1
 
 
 def test_toggles_change_the_count(home, story):
-    r = run(story, lua(AT % (1, 0)), "<C-h>cat", """
+    r = run(story, lua(AT % (1, 0)), "<C-r>cat", """
         local rp = require('sw.replace')
         rp.actions.refresh()
         R.t1 = vim.api.nvim_win_get_config(rp.win).title[1][1]
@@ -99,7 +99,7 @@ def test_toggles_change_the_count(home, story):
 
 
 def test_not_found_says_so_and_changes_nothing(home, story):
-    r = run(story, lua(AT % (1, 0)), "<C-h>zebra<Tab>x<A-a>", MAIN + "; " + TITLE)
+    r = run(story, lua(AT % (1, 0)), "<C-r>zebra<Tab>x<A-a>", MAIN + "; " + TITLE)
     assert r["lines"] == TEXT and "nothing to replace" in r["title"]
 
 
