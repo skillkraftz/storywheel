@@ -243,8 +243,8 @@ end
 
 function M.set_spell(on)
   M.spell = on
-  vim.wo[M.window].spell = on
-  vim.bo.spelllang = "en_us"
+  vim.wo[M.window].spell = on                       -- (spell belongs to the window; the language and word lists to each buffer)
+  require("sw.spell").apply_all()
 end
 
 function M.toggle(which)

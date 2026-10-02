@@ -29,7 +29,7 @@ def problems(story, setup, typed, check=""):
     return data["errmsg"], bad
 
 
-POPUP_ITEMS = ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Look Up", "Join Lines", "Writer Menu"]
+POPUP_ITEMS = ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Add to Dictionary", "Look Up", "Join Lines", "Writer Menu"]
 
 
 def test_the_right_click_menu_opens_without_errors(home, story):

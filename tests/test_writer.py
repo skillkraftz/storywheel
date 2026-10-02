@@ -354,10 +354,12 @@ def test_typewriter_and_spellcheck_toggles(home, story):
         local p = require("sw.prose")
         p.toggle("typewriter"); R.so_on = vim.o.scrolloff
         p.toggle("typewriter"); R.so_off = vim.o.scrolloff
-        p.toggle("spell"); R.spell_on = vim.wo[p.window].spell; R.lang = vim.bo.spelllang
+        R.spell_default = vim.wo[p.window].spell                       -- (spellcheck is on unless the settings say otherwise)
         p.toggle("spell"); R.spell_off = vim.wo[p.window].spell
+        p.toggle("spell"); R.spell_on = vim.wo[p.window].spell; R.lang = vim.bo[vim.api.nvim_win_get_buf(p.window)].spelllang
     """)
-    assert r["so_on"] == 999 and r["so_off"] < 999 and r["spell_on"] is True and r["spell_off"] is False and r["lang"] == "en_us"
+    assert r["so_on"] == 999 and r["so_off"] < 999 and r["spell_default"] is True and r["spell_off"] is False and r["spell_on"] is True
+    assert r["lang"] == "en_us"
 
 
 def test_toggle_defaults_come_from_settings(home, story):
@@ -369,7 +371,7 @@ def test_toggle_defaults_come_from_settings(home, story):
 def test_toggles_are_remembered_between_visits(home, story):
     run_lua(story, 'local p = require("sw.prose"); p.toggle("invisibles"); p.toggle("typewriter")')
     r = run_lua(story, 'local p = require("sw.prose"); R.t = p.typewriter; R.i = p.invisibles; R.s = p.spell')
-    assert r == {"t": True, "i": True, "s": False}
+    assert r == {"t": True, "i": True, "s": True}
 
 
 # --- counting words, stats ----------------------------------------------------------------------------------------------------

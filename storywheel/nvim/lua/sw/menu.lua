@@ -21,6 +21,10 @@ local function actions()
     { "Show invisibles", function() prose.toggle("invisibles") end },
     { "Typewriter mode", function() prose.toggle("typewriter") end },
     { "Spellcheck", function() prose.toggle("spell") end },
+    { "Add the word under the cursor to this universe's dictionary", function()
+        local w = require("sw.lookup").word_at_cursor()
+        if w then require("sw.spell").add_word(w) end
+      end },
     { "Word counts", function() sw.show_stats() end },
     { "Export manuscript (.docx)", function() sw.export("docx") end },
     { "Export anonymous manuscript (.docx)", function() sw.export("docx", true) end },

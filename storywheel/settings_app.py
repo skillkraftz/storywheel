@@ -42,7 +42,8 @@ SECTIONS = [
         ("indent_display", "Show a paragraph indent", "bool", None, ""),
         ("typewriter", "Typewriter mode", "bool", None, "Keep the current line in the middle of the screen."),
         ("invisibles", "Show invisibles", "bool", None, ""),
-        ("spellcheck", "Spellcheck", "bool", None, ""),
+        ("spellcheck", "Spellcheck", "bool", None, "Underlines words the dictionary doesn't know. Names from the universe are known; right-click > Add to Dictionary teaches it more."),
+        ("autocorrect", "Autocorrect common slips", "bool", None, "When you finish a word: i → I, im → I'm, dont → don't, teh → the... (a short list; never inside other words)."),
     ]),
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
@@ -55,6 +56,7 @@ SECTIONS = [
          "No name, contact block, byline or surname; the header is 'Title / page'. (Export also has an anonymous choice for one-offs.) "
          "Without a name in Settings > You, exports are anonymous anyway."),
         ("export_one_space", "One space after periods", "bool", None, "Double spaces after . ! ? are exported as one space."),
+        ("export_curly_quotes", "Curly quotes in the export", "bool", None, "The manuscript keeps straight quotes (so spellcheck works); the export turns them into “curly” ones."),
         ("manuscripts_dir", "Manuscripts folder", "path", None,
          "Exports go here, one folder per story: <folder>/<Story Title>/<Story Title> <date>.docx. Default ~/Writing."),
     ]),

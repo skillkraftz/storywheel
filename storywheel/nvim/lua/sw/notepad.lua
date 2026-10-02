@@ -133,7 +133,7 @@ end
 function M.clean_pasted(lines)
   local out = {}
   for _, l in ipairs(lines) do
-    local t = l:gsub("\r$", "")
+    local t = require("sw.typing").straighten(l:gsub("\r$", ""))        -- (curly quotes become straight)
     t = t:gsub("^[ \t]+", "")
     while t:sub(1, 2) == "\194\160" do t = t:sub(3):gsub("^[ \t]+", "") end         -- (a non-breaking space too)
     if t ~= "" or #lines == 1 then out[#out + 1] = t end
@@ -421,7 +421,7 @@ function M.popup_menu()
     { "Cut", "cut", "Ctrl+X" }, { "Copy", "copy", "Ctrl+C" }, { "Paste", "paste", "Ctrl+V" }, { "Select All", "select_all", "Ctrl+A" }, { "-" },
     { "Italic", "italic", { "key_italic", "<A-i>" } }, { "Bold", "bold", { "key_bold", "<A-b>" } },
     { "Scene Break", "scene_break", { "key_scene_break", "<A-s>" } }, { "-" },
-    { "Find", "find", "Ctrl+F" }, { "Replace", "replace", { "key_replace", "<C-r>" } },
+    { "Find", "find", "Ctrl+F" }, { "Replace", "replace", { "key_replace", "<C-r>" } }, { "Add to Dictionary", "spell_add" },
     { "Look Up", "lookup", { "key_lookup", "<F7>" } }, { "Join Lines", "join", "Alt+J" }, { "Writer Menu", "menu", { "key_menu", "<F12>" } },
   }
   for i, it in ipairs(items) do
@@ -441,6 +441,10 @@ function M.run_menu_item(name)
   local prose = require("sw.prose")
   local actions = {
     cut = M.cut, copy = M.copy, paste = M.paste, select_all = M.select_all, find = function() M.find() end,
+    spell_add = function()
+      local w = require("sw.lookup").word_at_cursor()
+      if w then require("sw.spell").add_word(w) else vim.api.nvim_echo({ { "Put the cursor on a word first.", "Normal" } }, true, {}) end
+    end,
     undo = function() M.undo() end, redo = function() M.redo() end, replace = function() require("sw.replace").open() end,
     italic = function()
       if M.has_selection() then prose.wrap_visual("*") else prose.toggle_insert("*") end

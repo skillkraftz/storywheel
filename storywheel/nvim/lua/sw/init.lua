@@ -263,7 +263,7 @@ function M.apply_settings()
   prose.decorate(M.main_buf())
   if story.setting("typewriter", false) ~= prose.typewriter then prose.set_typewriter(story.setting("typewriter", false)) end
   if story.setting("invisibles", false) ~= prose.invisibles then prose.set_invisibles(story.setting("invisibles", false)) end
-  if story.setting("spellcheck", false) ~= prose.spell then prose.set_spell(story.setting("spellcheck", false)) end
+  if story.setting("spellcheck", true) ~= prose.spell then prose.set_spell(story.setting("spellcheck", true)) end
   stats.refresh()
 end
 
@@ -387,12 +387,20 @@ function M.start()
     if remembered == nil then return default end
     return remembered
   end
+  require("sw.spell").setup()
   prose.set_typewriter(pick(saved.typewriter, story.setting("typewriter", false)))
   prose.set_invisibles(pick(saved.invisibles, story.setting("invisibles", false)))
-  prose.set_spell(pick(saved.spell, story.setting("spellcheck", false)))
+  prose.set_spell(pick(saved.spell, story.setting("spellcheck", true)))
   stats.setup()
   backup.setup()
   world.setup()
+  require("sw.typing").setup()
+  vim.api.nvim_create_autocmd({ "BufEnter", "BufReadPost" }, { group = vim.api.nvim_create_augroup("sw_spell", { clear = true }),
+    callback = function(ev)
+      local name = vim.api.nvim_buf_get_name(ev.buf)
+      if story.manuscript and name:find(story.manuscript, 1, true) then require("sw.spell").apply(ev.buf) end
+    end })
+  require("sw.spell").apply_all()
   notepad.setup()                                   -- (notepad mode is on unless the settings say otherwise)
   if notepad.enabled then notepad.map_buffer(vim.api.nvim_get_current_buf()) end
   vim.api.nvim_set_current_win(layout.main)

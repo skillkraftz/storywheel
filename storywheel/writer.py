@@ -89,6 +89,13 @@ def _refresh_copy(target):
 def environment(story, return_file):
     story.migrate_manuscript()
     story.migrate_paragraphs()
+    story.migrate_quotes()
+    spelling_dir = story.universe.path / "spell"
+    try:
+        from . import spelling
+        spelling.write_names(story, spelling_dir)
+    except OSError:
+        pass
     xdg = nvim_config()
     env = dict(os.environ)
     root = state_root()
@@ -96,7 +103,7 @@ def environment(story, return_file):
         "NVIM_APPNAME": APPNAME,
         "XDG_CONFIG_HOME": str(xdg), "XDG_DATA_HOME": str(root / "data"),
         "XDG_STATE_HOME": str(root / "state"), "XDG_CACHE_HOME": str(root / "cache"),
-        "STORYWHEEL_STORY_DIR": str(story.path), "STORYWHEEL_UNIVERSE": story.universe.slug,
+        "STORYWHEEL_STORY_DIR": str(story.path), "STORYWHEEL_UNIVERSE": story.universe.slug, "STORYWHEEL_SPELL_DIR": str(spelling_dir),
         "STORYWHEEL_STORY": story.slug, "STORYWHEEL_PY": sys.executable,
         "STORYWHEEL_RETURN_FILE": str(return_file),
         "STORYWHEEL_HOME": str(paths.home()), "STORYWHEEL_LIBRARY": str(paths.library_root()),

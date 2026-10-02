@@ -24,7 +24,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from . import paths, settings, vault
+from . import paths, quotes, settings, vault
 
 FORMATS = ("docx", "odt", "pdf", "md", "txt", "fountain")
 INDENT_INCHES = 0.5
@@ -69,7 +69,17 @@ def one_space(text):
     return re.sub(r"([.!?…][\"'”’)\]*_]*)[ \t]{2,}(?=\S)", r"\1 ", text)
 
 
-def paragraphs(text, single_space=False):
+def curly(story):
+    """Does this story's export turn straight quotes into curly ones? (setting export_curly_quotes, default on)"""
+    return settings.load_story(story.path).get("export_curly_quotes", True) is not False
+
+
+def smart_title(story, on=None):
+    on = curly(story) if on is None else on
+    return quotes.smarten(story.title) if on else story.title
+
+
+def paragraphs(text, single_space=False, curly_quotes=False):
     """Blocks of a text: [('scene_break', ''), ('text', 'a paragraph')...]. One line is one paragraph; blank lines mean
     nothing; a marker line is a scene break wherever it is."""
     out = []
@@ -78,7 +88,8 @@ def paragraphs(text, single_space=False):
         if vault.marker_label(s) is not None:
             out.append(("scene_break", ""))
         elif s:
-            out.append(("text", one_space(s) if single_space else s))
+            s = one_space(s) if single_space else s
+            out.append(("text", quotes.smarten(s) if curly_quotes else s))
     return out
 
 
@@ -90,7 +101,7 @@ def compile_text(story):
 def plain_text(story):
     """No markup at all: scene breaks are '#', as in a manuscript."""
     blocks = []
-    for kind, text in paragraphs(compile_text(story), _one_space(story)):
+    for kind, text in paragraphs(compile_text(story), _one_space(story), curly(story)):
         blocks.append("#" if kind == "scene_break" else strip_markup(text))
     return "\n\n".join(blocks)
 
@@ -203,13 +214,14 @@ def build_docx(story, path, anonymous=None):
         anonymous = bool(st.get("export_anonymous"))
     info, warnings = author_info(story, anonymous=anonymous)
     single = bool(st.get("export_one_space"))
+    curly_on = st.get("export_curly_quotes", True) is not False
     font = st.get("font") or "Times New Roman"
     novel = str(st.get("format", "short-story")).lower() == "novel"
     scenes = scene_texts(story)
     words = sum(vault.count_words(t) for _n, t in scenes)
 
     d = docx.Document()
-    d.core_properties.title = story.title
+    d.core_properties.title = smart_title(story, curly_on)
     d.core_properties.author = info["byline"]
     section = d.sections[0]
     section.page_width, section.page_height = Inches(8.5), Inches(11)
@@ -254,7 +266,7 @@ def build_docx(story, path, anonymous=None):
         para(line, single=True, runs=False)
     # the title (bold unless you turned that off), about halfway down the page, then the byline
     used = max(1, len(block)) * LINE_POINTS
-    title_p = para(story.title, WD_ALIGN_PARAGRAPH.CENTER, before=max(24, TITLE_DOWN_POINTS - used), runs=False)
+    title_p = para(smart_title(story, curly_on), WD_ALIGN_PARAGRAPH.CENTER, before=max(24, TITLE_DOWN_POINTS - used), runs=False)
     if st.get("export_title_bold", True) is not False:
         for r in title_p.runs:
             r.bold = True
@@ -266,7 +278,7 @@ def build_docx(story, path, anonymous=None):
     hp = header.paragraphs[0]
     hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     hp.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
-    shown = story.title if st.get("export_header", "full") != "keyword" else title_keyword(story, st)
+    shown = smart_title(story, curly_on) if st.get("export_header", "full") != "keyword" else title_keyword(story, st)
     hp.add_run((f"{info['surname']} / " if info["surname"] else "") + f"{shown} / ")
     _page_field(hp)
     section.first_page_header.paragraphs[0].text = ""
@@ -280,7 +292,7 @@ def build_docx(story, path, anonymous=None):
             p.paragraph_format.page_break_before = chapter > 1
             if chapter > 1:
                 p.paragraph_format.space_before = Pt(TITLE_DOWN_POINTS / 3)
-        for kind, block_text in paragraphs(text, single):
+        for kind, block_text in paragraphs(text, single, curly_on):
             if kind == "scene_break":
                 para("#", WD_ALIGN_PARAGRAPH.CENTER, runs=False)
             else:
@@ -301,8 +313,8 @@ def _byline_md(info):
 def build_md(story, path, anonymous=None):
     st = settings.load_story(story.path)
     info, warnings = author_info(story, anonymous=bool(st.get("export_anonymous")) if anonymous is None else anonymous)
-    body = "\n\n".join("* * *" if k == "scene_break" else t for k, t in paragraphs(compile_text(story), _one_space(story)))
-    text = f"# {story.title}\n\n{_byline_md(info)}{body}\n"
+    body = "\n\n".join("* * *" if k == "scene_break" else t for k, t in paragraphs(compile_text(story), _one_space(story), curly(story)))
+    text = f"# {smart_title(story)}\n\n{_byline_md(info)}{body}\n"
     Path(path).write_text(text, encoding="utf-8")
     return warnings
 
@@ -311,7 +323,7 @@ def build_txt(story, path, anonymous=None):
     st = settings.load_story(story.path)
     info, warnings = author_info(story, anonymous=bool(st.get("export_anonymous")) if anonymous is None else anonymous)
     by = "" if info["anonymous"] else f"by {info['byline']}\n"
-    text = f"{story.title}\n{by}\n{plain_text(story)}\n\nEND\n"
+    text = f"{smart_title(story)}\n{by}\n{plain_text(story)}\n\nEND\n"
     Path(path).write_text(text, encoding="utf-8")
     return warnings
 

@@ -32,7 +32,7 @@ def run(story, setup, typed, check, term="xterm-256color", env_extra=None, colum
         "vim.o.columns = %d\nvim.o.lines = %d\nrequire('sw').start()\nvim.wait(150)\nR = {}\n%s\n"
         "function CHECK()\n%s\nio.stdout:write(next(R) == nil and '{}' or vim.json.encode(R))\nvim.cmd('qa!')\nend\n"
         "vim.api.nvim_input(%s)\nvim.api.nvim_input('<Cmd>lua CHECK()<CR>')\n"
-        % (columns, lines, textwrap.dedent(setup), textwrap.dedent(check), json.dumps(typed)))
+        % (columns, lines, textwrap.dedent(setup), textwrap.dedent(check), json.dumps(typed, ensure_ascii=False)))
     res = subprocess.run([argv[0], "--headless", "-c", f"luafile {script}"], env=env, capture_output=True, text=True, timeout=60)
     out = res.stdout[res.stdout.index("{"):] if "{" in res.stdout else ""
     if quits and not out:
@@ -194,7 +194,7 @@ def test_right_click_menu_has_the_edit_entries(home, story):
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
-    assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Look Up", "Join Lines", "Writer Menu"]
+    assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Add to Dictionary", "Look Up", "Join Lines", "Writer Menu"]
     assert r["mousemodel"] == "popup_setpos"
 
 

@@ -357,6 +357,32 @@ class Story:
             parts.append(f"removed {dropped} blank line{'s' if dropped != 1 else ''}")
         return f"Paragraphs are now one line each: {' and '.join(parts) or 'tidied'} in {', '.join(changed)} (the originals are in {backup})."
 
+    def migrate_quotes(self):
+        """Manuscripts keep straight quotes and apostrophes (the spellchecker can't read ’ in "couldn’t"). Once per story (a
+        `.straight-quotes` file says so), curly marks in the manuscript files become straight, with the old files copied to
+        <story>/.backups/quotes-DATE/ first. Returns a message when something changed, else None."""
+        from . import quotes
+        flag = self.path / ".straight-quotes"
+        if flag.exists() or not self.path.is_dir():
+            return None
+        changed, total = [], 0
+        backup = self.path / ".backups" / f"quotes-{datetime.datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        for p in self.files():
+            old = p.read_text(encoding="utf-8")
+            n = quotes.count_curly(old)
+            if not n:
+                continue
+            backup.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(p, backup / p.name)
+            _write(p, quotes.straighten(old))
+            changed.append(p.name)
+            total += n
+        _write(flag, "straight quotes in the manuscript; the export makes them curly\n")
+        if not changed:
+            return None
+        return (f"Quotes are now straight in the manuscript ({total} curly mark{'s' if total != 1 else ''} changed in {', '.join(changed)}; the "
+                f"originals are in {backup}). The export makes them curly again.")
+
     def seed(self):
         p = self.path / "seed.json"
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
@@ -716,6 +742,7 @@ class Universe:
         m.update(meta or {})
         s.save_outline(m, sections or {})
         _write(s.path / ".one-line-paragraphs", "one line = one paragraph\n")      # (new stories already follow the rule)
+        _write(s.path / ".straight-quotes", "straight quotes in the manuscript; the export makes them curly\n")
         if seed is not None:
             _write(s.path / "seed.json", json.dumps(seed, indent=2))
         return s
