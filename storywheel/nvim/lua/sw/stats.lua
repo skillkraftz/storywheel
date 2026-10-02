@@ -99,12 +99,12 @@ function M.refresh()
   vim.cmd("redrawstatus")
 end
 
--- The status line: scene, manuscript, today against the goal. Minimal on purpose.
+-- The status line: words in the scene, in the story, and written today against the goal (each number says what it is).
 function M.line()
   local goal = tonumber(story.setting("daily_goal", 0)) or 0
   local today = math.max(0, M.total_cached - M.start_total) + M.day_base
-  local goal_text = goal > 0 and ("/" .. commas(goal)) or ""
-  return string.format("  scene %s · manuscript %s · today %s%s", commas(M.scene_cached), commas(M.total_cached),
+  local goal_text = goal > 0 and (" of " .. commas(goal)) or ""
+  return string.format("  words: in this scene %s · in the story %s · written today %s%s", commas(M.scene_cached), commas(M.total_cached),
                        commas(today), goal_text)
 end
 

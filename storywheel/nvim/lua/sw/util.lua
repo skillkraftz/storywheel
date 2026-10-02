@@ -118,6 +118,12 @@ function M.load_buffer(path)
   return b
 end
 
+-- A yes/no question. `M.auto_answer` (true/false) answers it without asking (tests, scripts).
+function M.ask_yes(message)
+  if M.auto_answer ~= nil then return M.auto_answer end
+  return vim.fn.confirm(message, "&Yes\n&No", 2) == 1
+end
+
 function M.notify(msg, level)
   vim.schedule(function() vim.notify(msg, level or vim.log.levels.INFO) end)
 end

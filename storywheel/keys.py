@@ -14,6 +14,7 @@ WRITER_KEYS = {
     "key_peek": ("Peek at a name", "<F8>"),
     "key_builder": ("Back to the Builder", "<C-q>"),
     "key_replace": ("Find and replace", "<C-r>"),
+    "key_quit": ("Quit storywheel", "<A-q>"),
     "key_lookup": ("Dictionary and thesaurus card", "<F7>"),
     "key_lookup_word": ("Look up a typed word", "<F6>"),
 }

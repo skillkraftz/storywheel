@@ -199,6 +199,37 @@ def cmd_inflect(args):
     emit({"word": word, "kind": inflect.classify(args.original, args.base)}) if args.json else print(word)
 
 
+def cmd_backups(args):
+    """backups list|show|restore UNIVERSE/STORY [ID]: browse a story's backups and put one back."""
+    from . import backups
+    uni, _, slug = (args.target or "").partition("/")
+    u = _universe(uni)
+    story = u.story(slug)
+    if not story:
+        sys.exit(f"No story '{slug}' in {u.slug}")
+    if args.action == "list":
+        rows = backups.list_backups(story)
+        if args.json:
+            emit(rows)
+        else:
+            for r in rows:
+                print(f"  {r['id']:<44} {r['when']}  {r['what']:<32} {r['words']:>7,} words")
+            if not rows:
+                print("  No backups yet.")
+        return
+    if not args.id:
+        sys.exit("Which backup? Give its id (see:  backups list).")
+    entry = backups.find(story, args.id)
+    if entry is None:
+        sys.exit(f"There is no backup '{args.id}'.")
+    if args.action == "show":
+        print(backups.preview(entry, lines=args.lines))
+        return
+    result = backups.restore(story, args.id)
+    emit(result) if args.json else print(f"  Restored {result['restored']} ({result['words']:,} words)."
+                                         + (f" The version it replaced is in {result['kept']}." if result["kept"] else ""))
+
+
 def cmd_dictionary(args):
     from . import dictionary, dictionary_build, paths
     if args.action == "status":
@@ -281,6 +312,12 @@ def add_parsers(sub):
         p.add_argument("word", nargs="+")
         p.add_argument("--json", action="store_true")
 
+    p = sub.add_parser("backups", help="a story's backups:  backups list|show|restore UNIVERSE/STORY [ID]")
+    p.add_argument("action", choices=["list", "show", "restore"])
+    p.add_argument("target", help="universe/story")
+    p.add_argument("id", nargs="?", help="the backup's id (from list)")
+    p.add_argument("--lines", type=int, default=14)
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("inflect", help="a word in the same form as another (inflect running run sprint -> sprinting)")
     p.add_argument("original")
     p.add_argument("base")
@@ -300,4 +337,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

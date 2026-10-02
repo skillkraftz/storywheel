@@ -19,7 +19,7 @@ M.HELP = {
   "Notepad mode (the default; a setting turns Vim keys back on)",
   "  You are always typing: Escape does nothing.  The mouse and Shift+arrows select; typing replaces the selection.",
   "  Ctrl+C / X / V  copy / cut / paste (system clipboard)    Ctrl+Z / Ctrl+Y  undo / redo    Ctrl+S  save",
-  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+R  find and replace    Ctrl+Q  back to the Builder",
+  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+R  find and replace    Ctrl+Q  back to the Builder    Alt+Q  Quit storywheel (asks first)",
   "  Ctrl+Backspace (Ctrl+H)  delete the previous word    Ctrl+Delete  delete the next word    Other Ctrl keys: nothing happens",
   "  F5  Words mode, carrying the word under the cursor (Use in Writer there brings a chosen word back, in the same form)",
   "  F7  dictionary and thesaurus card for the word under the cursor (Enter on a similar word replaces it)    F6  look up a typed word",
@@ -117,6 +117,12 @@ function M.leave(where, extra)
 end
 
 -- F5: Words, with the word under the cursor (or the selection) and where it is, so "Use in Writer" can replace it.
+-- Quit the whole program (asks first; everything is saved).
+function M.quit()
+  if util.ask_yes("Quit storywheel?  Everything is saved.") then return M.leave("quit") end
+  return false
+end
+
 function M.words()
   local data = { universe = story.universe, story = story.slug }
   local word, target = require("sw.lookup").word_at_cursor()

@@ -397,6 +397,7 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, story.setting("key_builder", "<C-q>"), function() require("sw").leave("builder") end)
   map({ "i", "s", "x", "n" }, story.setting("key_menu", "<F12>"), function() require("sw.menu").open() end)
   map({ "i", "s", "x", "n" }, "<A-m>", function() require("sw.menu").open() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_quit", "<A-q>"), function() require("sw").quit() end)
   map({ "i", "s", "x" }, "<A-j>", function() M.join_lines() end)
   -- smaller undo steps: a break at every space
   map("i", "<Space>", "<C-g>u<Space>")
