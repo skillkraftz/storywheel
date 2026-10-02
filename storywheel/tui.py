@@ -11,7 +11,7 @@ plain prompt uses, so the keys do exactly what they do there.
 
 Tab moves between the lists. Space rolls; k keeps; f (or Enter) rerolls the selected field;
 e edits it; E opens $EDITOR; w writes your own; + and - rate; u / U universe; m mix editor;
-h history; b back; x skip; q saves and quits; ? help.
+h history; b back a step; x skip; q back to the previous mode; Q quit storywheel; ? help.
 
 The mouse works on the card too: click a field to reroll it, right-click to edit it, scroll
 over it to step through its earlier values, click its ▲ or ▼ to rate it.
@@ -25,7 +25,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.message import Message
 from textual.screen import ModalScreen, Screen
-from . import appearance
+from . import appearance, navigation
 from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
@@ -42,7 +42,6 @@ MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("�
 HELP = """\
 [b]Keys[/b]
 
-  [b]F5[/b]      Words: look up a word, words to learn, My words, overused words (offline)
   [b]space[/b]   roll again
   [b]k[/b]       keep this and move on
   [b]f[/b]       reroll the selected field (so does enter)
@@ -62,7 +61,9 @@ HELP = """\
   [b]m[/b]       mix editor: what this story favors
   [b]b[/b]       go back a step
   [b]x[/b]       skip this step
-  [b]q[/b]       quit: keep this story or delete it
+  [b]q[/b]       back to the mode you came from (the draft is saved)
+  [b]Q[/b]       Quit storywheel: asks to keep this story or delete it (and offers to send it to the Builder)
+  [b]F1-F5[/b]   the modes: Wheel, Builder, Writer, Settings, Words (the footer says so)
   [b]?[/b]       this help
 
 [b]Moving around[/b]
@@ -241,7 +242,7 @@ class HelpScreen(ModalScreen):
 
 
 class DoneScreen(ModalScreen):
-    BINDINGS = [Binding("q,enter", "quit_app", "Quit"), Binding("escape", "keep_going", "Keep editing")]
+    BINDINGS = [Binding("Q,enter", "quit_app", "Quit storywheel"), Binding("q,escape", "keep_going", "Back: keep editing")]
     DEFAULT_CSS = """
     DoneScreen { align: center middle; }
     DoneScreen > Static { width: 70; height: auto; border: round $success; background: $surface; padding: 1 2; }
@@ -253,7 +254,7 @@ class DoneScreen(ModalScreen):
 
     def compose(self) -> ComposeResult:
         where = f"\n\nMarkdown: {self.path}" if self.path else ""
-        yield Static(f"[b]Done: {self.title_text}[/b]{where}\n\n  [b]q[/b] / enter   quit\n  [b]esc[/b]         keep editing")
+        yield Static(f"[b]Done: {self.title_text}[/b]{where}\n\n  [b]Q[/b] / enter   quit storywheel\n  [b]q[/b] / esc     back: keep editing")
 
     def action_quit_app(self):
         self.dismiss("quit")
@@ -733,7 +734,9 @@ class MainScreen(Screen):
     BINDINGS = [
         Binding("space", "roll", "Roll"),
         Binding("k", "keep", "Keep"),
-        Binding("q", "quit_app", "Quit"),
+        navigation.back_binding(),
+        navigation.quit_binding(),
+        *navigation.mode_bindings("wheel"),
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("f", "reroll_field", "Field"),
         Binding("e", "edit", "Edit"),
@@ -744,10 +747,6 @@ class MainScreen(Screen):
         Binding("m", "mix", "Mix"),
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
-        Binding("f2", "mode('builder')", "Builder", key_display="F2"),
-        Binding("f3", "mode('writer')", "Writer", key_display="F3"),
-        Binding("f4", "mode('settings')", "Settings", key_display="F4"),
-        Binding("f5", "mode('words')", "Words", key_display="F5"),
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
@@ -1519,6 +1518,20 @@ class MainScreen(Screen):
 
     def action_focus_card(self):
         self.card.focus()
+
+    def action_noop_mode(self):
+        self.say("You are in the Wheel.")
+
+    def action_back_mode(self):
+        """q: back to the mode you came from (the draft is saved)."""
+        from . import modes
+        if not modes.can_go_back():
+            self.say(navigation.NO_BACK)
+            return
+        self._leave("back")
+
+    def action_quit_program(self):
+        self.action_quit_app()
 
     def action_quit_app(self):
         s = self.session

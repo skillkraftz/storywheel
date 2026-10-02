@@ -178,7 +178,7 @@ def test_promotion_carries_on_into_the_builder(home):
         while app.session.step.key != "premise":
             await pilot.press("k")
             await pilot.pause()
-        await pilot.press("q", "n", "enter", "p")
+        await pilot.press("Q", "n", "enter", "p")
         await pilot.pause()
         return app.next
     nxt = run_tui(story, make_engine(home), script)
@@ -351,7 +351,8 @@ def test_plain_storywheel_reopens_the_builder_exactly_where_you_left_off(home, w
     assert t.wait_for("Place: Red Draw")
     text = " ".join(t.text().split())
     assert "Places (1)" in text and "Story outline: The Last Clause" in text and "Place: Red Draw" in text
-    t.send(b"q", 1.0)
+    t.send(b"Q", 1.0)
+    t.send(b"y", 1.0)                                                  # Quit storywheel? asks first
     assert t.finish() == 0
 
 
@@ -371,7 +372,8 @@ def test_builder_to_writer_and_back_with_the_hotkeys(home, world):
     assert "7 words" in " ".join(t.text().split()) or "words in" in t.text()
     assert "a line typed in the Writer" in s.scenes()[0].read_text()
     assert state.State().get("mode") == "builder"
-    t.send(b"q", 1.0)
+    t.send(b"Q", 1.0)
+    t.send(b"y", 1.0)
     assert t.finish() == 0
 
 
@@ -382,7 +384,8 @@ def test_storywheel_reopens_the_writer_if_that_is_where_you_were(home, world):
     assert t.wait_for("Stacie ran down the road", 25)
     t.send(F2, 1.0)
     assert t.wait_for("Universe Builder") or t.wait_for("Stories in Thornwood")
-    t.send(b"q", 1.0)
+    t.send(b"Q", 1.0)
+    t.send(b"y", 1.0)
     assert t.finish() == 0
 
 
@@ -390,6 +393,6 @@ def test_storywheel_reopens_the_writer_if_that_is_where_you_were(home, world):
 def test_with_no_state_storywheel_opens_the_wheel(home):
     t = Term([sys.executable, "-m", "storywheel"], cli_env(home))
     assert t.wait_for("Genre & mood")
-    t.send(b"q", 0.8)
+    t.send(b"Q", 0.8)
     t.send(b"d", 0.8)
     assert t.finish() == 0

@@ -9,6 +9,24 @@ import sys
 from . import paths, state as state_mod, store, vault, writer
 
 
+TRAIL = []          # the modes you came through, most recent last: q goes back along it
+
+
+def can_go_back():
+    return bool(TRAIL)
+
+
+def _arrive(came_from, mode):
+    """Update the trail for a move from `came_from` to `mode` (a mode already on the trail cuts it back to there instead of growing it)."""
+    if mode == came_from:
+        return
+    if mode in TRAIL:
+        del TRAIL[len(TRAIL) - 1 - TRAIL[::-1].index(mode):]
+        return
+    TRAIL.append(came_from)
+    del TRAIL[:-20]
+
+
 def _resolve_story(st, payload):
     """(universe, story) to write, from the payload or from where you were last."""
     uni = payload.get("universe") or st.get("universe")
@@ -102,6 +120,11 @@ def run(start=None, get_engine=None, get_ratings=None):
             nxt = run_words(st, payload)
         else:
             nxt = run_settings(st, payload)
+        if nxt and nxt[0] == "back":                          # q: back to the mode you came from
+            target = TRAIL.pop() if TRAIL else (nxt[1].get("fallback") or ("builder" if vault.list_universes() else "wheel"))
+            nxt = (target, nxt[1])
+        elif nxt and nxt[0] in ("wheel", "builder", "writer", "settings", "words"):
+            _arrive(mode, nxt[0])
         if not nxt or nxt[0] not in ("wheel", "builder", "writer", "settings", "words"):
             break
         came_from = mode

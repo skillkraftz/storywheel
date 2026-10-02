@@ -25,7 +25,7 @@ def flat(text):
 def test_leaving_with_a_kept_story_shows_the_promotion_message_and_three_choices(home):
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q")
+        await press(pilot, "Q")
         return type(app.screen).__name__, flat(screen_text(app))
     name, text = run_tui(store.new_story(), make_engine(home), script)
     assert name == "QuitScreen" and "Bringing this story into the Universe Builder" in text
@@ -35,7 +35,7 @@ def test_leaving_with_a_kept_story_shows_the_promotion_message_and_three_choices
 
 def test_a_story_with_nothing_kept_just_asks_keep_or_delete(home):
     async def script(app, pilot):
-        await press(pilot, "q")
+        await press(pilot, "Q")
         return flat(screen_text(app))
     text = run_tui(store.new_story(), make_engine(home), script)
     assert "Keep this story or delete it?" in text and "Universe Builder" not in text
@@ -45,7 +45,7 @@ def test_not_now_keeps_a_draft(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q", "k")
+        await press(pilot, "Q", "k")
         return app.return_value, app.next
     message, nxt = run_tui(story, make_engine(home), script)
     assert "Resume with:  storywheel resume" in message and nxt is None
@@ -56,7 +56,7 @@ def test_new_universe_named_after_the_story_with_a_preview(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q", "n")
+        await press(pilot, "Q", "n")
         box = app.screen.query_one(Input)
         title = store.title_of(app.session.story)
         assert type(app.screen).__name__ == "EditScreen" and box.value == title
@@ -81,7 +81,7 @@ def test_cancelling_the_preview_changes_nothing(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q", "n", "enter")
+        await press(pilot, "Q", "n", "enter")
         await press(pilot, "escape")
         return type(app.screen).__name__, app.is_running
     assert run_tui(story, make_engine(home), script) == ("MainScreen", True)
@@ -95,7 +95,7 @@ def test_existing_universe_offers_merges_and_enter_switches_them(home):
         await keep_to(app, pilot, "premise")
         name = app.session.story["kept"]["protagonist"]["name"]
         u.new_entity("character", name, {"job": "keeper of nothing"})
-        await press(pilot, "q", "e")
+        await press(pilot, "Q", "e")
         assert type(app.screen).__name__ == "PickUniverseScreen"
         await press(pilot, "enter")
         merged = flat(screen_text(app))
@@ -120,7 +120,7 @@ def test_no_existing_universe_falls_back_to_a_new_one(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q", "e")
+        await press(pilot, "Q", "e")
         return type(app.screen).__name__
     assert run_tui(story, make_engine(home), script) == "EditScreen"
 
@@ -129,7 +129,7 @@ def test_delete_the_draft_from_the_promotion_message(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "q", "d")
+        await press(pilot, "Q", "d")
         return app.return_value
     assert "Deleted" in run_tui(story, make_engine(home), script)
     assert not (home / "home" / "stories" / f"{story['id']}.json").exists()

@@ -54,7 +54,7 @@ def test_three_columns_with_tabs_overview_and_empty_states(home):
     text = run_builder(home, script)
     for needle in ("Universes", "Thornwood", "Stories in Thornwood", "Universe: Thornwood", "Genre leanings", "western",
                    "Characters", "Places", "Things", "Groups", "Notes", "Outline", "Scenes", "Writing", "Today", "Streak",
-                   "F1 Wheel", "Roll blanks"):
+                   "F1-F5", "Modes: Wheel", "Roll blanks"):
         assert needle in text, needle
 
 

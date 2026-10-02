@@ -16,7 +16,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
-from . import appearance
+from . import appearance, navigation
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -50,7 +50,7 @@ HELP = f"""\
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
   [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
-  [b]q[/b]  quit   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
+  [b]q[/b]  back to the mode you came from   [b]Q[/b]  Quit storywheel (asks first)   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
 
 Roll results use the universe's genre leanings, the entity's other fields, and existing entities
 (a rival, owner, parent place or leader can be a real entity).
@@ -191,11 +191,7 @@ class StoryOptions(OptionList):
 
 class BuilderScreen(Screen):
     BINDINGS = [
-        Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
-        Binding("f2", "noop_builder", "Builder", key_display="F2"),
-        Binding("f3", "writer", "Writer", key_display="F3"),
-        Binding("f4", "mode('settings')", "Settings", key_display="F4"),
-        Binding("f5", "mode('words')", "Words", key_display="F5"),
+        *navigation.mode_bindings("builder", writer_action="writer"),
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
         Binding("e", "write_field", "Write"),
@@ -215,12 +211,13 @@ class BuilderScreen(Screen):
         Binding("s", "universe_settings", "Universe settings", show=False),
         Binding("S", "story_settings", "Story settings", show=False),
         Binding("G", "global_settings", "Your details", show=False),
-        Binding("o", "overview", "Overview", show=False),
+        Binding("o", "overview", "Universe overview"),
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
         Binding("W", "new_draft", "New Wheel draft", show=False),
-        Binding("q", "quit_app", "Quit"),
+        navigation.back_binding(),
+        navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("escape", "focus_card", "", show=False),
     ]
@@ -1041,8 +1038,22 @@ class BuilderScreen(Screen):
     def action_mode(self, which):
         self.b.go(which)
 
+    def action_noop_mode(self):
+        self.say("You are in the Builder.")
+
+    def action_back_mode(self):
+        """q: back to the mode you came from."""
+        from . import modes
+        if not modes.can_go_back():
+            self.say(navigation.NO_BACK)
+            return
+        self.b.go("back", {"universe": self.universe.slug if self.universe else None, "story": self.story.slug if self.story else None})
+
+    def action_quit_program(self):
+        self.app.push_screen(ConfirmScreen(navigation.QUIT_QUESTION), lambda yes: self.b.go("quit") if yes else None)
+
     def action_quit_app(self):
-        self.b.go("quit")
+        self.action_quit_program()
 
     # --- universes and stories ----------------------------------------------------------------------------------------------
 

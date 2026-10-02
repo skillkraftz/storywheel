@@ -238,7 +238,7 @@ def test_the_story_you_are_in_cannot_be_deleted_from_the_list(home):
 
 def test_q_asks_keep_or_delete_and_escape_cancels(home):
     async def script(app, pilot):
-        await press(pilot, "k", "q")
+        await press(pilot, "k", "Q")
         asked = (type(app.screen).__name__, " ".join(screen_text(app).split()))
         await press(pilot, "escape")
         return asked, app.is_running, type(app.screen).__name__
@@ -251,7 +251,7 @@ def test_keeping_prints_the_story_then_the_markdown_path_and_the_resume_command(
     async def script(app, pilot):
         while app.session.step.key != "premise":
             await press(pilot, "k")
-        await press(pilot, "q", "k")
+        await press(pilot, "Q", "k")
         return app.return_value
     message = run_tui(story, make_engine(home), script)
     title = store.title_of(store.load(story["id"]))
@@ -266,7 +266,7 @@ def test_deleting_on_exit_removes_the_story_and_its_markdown(home):
         for _ in range(4):
             await press(pilot, "k")
         assert list((home / "out").glob("*.md"))
-        await press(pilot, "q", "d")
+        await press(pilot, "Q", "d")
         return app.return_value
     message = run_tui(story, make_engine(home), script)
     assert "Deleted" in message and "PROTAGONIST" not in message

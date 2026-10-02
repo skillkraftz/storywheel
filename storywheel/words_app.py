@@ -19,7 +19,7 @@ from textual.widgets import Button, Footer, Input, Label, OptionList, Select, St
 from textual.widgets.option_list import Option
 
 from . import dictionary, inflect, learn, overused, vault, wordbank
-from . import appearance
+from . import appearance, navigation
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -43,7 +43,7 @@ HELP = f"""\
 [b]Overused[/b]  the most frequent words of a story (everyday words left out) and words repeated close together. Enter on a
   place opens the Writer there.
 
-[b]q[/b] goes back to where you were. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus;
+[b]q[/b] goes back to where you were; [b]Q[/b] Quit storywheel (asks first); F1-F5 are the modes. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus;
 word frequencies: wordfreq (data CC BY-SA 4.0).
 """
 
@@ -224,13 +224,10 @@ class FlashcardScreen(ModalScreen):
 
 class WordsScreen(Screen):
     BINDINGS = [
-        Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
-        Binding("f2", "mode('builder')", "Builder", key_display="F2"),
-        Binding("f3", "mode('writer')", "Writer", key_display="F3"),
-        Binding("f4", "mode('settings')", "Settings", key_display="F4"),
-        Binding("f5", "noop", "Words", key_display="F5"),
+        *navigation.mode_bindings("words"),
         Binding("question_mark", "help", "Help", key_display="?"),
-        Binding("q", "leave", "Back"),
+        navigation.back_binding(),
+        navigation.quit_binding(),
         Binding("b", "back", "Back a word", show=False),
         Binding("n", "forward", "Forward", show=False),
         Binding("slash", "filter", "Filter", show=False),
@@ -733,8 +730,17 @@ class WordsScreen(Screen):
         return {"universe": self.universe.slug if self.universe else self.payload.get("universe"),
                 "story": self.story.slug if self.story else self.payload.get("story")}
 
-    def action_leave(self):
-        self.b.go(self.b.back, self.context())
+    def action_noop_mode(self):
+        self.say("You are in Words.")
+
+    def action_back_mode(self):
+        self.b.go("back", dict(self.context(), fallback=self.b.back))
+
+    action_leave = action_back_mode
+
+    def action_quit_program(self):
+        from .tui import ConfirmScreen
+        self.app.push_screen(ConfirmScreen(navigation.QUIT_QUESTION), lambda yes: self.b.go("quit") if yes else None)
 
 
 class WordsApp(App):

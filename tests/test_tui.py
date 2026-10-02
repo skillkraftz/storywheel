@@ -41,7 +41,7 @@ def test_the_screen_has_steps_a_card_a_history_and_a_footer_with_the_keys(home):
         assert step in text
     assert "▶ 1 Genre & mood" in text and "· 2 Structure" in text
     assert "History: every roll" in text and "#1 of 1" in text
-    for needle in ("space Roll", "k Keep", "q Quit", "? Help", "f Field", "e Edit"):
+    for needle in ("space Roll", "k Keep", "q Back", "Q Quit storywheel", "F1-F5", "? Help", "f Field", "e Edit"):
         assert needle in text, needle
 
 
@@ -426,7 +426,7 @@ def test_q_saves_and_quits_with_a_resume_hint(home):
     story = new_story()
     async def script(app, pilot):
         await press(pilot, "k", "k")
-        await pilot.press("q")
+        await pilot.press("Q")
         await pilot.pause()
         await pilot.press("k")                      # "Keep this story or delete it?" -> keep
         await pilot.pause()
@@ -460,7 +460,7 @@ def test_resuming_a_story_starts_on_the_step_it_stopped_at(home):
     story = new_story()
     async def first(app, pilot):
         await press(pilot, "k", "k", "k")
-        await pilot.press("q")
+        await pilot.press("Q")
         await pilot.pause()
         await pilot.press("k")                      # "Keep this story or delete it?" -> keep
         await pilot.pause()
@@ -536,7 +536,7 @@ def test_in_a_real_terminal_the_app_starts_and_q_saves_and_quits(home):
     drain(3.0)
     os.write(fd, b"k")
     drain(1.0)
-    os.write(fd, b"q")
+    os.write(fd, b"Q")
     drain(1.0)
     os.write(fd, b"k")
     drain(3.0)

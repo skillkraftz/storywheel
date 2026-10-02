@@ -251,8 +251,10 @@ def test_q_goes_back_to_where_you_were(index, world):
         await pilot.press("q")
         await pilot.pause()
         return app.next
-    assert run(script, back="settings")[0] == "settings"
-    assert run(script, back="writer")[0] == "writer"
+    nxt = run(script, back="settings")
+    assert nxt[0] == "back" and nxt[1]["fallback"] == "settings"
+    nxt = run(script, back="writer")
+    assert nxt[0] == "back" and nxt[1]["fallback"] == "writer"
 
 
 def test_f5_in_every_other_mode_goes_to_words(index, world):

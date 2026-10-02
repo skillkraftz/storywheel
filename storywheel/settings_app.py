@@ -9,7 +9,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
-from . import appearance
+from . import appearance, navigation
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
@@ -84,7 +84,7 @@ HELP = f"""\
 
   Everything is saved as you change it, to ~/.storywheel/settings.toml.
   [b]tab[/b] / [b]shift+tab[/b]  next / previous box        [b]left right[/b] on the tabs  switch tab
-  [b]q[/b]  leave settings and go back to where you were    [b]F1 F2 F3 F5[/b]  another mode (F5: Words)
+  [b]q[/b]  back to where you were    [b]Q[/b]  Quit storywheel (asks first)    [b]F1-F5[/b]  the modes (Wheel, Builder, Writer, Settings, Words)
   The Stats tab shows words per day, your streaks, and per-story totals (what the Writer recorded).
 """
 
@@ -119,13 +119,10 @@ class HelpScreen(ModalScreen):
 
 class SettingsScreen(Screen):
     BINDINGS = [
-        Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
-        Binding("f2", "mode('builder')", "Builder", key_display="F2"),
-        Binding("f3", "mode('writer')", "Writer", key_display="F3"),
-        Binding("f4", "noop", "Settings", key_display="F4"),
-        Binding("f5", "mode('words')", "Words", key_display="F5"),
+        *navigation.mode_bindings("settings"),
         Binding("question_mark", "help", "Help", key_display="?"),
-        Binding("q", "leave", "Back"),
+        navigation.back_binding(),
+        navigation.quit_binding(),
     ]
     DEFAULT_CSS = """
     SettingsScreen VerticalScroll { padding: 1 2; }
@@ -394,8 +391,17 @@ class SettingsScreen(Screen):
         self.b.go(which)
 
 
-    def action_leave(self):
-        self.b.go(self.b.back)
+    def action_noop_mode(self):
+        self.say("You are in Settings.")
+
+    def action_back_mode(self):
+        self.b.go("back", {"fallback": self.b.back})
+
+    action_leave = action_back_mode
+
+    def action_quit_program(self):
+        from .tui import ConfirmScreen
+        self.app.push_screen(ConfirmScreen(navigation.QUIT_QUESTION), lambda yes: self.b.go("quit") if yes else None)
 
 
 class SettingsApp(App):
@@ -420,8 +426,8 @@ class SettingsApp(App):
             except OSError:
                 pass
 
-    def go(self, where):
-        self.next = (where, {})
+    def go(self, where, payload=None):
+        self.next = (where, payload or {})
         self.exit()
 
 
