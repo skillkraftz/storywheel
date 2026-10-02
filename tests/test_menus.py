@@ -13,7 +13,7 @@ pytestmark = pytest.mark.skipif(writer.check() is not None, reason="Neovim 0.10+
 RECORD = """
 vim.api.nvim_create_autocmd("VimLeavePre", { callback = function()
   local f = io.open(%r, "w")
-  f:write(vim.json.encode({ errmsg = vim.v.errmsg, messages = vim.fn.execute("messages") }))
+  f:write(vim.json.encode({ errmsg = vim.v.errmsg, messages = vim.fn.execute("messages"), R = R or {} }))
   f:close()
 end })
 """
@@ -25,6 +25,7 @@ def problems(story, setup, typed, check=""):
     run(story, RECORD % str(out) + setup, typed, check, quits=True)
     data = json.loads(out.read_text())
     bad = [l for l in data["messages"].splitlines() if re.match(r"(E\d+:|Error)", l) or "E5108" in l or "stack traceback" in l or "Error " in l]
+    problems.last = data
     return data["errmsg"], bad
 
 
