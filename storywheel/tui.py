@@ -41,6 +41,7 @@ MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("�
 HELP = """\
 [b]Keys[/b]
 
+  [b]F5[/b]      look up a word (meanings, similar and opposite words; offline)
   [b]space[/b]   roll again
   [b]k[/b]       keep this and move on
   [b]f[/b]       reroll the selected field (so does enter)
@@ -745,6 +746,7 @@ class MainScreen(Screen):
         Binding("f2", "mode('builder')", "Builder", key_display="F2"),
         Binding("f3", "mode('writer')", "Writer", key_display="F3"),
         Binding("f4", "mode('settings')", "Settings", key_display="F4"),
+        Binding("f5", "lookup", "Lookup", key_display="F5"),
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
@@ -1509,6 +1511,10 @@ class MainScreen(Screen):
         self.refresh_all()
         self.app.push_screen(DoneScreen(self.session.story["kept"].get("title", {}).get("title", "Untitled"), path),
                              self._after_done)
+
+    def action_lookup(self):
+        from .lookup_screen import LookupScreen
+        self.app.push_screen(LookupScreen())
 
     def action_help(self):
         self.app.push_screen(HelpScreen())

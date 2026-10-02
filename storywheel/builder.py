@@ -30,6 +30,8 @@ TYPE_ORDER = ["character", "place", "thing", "group", "note"]
 HELP = f"""\
 [b]Universe Builder[/b]        {MODE_KEYS}
 
+[b]F5[/b]  look up a word (meanings, similar and opposite words; offline)
+
 [b]Entities[/b] (the tabs: 1-5 switch)
   [b]n[/b]        new entity (starts blank)         [b]d[/b]  delete (asks first)
   [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
@@ -192,6 +194,7 @@ class BuilderScreen(Screen):
         Binding("f2", "noop_builder", "Builder", key_display="F2"),
         Binding("f3", "writer", "Writer", key_display="F3"),
         Binding("f4", "mode('settings')", "Settings", key_display="F4"),
+        Binding("f5", "lookup", "Lookup", key_display="F5"),
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
         Binding("e", "write_field", "Write"),
@@ -1032,6 +1035,10 @@ class BuilderScreen(Screen):
 
     def action_help(self):
         self.app.push_screen(BuilderHelp())
+
+    def action_lookup(self):
+        from .lookup_screen import LookupScreen
+        self.app.push_screen(LookupScreen())
 
     def action_mode(self, which):
         self.b.go(which)

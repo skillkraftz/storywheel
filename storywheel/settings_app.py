@@ -74,7 +74,7 @@ HELP = f"""\
 
   Everything is saved as you change it, to ~/.storywheel/settings.toml.
   [b]tab[/b] / [b]shift+tab[/b]  next / previous box        [b]left right[/b] on the tabs  switch tab
-  [b]q[/b]  leave settings and go back to where you were    [b]F1 F2 F3[/b]  another mode
+  [b]q[/b]  leave settings and go back to where you were    [b]F1 F2 F3[/b]  another mode    [b]F5[/b]  look up a word
   The Stats tab shows words per day, your streaks, and per-story totals (what the Writer recorded).
 """
 
@@ -113,6 +113,7 @@ class SettingsScreen(Screen):
         Binding("f2", "mode('builder')", "Builder", key_display="F2"),
         Binding("f3", "mode('writer')", "Writer", key_display="F3"),
         Binding("f4", "noop", "Settings", key_display="F4"),
+        Binding("f5", "lookup", "Lookup", key_display="F5"),
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("q", "leave", "Back"),
     ]
@@ -361,6 +362,10 @@ class SettingsScreen(Screen):
 
     def action_mode(self, which):
         self.b.go(which)
+
+    def action_lookup(self):
+        from .lookup_screen import LookupScreen
+        self.app.push_screen(LookupScreen())
 
     def action_leave(self):
         self.b.go(self.b.back)
