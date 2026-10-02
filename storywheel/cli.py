@@ -405,7 +405,7 @@ def cmd_open(args):
     except ImportError:
         return cmd_new(args)
     from . import cli_world, migrate, modes
-    for line in migrate.migrate_universe_json():
+    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts():
         print("  " + line)
     modes.run(None, get_engine, get_ratings)
 

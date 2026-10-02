@@ -41,19 +41,46 @@ def strip_markup(text):
     return text.replace("**", "").replace("*", "")
 
 
+def normalize(text):
+    """A file's text with its scene markers made plain: `* * * Title` becomes `* * *`, and a marker at the very
+    start (it only names the first scene) disappears."""
+    lines = text.strip("\n").split("\n")
+    out, started = [], False
+    for line in lines:
+        if vault.marker_label(line) is not None:
+            if started:
+                out.append("* * *")
+            continue
+        if line.strip():
+            started = True
+        if started or line.strip():
+            out.append(line)
+    return "\n".join(out)
+
+
 def scene_texts(story):
-    """[(file name, text)] for each scene, trimmed."""
-    return [(p.name, p.read_text(encoding="utf-8").strip("\n")) for p in story.scenes()]
+    """[(file name, text)] for each manuscript file, with plain markers."""
+    return [(p.name, normalize(p.read_text(encoding="utf-8"))) for p in story.files()]
 
 
 def paragraphs(text):
-    """Blocks of a scene: [('scene_break', ''), ('text', 'a paragraph')...]."""
-    out = []
-    for block in re.split(r"\n\s*\n", text.strip()):
-        block = " ".join(line.strip() for line in block.splitlines()).strip()
-        if not block:
-            continue
-        out.append(("scene_break", "") if block == "* * *" else ("text", block))
+    """Blocks of a text: [('scene_break', ''), ('text', 'a paragraph')...]. A marker line is a scene break wherever it is."""
+    out, buf = [], []
+
+    def flush():
+        if buf:
+            out.append(("text", " ".join(buf)))
+            buf.clear()
+
+    for line in text.split("\n"):
+        if vault.marker_label(line.strip()) is not None:
+            flush()
+            out.append(("scene_break", ""))
+        elif line.strip():
+            buf.append(line.strip())
+        else:
+            flush()
+    flush()
     return out
 
 
@@ -295,7 +322,7 @@ def export(story, fmt="docx", out_dir=None):
     fmt = fmt.lower().lstrip(".")
     if fmt not in FORMATS:
         raise ExportError(f"Unknown format '{fmt}'. Choose one of: {', '.join(FORMATS)}")
-    if not story.scenes() or not compile_text(story).strip():
+    if not story.files() or not compile_text(story).strip():
         raise ExportError("The manuscript is empty: write something first.")
     out = Path(out_dir) if out_dir else story.exports_dir
     out.mkdir(parents=True, exist_ok=True)

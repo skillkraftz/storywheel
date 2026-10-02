@@ -70,6 +70,15 @@ def run_typed(story, setup, typed, check, term="xterm-256color", columns=100, li
         raise AssertionError(f"no JSON from Neovim.\nstdout: {res.stdout}\nstderr: {res.stderr}")
 
 
+MARKED = ("* * * Opening\n\nStacie ran down the road.\n\nIt was *very* dry.\n\n"
+          "* * * The Letter\n\nA letter came on Tuesday.\n\n* * *\n\nBy Friday it was gone.")
+
+
+def marked(story, text=MARKED):
+    story.scenes()[0].write_text(text)
+    return story.scenes()[0]
+
+
 def keys(text):
     """Lua that types `text` into Neovim. Typed in pieces (plain text, then each <Key> on its own), so that
     expression mappings (Enter) see the text before them, as they do when a person types."""
@@ -158,7 +167,7 @@ def test_a_story_with_no_scenes_gets_a_first_one(home):
     u = vault.create_universe("U")
     s = u.new_story("Empty Tale")
     r = run_lua(s, 'R.name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t")')
-    assert r["name"] == "01-opening.md" and (s.manuscript_dir / "01-opening.md").exists()
+    assert r["name"] == "manuscript.md" and (s.manuscript_dir / "manuscript.md").exists()
 
 
 def test_movement_is_by_displayed_line_and_markup_is_concealed(home, story):
@@ -450,31 +459,32 @@ def test_unsaved_work_blocks_leaving_instead_of_losing_it(home, story):
 
 # --- the scene sidebar ---------------------------------------------------------------------------------------------------------
 
-def test_the_scene_list_matches_the_files_with_first_lines_and_sections(home, story):
-    story.add_scene("The Letter", "A letter came on Tuesday.\n\n* * *\n\nBy Friday it was gone.")
+def test_the_scene_list_is_found_by_the_markers_with_first_lines(home, story):
+    marked(story)
     r = run_lua(story, """
         local lines, entries = require("sw.sidebar").build()
         R.lines = lines; R.entries = {}
-        for i, e in pairs(entries) do R.entries[#R.entries + 1] = { i, vim.fn.fnamemodify(e.path, ":t"), e.line } end
+        for i, e in pairs(entries) do R.entries[#R.entries + 1] = { i, e.n, e.title, e.start, e.finish, e.body } end
         table.sort(R.entries, function(a, b) return a[1] < b[1] end)
     """)
-    assert len(r["lines"]) == 3
     assert r["lines"][0].startswith("▶ 01 Opening — Stacie ran down the road.")
-    assert r["lines"][1].startswith("  02 The letter — A letter came on")
-    assert "✦ By Friday it was gone." in r["lines"][2]
-    assert r["entries"] == [[1, "01-opening.md", 1], [2, "02-the-letter.md", 1], [3, "02-the-letter.md", 5]]
+    assert r["lines"][1].startswith("  02 The Letter — A letter came on")
+    assert r["lines"][2].startswith("  03 Scene 3 — By Friday it was")
+    assert r["entries"] == [[1, 1, "Opening", 1, 6, 3], [2, 2, "The Letter", 7, 10, 9], [3, 3, "Scene 3", 11, 13, 13]]
 
 
-def test_sidebar_jump_opens_the_scene_at_the_line(home, story):
-    story.add_scene("The Letter", "A letter came on Tuesday.\n\n* * *\n\nBy Friday it was gone.")
+def test_sidebar_jump_opens_the_scene_at_its_first_line_of_text(home, story):
+    marked(story)
     r = run_lua(story, """
         local sb = require("sw.sidebar"); sb.toggle()
         R.open = require("sw.layout").sidebar_open
         sb.jump(sb.entries[3])
         R.name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t"); R.cursor = vim.api.nvim_win_get_cursor(0)
         R.in_main = vim.api.nvim_get_current_win() == require("sw.layout").main
+        R.current = require("sw.sidebar").build()[3] and select(1, require("sw.sidebar").build())[3]
     """)
-    assert r["open"] is True and r["name"] == "02-the-letter.md" and r["cursor"] == [5, 0] and r["in_main"] is True
+    assert r["open"] is True and r["name"] == "01-opening.md" and r["cursor"] == [13, 0] and r["in_main"] is True
+    assert r["current"].startswith("▶ 03")                        # the list follows the cursor
 
 
 def test_sidebar_open_shifts_the_column_and_close_restores_it(home, story):
@@ -488,46 +498,92 @@ def test_sidebar_open_shifts_the_column_and_close_restores_it(home, story):
 
 
 def test_add_rename_and_reorder_scenes_from_the_sidebar(home, story):
-    story.add_scene("Second", "Second scene text.")
+    path = marked(story)
     r = run_lua(story, """
         local sb, st = require("sw.sidebar"), require("sw.story")
         sb.toggle()
-        local p = sb.add("The Third")
-        R.added = vim.fn.fnamemodify(p, ":t")
+        local p, line = sb.add("The Fourth")
+        R.added = { vim.fn.fnamemodify(p, ":t"), line }
         sb.render()
-        -- rename scene 2
-        local idx; for i, e in pairs(sb.entries) do if e.scene.name == "02-second.md" then idx = i end end
-        sb.rename(sb.entries[idx], "Second Thoughts")
-        R.after_rename = vim.tbl_map(function(s) return s.name end, st.scenes())
-        -- move scene 3 up
+        sb.rename(sb.entries[2], "Second Thoughts")
+        R.after_rename = vim.tbl_map(function(s) return s.title end, st.scene_list())
         sb.render()
-        for i, e in pairs(sb.entries) do if e.scene.name == "03-the-third.md" then idx = i end end
-        sb.move(sb.entries[idx], -1)
-        R.after_move = vim.tbl_map(function(s) return s.name end, st.scenes())
-        R.contents = vim.tbl_map(function(s) return (io.open(s.path):read("*a")) end, st.scenes())
+        R.moved_up = sb.move(sb.entries[4], -1)
+        R.after_move = vim.tbl_map(function(s) return s.title end, st.scene_list())
+        sb.render()
+        R.moved_top_up = sb.move(sb.entries[1], -1)                   -- nothing above the first
+        R.moved_down = sb.move(sb.entries[1], 1)                      -- the unmarked-by-name first scene goes down
+        R.after_down = vim.tbl_map(function(s) return s.title end, st.scene_list())
+        R.words = require("sw.stats").manuscript()
     """)
-    assert r["added"] == "03-the-third.md"
-    assert r["after_rename"] == ["01-opening.md", "02-second-thoughts.md", "03-the-third.md"]
-    assert r["after_move"] == ["01-opening.md", "02-the-third.md", "03-second-thoughts.md"]
-    assert r["contents"][2] == "Second scene text." and r["contents"][1] == ""
+    assert r["added"][0] == "01-opening.md" and r["added"][1] > 10
+    assert r["after_rename"] == ["Opening", "Second Thoughts", "Scene 3", "The Fourth"]
+    assert r["moved_up"] is True and r["after_move"] == ["Opening", "Second Thoughts", "The Fourth", "Scene 4"]
+    assert r["moved_top_up"] is False and r["moved_down"] is True
+    assert r["after_down"] == ["Second Thoughts", "Opening", "The Fourth", "Scene 4"]
+    text = path.read_text()
+    assert text.startswith("* * * Second Thoughts\n") and "* * * Opening\n" in text and r["words"] == vault.count_words(text)
+    assert vault.count_words(text) == vault.count_words(MARKED)                          # nothing lost in all that moving
+    for sentence in ("Stacie ran down the road.", "It was *very* dry.", "A letter came on Tuesday.", "By Friday it was gone."):
+        assert sentence in text
 
 
-def test_moving_the_scene_you_are_in_keeps_you_in_it_and_loses_nothing(home, story):
-    story.add_scene("Second", "Second scene text.")
-    r = run_typed(story, "", "Gotyped before moving<Esc>:lua require('sw.sidebar').toggle(); require('sw.sidebar').move(require('sw.sidebar').entries[1], 1)<CR>", """
-        local st = require("sw.story")
-        R.scenes = vim.tbl_map(function(s) return s.name end, st.scenes())
-        R.current = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(require("sw.layout").main)), ":t")
+def test_moving_an_unmarked_first_scene_gives_it_a_marker(home, story):
+    path = marked(story, "Stacie ran down the road.\n\n* * * The Letter\n\nA letter came.")
+    r = run_lua(story, """
+        local sb, st = require("sw.sidebar"), require("sw.story")
+        sb.toggle()
+        sb.move(sb.entries[1], 1)
+        R.titles = vim.tbl_map(function(s) return s.title end, st.scene_list())
     """)
-    assert r["scenes"] == ["01-second.md", "02-opening.md"] and r["current"] == "02-opening.md"
-    assert "typed before moving" in (story.manuscript_dir / "02-opening.md").read_text()
+    assert r["titles"] == ["The Letter", "Scene 2"]
+    assert path.read_text().splitlines()[0] == "* * * The Letter" and "\n* * *\n" in path.read_text()
+
+
+def test_renaming_an_unmarked_first_scene_adds_a_marker_line(home, story):
+    path = marked(story, "Stacie ran down the road.\n\n* * * The Letter\n\nA letter came.")
+    run_lua(story, """
+        local sb = require("sw.sidebar"); sb.toggle(); sb.rename(sb.entries[1], "The Road")
+    """)
+    assert path.read_text().startswith("* * * The Road\n\nStacie ran down the road.")
+
+
+def test_a_scene_cannot_be_moved_into_another_chapter_file(home, story):
+    settings_ = __import__("storywheel.settings", fromlist=["x"])
+    settings_.save_story(story.path, {"format": "novel"})
+    story.scenes()[0].write_text("* * * One\n\nFirst chapter text.\n")
+    story.add_scene("Chapter Two", "* * * Two\n\nSecond chapter text.\n")
+    r = run_lua(story, """
+        local sb, st = require("sw.sidebar"), require("sw.story")
+        sb.toggle()
+        R.moved = sb.move(sb.entries[1], 1)
+        R.titles = vim.tbl_map(function(s) return s.title end, st.scene_list())
+        R.files = vim.tbl_map(function(f) return f.name end, st.files())
+    """)
+    assert r["moved"] is False and r["titles"] == ["One", "Two"] and len(r["files"]) == 2
+
+
+def test_moving_the_scene_you_are_in_keeps_your_cursor_on_your_text(home, story):
+    path = marked(story)
+    r = run_typed(story, "vim.api.nvim_win_set_cursor(0, { 5, 3 })", "ixx<Esc>", """
+        local sb = require("sw.sidebar")
+        sb.toggle()
+        sb.move(sb.entries[1], 1)
+        local cur = vim.api.nvim_win_get_cursor(require("sw.layout").main)
+        R.line = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(require("sw.layout").main), cur[1] - 1, cur[1], false)[1]
+        R.titles = vim.tbl_map(function(s) return s.title end, require("sw.story").scene_list())
+    """)
+    assert r["titles"][:2] == ["The Letter", "Opening"] and "xx" in r["line"]           # (typed before moving)
+    assert "xx" in path.read_text() and vault.count_words(path.read_text()) == vault.count_words(MARKED) + 0
 
 
 def test_next_and_previous_scene_keys(home, story):
-    story.add_scene("Second", "Two.")
-    r = run_typed(story, "", "]]", 'R.a = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t")')
-    r2 = run_typed(story, "", "]][[", 'R.b = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t")')
-    assert (r["a"], r2["b"]) == ("02-second.md", "01-opening.md")
+    marked(story)
+    top = "vim.api.nvim_win_set_cursor(0, { 1, 0 })"                 # (each run starts where the last one left off)
+    r = run_typed(story, top, "]]", 'R.a = vim.api.nvim_win_get_cursor(0)')
+    r2 = run_typed(story, top, "]]]]", 'R.b = vim.api.nvim_win_get_cursor(0)')
+    r3 = run_typed(story, top, "]][[", 'R.c = vim.api.nvim_win_get_cursor(0)')
+    assert (r["a"], r2["b"], r3["c"]) == ([9, 0], [13, 0], [3, 0])
 
 
 # --- the world -----------------------------------------------------------------------------------------------------------------
@@ -597,17 +653,17 @@ def test_saving_settings_toml_in_the_writer_applies_it_at_once(home, story):
 
 
 def test_open_scenes_and_cursors_are_restored_per_story(home, story):
-    story.add_scene("Second", "Line one of two.\n\nLine two of two.\n\nLine three.")
+    marked(story)
     run_lua(story, """
         require("sw").step_scene(1)
-        vim.api.nvim_win_set_cursor(0, { 3, 5 })
+        vim.api.nvim_win_set_cursor(0, { 9, 3 })
     """)
     r = run_lua(story, 'R.name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t"); R.cursor = vim.api.nvim_win_get_cursor(0)')
-    assert r["name"] == "02-second.md" and r["cursor"] == [3, 5]
+    assert r["name"] == "01-opening.md" and r["cursor"] == [9, 3]
     other = vault.get_universe("thornwood").new_story("Another")
     other.add_scene("A", "Hello.")
-    r2 = run_lua(other, 'R.name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t")')
-    assert r2["name"] == "01-a.md"                                                    # a different story has its own place
+    r2 = run_lua(other, 'R.name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t"); R.cursor = vim.api.nvim_win_get_cursor(0)')
+    assert r2["name"] == "01-a.md" and r2["cursor"] == [1, 0]                       # a different story has its own place
 
 
 def test_f2_saves_everything_and_asks_to_go_back_to_the_builder(home, story):
@@ -636,10 +692,9 @@ def test_the_help_lists_the_mode_keys_and_the_writing_keys(home, story):
 
 
 def test_copy_manuscript_as_plain_text(home, story):
-    story.add_scene("Second", "After the **break** it was *cold*.")
-    story.scenes()[0].write_text("Stacie ran.\n\n* * *\n\nThen rest.")
+    marked(story, "* * * Opening\n\nStacie ran.\n\n* * *\n\nThen rest.\n\n* * * Second\n\nAfter the **break** it was *cold*.")
     r = run_lua(story, 'R.text = require("sw").plain_text()')
-    assert r["text"] == "Stacie ran.\n\n#\n\nThen rest.\n\nAfter the break it was cold."
+    assert r["text"] == "Stacie ran.\n\n#\n\nThen rest.\n\n#\n\nAfter the break it was cold."
 
 
 # --- in a real terminal ----------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ def entity_json(e, universe=None):
 def story_json(s):
     meta, sections = s.load_outline()
     return {"id": s.slug, "universe": s.universe.slug, "universe_name": s.universe.name, "title": s.title,
-            "meta": meta, "outline": sections, "scenes": [p.name for p in s.scenes()], "words": s.word_count(),
+            "meta": meta, "outline": sections, "scenes": [e["title"] for e in s.scene_list()], "files": [p.name for p in s.files()], "words": s.word_count(),
             "path": str(s.path), "manuscript": str(s.manuscript_dir), "settings": settings.load_story(s.path),
             "author": {k: v for k, v in settings.load_global().items()
                        if k in ("author_name", "legal_name", "address", "email", "phone")}}
@@ -154,6 +154,11 @@ def cmd_manuscript(args):
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
+def cmd_migrate(args):
+    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts()
+    print("\n".join("  " + l for l in lines) if lines else "  Nothing to migrate.")
+
+
 def cmd_settings(args):
     from . import modes
     from .cli import get_engine, get_ratings
@@ -163,7 +168,7 @@ def cmd_settings(args):
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
-    for line in migrate.migrate_universe_json():
+    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts():
         print("  " + line)
     from . import modes
     from .cli import get_engine
@@ -200,6 +205,7 @@ def add_parsers(sub):
     p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
     p.add_argument("--out", help="folder to write into (default: the story's exports folder)")
     p.add_argument("--json", action="store_true")
+    sub.add_parser("migrate", help="bring old data up to date (the old universe.json, scene files -> one manuscript file)")
     sub.add_parser("settings", help="open Settings (who you are, goals, Writer preferences, export, library, stats)")
     p = sub.add_parser("builder", help="open the Universe Builder")
     p.add_argument("universe", nargs="?")
@@ -207,4 +213,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

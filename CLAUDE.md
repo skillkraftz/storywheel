@@ -631,4 +631,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   otherwise it follows the global `atom_boost`.
 - The library folder can be set in Settings (`library = "..."` in settings.toml); `STORYWHEEL_LIBRARY` still overrides it.
   Changing it never moves files.
+- Manuscript = one file per story (`manuscript/manuscript.md`) with scene markers; a novel has one file per chapter. A marker is a line
+  `* * *` or `* * * Title` (the scene-break key inserts the plain one). A marker at the very start names the first scene and is not a
+  break. Markers are exported as a centered `#` (not counted as words). Old stories with one file per scene are merged, in order, into
+  `manuscript.md` when the Writer starts or on `storywheel migrate`, with the originals kept in `.backups/migrated-DATE/`.
 

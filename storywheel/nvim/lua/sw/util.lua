@@ -42,12 +42,54 @@ end
 -- (storywheel/vault.py counts the same way.)
 local keyword = vim.regex([[\k]])
 
+-- A scene marker is `* * *` or `* * * Title`. Returns nil for any other line, else the title ("" for a plain `* * *`).
+function M.marker_label(line)
+  if line == "* * *" then return "" end
+  local label = line:match("^%* %* %*%s+(.-)%s*$")
+  return label
+end
+
+-- Words in prose: runs of non-space characters holding a letter or digit. Marker lines are not prose.
+-- (storywheel/vault.py counts the same way.)
 function M.count_words(text)
   local n = 0
-  for w in text:gmatch("%S+") do
-    if w:find("%w") or (w:find("[\128-\255]") and keyword:match_str(w)) then n = n + 1 end
+  for line in (text .. "\n"):gmatch("(.-)\n") do
+    if M.marker_label(line) == nil then
+      for w in line:gmatch("%S+") do
+        if w:find("%w") or (w:find("[\128-\255]") and keyword:match_str(w)) then n = n + 1 end
+      end
+    end
   end
   return n
+end
+
+-- Scenes in a list of lines, found by their markers. A marker at the very start names the first scene (it is not a
+-- break); text before the first marker is a scene of its own. Returns { {start=, finish=, label=, marked=, first_line=, words=,
+-- body=}, ... } with 1-based lines; `body` is the first line of real text.
+function M.parse_scenes(lines)
+  local scenes = {}
+  for i, line in ipairs(lines) do
+    local label = M.marker_label(line)
+    if label ~= nil then
+      scenes[#scenes + 1] = { start = (#scenes == 0) and 1 or i, label = label, marked = true }
+    elseif line:match("%S") and #scenes == 0 then
+      scenes[#scenes + 1] = { start = 1, label = "", marked = false }
+    end
+  end
+  for k, sc in ipairs(scenes) do
+    sc.finish = scenes[k + 1] and (scenes[k + 1].start - 1) or #lines
+    sc.first_line, sc.body = "", sc.start
+    local block = {}
+    for i = sc.start, sc.finish do
+      local line = lines[i]
+      block[#block + 1] = line
+      if sc.first_line == "" and line:match("%S") and M.marker_label(line) == nil then
+        sc.first_line, sc.body = line, i
+      end
+    end
+    sc.words = M.count_words(table.concat(block, "\n"))
+  end
+  return scenes
 end
 
 function M.notify(msg, level)

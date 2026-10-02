@@ -34,7 +34,7 @@ def _files(universe, entity):
         out.append((e.path, "entity", f"{e.type}: {e.name or e.id}"))
     for s in universe.stories():
         out.append((s.outline_path, "outline", f"outline: {s.title}"))
-        for p in s.scenes():
+        for p in s.files():
             out.append((p, "manuscript", f"manuscript: {s.title} / {p.name}"))
     return [(p, k, l) for p, k, l in out if p and Path(p).exists()]
 

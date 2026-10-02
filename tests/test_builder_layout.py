@@ -29,10 +29,10 @@ def write_stats(story, per_day):
 def world(home):
     u = vault.create_universe("Thornwood", ["western"])
     s = u.new_story("The Last Clause", {"genre": "western"}, {"Premise": "A clerk finds a clause."})
-    s.add_scene("Opening", "Stacie ran down the road.\n\nIt was dry.")
-    s.add_scene("The Letter", "A letter came on Tuesday.\n\n* * *\n\nBy Friday it was gone.")
+    s.append_scene("Opening", "Stacie ran down the road.\n\nIt was dry.")
+    s.append_scene("The Letter", "A letter came on Tuesday.\n\nBy Friday it was gone.")
     s2 = u.new_story("Other Tale")
-    s2.add_scene("A", "Three words here.")
+    s2.append_scene("A", "Three words here.")
     u.new_entity("character", "Stacie", {"job": "clerk"})
     return u, s, s2
 
@@ -173,9 +173,9 @@ def test_the_scenes_tab_lists_the_scenes_with_first_lines_and_words(world):
         await pilot.pause()
         return flat(screen_text(app)), [e["title"] for e in app.screen_ref.scene_entries]
     text, titles = run(script)
-    assert titles == ["Opening", "The letter"]
+    assert titles == ["Opening", "The Letter"]
     assert "1 Opening 8w" in text and "Stacie ran down the road." in text
-    assert "2 The letter" in text and "A letter came on Tuesday." in text
+    assert "2 The Letter" in text and "A letter came on Tuesday." in text
 
 
 def test_the_scenes_tab_without_a_story_says_what_to_do(world):
@@ -204,9 +204,9 @@ def test_enter_on_a_scene_opens_the_writer_at_that_scene(world, monkeypatch):
         await pilot.click("#sc-write")
         await pilot.pause()
     run(script)
-    assert calls[0][0] == "the-last-clause" and calls[0][1]["title"] == "The letter"
-    assert calls[0][1]["path"].endswith("02-the-letter.md") and calls[0][1]["line"] == 1
-    assert calls[1][1]["title"] == "The letter"                      # the button writes at the highlighted scene
+    assert calls[0][0] == "the-last-clause" and calls[0][1]["title"] == "The Letter"
+    assert calls[0][1]["path"].endswith("manuscript.md") and calls[0][1]["line"] == 7      # the marker's line
+    assert calls[1][1]["title"] == "The Letter"                      # the button writes at the highlighted scene
 
 
 def test_the_writer_gets_the_scene_in_its_environment(world, monkeypatch):
@@ -231,7 +231,7 @@ def test_add_a_scene_from_the_tab(world):
         await pilot.press("enter")
         await pilot.pause()
         return [e["title"] for e in app.screen_ref.scene_entries]
-    assert run(script) == ["Opening", "The letter", "The ending"]
+    assert run(script) == ["Opening", "The Letter", "The Ending"]
 
 
 def test_the_chosen_tab_is_remembered(world):

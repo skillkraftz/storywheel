@@ -64,13 +64,16 @@ function M.open_scene(path, cursor)
   if layout.sidebar_open then sidebar.render() end
 end
 
+-- ]] and [[: the next / previous scene (by its marker), across files.
 function M.step_scene(direction)
-  local scenes = story.scenes()
-  local cur = M.current_scene()
-  for i, s in ipairs(scenes) do
-    if s.path == cur and scenes[i + direction] then
+  local list = story.scene_list()
+  local path = vim.api.nvim_buf_get_name(M.main_buf())
+  local row = vim.api.nvim_win_get_cursor(layout.main)[1]
+  for i, sc in ipairs(list) do
+    if sc.path == path and row >= sc.start and row <= sc.finish and list[i + direction] then
       session.save()
-      return M.open_scene(scenes[i + direction].path, { 1, 0 })
+      local target = list[i + direction]
+      return M.open_scene(target.path, { target.body, 0 })
     end
   end
   vim.api.nvim_echo({ { direction > 0 and "This is the last scene." or "This is the first scene.", "Normal" } }, false, {})
@@ -98,17 +101,23 @@ end
 
 -- --- the toggles and commands ---------------------------------------------------------------------------
 
+-- The manuscript as plain text: no markup, scene markers become "#" (a marker at the very start only names the first scene).
 function M.plain_text()
   local parts = {}
-  for _, s in ipairs(story.scenes()) do
-    local b = vim.fn.bufnr(s.path)
-    local text
-    if b ~= -1 and vim.api.nvim_buf_is_loaded(b) then text = table.concat(vim.api.nvim_buf_get_lines(b, 0, -1, false), "\n")
-    else text = util.read(s.path) or "" end
-    parts[#parts + 1] = text:gsub("^%s+", ""):gsub("%s+$", "")
+  for _, f in ipairs(story.files()) do
+    local out, started = {}, false
+    for _, line in ipairs(story.lines_of(f.path)) do
+      if util.marker_label(line) ~= nil then
+        if started then out[#out + 1] = "#" end
+      else
+        if line:match("%S") then started = true end
+        if started then out[#out + 1] = line end
+      end
+    end
+    local text = table.concat(out, "\n"):gsub("^%s+", ""):gsub("%s+$", "")
+    if text ~= "" then parts[#parts + 1] = text end
   end
   local text = table.concat(parts, "\n\n")
-  text = text:gsub("\n%* %* %*\n", "\n#\n"):gsub("^%* %* %*\n", "#\n")
   text = text:gsub("%*%*", ""):gsub("%*", "")
   return text
 end
@@ -205,8 +214,8 @@ end
 function M.new_scene()
   vim.ui.input({ prompt = "New scene title: " }, function(t)
     if t == nil then return end
-    local path = sidebar.add(t ~= "" and t or "scene")
-    M.open_scene(path, { 1, 0 })
+    local path, line = sidebar.add(t)
+    M.open_scene(path, { line + 1, 0 })
   end)
 end
 
@@ -293,8 +302,18 @@ function M.start()
   layout.setup(main)
   prose.window = main
   local start = saved.current
-  if not (start and util.exists(start)) then start = story.scenes()[1].path end
-  M.open_scene(start, saved.cursors and saved.cursors[start] or { 1, 0 })
+  if not (start and util.exists(start)) then start = story.files()[1].path end
+  local cursor = saved.cursors and saved.cursors[start] or { 1, 0 }
+  local asked = os.getenv("STORYWHEEL_SCENE")                  -- "<file>:<line>": open at that scene (from the Builder)
+  if asked and asked ~= "" then
+    local file, line = asked:match("^(.*):(%d+)$")
+    if file and util.exists(file) then
+      start, cursor = file, { tonumber(line), 0 }
+      local sc = story.scene_at(file, tonumber(line))
+      if sc then cursor = { sc.body, 0 } end                   -- not on the marker itself, on the first line of text
+    end
+  end
+  M.open_scene(start, cursor)
   for _, p in ipairs(saved.open or {}) do          -- scenes that were open come back as (hidden) buffers
     if p ~= start and util.exists(p) then pcall(vim.fn.bufload, vim.fn.bufadd(p)) end
   end

@@ -285,6 +285,6 @@ def test_universe_entity_and_story_json_commands(home):
     one = json.loads(cli(["entity", "show", "thornwood", "stacie", "--json"], home).stdout)
     assert one["name"] == "Stacie"
     st = json.loads(cli(["story", "show", "thornwood/the-clause", "--json"], home).stdout)
-    assert st["title"] == "The Clause" and st["scenes"] == ["01-opening.md"] and st["words"] == 2 and st["outline"]["Premise"] == "A clause."
+    assert st["title"] == "The Clause" and st["scenes"] == ["Opening"] and st["files"] == ["01-opening.md"] and st["words"] == 2 and st["outline"]["Premise"] == "A clause."
     assert json.loads(cli(["story", "list", "--json"], home).stdout)[0]["id"] == "the-clause"
     assert cli(["entity", "list", "nope"], home).returncode != 0

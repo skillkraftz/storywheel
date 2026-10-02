@@ -11,6 +11,18 @@ CHARACTER_KEYS = {"protagonist"}
 PLACE_KEYS = {"setting"}
 
 
+def migrate_manuscripts():
+    """Old stories kept one file per scene; a short story now has one manuscript file with scene markers.
+    Merges every such story (originals go to the story's .backups folder). Returns report lines."""
+    lines = []
+    for u in vault.list_universes():
+        for s in u.stories():
+            message = s.migrate_manuscript()
+            if message:
+                lines.append(f"{u.name} / {s.title}: {message}")
+    return lines
+
+
 def migrate_universe_json():
     """Returns a short report (a list of lines), or [] when there was nothing to do.
     The old file is kept as universe.json.migrated-<date>; running again does nothing."""

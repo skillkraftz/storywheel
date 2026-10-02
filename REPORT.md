@@ -210,6 +210,14 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 
 The Writer settings on that tab (notepad mode, Neovide, font, line spacing, paragraph spacing) are stored now; the Writer starts using them in the notepad / Neovide areas below.
 
+### Writer: one manuscript file (`pass2-manuscript`)
+| Item | Status | What's missing |
+|---|---|---|
+| One manuscript file per story with scene markers inside it (novels: one file per chapter) | Works | a scene starts at a marker line `* * *` or `* * * Title` (the same line the scene-break key inserts; exported as a centered `#`; a marker at the very top only names the first scene). Short story = `manuscript/manuscript.md`; a novel keeps one file per chapter. Marker lines are not counted as words (Python and Lua agree) |
+| Sidebar lists and jumps to scenes by their markers (add, rename, reorder) | Works | rename edits the marker's title; J/K swaps neighbouring scenes in the same file (an unmarked first scene gets a marker when it moves; moving across chapter files is refused with a message); the cursor stays on your text; `]]` / `[[` step between scenes |
+| Migrate existing scene files in order, with a backup | Works | runs when the Writer starts and at app start (`storywheel migrate` does it by hand): scene files are merged in order into `manuscript.md` (each one's name becomes its marker title) and the originals are moved to `<story>/.backups/migrated-DATE/`; a novel and single-file stories are left alone; nothing is merged twice |
+| Opening the Writer at a chosen scene (from the Scenes tab and the sidebar) | Works | the Builder's Scenes tab passes the scene (`STORYWHEEL_SCENE`); the Writer opens at the first line of its text |
+
 ## P2. Tests added in the second pass
 | Area | File | Tests |
 |---|---|---|
@@ -218,6 +226,7 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 | Builder layout and writing stats | `test_builder_layout.py` | 18 |
 | Settings mode and stats tab | `test_settings_mode.py` | 20 |
 | F4 from the Writer | `test_writer.py` | +1 |
+| One manuscript file, markers, migration, scene tools (and the Writer tests rewritten for markers) | `test_manuscript.py` | 23 |
 
 ## P3. Manual test script additions
 1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
@@ -235,7 +244,13 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 7. Press **F4** in each mode: Settings opens. Change your name, toggle a switch, set the daily goal; open `~/.storywheel/settings.toml`
    and see it written. Look at the Stats tab. Press `q`: you return to the mode you came from.
 
+8. Migration: open a story that still has several scene files (from before this pass): run `storywheel migrate`, then look in the story
+   folder: one `manuscript.md` with `* * * Title` lines, and the old files in `.backups/migrated-.../`.
+9. In the Writer press `Space n`: scenes are listed by their markers. Press `a` to add one, `r` to rename, `J`/`K` to move, Enter to jump.
+   In the Builder's Scenes tab press Enter on a scene: the Writer should open on its first line.
+
 ## P4. Known issues / open questions (second pass)
+- A scene marker is a visible line in the file (`* * * Title`); on screen it is drawn centered, with the title dim beside it. Deleting that line merges the scene into the one before.
 - Changing the library folder in Settings only points at it; moving or copying your existing universes there is up to you.
 - The stats box counts words as the Writer recorded them in `stats.json`; words typed outside the Writer are not counted.
 - The "list moves when clicked" report could not be reproduced headlessly (see above); please re-test by hand.

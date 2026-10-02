@@ -17,7 +17,7 @@ function M.snapshot(force)
   if not story.dir then return 0 end
   local made = 0
   local now = os.time()
-  for _, s in ipairs(story.scenes()) do
+  for _, s in ipairs(story.files()) do
     local text = util.read(s.path) or ""
     local last = M.last[s.name]
     local latest_text = last and last.text

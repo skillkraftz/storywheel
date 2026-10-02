@@ -457,7 +457,7 @@ class BuilderScreen(Screen):
             st = settings.load_story(self.story.path)
             rows.append(("settings", "Settings", f"{st['format']} · {st['font']} · goal {st['daily_goal']}/day · "
                                                  f"column {st['column_width']}"))
-            rows.append(("words", "Manuscript", f"{self.story.word_count()} words in {len(self.story.scenes())} scene file(s)"))
+            rows.append(("words", "Manuscript", f"{self.story.word_count()} words in {len(self.story.scene_list())} scene(s)"))
         elif self.universe:
             s = self.universe.settings()
             rows.append(("u:name", "Name", s["name"]))
@@ -957,7 +957,7 @@ class BuilderScreen(Screen):
 
     def _scene_added(self, out):
         if out is not None:
-            self.story.add_scene(out["title"].strip() or "scene")
+            self.story.append_scene(out["title"].strip() or "")
             self.refresh_top()
             self.say("Scene added. Press Enter on it to write.")
 

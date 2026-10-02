@@ -196,29 +196,85 @@ class Story:
             return []
         return sorted(self.manuscript_dir.glob("*.md"))
 
+    def files(self):
+        """The manuscript's files in order (one for a short story; one per chapter for a novel)."""
+        return self.scenes()
+
     def scene_list(self):
-        """The scenes in order: [{n, title, first_line, words, path, line}]. (One entry per scene file.)"""
+        """The scenes in order, found by their markers (`* * *` or `* * * Title`) across all the files:
+        [{n, title, label, first_line, words, path, line, file}]. `line` is the marker's line (1 for an unmarked first scene)."""
         out = []
-        for n, p in enumerate(self.scenes(), 1):
-            text = p.read_text(encoding="utf-8")
-            first = next((l.strip() for l in text.splitlines() if l.strip() and l.strip() != "* * *"), "")
-            title = re.sub(r"\.md$", "", re.sub(r"^\d+-", "", p.name)).replace("-", " ")
-            out.append({"n": n, "title": title[:1].upper() + title[1:], "first_line": first, "words": count_words(text),
-                        "path": str(p), "line": 1})
+        for p in self.files():
+            for sc in parse_scenes(p.read_text(encoding="utf-8")):
+                n = len(out) + 1
+                out.append({"n": n, "title": sc["label"] or (f"Scene {n}" if n > 1 or sc["marked"] else "Opening"),
+                            "label": sc["label"], "first_line": sc["first_line"], "words": sc["words"],
+                            "path": str(p), "line": sc["start"], "end": sc["end"], "file": p.name, "marked": sc["marked"]})
         return out
+
+    def append_scene(self, title="", text=""):
+        """A new scene at the end of the manuscript, marked `* * * Title` (in the last file; a first file is made if there is none)."""
+        files = self.files()
+        if not files:
+            self.manuscript_dir.mkdir(parents=True, exist_ok=True)
+            target = self.manuscript_dir / "manuscript.md"
+            body = (f"* * * {title}\n\n" if title else "") + text
+            _write(target, body)
+            return {"path": str(target), "line": 1}
+        target = files[-1]
+        old = target.read_text(encoding="utf-8").rstrip("\n")
+        marker = f"* * * {title}".rstrip()
+        new = (old + "\n\n" if old else "") + marker + "\n\n" + (text + "\n" if text else "")
+        _write(target, new)
+        return {"path": str(target), "line": new.count("\n", 0, new.rindex(marker)) + 1}
+
+    def migrate_manuscript(self):
+        """Older stories kept one file per scene. A short story now has ONE file (manuscript.md) with a marker line at
+        the start of each scene, so the whole thing reads in order. The scene files are moved into a backup folder
+        (<story>/.backups/migrated-DATE/) first; a novel keeps one file per chapter. Returns a message, or None."""
+        files = self.files()
+        from . import settings
+        if len(files) <= 1 or str(settings.load_story(self.path).get("format", "short-story")).lower() == "novel":
+            return None
+        if files == [self.manuscript_dir / "manuscript.md"]:
+            return None
+        stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        backup = self.path / ".backups" / f"migrated-{stamp}"
+        backup.mkdir(parents=True, exist_ok=True)
+        parts = []
+        for p in files:
+            text = p.read_text(encoding="utf-8").strip("\n")
+            shutil.copy2(p, backup / p.name)
+            title = re.sub(r"\.md$", "", re.sub(r"^\d+-", "", p.name)).replace("-", " ")
+            title = title[:1].upper() + title[1:]
+            head, _, rest = text.partition("\n")
+            label = marker_label(head)
+            if label:                                              # the file already names its scene
+                parts.append(text)
+            elif label == "":                                      # a plain `* * *` at the top: give it the file's name
+                parts.append(f"* * * {title}" + ("\n" + rest if rest else ""))
+            else:
+                parts.append((f"* * * {title}\n\n" if text else f"* * * {title}\n") + text)
+        merged = "\n\n".join(parts).rstrip("\n") + "\n"
+        target = self.manuscript_dir / "manuscript.md"
+        _write(target, merged)
+        for p in files:
+            if p != target:
+                p.unlink()
+        return f"Merged {len(files)} scene files into manuscript.md (the originals are in {backup})."
 
     def seed(self):
         p = self.path / "seed.json"
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
     def manuscript_text(self):
-        return "\n\n".join(p.read_text(encoding="utf-8").strip("\n") for p in self.scenes())
+        return "\n\n".join(p.read_text(encoding="utf-8").strip("\n") for p in self.files())
 
     def word_count(self):
         return sum(count_words(p.read_text(encoding="utf-8")) for p in self.scenes())
 
     def add_scene(self, title="", text=""):
-        """A new scene file at the end: 03-the-letter.md."""
+        """A new manuscript FILE at the end: 03-the-letter.md (a chapter, in a novel; a short story uses append_scene)."""
         self.manuscript_dir.mkdir(parents=True, exist_ok=True)
         n = len(self.scenes()) + 1
         existing = {p.name for p in self.scenes()}
@@ -232,10 +288,36 @@ class Story:
         return trash(self.path)
 
 
+def marker_label(line):
+    """None if the line is not a scene marker; else the scene's title ('' for a plain `* * *`)."""
+    m = re.fullmatch(r"\* \* \*(?:\s+(.*?))?\s*", line)
+    return None if m is None else (m.group(1) or "")
+
+
 def count_words(text):
-    """Words in some prose: runs of non-space characters that hold a letter or digit (so `* * *` is not three
-    words). The Writer counts the same way."""
-    return sum(1 for w in text.split() if re.search(r"\w", w))
+    """Words in some prose: runs of non-space characters that hold a letter or digit. Scene marker lines (`* * *`,
+    `* * * Title`) are not prose and are not counted. The Writer counts the same way."""
+    return sum(1 for line in text.split("\n") if marker_label(line) is None
+               for w in line.split() if re.search(r"\w", w))
+
+
+def parse_scenes(text):
+    """Scenes in a file by their markers: [{start, end, label, marked, first_line, words}] (lines are 1-based).
+    A marker at the very start names the first scene (it is not a break); text before the first marker is a scene of its own."""
+    lines = text.split("\n")
+    scenes = []
+    for i, line in enumerate(lines, 1):
+        label = marker_label(line)
+        if label is not None:
+            scenes.append({"start": 1 if not scenes else i, "label": label, "marked": True})
+        elif line.strip() and not scenes:
+            scenes.append({"start": 1, "label": "", "marked": False})
+    for k, sc in enumerate(scenes):
+        sc["end"] = (scenes[k + 1]["start"] - 1) if k + 1 < len(scenes) else len(lines)
+        block = lines[sc["start"] - 1:sc["end"]]
+        sc["first_line"] = next((l.strip() for l in block if l.strip() and marker_label(l) is None), "")
+        sc["words"] = count_words("\n".join(block))
+    return scenes
 
 
 def parse_sections(body):

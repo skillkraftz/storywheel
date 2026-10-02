@@ -66,13 +66,20 @@ function M.decorate(buf)
   local indent_on = story.setting("indent_display", true)
   local width = M.column_width()
   for i, line in ipairs(lines) do
-    if line == "* * *" then
+    local label = require("sw.util").marker_label(line)
+    if label ~= nil then
+      local chunks = { { "*     *     *", "SwBreak" } }
+      local total = 11
+      if label ~= "" then
+        chunks[2] = { "   " .. label, "Comment" }
+        total = total + 3 + vim.fn.strdisplaywidth(label)
+      end
       vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, {
         end_row = i - 1, end_col = #line, conceal = " ",
-        virt_text = { { "*     *     *", "SwBreak" } },
-        virt_text_win_col = math.max(0, math.floor((width - 11) / 2)),
+        virt_text = chunks,
+        virt_text_win_col = math.max(0, math.floor((width - total) / 2)),
       })
-    elseif indent_on and line:match("%S") and (i == 1 or not lines[i - 1]:match("%S")) then
+    elseif indent_on and line:match("%S") and (i == 1 or not lines[i - 1]:match("%S") or require("sw.util").marker_label(lines[i - 1]) ~= nil) then
       vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, {
         virt_text = { { string.rep(" ", M.INDENT), "Normal" } }, virt_text_pos = "inline",
       })

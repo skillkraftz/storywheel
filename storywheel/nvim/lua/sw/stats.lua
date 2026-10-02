@@ -29,15 +29,23 @@ end
 -- Words in the whole manuscript (open buffers count as they are now, others as saved on disk).
 function M.manuscript()
   local total = 0
-  for _, s in ipairs(story.scenes()) do
+  for _, s in ipairs(story.files()) do
     local b = vim.fn.bufnr(s.path)
     if b ~= -1 and vim.api.nvim_buf_is_loaded(b) then total = total + buffer_words(b) else total = total + path_words(s.path) end
   end
   return total
 end
 
+-- Words in the scene the cursor is in (a scene runs from one marker line to the next).
 function M.scene(buf)
-  return buffer_words(buf or vim.api.nvim_get_current_buf())
+  buf = buf or vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local win = vim.fn.bufwinid(buf)
+  local row = (win ~= -1) and vim.api.nvim_win_get_cursor(win)[1] or 1
+  for _, sc in ipairs(util.parse_scenes(lines)) do
+    if row >= sc.start and row <= sc.finish then return sc.words end
+  end
+  return buffer_words(buf)
 end
 
 function M.today()
