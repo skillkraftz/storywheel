@@ -1,0 +1,56 @@
+"""A tiny dictionary index built from a hand-made WordNet-style file and Moby-style lines (the real ones are downloaded by
+`storywheel dictionary install`; tests never touch the network)."""
+from storywheel import dictionary_build
+
+XML = """<?xml version="1.0" encoding="UTF-8"?>
+<LexicalResource xmlns:dc="https://globalwordnet.github.io/schemas/dc/">
+  <Lexicon id="oewn" label="Open English Wordnet" language="en" email="x@y" license="https://creativecommons.org/licenses/by/4.0" version="2025" url="x">
+    <LexicalEntry id="oewn-dog-n"><Lemma writtenForm="dog" partOfSpeech="n"/>
+      <Sense id="oewn-dog__1.05.00.." synset="oewn-1-n"/><Sense id="oewn-dog__1.18.01.." synset="oewn-2-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-domestic_dog-n"><Lemma writtenForm="domestic dog" partOfSpeech="n"/><Sense id="oewn-domestic_dog__1.05.00.." synset="oewn-1-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-canine-n"><Lemma writtenForm="canine" partOfSpeech="n"/><Sense id="oewn-canine__1.05.00.." synset="oewn-3-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-wretch-n"><Lemma writtenForm="wretch" partOfSpeech="n"/><Sense id="oewn-wretch__1.18.00.." synset="oewn-2-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-goose-n"><Lemma writtenForm="goose" partOfSpeech="n"/><Form writtenForm="geese"/><Sense id="oewn-goose__1.05.00.." synset="oewn-4-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-wolf-n"><Lemma writtenForm="wolf" partOfSpeech="n"/><Form writtenForm="wolves"/><Sense id="oewn-wolf__1.05.00.." synset="oewn-5-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-run-v"><Lemma writtenForm="run" partOfSpeech="v"/><Form writtenForm="ran"/><Sense id="oewn-run__2.38.00.." synset="oewn-6-v"/></LexicalEntry>
+    <LexicalEntry id="oewn-sprint-v"><Lemma writtenForm="sprint" partOfSpeech="v"/><Sense id="oewn-sprint__2.38.00.." synset="oewn-6-v"/></LexicalEntry>
+    <LexicalEntry id="oewn-dash-v"><Lemma writtenForm="dash" partOfSpeech="v"/><Sense id="oewn-dash__2.38.00.." synset="oewn-6-v"/></LexicalEntry>
+    <LexicalEntry id="oewn-happy-a"><Lemma writtenForm="happy" partOfSpeech="a"/>
+      <Sense id="oewn-happy__3.00.00.." synset="oewn-7-a"><SenseRelation relType="antonym" target="oewn-unhappy__3.00.00.."/></Sense></LexicalEntry>
+    <LexicalEntry id="oewn-glad-a"><Lemma writtenForm="glad" partOfSpeech="a"/><Sense id="oewn-glad__3.00.00.." synset="oewn-7-a"/></LexicalEntry>
+    <LexicalEntry id="oewn-unhappy-a"><Lemma writtenForm="unhappy" partOfSpeech="a"/>
+      <Sense id="oewn-unhappy__3.00.00.." synset="oewn-8-a"><SenseRelation relType="antonym" target="oewn-happy__3.00.00.."/></Sense></LexicalEntry>
+    <LexicalEntry id="oewn-cheerful-s"><Lemma writtenForm="cheerful" partOfSpeech="s"/><Sense id="oewn-cheerful__3.00.01.." synset="oewn-9-s"/></LexicalEntry>
+    <LexicalEntry id="oewn-leaf-n"><Lemma writtenForm="leaf" partOfSpeech="n"/><Form writtenForm="leaves"/><Sense id="oewn-leaf__1.20.00.." synset="oewn-10-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-leave-v"><Lemma writtenForm="leave" partOfSpeech="v"/><Sense id="oewn-leave__2.38.01.." synset="oewn-11-v"/></LexicalEntry>
+    <Synset id="oewn-1-n" members="oewn-dog-n oewn-domestic_dog-n" partOfSpeech="n"><Definition>a domesticated canine</Definition>
+      <Example>the dog barked</Example><SynsetRelation relType="hypernym" target="oewn-3-n"/></Synset>
+    <Synset id="oewn-2-n" members="oewn-dog-n oewn-wretch-n" partOfSpeech="n"><Definition>a despicable person</Definition></Synset>
+    <Synset id="oewn-3-n" members="oewn-canine-n" partOfSpeech="n"><Definition>any of various fissiped mammals</Definition></Synset>
+    <Synset id="oewn-4-n" members="oewn-goose-n" partOfSpeech="n"><Definition>web-footed long-necked birds</Definition></Synset>
+    <Synset id="oewn-5-n" members="oewn-wolf-n" partOfSpeech="n"><Definition>a wild canine</Definition></Synset>
+    <Synset id="oewn-6-v" members="oewn-run-v oewn-sprint-v oewn-dash-v" partOfSpeech="v"><Definition>move fast by using legs</Definition><Example>She ran home</Example></Synset>
+    <Synset id="oewn-7-a" members="oewn-happy-a oewn-glad-a" partOfSpeech="a"><Definition>enjoying or showing joy</Definition></Synset>
+    <Synset id="oewn-8-a" members="oewn-unhappy-a" partOfSpeech="a"><Definition>experiencing sorrow</Definition></Synset>
+    <Synset id="oewn-9-s" members="oewn-cheerful-s" partOfSpeech="s"><Definition>full of good spirits</Definition><SynsetRelation relType="similar" target="oewn-7-a"/></Synset>
+    <Synset id="oewn-10-n" members="oewn-leaf-n" partOfSpeech="n"><Definition>the main organ of photosynthesis</Definition></Synset>
+    <Synset id="oewn-11-v" members="oewn-leave-v" partOfSpeech="v"><Definition>go away from</Definition></Synset>
+  </Lexicon>
+</LexicalResource>
+"""
+
+MOBY = ("happy,glad,joyful,blithe,content,merry,cheerful,elated\r\n"
+        "run,dash,sprint,jog,scamper,race,bolt,gallop\r\n"
+        "dog,hound,mutt,pooch,cur\r\n"
+        "leave,depart,exit,quit,go away\r\n"
+        "unhappy,sad,miserable,glum\r\n")
+
+
+def build_fixture(directory):
+    directory = __import__("pathlib").Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / "oewn.xml").write_text(XML, encoding="utf-8")
+    (directory / "moby.txt").write_text(MOBY, encoding="latin-1")
+    out = directory / "dictionary.sqlite"
+    counts = dictionary_build.build(directory / "oewn.xml", directory / "moby.txt", out)
+    return out, counts

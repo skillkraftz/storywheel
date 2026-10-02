@@ -154,6 +154,61 @@ def cmd_manuscript(args):
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
+def cmd_lookup(args):
+    """define / thesaurus / lookup WORD [--json]: meanings, similar words and opposite words, from the offline dictionary."""
+    from . import dictionary
+    try:
+        result = dictionary.lookup(" ".join(args.word), limit_similar=args.limit)
+    except dictionary.DictionaryMissing as e:
+        if args.json:
+            emit({"error": str(e), "installed": False})
+        else:
+            print("  " + str(e))
+        raise SystemExit(1)
+    kind = args.command
+    if args.json:
+        out = dict(result)
+        if kind == "define":
+            out["entries"] = [{k: e[k] for k in ("word", "form_of", "parts")} for e in result["entries"]]
+        elif kind == "thesaurus":
+            out["entries"] = [{"word": e["word"], "form_of": e["form_of"], "close_synonyms": e["close_synonyms"],
+                               "synonyms": e["synonyms"], "more_synonyms": e["more_synonyms"], "antonyms": e["antonyms"],
+                               "kind_of": sorted({k for p in e["parts"] for s in p["senses"] for k in s["kind_of"]})} for e in result["entries"]]
+        emit(out)
+        return
+    if kind == "thesaurus" and result["found"]:
+        for e in result["entries"]:
+            print(f"  {e['word']}" + (f"  (from '{e['form_of']}')" if e["form_of"] else ""))
+            print("    similar:  " + (", ".join(e["synonyms"]) or "-"))
+            print("    opposite: " + (", ".join(e["antonyms"]) or "-"))
+        return
+    print("\n".join("  " + l for l in dictionary.card_lines(result, similar_shown=args.limit)))
+
+
+def cmd_dictionary(args):
+    from . import dictionary, dictionary_build, paths
+    if args.action == "status":
+        st = dictionary.status()
+        emit(st) if args.json else print(
+            f"  Installed: {paths.tilde(st['path'])}  ({st['size'] // 1048576} MB)\n  {st.get('wordnet', '')}\n  {st.get('moby', '')}" if st["installed"]
+            else f"  {dictionary.NOT_INSTALLED}")
+        return
+    dest = dictionary.index_path()
+    try:
+        if args.action == "install":
+            print("  This downloads Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB,")
+            print("  and builds the index. It is the only time storywheel uses the network.")
+            counts = dictionary_build.install(dest, dest.parent / ".dictionary-download", lambda m: print("  " + m))
+        else:
+            counts = dictionary_build.build(args.oewn, args.moby, dest, lambda m: print("  " + m))
+    except dictionary_build.DictionaryBuildError as e:
+        print("  " + str(e))
+        raise SystemExit(1)
+    dictionary.forget()
+    print(f"  Dictionary ready at {paths.tilde(dest)}: {counts['words']:,} words, {counts['synsets']:,} meanings, "
+          f"{counts['moby_roots']:,} thesaurus entries.")
+
+
 def cmd_migrate(args):
     lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports()
     print("\n".join("  " + l for l in lines) if lines else "  Nothing to migrate.")
@@ -206,6 +261,17 @@ def add_parsers(sub):
     p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
     p.add_argument("--anonymous", action="store_true", help="no name, contact block, byline or surname (header: Title / page)")
     p.add_argument("--json", action="store_true")
+    for name, text in (("define", "meanings of a word (offline dictionary)"), ("thesaurus", "similar and opposite words"),
+                       ("lookup", "meanings, similar and opposite words")):
+        p = sub.add_parser(name, help=text)
+        p.add_argument("word", nargs="+")
+        p.add_argument("--json", action="store_true")
+        p.add_argument("--limit", type=int, default=80, help="how many similar words to list")
+    p = sub.add_parser("dictionary", help="the offline dictionary and thesaurus:  dictionary install | status | build --oewn FILE --moby FILE")
+    p.add_argument("action", choices=["install", "status", "build"])
+    p.add_argument("--oewn", help="build: the Open English WordNet .xml or .xml.gz")
+    p.add_argument("--moby", help="build: mthesaur.txt")
+    p.add_argument("--json", action="store_true")
     sub.add_parser("migrate", help="bring old data up to date (the old universe.json, scene files -> one manuscript file)")
     sub.add_parser("settings", help="open Settings (who you are, goals, Writer preferences, export, library, stats)")
     p = sub.add_parser("builder", help="open the Universe Builder")
@@ -214,4 +280,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
