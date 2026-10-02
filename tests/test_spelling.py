@@ -126,8 +126,13 @@ def test_italics_survive_curly_conversion(home):
 
 @pytest.mark.parametrize("typed,expected", [
     ("i think im late and i've gone ", "I think I'm late and I've gone "),
-    ("I dont know. She cant. Dont go! ", "I don't know. She can't. Don't go! "),
-    ("teh end, wont you? ", "the end, won't you? "),
+    ("I dont know. Dont go! ", "I don't know. Don't go! "),
+    ("teh end, as was her wont. ", "the end, as was her wont. "),
+    ("the cant of thieves, she cant. ", "the cant of thieves, she cant. "),
+    ("it is, i.e. it was. ", "it is, i.e. it was. "),
+    ("fruit, e.g. figs; i.e., ripe. ", "fruit, e.g. figs; i.e., ripe. "),
+    ("then i. wait, i said. ", "then i. wait, I said. "),
+    ("i, i; i! i? (i) ", "I, I; I! I? (I) "),
     ("i'll go, i'd stay. ", "I'll go, I'd stay. "),
     ("it is fine. ", "it is fine. "),
     ("this is a single i— ", "this is a single i— "),

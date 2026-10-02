@@ -16,8 +16,8 @@ end
 M.CORRECTIONS = {
   ["i"] = "I", ["im"] = "I'm", ["i'm"] = "I'm", ["ive"] = "I've", ["i've"] = "I've", ["i'll"] = "I'll", ["i'd"] = "I'd",
   ["dont"] = "don't", ["doesnt"] = "doesn't", ["didnt"] = "didn't", ["isnt"] = "isn't", ["wasnt"] = "wasn't", ["arent"] = "aren't",
-  ["werent"] = "weren't", ["cant"] = "can't", ["couldnt"] = "couldn't", ["wouldnt"] = "wouldn't", ["shouldnt"] = "shouldn't",
-  ["hasnt"] = "hasn't", ["havent"] = "haven't", ["hadnt"] = "hadn't", ["wont"] = "won't", ["thats"] = "that's", ["theyre"] = "they're",
+  ["werent"] = "weren't", ["couldnt"] = "couldn't", ["wouldnt"] = "wouldn't", ["shouldnt"] = "shouldn't",
+  ["hasnt"] = "hasn't", ["havent"] = "haven't", ["hadnt"] = "hadn't", ["thats"] = "that's", ["theyre"] = "they're",
   ["youre"] = "you're", ["theyve"] = "they've", ["weve"] = "we've", ["youve"] = "you've", ["theyll"] = "they'll", ["youll"] = "you'll",
   ["teh"] = "the", ["adn"] = "and", ["taht"] = "that", ["wiht"] = "with", ["recieve"] = "receive",
   ["definately"] = "definitely", ["seperate"] = "separate", ["occured"] = "occurred", ["untill"] = "until",
@@ -34,7 +34,7 @@ function M.correct(word)
 end
 
 -- After a space or punctuation has been typed, fix the word before it.
-local function fix_before_cursor(buf, want_row, want_col)
+local function fix_before_cursor(buf, want_row, want_col, delimiter)
   if not vim.api.nvim_buf_is_valid(buf) or vim.api.nvim_get_current_buf() ~= buf or vim.fn.mode() ~= "i" then return end
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if row ~= want_row or col ~= want_col then return end            -- more was typed already (keys queued up): leave the text alone
@@ -48,6 +48,8 @@ local function fix_before_cursor(buf, want_row, want_col)
   local word = line:sub(s, e)
   if word:sub(1, 1) == "'" then word = word:sub(2) s = s + 1 end
   if word == "" then return end
+  -- "i." is the start of "i.e." (and "e.g.", "a.m."...): a lone letter before a full stop is not the pronoun
+  if word:lower() == "i" and delimiter == "." then return end
   local fix = M.correct(word)
   if not fix then return end
   vim.api.nvim_buf_set_text(buf, row - 1, s - 1, row - 1, e, { fix })
@@ -65,7 +67,7 @@ function M.setup()
     end
     if story.setting("autocorrect", true) ~= false and c:match("^[%s%.,;:!%?%)%]\"]$") then
       local at = vim.api.nvim_win_get_cursor(0)               -- where the delimiter is going in; the fix only applies if the cursor is right after it
-      vim.schedule(function() fix_before_cursor(buf, at[1], at[2] + 1) end)
+      vim.schedule(function() fix_before_cursor(buf, at[1], at[2] + 1, c) end)
     end
   end })
 end
