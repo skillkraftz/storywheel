@@ -22,7 +22,7 @@ from textual.widgets.option_list import Option
 from . import fill, paths, promote, rename, schemas, settings, state, vault, writing_stats
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
-MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer"
+MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings"
 TYPE_ORDER = ["character", "place", "thing", "group", "note"]
 
 HELP = f"""\
@@ -189,6 +189,7 @@ class BuilderScreen(Screen):
         Binding("f1", "mode('wheel')", "Wheel", key_display="F1"),
         Binding("f2", "noop_builder", "Builder", key_display="F2"),
         Binding("f3", "writer", "Writer", key_display="F3"),
+        Binding("f4", "mode('settings')", "Settings", key_display="F4"),
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
         Binding("e", "write_field", "Write"),
@@ -1148,7 +1149,8 @@ class BuilderScreen(Screen):
                   "exclude tags (comma separated)": ", ".join(s["exclude_tags"]),
                   "exclude lists (comma separated, e.g. job/western)": ", ".join(s["exclude_lists"]),
                   "boosts (tag=1.5, tag=2)": ", ".join(f"{k}={v}" for k, v in s["boost"].items()),
-                  "universe atoms boost (how much likelier its own people and places are)": str(s["atom_boost"])}
+                  "universe atoms boost (blank = your default, " + f"{s['atom_boost'] if not s['atom_boost_own'] else 'now ' + str(s['atom_boost'])})":
+                      str(s["atom_boost"]) if s["atom_boost_own"] else ""}
         self.app.push_screen(EditScreen(f"Universe settings: {self.universe.name}   (own lists: {self.universe.lists_dir}"
                                         "  - put atom files there)", fields), self._universe_settings_done)
 
@@ -1166,9 +1168,10 @@ class BuilderScreen(Screen):
                 except ValueError:
                     self.say(f"Ignored boost '{part}' (use tag=1.5).")
         try:
-            atom_boost = float(vals[4])
+            atom_boost = float(vals[4]) if vals[4].strip() else None
         except ValueError:
-            atom_boost = 1.5
+            atom_boost = None
+            self.say("Boost must be a number; your default is used.")
         self.universe.save_settings(genres=[g.lower() for g in split(vals[0])], exclude_tags=[t.lower() for t in split(vals[1])],
                                     exclude_lists=split(vals[2]), boost=boost, atom_boost=atom_boost)
         self.universe.lists_dir.mkdir(exist_ok=True)
@@ -1197,7 +1200,8 @@ class BuilderScreen(Screen):
         st["title_keyword"] = vals["title_keyword"].strip()
         for k in ("indent_display", "typewriter", "invisibles", "spellcheck"):
             st[k] = _as_bool(vals[k], st[k])
-        settings.save_story(self.story.path, st)
+        before = settings.load_story(self.story.path)
+        settings.save_story(self.story.path, {k: v for k, v in st.items() if before.get(k) != v or k not in before})
         self.refresh_top()
         self.say("Story settings saved.")
 

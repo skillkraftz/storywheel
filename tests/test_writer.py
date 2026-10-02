@@ -687,3 +687,9 @@ def test_in_a_real_terminal_the_writer_starts_draws_the_text_and_f2_returns(home
     assert "E5108" not in text and "E5113" not in text and "Error" not in text.split("Stacie")[0][-500:]
     assert (story.path.parent / "return-pty.txt").read_text() == "builder"
     assert "hello from the pty" in story.scenes()[0].read_text()
+
+
+def test_f4_in_the_writer_goes_to_settings(home, story):
+    return_file = story.path.parent / "return.txt"
+    run_typed(story, "", "<F4>", "", quits=True)
+    assert return_file.read_text() == "settings"

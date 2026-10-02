@@ -20,5 +20,21 @@ def home():
 
 
 def library_root():
-    """Where universes live: plain folders of markdown you can open in Obsidian."""
-    return Path(os.environ.get("STORYWHEEL_LIBRARY", Path.home() / "Writing" / "storywheel"))
+    """Where universes live: plain folders of markdown you can open in Obsidian.
+    STORYWHEEL_LIBRARY wins, then `library = "..."` in ~/.storywheel/settings.toml (the Settings mode, F4), then the default."""
+    env = os.environ.get("STORYWHEEL_LIBRARY")
+    if env:
+        return Path(env)
+    try:
+        import re
+        text = (home() / "settings.toml").read_text(encoding="utf-8")
+        m = re.search(r'^library\s*=\s*"((?:[^"\\]|\\.)*)"', text, re.M)
+        if m and m.group(1).strip():
+            return Path(m.group(1).encode().decode("unicode_escape")).expanduser()
+    except OSError:
+        pass
+    return default_library()
+
+
+def default_library():
+    return Path.home() / "Writing" / "storywheel"

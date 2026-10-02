@@ -67,17 +67,28 @@ def run_writer(st, payload):
     return (where or "builder", {"universe": u.slug, "story": story.slug})
 
 
+def run_settings(st, payload):
+    from . import settings_app
+    back = payload.get("back") or st.get("back") or ("builder" if vault.list_universes() else "wheel")
+    return settings_app.run_settings(st, back)
+
+
 def run(start=None, get_engine=None, get_ratings=None):
     """Run modes until the writer quits. `start` is (mode, payload) or None (use the saved state)."""
     st = state_mod.State()
     mode, payload = start or (st.get("mode") or "wheel", {})
-    while mode in ("wheel", "builder", "writer"):
+    while mode in ("wheel", "builder", "writer", "settings"):
         if mode == "wheel":
             nxt = run_wheel(st, payload, get_engine)
         elif mode == "builder":
             nxt = run_builder(st, payload, get_ratings)
-        else:
+        elif mode == "writer":
             nxt = run_writer(st, payload)
-        if not nxt or nxt[0] not in ("wheel", "builder", "writer"):
+        else:
+            nxt = run_settings(st, payload)
+        if not nxt or nxt[0] not in ("wheel", "builder", "writer", "settings"):
             break
+        came_from = mode
         mode, payload = nxt
+        if mode == "settings":
+            payload = dict(payload, back=came_from)         # q in Settings goes back to where F4 was pressed

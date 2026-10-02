@@ -51,7 +51,7 @@ HELP = """\
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
   [b]B[/b]       send this story to the Universe Builder (the button under the card; F2 offers it too)
-  [b]F1[/b] [b]F2[/b] [b]F3[/b]   Wheel, Universe Builder, Writer (this is the Wheel)
+  [b]F1[/b] [b]F2[/b] [b]F3[/b] [b]F4[/b]   Wheel (this), Universe Builder, Writer, Settings
   [b]v[/b]       the universe panel (see below)
   [b]c[/b]       copy the story so far to the clipboard (plain text)
   [b]i[/b]       ignore a stale warning
@@ -743,6 +743,7 @@ class MainScreen(Screen):
         Binding("B", "send", "Send to Builder", key_display="B"),
         Binding("f2", "mode('builder')", "Builder", key_display="F2"),
         Binding("f3", "mode('writer')", "Writer", key_display="F3"),
+        Binding("f4", "mode('settings')", "Settings", key_display="F4"),
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),

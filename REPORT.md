@@ -201,12 +201,23 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 | Scenes tab lists the manuscript's scenes and opens the Writer at one | Partial | Enter / "Write here" pass the scene to the Writer (`STORYWHEEL_SCENE`), and the list shows first lines and word counts; **the Writer itself does not yet jump to it** (that arrives with the one-file manuscript, below) |
 | Top box becomes a stats box | Works | today vs the goal with a bar, current and best streak, this week, totals for the story and the universe; read from each story's `stats.json`, so it counts what the Writer recorded |
 
+### Settings, F4 (`pass2-settings`)
+| Item | Status | What's missing |
+|---|---|---|
+| A Settings mode on F4, in every help screen | Works | F4 in the Wheel, Builder, Writer; `storywheel settings`; `q` returns to where you pressed it; F1-F3 go on from there; remembered in `state.json` |
+| Author details, goals, Writer preferences, export defaults, universe boost, library location | Works | tabs You, Goals, Writer, Export, Universes, Library; each change is saved to `~/.storywheel/settings.toml` as you make it; story settings still override (and now only store what the story itself sets, so your defaults keep applying); the universe boost is a default, a universe can pin its own (blank in `s` = follow the default); the library path can also be set here (the `STORYWHEEL_LIBRARY` variable still wins, and nothing is moved) |
+| A Stats tab: words per day history, streaks, per-story totals | Works | counts what the Writer recorded in `stats.json` |
+
+The Writer settings on that tab (notepad mode, Neovide, font, line spacing, paragraph spacing) are stored now; the Writer starts using them in the notepad / Neovide areas below.
+
 ## P2. Tests added in the second pass
 | Area | File | Tests |
 |---|---|---|
 | Send to Builder | `test_send_to_builder.py` | 9 |
 | Builder fixes | `test_builder_fixes.py` | 13 |
 | Builder layout and writing stats | `test_builder_layout.py` | 18 |
+| Settings mode and stats tab | `test_settings_mode.py` | 20 |
+| F4 from the Writer | `test_writer.py` | +1 |
 
 ## P3. Manual test script additions
 1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
@@ -221,7 +232,11 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 6. In the Builder: look at the box at the top (today's words, streak, totals) and the three tabs on the right (keys 6, 7, 8). Open the
    Scenes tab, press Enter on a scene.
 
+7. Press **F4** in each mode: Settings opens. Change your name, toggle a switch, set the daily goal; open `~/.storywheel/settings.toml`
+   and see it written. Look at the Stats tab. Press `q`: you return to the mode you came from.
+
 ## P4. Known issues / open questions (second pass)
+- Changing the library folder in Settings only points at it; moving or copying your existing universes there is up to you.
 - The stats box counts words as the Writer recorded them in `stats.json`; words typed outside the Writer are not counted.
 - The "list moves when clicked" report could not be reproduced headlessly (see above); please re-test by hand.
 - Past stories' button is labelled just "Send" (a longer label did not fit the column).

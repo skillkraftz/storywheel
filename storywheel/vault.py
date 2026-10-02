@@ -262,6 +262,14 @@ def render_sections(title, sections):
 
 # --- universes ---------------------------------------------------------------------------------------------
 
+def _global_boost():
+    from . import settings
+    try:
+        return float(settings.load_global().get("atom_boost") or 1.5)
+    except (TypeError, ValueError):
+        return 1.5
+
+
 class Universe:
     def __init__(self, slug):
         self.slug = slug
@@ -291,15 +299,22 @@ class Universe:
         return {"name": meta.get("name") or self.name, "genres": list(meta.get("genres") or []),
                 "exclude_tags": list(meta.get("exclude_tags") or []), "exclude_lists": list(meta.get("exclude_lists") or []),
                 "boost": {k: float(v) for k, v in (meta.get("boost") or {}).items()},
-                "atom_boost": float(meta.get("atom_boost", 1.5) or 1.5), "notes": body,
-                "created": meta.get("created", "")}
+                "atom_boost": float(meta.get("atom_boost") or _global_boost()), "atom_boost_own": bool(meta.get("atom_boost")),
+                "notes": body, "created": meta.get("created", "")}
 
     def save_settings(self, **changes):
+        """Save changes. `atom_boost` pins this universe's own boost; `atom_boost=None` goes back to your default (F4)."""
         s = self.settings()
+        if "atom_boost" in changes:
+            s["atom_boost_own"] = changes["atom_boost"] is not None
+            if changes["atom_boost"] is None:
+                changes = {k: v for k, v in changes.items() if k != "atom_boost"}
         s.update(changes)
         meta = {"name": s["name"], "genres": s["genres"], "exclude_tags": s["exclude_tags"],
-                "exclude_lists": s["exclude_lists"], "boost": s["boost"], "atom_boost": s["atom_boost"],
+                "exclude_lists": s["exclude_lists"], "boost": s["boost"],
                 "created": s["created"] or datetime.date.today().isoformat()}
+        if s["atom_boost_own"]:
+            meta["atom_boost"] = s["atom_boost"]
         _write(self.file, frontmatter.dumps(meta, s["notes"]))
 
     def mix_dict(self):

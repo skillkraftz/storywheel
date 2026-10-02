@@ -11,15 +11,27 @@ from pathlib import Path
 
 from . import paths
 
+# What you are (once, for everything) and defaults for every story. A story can override any of the story ones in its
+# own settings.toml. The Settings mode (F4) edits this file.
 GLOBAL_DEFAULTS = {
-    "author_name": "", "legal_name": "", "address": "", "email": "", "phone": "",
-    "font": "Times New Roman", "format": "short-story", "daily_goal": 500, "column_width": 72,
+    "author_name": "", "legal_name": "", "surname": "", "address": "", "email": "", "phone": "",
+    "font": "Times New Roman", "format": "short-story", "export_format": "docx",
+    "daily_goal": 500, "column_width": 72,
+    "indent_display": True, "typewriter": False, "invisibles": False, "spellcheck": False,
+    "notepad_mode": True, "neovide": False, "writer_font": "", "writer_font_size": 15, "line_spacing": 12,
+    "paragraph_spacing": 0,
+    "atom_boost": 1.5,
 }
 STORY_DEFAULTS = {
     "format": "short-story", "font": "Times New Roman", "column_width": 72, "daily_goal": 500,
     "title_keyword": "", "indent_display": True, "typewriter": False, "invisibles": False,
     "spellcheck": False, "scene_goal": 0,
+    "notepad_mode": True, "neovide": False, "writer_font": "", "writer_font_size": 15, "line_spacing": 12,
+    "paragraph_spacing": 0,
 }
+# story settings that fall back to your global settings
+INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
+             "notepad_mode", "neovide", "writer_font", "writer_font_size", "line_spacing", "paragraph_spacing")
 
 
 def _mini_parse(text):
@@ -113,7 +125,9 @@ def load_global():
 def save_global(values):
     path = global_path()
     path.parent.mkdir(parents=True, exist_ok=True)
-    merged = dict(GLOBAL_DEFAULTS, **{k: v for k, v in values.items() if k in GLOBAL_DEFAULTS or True})
+    keep = {k: v for k, v in _load(path, {}).items()} if path.exists() else {}     # keys we don't know (library = ...) stay
+    merged = dict(GLOBAL_DEFAULTS, **keep)
+    merged.update(values)
     path.write_text(dump_toml(merged, "storywheel settings: who you are, and defaults for new stories."),
                     encoding="utf-8")
     return path
@@ -123,16 +137,20 @@ def load_story(story_dir):
     """A story's settings: its own file over your global defaults over the built-in ones."""
     g = load_global()
     base = dict(STORY_DEFAULTS)
-    for key in ("format", "font", "column_width", "daily_goal"):
-        if key in g and g[key] not in ("", None):
+    for key in INHERITED:
+        if key in g and g[key] is not None and (g[key] != "" or key == "writer_font"):
             base[key] = g[key]
     return _load(Path(story_dir) / "settings.toml", base)
 
 
 def save_story(story_dir, values):
+    """Save the story's own settings: only what it sets itself (what it doesn't set follows your defaults)."""
     path = Path(story_dir) / "settings.toml"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(dump_toml(dict(STORY_DEFAULTS, **values), "this story's settings"), encoding="utf-8")
+    own = _load(path, {}) if path.exists() else {}
+    own.update(values)
+    path.write_text(dump_toml(own, "this story's settings (anything missing follows your defaults in ~/.storywheel/settings.toml)"),
+                    encoding="utf-8")
     return path
 
 

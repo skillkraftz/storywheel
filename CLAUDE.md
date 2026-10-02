@@ -624,4 +624,11 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   in the ticked universes (`Engine.proper`), so templates that say "the {rival}" read "Sheriff Lund".
 - Builder layout: the box at the top is a writing-stats box (today vs goal, streaks, totals), read from the stories' `stats.json`
   (`writing_stats.py`). The right column is tabs: Outline, Scenes, Notes (keys 6-8). Notes holds the entity notes, links and appearances.
+- A fourth mode, Settings, on F4 (`settings_app.py`), reachable from every mode and listed in every help screen. It edits
+  `~/.storywheel/settings.toml`, saving each change as it is made. `q` returns to the mode F4 was pressed in.
+- Story `settings.toml` files store only what that story sets itself; everything else follows the global defaults
+  (writer preferences, goals, font, column width...). A universe's `atom_boost` is stored only if the universe pins its own;
+  otherwise it follows the global `atom_boost`.
+- The library folder can be set in Settings (`library = "..."` in settings.toml); `STORYWHEEL_LIBRARY` still overrides it.
+  Changing it never moves files.
 

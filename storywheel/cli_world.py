@@ -154,6 +154,12 @@ def cmd_manuscript(args):
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
+def cmd_settings(args):
+    from . import modes
+    from .cli import get_engine, get_ratings
+    modes.run(("settings", {"back": "builder" if vault.list_universes() else "wheel"}), get_engine, get_ratings)
+
+
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
@@ -194,10 +200,11 @@ def add_parsers(sub):
     p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
     p.add_argument("--out", help="folder to write into (default: the story's exports folder)")
     p.add_argument("--json", action="store_true")
+    sub.add_parser("settings", help="open Settings (who you are, goals, Writer preferences, export, library, stats)")
     p = sub.add_parser("builder", help="open the Universe Builder")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

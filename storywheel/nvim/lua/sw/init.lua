@@ -12,7 +12,7 @@ local session = require("sw.session")
 local M = {}
 
 M.HELP = {
-  "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer",
+  "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer   F4 Settings",
   "",
   "Writing",
   "  Alt+I / Alt+B      italic / bold (insert and visual; Ctrl+B too; Ctrl+I only if your terminal can send it)",
@@ -29,7 +29,7 @@ M.HELP = {
   "",
   "Sidebar (Space n, or F9):  Enter jump   a add   r rename   J / K move down / up   q close",
   "",
-  "Leaving:  F2 saves everything and goes back to the Builder.  F1 goes to the Wheel.  :q works too.",
+  "Leaving:  F2 saves everything and goes back to the Builder.  F1 the Wheel.  F4 Settings.  :q works too.",
   "Everything is saved as you go; backups are in the story's .backups folder.",
 }
 
@@ -236,6 +236,7 @@ function M.map_global()
   map({ "n", "i", "x" }, "<F1>", function() M.leave("wheel") end, "to the Wheel")
   map({ "n", "i", "x" }, "<F2>", function() M.leave("builder") end, "to the Builder")
   map({ "n", "i", "x" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
+  map({ "n", "i", "x" }, "<F4>", function() M.leave("settings") end, "to Settings")
   map({ "n", "i" }, "<F9>", function() sidebar.toggle() end, "scene sidebar")
   map({ "n", "i" }, "<F10>", function() world.peek() end, "peek")
   local leader = {
