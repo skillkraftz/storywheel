@@ -2,7 +2,7 @@
 import json
 import sys
 
-from . import migrate, schemas, vault
+from . import migrate, schemas, settings, vault
 
 
 def emit(data):
@@ -12,6 +12,17 @@ def emit(data):
 def entity_json(e, universe=None):
     out = {"id": e.id, "type": e.type, "name": e.name, "fields": e.fields, "custom": e.custom, "notes": e.body,
            "universe": universe.slug if universe else None}
+    if universe is not None:                    # link fields shown as names, for the Writer's peek card
+        shown = {}
+        for f in schemas.get(e.type)["fields"]:
+            v = e.fields.get(f["key"])
+            if f.get("kind") == "link" and v:
+                t = universe.resolve(v)
+                shown[f["key"]] = t.name if t else v
+            elif f.get("kind") == "links" and v:
+                shown[f["key"]] = ", ".join((universe.resolve(x).name if universe.resolve(x) else x) for x in v)
+        out["display"] = shown
+        out["labels"] = {f["key"]: f["label"] for f in schemas.get(e.type)["fields"]}
     if e.type == "note":
         out["notes"] = e.fields.get("body", "")
     return out
@@ -19,9 +30,11 @@ def entity_json(e, universe=None):
 
 def story_json(s):
     meta, sections = s.load_outline()
-    return {"id": s.slug, "universe": s.universe.slug, "title": s.title, "meta": meta, "outline": sections,
-            "scenes": [p.name for p in s.scenes()], "words": s.word_count(), "path": str(s.path),
-            "manuscript": str(s.manuscript_dir)}
+    return {"id": s.slug, "universe": s.universe.slug, "universe_name": s.universe.name, "title": s.title,
+            "meta": meta, "outline": sections, "scenes": [p.name for p in s.scenes()], "words": s.word_count(),
+            "path": str(s.path), "manuscript": str(s.manuscript_dir), "settings": settings.load_story(s.path),
+            "author": {k: v for k, v in settings.load_global().items()
+                       if k in ("author_name", "legal_name", "address", "email", "phone")}}
 
 
 def universe_json(u):

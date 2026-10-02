@@ -204,7 +204,7 @@ class Story:
         return "\n\n".join(p.read_text(encoding="utf-8").strip("\n") for p in self.scenes())
 
     def word_count(self):
-        return sum(len(p.read_text(encoding="utf-8").split()) for p in self.scenes())
+        return sum(count_words(p.read_text(encoding="utf-8")) for p in self.scenes())
 
     def add_scene(self, title="", text=""):
         """A new scene file at the end: 03-the-letter.md."""
@@ -219,6 +219,12 @@ class Story:
 
     def delete(self):
         return trash(self.path)
+
+
+def count_words(text):
+    """Words in some prose: runs of non-space characters that hold a letter or digit (so `* * *` is not three
+    words). The Writer counts the same way."""
+    return sum(1 for w in text.split() if re.search(r"\w", w))
 
 
 def parse_sections(body):

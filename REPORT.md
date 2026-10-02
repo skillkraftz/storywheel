@@ -47,7 +47,21 @@ Not done here: after promotion the app records `app.next = ("builder", ...)`, bu
 | Past stories: send protagonist / setting to a universe | Works | asks which universe |
 
 Rough edges: a character used in the `rival` slot reads as "the Sheriff Lund" (the templates say "the {rival}"); removing an entity from a universe is done in the Builder only (`U` says so).
-### Writer (Neovim) -- Not started
+### Writer (Neovim) (tag `foundation-writer`)
+| Item | Status | Notes |
+|---|---|---|
+| Self-contained config via NVIM_APPNAME, shipped in the package | Works | `storywheel/nvim/` linked (or copied) into `~/.storywheel/nvim/config/storywheel-writer`; data/state/cache folders are under `~/.storywheel/nvim/`; no plugins at all; needs Neovim 0.10+ and says so if missing |
+| Full screen, centered column, minimal statusline, soft wrap, mouse | Works | tests check the layout numbers; the *look* is in the manual script (two blank pad windows make the margins) |
+| Ctrl+I / Ctrl+B italic and bold, markup concealed | Partial | Ctrl+B and Alt+B bold, Alt+I italic work everywhere; **Ctrl+I only where the terminal reports it apart from Tab** (kitty, foot, WezTerm, ghostty are assumed; anything else is not mapped, so Tab stays Tab). `Space k` / `:SWKeyCheck` asks your terminal and remembers the answer. This machine's terminal is a VTE one (GNOME Terminal family), which sends Ctrl+I as Tab, so expect to use Alt+I |
+| Virtual first-line paragraph indent; Enter starts a new paragraph | Works | the indent is virtual text (nothing typed); Enter inserts a blank line and never stacks them |
+| Scene break key (`* * *` stored, centered) | Works | Alt+S; centered with a virtual-text overlay |
+| Show invisibles, typewriter, spellcheck toggles | Works | `Space i / t / s`; remembered between visits; defaults from settings.toml |
+| Scene sidebar with first lines: jump, add, rename, reorder | Works | `Space n` / F9; `* * *` sections appear as sub-entries |
+| World peek card for the name under the cursor; name completion | Works | `Space p` / F10; completion pops up as you type a capitalised name, Tab moves through it |
+| Stats: scene / manuscript / today vs goal in the statusline; stats.json | Works | words per day and per session |
+| Autosave plus rolling backups | Works | on leaving insert mode, focus loss, idle, quitting; copies in `<story>/.backups/<date>/HHMM-<scene>.md` when changed, at most every 15 minutes, 30 days kept |
+| Story settings read from settings.toml, editable from the Builder | Works | the Writer reads them through `storywheel story show --json`; saving settings.toml inside the Writer applies it at once; the Builder's `S` edits them |
+| (extra) copy manuscript as plain text; `:SWExport` | Partial | copy works; `:SWExport` calls the export command, which arrives in the Export area |
 ### Switching and state -- Not started
 ### Export -- Not started
 
@@ -61,6 +75,7 @@ Rough edges: a character used in the `rival` slot reads as "the Sheriff Lund" (t
 | Filling fields and renames (`tests/test_fill_rename.py`) | 17 |
 | Builder in the app (`tests/test_builder.py`) | 28 |
 | Universes in the Wheel (`tests/test_universes_wheel.py`) | 32 |
+| Writer, headless Neovim plus one real-terminal run (`tests/test_writer.py`) | 55 |
 | (removed) the old global-pool panel tests, replaced by the above | -14 |
 
 ## 3. Manual test script

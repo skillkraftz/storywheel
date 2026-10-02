@@ -591,3 +591,16 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - A universe character used as the protagonist is added to the "used" atoms for `someone`, `close` and `rival`.
 - `u` in the Wheel saves into the single ticked universe, or asks which; `U` only explains that deleting happens in
   the Builder.
+- The Writer's Neovim config has no plugins. It lives in `storywheel/nvim/` and is symlinked into
+  `~/.storywheel/nvim/config/storywheel-writer` (copied if links fail). Neovim's data and state folders are under
+  `~/.storywheel/nvim/` too.
+- Ctrl+I is mapped to italic only when the terminal is one known to report it apart from Tab, or after `Space k`
+  (`:SWKeyCheck`) proved it works; Alt+I always works. VTE terminals (GNOME Terminal) do not.
+- The centered column is made of two blank "pad" windows either side of the text window (the left one doubles as
+  the scene sidebar), not of a padded text window.
+- A word is a run of non-space characters containing a letter or digit, so `* * *` counts as no words. Python
+  (`vault.count_words`) and Lua (`sw.util.count_words`) use the same rule.
+- The Writer keeps its own per-story session (open scenes, cursors, toggles) as JSON under Neovim's state folder, not
+  Vim's `:mksession`.
+- Backups are copies named `HHMM-<scene>.md` in `<story>/.backups/<date>/`, made when a scene changed and at least
+  15 minutes after the previous copy; 30 days of folders are kept.
