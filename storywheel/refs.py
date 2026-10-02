@@ -22,6 +22,9 @@ def change_pairs(old, new):
             pairs.append((ov, nv))
             if k == "name" and ov.split()[0] != nv.split()[0]:
                 pairs.append((ov.split()[0], nv.split()[0]))
+            if k == "name" and len(ov.split()) > 1 and len(nv.split()) > 1 and ov.split()[-1] != nv.split()[-1] \
+                    and len(ov.split()[-1]) >= 3:                       # the surname alone ("O'Brien's cottage") follows too
+                pairs.append((ov.split()[-1], nv.split()[-1]))
     return sorted(pairs, key=lambda p: -len(p[0]))
 
 

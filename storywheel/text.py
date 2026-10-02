@@ -13,11 +13,26 @@ def plural(w):
     return w + "s"
 
 
+# nouns whose plural ends -ies but whose singular ends -ie (not -y), and a few odd plurals
+_IE_WORDS = {"prairie", "movie", "cookie", "zombie", "rookie", "pie", "tie", "lie", "genie", "goodie", "hoodie", "selfie",
+             "birdie", "calorie", "brownie", "cutie", "sweetie", "collie", "eerie", "specie", "doggie", "bogie", "newbie"}
+_ODD_SINGULAR = {"gallowses": "gallows", "trellises": "trellis", "cactuses": "cactus", "oases": "oasis", "crises": "crisis",
+                 "geese": "goose", "wolves": "wolf", "knives": "knife", "leaves": "leaf", "thieves": "thief", "men": "man",
+                 "women": "woman", "children": "child", "mice": "mouse", "feet": "foot", "teeth": "tooth"}
+
+
 def singular(w):
-    """Rough singular, so 'the {motif}' reads right: stags -> stag."""
+    """Rough singular, so 'the {motif}' reads right: stags -> stag. Possessives ('sorcerer's') and words that are not
+    plurals are left alone."""
+    if w in _ODD_SINGULAR:
+        return _ODD_SINGULAR[w]
+    if "'" in w or "’" in w:
+        return w
     if w.endswith("ies"):
-        return w[:-3] + "y"
+        return w[:-1] if w[:-1] in _IE_WORDS else w[:-3] + "y"
     if w.endswith(("ches", "shes", "xes", "sses")):
+        return w[:-2]
+    if w.endswith("uses") and not w.endswith(("ouses", "auses", "ruses")):
         return w[:-2]
     if w.endswith("s") and not w.endswith(("ss", "us", "is")):
         return w[:-1]

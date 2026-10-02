@@ -30,7 +30,7 @@
   },
   {
    "key": "parent",
-   "label": "Inside",
+   "label": "Located in",
    "kind": "link",
    "target": "place",
    "fill": {
@@ -44,6 +44,15 @@
    "fill": {
     "step": "setting",
     "field": "era"
+   }
+  },
+  {
+   "key": "season",
+   "label": "Season",
+   "kind": "short",
+   "fill": {
+    "step": "setting",
+    "field": "season"
    }
   },
   {

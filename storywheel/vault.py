@@ -123,7 +123,10 @@ class Entity:
             if f.get("kind") == "links" and isinstance(value, str):
                 value = [v.strip() for v in value.split(",") if v.strip()]
             fields[f["key"]] = value if not isinstance(value, (int, float)) else str(value)
-        e = cls(type_, meta.get("id") or (Path(path).stem if path else ""), fields, meta.get("custom") or {},
+        custom = dict(meta.get("custom") or {})
+        if type_ == "place" and "season" in custom and not fields.get("season"):
+            fields["season"] = custom.pop("season")                       # (older files kept it as a custom field)
+        e = cls(type_, meta.get("id") or (Path(path).stem if path else ""), fields, custom,
                 "" if any(f.get("body") for f in sch["fields"]) else body, meta.get("created"))
         e.path = Path(path) if path else None
         return e

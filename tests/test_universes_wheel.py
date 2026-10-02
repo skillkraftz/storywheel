@@ -287,7 +287,7 @@ def test_save_a_protagonist_and_a_setting_into_a_universe(home):
         s.keep()
     s.save_to_universe(u)
     town = u.entities("place")[0] if u.entities("place")[0].fields["kind"] == "town" else u.entities("place")[1]
-    assert town.name == s.fields["place"] and town.custom["season"] == s.fields["season"]
+    assert town.name == s.fields["place"] and town.fields["season"] == s.fields["season"] and "season" not in town.custom
     landmark = [p for p in u.entities("place") if p.fields["kind"] == "landmark"][0]
     assert landmark.fields["parent"] == town.id
 

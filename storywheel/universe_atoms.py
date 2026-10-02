@@ -97,7 +97,7 @@ def step_candidates(universe, step_key):
                     landmark = other.name if ARTICLE.match(other.name) else f"the {other.name}"
                     break
             landmark = landmark or p.fields.get("feature", "")
-            f = {"place": p.name, "era": p.fields.get("era", ""), "season": p.custom.get("season", ""),
+            f = {"place": p.name, "era": p.fields.get("era", ""), "season": p.fields.get("season", ""),
                  "landmark": landmark, "rumor": p.fields.get("rumor", "")}
             out.append((p, f))
     return out
@@ -113,7 +113,7 @@ def save_piece(universe, step_key, label, fields):
         rival = data.pop("rival", "")
     elif step_key == "setting":
         type_, name = "place", fields.get("place", "")
-        data = {"kind": "town", "era": fields.get("era", ""), "rumor": fields.get("rumor", "")}
+        data = {"kind": "town", "era": fields.get("era", ""), "season": fields.get("season", ""), "rumor": fields.get("rumor", "")}
         rival = ""
     else:
         type_, name = "note", f"{label}: {next(iter(fields.values()))[:40]}"
@@ -130,8 +130,6 @@ def save_piece(universe, step_key, label, fields):
     e = universe.new_entity(type_, name, data)
     if rival:
         e.fields["rival"] = rival
-    if step_key == "setting" and fields.get("season"):
-        e.custom["season"] = fields["season"]
     universe.save_entity(e)
     if step_key == "setting" and fields.get("landmark"):
         universe.new_entity("place", promote.tidy(fields["landmark"]), {"kind": "landmark", "parent": e.id})

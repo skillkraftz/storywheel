@@ -18,7 +18,7 @@ from . import ratings as R
 from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
 from .steps import OWNER, public, steps_for
-from .text import fix_articles
+from .text import fix_articles, motif_from
 
 HEADLINE = ("name", "first", "last", "place", "title", "motif", "genre", "structure")     # what a banner names
 UNIVERSE_CHANCE = 0.35       # how often "mix" mode pulls from your universe
@@ -162,17 +162,33 @@ class Session:
         step, cand = self.step, self.cand
         self._add(self._fresh(lambda: reroll_field(step, self.engine, self.story, cand, field)))
 
+    def _follow_title(self, cand, old_title):
+        """A hand-written title says what the story is about: the motif follows it (unless you also wrote the motif)."""
+        if self.step.key != "title" or "motif" not in cand or cand.get("title", "") == old_title:
+            return
+        motif = motif_from(cand["title"], lambda: cand["motif"])
+        if motif != cand["motif"]:
+            cand["motif"] = motif
+            self.note(f"The motif now follows your title: '{motif}'. Edit the motif field if that isn't what it is about.")
+
     def edit_field(self, field, text):
         text = text.strip()
         if text and text != self.cand.get(field):
-            self._add(with_field(self.cand, field, text, src="edited"))
+            old_title = self.cand.get("title", "")
+            new = with_field(self.cand, field, text, src="edited")
+            if field == "title":
+                self._follow_title(new, old_title)
+            self._add(new)
             return True
         return False
 
     def replace_fields(self, new):
         """The whole item rewritten (in $EDITOR, or by hand): it joins the history."""
         if new != self.fields:
-            self._add(inherit(dict(new, _src="edited"), self.cand))
+            cand = inherit(dict(new, _src="edited"), self.cand)
+            if new.get("motif") == self.fields.get("motif"):            # (you didn't also change the motif by hand)
+                self._follow_title(cand, self.fields.get("title", ""))
+            self._add(cand)
             return True
         return False
 

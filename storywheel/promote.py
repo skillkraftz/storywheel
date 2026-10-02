@@ -114,8 +114,8 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
     setting = kept.get("setting")
     if setting:
         town = add(Item("town", "place", setting.get("place", ""),
-                        {"kind": "town", "era": setting.get("era", ""), "rumor": setting.get("rumor", "")},
-                        {"season": setting["season"]} if setting.get("season") else {}, why="setting"))
+                        {"kind": "town", "era": setting.get("era", ""), "season": setting.get("season", ""),
+                         "rumor": setting.get("rumor", "")}, why="setting"))
         if setting.get("landmark"):
             add(Item("landmark", "place", tidy(setting["landmark"]), {"kind": "landmark"}, links={"parent": town.key},
                      why="landmark"))

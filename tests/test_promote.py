@@ -25,7 +25,7 @@ def test_the_plan_follows_the_table(home):
     assert items["protagonist"].links == {"rival": "rival"}
     s = d["kept"]["setting"]
     assert items["town"].type == "place" and items["town"].name == s["place"] and items["town"].fields["era"] == s["era"]
-    assert items["town"].custom == {"season": s["season"]}
+    assert items["town"].fields["season"] == s["season"] and items["town"].custom == {}
     assert items["landmark"].type == "place" and items["landmark"].links == {"parent": "town"}
     assert "motif" in items and items["motif"].type in ("thing", "character", "place")
     kinds = {i.type for k, i in items.items() if k.startswith("thread:")}
@@ -51,7 +51,7 @@ def test_apply_creates_a_universe_entities_links_and_the_story_outline(home):
     land = next(e for e in u.entities("place") if e.fields["kind"] == "landmark")
     assert u.resolve(land.fields["parent"]).fields["kind"] == "town"
     town = u.resolve(land.fields["parent"])
-    assert town.custom["season"] == d["kept"]["setting"]["season"] and town.fields["rumor"] == d["kept"]["setting"]["rumor"]
+    assert town.fields["season"] == d["kept"]["setting"]["season"] and town.custom == {} and town.fields["rumor"] == d["kept"]["setting"]["rumor"]
     meta, sections = story.load_outline()
     assert meta["title"] == d["kept"]["title"]["title"] and meta["promoted_from"] == d["id"] and hero.id in meta["cast"]
     assert sections["Premise"] == d["kept"]["premise"]["premise"] and "Twist" in sections

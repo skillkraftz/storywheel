@@ -69,7 +69,9 @@ def replace_text(text, old, new):
     box was a fake", "the locked box", "the pistol") -> "The pistol was a fake"."""
     def repl(m):
         return new[:1].upper() + new[1:] if m.group(0)[:1].isupper() else new
-    return re.subn(re.escape(old), repl, text, flags=re.IGNORECASE)
+    # whole words only: replacing "sorcerer" must never reach into "sorcerer's" or "sorcerers"
+    pattern = (r"(?<![\w'])" if old[:1].isalnum() else "") + re.escape(old) + (r"(?![\w])" if old[-1:].isalnum() else "")
+    return re.subn(pattern, repl, text, flags=re.IGNORECASE)
 
 
 def swap_pairs(old, new):
@@ -138,7 +140,7 @@ def verify(thread, beat_text, first):
     if thread["text"] in beat_text:
         return thread
     if first:
-        shown = thread["text"].replace(f"{first}'s", "their")
+        shown = re.sub(r"(?<![\w'])" + re.escape(first) + r"'s\b", "their", thread["text"])
         if shown in beat_text:
             return dict(thread, shown=shown)
     return None
