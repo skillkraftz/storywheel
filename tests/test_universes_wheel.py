@@ -432,6 +432,8 @@ def test_f2_leaves_the_wheel_for_the_builder_and_saves_the_draft(home):
     async def script(app, pilot):
         await press(pilot, "v", "enter", "escape", "k")
         await press(pilot, "f2")
+        assert type(app.screen).__name__ == "ChoiceScreen"            # a draft with kept steps is offered a send first
+        await press(pilot, "down", "enter")                           # "just go"
         return app.next
     assert run_tui(story, make_engine(home), script) == ("builder", {"universe": "thornwood"})
     assert store.load(story["id"])["universes"] == ["thornwood"]

@@ -50,6 +50,7 @@ HELP = """\
           and atom pairs come up a little less. Again clears it.
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
+  [b]B[/b]       send this story to the Universe Builder (the button under the card; F2 offers it too)
   [b]F1[/b] [b]F2[/b] [b]F3[/b]   Wheel, Universe Builder, Writer (this is the Wheel)
   [b]v[/b]       the universe panel (see below)
   [b]c[/b]       copy the story so far to the clipboard (plain text)
@@ -735,6 +736,7 @@ class MainScreen(Screen):
         Binding("h", "history", "Hist"),
         Binding("m", "mix", "Mix"),
         Binding("v", "focus_universe", "Universe"),
+        Binding("B", "send", "Send to Builder", key_display="B"),
         Binding("f2", "mode('builder')", "Builder", key_display="F2"),
         Binding("f3", "mode('writer')", "Writer", key_display="F3"),
         Binding("c", "copy_story", "Copy story"),
@@ -749,7 +751,7 @@ class MainScreen(Screen):
     ]
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
-    MainScreen #left { width: 42; border: round $primary-darken-2; }
+    MainScreen #left { width: 46; border: round $primary-darken-2; }
     MainScreen #right { width: 48; border: round $primary-darken-2; }
     MainScreen #sofar-box { height: 1fr; }
     MainScreen #issues { padding: 0 1; height: auto; }
@@ -806,7 +808,7 @@ class MainScreen(Screen):
                     yield _quiet(Button("Del", id="st-delete"))
                     yield _quiet(Button("+Prot", id="st-protagonist"))
                     yield _quiet(Button("+Place", id="st-setting"))
-                    yield _quiet(Button("Promote", id="st-promote"))
+                    yield _quiet(Button("Send", id="st-promote"))
                 yield StoryList(id="stories")
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
@@ -821,7 +823,7 @@ class MainScreen(Screen):
                     yield Static("", id="extra", markup=False)
                     with Horizontal(id="buttons"):
                         for label, name in (("Roll", "roll"), ("Keep", "keep"), ("Back", "back"),
-                                            ("Skip", "skip"), ("Mix", "mix")):
+                                            ("Skip", "skip"), ("Mix", "mix"), ("Send to Builder", "send")):
                             yield _quiet(Button(label, id=f"btn-{name}"))
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
@@ -882,6 +884,7 @@ class MainScreen(Screen):
         if notes:
             self.say("  ".join(notes))
         title = self.session.story["kept"].get("title", {}).get("title")
+        self.refresh_send_button()
         self.app.remember(self.session)
         self.app.title = f"storywheel · {title}" if title else "storywheel"
         self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
@@ -1194,8 +1197,45 @@ class MainScreen(Screen):
     def action_focus_universe(self):
         self.query_one("#uni-check", OptionList).focus()
 
+    def refresh_send_button(self):
+        """'Send to Builder' is there from the first kept step; once sent it becomes 'Open in Builder'."""
+        story = self.session.story
+        button = self.query_one("#btn-send", Button)
+        sent = bool(story.get("promoted"))
+        button.label = "Open in Builder" if sent else "Send to Builder"
+        button.disabled = not story["kept"]
+        button.tooltip = ("Nothing is kept yet: keep a step first." if not story["kept"] else
+                          "Bring this story into a universe and open the Universe Builder (key: B)")
+
+    def action_send(self):
+        """Bring this draft into a universe and go to the Builder (or just open it, if it was sent already)."""
+        s = self.session
+        story = s.story
+        if not story["kept"]:
+            self.say("Nothing is kept yet, so there is nothing to send. Keep a step first (k).")
+            return
+        if story.get("promoted"):
+            s.save()
+            self.app.next = ("builder", dict(story["promoted"]))
+            self.app.exit(None)
+            return
+        s.save()
+        self.app.push_screen(ChoiceScreen("Send this story to the Universe Builder: into…",
+                                          [("a new universe", "new"), ("an existing universe", "existing")]),
+                             lambda c: self.promote_flow(story, c, "exit") if c else None)
+
     def action_mode(self, which):
-        """F1 / F2 / F3: save this draft and leave for another mode."""
+        """F1 / F2 / F3: save this draft and leave for another mode. F2 from a draft with kept steps offers to send it first."""
+        story = self.session.story
+        if which == "builder" and story["kept"] and not story.get("promoted"):
+            self.app.push_screen(ChoiceScreen("This draft has kept steps that are not in the Builder yet.",
+                                              [("Send it to the Builder first (new or existing universe)", "send"),
+                                               ("Just go to the Builder; leave the draft as it is", "go")]),
+                                 lambda c: self.action_send() if c == "send" else (self._leave("builder") if c == "go" else None))
+            return
+        self._leave(which)
+
+    def _leave(self, which):
         self.session.save()
         slug = (self.session.story.get("universes") or [None])[0]
         self.app.next = (which, {"universe": slug})

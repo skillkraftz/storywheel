@@ -172,3 +172,30 @@ Set up: `pipx install --editable .` (or `pip install -e .`), then `storywheel`. 
 - **Speed:** `.odt`/`.pdf` export waits for LibreOffice (a few seconds) with the screen showing "Exporting…".
 - **Not verified on other machines:** Wayland clipboard (`wl-copy`) and a plain `xterm`.
 - **Decisions** I made where CLAUDE.md was ambiguous are in its Decisions log (appended during the sweep).
+
+---
+
+# Second pass: fixes and additions from first real use
+
+_Status words as above. Updated after each area; each area has a tag `pass2-...`._
+
+## P1. Checklist
+
+### Promotion is easy to find (`pass2-send-to-builder`)
+| Item | Status | What's missing |
+|---|---|---|
+| A visible "Send to Builder" button and key (`B`) in the Wheel once a story has kept steps; same on Past stories | Works | the button is under the card from the start (greyed out until something is kept); once sent it reads "Open in Builder" and `B` opens the story there; Past stories has a "Send" button (and `P`) |
+| F2 from a draft with kept steps offers to send it first | Works | choices: send it first, just go, or Escape to stay; a draft with nothing kept or already sent goes straight through |
+
+## P2. Tests added in the second pass
+| Area | File | Tests |
+|---|---|---|
+| Send to Builder | `test_send_to_builder.py` | 9 |
+
+## P3. Manual test script additions
+1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
+2. Press **F2** in a draft with kept steps: you should be offered "send it first".
+
+## P4. Known issues / open questions (second pass)
+- Past stories' button is labelled just "Send" (a longer label did not fit the column).
+

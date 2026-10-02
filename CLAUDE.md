@@ -616,3 +616,6 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - A novel is the same pages with each scene file as a chapter on a new page (partial); a screenplay exports an
   unformatted `.fountain` file with a visible "stub" warning.
 - `python-docx` is a required dependency; `pyte` is a dev dependency (terminal-screen tests).
+- "Send to Builder" is a button (and `B`) in the Wheel from the first kept step, "Open in Builder" once sent; F2 from an unsent
+  draft with kept steps asks whether to send it first. Sending asks only "new or existing universe", then shows the usual preview.
+

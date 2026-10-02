@@ -196,6 +196,9 @@ def test_f2_and_f3_in_the_wheel_ask_for_the_builder_and_the_writer(home, world):
             await pilot.pause()
             await pilot.press(key)
             await pilot.pause()
+            if key == "f2":
+                await pilot.press("down", "enter")                    # offered to send the draft first: just go
+                await pilot.pause()
             return app.next
         assert run_tui(story, make_engine(home), script) == (expect, {"universe": "thornwood"})
 
