@@ -1,10 +1,16 @@
 -- Dictionary and thesaurus card (F7 on the word under the cursor or a selection, F6 for a typed word; also in the menus).
--- A floating card with meanings by part of speech, similar words and opposite words. Move to a word and press Enter: it replaces
--- the word you looked up, keeping its capitalization. The data comes from `storywheel lookup WORD --json` (offline).
+-- One scrollable card: meanings by part of speech, each with its own similar words; then the full broad list of similar words;
+-- opposite words, then the indirect ones (opposites of similar words); a filter narrows every list.
+-- Keys in the card: Enter looks the word under the cursor up (b goes back, n forward), r replaces the word that was under the
+-- cursor when you opened the card (in the same form: running -> sprinting), i inserts at the cursor, c copies, / filters.
+-- The data comes from `storywheel lookup WORD --json` (offline); the form from `storywheel inflect`.
 local util = require("sw.util")
 local M = {}
 
-M.WIDTH = 76
+M.WIDTH = 80
+M.ns = vim.api.nvim_create_namespace("sw_lookup")
+
+-- --- the word at the cursor ---------------------------------------------------------------------------------------------------
 
 -- The word at the cursor (or in a one-line selection): returns word, { row0, start_col, end_col } or nil.
 function M.word_at_cursor()
@@ -14,8 +20,9 @@ function M.word_at_cursor()
     local r1, c1, r2, c2 = require("sw.prose").selection_bounds()
     if text and r1 == r2 and text:match("%S") then
       local trimmed = vim.trim(text)
+      local lead = #text - #text:gsub("^%s+", "")
       vim.cmd("normal! \27")
-      return trimmed, { r1, c1 + (#text - #text:gsub("^%s+", "")), c1 + (#text - #text:gsub("^%s+", "")) + #trimmed }
+      return trimmed, { r1, c1 + lead, c1 + lead + #trimmed }
     end
     return nil
   end
@@ -45,6 +52,8 @@ function M.apply_case(original, new)
   return new
 end
 
+-- --- the data ---------------------------------------------------------------------------------------------------------------------
+
 -- Ask the CLI. Returns the decoded result, or nil and a message.
 function M.fetch(word)
   local out = vim.fn.system(util.cli({ "lookup", word, "--json" }))
@@ -54,7 +63,26 @@ function M.fetch(word)
   return data
 end
 
-local function wrap(text, width, indent)
+local function nz(v)
+  if v == vim.NIL then return nil end
+  return v
+end
+
+-- The chosen word in the same form as the original ("running" was a form of "run": sprint -> sprinting), unless it needs no change.
+function M.inflected(word, pos)
+  local o = M.origin
+  if not o or not o.base or not o.kind or o.kind == "base" then return word end
+  local args = { "inflect", o.text, o.base, word }
+  if pos then vim.list_extend(args, { "--pos", pos }) end
+  local out = vim.fn.system(util.cli(args))
+  if vim.v.shell_error ~= 0 then return word end
+  out = vim.trim(out)
+  return out ~= "" and out or word
+end
+
+-- --- building the card --------------------------------------------------------------------------------------------------------
+
+local function wrap_plain(text, width, indent)
   local lines, cur = {}, indent
   for w in text:gmatch("%S+") do
     if #cur + #w + 1 > width and cur:match("%S") then
@@ -68,49 +96,226 @@ local function wrap(text, width, indent)
   return lines
 end
 
--- The card as lines, plus which lines are words you can pick: { lines = {...}, picks = { [line number] = "word" } }.
-function M.build(result, original)
-  local lines, picks = {}, {}
-  local function add(text, pick)
-    lines[#lines + 1] = text
-    if pick then picks[#lines] = pick end
+-- The card as lines plus the words on them: { lines = {...}, spans = { [line] = { {s=, e=, word=, pos=, group=}, ... } } }.
+-- Words are wrapped like text; the span under the cursor is the word you can pick.
+function M.build(result, filter)
+  local lines, spans, group = {}, {}, 0
+  local f = filter and filter ~= "" and filter:lower() or nil
+  local function add(text) lines[#lines + 1] = text end
+  local function add_words(items, indent)             -- items: { {word=, pos=, note=}, ... }
+    group = group + 1
+    local cur, row = indent, {}
+    local function flush()
+      if #row > 0 then
+        lines[#lines + 1] = cur
+        spans[#lines] = row
+      end
+      cur, row = indent, {}
+    end
+    local shown = 0
+    for _, it in ipairs(items) do
+      if not f or it.word:lower():find(f, 1, true) then
+        shown = shown + 1
+        local label = it.word .. (it.note and (" (" .. it.note .. ")") or "")
+        if #row > 0 and #cur + #label + 2 > M.WIDTH - 1 then flush() end
+        local s = #cur
+        cur = cur .. label .. "  "
+        row[#row + 1] = { s = s, e = s + #it.word, word = it.word, pos = it.pos, group = group }
+      end
+    end
+    flush()
+    return shown
   end
+  local function words(list, pos)
+    local out = {}
+    for _, w in ipairs(list or {}) do out[#out + 1] = { word = w, pos = pos } end
+    return out
+  end
+
   if not result.found then
     add(" No entry for '" .. (result.word ~= "" and result.word or result.query) .. "'.")
     if #result.suggestions > 0 then
       add("")
       add(" Did you mean (Enter looks it up):")
-      for _, s in ipairs(result.suggestions) do add("   " .. s, { lookup = s }) end
+      add_words(words(result.suggestions), "   ")
     end
-    return { lines = lines, picks = picks }
+    return { lines = lines, spans = spans }
   end
-  for n, e in ipairs(result.entries) do
-    if n > 2 then break end
-    local form_of = e.form_of ~= vim.NIL and e.form_of or nil           -- (JSON null is vim.NIL, which is truthy)
+  for _, e in ipairs(result.entries) do
+    local form_of = nz(e.form_of)
     add(" " .. e.word .. (form_of and ("   (form of “" .. form_of .. "”)") or ""))
     for _, part in ipairs(e.parts) do
       add(" " .. part.pos)
       for i, s in ipairs(part.senses) do
-        if i > 4 then break end
-        for _, l in ipairs(wrap(i .. ". " .. s.definition, M.WIDTH - 2, "   ")) do add(l) end
+        for _, l in ipairs(wrap_plain(i .. ". " .. s.definition, M.WIDTH - 2, "   ")) do add(l) end
         if s.examples[1] then add("      “" .. s.examples[1] .. "”") end
+        if #s.kind_of > 0 then add("      a kind of: " .. table.concat(s.kind_of, ", ")) end
+        if #s.synonyms > 0 then
+          local n = add_words(words(s.synonyms, part.pos), "      ")
+          if f and n == 0 then add("      (none match the filter)") end
+        end
       end
     end
     add("")
-    if #e.synonyms > 0 then
-      add(" Similar words" .. (original and (" — Enter replaces “" .. original .. "”") or " — Enter inserts the word"))
-      for _, w in ipairs(e.synonyms) do add("   " .. w, { replace = w }) end
-      if e.more_synonyms > 0 then add("   … " .. e.more_synonyms .. " more (storywheel thesaurus " .. e.word .. ")") end
+    if #e.wide_synonyms > 0 then
+      add(" More similar words (" .. #e.wide_synonyms .. ")")
+      local n = add_words(words(e.wide_synonyms), "   ")
+      if f and n == 0 then add("   (none match the filter)") end
       add("")
     end
     if #e.antonyms > 0 then
       add(" Opposite words")
-      for _, w in ipairs(e.antonyms) do add("   " .. w, { replace = w }) end
+      add_words(words(e.antonyms), "   ")
+      add("")
+    end
+    if #e.indirect_antonyms > 0 then
+      add(" Opposite words, indirect (opposites of similar words)")
+      local items = {}
+      for _, a in ipairs(e.indirect_antonyms) do items[#items + 1] = { word = a.word, note = a.via } end
+      add_words(items, "   ")
+      add("")
+    end
+    local related = {}
+    for kind, list in pairs(e.related_forms) do for _, w in ipairs(list) do related[#related + 1] = { word = w, note = kind } end end
+    if #related > 0 then
+      add(" Related forms")
+      add_words(related, "   ")
       add("")
     end
   end
   add(" Open English WordNet (CC BY 4.0); Moby Thesaurus (public domain)")
-  return { lines = lines, picks = picks }
+  return { lines = lines, spans = spans }
+end
+
+-- --- showing it -----------------------------------------------------------------------------------------------------------------
+
+local function first_span(card)
+  for i = 1, #card.lines do
+    if card.spans[i] then return i, card.spans[i][1] end
+  end
+end
+
+function M.span_at(line, col)
+  local row = M.card and M.card.spans[line]
+  if not row then return nil end
+  for _, sp in ipairs(row) do
+    if col >= sp.s and col <= sp.e then return sp end
+  end
+  local best, dist = nil, 1e9
+  for _, sp in ipairs(row) do
+    local d = math.min(math.abs(col - sp.s), math.abs(col - sp.e))
+    if d < dist then best, dist = sp, d end
+  end
+  return best
+end
+
+function M.current()
+  if not (M.win and vim.api.nvim_win_is_valid(M.win)) then return nil end
+  local c = vim.api.nvim_win_get_cursor(M.win)
+  return M.span_at(c[1], c[2])
+end
+
+local function highlight()
+  if not (M.buf and vim.api.nvim_buf_is_valid(M.buf)) then return end
+  vim.api.nvim_buf_clear_namespace(M.buf, M.ns, 0, -1)
+  local sp = M.current()
+  if sp then
+    local line = vim.api.nvim_win_get_cursor(M.win)[1] - 1
+    vim.api.nvim_buf_set_extmark(M.buf, M.ns, line, sp.s, { end_col = sp.e, hl_group = "PmenuSel" })
+  end
+end
+
+local function title()
+  local r = M.result
+  local name = (r and r.found and r.entries[1].word) or (r and r.word) or "Look up"
+  local extra = (M.filter and M.filter ~= "") and ("  ·  filter: " .. M.filter) or ""
+  local hist = #M.history > 1 and ("  [" .. M.pos .. "/" .. #M.history .. "]") or ""
+  return " " .. name .. hist .. extra .. " "
+end
+
+local function footer()
+  local keys = " Enter look up · b back · r replace · i insert · c copy · / filter · w new word · Esc close "
+  if not M.origin or not M.target then keys = " Enter look up · b back · i insert · c copy · / filter · w new word · Esc close " end
+  return keys
+end
+
+function M.render(keep_cursor)
+  local card = M.build(M.result, M.filter)
+  M.card = card
+  vim.bo[M.buf].modifiable = true
+  vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, card.lines)
+  vim.bo[M.buf].modifiable = false
+  vim.api.nvim_win_set_config(M.win, { title = title(), title_pos = "center", footer = footer(), footer_pos = "center" })
+  if not keep_cursor then
+    local l, sp = first_span(card)
+    vim.api.nvim_win_set_cursor(M.win, { l or 1, sp and sp.s or 0 })
+  end
+  highlight()
+end
+
+local function ensure_window()
+  if M.win and vim.api.nvim_win_is_valid(M.win) then return end
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].modifiable = false
+  local height = math.max(8, vim.o.lines - 8)
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor", row = 2, col = math.max(0, math.floor((vim.o.columns - M.WIDTH) / 2)), width = M.WIDTH, height = height,
+    style = "minimal", border = "rounded", title = " Look up ", title_pos = "center", footer = footer(), footer_pos = "center",
+  })
+  vim.wo[win].cursorline = false
+  vim.wo[win].wrap = false
+  M.win, M.buf = win, buf
+  vim.cmd("stopinsert")
+  M.map_keys(buf)
+  vim.api.nvim_create_autocmd("CursorMoved", { buffer = buf, callback = highlight })
+  vim.api.nvim_create_autocmd("WinClosed", { pattern = tostring(win), once = true, callback = function() M.win = nil end })
+end
+
+-- --- moving about and picking ----------------------------------------------------------------------------------------------------
+
+local function all_spans()
+  local out = {}
+  for l = 1, #M.card.lines do
+    for _, sp in ipairs(M.card.spans[l] or {}) do out[#out + 1] = { l, sp } end
+  end
+  return out
+end
+
+local function go_to(entry)
+  if entry then vim.api.nvim_win_set_cursor(M.win, { entry[1], entry[2].s }) end
+end
+
+local function step(dir)                           -- the next / previous word
+  local list = all_spans()
+  local c = vim.api.nvim_win_get_cursor(M.win)
+  local cur = M.span_at(c[1], c[2])
+  for i, it in ipairs(list) do
+    if it[1] == c[1] and it[2] == cur then go_to(list[i + dir]) return end
+  end
+  go_to(list[1])
+end
+
+local function vertical(dir)                       -- the nearest word on the next line that has words
+  local c = vim.api.nvim_win_get_cursor(M.win)
+  local l = c[1] + dir
+  while l >= 1 and l <= #M.card.lines do
+    if M.card.spans[l] then
+      local sp = M.span_at(l, c[2])
+      vim.api.nvim_win_set_cursor(M.win, { l, sp.s })
+      return
+    end
+    l = l + dir
+  end
+end
+
+local function next_section()
+  local c = vim.api.nvim_win_get_cursor(M.win)
+  local cur = M.span_at(c[1], c[2])
+  for _, it in ipairs(all_spans()) do
+    if cur and it[2].group > cur.group then go_to(it) return end
+  end
+  go_to(all_spans()[1])
 end
 
 function M.close()
@@ -120,85 +325,160 @@ function M.close()
   if layout.main and vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
 end
 
--- Put `new` in place of the looked-up word (or at the cursor for a typed word), then go back to typing.
-function M.replace(new)
-  local target, original = M.target, M.original
-  local layout = require("sw.layout")
+local function leave()
   M.close()
-  local buf = vim.api.nvim_win_get_buf(layout.main)
-  if target then
-    local row, s, e = target[1], target[2], target[3]
-    local now = vim.api.nvim_buf_get_text(buf, row, s, row, e, {})[1]
-    if now ~= original then
-      vim.api.nvim_echo({ { "The text changed since you looked it up; nothing replaced.", "WarningMsg" } }, true, {})
-    else
-      local text = M.apply_case(original, new)
-      vim.api.nvim_buf_set_text(buf, row, s, row, e, { text })
-      vim.api.nvim_win_set_cursor(layout.main, { row + 1, s + #text })
-    end
-  else
-    local c = M.cursor or vim.api.nvim_win_get_cursor(layout.main)
-    vim.api.nvim_buf_set_text(buf, c[1] - 1, c[2], c[1] - 1, c[2], { new })
-    vim.api.nvim_win_set_cursor(layout.main, { c[1], c[2] + #new })
-  end
   require("sw.notepad").insert(true)
 end
 
-function M.show(word, target)
+-- r: replace the word that was under the cursor when the card was opened, in the same form, keeping capitalization
+function M.replace(word, pos)
+  local target, original = M.target, M.origin and M.origin.text
+  if not target or not original then
+    vim.api.nvim_echo({ { "Nothing to replace: no word was under the cursor when you opened the card. Use i to insert it.", "WarningMsg" } }, true, {})
+    return false
+  end
+  local new = M.apply_case(original, M.inflected(word, pos))
+  local layout = require("sw.layout")
+  M.close()
+  local buf = vim.api.nvim_win_get_buf(layout.main)
+  local row, s, e = target[1], target[2], target[3]
+  local now = vim.api.nvim_buf_get_text(buf, row, s, row, e, {})[1]
+  if now ~= original then
+    vim.api.nvim_echo({ { "The text changed since you looked it up; nothing replaced.", "WarningMsg" } }, true, {})
+  else
+    vim.api.nvim_buf_set_text(buf, row, s, row, e, { new })
+    vim.api.nvim_win_set_cursor(layout.main, { row + 1, s + #new })
+  end
+  require("sw.notepad").insert(true)
+  return true
+end
+
+-- i: insert the word at the cursor (where it was when the card was opened)
+function M.insert(word)
+  local layout = require("sw.layout")
+  local c = M.cursor or vim.api.nvim_win_get_cursor(layout.main)
+  M.close()
+  local buf = vim.api.nvim_win_get_buf(layout.main)
+  vim.api.nvim_buf_set_text(buf, c[1] - 1, c[2], c[1] - 1, c[2], { word })
+  vim.api.nvim_win_set_cursor(layout.main, { c[1], c[2] + #word })
+  require("sw.notepad").insert(true)
+end
+
+function M.copy(word)
+  pcall(vim.fn.setreg, "+", word)
+  pcall(vim.fn.setreg, '"', word)
+  vim.api.nvim_echo({ { "Copied “" .. word .. "”.", "Normal" } }, true, {})
+end
+
+function M.map_keys(buf)
+  local function map(lhs, fn) vim.keymap.set("n", lhs, fn, { buffer = buf, nowait = true, silent = true }) end
+  local function with_word(fn)
+    return function()
+      local sp = M.current()
+      if sp then fn(sp) else vim.api.nvim_echo({ { "Move to a word first.", "Normal" } }, false, {}) end
+    end
+  end
+  map("<CR>", with_word(function(sp) M.lookup(sp.word) end))
+  map("<2-LeftMouse>", with_word(function(sp) M.lookup(sp.word) end))
+  map("<LeftMouse>", function()
+    local pos = vim.fn.getmousepos()
+    if pos.winid ~= M.win then leave() return end
+    vim.api.nvim_win_set_cursor(M.win, { math.max(1, pos.line), math.max(0, pos.column - 1) })
+  end)
+  map("r", with_word(function(sp) M.replace(sp.word, sp.pos) end))
+  map("i", with_word(function(sp) M.insert(sp.word) end))
+  map("c", with_word(function(sp) M.copy(sp.word) end))
+  map("b", function() M.back() end)
+  map("<BS>", function() M.back() end)
+  map("n", function() M.forward() end)
+  map("/", function() M.ask_filter() end)
+  map("w", function() M.ask_word() end)
+  map("<Tab>", next_section)
+  map("<Right>", function() step(1) end)
+  map("l", function() step(1) end)
+  map("<Left>", function() step(-1) end)
+  map("h", function() step(-1) end)
+  map("<Down>", function() vertical(1) end)
+  map("j", function() vertical(1) end)
+  map("<Up>", function() vertical(-1) end)
+  map("k", function() vertical(-1) end)
+  map("<PageDown>", "<C-d>")
+  map("<PageUp>", "<C-u>")
+  map("<Esc>", function()
+    if M.filter and M.filter ~= "" then M.filter = "" M.render() else leave() end
+  end)
+  map("q", leave)
+end
+
+-- --- looking things up ------------------------------------------------------------------------------------------------------------
+
+-- Look a word up in the open card (adds to the history unless it is the one shown).
+function M.lookup(word, from_history)
   local result, err = M.fetch(word)
   if not result then
     vim.api.nvim_echo({ { err, "WarningMsg" } }, true, {})
     return false
   end
-  M.close()
-  local card = M.build(result, target and word or nil)
-  M.target, M.original = target, target and word or nil
+  ensure_window()
   M.result = result
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, card.lines)
-  vim.bo[buf].modifiable = false
-  vim.bo[buf].bufhidden = "wipe"
-  local height = math.min(#card.lines, vim.o.lines - 6)
-  local title = " " .. (result.found and result.entries[1].word or "Look up") .. " "
-  local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor", row = 2, col = math.max(0, math.floor((vim.o.columns - M.WIDTH) / 2)), width = M.WIDTH, height = math.max(3, height),
-    style = "minimal", border = "rounded", title = title, title_pos = "center",
-    footer = " Enter pick · Tab next section · w another word · Esc close ", footer_pos = "center",
-  })
-  vim.wo[win].cursorline = true
-  vim.wo[win].wrap = false
-  M.win, M.buf, M.card = win, buf, card
-  vim.cmd("stopinsert")
-  local first
-  for i = 1, #card.lines do if card.picks[i] then first = i break end end
-  if first then vim.api.nvim_win_set_cursor(win, { first, 0 }) end
-  local function map(lhs, fn) vim.keymap.set("n", lhs, fn, { buffer = buf, nowait = true, silent = true }) end
-  local function pick()
-    local p = card.picks[vim.api.nvim_win_get_cursor(win)[1]]
-    if not p then return end
-    if p.replace then M.replace(p.replace) elseif p.lookup then M.show(p.lookup, target) end
+  M.filter = ""
+  if not from_history then
+    for i = #M.history, M.pos + 1, -1 do M.history[i] = nil end        -- a new word after going back drops the old forward trail
+    M.history[#M.history + 1] = word
+    M.pos = #M.history
   end
-  map("<CR>", pick)
-  map("<LeftMouse>", function()
-    local pos = vim.fn.getmousepos()
-    if pos.winid ~= win then M.close() require("sw.notepad").insert(true) return end
-    vim.api.nvim_win_set_cursor(win, { pos.line, 0 })
-  end)
-  map("<2-LeftMouse>", pick)
-  map("<Esc>", function() M.close() require("sw.notepad").insert(true) end)
-  map("q", function() M.close() require("sw.notepad").insert(true) end)
-  map("j", "j")
-  map("k", "k")
-  map("<Down>", "j")
-  map("<Up>", "k")
-  map("<Tab>", function()                       -- the next section's first word
-    local cur = vim.api.nvim_win_get_cursor(win)[1]
-    local in_section = true
-    for i = cur + 1, #card.lines do
-      if not card.picks[i] then in_section = false elseif not in_section then vim.api.nvim_win_set_cursor(win, { i, 0 }) return end
+  M.render()
+  return true
+end
+
+function M.back()
+  if M.pos > 1 then M.pos = M.pos - 1 M.lookup(M.history[M.pos], true)
+  else vim.api.nvim_echo({ { "That is the first word you looked up.", "Normal" } }, false, {}) end
+end
+
+function M.forward()
+  if M.pos < #M.history then M.pos = M.pos + 1 M.lookup(M.history[M.pos], true)
+  else vim.api.nvim_echo({ { "That is the last word you looked up.", "Normal" } }, false, {}) end
+end
+
+function M.ask_filter()
+  vim.ui.input({ prompt = "Show only words containing: ", default = M.filter or "" }, function(text)
+    if text ~= nil and M.win and vim.api.nvim_win_is_valid(M.win) then
+      M.filter = vim.trim(text)
+      M.render()
     end
   end)
-  map("w", function() M.ask(target) end)
+end
+
+function M.ask_word()
+  vim.ui.input({ prompt = "Look up: " }, function(text)
+    if text and vim.trim(text) ~= "" and M.win and vim.api.nvim_win_is_valid(M.win) then M.lookup(vim.trim(text)) end
+  end)
+end
+
+-- Open the card for `word`. `origin` is the word to be replaced (the text under the cursor) with its range `target`.
+function M.show(word, target, origin_text)
+  M.history, M.pos, M.filter = {}, 0, ""
+  M.target = target
+  local layout = require("sw.layout")
+  M.cursor = vim.api.nvim_win_get_cursor(layout.main)
+  M.origin = nil
+  local first, err = M.fetch(word)
+  if not first then
+    vim.api.nvim_echo({ { err, "WarningMsg" } }, true, {})
+    return false
+  end
+  -- what form the original is in (running = the -ing form of run), for putting a replacement in the same form
+  if origin_text then
+    local o = origin_text == word and first or M.fetch(origin_text)
+    if o then M.origin = { text = origin_text, base = o.base, kind = o.form_kind } end
+  end
+  M.close()
+  ensure_window()
+  M.result = first
+  M.history = { word }
+  M.pos = 1
+  M.render()
   return true
 end
 
@@ -209,16 +489,18 @@ function M.word()
     vim.api.nvim_echo({ { "Put the cursor on a word first (or select one), or press the other lookup key to type a word.", "Normal" } }, true, {})
     return false
   end
-  return M.show(word, target)
+  return M.show(word, target, word)
 end
 
--- F6: a typed word. Picking a word inserts it where the cursor was.
-function M.ask(target)
-  local layout = require("sw.layout")
-  M.cursor = vim.api.nvim_win_get_cursor(layout.main)
-  M.close()
+-- F6: a typed word; the word under the cursor (if any) is what r replaces.
+function M.ask(_unused)
+  local word, target = M.word_at_cursor()
   vim.ui.input({ prompt = "Look up: " }, function(text)
-    if text and vim.trim(text) ~= "" then M.show(vim.trim(text), target) else require("sw.notepad").insert(true) end
+    if text and vim.trim(text) ~= "" then
+      M.show(vim.trim(text), target, word)
+    else
+      require("sw.notepad").insert(true)
+    end
   end)
 end
 
