@@ -22,6 +22,9 @@ def _resolve_story(st, payload):
 
 def run_wheel(st, payload, get_engine, plain=False):
     from .tui import run_app
+    cleaned = store.cleanup_empty_drafts()
+    notice = (f"Tidied up: {cleaned} draft{'s' if cleaned != 1 else ''} with nothing kept {'were' if cleaned != 1 else 'was'} "
+              "moved to the .trash folder in your storywheel home.") if cleaned else ""
     story = None
     if payload.get("new"):
         story = store.new_story()
@@ -38,10 +41,8 @@ def run_wheel(st, payload, get_engine, plain=False):
         story = store.new_story()
         if payload.get("universe"):
             story["universes"] = [payload["universe"]]
-    elif story["step"] >= len(store.steps_for(story)):
-        story["step"] = 0                      # a finished draft: start from the top so things can be changed
     st.update(mode="wheel", draft=story["id"])
-    return run_app(story, get_engine(), st)
+    return run_app(story, get_engine(), st, notice)
 
 
 def run_builder(st, payload, get_ratings):

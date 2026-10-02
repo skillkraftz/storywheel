@@ -45,11 +45,16 @@ def upgrade(story):
     return story
 
 def save(story):
+    """Write the draft. A draft with nothing kept is not worth a file: it is only written once something is kept
+    (or if it already has a file, so that un-keeping everything still saves)."""
+    path = STORIES / f"{story['id']}.json"
+    if not story["kept"] and not path.exists():
+        return None
     STORIES.mkdir(parents=True, exist_ok=True)
     sync_base(story)                            # the mix follows the kept genres
     for key, hist in story["history"].items():
         story["history"][key] = hist[-HISTORY_LIMIT:]
-    (STORIES / f"{story['id']}.json").write_text(json.dumps(story, indent=2))
+    path.write_text(json.dumps(story, indent=2))
     if story["kept"]:
         return export(story)
 
@@ -66,6 +71,52 @@ def all_stories():
     if not STORIES.exists():
         return []
     return [upgrade(json.loads(p.read_text())) for p in sorted(STORIES.glob("*.json"), reverse=True)]
+
+def progress(story):
+    """(steps kept, steps in all, finished?): what the Past stories list shows, instead of the step you stopped on."""
+    steps = steps_for(story)
+    return sum(1 for st in steps if story["kept"].get(st.key)), len(steps), story.get("step", 0) >= len(steps)
+
+def progress_text(story):
+    kept, total, done = progress(story)
+    return f"{kept}/{total} kept" + (", done" if done else "")
+
+def open_step(story):
+    """The step to open a draft on: where you stopped, or (for a finished draft) the last step, never silently the first."""
+    n = len(steps_for(story))
+    return story.get("step", 0) if story.get("step", 0) < n else n - 1
+
+def cleanup_empty_drafts():
+    """Move drafts with nothing kept into HOME/.trash (never delete writing). Returns how many were moved."""
+    if not STORIES.exists():
+        return 0
+    moved = 0
+    for p in sorted(STORIES.glob("*.json")):
+        try:
+            story = json.loads(p.read_text())
+        except (OSError, ValueError):
+            continue
+        if story.get("kept") or story.get("promoted"):
+            continue
+        trash = HOME / ".trash"
+        trash.mkdir(parents=True, exist_ok=True)
+        p.replace(trash / p.name)
+        moved += 1
+    return moved
+
+def copy_as_new(story):
+    """An editable copy of a draft (a promoted one is read-only in the Wheel): same kept pieces, a fresh id, not promoted."""
+    import copy
+    new = new_story()
+    n = 1
+    while (STORIES / f"{new['id']}.json").exists():            # (two copies in one second)
+        new["id"] = f"{new['id'][:15]}-{n}"
+        n += 1
+    for key in ("kept", "history", "seeds", "threads", "atoms", "inputs", "mix", "universes", "universe_mode", "step"):
+        if key in story:
+            new[key] = copy.deepcopy(story[key])
+    new["copied_from"] = story["id"]
+    return new
 
 def find(target=None):
     """Find a story by list number (1 = newest), id, or id prefix. None = newest."""

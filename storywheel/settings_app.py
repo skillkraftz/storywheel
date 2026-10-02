@@ -273,15 +273,19 @@ class SettingsScreen(Screen):
         self.query_one("#summary", Static).update("\n".join(lines))
         days = self.query_one("#days", DataTable)
         days.clear(columns=True)
-        days.add_columns("Date", "Words", "")
+        days.add_column("Date", width=11)
+        days.add_column("Words", width=9)
+        days.add_column("", width=32)
         top = max(per_day.values(), default=0) or 1
         for date, words in writing_stats.history(90):
             days.add_row(date, f"{words:,}", "█" * max(1 if words else 0, int(30 * words / top)))
         stories = self.query_one("#stories", DataTable)
         stories.clear(columns=True)
-        stories.add_columns("Universe", "Story", "Words", "Today")
-        for uni, title, words, t in rows:
-            stories.add_row(uni, title, f"{words:,}", f"{t:,}" if t else "")
+        cells = [(uni, title, f"{words:,}", f"{t:,}" if t else "") for uni, title, words, t in rows]
+        for i, head in enumerate(("Universe", "Story", "Words", "Today")):      # (explicit widths: never a clipped name)
+            stories.add_column(head, width=max([len(head)] + [len(c[i]) for c in cells]) + 1)
+        for c in cells:
+            stories.add_row(*c)
 
     # --- actions ----------------------------------------------------------------------------------------------
 

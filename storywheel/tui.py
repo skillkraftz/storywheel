@@ -747,6 +747,7 @@ class MainScreen(Screen):
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
+        Binding("C", "copy_draft", "Copy as new", show=False),
         Binding("b", "back", "Back"),
         Binding("x", "skip", "Skip"),
         Binding("u", "universe_add", "Univ", key_display="u/U"),
@@ -842,11 +843,38 @@ class MainScreen(Screen):
         yield Footer()
 
     def on_mount(self):
-        i = self.session.story["step"]
-        self.session.enter(i if i < len(self.session.steps) else 0)
+        self.session.enter(store.open_step(self.session.story))
         self.query_one("#universe", Tree).show_root = False
         self.refresh_all()
         self.query_one("#card", OptionList).focus()
+        self.say(self.app.notice or self.opening_note())
+
+    def opening_note(self):
+        story = self.session.story
+        if story.get("promoted"):
+            return ("This draft was promoted, so the Builder holds the real story and the Wheel shows it read-only. "
+                    "C makes an editable copy as a new draft.")
+        if store.progress(story)[2]:
+            return "This story is finished. You are on the last step; pick a step on the left to change one."
+        return ""
+
+    def locked(self):
+        """A promoted draft is read-only here (see CLAUDE.md): say so, and offer the copy."""
+        if self.session.story.get("promoted"):
+            self.say("Read-only: this draft was promoted, and edits here would drift from the Builder. "
+                     "Press C to make an editable copy as a new draft.")
+            return True
+        return False
+
+    def action_copy_draft(self):
+        story = self.session.story
+        if not story.get("promoted"):
+            self.say("Only a promoted draft needs a copy; this one is already editable.")
+            return
+        new = store.copy_as_new(story)
+        store.save_draft(new)
+        self.switch_story(new)
+        self.say(f"Made an editable copy of '{store.title_of(story)}'. The promoted original is untouched.")
 
     # --- showing the session --------------------------------------------------------------------------------
 
@@ -934,10 +962,9 @@ class MainScreen(Screen):
             t = Text()
             here = story["id"] == s.story["id"]
             t.append("▶ " if here else "  ", style="bold cyan")
-            t.append(f"{store.title_of(story)[:15]:<15}", style="bold" if here else "")
-            done = story["step"] >= len(steps_for(story))
-            t.append(f" {story['created'][5:10]} " + ("done" if done else f"{story['step']}/{len(steps_for(story))}"),
-                     style="dim")
+            t.append(f"{store.title_of(story)[:22]:<22}", style="bold" if here else "")
+            kept, total, done = store.progress(story)
+            t.append(f" {story['created'][5:10]} " + ("done" if done else f"{kept}/{total}"), style="dim")
             if story.get("promoted"):
                 t.append(f" ⇢{story['promoted']['universe'][:10]}", style="green")
             rows.append(Option(t, id=story["id"]))
@@ -1021,12 +1048,11 @@ class MainScreen(Screen):
         old = self.session
         old.save()
         session = Session(story, self.app.engine, ratings=self.app.engine.ratings)
-        i = story["step"] if story["step"] < len(session.steps) else 0
-        session.enter(i)
+        session.enter(store.open_step(story))
         self.session = self.app.session = session
         self.hist_mode = "rolls"
         self.refresh_all()
-        self.say(f"Opened '{store.title_of(story)}'. The story you left was saved.")
+        self.say(self.opening_note() or f"Opened '{store.title_of(story)}'. The story you left was saved.")
         self.card.focus()
 
     def refresh_card(self, keep_field=True):
@@ -1333,6 +1359,8 @@ class MainScreen(Screen):
             self.after()
             self.card.focus()
         elif lst == "history":
+            if self.locked():
+                return
             index = int(event.option.id)
             if self.hist_mode == "rolls":
                 s.pick(index)
@@ -1344,10 +1372,14 @@ class MainScreen(Screen):
     # --- actions --------------------------------------------------------------------------------------------------
 
     def action_roll(self):
+        if self.locked():
+            return
         self.session.roll()
         self.after()
 
     def action_keep(self):
+        if self.locked():
+            return
         s = self.session
         s.keep()
         self.hist_mode = "rolls"
@@ -1368,6 +1400,8 @@ class MainScreen(Screen):
             self.after()
 
     def action_reroll_field(self):
+        if self.locked():
+            return
         field = self.card_field()
         if field is None:
             self.session.roll()
@@ -1380,6 +1414,8 @@ class MainScreen(Screen):
                 self.refresh_history()
 
     def action_edit(self):
+        if self.locked():
+            return
         s = self.session
         field = self.card_field() or s.field_names[0]
         self.app.push_screen(EditScreen(f"Edit {field.replace('_', ' ')}", {field: s.cand[field]}),
@@ -1390,6 +1426,8 @@ class MainScreen(Screen):
             self.after()
 
     def action_write(self):
+        if self.locked():
+            return
         s = self.session
         self.app.push_screen(EditScreen("Write your own (each box starts as it is now)", dict(s.fields)), self._written)
 
@@ -1398,6 +1436,8 @@ class MainScreen(Screen):
             self.after()
 
     def action_editor(self):
+        if self.locked():
+            return
         from .cli import edit_in_editor
         with self.app.suspend():
             new = edit_in_editor(public(self.session.cand))
@@ -1453,6 +1493,8 @@ class MainScreen(Screen):
         self.after()
 
     def action_skip(self):
+        if self.locked():
+            return
         s = self.session
         s.skip()
         self.hist_mode = "rolls"
@@ -1570,13 +1612,14 @@ class StorywheelApp(App):
     ENABLE_COMMAND_PALETTE = False
     BINDINGS = []
 
-    def __init__(self, story, engine, state_store=None):
+    def __init__(self, story, engine, state_store=None, notice=""):
         super().__init__()
         self.story, self.engine = story, engine
         self.state_store = state_store
         self.session = Session(story, engine, ratings=engine.ratings)
         self.main = MainScreen(self.session)
         self.next = None                  # where to go after the app closes: ("builder", {...}) or None
+        self.notice = notice              # said once, on the status line, when the Wheel opens
 
     def remember(self, session):
         """Record where we are (state.json), so plain `storywheel` comes back here."""
@@ -1590,10 +1633,10 @@ class StorywheelApp(App):
         self.push_screen(self.main)
 
 
-def run_app(story, engine, state_store=None):
+def run_app(story, engine, state_store=None, notice=""):
     """Run the app on a story; prints where it was saved when you quit. Returns where to go next, if the writer
     asked for another mode: ("builder", {...}), ("writer", {...}) or None."""
-    app = StorywheelApp(story, engine, state_store)
+    app = StorywheelApp(story, engine, state_store, notice)
     message = app.run()
     if message:
         print("\n  " + str(message).replace("\n", "\n  "))

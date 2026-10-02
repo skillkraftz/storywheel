@@ -307,9 +307,50 @@ _Same status words. Tags `pass3-...`._
 | Rebalance widths | Works | left column 46, entity list column 40, right column 52: every button (Roll blanks, Del, Outline, +Draft...) shows whole at 220, 180 and 160 columns; left-column titles wrap rather than truncate; each universe in the list shows "N entities" |
 | Outline tab as readable text | Works | one row per beat (numbered, or with its own label if the structure shows labels), setting lines as rows, no `**`, no list dashes, no "Once upon a time. Once upon a time,"; right-click or `e` edits just that beat or setting line and writes it back to story.md. Promotion no longer adds a label when the sentence already opens with it (older outlines are cleaned for showing) |
 
+### Data correctness (`pass3-data`)
+| Item | Status | What's missing |
+|---|---|---|
+| "the sorcers apprentice" vs "a sorcerer's apprentice" | Partial | The exact path that produced your screenshot could not be reproduced: promotion, the outline and the frontmatter round-trip keep the text exactly (a test now proves it from Wheel through promotion, outline, Builder and the .docx/.md/.txt exports). Fuzzing the Wheel's own rewriting found three real mangling paths, all fixed: `singular()` turned gallows→"gallowse", prairie→"prairy", cactus→"cactuse"; thread replacement could cut into a longer word ("sorcerer" inside "sorcerer's"); a pronoun pass could eat part of a possessive. A swap of a protagonist's name now also follows the surname ("O'Brien's cottage"). If "sorcers" shows up again, note which Wheel step you were on |
+| Hand-written title recomputes the motif | Works | in the Wheel (edit field, write own, $EDITOR) and in the Builder's title edit; a note says "The motif now follows your title"; if you changed the motif yourself in the same edit, yours stands |
+| Season is a real Place field; "Located in" | Works | Season sits after Era on the Place card and can be rolled; promotion stores it as a field; older places with a custom `season` are read as the field. The link is labelled "Located in" |
+| Universe counts agree | Works | one shared count (`universe_atoms.counts_text` / `named`): checklist reads "4 characters · 2 places · 3 things"; the panel has Characters / Places / Things groups with the same numbers. Only characters and towns can be "used" as a whole step; things and landmarks say why |
+
+### Wheel drafts (`pass3-drafts`)
+| Item | Status | What's missing |
+|---|---|---|
+| No draft file until something is kept; tidy old ones | Works | a draft is written on its first keep. At the next Wheel start (or `storywheel list`) drafts with nothing kept are moved to `<home>/.trash/` and the status line says how many |
+| Past stories show kept progress | Works | "5/8" is steps kept, "done" is a finished story. Titles show 22 characters, not 15 |
+| Finished draft reopens where it ended | Works | on its last step, with a line saying so (CLI: same). It no longer jumps to step 1 |
+| Promoted draft in the Wheel | Works (read-only) | see Decisions: opened read-only, `C` makes an editable copy as a new draft; roll/keep/edit/write/skip/history-pick say why they do nothing. Plain `resume` offers the copy |
+
+### Own review pass (`pass3-review`): found and fixed
+Clicked through the Wheel, Builder (every tab) and Settings (every tab) at 200x50 and checked each for the same kinds of trouble.
+| Found | Fixed |
+|---|---|
+| Builder entity card: "Relationships ✎(blank)" ran together (label column too narrow for the marker) | label column now counts the marker |
+| "5 words in 1 scene(s)" raw plural in the Builder's stats and Outline | proper plurals |
+| Settings > Stats tables clipped names ("Thornwoo", "Null") | explicit column widths |
+| Wheel Past stories cut titles at 15 characters | 22 |
+| Wheel/Builder buttons could clip at narrower widths | tests check 160, 180 and 220 columns |
+| Counts across modes | Wheel checklist, Wheel panel, Builder universe list and tab counts now agree (shared function) |
+| Data changing between modes | promoted drafts can no longer be edited in the Wheel; the Builder is the one place the story changes |
+| Raw markup | none left in the Outline; the Wheel's "story so far" and the Builder's Outline read the same |
+
 ## T2. Tests added in the third pass
 | Area | File | Tests |
 |---|---|---|
-| Focus never moves anything; layout holds together | `test_layout_stability.py` | 11 |
+| Focus never moves anything; layout holds together; review-pass checks | `test_layout_stability.py` | 14 |
 | Outline as readable rows, one-row edits | `test_outline.py` | 8 |
+| Possessives through the whole pipeline, singular/plural round trip, motif follows title, Season | `test_data_correctness.py` | 26 |
+| Drafts: no empty files, tidy to .trash, progress, finished reopen, promoted read-only + copy | `test_drafts.py` | 11 |
 
+Full suite before the final commit: see the line at the end of this section.
+
+## T3. Manual test script (things tests can't see)
+1. Click every list in the Builder, the Wheel and Settings: nothing should shift a row or change size, only the highlight colour changes.
+2. Builder: select a character; Links and Appears in sit under the card; widths feel right at your usual window size.
+3. Open the Outline tab and read it like the Wheel's story so far. Right-click (or `e`) a beat and a setting line and edit them.
+4. Hand-write a title in the Wheel and keep it; the motif should follow. Do it again in the Builder.
+5. Wheel: start it and quit without keeping anything; no draft appears in Past stories. Keep one step, quit, relaunch: it is there with "1/8".
+6. Open a finished draft: it lands on Twist (last step) with the "finished" line. Open a promoted draft: edits say "Read-only"; press C and edit the copy.
+7. Tick a universe in the Wheel: the counts line and the three groups below agree.

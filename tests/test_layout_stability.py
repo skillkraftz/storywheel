@@ -170,3 +170,36 @@ def test_a_long_universe_name_is_not_cut_off(home):
         return flat(screen_text(app))
     text = run(script, size=(220, 55), universe="the-unbelievably-long-named-universe-of-dry-country")
     assert "Unbelievably" in text
+
+
+# --- found in the third-pass review ------------------------------------------------------------------------------------------------
+
+def test_write_only_marker_has_a_gap_before_the_value(home):
+    world(home)
+    async def script(app, pilot):
+        return screen_text(app)
+    text = run(script)
+    assert "✎(" not in text and "✎(blank)" not in text
+
+
+def test_the_stats_tables_in_settings_show_whole_names(home):
+    u = vault.create_universe("Thornwood")
+    s = u.new_story("The Last Clause", {}, {})
+    s.append_scene("Opening", "Five words are here now.")
+    async def go():
+        app = settings_app.SettingsApp(None, "builder")
+        async with app.run_test(size=(180, 60)) as pilot:
+            await pilot.pause()
+            app.screen.query_one("#tabs").active = "t-stats"
+            await pilot.pause()
+            return flat(screen_text(app))
+    text = asyncio.run(go())
+    assert "Thornwood" in text and "The Last Clause" in text
+
+
+def test_counts_use_proper_plurals(home):
+    u = world(home)
+    u.stories()[0].append_scene("Opening", "Words here.")
+    async def script(app, pilot):
+        return flat(screen_text(app))
+    assert "scene(s)" not in run(script)

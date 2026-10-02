@@ -648,4 +648,16 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   showing, edited one row at a time. Promotion writes a beat's label (`**Label.** text`) only for structures that show their labels.
 - The Wheel panel's groups (Characters, Places, Things) count named entities, the same numbers the checklist shows; only
   characters and towns can be a whole step, the rest are boosted atoms and say so when you try to "use" them.
+- Promoted Wheel drafts are read-only in the Wheel (chosen over syncing edits back to the outline). Once promoted, the
+  Builder holds the real story; a second place to edit it would drift, and syncing would need an entity-by-entity diff and
+  merge for every reroll. Instead the Wheel says so, nothing mutates (roll, keep, edit, write, skip, history picks), and `C`
+  (or the offer in plain `resume`) makes an editable copy as a new, unpromoted draft (`store.copy_as_new`). The original stays.
+- A Wheel draft gets a file only when something is kept. Drafts with nothing kept are moved (never deleted) to
+  `<home>/.trash/` the next time the Wheel starts or `list` runs, and the count is said. Past stories show steps kept ("5/8"),
+  "done" for finished ones. A finished draft reopens on its last step, never silently on step 1.
+- Hand-writing a title recomputes the motif from it (Wheel and Builder), saying so, unless the motif was edited in the same
+  edit. Season is a real Place field; a place's parent link reads "Located in".
+- Text rewriting never changes part of a word: thread/stand-in replacement matches whole words (possessives included),
+  `singular()` knows -ie, -us, -is and irregular nouns and leaves possessives alone, and a renamed protagonist's surname
+  follows too.
 

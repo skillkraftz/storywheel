@@ -20,7 +20,7 @@ from textual.widgets import Button, Footer, Header, Input, Label, OptionList, St
 from textual.widgets.option_list import Option
 
 from . import fill, outline, paths, promote, rename, schemas, settings, state, vault, writing_stats
-from .text import motif_from
+from .text import motif_from, plural_n
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings"
@@ -458,7 +458,7 @@ class BuilderScreen(Screen):
             st = settings.load_story(self.story.path)
             rows.append(("settings", "Settings", f"{st['format']} · {st['font']} · goal {st['daily_goal']}/day · "
                                                  f"column {st['column_width']}"))
-            rows.append(("words", "Manuscript", f"{self.story.word_count()} words in {len(self.story.scene_list())} scene(s)"))
+            rows.append(("words", "Manuscript", f"{self.story.word_count()} words in {plural_n(len(self.story.scene_list()), 'scene')}"))
         elif self.universe:
             s = self.universe.settings()
             rows.append(("u:name", "Name", s["name"]))
@@ -489,7 +489,7 @@ class BuilderScreen(Screen):
                  f"Streak   {sm['streak']} day{'s' if sm['streak'] != 1 else ''} (best {sm['best_streak']})"
                  f"      This week  {sm['week']:,} words"]
         if self.story:
-            lines.append(f"Story    {sm['story_words']:,} words in {sm['story_scenes']} scene(s): {sm['story_title']}")
+            lines.append(f"Story    {sm['story_words']:,} words in {plural_n(sm['story_scenes'], 'scene')}: {sm['story_title']}")
         lines.append(f"Universe {sm['universe_words']:,} words across {sm['universe_stories']} stor"
                      f"{'y' if sm['universe_stories'] == 1 else 'ies'}: {sm['universe_name']}")
         self.query_one("#stats", Static).update("\n".join(lines))
@@ -583,7 +583,7 @@ class BuilderScreen(Screen):
         title.update(f"{schemas.get(e.type)['label']}: {e.name or '(blank)'}   "
                      "click/f: roll   right-click/e: write   wheel: history   space: roll blanks")
         rows = self.rows()
-        width = max(len(r[1]) for r in rows) + 2
+        width = max(len(r[1]) + (2 if (r[3] is None or not schemas.can_roll(r[3])) else 0) for r in rows) + 2      # (room for the ✎ too)
         options = []
         for key, label, value, spec in rows:
             write_only = spec is not None and not schemas.can_roll(spec)

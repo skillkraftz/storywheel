@@ -234,8 +234,8 @@ def test_pick_a_structure_finish_then_go_back_and_change_it(home):
     assert list(saved["kept"]["spine"]) == structures.registry()["three-act"].keys
     assert "**Act I: Setup.**" in next(o.glob("*.md")).read_text()
 
-    # resume (finished stories start over so you can change things) and switch shape
-    second = "\n".join(["k", "e", "Kishotenketsu", "k"] + ["k"] * 6) + "\n"
+    # resume (a finished story opens on its last step; go back to the structure) and switch shape
+    second = "\n".join(["b"] * 6 + ["e", "Kishotenketsu", "k"] + ["k"] * 6) + "\n"
     res = run_cli(["resume"], second, h, o)
     assert res.returncode == 0, res.stderr
     assert "New structure: the story body will be rolled again" in res.stdout

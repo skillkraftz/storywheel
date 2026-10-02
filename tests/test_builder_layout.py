@@ -106,7 +106,7 @@ def test_the_top_box_is_a_stats_box(world):
     text = run(script)
     assert "Writing" in text and "Today 640 / 1,000 words" in text and "64%" in text
     assert "Streak 3 days (best 3)" in text and "This week 790 words" in text
-    assert "Story 18 words in 2 scene(s): The Last Clause" in text
+    assert "Story 18 words in 2 scenes: The Last Clause" in text
     assert "Universe 21 words across 2 stories: Thornwood" in text
 
 

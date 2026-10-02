@@ -94,3 +94,8 @@ def implicit(text, first):
     if not first or first not in text:
         return text
     return pronouns(first + " " + text, first)[len(first) + 1:]
+
+
+def plural_n(n, noun):
+    """'1 scene', '2 scenes' (regular nouns only: it is for the status lines)."""
+    return f"{n} {noun}" if n == 1 else f"{n} {noun}s"

@@ -339,8 +339,7 @@ def offer_promotion(story):
 
 def run_plain(story):
     sess = Session(story, get_engine(), ratings=get_engine().ratings)
-    i = story["step"] if story["step"] < len(sess.steps) else 0
-    sess.enter(i)
+    sess.enter(store.open_step(story))
     try:
         while not sess.done:
             for note in sess.take_notes():
@@ -421,6 +420,9 @@ def emit(data):
 
 
 def cmd_list(args):
+    cleaned = store.cleanup_empty_drafts()
+    if cleaned and not getattr(args, "json", False):
+        print(dim(f"  Tidied up: {cleaned} draft{'s' if cleaned != 1 else ''} with nothing kept moved to .trash."))
     stories = store.all_stories()
     if getattr(args, "json", False):
         emit([dict(store.story_json(s), number=n) for n, s in enumerate(stories, 1)])
@@ -430,17 +432,21 @@ def cmd_list(args):
         return
     total = len(STEPS)
     for n, s in enumerate(stories, 1):
-        done = "done" if s["step"] >= total else f"step {s['step'] + 1}/{total}"
-        print(f"  {n:>3}  {s['id']}  {store.title_of(s):<40} {dim(done)}")
+        print(f"  {n:>3}  {s['id']}  {store.title_of(s):<40} {dim(store.progress_text(s))}")
 
 def cmd_resume(args):
     story = store.find(args.target)
     if not story:
         print("  Couldn't find that story. Try  storywheel list")
         return
-    if story["step"] >= len(STEPS):
-        print(dim("  This story is finished; starting from the first step so you can change things."))
-        story["step"] = 0
+    if story.get("promoted"):
+        print(dim("  This draft was promoted into the Builder, so it is read-only in the Wheel (edits here would drift from the Builder)."))
+        if ask("  Make an editable copy as a new draft? [Y/n] ").strip().lower() in ("n", "no"):
+            return
+        story = store.copy_as_new(story)
+        store.save_draft(story)
+    elif story["step"] >= len(STEPS):
+        print(dim("  This story is finished; opening on its last step. Use 'back' to change an earlier one."))
     run(story, plain=getattr(args, "plain", False))
 
 def cmd_export(args):
