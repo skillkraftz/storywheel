@@ -19,7 +19,7 @@ M.HELP = {
   "Notepad mode (the default; a setting turns Vim keys back on)",
   "  You are always typing: Escape does nothing.  The mouse and Shift+arrows select; typing replaces the selection.",
   "  Ctrl+C / X / V  copy / cut / paste (system clipboard)    Ctrl+Z / Ctrl+Y  undo / redo    Ctrl+S  save",
-  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+Q  back to the Builder",
+  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+H  find and replace    Ctrl+Q  back to the Builder",
   "  F12 or Alt+M  a menu of everything below (export, sidebar, toggles, settings...)    Right-click  edit menu",
   "  F9  scene sidebar    F8  peek at the name under the cursor",
   "",
@@ -296,6 +296,7 @@ function M.commands()
   c("SWKeyCheck", function() M.keycheck() end)
   c("SWSceneBreak", function() prose.scene_break() end)
   c("SWJoin", function() notepad.join_lines() end)
+  c("SWReplace", function(a) require("sw.replace").open(a.args ~= "" and a.args or nil) end, { nargs = "?" })
   c("SWInvisibles", function() prose.toggle("invisibles") end)
   c("SWTypewriter", function() prose.toggle("typewriter") end)
   c("SWSpell", function() prose.toggle("spell") end)

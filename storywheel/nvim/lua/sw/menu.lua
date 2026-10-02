@@ -10,6 +10,7 @@ local function actions()
     { "Scenes sidebar", function() require("sw.sidebar").toggle() end },
     { "New scene", function() sw.new_scene() end },
     { "Find…", function() notepad.find() end },
+    { "Find and replace…", function() require("sw.replace").open() end },
     { "Join lines into one paragraph", function() notepad.join_lines() end },
     { "Peek at the name under the cursor", function() require("sw.world").peek() end },
     { "Show invisibles", function() prose.toggle("invisibles") end },

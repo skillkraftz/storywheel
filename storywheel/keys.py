@@ -13,6 +13,7 @@ WRITER_KEYS = {
     "key_sidebar": ("Scenes sidebar", "<F9>"),
     "key_peek": ("Peek at a name", "<F8>"),
     "key_builder": ("Back to the Builder", "<C-q>"),
+    "key_replace": ("Find and replace", "<C-h>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 
@@ -20,7 +21,7 @@ DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 RESERVED = {
     "<C-c>": "copy", "<C-x>": "cut", "<C-v>": "paste", "<C-z>": "undo", "<C-y>": "redo", "<C-s>": "save",
     "<C-a>": "select all", "<C-f>": "find", "<C-g>": "find next", "<A-g>": "find previous", "<A-j>": "join lines",
-    "<C-i>": "Tab (some terminals can't tell it from Ctrl+I)", "<C-m>": "Enter", "<C-h>": "Backspace", "<C-j>": "Enter",
+    "<C-i>": "Tab (some terminals can't tell it from Ctrl+I)", "<C-m>": "Enter", "<C-j>": "Enter",
     "<C-[>": "Escape", "<F1>": "the Wheel", "<F2>": "the Builder", "<F3>": "the Writer", "<F4>": "Settings",
     "<A-m>": "the Writer menu (always works)", "<C-b>": "bold (always works)",
 }
