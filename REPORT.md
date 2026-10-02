@@ -477,3 +477,5 @@ _Same status words. Tags `pass5-paragraphs`, `pass5-menus`, `pass5-keys`, `pass5
 - Key changes apply at the next Writer start.
 - Stories made by the Python side (Builder "new scene") still put a blank line before and after a marker; it is ignored everywhere.
 
+
+Full suite before the final commit: **925 passed**.
