@@ -1,12 +1,24 @@
 # storywheel
 
-Roll a story one piece at a time. Keep what clicks, edit what almost works,
-and every piece you keep feeds the next roll. Everything you keep lands in a
-single markdown file, ready for Obsidian.
+A personal writing program for one writer, covering the whole path from "I have nothing" to "a manuscript ready to
+submit":
+
+1. **The Wheel**: roll a story idea piece by piece. Keep what clicks, edit what almost works, and every piece you keep
+   feeds the next roll.
+2. **The Universe Builder**: grow a kept idea into a world of characters, places, things, groups and notes, with the
+   generator on hand to fill any field.
+3. **The Writer**: a full-screen, distraction-free Neovim setup for drafting, aware of the world, that exports a
+   properly formatted (Shunn) manuscript.
+
+One key moves between them: **F1 Wheel, F2 Builder, F3 Writer** (and F2 in Neovim comes back to the Builder).
+`storywheel` with no arguments reopens exactly where you left off.
+
+Everything you keep is plain files: markdown with YAML frontmatter, so the library folder is also a valid Obsidian vault.
 
 ## Install
 
-On a Raspberry Pi (or anywhere), from the folder containing `pyproject.toml`:
+You need Python 3.9+ with pipx, **Neovim 0.10 or newer** (for the Writer) and, optionally, LibreOffice (only for .odt
+and .pdf export). From the folder containing `pyproject.toml`:
 
     pipx install .
 
@@ -178,10 +190,97 @@ pipe) is the original prompt loop. It works on a dumb terminal over a slow link:
 
 Commands work with or without a space: `f 4` and `f4` both reroll field 4.
 
-## Where things live
+## The whole program
+
+### Where things live
+
+    ~/Writing/storywheel/                      the library (STORYWHEEL_LIBRARY): plain files, an Obsidian vault
+      universes/the-thornwood/
+        universe.md                            name, genre leanings, mix changes, notes
+        characters/ places/ things/ groups/ notes/     one .md per entity (fields in the frontmatter, notes in the body)
+        lists/                                 your own atom lists for this world
+        stories/the-last-clause/
+          story.md                             the outline (premise, setting, beats, twist)
+          seed.json                            the Wheel draft it came from
+          settings.toml                        format, font, column width, daily goal...
+          manuscript/01-opening.md ...         the prose, one file per scene
+          stats.json  exports/  .backups/
+      .trash/                                  everything you delete goes here first
+    ~/.storywheel/                             app storage (STORYWHEEL_HOME)
+      stories/ (Wheel drafts)  state.json  settings.toml  ratings.json  recent.json  nvim/
+
+`~/.storywheel/settings.toml` holds who you are (legal name, byline, address, email, phone), which goes on the first page
+of a manuscript. Edit it in the Builder with `G`, or by hand.
+
+### From the Wheel to a universe
+
+Leave the Wheel (`q`) with something kept and it says you are about to bring the story into the Universe Builder: into a
+**new universe**, an **existing** one, or **not now** (it stays a draft; promote it later with `P` in Past stories).
+The preview lists what will be created: the protagonist becomes a character, the rival a stub, the town and the
+landmark places, the motif a thing or a character, the story's threads stubs, and the title, premise, beats and twist
+the story's outline. Same-name entities are offered as merges (blank fields filled, nothing overwritten).
+`storywheel promote N --new NAME` does the same from the command line.
+
+### The Universe Builder (F2)
+
+Left: universes (create, rename, delete after a confirm) and their stories. Middle: the universe overview or a story's
+outline, then tabs for Characters, Places, Things, Groups and Notes with the selected entity as a card. Right: its notes
+(edit as you type), its links both ways, and the stories it appears in. The keys are listed with `?`.
+
+A new entity starts blank. **Click a field (or `f`) to roll it, right-click (or `e`) to write it, `space` rolls every
+blank field**, the wheel steps through a field's history. Rolls use the universe's genre leanings, the entity's other
+fields, and the people and places already there (a rival, an owner, a parent place, a leader can be real entities).
+Fields marked ✎ are write-only; `c` adds your own. **Renaming** (`r`, or rolling/writing a new name) shows every match
+of the old name in this universe's notes, outlines and manuscripts first; you choose what to replace. `s` edits the
+universe's genre leanings, exclusions, boosts and its own `lists/` folder; `S` the story's settings.
+
+`w` or **F3** opens the story in the Writer; `x` exports it; `C` copies the manuscript as plain text.
+
+### Universes in the Wheel
+
+The Wheel's universe panel is a checklist: tick the universes the generator may draw from for this draft (saved with
+it). Their characters, places and things become atoms in the matching slots, boosted (`atom_boost` in the universe's
+settings), and their genre leanings join the mix. `Use: no / mix / only` decides whether whole protagonist and setting
+candidates can come from them. `u` saves a piece into a universe.
+
+### The Writer (F3)
+
+Neovim, with its own config shipped in the package (it never touches your personal one): a centered column, soft wrap,
+nothing else on screen. Keys, with `Space ?` in the Writer for the full list:
+
+    Alt+I / Alt+B   italic / bold (Ctrl+B too; Ctrl+I only where your terminal can send it: Space k checks)
+    Enter           a new paragraph (blank line between, shown with an indent)
+    Alt+S           scene break (* * * in the file, centered on screen)
+    Space n         scene sidebar (Enter jump, a add, r rename, J/K move)       ]] / [[  next / previous scene
+    Space p / F10   peek at the character or place under the cursor            Tab  complete names from the universe
+    Space i t s     show invisibles / typewriter mode / spellcheck             Space w  word counts
+    Space e         export .docx          Space c  copy manuscript as plain text
+    F2              save everything and go back to the Builder       F1  to the Wheel
+
+Everything is saved as you go, with rolling backups in the story's `.backups/` folder. The status line shows words in
+the scene, in the manuscript, and today against your goal (`stats.json` keeps a record).
+
+### Export
+
+`x` in the Builder, `Space e` in the Writer, or `storywheel manuscript export UNIVERSE/STORY --format docx`.
+The **.docx** follows Shunn's proper manuscript format for a short story: 12 pt Times New Roman (or Courier New), double
+spaced, 1 inch margins, half-inch indents, your name and address at the top left of page 1 with the rounded word count
+at the right, the title halfway down, a header "Surname / Keyword / page" from page 2, a centered `#` for scene breaks,
+a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
+screenplay is a marked stub (a `.fountain` file).
+
+### Command line (all with `--json` where it makes sense)
+
+    storywheel                       reopen where you left off        storywheel wheel | builder | writer
+    storywheel universes             list universes (new NAME)        storywheel entity list UNIVERSE --json
+    storywheel story list|show       stories in your universes        storywheel promote N --new NAME
+    storywheel manuscript export|text UNIVERSE/STORY
+
+## The Wheel in detail
+
+### Wheel storage
 
 - Stories: `~/.storywheel/stories/` (one JSON file each)
-- Your universe: `~/.storywheel/universe.json`
 - Ratings: `~/.storywheel/ratings.json`; recent picks: `~/.storywheel/recent.json`
 - Markdown: `~/storywheel/`, rewritten on every keep
 
@@ -190,13 +289,12 @@ you roll (add this to `~/.bashrc`):
 
     export STORYWHEEL_OUT=~/path/to/vault/Stories
 
-## Your universe
+## Your universes
 
-Press `u` on anything you like and it's saved for future stories. When you
-start or resume a story with things in your universe, you'll be asked whether
-to pull from it: no, mix it in (about a third of rolls), or only from it.
-Characters and settings work best here, since they become recurring people
-and places across stories.
+The old single pool (`~/.storywheel/universe.json`) is gone: when you first start, it is moved into a universe called
+"Loose Ends" (characters from protagonist entries, places from setting entries, notes for the rest), and the old file is
+kept as `universe.json.migrated-DATE`. Universes now live in the library (see "The whole program" above): tick them in the
+Wheel's panel to let the generator draw from them, and press `u` to save a piece into one.
 
 ## Make it yours
 

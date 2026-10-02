@@ -132,6 +132,28 @@ def cmd_writer(args):
     modes.run(("writer", {"universe": args.universe, "story": args.story}), get_engine, get_ratings)
 
 
+def cmd_manuscript(args):
+    from . import export
+    uni, _, slug = (args.target or "").partition("/")
+    u = _universe(uni)
+    story = u.story(slug)
+    if not story:
+        sys.exit(f"No story '{slug}' in {u.slug}")
+    if args.action == "text":
+        print(export.plain_text(story))
+        return
+    try:
+        result = export.export(story, args.format, args.out)
+    except export.ExportError as e:
+        if args.json:
+            emit({"error": str(e)})
+        else:
+            print("  " + str(e))
+        raise SystemExit(1)
+    emit(result) if args.json else print(f"  Wrote {result['path']}  ({result['words']:,} words)" +
+                                          "".join(f"\n  Note: {w}" for w in result["warnings"]))
+
+
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
@@ -166,10 +188,16 @@ def add_parsers(sub):
     p.add_argument("--dry-run", action="store_true", help="show what would be created")
     p.add_argument("--yes", action="store_true", help="don't ask")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("manuscript", help="manuscript export:  manuscript export UNIVERSE/STORY --format docx | manuscript text UNIVERSE/STORY")
+    p.add_argument("action", choices=["export", "text"])
+    p.add_argument("target", help="universe/story")
+    p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
+    p.add_argument("--out", help="folder to write into (default: the story's exports folder)")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("builder", help="open the Universe Builder")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

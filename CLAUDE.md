@@ -610,3 +610,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Leaving Neovim with `:q` (not F2) returns to the Builder; F1 in Neovim goes to the Wheel.
 - Plain `storywheel` only resumes the saved mode in an interactive terminal; with `--plain` or a pipe it is still the
   plain prompt for a new draft.
+- Export builds the .docx directly with python-docx (no pandoc on the machine); .odt and .pdf are LibreOffice
+  conversions of it. Word count on page 1 is rounded to the nearest hundred (nearest ten under 100). The header keyword
+  is the story's `title_keyword` setting, else the first real word of the title.
+- A novel is the same pages with each scene file as a chapter on a new page (partial); a screenplay exports an
+  unformatted `.fountain` file with a visible "stub" warning.
+- `python-docx` is a required dependency; `pyte` is a dev dependency (terminal-screen tests).

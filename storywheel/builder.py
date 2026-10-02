@@ -41,7 +41,8 @@ HELP = f"""\
 [b]Universe and stories[/b]
   [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
-  [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it   [b]W[/b]  new Wheel draft
+  [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
+  [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
   [b]q[/b]  quit   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
 
 Roll results use the universe's genre leanings, the entity's other fields, and existing entities
@@ -206,6 +207,7 @@ class BuilderScreen(Screen):
         Binding("o", "overview", "Overview", show=False),
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
+        Binding("C", "copy_manuscript", "Copy manuscript", show=False),
         Binding("W", "new_draft", "New Wheel draft", show=False),
         Binding("q", "quit_app", "Quit"),
         Binding("question_mark", "help", "Help", key_display="?"),
@@ -1108,6 +1110,9 @@ class BuilderScreen(Screen):
     def action_export(self):
         self.b.export(self)
 
+    def action_copy_manuscript(self):
+        self.b.copy_manuscript(self)
+
     def action_new_draft(self):
         self.b.go("wheel", {"universe": self.universe.slug if self.universe else None, "new": True})
 
@@ -1216,8 +1221,49 @@ class BuilderApp(App):
         if where == "wheel":
             self.go("wheel", {})
 
-    def export(self, screen):
-        screen.say("Export isn't connected yet.")
+    def export(self, screen, fmt=None):
+        """Export the open story's manuscript (a format chosen from a list, unless given)."""
+        from . import export as exporter
+        story = screen.story
+        if story is None and screen.universe is not None and screen.universe.stories():
+            story = screen.universe.stories()[0]
+        if story is None:
+            screen.say("This universe has no story to export yet.")
+            return
+        screen.story = story
+        if fmt is None:
+            options = [("Word (.docx), Shunn manuscript format", "docx"), ("OpenDocument (.odt), needs LibreOffice", "odt"),
+                       ("PDF, needs LibreOffice", "pdf"), ("Markdown (.md)", "md"), ("Plain text (.txt)", "txt"),
+                       ("Fountain screenplay (.fountain), a stub", "fountain")]
+            self.push_screen(ChoiceScreen(f"Export '{story.title}' as…", options),
+                             lambda f: self.export(screen, f) if f else None)
+            return
+        screen.say(f"Exporting {story.title} as .{fmt} …")
+        self.refresh()
+        try:
+            result = exporter.export(story, fmt)
+        except exporter.ExportError as e:
+            screen.say(str(e))
+            return
+        screen.say(f"Exported {result['words']:,} words to {result['path']}" +
+                   "".join(f"   Note: {w}" for w in result["warnings"]))
+        screen.last_export = result
+
+    def copy_manuscript(self, screen):
+        from . import clipboard, export as exporter
+        story = screen.story
+        if story is None and screen.universe is not None and screen.universe.stories():
+            story = screen.universe.stories()[0]
+        if story is None:
+            screen.say("This universe has no story to copy.")
+            return
+        text = exporter.plain_text(story)
+        if not text.strip():
+            screen.say("The manuscript is empty, so there is nothing to copy.")
+            return
+        how = clipboard.copy(text, self)
+        screen.say(f"Copied the manuscript of '{story.title}' ({len(text.split())} words) as plain text via {how}." if how
+                   else "Couldn't reach a clipboard (install wl-clipboard or xclip). Export a .txt instead (x).")
 
 
 def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None):
