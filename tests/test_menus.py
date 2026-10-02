@@ -98,6 +98,7 @@ def test_every_writer_menu_item_runs_by_mouse_click(home, story):
 
 
 def test_help_from_the_menu_closes_with_q_and_you_are_typing_again(home, story):
-    last = len(writer_menu_labels(story)) - 2                         # "Help" is second from last
-    r = run(story, "", "<F12>" + "<Down>" * (last - 1) + "<CR>q", "R.mode = vim.fn.mode(); R.win_is_main = vim.api.nvim_get_current_win() == require('sw.layout').main")
+    labels = writer_menu_labels(story)
+    downs = labels.index("Help")
+    r = run(story, "", "<F12>" + "<Down>" * downs + "<CR>q", "R.mode = vim.fn.mode(); R.win_is_main = vim.api.nvim_get_current_win() == require('sw.layout').main")
     assert r["win_is_main"] is True and r["mode"] == "i"
