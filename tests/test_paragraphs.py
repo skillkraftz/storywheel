@@ -59,7 +59,7 @@ def test_ctrl_v_strips_leading_spaces_and_tabs_and_drops_empty_lines(home, story
 def test_a_pasted_story_of_one_paragraph_per_line_stays_that_way(home, story):
     text = [f"Paragraph number {i} has a few words in it." for i in range(1, 41)]
     r = run(story, lua_lines("") + "\nvim.fn.setreg('+', { " + ", ".join(json.dumps(t) for t in text) + " }, 'v')", "<C-v>", LINES)
-    assert r["lines"] == text and vault.count_words("\n".join(r["lines"])) == 40 * 8
+    assert r["lines"] == text and vault.count_words("\n".join(r["lines"])) == 40 * 9
 
 
 def test_terminal_paste_is_cleaned_too_in_one_piece_and_in_chunks(home, story):

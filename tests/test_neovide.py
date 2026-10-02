@@ -125,13 +125,14 @@ def test_in_the_gui_ctrl_i_is_italic(home, story):
 @pytestmark_nvim
 def test_the_terminal_can_show_extra_space_between_paragraphs(home, story):
     settings.save_story(story.path, {"paragraph_spacing": 2})
-    r = nrun(story, "", "", """
+    r = nrun(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'First paragraph here.', 'Second paragraph here.', 'Third.' })", "", """
+        require("sw.prose").decorate(0)
         local marks = vim.api.nvim_buf_get_extmarks(0, require("sw.prose").ns, 0, -1, { details = true })
         R.rows = {}
         for _, m in ipairs(marks) do if m[4].virt_lines then R.rows[#R.rows + 1] = { m[2], #m[4].virt_lines } end end
         R.lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     """)
-    assert r["rows"] == [[1, 2], [3, 2]] and r["lines"] == ["First paragraph here.", "", "Second paragraph here.", "", "Third."]
+    assert r["rows"] == [[0, 2], [1, 2]] and r["lines"] == ["First paragraph here.", "Second paragraph here.", "Third."]     # (one line is one paragraph: a gap after each but the last)
 
 
 @pytestmark_nvim

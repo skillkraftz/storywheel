@@ -12,7 +12,7 @@ from textual.screen import ModalScreen, Screen
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
-from . import paths, settings, vault, writing_stats
+from . import keys, paths, settings, vault, writing_stats
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings"
 
@@ -36,6 +36,8 @@ SECTIONS = [
         ("writer_font_size", "Font size in Neovide", "int", None, "Points."),
         ("line_spacing", "Extra line spacing in Neovide", "int", None, "Pixels; about the font size looks double spaced."),
         ("paragraph_spacing", "Terminal: blank lines between paragraphs", "int", None, "The closest a terminal gets to double spacing (shown, not typed)."),
+        ("scene_marker", "Scene break in the file", "choice", ["***", "* * *", "#"],
+         "What the scene-break key inserts: a line holding only this. (*** or * * * or # lines are all recognized when you type them.)"),
         ("column_width", "Column width", "int", None, "Characters."),
         ("indent_display", "Show a paragraph indent", "bool", None, ""),
         ("typewriter", "Typewriter mode", "bool", None, "Keep the current line in the middle of the screen."),
@@ -46,9 +48,18 @@ SECTIONS = [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
         ("format", "Default format", "choice", ["short-story", "novel", "screenplay"], "A story can choose its own."),
         ("export_format", "Quick export file type", "choice", ["docx", "odt", "pdf", "md", "txt"], ""),
+        ("export_title_bold", "Title in bold", "bool", None, "On the first page of the .docx."),
+        ("export_header", "Page header shows", "choice", ["full", "keyword"],
+         "full: the whole title.  keyword: Shunn's one-word short title (a story can set its own title_keyword)."),
+        ("export_anonymous", "Always export anonymously", "bool", None,
+         "No name, contact block, byline or surname; the header is 'Title / page'. (Export also has an anonymous choice for one-offs.) "
+         "Without a name in Settings > You, exports are anonymous anyway."),
+        ("export_one_space", "One space after periods", "bool", None, "Double spaces after . ! ? are exported as one space."),
         ("manuscripts_dir", "Manuscripts folder", "path", None,
          "Exports go here, one folder per story: <folder>/<Story Title>/<Story Title> <date>.docx. Default ~/Writing."),
     ]),
+    ("Keys", [(k, label, "key", None, f"Default {keys.label(default)}. Type a key such as Alt+I, Ctrl+B or F9 and press Enter.")
+              for k, (label, default) in keys.WRITER_KEYS.items()]),
     ("Universes", [
         ("atom_boost", "How much likelier a universe's own people and places are", "float", None,
          "Your default for every universe (1.5 is a strong genre list's share); a universe can set its own."),
@@ -141,6 +152,10 @@ class SettingsScreen(Screen):
                                 yield from self.control(key, kind, extra, g.get(key))
                                 if hint:
                                     yield Static(hint, classes="hint", markup=False)
+                        if title == "Keys":
+                            yield Static("These work in the Writer. Always available: Alt+M (menu), Ctrl+B (bold), Ctrl+C/X/V, Ctrl+Z/Y, "
+                                         "Ctrl+S, Ctrl+A, Ctrl+F/G, Alt+G, Alt+J (join selected lines), F1-F4 (modes). "
+                                         "Changes apply the next time the Writer starts.", markup=False)
                         if title == "Writer":
                             from . import writer as _writer
                             exe = _writer.neovide_exe()
@@ -199,6 +214,26 @@ class SettingsScreen(Screen):
         settings.save_global(g)
         self.say(f"Saved: {key} = {value!r}")
 
+    def save_key(self, key, text, box=None):
+        """Check a shortcut (a form we understand, not used by anything else) and save it in Neovim's notation."""
+        ok, value = keys.normalize(text)
+        if not ok:
+            self.say(value)
+            return False
+        g = settings.load_global()
+        current = {k: g.get(k) or keys.DEFAULTS[k] for k in keys.WRITER_KEYS}
+        ok, message = keys.check(key, value, current)
+        if not ok:
+            self.say(message)
+            return False
+        g[key] = value
+        settings.save_global(g)
+        self.values[key] = value
+        if box is not None:
+            box.value = value
+        self.say(f"Saved: {keys.WRITER_KEYS[key][0].lower()} is {keys.label(value)} ({value}). It applies the next time the Writer starts.")
+        return True
+
     def save_manuscripts(self, text):
         new = text.strip()
         if not new:
@@ -245,7 +280,7 @@ class SettingsScreen(Screen):
     def on_input_changed(self, event):
         key = (event.input.id or "")[2:]
         kind = self.kind_of(key)
-        if kind == "path":
+        if kind in ("path", "key"):
             return                                              # saved on Enter, not on every keystroke
         ok, value = parse(kind, event.value)
         if not ok:
@@ -258,8 +293,11 @@ class SettingsScreen(Screen):
 
     def on_input_submitted(self, event):
         key = (event.input.id or "")[2:]
-        if self.kind_of(key) == "path":
+        kind = self.kind_of(key)
+        if kind == "path":
             (self.save_manuscripts if key == "manuscripts_dir" else self.save_library)(event.value)
+        elif kind == "key":
+            self.save_key(key, event.value, event.input)
 
     def on_switch_changed(self, event):
         key = (event.switch.id or "")[2:]

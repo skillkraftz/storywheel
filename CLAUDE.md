@@ -671,4 +671,17 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   schemas (by folder time). Our own writes forget a file at once; the Writer's and Obsidian's changes are noticed by time. Callers get
   copies of entities, so changing one never changes what is remembered. A field roll redraws only the card and its links.
   `tests/test_performance.py` guards 50 ms for a roll and a selection in a 160-entity, four-story universe.
+- One line is one paragraph (Writer, counts, scenes, export). Blank lines are allowed and mean nothing. Every paragraph line is
+  indented (virtual in the Writer, a first-line indent in the .docx), `paragraph_spacing` puts a visual gap between paragraph lines,
+  Enter starts the next line, paste strips leading whitespace and empty lines, Tab at a paragraph start does nothing, Alt+J joins a
+  selection. Old manuscripts with blank-line paragraphs are converted once per story (`.one-line-paragraphs`), with a backup.
+- Scene breaks: a line holding only `***`, `* * *` or `#` (or `* * * Title` / `*** Title` to name the scene). The one inserted is the
+  `scene_marker` setting (default `***`); typing a break and Enter rewrites it to that form. `***text***` inside a line is bold italic.
+- Never `startinsert` unless `notepad.can_type()` (writing window current and modifiable). Menus are tested with real key sequences.
+- `QuietHeader` replaces Textual's Header (no tall mode).
+- Export: title bold (default), header full title or keyword, anonymous (setting or per export; no name/contact/byline/surname, header
+  "Title / page"); no author name means anonymous with a message, never a placeholder; `export_one_space` collapses double spaces after
+  sentences.
+- Shortcuts (Settings > Keys) are stored in Neovim notation, validated by `keys.py` (modifier or F key; not a reserved or already used
+  key) and read by the Writer at start-up.
 

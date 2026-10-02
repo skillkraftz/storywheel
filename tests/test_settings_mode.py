@@ -42,7 +42,7 @@ def test_every_tab_is_there_with_your_current_values(home):
         return (tabs, s.query_one("#f-legal_name", Input).value, s.query_one("#f-daily_goal", Input).value,
                 s.query_one("#f-notepad_mode", Switch).value, s.query_one("#f-library", Input).value)
     tabs, name, goal, notepad, lib = run(script)
-    assert tabs == ["t-you", "t-goals", "t-writer", "t-export", "t-universes", "t-library", "t-stats"]
+    assert tabs == ["t-you", "t-goals", "t-writer", "t-export", "t-keys", "t-universes", "t-library", "t-stats"]
     assert (name, goal, notepad) == ("Andrew Writer", "750", False) and lib == str(paths.library_root())
 
 

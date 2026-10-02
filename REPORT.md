@@ -405,3 +405,75 @@ _Same status words. Tags `pass4-menus`, `pass4-export`, `pass4-perf`._
 - A file rewritten twice within the file system's timestamp tick with the same size by another program could be missed until it changes again; our own writes never are.
 
 Full suite before the final commit: **855 passed**.
+
+---
+
+# Fifth pass: the Writer and export, ready for real use
+
+_Same status words. Tags `pass5-paragraphs`, `pass5-menus`, `pass5-keys`, `pass5-export`._
+
+## G1. Checklist
+
+### Paragraphs (`pass5-paragraphs`)
+| Item | Status | What's missing |
+|---|---|---|
+| One line = one paragraph everywhere | Works | Writer (indent, Enter, scene break), word counts (they were already line based), scenes, and export (`export.paragraphs()` no longer joins lines). A pasted 50-paragraph story with no blank lines exports as 50 paragraphs (test) |
+| Every paragraph line gets the indent; blank lines optional; `paragraph_spacing` still adds a gap | Works | display: every non-blank, non-break line is indented (it used to need a blank line before it). Export: every paragraph has the half-inch first-line indent, including the first after a scene break. The terminal gap now sits between paragraph lines (after each paragraph line that is followed by another), not on blank lines. Old blank lines are ignored in export and counts |
+| Paste strips leading tabs/spaces; Tab at a paragraph start does nothing | Works | Ctrl+V and the terminal's paste (bracketed, in one piece or chunks) drop leading tabs/spaces/non-breaking spaces and empty lines; spaces inside a line are kept. Tab at the start of a paragraph does nothing and says "Indents are automatic" once per session; Tab elsewhere in a line still inserts (as spaces) and still walks the name completion |
+| Join selected lines into one paragraph | Works | Alt+J, `:SWJoin`, "Join lines into one paragraph" in the Writer menu and "Join Lines" in the right-click menu. It needs a selection (with one line per paragraph there is no "the paragraph" to guess, and joining a whole run of lines by accident would be bad); with nothing selected it says so. Blank lines and scene breaks inside the selection are dropped |
+| Convert existing manuscripts, with a backup, and report | Works | `Story.migrate_paragraphs()`, once per story (a `.one-line-paragraphs` file records it; new stories get it at once). Only files that use blank lines between paragraphs are touched: lines of a paragraph that were wrapped are joined, blank lines are dropped, originals go to `.backups/paragraphs-DATE/`, and the startup migration (or the Writer's start) says e.g. "joined 2 hard-wrapped paragraphs and removed 4 blank lines in manuscript.md". A file with no blank lines is taken to be in the new form already |
+| Optional export setting: one space after periods | Works | Settings > Export "One space after periods" (`export_one_space`); applies to .docx, .md and .txt. "3.5  apples" (no sentence end) is left alone |
+
+### E21 and real key paths (`pass5-menus`)
+| Item | Status | What's missing |
+|---|---|---|
+| Insert mode inside the read-only menu | Works | cause as you found: `run_menu_item('menu')` ended with `insert(true)` while the menu window was current. `notepad.can_type()` (the writing window is current and modifiable) now guards every way into Insert mode (`insert`, `start_typing`), so it can't happen from any menu, help or sidebar |
+| Tests with real key sequences | Works | `test_menu_keys.py`: every Writer-menu item by F12+Down+Enter, by F12+number, and by right-click > Writer Menu > Down > Enter; each must work after exactly those keys (menu closed, effect done, back in the writing window, or the right mode left for) with no error message. They fail on the old code (checked). Extra: right-click > Writer Menu > Export makes the file on the first Enter; keep typing straight after |
+
+### Title bar (`pass5-menus`)
+| Item | Status | What's missing |
+|---|---|---|
+| Header never goes tall | Works | `header.QuietHeader` ignores clicks and never takes the `-tall` class; used in the Wheel, Builder and Settings (test clicks it twice in each) |
+
+### Manuscript export (`pass5-export`)
+| Item | Status | What's missing |
+|---|---|---|
+| Title in bold (default on); header full title (default) or Shunn's keyword | Works | Settings > Export: "Title in bold", "Page header shows" (full / keyword; a story's `title_keyword` still works for keyword) |
+| Anonymous export | Works | setting "Always export anonymously", plus a choice per export: Builder export list ("Word (.docx), anonymous"), Writer menu ("Export anonymous manuscript"), CLI `--anonymous`. No name, contact block, byline or surname; header "Title / page"; the word count stays top right; the document author property is blank. Markdown/text exports drop the byline |
+| Missing author details | Works | no name in Settings > You: the anonymous layout is exported and the message says so ("exported anonymously, with no name or contact block"). No "Your Name"/"Author" placeholder anywhere. A missing address still only warns |
+
+### Scene breaks and keys (`pass5-keys`)
+| Item | Status | What's missing |
+|---|---|---|
+| Configurable scene break, default `***` | Works | Settings > Writer: `***`, `* * *` or `#`. A line holding only one of them (also `* * * Title`, `*** Title`) is a break everywhere (Python and Lua); `***bold italic***` inside text is not. Alt+S inserts the chosen form; typing `***` (or `* * *`, `#`) alone on a line and pressing Enter makes it the chosen form and starts a new line |
+| Keys section in Settings | Works | Settings > Keys: italic, bold, scene break, menu, sidebar, peek, back to the Builder. You may type "Alt+I", "ctrl+b", "<A-i>", "F9"; it is stored in Neovim's form. Refused: a bare letter, unknown names, keys the Writer needs (Ctrl+C/X/V/Z/Y/S/A/F/G, Alt+G, Alt+J, Alt+M, Ctrl+B, F1-F4...) and a key another shortcut already has, each with a message. Applies the next time the Writer starts. Extra keys that always work (Alt+M, Ctrl+B) are kept |
+
+## G2. Review of the Writer the way you use it
+`test_writer_review.py` does it in one go: pastes 30 paragraphs (one per line, alternating tab and 4-space indents, with blank lines in between) through the terminal-paste path, types a new paragraph, a scene break with Alt+S, a paragraph, then `***`+Enter and a paragraph, saves with Ctrl+S, exports, and reads the .docx with python-docx. Confirmed: 33 paragraphs (30 + 3 typed), nothing indented in the file, exactly two scene breaks (`#` centred in the export), every paragraph indented 0.5", title bold, byline, header "Writer / The Last Clause / page".
+
+## G3. Tests added in the fifth pass
+| Area | File | Tests |
+|---|---|---|
+| Paragraphs in the Writer, paste, Tab, join, breaks, conversion | `test_paragraphs.py` | 23 |
+| Export of paragraphs and the new options | `test_paragraph_export.py` | 13 |
+| Menus by real keys | `test_menu_keys.py` | 5 |
+| Shortcuts and Settings > Keys | `test_keys.py` | 23 |
+| Title bar | `test_header.py` | 3 |
+| Whole use of the Writer then export | `test_writer_review.py` | 1 |
+(Several older Writer tests changed to the one-line rule: Enter, indent, scene break, paste, menu numbers.)
+
+## G4. Manual test script
+1. Paste a few pages from another program (one paragraph per line, with tabs). Every paragraph should show an indent; nothing should be indented in the file (look with Show invisibles).
+2. Press Tab at the start of a paragraph: nothing, and the note once. Select several hard-wrapped lines and press Alt+J.
+3. Type `***`, Enter: it becomes a centred break. Try Alt+S. Change the break form in Settings > Writer and try again.
+4. Settings > Keys: change Italic to something else, restart the Writer, try it; try a conflicting key and read the message.
+5. Right-click > Writer Menu > Down > Enter on any item: it should work with that one Enter.
+6. Export (and the anonymous export) and open the .docx in your word processor: indents, `#` breaks, bold title, header text.
+7. Click the title bar in each mode: it should stay one line.
+
+## G5. Known issues / decisions to check
+- Join needs a selection (see above); say if you would rather it join the whole run of lines around the cursor.
+- A manuscript that has NO blank lines at all is assumed to be in the new form already, so an old single hard-wrapped paragraph without blank lines isn't joined by the conversion (use Alt+J).
+- Key changes apply at the next Writer start.
+- Stories made by the Python side (Builder "new scene") still put a blank line before and after a marker; it is ignored everywhere.
+
