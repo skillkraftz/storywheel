@@ -92,6 +92,13 @@ function M.parse_scenes(lines)
   return scenes
 end
 
+-- Load a file into a (hidden) buffer without the "path, 12L, 340B" message, which would scroll the status line.
+function M.load_buffer(path)
+  local b = vim.fn.bufadd(path)
+  vim.cmd("silent! call bufload(" .. b .. ")")
+  return b
+end
+
 function M.notify(msg, level)
   vim.schedule(function() vim.notify(msg, level or vim.log.levels.INFO) end)
 end

@@ -7,6 +7,8 @@ local sidebar = require("sw.sidebar")
 local world = require("sw.world")
 local stats = require("sw.stats")
 local backup = require("sw.backup")
+local notepad = require("sw.notepad")
+local gui = require("sw.gui")
 local session = require("sw.session")
 
 local M = {}
@@ -14,14 +16,21 @@ local M = {}
 M.HELP = {
   "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer   F4 Settings",
   "",
+  "Notepad mode (the default; a setting turns Vim keys back on)",
+  "  You are always typing: Escape does nothing.  The mouse and Shift+arrows select; typing replaces the selection.",
+  "  Ctrl+C / X / V  copy / cut / paste (system clipboard)    Ctrl+Z / Ctrl+Y  undo / redo    Ctrl+S  save",
+  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+Q  back to the Builder",
+  "  F12 or Alt+M  a menu of everything below (export, sidebar, toggles, settings...)    Right-click  edit menu",
+  "  F9  scene sidebar    F8  peek at the name under the cursor",
+  "",
   "Writing",
-  "  Alt+I / Alt+B      italic / bold (insert and visual; Ctrl+B too; Ctrl+I only if your terminal can send it)",
+  "  Alt+I / Alt+B      italic / bold (Ctrl+B too; Ctrl+I only if your terminal can send it)",
   "  Enter              starts a new paragraph (a blank line between, shown with an indent)",
   "  Alt+S              scene break  (* * *  in the file, centered on screen)",
   "  Tab                next name in the completion list (names from this universe)",
   "",
-  "Normal mode, with Space first",
-  "  n  scene sidebar      p  peek at the name under the cursor (also F10)    a  new scene",
+  "With Vim keys on (not notepad mode), in Normal mode, with Space first",
+  "  n  scene sidebar      p  peek at the name under the cursor (also F8)    a  new scene",
   "  i  show invisibles    t  typewriter mode    s  spellcheck",
   "  w  word counts        c  copy the manuscript as plain text",
   "  e  export (docx)      S  this story's settings.toml      k  check which keys your terminal sends",
@@ -225,13 +234,16 @@ local function global_options()
   local o = vim.o
   o.termguicolors = true
   o.laststatus = 3
+  o.statusline = " "                        -- (blank until the word counts are ready: never a file path)
   o.showmode = false
   o.ruler = false
   o.showcmd = false
   o.mouse = "a"
   o.hidden = true
   o.swapfile = false
-  o.shortmess = o.shortmess .. "I"
+  o.title = true
+  o.titlestring = "storywheel: writing"        -- (the terminal window title; short, so it never shows a long path)
+  o.shortmess = "filmnrxoOtTWAIFcs"        -- short messages: a long file path must never wrap and scroll the status line
   o.scrolloff = 4
   o.timeoutlen = 600
   o.virtualedit = ""
@@ -247,7 +259,7 @@ function M.map_global()
   map({ "n", "i", "x" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
   map({ "n", "i", "x" }, "<F4>", function() M.leave("settings") end, "to Settings")
   map({ "n", "i" }, "<F9>", function() sidebar.toggle() end, "scene sidebar")
-  map({ "n", "i" }, "<F10>", function() world.peek() end, "peek")
+  map({ "n", "i" }, "<F8>", function() world.peek() end, "peek")
   local leader = {
     n = function() sidebar.toggle() end, p = function() world.peek() end, a = function() M.new_scene() end,
     i = function() prose.toggle("invisibles") end, t = function() prose.toggle("typewriter") end,
@@ -298,6 +310,7 @@ function M.start()
   M.started = true
   story.ensure_first_scene()
   local saved = session.load()
+  gui.setup()                                       -- (fonts and line spacing, when this is Neovide)
   local main = vim.api.nvim_get_current_win()
   layout.setup(main)
   prose.window = main
@@ -315,7 +328,7 @@ function M.start()
   end
   M.open_scene(start, cursor)
   for _, p in ipairs(saved.open or {}) do          -- scenes that were open come back as (hidden) buffers
-    if p ~= start and util.exists(p) then pcall(vim.fn.bufload, vim.fn.bufadd(p)) end
+    if p ~= start and util.exists(p) then pcall(util.load_buffer, p) end
   end
   local function pick(remembered, default)
     if remembered == nil then return default end
@@ -327,11 +340,14 @@ function M.start()
   stats.setup()
   backup.setup()
   world.setup()
+  notepad.setup()                                   -- (notepad mode is on unless the settings say otherwise)
+  if notepad.enabled then notepad.map_buffer(vim.api.nvim_get_current_buf()) end
   vim.api.nvim_set_current_win(layout.main)
   if saved.sidebar then
     sidebar.open()
     vim.api.nvim_set_current_win(layout.main)
   end
+  notepad.start_typing()
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     group = vim.api.nvim_create_augroup("sw_decorate", { clear = true }),
     callback = function(ev) prose.decorate(ev.buf) if layout.sidebar_open then sidebar.render() end end,

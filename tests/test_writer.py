@@ -22,6 +22,7 @@ def story(home):
     u.new_entity("place", "Red Draw", {"kind": "town", "era": "the strike"})
     s = u.new_story("The Last Clause")
     s.add_scene("Opening", "Stacie ran down the road.\n\nIt was *very* dry.")
+    settings.save_story(s.path, {"notepad_mode": False})          # (these tests are about the Vim keys; notepad mode has its own file)
     return s
 
 

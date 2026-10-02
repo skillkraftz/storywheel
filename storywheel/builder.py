@@ -1345,6 +1345,7 @@ class BuilderApp(App):
             return
         screen.story = story
         story.manuscript_dir.mkdir(parents=True, exist_ok=True)
+        note = writer.neovide_note(story)
         if self.state_store is not None:
             self.state_store.update(mode="writer", universe=screen.universe.slug, story=story.slug)
         with self.suspend():
@@ -1352,7 +1353,7 @@ class BuilderApp(App):
         if self.state_store is not None:
             self.state_store.update(mode="builder")
         screen.refresh_all()
-        screen.say(f"Back from the Writer ({story.word_count()} words in {story.title}).")
+        screen.say(f"Back from the Writer ({story.word_count()} words in {story.title})." + (f"  {note}" if note else ""))
         if where == "wheel":
             self.go("wheel", {})
 

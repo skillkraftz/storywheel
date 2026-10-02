@@ -62,6 +62,9 @@ def run_writer(st, payload):
         print("  " + problem)
         return ("builder", {"universe": u.slug})
     st.update(mode="writer", universe=u.slug, story=story.slug)
+    note = writer.neovide_note(story)
+    if note:
+        print("  " + note)
     where = writer.run(story)
     st.update(mode="builder" if where != "wheel" else "wheel")
     return (where or "builder", {"universe": u.slug, "story": story.slug})

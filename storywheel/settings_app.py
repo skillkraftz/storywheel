@@ -137,6 +137,12 @@ class SettingsScreen(Screen):
                                 yield from self.control(key, kind, extra, g.get(key))
                                 if hint:
                                     yield Static(hint, classes="hint", markup=False)
+                        if title == "Writer":
+                            from . import writer as _writer
+                            exe = _writer.neovide_exe()
+                            yield Static(f"Neovide: {'installed at ' + exe if exe else 'not installed (the Writer then uses the terminal)'}"
+                                         f"      Neovim: {'.'.join(map(str, _writer.nvim_version() or ())) or 'not installed'}",
+                                         id="writer-tools", markup=False)
                         if title == "Library":
                             yield Static(f"App storage: {paths.home()}\nSettings file: {settings.global_path()}", markup=False)
             with TabPane("Stats", id="t-stats"):

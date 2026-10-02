@@ -199,6 +199,7 @@ def story(home):
     s.append_scene("Opening", "Stacie ran down the road.\n\nIt was *very* dry.")
     s.append_scene("The Letter", "A letter came on Tuesday.")
     s.append_scene("", "By Friday it was gone.")
+    settings.save_story(s.path, {"notepad_mode": False})
     return s
 
 

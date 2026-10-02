@@ -2,7 +2,7 @@
 
 Everything in the roadmap's foundation sweep is built and usable end to end. Status words: **Works** (built, tested,
 used end to end), **Partial** (works, with a stated gap), **Stub** (marked as such, not the real thing), **Not started**.
-The full suite is **615 tests, all passing** (it was 413 at the start of the sweep). Tags: `stage-3-ui`,
+The full suite is **752 tests, all passing** (413 at the start of the first sweep, 615 at its end). Tags: `stage-3-ui`,
 `foundation-storage`, `foundation-promotion`, `foundation-builder`, `foundation-universes-wheel`, `foundation-writer`,
 `foundation-switching`, `foundation-export`.
 
@@ -218,6 +218,26 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 | Migrate existing scene files in order, with a backup | Works | runs when the Writer starts and at app start (`storywheel migrate` does it by hand): scene files are merged in order into `manuscript.md` (each one's name becomes its marker title) and the originals are moved to `<story>/.backups/migrated-DATE/`; a novel and single-file stories are left alone; nothing is merged twice |
 | Opening the Writer at a chosen scene (from the Scenes tab and the sidebar) | Works | the Builder's Scenes tab passes the scene (`STORYWHEEL_SCENE`); the Writer opens at the first line of its text |
 
+### Writer: notepad mode (`pass2-notepad`)
+| Item | Status | What's missing |
+|---|---|---|
+| Notepad mode, on by default: stays in typing mode (Escape does nothing) | Works | Neovim has no "insert mode only" option, so Normal mode is simply never rested in (it drops straight back to typing); Escape closes a popup or clears a find highlight |
+| Mouse selection like a normal app; typing replaces the selection; Shift+arrows select | Works | uses Neovim's Select mode with an exclusive selection; **dragging with the mouse is configured but can only be tried by hand** (manual script 10) |
+| Ctrl+C / X / V system clipboard | Works | with `xclip`/`wl-copy` etc.; with none, copy and paste work inside the Writer only and you are told; the real clipboard path is manual (script 11) |
+| Ctrl+Z / Y, Ctrl+S, Ctrl+A, Ctrl+F (find; Ctrl+G next, Alt+G previous) | Works | undo goes a word at a time (an undo break at each space) |
+| A right-click menu | Works | Cut, Copy, Paste, Select All, Italic, Bold, Scene Break, Find, Writer Menu |
+| A key that opens a menu of Writer actions | Works | **F12 or Alt+M**: sidebar, new scene, find, peek, invisibles, typewriter, spellcheck, counts, export, copy manuscript, settings.toml, Settings, Builder, Wheel, help, switch to Vim keys; Ctrl+Q goes back to the Builder. (Peek moved from F10 to F8, since GNOME Terminal keeps F10 for its own menu.) |
+| A setting turns Vim behavior back on | Works | "Notepad mode" in Settings (F4), per story or global |
+| Home/End | Partial | they go to the start/end of the paragraph, not of the wrapped screen line |
+
+### Writer: Neovide and the status line (`pass2-neovide`)
+| Item | Status | What's missing |
+|---|---|---|
+| Optional Neovide front-end (same config, real fonts from settings, extra line spacing) | Partial | `Use Neovide` (global or per story), font, size and line spacing are settings; Neovide is started with `--no-fork` and the same environment; Ctrl+I works there. **I could not run Neovide here (it isn't installed), so how it looks is untested**, though the launch command and the options it gets are tested |
+| Detect whether Neovide is installed and say so if not | Works | falls back to the terminal with a plain message in the Builder (and before launching from the Wheel/CLI); Settings > Writer shows whether Neovide and Neovim are found |
+| In the terminal, extra space between paragraphs as the closest equivalent | Works | `paragraph_spacing` (0-3 blank lines shown between paragraphs; display only, nothing is typed) |
+| Check the statusline renders correctly | Works | read off a real terminal emulator (tmux) in both modes: `scene 11 · manuscript 11 · today 0/1,000` on the row above the command line, nothing else on it and no file path anywhere. The garbling seen earlier was the Python screen emulator I used for the capture (`pyte`), not Neovim; I also made the Writer start with a blank status line, short messages and a short window title, so a path can never show there
+
 ## P2. Tests added in the second pass
 | Area | File | Tests |
 |---|---|---|
@@ -227,6 +247,9 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 | Settings mode and stats tab | `test_settings_mode.py` | 20 |
 | F4 from the Writer | `test_writer.py` | +1 |
 | One manuscript file, markers, migration, scene tools (and the Writer tests rewritten for markers) | `test_manuscript.py` | 23 |
+| Notepad mode | `test_notepad.py` | 34 |
+| Neovide, GUI settings, paragraph spacing | `test_neovide.py` | 14 |
+| Status line on a real terminal (tmux) | `test_statusline.py` | 2 |
 
 ## P3. Manual test script additions
 1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
@@ -249,7 +272,19 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 9. In the Writer press `Space n`: scenes are listed by their markers. Press `a` to add one, `r` to rename, `J`/`K` to move, Enter to jump.
    In the Builder's Scenes tab press Enter on a scene: the Writer should open on its first line.
 
+10. **Notepad feel** (the main thing for your eyes): open the Writer. You should be typing at once; press Escape (nothing happens).
+    Drag the mouse over some words, type: they are replaced. Shift+arrows select. Ctrl+C, Ctrl+V into another program and back.
+    Ctrl+Z / Ctrl+Y, Ctrl+S, Ctrl+A, Ctrl+F (type a word, Enter; Ctrl+G for the next one). Right-click: a menu. F12: the Writer menu.
+11. Real clipboard: copy a sentence in the Writer, paste it in a browser; copy in a browser, Ctrl+V in the Writer. (If you have no
+    `xclip` or `wl-copy`, a notice says copy/paste stay inside the Writer.)
+12. **Neovide look** (if you install it): in Settings (F4) > Writer switch on "Use Neovide", set a font and a line spacing (try 15),
+    then open the Writer: a window with that font and a double-spaced look. If Neovide is not installed you get a message and the terminal.
+    In the terminal, set "Terminal: blank lines between paragraphs" to 1 and look at the gap.
+13. **List stability** (Builder): the long entity list should not move when you click items or roll fields.
+
 ## P4. Known issues / open questions (second pass)
+- Mouse dragging and the real clipboard are untested by machine (no screen/clipboard in the tests); see steps 10 and 11.
+- In notepad mode the Vim `Space` shortcuts are not available; their jobs are on F8, F9, F12 / Alt+M, Alt+I/B/S and the right-click menu.
 - A scene marker is a visible line in the file (`* * * Title`); on screen it is drawn centered, with the title dim beside it. Deleting that line merges the scene into the one before.
 - Changing the library folder in Settings only points at it; moving or copying your existing universes there is up to you.
 - The stats box counts words as the Writer recorded them in `stats.json`; words typed outside the Writer are not counted.

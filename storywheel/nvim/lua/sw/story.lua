@@ -97,8 +97,7 @@ function M.add_scene(title)
   M.ensure_first_scene()
   local files = M.files()
   local path = files[#files].path
-  local b = vim.fn.bufadd(path)
-  vim.fn.bufload(b)
+  local b = util.load_buffer(path)
   local lines = vim.api.nvim_buf_get_lines(b, 0, -1, false)
   while #lines > 0 and lines[#lines] == "" do table.remove(lines) end
   if #lines > 0 then lines[#lines + 1] = "" end

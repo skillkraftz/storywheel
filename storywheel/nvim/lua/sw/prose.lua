@@ -65,6 +65,7 @@ function M.decorate(buf)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local indent_on = story.setting("indent_display", true)
   local width = M.column_width()
+  local gap = require("sw.gui").paragraph_spacing()          -- extra blank space between paragraphs (terminal only)
   for i, line in ipairs(lines) do
     local label = require("sw.util").marker_label(line)
     if label ~= nil then
@@ -79,6 +80,10 @@ function M.decorate(buf)
         virt_text = chunks,
         virt_text_win_col = math.max(0, math.floor((width - total) / 2)),
       })
+    elseif gap > 0 and line == "" and i > 1 and lines[i - 1]:match("%S") and i < #lines then
+      local extra = {}
+      for _ = 1, gap do extra[#extra + 1] = { { "", "Normal" } } end
+      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, { virt_lines = extra })
     elseif indent_on and line:match("%S") and (i == 1 or not lines[i - 1]:match("%S") or require("sw.util").marker_label(lines[i - 1]) ~= nil) then
       vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, {
         virt_text = { { string.rep(" ", M.INDENT), "Normal" } }, virt_text_pos = "inline",
@@ -125,25 +130,38 @@ function M.toggle_text(text, mark)
   return mark .. text .. mark
 end
 
--- In visual mode: wrap the selection (each line of it on its own, so the marks stay on one line).
+-- The selection (Visual or Select mode) as buffer coordinates, start first and end EXCLUSIVE, 0-based:
+-- row1, col1, row2, col2, linewise. Works whether 'selection' is inclusive (Vim keys) or exclusive (notepad mode).
+function M.selection_bounds()
+  local m = vim.fn.mode()
+  local a, b = vim.fn.getpos("v"), vim.fn.getpos(".")
+  local r1, c1, r2, c2 = a[2] - 1, a[3] - 1, b[2] - 1, b[3] - 1
+  if r1 > r2 or (r1 == r2 and c1 > c2) then r1, c1, r2, c2 = r2, c2, r1, c1 end
+  local linewise = (m == "S" or m == "V")
+  local last = vim.api.nvim_buf_get_lines(0, r2, r2 + 1, false)[1] or ""
+  if linewise then
+    c1, c2 = 0, #last
+  elseif vim.o.selection ~= "exclusive" then
+    local extra = (c2 < #last) and vim.str_utf_end(last, c2 + 1) or 0      -- the last character may be several bytes
+    c2 = c2 + 1 + extra
+  end
+  if c2 > #last then c2 = #last end
+  return r1, c1, r2, c2, linewise
+end
+
+-- In visual or select mode: wrap the selection (each line of it on its own, so the marks stay on one line);
+-- wrapping something already wrapped takes the marks off.
 function M.wrap_visual(mark)
-  local s, e = vim.fn.getpos("v"), vim.fn.getpos(".")
-  local mode = vim.fn.mode()
-  local srow, scol, erow, ecol = s[2], s[3], e[2], e[3]
-  if srow > erow or (srow == erow and scol > ecol) then srow, scol, erow, ecol = erow, ecol, srow, scol end
+  local r1, c1, r2, c2 = M.selection_bounds()
   vim.cmd("normal! \27")
-  for row = erow, srow, -1 do
-    local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
-    local c1 = (row == srow) and scol or 1
-    local c2 = (row == erow) and ecol or #line
-    if mode == "V" then c1, c2 = 1, #line end
-    if c2 > #line then c2 = #line end
-    if c2 >= 1 then c2 = c2 + vim.str_utf_end(line, c2) end
-    local seg = line:sub(c1, c2)
+  for row = r2, r1, -1 do
+    local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1]
+    local from = (row == r1) and c1 or 0
+    local to = (row == r2) and c2 or #line
+    local seg = line:sub(from + 1, to)
     if seg:match("%S") then
       local lead, body, tail = seg:match("^(%s*)(.-)(%s*)$")
-      local new = lead .. M.toggle_text(body, mark) .. tail
-      vim.api.nvim_buf_set_text(0, row - 1, c1 - 1, row - 1, c2, { new })
+      vim.api.nvim_buf_set_text(0, row, from, row, to, { lead .. M.toggle_text(body, mark) .. tail })
     end
   end
 end
@@ -229,6 +247,7 @@ function M.ctrl_i_wanted()
   if setting == "yes" then return true end
   if setting == "no" then return false end
   -- "auto": only terminals known to report Ctrl+I apart from Tab
+  if require("sw.gui").detected() then return true end              -- a GUI window reports Ctrl+I apart from Tab
   local term, prog = os.getenv("TERM") or "", os.getenv("TERM_PROGRAM") or ""
   return term:find("kitty") ~= nil or term:find("foot") ~= nil or term:find("ghostty") ~= nil
       or os.getenv("KITTY_WINDOW_ID") ~= nil or os.getenv("WEZTERM_EXECUTABLE") ~= nil
@@ -239,6 +258,7 @@ function M.map_buffer(buf)
   local function map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { buffer = buf, silent = true }, opts or {}))
   end
+  require("sw.notepad").map_buffer(buf)             -- (notepad keys first; the rest below can refine them)
   -- movement by displayed lines
   map({ "n", "x" }, "j", "gj")
   map({ "n", "x" }, "k", "gk")
@@ -255,11 +275,11 @@ function M.map_buffer(buf)
   -- formatting (Alt works in every terminal; Ctrl+I only where the terminal can tell it from Tab)
   for _, spec in ipairs({ { "<A-i>", "*" }, { "<A-b>", "**" }, { "<C-b>", "**" } }) do
     map("i", spec[1], function() M.toggle_insert(spec[2]) end)
-    map("x", spec[1], function() M.wrap_visual(spec[2]) end)
+    map({ "x", "s" }, spec[1], function() M.wrap_visual(spec[2]) end)
   end
   if M.ctrl_i_wanted() then
     map("i", "<C-i>", function() M.toggle_insert("*") end)
-    map("x", "<C-i>", function() M.wrap_visual("*") end)
+    map({ "x", "s" }, "<C-i>", function() M.wrap_visual("*") end)
   end
   -- scene break
   map({ "i", "n" }, "<A-s>", function() M.scene_break() end)

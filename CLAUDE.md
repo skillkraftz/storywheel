@@ -635,4 +635,11 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `* * *` or `* * * Title` (the scene-break key inserts the plain one). A marker at the very start names the first scene and is not a
   break. Markers are exported as a centered `#` (not counted as words). Old stories with one file per scene are merged, in order, into
   `manuscript.md` when the Writer starts or on `storywheel migrate`, with the originals kept in `.backups/migrated-DATE/`.
+- Notepad mode (setting `notepad_mode`, default on) makes the Writer behave like an ordinary editor: Neovim has no insert-only
+  option, so the writing window simply never rests in Normal mode. Selection uses Select mode with `selection=exclusive`
+  (inclusive only while "select all" is active). Ctrl+C/X/V use the `+` register; with no clipboard tool an in-process provider
+  is installed and the writer is told. Escape is a no-op in Insert mode. F12 / Alt+M opens the Writer menu; peek moved to F8.
+- Neovide is optional (`neovide` setting): started as `neovide --no-fork` with the same environment plus `STORYWHEEL_GUI=neovide`;
+  if missing, the terminal is used and a message says so. The font, size and `line_spacing` (pixels) come from settings.
+  In the terminal, `paragraph_spacing` adds display-only blank lines between paragraphs.
 

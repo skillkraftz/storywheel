@@ -105,6 +105,32 @@ def environment(story, return_file):
     return env
 
 
+def neovide_exe():
+    return shutil.which(os.environ.get("STORYWHEEL_NEOVIDE", "neovide"))
+
+
+def launch(story, return_file=None):
+    """(argv, env, note): how to start the Writer, honoring the neovide setting. `note` is a plain message when
+    Neovide was asked for but isn't installed (the terminal is used instead), else None."""
+    from . import settings
+    argv, env = command(story, return_file)
+    note = None
+    if settings.load_story(story.path).get("neovide"):
+        exe = neovide_exe()
+        if exe:
+            argv = [exe, "--no-fork"]                 # wait for the window to close, like the terminal Neovim does
+            env["STORYWHEEL_GUI"] = "neovide"
+        else:
+            note = ("Neovide isn't installed, so the Writer opened in the terminal. "
+                    "Install Neovide, or turn 'Use Neovide' off in Settings (F4).")
+    return argv, env, note
+
+
+def neovide_note(story):
+    """The message to show if Neovide is wanted but not installed, else None."""
+    return launch(story)[2]
+
+
 def command(story, return_file=None):
     """(argv, env) to start the Writer on a story. Neovim opens the story's current scene itself."""
     return_file = Path(return_file or (state_root() / "return"))
@@ -121,7 +147,8 @@ def run(story, scene=None):
     return_file = state_root() / "return"
     state_root().mkdir(parents=True, exist_ok=True)
     return_file.write_text("")
-    argv, env = command(story, return_file)
+    argv, env, note = launch(story, return_file)
+    run.note = note
     if scene:                                   # open at this scene: "<file>:<line>"
         env["STORYWHEEL_SCENE"] = f"{scene['path']}:{scene.get('line', 1)}"
     subprocess.call(argv, env=env)

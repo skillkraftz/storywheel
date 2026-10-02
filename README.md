@@ -252,7 +252,7 @@ nothing else on screen. Keys, with `Space ?` in the Writer for the full list:
     Enter           a new paragraph (blank line between, shown with an indent)
     Alt+S           scene break (* * * in the file, centered on screen)
     Space n         scene sidebar (Enter jump, a add, r rename, J/K move)       ]] / [[  next / previous scene
-    Space p / F10   peek at the character or place under the cursor            Tab  complete names from the universe
+    Space p / F8    peek at the character or place under the cursor            Tab  complete names from the universe
     Space i t s     show invisibles / typewriter mode / spellcheck             Space w  word counts
     Space e         export .docx          Space c  copy manuscript as plain text
     F2              save everything and go back to the Builder       F1  to the Wheel

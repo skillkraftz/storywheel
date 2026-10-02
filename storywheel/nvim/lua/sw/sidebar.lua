@@ -62,9 +62,7 @@ end
 
 -- Work on a file through its buffer, so unsaved edits are never lost and the writing window shows the change at once.
 local function buffer_of(path)
-  local b = vim.fn.bufadd(path)
-  vim.fn.bufload(b)
-  return b
+  return util.load_buffer(path)
 end
 
 local function save(b)
