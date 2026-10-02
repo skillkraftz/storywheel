@@ -19,7 +19,7 @@ from xml.etree import ElementTree as ET
 
 OEWN_URL = "https://github.com/globalwordnet/english-wordnet/releases/download/2025-edition/english-wordnet-2025.xml.gz"
 MOBY_URL = "https://www.gutenberg.org/files/3202/files/mthesaur.txt"
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SCHEMA = """
 create table meta (key text primary key, value text);
@@ -30,7 +30,7 @@ create index forms_form on forms (form);
 create table senses (word_id integer not null, pos text not null, synset_id integer not null, ord integer not null);
 create index senses_word on senses (word_id, pos, ord);
 create table synsets (id integer primary key, pos text not null, defn text not null, ex text not null,
-                      members text not null, hyper text not null, similar text not null);
+                      members text not null, hyper text not null, similar text not null, lex text not null default '');
 create table rels (synset_id integer not null, kind text not null, target integer not null);
 create index rels_synset on rels (synset_id, kind);
 create table related (word_id integer not null, other_id integer not null, kind text not null);
@@ -134,6 +134,7 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
                     "defn": " ".join(d.text or "" for d in el.findall("Definition")).strip(),
                     "ex": [e.text or "" for e in el.findall("Example")],
                     "hyper": rels.get("hypernym", []), "similar": rels.get("similar", []), "rels": rels,
+                    "lex": el.get("lexfile") or "",
                 }
                 el.clear()
     if not entries or not synsets:
@@ -156,10 +157,10 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
             by_synset.setdefault(syn, []).append(lemma)
     for key, s in synsets.items():
         member_ids = ",".join(str(word_id(w)) for w in by_synset.get(key, []))
-        db.execute("insert into synsets values (?,?,?,?,?,?,?)", (
+        db.execute("insert into synsets values (?,?,?,?,?,?,?,?)", (
             synset_ids[key], s["pos"], s["defn"], "\x1f".join(s["ex"]), member_ids,
             ",".join(str(synset_ids[h]) for h in s["hyper"] if h in synset_ids),
-            ",".join(str(synset_ids[h]) for h in s["similar"] if h in synset_ids)))
+            ",".join(str(synset_ids[h]) for h in s["similar"] if h in synset_ids), s["lex"]))
     pairs, links = set(), set()
     for lemma, pos, senses, _forms in entries:
         for _syn, _sid, ants, sense_links in senses:

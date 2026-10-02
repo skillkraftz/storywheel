@@ -41,7 +41,7 @@ MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("�
 HELP = """\
 [b]Keys[/b]
 
-  [b]F5[/b]      Words: look up a word, build vocabulary, a word bank, overused words (offline)
+  [b]F5[/b]      Words: look up a word, words to learn, My words, overused words (offline)
   [b]space[/b]   roll again
   [b]k[/b]       keep this and move on
   [b]f[/b]       reroll the selected field (so does enter)

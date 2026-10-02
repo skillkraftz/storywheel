@@ -1,5 +1,5 @@
-"""Word banks: words you chose while looking around a topic, kept per story or per universe, and saved as a universe atom list
-(`<universe>/lists/<slot>/wordbank-....json`) so the Wheel and Builder can roll with them."""
+"""Words as universe atoms: one action puts a word on a universe's own list for a slot (job, thing, place...), so the Wheel and Builder
+can roll with it. (The old per-story and per-universe 'word banks' were folded into My words by `migrate_banks`.)"""
 import json
 import re
 from pathlib import Path
@@ -14,47 +14,25 @@ def path_for(universe, story=None):
     return (story.path if story is not None else universe.path) / BANK
 
 
-def load(universe, story=None):
-    """{"name", "words": [{"word", "note"}]} for a story (story given) or the universe."""
-    p = path_for(universe, story)
-    try:
-        data = json.loads(p.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        data = {}
-    data.setdefault("words", [])
-    data.setdefault("name", story.title if story is not None else universe.name)
-    return data
-
-
-def save(universe, data, story=None):
-    p = path_for(universe, story)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    vault._write(p, json.dumps(data, indent=2, ensure_ascii=False) + "\n")
-    return p
-
-
-def add(universe, words, story=None, note=""):
-    """Add words (strings, or (word, note) pairs); returns how many were new."""
-    data = load(universe, story)
-    have = {w["word"].lower() for w in data["words"]}
-    new = 0
-    for item in words:
-        word, n = (item if isinstance(item, (tuple, list)) else (item, note))
-        word = word.strip()
-        if word and word.lower() not in have:
-            have.add(word.lower())
-            data["words"].append({"word": word, "note": n})
-            new += 1
-    save(universe, data, story)
-    return new
-
-
-def remove(universe, word, story=None):
-    data = load(universe, story)
-    before = len(data["words"])
-    data["words"] = [w for w in data["words"] if w["word"].lower() != word.lower()]
-    save(universe, data, story)
-    return before - len(data["words"])
+def migrate_banks(my_words):
+    """Older versions kept 'word banks' per story and universe. Their words go into My words (note: where they came from) and the
+    old file is renamed wordbank.json.migrated (nothing is deleted). Returns how many words were brought over."""
+    n = 0
+    for u in vault.list_universes():
+        places = [(u.path, f"word bank of {u.name}")] + [(s.path, f"word bank of {s.title}") for s in u.stories()]
+        for folder, note in places:
+            p = Path(folder) / BANK
+            if not p.exists():
+                continue
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            for w in data.get("words", []):
+                if w.get("word") and my_words.mark_learning(w["word"], note=w.get("note") or note):
+                    n += 1
+            p.rename(p.with_name(BANK + ".migrated"))
+    return n
 
 
 def slots():
@@ -66,24 +44,28 @@ def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "words"
 
 
-def save_as_atom_list(universe, data, slot, name=None):
-    """Write the bank as a universe list for `slot`. Atoms are short (five words at most), so longer entries are skipped and
-    reported. Returns (path, written count, skipped list)."""
+def add_to_universe_list(universe, word, slot):
+    """Add one word to the universe's own list for `slot` (`<universe>/lists/<slot>/words-added.json`), tagged with the universe's
+    genres so the Wheel and Builder roll with it. Atoms are five words at most. Returns (path, True if the word was new)."""
     if slot not in slots():
         raise ValueError(f"'{slot}' is not a slot (known: {', '.join(slots())})")
-    entries, skipped = [], []
-    for w in data["words"]:
-        word = w["word"].strip()
-        if len(word.split()) > 5:
-            skipped.append(word)
-        elif word and word not in entries:
-            entries.append(word)
-    if not entries:
-        raise ValueError("The word bank has nothing to save.")
-    genres = [g.lower() for g in universe.settings().get("genres", [])] or ["general"]
+    word = word.strip()
+    if not word or len(word.split()) > 5:
+        raise ValueError("A list entry is one to five words.")
     folder = universe.lists_dir / slot
     folder.mkdir(parents=True, exist_ok=True)
-    path = folder / f"wordbank-{slug(name or data.get('name') or 'words')}.json"
-    vault._write(path, json.dumps({"_note": f"Made from a word bank in storywheel's Words mode ({data.get('name', '')}).",
-                                   "slot": slot, "tags": genres, "entries": entries}, indent=2, ensure_ascii=False) + "\n")
-    return path, len(entries), skipped
+    path = folder / "words-added.json"
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        doc = {}
+    genres = [g.lower() for g in universe.settings().get("genres", [])] or ["general"]
+    doc.setdefault("_note", "Words added in storywheel's Words mode (Add to this universe's word list).")
+    doc["slot"] = slot
+    doc.setdefault("tags", genres)
+    doc.setdefault("entries", [])
+    new = word not in doc["entries"]
+    if new:
+        doc["entries"].append(word)
+    vault._write(path, json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
+    return path, new

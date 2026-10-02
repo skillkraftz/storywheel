@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from storywheel import fill, overused, vault, wordbank
+from storywheel import fill, overused, vault
 
 
 def story_with(text, home_title="Tale"):
@@ -12,47 +12,6 @@ def story_with(text, home_title="Tale"):
     s.manuscript_dir.mkdir(parents=True, exist_ok=True)
     (s.manuscript_dir / "manuscript.md").write_text(text, encoding="utf-8")
     return u, s
-
-
-# --- word banks ---------------------------------------------------------------------------------------------------------------------
-
-def test_a_bank_is_kept_per_story_and_per_universe(home):
-    u, s = story_with("x\n")
-    assert wordbank.add(u, ["saddle", "spur", ("lariat", "a rope")], story=s) == 3
-    assert wordbank.add(u, ["Saddle", "bridle"], story=s) == 1                      # a repeat (any case) is not added again
-    assert [w["word"] for w in wordbank.load(u, s)["words"]] == ["saddle", "spur", "lariat", "bridle"]
-    assert wordbank.load(u, s)["words"][2]["note"] == "a rope"
-    assert wordbank.load(u)["words"] == []                                          # the universe's own bank is separate
-    wordbank.add(u, ["frontier"])
-    assert [w["word"] for w in wordbank.load(u)["words"]] == ["frontier"]
-    assert wordbank.remove(u, "SPUR", story=s) == 1 and "spur" not in [w["word"] for w in wordbank.load(u, s)["words"]]
-    assert (s.path / "wordbank.json").exists() and (u.path / "wordbank.json").exists()
-
-
-def test_a_bank_becomes_a_universe_atom_list_the_engine_uses(home):
-    u, s = story_with("x\n")
-    wordbank.add(u, ["bell-ringer", "gravedigger", "a woman who sells small hats on the road to nowhere"], story=s)
-    path, n, skipped = wordbank.save_as_atom_list(u, wordbank.load(u, s), "job", "Town trades")
-    doc = json.loads(path.read_text())
-    assert path.parent == u.lists_dir / "job" and path.name == "wordbank-town-trades.json"
-    assert doc["slot"] == "job" and doc["tags"] == ["western"] and doc["entries"] == ["bell-ringer", "gravedigger"]
-    assert n == 2 and skipped == ["a woman who sells small hats on the road to nowhere"]
-    eng = fill.make_engine(u, seed=1)
-    own = [wl for wl in eng.library.lists.values() if "gravedigger" in [e.text for e in wl.entries]]
-    assert own and own[0].slot == "job"
-    c = u.new_entity("character")
-    seen = {fill.Filler(u, eng).roll(c, "job") for _ in range(300)}
-    assert "bell-ringer" in seen or "gravedigger" in seen
-
-
-def test_saving_needs_a_real_slot_and_some_words(home):
-    u, s = story_with("x\n")
-    with pytest.raises(ValueError, match="nothing to save"):
-        wordbank.save_as_atom_list(u, wordbank.load(u, s), "job")
-    wordbank.add(u, ["x"], story=s)
-    with pytest.raises(ValueError, match="not a slot"):
-        wordbank.save_as_atom_list(u, wordbank.load(u, s), "zzz")
-    assert "job" in wordbank.slots() and "thing" in wordbank.slots()
 
 
 # --- overused words -----------------------------------------------------------------------------------------------------------------

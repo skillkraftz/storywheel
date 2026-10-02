@@ -4,17 +4,19 @@ import json
 from pathlib import Path
 
 import pytest
-from textual.widgets import Button, Input, OptionList, Select, TabbedContent
+from textual.widgets import Button, Input, OptionList, Select, TabbedContent, TabPane
 
 from dictfixture import build_fixture
-from storywheel import dictionary, vault, wordbank, words_app
+from storywheel import dictionary, learn, vault, wordbank, words_app
 from conftest import screen_text
 
 
 @pytest.fixture
 def index(tmp_path, monkeypatch):
+    from dictfixture import ZIPF
     out, _ = build_fixture(tmp_path / "dict")
     monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(out))
+    monkeypatch.setattr(learn, "zipf", lambda w: ZIPF.get(w, 0.0))
     dictionary.forget()
     yield out
     dictionary.forget()
@@ -89,11 +91,6 @@ def test_lookup_rows_for_a_missing_word_offer_spellings(index):
     assert rows[0][0] == "No entry for 'hapyp'." and "w:happy|" in [plain(i) for _t, i, _s in rows]
 
 
-def test_vocabulary_groups(index):
-    groups = words_app.vocab_groups(dictionary.vocabulary("dog"))
-    titles = [t for t, _w in groups]
-    assert any("Types of it" in t for t in titles) and any("Parts of it" in t for t in titles) and any("subject" in t for t in titles)
-    assert groups[-1] == ("Related words (Moby Thesaurus)", ["cur", "hound", "mutt", "pooch"])
 
 
 # --- Lookup -------------------------------------------------------------------------------------------------------------------------
@@ -294,99 +291,232 @@ def test_the_help_lists_f5_in_every_mode():
     assert "F5" in tui.HELP and "F5 Words" in builder.HELP and "F5" in settings_app.HELP and "F5 Words" in words_app.HELP
 
 
-# --- Vocabulary and the word bank -------------------------------------------------------------------------------------------------------
+# --- Vocabulary (words to learn) and My words ------------------------------------------------------------------------------------
 
-def test_gather_choose_add_and_the_bank_saves_as_an_atom_list(index, world):
-    u, s = world
+def row_word(text):
+    return text.strip().lstrip("★✓ ").split()[0]
+
+
+def learn_rows(app):
+    return [(i, t) for i, t in options(app, "learn") if i]
+
+
+def test_new_batch_lists_words_with_part_of_speech_and_a_simple_meaning(index, world):
     async def script(app, pilot):
-        tabs = app.screen.query_one(TabbedContent)
         await show_tab(app, pilot, "t-vocab")
-        await type_word(app, pilot, "dog", box="topic")
-        rows = options(app, "vocab")
-        lst = app.screen.query_one("#vocab", OptionList)
-        ids = [o[0] for o in rows]
-        lst.highlighted = ids.index("v:puppy")
+        await pilot.click("#newbatch")
         await pilot.pause()
-        await pilot.press("space")
+        return learn_rows(app), flat(screen_text(app))
+    rows, text = run(script, {"universe": "thornwood"})
+    joined = " | ".join(t for _i, t in rows)
+    assert len(rows) >= 6 and "puppy" in joined and "a young dog" in joined and "noun" in joined
+    assert "dog " not in " ".join(t.split()[0] + " " for _i, t in rows if t.split()[0] == "dog")          # everyday words are not offered
+    assert "new words" in text
+
+
+def test_a_second_batch_has_no_repeats(index, world, monkeypatch):
+    monkeypatch.setattr(learn, "batch", lambda n, *a, exclude=(), **k: [
+        {"word": w, "pos": "noun", "definition": "d", "zipf": 3, "subject": ""} for w in ["w1", "w2", "w3", "w4"] if w not in {x.lower() for x in exclude}][:2])
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        await pilot.click("#newbatch")
         await pilot.pause()
-        lst.highlighted = ids.index("v:tail")
+        first = [row_word(t) for _i, t in learn_rows(app)]
+        await pilot.click("#newbatch")
         await pilot.pause()
+        second = [row_word(t) for _i, t in learn_rows(app)]
+        return first, second
+    first, second = run(script, {})
+    assert first == ["w1", "w2"] and second == ["w3", "w4"]
+
+
+def test_the_filters_are_passed_to_the_picker(index, world, monkeypatch):
+    seen = {}
+    monkeypatch.setattr(learn, "batch", lambda n, difficulty="any", pos=None, subject=None, exclude=(), **k: seen.update(d=difficulty, p=pos, s=subject) or [])
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        app.screen.query_one("#difficulty", Select).value = "rare"
+        app.screen.query_one("#vpos", Select).value = "verb"
+        app.screen.query_one("#subject", Select).value = "verb.motion"
+        await pilot.pause()
+        await pilot.click("#newbatch")
+        await pilot.pause()
+        return flat(screen_text(app))
+    text = run(script, {})
+    assert seen == {"d": "rare", "p": "verb", "s": "verb.motion"} and "No new words with these filters" in text
+
+
+def test_the_subject_choices_are_in_plain_words(index, world):
+    async def script(app, pilot):
+        return [label for label, _k in app.screen.subject_options]
+    labels = run(script, {})
+    assert "Any subject" in labels and "Animals" in labels and "Moving" in labels and "Describing words" in labels
+
+
+def test_enter_on_a_word_opens_its_full_entry_in_lookup(index, world):
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        await pilot.click("#newbatch")
+        await pilot.pause()
+        lst = app.screen.query_one("#learn", OptionList)
+        ids = [i for i, t in learn_rows(app) if "puppy" in t]
+        lst.focus()
+        lst.highlighted = int(ids[0][2:])
         await pilot.press("enter")
         await pilot.pause()
-        await pilot.press("a")
-        await pilot.pause()
-        chosen_after = set(app.screen.chosen)
-        await show_tab(app, pilot, "t-bank")
-        bank = [i for i, _t in options(app, "bank")]
-        app.screen.query_one("#slot", Select).value = "job"
-        app.screen.query_one("#listname", Input).value = "Dog words"
-        await pilot.click("#savelist")
-        await pilot.pause()
-        return chosen_after, bank, flat(screen_text(app))
-    chosen, bank, text = run(script, {"universe": "thornwood", "story": s.slug})
-    assert chosen == set() and bank == ["b:puppy", "b:tail"]
-    assert "Saved 2 words as a 'job' list" in text
-    doc = json.loads((u.lists_dir / "job" / "wordbank-dog-words.json").read_text())
-    assert doc["entries"] == ["puppy", "tail"] and doc["slot"] == "job"
-    assert [w["word"] for w in wordbank.load(u, s)["words"]] == ["puppy", "tail"]
+        return app.screen.query_one(TabbedContent).active, app.screen.history, flat(screen_text(app))
+    tab, hist, text = run(script, {})
+    assert tab == "t-lookup" and hist == ["puppy"] and "a young dog" in text
 
 
-def test_g_chooses_a_whole_group_and_l_looks_a_word_up(index, world):
-    u, s = world
+def test_l_marks_a_word_learning_and_it_appears_in_my_words_with_its_meaning_k_marks_it_known(index, world):
     async def script(app, pilot):
         await show_tab(app, pilot, "t-vocab")
-        await type_word(app, pilot, "dog", box="topic")
-        lst = app.screen.query_one("#vocab", OptionList)
-        ids = [o[0] for o in options(app, "vocab")]
-        lst.highlighted = ids.index("v:puppy")
-        await pilot.press("g")
-        group = set(app.screen.chosen)
-        await pilot.press("g")
-        again = set(app.screen.chosen)
-        await pilot.press("l")
+        await pilot.click("#newbatch")
         await pilot.pause()
-        return group, again, app.screen.query_one(TabbedContent).active, app.screen.history
-    group, again, tab, hist = run(script, {"universe": "thornwood", "story": s.slug})
-    assert group == {"puppy", "pup"} and again == set() and tab == "t-lookup" and hist == ["puppy"]
+        lst = app.screen.query_one("#learn", OptionList)
+        lst.focus()
+        idx = {row_word(t): int(i[2:]) for i, t in learn_rows(app)}
+        lst.highlighted = idx["puppy"]
+        await pilot.pause()
+        await pilot.press("l")
+        lst.highlighted = idx["kennel"]
+        await pilot.pause()
+        await pilot.press("k")
+        await pilot.pause()
+        marks = {row_word(t): t[1] for _i, t in learn_rows(app)}
+        await show_tab(app, pilot, "t-mine")
+        mine = [t for _i, t in options(app, "mine") if _i]
+        return marks, mine, learn.MyWords().known
+    marks, mine, known = run(script, {})
+    assert marks["puppy"] == "★" and marks["kennel"] == "✓"
+    assert len(mine) == 1 and "puppy" in mine[0] and "noun" in mine[0] and "a young dog" in mine[0]
+    assert known == {"kennel"}
 
 
-def test_add_to_the_bank_from_lookup_and_by_hand_and_remove(index, world):
-    u, s = world
+def test_my_words_remove_known_and_look_up(index, world):
+    my = learn.MyWords()
+    my.mark_learning("puppy"); my.mark_learning("kennel", "noun", "a shelter for dogs"); my.mark_learning("wretch")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-mine")
+        lst = app.screen.query_one("#mine", OptionList)
+        lst.focus()
+        rows = [t for i, t in options(app, "mine") if i]
+        lst.highlighted = 0
+        await pilot.pause()
+        await pilot.press("d")                                  # remove puppy
+        await pilot.pause()
+        lst.highlighted = 0
+        await pilot.pause()
+        await pilot.press("k")                                  # kennel: known
+        await pilot.pause()
+        left = [t for i, t in options(app, "mine") if i]
+        lst.highlighted = 0
+        await pilot.press("enter")
+        await pilot.pause()
+        return rows, left, app.screen.query_one(TabbedContent).active, app.screen.history
+    rows, left, tab, hist = run(script, {})
+    assert "a young dog" in rows[0] and "a shelter for dogs" in rows[1] and "a despicable person" in rows[2]       # meanings filled in
+    assert len(left) == 1 and "wretch" in left[0] and tab == "t-lookup" and hist == ["wretch"]
+    again = learn.MyWords()
+    assert again.known == {"kennel"} and again.learning_words() == {"wretch"}
+
+
+def test_flashcards_show_the_word_then_the_meaning_and_k_takes_it_off_the_list(index, world):
+    my = learn.MyWords()
+    my.mark_learning("puppy"); my.mark_learning("kennel")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-mine")
+        app.screen.query_one("#mine", OptionList).focus()
+        await pilot.press("f")
+        await pilot.pause()
+        card = app.screen
+        first = flat(str(card.query_one("#card").content))
+        await pilot.press("space")
+        await pilot.pause()
+        second = flat(str(card.query_one("#card").content))
+        word = card.entries[0]["word"]
+        await pilot.press("k")                                    # I know it
+        await pilot.pause()
+        await pilot.press("n")                                    # next (second card): ends the deck
+        await pilot.pause()
+        return first, second, word, type(app.screen).__name__, [i for i, t in options(app, "mine") if i]
+    first, second, word, screen, left = run(script, {})
+    assert word in first and "young dog" not in first and "shelter" not in first.replace(word, "")
+    assert word in second and ("a young dog" in second or "no meaning" in second or "shelter" in second or "a place" in second)
+    assert screen == "WordsScreen" and len(left) == 1
+    assert len(learn.MyWords().known) == 1
+
+
+def test_lookup_a_adds_the_word_to_my_words_with_its_meaning(index, world):
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
-        ids = [o[0] for o in options(app, "results")]
-        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:hound|")
+        ids = [i for i, _t in options(app, "results")]
+        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:puppy|")
         await pilot.press("a")
-        await show_tab(app, pilot, "t-bank")
-        await type_word(app, pilot, "saddle, bridle", box="addword")
-        names = [i for i, _t in options(app, "bank")]
-        scope = app.screen.query_one("#scope", Select).value
-        app.screen.query_one("#bank", OptionList).focus()
-        app.screen.query_one("#bank", OptionList).highlighted = 1
-        await pilot.press("d")
         await pilot.pause()
-        return names, scope, [i for i, _t in options(app, "bank")]
-    names, scope, after = run(script, {"universe": "thornwood", "story": s.slug})
-    assert names == ["b:hound", "b:saddle", "b:bridle"] and scope == "story" and after == ["b:hound", "b:bridle"]
+        return learn.MyWords().learning
+    got = run(script, {})
+    assert got == [{"word": "puppy", "pos": "", "definition": "a young dog", "note": ""}] or got[0]["word"] == "puppy"
 
 
-def test_the_bank_can_be_the_universes_instead_of_the_stories(index, world):
+def test_add_to_this_universes_word_list_from_lookup_and_my_words(index, world):
     u, s = world
+    learn.MyWords().mark_learning("kennel", "noun", "a shelter for dogs")
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-bank")
-        app.screen.query_one("#scope", Select).value = "universe"
+        await type_word(app, pilot, "dog")
+        ids = [i for i, _t in options(app, "results")]
+        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:hound|")
+        app.screen.query_one("#results", OptionList).focus()
+        await pilot.press("w")
         await pilot.pause()
-        await type_word(app, pilot, "frontier", box="addword")
-        return None
-    run(script, {"universe": "thornwood", "story": s.slug})
-    assert [w["word"] for w in wordbank.load(u)["words"]] == ["frontier"] and wordbank.load(u, s)["words"] == []
+        picker = type(app.screen).__name__
+        app.screen.query_one("#slot", Select).value = "job"
+        await pilot.click("#ok")
+        await pilot.pause()
+        status = str(app.screen.query_one("#status").content)
+        await show_tab(app, pilot, "t-mine")
+        app.screen.query_one("#mine", OptionList).focus()
+        app.screen.query_one("#mine", OptionList).highlighted = 0
+        await pilot.pause()
+        await pilot.press("w")
+        await pilot.pause()
+        app.screen.query_one("#slot", Select).value = "place"
+        await pilot.click("#ok")
+        await pilot.pause()
+        return picker, status
+    picker, status = run(script, {"universe": "thornwood", "story": s.slug})
+    assert picker == "SlotScreen" and "Added “hound”" in status and "'job'" in status
+    assert json.loads((u.lists_dir / "job" / "words-added.json").read_text())["entries"] == ["hound"]
+    assert json.loads((u.lists_dir / "place" / "words-added.json").read_text())["entries"] == ["kennel"]
 
 
-def test_the_bank_needs_a_universe(index, home):
+def test_adding_to_a_universe_list_without_a_universe_says_so(index, home):
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-bank")
+        await type_word(app, pilot, "dog")
+        app.screen.query_one("#results", OptionList).focus()
+        await pilot.press("w")
+        await pilot.pause()
+        return type(app.screen).__name__, flat(screen_text(app))
+    screen, text = run(script, {})
+    assert screen == "WordsScreen" and "no universe to add it to" in text
+
+
+def test_old_word_banks_are_in_my_words_when_words_opens(index, world):
+    u, s = world
+    (s.path / "wordbank.json").write_text(json.dumps({"words": [{"word": "saddle", "note": ""}]}))
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-mine")
         return flat(screen_text(app))
-    assert "Open a universe in the Builder" in run(script, {})
+    text = run(script, {"universe": "thornwood", "story": s.slug})
+    assert "saddle" in text and "old word banks (1 words)" in text.replace("  ", " ") or "saddle" in text
+    assert [e["word"] for e in learn.MyWords().learning] == ["saddle"]
+
+
+def test_the_old_tabs_are_gone(index, world):
+    async def script(app, pilot):
+        return [p.id for p in app.screen.query(TabPane)]
+    assert run(script, {}) == ["t-lookup", "t-vocab", "t-mine", "t-over"]
 
 
 # --- Overused ------------------------------------------------------------------------------------------------------------------------
@@ -432,11 +562,3 @@ def test_a_word_in_several_lists_does_not_break_the_screen(index, world):
     ids = [i for _t, i, _s in rows if i]
     assert len(ids) == 5 and len(set(ids)) == 5 and {plain(i) for i in ids} == {"w:a|noun", "w:a|"}
 
-
-def test_a_word_in_two_vocabulary_groups_can_be_chosen_once(index, world):
-    async def script(app, pilot):
-        await show_tab(app, pilot, "t-vocab")
-        await type_word(app, pilot, "dog", box="topic")
-        ids = [o.id for o in (app.screen.query_one("#vocab", OptionList).get_option_at_index(i) for i in range(app.screen.query_one("#vocab", OptionList).option_count)) if o.id]
-        return len(ids) == len(set(ids))
-    assert run(script, {"universe": "thornwood"})

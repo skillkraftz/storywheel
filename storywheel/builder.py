@@ -30,7 +30,7 @@ TYPE_ORDER = ["character", "place", "thing", "group", "note"]
 HELP = f"""\
 [b]Universe Builder[/b]        {MODE_KEYS}
 
-[b]F5[/b]  Words: look up a word, build vocabulary, a word bank, overused words (offline)
+[b]F5[/b]  Words: look up a word, words to learn, My words, overused words (offline)
 
 [b]Entities[/b] (the tabs: 1-5 switch)
   [b]n[/b]        new entity (starts blank)         [b]d[/b]  delete (asks first)

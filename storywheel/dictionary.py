@@ -271,42 +271,6 @@ def lookup(word, db=None):
     return result
 
 
-def vocabulary(topic, db=None):
-    """Words around a topic, for the vocabulary builder: for each meaning of the word, the types of it, the parts of it and the
-    terms of its subject area (WordNet); plus the Moby thesaurus words related to it. Returns {topic, found, senses, related}."""
-    db = db or connect()
-    text = clean(topic)
-    out = {"topic": topic, "word": text, "found": False, "senses": [], "related": []}
-    if not text:
-        return out
-    seen_related = set()
-    for wid, w, _note in base_words(db, text):
-        for pos, sid in db.execute("select pos, synset_id from senses where word_id = ? order by pos, ord", (wid,)).fetchall():
-            defn = db.execute("select defn from synsets where id = ?", (sid,)).fetchone()[0]
-            types, frontier = [], _targets(db, sid, "hyponym")
-            for _depth in range(2):                                       # types of it, and types of those
-                types += _members_of(db, frontier, skip=[w] + types)
-                frontier = [t for f in frontier for t in _targets(db, f, "hyponym")]
-            parts = _members_of(db, [t for k in ("mero_part", "mero_substance", "mero_member") for t in _targets(db, sid, k)])
-            domain_synsets = _targets(db, sid, "has_domain_topic")
-            for topic_id in _targets(db, sid, "domain_topic"):
-                domain_synsets += [t for t in _targets(db, topic_id, "has_domain_topic") if t != sid]
-                domain_synsets.append(topic_id)
-            domain = _members_of(db, domain_synsets, skip=[w])
-            kinds = _members_of(db, _targets(db, sid, "hypernym"))
-            out["senses"].append({"word": w, "pos": POS_NAMES.get(pos, pos), "definition": defn, "types": types, "parts": parts,
-                                  "domain": domain, "kinds": kinds})
-        moby = db.execute("select blob from moby where word_id = ?", (wid,)).fetchone()
-        for i in (unpack_ids(moby[0]) if moby else []):
-            x = _word(db, i)
-            if x and x.lower() not in seen_related:
-                seen_related.add(x.lower())
-                out["related"].append(x)
-    out["related"].sort(key=str.lower)
-    out["found"] = bool(out["senses"] or out["related"])
-    return out
-
-
 def suggest(db, text, n=5):
     like = (text[:1] + "%") if text else "%"
     pool = [w for (w,) in db.execute("select w from words where w like ? and length(w) between ? and ?", (like, len(text) - 2, len(text) + 2))]

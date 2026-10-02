@@ -158,10 +158,7 @@ def cmd_lookup(args):
     """define / thesaurus / lookup WORD [--json]: meanings, similar words and opposite words, from the offline dictionary."""
     from . import dictionary
     try:
-        if args.command == "vocabulary":
-            result = dictionary.vocabulary(" ".join(args.word))
-        else:
-            result = dictionary.lookup(" ".join(args.word))
+        result = dictionary.lookup(" ".join(args.word))
     except dictionary.DictionaryMissing as e:
         if args.json:
             emit({"error": str(e), "installed": False})
@@ -169,21 +166,6 @@ def cmd_lookup(args):
             print("  " + str(e))
         raise SystemExit(1)
     kind = args.command
-    if kind == "vocabulary":
-        if args.json:
-            emit(result)
-            return
-        if not result["found"]:
-            print(f"  Nothing found for '{result['word'] or result['topic']}'.")
-            return
-        for s in result["senses"]:
-            print(f"  {s['word']} ({s['pos']}): {s['definition']}")
-            for label, key in (("types", "types"), ("parts", "parts"), ("subject terms", "domain"), ("a kind of", "kinds")):
-                if s[key]:
-                    print(f"    {label}: " + ", ".join(s[key]))
-        if result["related"]:
-            print("  related words: " + ", ".join(result["related"]))
-        return
     if args.json:
         out = dict(result)
         if kind == "define":
@@ -299,9 +281,6 @@ def add_parsers(sub):
         p.add_argument("word", nargs="+")
         p.add_argument("--json", action="store_true")
 
-    p = sub.add_parser("vocabulary", help="words around a topic: types, parts, subject terms, related words")
-    p.add_argument("word", nargs="+")
-    p.add_argument("--json", action="store_true")
     p = sub.add_parser("inflect", help="a word in the same form as another (inflect running run sprint -> sprinting)")
     p.add_argument("original")
     p.add_argument("base")
@@ -321,4 +300,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "vocabulary": cmd_lookup, "inflect": cmd_inflect, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

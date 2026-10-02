@@ -2,12 +2,13 @@
 
     Lookup       meanings, every similar word, every opposite, wider and narrower words, parts, related forms; Enter or a click on a
                  word looks it up; back and forward remember where you were
-    Vocabulary   from a word or topic: types of it, parts of it, terms of its subject, related words; keep the ones you like
-    Word bank    the words you kept, per story or universe; save them as a universe atom list for the Wheel and Builder
+    Vocabulary   words worth learning (not everyday, not obscure), a fresh batch at a time; mark them Known or Learning
+    My words     the words you are learning, with their meanings; flashcards
     Overused     a story's most frequent words and words repeated close together, and where they are
 
-Opened from the Writer (F5), it carries the word under the cursor; "Use in Writer" goes back and replaces that word with the one you
-picked, in the same form (running -> sprinting).
+On any word in Lookup or My words, "Add to this universe's word list" puts it on the universe's own list for a slot (job, thing, place...)
+so the Wheel and Builder roll with it. Opened from the Writer (F5), Words carries the word under the cursor; "Use in Writer" goes back
+and replaces it with the one you picked, in the same form (running -> sprinting).
 """
 from rich.text import Text
 from textual.app import App, ComposeResult
@@ -17,7 +18,7 @@ from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, Footer, Input, Label, OptionList, Select, Static, TabbedContent, TabPane
 from textual.widgets.option_list import Option
 
-from . import dictionary, inflect, overused, vault, wordbank
+from . import dictionary, inflect, learn, overused, vault, wordbank
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -27,19 +28,22 @@ HELP = f"""\
 
 [b]Lookup[/b]  type a word and press Enter. Plurals, past tenses and misspellings work.
   [b]Enter[/b] or a click on a word looks it up       [b]b[/b] / [b]n[/b]  back / forward through the words you looked up
-  [b]/[/b]  filter the lists                          [b]a[/b]  add the word to the word bank       [b]c[/b]  copy it
+  [b]/[/b]  filter the lists                          [b]c[/b]  copy the word       [b]a[/b]  add it to My words
+  [b]w[/b]  Add to this universe's word list (pick the slot: job, thing, place...) so the Wheel and Builder use it
   [b]u[/b]  Use in Writer: go back to the Writer and replace the word you were on (only when you came from the Writer)
 
-[b]Vocabulary[/b]  type a word or topic: its types, its parts, the terms of its subject, related words.
-  [b]Enter[/b] or [b]space[/b] chooses a word, [b]g[/b] a whole group, [b]a[/b] adds the chosen ones to the word bank, [b]l[/b] looks one up.
+[b]Vocabulary[/b]  words worth learning: not everyday, not obscure, each with a one-line meaning. Pick how rare, the part of
+  speech and the subject, then [b]New batch[/b] (it never repeats a word you have seen). [b]Enter[/b] opens the full entry in Lookup;
+  [b]l[/b] marks a word Learning (it goes to My words), [b]k[/b] marks it Known (never offered again).
 
-[b]Word bank[/b]  per story or per universe. [b]d[/b] removes the word. "Save as atom list" writes it into the universe's lists
-  for the slot you pick, so the Wheel and the Builder roll with it.
+[b]My words[/b]  the words you are learning, with meanings. [b]Enter[/b] looks one up, [b]k[/b] marks it Known (removes it),
+  [b]d[/b] removes it, [b]w[/b] adds it to the universe's word list, [b]f[/b] flashcards (the word first; space shows the meaning).
 
 [b]Overused[/b]  the most frequent words of a story (everyday words left out) and words repeated close together. Enter on a
   place opens the Writer there.
 
-[b]q[/b] goes back to where you were. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus.
+[b]q[/b] goes back to where you were. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus;
+word frequencies: wordfreq (data CC BY-SA 4.0).
 """
 
 
@@ -131,20 +135,91 @@ def lookup_rows(result, filter_text=""):
     return rows
 
 
-def vocab_groups(result):
-    """[(title, [words])] for the vocabulary list, in order."""
-    out = []
-    for s in result["senses"]:
-        head = f"{s['word']} ({s['pos']}): {s['definition']}"
-        for title, key in (("Kinds of it (wider)", "kinds"), ("Types of it", "types"), ("Parts of it", "parts"), ("Terms from its subject", "domain")):
-            if s[key]:
-                out.append((f"{head}  —  {title}", s[key]))
-    if result["related"]:
-        out.append(("Related words (Moby Thesaurus)", result["related"]))
-    return out
-
-
 # --- the screen -------------------------------------------------------------------------------------------------------------------
+
+class SlotScreen(ModalScreen):
+    """Pick the slot a word goes into on the universe's own list: what kind of thing it is in a story."""
+    BINDINGS = [Binding("escape", "cancel", "Cancel")]
+    DEFAULT_CSS = """
+    SlotScreen { align: center middle; }
+    SlotScreen #dlg { width: 70; height: auto; border: round $accent; background: $surface; padding: 1 2; }
+    SlotScreen Button { margin-right: 2; }
+    SlotScreen #hint { color: $text-muted; }
+    """
+    HINTS = {"job": "a job or trade", "thing": "an object", "place": "a town or region", "landmark": "a feature of a place",
+             "someone": "a kind of person", "disaster": "a trouble", "title_noun": "a word for titles"}
+
+    def __init__(self, word, universe_name):
+        super().__init__()
+        self.word, self.universe_name = word, universe_name
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(f"Add “{self.word}” to {self.universe_name}'s word list", markup=False)
+            yield Static("Which slot does it fit? The Wheel and Builder will use it when they need that kind of thing in this universe.", id="hint", markup=False)
+            yield Select([(f"{s}" + (f"  ({self.HINTS[s]})" if s in self.HINTS else ""), s) for s in wordbank.slots()],
+                         value="thing" if "thing" in wordbank.slots() else wordbank.slots()[0], id="slot", allow_blank=False)
+            with Horizontal():
+                yield Button("Add", id="ok", variant="primary")
+                yield Button("Cancel", id="cancel")
+
+    def on_button_pressed(self, event):
+        event.stop()
+        self.dismiss(self.query_one("#slot", Select).value if event.button.id == "ok" else None)
+
+    def action_cancel(self):
+        self.dismiss(None)
+
+
+class FlashcardScreen(ModalScreen):
+    """The word first; Space shows the meaning; then Got it (k: Known, leaves the list) or Again (n: next)."""
+    BINDINGS = [Binding("escape,q", "close", "Close"), Binding("space,enter", "reveal", "Show meaning"),
+                Binding("k", "known", "Got it: Known"), Binding("n,right", "next", "Again / next")]
+    DEFAULT_CSS = """
+    FlashcardScreen { align: center middle; }
+    FlashcardScreen #card { width: 80; height: 14; border: round $accent; background: $surface; padding: 1 3; content-align: center middle; }
+    FlashcardScreen #keys { width: 80; color: $text-muted; text-align: center; }
+    """
+
+    def __init__(self, entries):
+        super().__init__()
+        import random
+        self.entries = entries
+        random.shuffle(self.entries)
+        self.i = 0
+        self.shown = False
+        self.known = []
+
+    def compose(self) -> ComposeResult:
+        yield Static("", id="card", markup=False)
+        yield Static("Space: show the meaning    k: I know it (take it off the list)    n: again later / next    Esc: stop", id="keys")
+
+    def on_mount(self):
+        self.draw()
+
+    def draw(self):
+        e = self.entries[self.i]
+        text = f"{e['word']}\n\n" + (f"{e.get('pos') or ''}\n{e.get('definition') or e.get('note') or '(no meaning on file)'}" if self.shown else "")
+        self.query_one("#card", Static).update(text + f"\n\n{self.i + 1} / {len(self.entries)}")
+
+    def action_reveal(self):
+        self.shown = True
+        self.draw()
+
+    def action_next(self):
+        self.i += 1
+        self.shown = False
+        if self.i >= len(self.entries):
+            return self.action_close()
+        self.draw()
+
+    def action_known(self):
+        self.known.append(self.entries[self.i]["word"])
+        self.action_next()
+
+    def action_close(self):
+        self.dismiss(self.known)
+
 
 class WordsScreen(Screen):
     BINDINGS = [
@@ -159,12 +234,13 @@ class WordsScreen(Screen):
         Binding("n", "forward", "Forward", show=False),
         Binding("slash", "filter", "Filter", show=False),
         Binding("u", "use", "Use in Writer", show=False),
-        Binding("a", "add", "Add to bank", show=False),
+        Binding("a", "add", "Add to My words", show=False),
         Binding("c", "copy", "Copy", show=False),
-        Binding("space", "choose", "Choose", show=False),
-        Binding("g", "group", "Choose group", show=False),
-        Binding("l", "lookup_chosen", "Look up", show=False),
+        Binding("w", "wordlist", "Universe word list", show=False),
+        Binding("k", "known", "Known", show=False),
+        Binding("l", "learning", "Learning", show=False),
         Binding("d", "remove", "Remove", show=False),
+        Binding("f", "flashcards", "Flashcards", show=False),
     ]
     DEFAULT_CSS = """
     WordsScreen TabbedContent { height: 1fr; }
@@ -190,9 +266,9 @@ class WordsScreen(Screen):
         self.rows = []
         self.filter = ""
         self.origin = None
-        self.chosen = set()
-        self.vocab = None
-        self.vocab_rows = []
+        self.my = learn.MyWords()
+        self.batch = []
+        self.subject_options = [("Any subject", "any")]
         self.over = None
         self.universe = None
         self.story = None
@@ -214,26 +290,29 @@ class WordsScreen(Screen):
                 yield OptionList(id="results")
                 with Horizontal(id="tools", classes="bar"):
                     yield Button("Use in Writer", id="use")
-                    yield Button("Add to bank", id="add")
+                    yield Button("Add to My words", id="add")
+                    yield Button("Add to universe word list", id="lookuplist")
                     yield Button("Copy", id="copy")
             with TabPane("Vocabulary", id="t-vocab"):
                 with Horizontal(classes="bar"):
-                    yield Input(placeholder="a word or topic: kitchen, saddle, storm…", id="topic")
-                    yield Button("Gather", id="gather")
-                    yield Button("Add chosen to bank", id="vadd")
-                yield Static("Enter or space chooses a word; g chooses a whole group; a adds the chosen words to the word bank.", classes="note")
-                yield OptionList(id="vocab")
-            with TabPane("Word bank", id="t-bank"):
-                with Horizontal(classes="bar"):
-                    yield Select([("(no story or universe yet)", "none")], id="scope", allow_blank=False)
-                    yield Input(placeholder="add a word of your own", id="addword")
-                    yield Button("Add", id="bankadd")
-                yield OptionList(id="bank")
-                with Horizontal(classes="bar"):
-                    yield Select([(s, s) for s in wordbank.slots()], value="thing", id="slot", allow_blank=False)
-                    yield Input(placeholder="name of the list", id="listname")
-                    yield Button("Save as atom list", id="savelist")
-                    yield Button("Remove word", id="remove")
+                    yield Select([(d, d) for d in learn.DIFFICULTY], value="any", id="difficulty", allow_blank=False)
+                    yield Select([("Any part of speech", "any")] + [(p, p) for p in learn.POS], value="any", id="vpos", allow_blank=False)
+                    yield Select([("Any subject", "any")], value="any", id="subject", allow_blank=False)
+                    yield Button("New batch", id="newbatch")
+                yield Static("Words worth learning: not everyday, not obscure. Enter opens the full entry; l = Learning, k = Known.", classes="note")
+                yield OptionList(id="learn")
+                with Horizontal(id="learntools", classes="bar"):
+                    yield Button("Learning", id="learning")
+                    yield Button("Known", id="known")
+                    yield Button("Open in Lookup", id="openlookup")
+            with TabPane("My words", id="t-mine"):
+                yield Static("", id="minenote", classes="note")
+                yield OptionList(id="mine")
+                with Horizontal(id="minetools", classes="bar"):
+                    yield Button("Flashcards", id="flash")
+                    yield Button("Known", id="mineknown")
+                    yield Button("Remove", id="remove")
+                    yield Button("Add to universe word list", id="minelist")
             with TabPane("Overused", id="t-over"):
                 with Horizontal(classes="bar"):
                     yield Select([("(no story yet)", "none")], id="overstory", allow_blank=False)
@@ -255,11 +334,14 @@ class WordsScreen(Screen):
             self.story = self.universe.story(slug) if slug else None
             if self.story is None and self.universe.stories():
                 self.story = self.universe.stories()[0]
-        self.setup_scopes()
-        self.refresh_bank()
         self.setup_stories()
+        self.setup_subjects()
+        migrated = wordbank.migrate_banks(self.my)
+        self.refresh_mine()
         if not dictionary.installed():
             self.say(dictionary.NOT_INSTALLED)
+        elif migrated:
+            self.say(f"Your old word banks ({migrated} words) are now in My words.")
         if self.handover and self.handover.get("word"):
             self.query_one("#word", Input).value = self.handover["word"]
             self.lookup(self.handover["word"], origin=True)
@@ -316,13 +398,6 @@ class WordsScreen(Screen):
 
     def current_word(self):
         """(word, pos) of the highlighted word row in whichever list has the focus, or (None, None)."""
-        for lst_id in ("results", "vocab", "bank"):
-            lst = self.query_one(f"#{lst_id}", OptionList)
-            if lst.has_focus and lst.highlighted is not None:
-                oid = lst.get_option_at_index(lst.highlighted).id
-                if oid and oid[:2] in ("w:", "v:", "b:"):
-                    _k, w, pos = parse_id(oid)
-                    return w, pos
         lst = self.query_one("#results", OptionList)
         if lst.highlighted is not None:
             oid = lst.get_option_at_index(lst.highlighted).id
@@ -336,10 +411,6 @@ class WordsScreen(Screen):
         if i == "word":
             self.lookup(event.value)
             self.query_one("#results", OptionList).focus()
-        elif i == "topic":
-            self.gather(event.value)
-        elif i == "addword":
-            self.bank_add_typed(event.value)
 
     def on_input_changed(self, event):
         if event.input.id == "filter":
@@ -350,8 +421,10 @@ class WordsScreen(Screen):
         lst, oid = event.option_list.id, event.option.id
         if lst == "results" and oid and oid.startswith("w:"):
             self.lookup(parse_id(oid)[1])
-        elif lst == "vocab" and oid and oid.startswith("v:"):
-            self.toggle_vocab(event.option_list.highlighted)
+        elif lst == "learn" and oid:
+            self.open_in_lookup(self.batch[int(oid[2:])]["word"])
+        elif lst == "mine" and oid:
+            self.open_in_lookup(self.mine[int(oid[2:])]["word"])
         elif lst == "over" and oid:
             self.show_occurrences(oid)
         elif lst == "occ" and oid:
@@ -360,9 +433,11 @@ class WordsScreen(Screen):
     def on_button_pressed(self, event):
         event.stop()
         {"go": lambda: self.lookup(self.query_one("#word", Input).value), "back": self.action_back, "forward": self.action_forward,
-         "use": self.action_use, "add": self.action_add, "copy": self.action_copy, "gather": lambda: self.gather(self.query_one("#topic", Input).value),
-         "vadd": self.vocab_add, "bankadd": lambda: self.bank_add_typed(self.query_one("#addword", Input).value),
-         "savelist": self.save_list, "remove": self.action_remove, "analyze": self.analyze}.get(event.button.id or "", lambda: None)()
+         "use": self.action_use, "add": self.action_add, "copy": self.action_copy, "lookuplist": self.action_wordlist,
+         "newbatch": self.new_batch, "learning": lambda: self.mark("learning"), "known": lambda: self.mark("known"),
+         "openlookup": lambda: self.batch_word() and self.open_in_lookup(self.batch_word()["word"]),
+         "flash": self.action_flashcards, "mineknown": lambda: self.mark("known"), "remove": self.action_remove,
+         "minelist": self.action_wordlist, "analyze": self.analyze}.get(event.button.id or "", lambda: None)()
 
     def action_back(self):
         if self.pos > 0:
@@ -398,14 +473,20 @@ class WordsScreen(Screen):
         self.say(f"Copied “{w}”." if how else f"Couldn't reach a clipboard (install xclip or wl-clipboard). The word is: {w}")
 
     def action_add(self):
-        w, _ = self.current_word()
-        tab = self.query_one(TabbedContent).active
-        if tab == "t-vocab":
-            return self.vocab_add()
+        """Add the highlighted Lookup word to My words, with its meaning."""
+        w, pos = self.current_word()
         if not w:
             self.say("Move to a word first.")
             return
-        self.bank_add([w])
+        entry = learn.fill_definition({"word": w, "pos": pos or "", "definition": ""})
+        new = self.my.mark_learning(w, entry.get("pos") or "", entry.get("definition") or "")
+        self.refresh_mine()
+        self.say(f"“{w}” is in My words." if new else f"“{w}” is already in My words.")
+
+    def open_in_lookup(self, word):
+        self.query_one(TabbedContent).active = "t-lookup"
+        self.lookup(word)
+        self.query_one("#results", OptionList).focus()
 
     # --- Use in Writer -------------------------------------------------------------------------------------------------------------
 
@@ -431,179 +512,165 @@ class WordsScreen(Screen):
         replace = dict(self.handover["replace"], new=self.replacement_for(w, pos), picked=w)
         self.b.go("writer", {"universe": self.handover.get("universe"), "story": self.handover.get("story"), "replace": replace})
 
-    # --- Vocabulary -----------------------------------------------------------------------------------------------------------------
+    # --- Vocabulary (words worth learning) ----------------------------------------------------------------------------------------------
 
-    def gather(self, topic):
-        topic = (topic or "").strip()
-        if not topic:
-            return
+    def setup_subjects(self):
         try:
-            self.vocab = dictionary.vocabulary(topic)
+            options = learn.subjects()
+        except dictionary.DictionaryMissing:
+            return
+        self.subject_options = [(label, key or "any") for label, key in options]
+        sel = self.query_one("#subject", Select)
+        sel.set_options(self.subject_options)
+        sel.value = "any"
+
+    def new_batch(self):
+        try:
+            self.batch = learn.batch(20, self.query_one("#difficulty", Select).value,
+                                     None if self.query_one("#vpos", Select).value == "any" else self.query_one("#vpos", Select).value,
+                                     None if self.query_one("#subject", Select).value == "any" else self.query_one("#subject", Select).value,
+                                     exclude=self.my.excluded())
         except dictionary.DictionaryMissing as e:
             self.say(str(e))
             return
-        self.chosen = set()
-        self.render_vocab()
-        n = sum(len(w) for _t, w in vocab_groups(self.vocab)) if self.vocab["found"] else 0
-        self.say(f"{n} words around “{topic}”." if self.vocab["found"] else f"Nothing found for “{topic}”.")
-        self.query_one("#vocab", OptionList).focus()
+        except learn.WordfreqMissing as e:
+            self.say(str(e))
+            return
+        self.my.mark_seen([w["word"] for w in self.batch])
+        self.render_batch()
+        left = "" if len(self.batch) >= 20 else " (that is all this filter has left: widen it, or forget what you have seen)"
+        self.say(f"{len(self.batch)} new words{left}." if self.batch else "No new words with these filters: widen them.")
+        self.query_one("#learn", OptionList).focus()
 
-    def render_vocab(self):
-        lst = self.query_one("#vocab", OptionList)
+    def batch_marker(self, word):
+        w = word.lower()
+        return "★" if w in self.my.learning_words() else "✓" if w in self.my.known else " "
+
+    def render_batch(self):
+        lst = self.query_one("#learn", OptionList)
         previous = lst.highlighted
-        self.vocab_rows = []
-        for title, words in vocab_groups(self.vocab) if self.vocab and self.vocab["found"] else []:
-            self.vocab_rows.append((title, None))
-            for w in words:
-                self.vocab_rows.append((w, f"v:{w}\x1f{len(self.vocab_rows)}"))
         lst.clear_options()
-        options = []
-        for text, oid in self.vocab_rows:
-            if oid is None:
-                options.append(_opt(text, None, style="bold"))
-            else:
-                w = parse_id(oid)[1]
-                options.append(_opt(f"  [{'x' if w.lower() in self.chosen else ' '}] {w}", oid))
-        lst.add_options(options)
-        if previous is not None:
-            lst.highlighted = min(previous, max(0, len(options) - 1))
-        elif options:
-            lst.highlighted = next((n for n, r in enumerate(self.vocab_rows) if r[1]), 0)
+        width = max([len(w["word"]) for w in self.batch] + [8])
+        lst.add_options([_opt(f" {self.batch_marker(w['word'])} {w['word']:<{width}}  {w['pos']:<9} {w['definition']}", f"l:{i}")
+                         for i, w in enumerate(self.batch)])
+        if previous is not None and self.batch:
+            lst.highlighted = min(previous, len(self.batch) - 1)
+        elif self.batch:
+            lst.highlighted = 0
 
-    def toggle_vocab(self, index):
-        if index is None or index >= len(self.vocab_rows) or not self.vocab_rows[index][1]:
-            return
-        w = parse_id(self.vocab_rows[index][1])[1].lower()
-        self.chosen.symmetric_difference_update({w})
-        self.render_vocab()
-
-    def action_choose(self):
-        """Space on a word in the Vocabulary list chooses it (the same as Enter)."""
-        lst = self.query_one("#vocab", OptionList)
-        if self.query_one(TabbedContent).active == "t-vocab" and lst.has_focus:
-            self.toggle_vocab(lst.highlighted)
-
-    def action_group(self):
-        lst = self.query_one("#vocab", OptionList)
-        i = lst.highlighted
-        if self.query_one(TabbedContent).active != "t-vocab" or i is None:
-            return
-        start = i
-        while start > 0 and self.vocab_rows[start][1]:
-            start -= 1
-        end = i + 1
-        while end < len(self.vocab_rows) and self.vocab_rows[end][1]:
-            end += 1
-        group = {parse_id(r[1])[1].lower() for r in self.vocab_rows[start + 1:end] if r[1]}
-        if group <= self.chosen:
-            self.chosen -= group
-        else:
-            self.chosen |= group
-        self.render_vocab()
-
-    def action_lookup_chosen(self):
-        if self.query_one(TabbedContent).active == "t-vocab":
-            lst = self.query_one("#vocab", OptionList)
-            i = lst.highlighted
-            if i is not None and self.vocab_rows[i][1]:
-                self.query_one(TabbedContent).active = "t-lookup"
-                self.lookup(parse_id(self.vocab_rows[i][1])[1])
-
-    def vocab_add(self):
-        if not self.chosen:
-            self.say("Choose some words first (Enter or space on a word, g for a group).")
-            return
-        # keep the writer's own spelling/capitalization from the list
-        spelled = {parse_id(r[1])[1].lower(): parse_id(r[1])[1] for r in self.vocab_rows if r[1]}
-        self.bank_add([spelled.get(w, w) for w in sorted(self.chosen)], note=(self.vocab or {}).get("topic", ""))
-        self.chosen = set()
-        self.render_vocab()
-
-    # --- Word bank -------------------------------------------------------------------------------------------------------------------
-
-    def setup_scopes(self):
-        sel = self.query_one("#scope", Select)
-        options = []
-        if self.universe is not None:
-            if self.story is not None:
-                options.append((f"This story: {self.story.title}", "story"))
-            options.append((f"This universe: {self.universe.name}", "universe"))
-        if not options:
-            options = [("(open a universe in the Builder first)", "none")]
-        sel.set_options(options)
-        sel.value = options[0][1]
-
-    def scope(self):
-        v = self.query_one("#scope", Select).value
-        return v if v in ("story", "universe") else None
-
-    def bank_data(self):
-        s = self.scope()
-        if not s or self.universe is None:
+    def batch_word(self):
+        lst = self.query_one("#learn", OptionList)
+        if lst.highlighted is None or not self.batch:
             return None
-        return wordbank.load(self.universe, self.story if s == "story" else None)
+        return self.batch[lst.highlighted]
 
-    def refresh_bank(self):
-        lst = self.query_one("#bank", OptionList)
+    def mark(self, status):
+        """Mark the highlighted word in whichever list is showing: 'learning' or 'known'."""
+        tab = self.query_one(TabbedContent).active
+        if tab == "t-vocab":
+            w = self.batch_word()
+            if not w:
+                return self.say("Move to a word first.")
+            if status == "learning":
+                self.my.mark_learning(w["word"], w["pos"], w["definition"])
+                self.say(f"“{w['word']}” is in My words.")
+            else:
+                self.my.mark_known(w["word"])
+                self.say(f"“{w['word']}” is marked Known: it won't be offered again.")
+            self.render_batch()
+            self.refresh_mine()
+        elif tab == "t-mine" and status == "known":
+            e = self.mine_entry()
+            if e:
+                self.my.mark_known(e["word"])
+                self.say(f"“{e['word']}” is marked Known and left your list.")
+                self.refresh_mine()
+        elif tab == "t-lookup" and status == "learning":
+            self.action_add()
+
+    def action_known(self):
+        self.mark("known")
+
+    def action_learning(self):
+        self.mark("learning")
+
+    # --- My words ----------------------------------------------------------------------------------------------------------------------
+
+    def refresh_mine(self):
+        lst = self.query_one("#mine", OptionList)
         previous = lst.highlighted
         lst.clear_options()
-        data = self.bank_data()
-        if data is None:
-            lst.add_options([_opt("Open a universe in the Builder (F2) to keep a word bank.", None, style="dim")])
+        entries = [learn.fill_definition(e) for e in self.my.learning]
+        self.mine = entries
+        if not entries:
+            lst.add_options([_opt("Nothing here yet. Mark words Learning in Vocabulary, or add a word from Lookup (a).", None, style="dim")])
+            self.query_one("#minenote", Static).update("")
             return
-        if not data["words"]:
-            lst.add_options([_opt("Empty. Add words from Lookup (a) or Vocabulary (Add chosen to bank).", None, style="dim")])
-            return
-        lst.add_options([_opt(w["word"] + (f"   — {w['note']}" if w.get("note") else ""), f"b:{w['word']}") for w in data["words"]])
+        width = max(len(e["word"]) for e in entries)
+        lst.add_options([_opt(f"  {e['word']:<{width}}  {(e.get('pos') or ''):<9} {e.get('definition') or e.get('note') or ''}", f"m:{i}")
+                         for i, e in enumerate(entries)])
+        self.query_one("#minenote", Static).update(f"{len(entries)} word{'s' if len(entries) != 1 else ''} you are learning. Enter looks one up; f = flashcards.")
         if previous is not None:
-            lst.highlighted = min(previous, len(data["words"]) - 1)
+            lst.highlighted = min(previous, len(entries) - 1)
 
-    def on_select_changed(self, event):
-        if event.select.id == "scope":
-            self.refresh_bank()
-
-    def bank_add(self, words, note=""):
-        s = self.scope()
-        if not s or self.universe is None:
-            self.say("There is no story or universe to keep a word bank in: open one in the Builder first.")
-            return
-        n = wordbank.add(self.universe, words, self.story if s == "story" else None, note)
-        self.refresh_bank()
-        where = "this story's" if s == "story" else "this universe's"
-        self.say(f"Added {n} word{'s' if n != 1 else ''} to {where} word bank." + ("" if n == len(words) else f" ({len(words) - n} already there.)"))
-
-    def bank_add_typed(self, text):
-        words = [w.strip() for w in (text or "").replace("\n", ",").split(",") if w.strip()]
-        if words:
-            self.bank_add(words)
-            self.query_one("#addword", Input).value = ""
+    def mine_entry(self):
+        lst = self.query_one("#mine", OptionList)
+        if lst.highlighted is None or not getattr(self, "mine", None) or lst.highlighted >= len(self.mine):
+            return None
+        return self.mine[lst.highlighted]
 
     def action_remove(self):
-        s = self.scope()
-        lst = self.query_one("#bank", OptionList)
-        if self.query_one(TabbedContent).active != "t-bank" or not s or lst.highlighted is None:
+        if self.query_one(TabbedContent).active != "t-mine":
             return
-        oid = lst.get_option_at_index(lst.highlighted).id
-        if oid and oid.startswith("b:"):
-            wordbank.remove(self.universe, oid[2:], self.story if s == "story" else None)
-            self.refresh_bank()
-            self.say(f"Removed “{oid[2:]}”.")
+        e = self.mine_entry()
+        if e:
+            self.my.remove(e["word"])
+            self.refresh_mine()
+            self.say(f"Removed “{e['word']}” from My words.")
 
-    def save_list(self):
-        data = self.bank_data()
-        if data is None or self.universe is None:
-            self.say("There is no word bank to save.")
+    def action_flashcards(self):
+        if not getattr(self, "mine", None):
+            self.say("My words is empty: nothing to practise yet.")
             return
-        slot = self.query_one("#slot", Select).value
-        name = self.query_one("#listname", Input).value.strip() or data["name"]
+        def done(known):
+            for w in known or []:
+                self.my.mark_known(w)
+            self.refresh_mine()
+            if known:
+                self.say(f"{len(known)} word{'s' if len(known) != 1 else ''} marked Known and taken off your list.")
+        self.app.push_screen(FlashcardScreen(list(self.mine)), done)
+
+    # --- Add to this universe's word list ------------------------------------------------------------------------------------------------
+
+    def action_wordlist(self):
+        tab = self.query_one(TabbedContent).active
+        if tab == "t-mine":
+            e = self.mine_entry()
+            word = e["word"] if e else None
+        elif tab == "t-vocab":
+            b = self.batch_word()
+            word = b["word"] if b else None
+        else:
+            word, _ = self.current_word()
+        if not word:
+            self.say("Move to a word first.")
+            return
+        if self.universe is None:
+            self.say("There is no universe to add it to: open one in the Builder (F2) first.")
+            return
+        self.app.push_screen(SlotScreen(word, self.universe.name), lambda slot: self.add_to_list(word, slot))
+
+    def add_to_list(self, word, slot):
+        if not slot:
+            return
         try:
-            path, n, skipped = wordbank.save_as_atom_list(self.universe, data, slot, name)
+            path, new = wordbank.add_to_universe_list(self.universe, word, slot)
         except ValueError as e:
             self.say(str(e))
             return
         from . import paths
-        self.say(f"Saved {n} words as a '{slot}' list: {paths.tilde(path)}. The Wheel and Builder use it for this universe."
-                 + (f" Skipped {len(skipped)} longer than five words." if skipped else ""))
+        self.say((f"Added “{word}” to {self.universe.name}'s '{slot}' list" if new else f"“{word}” was already on the '{slot}' list")
+                 + f" ({paths.tilde(path)}). The Wheel and Builder use it for this universe.")
 
     # --- Overused ---------------------------------------------------------------------------------------------------------------------
 

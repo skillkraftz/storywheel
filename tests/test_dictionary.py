@@ -116,16 +116,6 @@ def test_indirect_opposites_are_the_opposites_of_similar_words_and_labelled(inde
     assert "Opposite (indirect, opposites of similar words):" in text and "sad (of glad)" in text
 
 
-def test_vocabulary_gathers_types_parts_subject_terms_and_related_words(index):
-    v = dictionary.vocabulary("dog")
-    assert v["found"]
-    s = v["senses"][0]
-    assert s["types"] == ["puppy", "pup"] and s["parts"] == ["tail"] and s["kinds"] == ["canine"]
-    assert s["domain"] == ["kennel", "vaccinate", "veterinary medicine"] or set(s["domain"]) == {"kennel", "vaccinate", "veterinary medicine"}
-    assert v["related"] == ["cur", "hound", "mutt", "pooch"]
-    assert dictionary.vocabulary("zzzqx")["found"] is False
-
-
 def test_an_index_from_an_older_version_asks_to_be_rebuilt(tmp_path, monkeypatch):
     import sqlite3
     old = tmp_path / "old.sqlite"
@@ -169,8 +159,7 @@ def test_cli_define_and_thesaurus_json(index):
     e = t["entries"][0]
     assert e["close_synonyms"] == ["glad"] and "joyful" in e["synonyms"] and e["antonyms"] == ["unhappy"] and "parts" not in e
     assert e["indirect_antonyms"] == [{"word": "sad", "via": "glad"}] and "wide_synonyms" in e
-    v = json.loads(cli("vocabulary", "dog", "--json", env_index=index).stdout)
-    assert v["found"] and v["senses"][0]["types"] == ["puppy", "pup"]
+
     m = json.loads(cli("lookup", "happy", "--json", env_index=index).stdout)
     assert "parts" in m["entries"][0] and "synonyms" in m["entries"][0]
 
