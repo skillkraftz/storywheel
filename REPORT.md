@@ -194,11 +194,19 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 | Top box: left-click selects and allows scrolling; only right-click or `e` edits | Works | the wheel scrolls the top box (it no longer steps through history there); Enter does nothing |
 | Universe entities know they're proper names ("the {rival}" renders "Sheriff Lund") | Works | done as a rule in the text filler (an article directly before a universe character's or place's name is dropped), so it also fixes "a/the" before places; names that already start with an article are left alone |
 
+### Builder layout (`pass2-builder-layout`)
+| Item | Status | What's missing |
+|---|---|---|
+| Right column becomes tabbed: Outline, Scenes, Notes (keys 6, 7, 8) | Works | Outline = the story's outline (the universe overview when no story is open), same click/e rules as before; Notes = the entity's notes (saved as you type), links both ways and appearances; the chosen tab is remembered |
+| Scenes tab lists the manuscript's scenes and opens the Writer at one | Partial | Enter / "Write here" pass the scene to the Writer (`STORYWHEEL_SCENE`), and the list shows first lines and word counts; **the Writer itself does not yet jump to it** (that arrives with the one-file manuscript, below) |
+| Top box becomes a stats box | Works | today vs the goal with a bar, current and best streak, this week, totals for the story and the universe; read from each story's `stats.json`, so it counts what the Writer recorded |
+
 ## P2. Tests added in the second pass
 | Area | File | Tests |
 |---|---|---|
 | Send to Builder | `test_send_to_builder.py` | 9 |
 | Builder fixes | `test_builder_fixes.py` | 13 |
+| Builder layout and writing stats | `test_builder_layout.py` | 18 |
 
 ## P3. Manual test script additions
 1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
@@ -210,7 +218,11 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 4. In a story's outline box (top): left-click a row (it highlights, nothing opens), scroll the wheel (it scrolls), right-click or press `e` (an edit box opens).
 5. Put a universe character in the rival slot (`Use: only` is not needed; boost the universe): the text says "Sheriff Lund", not "the Sheriff Lund".
 
+6. In the Builder: look at the box at the top (today's words, streak, totals) and the three tabs on the right (keys 6, 7, 8). Open the
+   Scenes tab, press Enter on a scene.
+
 ## P4. Known issues / open questions (second pass)
+- The stats box counts words as the Writer recorded them in `stats.json`; words typed outside the Writer are not counted.
 - The "list moves when clicked" report could not be reproduced headlessly (see above); please re-test by hand.
 - Past stories' button is labelled just "Send" (a longer label did not fit the column).
 

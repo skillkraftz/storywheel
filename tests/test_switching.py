@@ -207,7 +207,7 @@ def test_the_builder_opens_the_writer_and_refreshes_on_return(home, world, monke
     u, s = world
     import asyncio
     seen = {}
-    def fake_run(story):
+    def fake_run(story, scene=None):
         seen["story"] = story.slug
         story.add_scene("Added in the Writer", "Four new words here.")
         return "builder"
@@ -232,7 +232,7 @@ def test_the_builder_opens_the_writer_and_refreshes_on_return(home, world, monke
 
 def test_the_writer_can_send_you_to_the_wheel_from_the_builder(home, world, monkeypatch):
     import asyncio
-    monkeypatch.setattr(writer, "run", lambda story: "wheel")
+    monkeypatch.setattr(writer, "run", lambda story, scene=None: "wheel")
     monkeypatch.setattr(writer, "check", lambda: None)
     async def go():
         app = builder.BuilderApp(universe="thornwood", story="the-last-clause")

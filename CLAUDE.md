@@ -622,4 +622,6 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   never scroll themselves. In the top box only right-click or `e` edits, and the wheel scrolls.
 - Proper names: instead of flagging atoms, the text filler drops "the/a/an" directly before the name of any character or place
   in the ticked universes (`Engine.proper`), so templates that say "the {rival}" read "Sheriff Lund".
+- Builder layout: the box at the top is a writing-stats box (today vs goal, streaks, totals), read from the stories' `stats.json`
+  (`writing_stats.py`). The right column is tabs: Outline, Scenes, Notes (keys 6-8). Notes holds the entity notes, links and appearances.
 

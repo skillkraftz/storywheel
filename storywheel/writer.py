@@ -111,7 +111,7 @@ def command(story, return_file=None):
     return argv, environment(story, return_file)
 
 
-def run(story):
+def run(story, scene=None):
     """Run the Writer on a story and wait. Returns where the writer asked to go next: 'builder', 'wheel', or None."""
     problem = check()
     if problem:
@@ -121,6 +121,8 @@ def run(story):
     state_root().mkdir(parents=True, exist_ok=True)
     return_file.write_text("")
     argv, env = command(story, return_file)
+    if scene:                                   # open at this scene: "<file>:<line>"
+        env["STORYWHEEL_SCENE"] = f"{scene['path']}:{scene.get('line', 1)}"
     subprocess.call(argv, env=env)
     where = return_file.read_text().strip() if return_file.exists() else ""
     return where or None

@@ -16,7 +16,7 @@ def flat(text):
 
 def start(home, setup=None, story=None):
     u = vault.create_universe("W", ["western"])
-    for i in range(40):
+    for i in range(70):
         u.new_entity("character", f"Person {i:02d}", {"job": "x" * (i % 7) + " job", "want": "w" * (i * 3)})
     if setup:
         setup(u)
@@ -34,7 +34,9 @@ def run(script, universe="w", story=None, size=(220, 55)):
 
 def geometry(app):
     s = app.screen_ref
-    return {w: (s.query_one(w).region, s.query_one(w).virtual_size) for w in ("#entities", "#entity-list", "#card-box", "#card")}
+    out = {w: s.query_one(w).region for w in ("#entities", "#entity-list", "#card-box", "#card")}
+    out["list-size"] = s.query_one("#entity-list").virtual_size
+    return out
 
 
 def test_clicking_an_entity_does_not_move_or_resize_the_list(home):
@@ -82,7 +84,7 @@ def test_cards_of_very_different_length_leave_the_list_alone(home):
     async def script(app, pilot):
         s = app.screen_ref
         regions = set()
-        for i in (1, 39, 2, 38):
+        for i in (1, 69, 2, 68):
             s.elist.highlighted = i
             await pilot.pause()
             regions.add((s.query_one("#entity-list").region, s.query_one("#entities").region))
@@ -111,7 +113,7 @@ def test_a_new_name_keeps_the_list_where_it_was_if_the_row_is_still_in_view(home
 # --- the top box ----------------------------------------------------------------------------------------------
 
 def with_story(u):
-    sections = {f"Section {i}": f"Text of section {i}." for i in range(14)}
+    sections = {f"Section {i}": f"Text of section {i}." for i in range(80)}
     u.new_story("Tale", {"genre": "western"}, sections)
 
 
@@ -119,7 +121,7 @@ def test_a_left_click_in_the_top_box_only_selects(home):
     start(home, with_story)
     async def script(app, pilot):
         s = app.screen_ref
-        await pilot.click("#top", offset=(8, 2))
+        await pilot.click("#outline", offset=(8, 2))
         await pilot.pause()
         return type(app.screen).__name__, s.top.highlighted
     assert run(script, story="tale")[0] == "BuilderScreen" and True
@@ -131,7 +133,7 @@ def test_right_click_or_e_edits_the_selected_row_and_enter_does_not(home):
     start(home, with_story)
     async def script(app, pilot):
         s = app.screen_ref
-        await pilot.click("#top", offset=(8, 4))
+        await pilot.click("#outline", offset=(8, 4))
         await pilot.pause()
         await pilot.press("enter")
         await pilot.pause()
@@ -141,7 +143,7 @@ def test_right_click_or_e_edits_the_selected_row_and_enter_does_not(home):
         via_e = type(app.screen).__name__, app.screen.query_one(Input).value
         await pilot.press("escape")
         await pilot.pause()
-        await pilot.click("#top", offset=(8, 5), button=3)
+        await pilot.click("#outline", offset=(8, 5), button=3)
         await pilot.pause()
         via_right = type(app.screen).__name__
         await pilot.press("escape")
@@ -156,9 +158,9 @@ def test_the_top_box_scrolls_with_the_wheel_instead_of_stepping_a_history(home):
     start(home, with_story)
     async def script(app, pilot):
         s = app.screen_ref
-        await pilot._post_mouse_events([events.MouseScrollDown], "#top", offset=(8, 3))
-        await pilot._post_mouse_events([events.MouseScrollDown], "#top", offset=(8, 3))
-        await pilot._post_mouse_events([events.MouseScrollDown], "#top", offset=(8, 3))
+        await pilot._post_mouse_events([events.MouseScrollDown], "#outline", offset=(8, 3))
+        await pilot._post_mouse_events([events.MouseScrollDown], "#outline", offset=(8, 3))
+        await pilot._post_mouse_events([events.MouseScrollDown], "#outline", offset=(8, 3))
         await pilot.pause()
         return s.top.scroll_y, type(app.screen).__name__
     scroll, screen = run(script, story="tale")
@@ -168,7 +170,7 @@ def test_the_top_box_scrolls_with_the_wheel_instead_of_stepping_a_history(home):
 def test_the_top_box_edit_is_saved(home):
     start(home, with_story)
     async def script(app, pilot):
-        await pilot.click("#top", offset=(8, 4), button=3)
+        await pilot.click("#outline", offset=(8, 4), button=3)
         await pilot.pause()
         app.screen.query_one(Input).value = "Changed text."
         await pilot.press("enter")

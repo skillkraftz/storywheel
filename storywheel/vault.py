@@ -196,6 +196,17 @@ class Story:
             return []
         return sorted(self.manuscript_dir.glob("*.md"))
 
+    def scene_list(self):
+        """The scenes in order: [{n, title, first_line, words, path, line}]. (One entry per scene file.)"""
+        out = []
+        for n, p in enumerate(self.scenes(), 1):
+            text = p.read_text(encoding="utf-8")
+            first = next((l.strip() for l in text.splitlines() if l.strip() and l.strip() != "* * *"), "")
+            title = re.sub(r"\.md$", "", re.sub(r"^\d+-", "", p.name)).replace("-", " ")
+            out.append({"n": n, "title": title[:1].upper() + title[1:], "first_line": first, "words": count_words(text),
+                        "path": str(p), "line": 1})
+        return out
+
     def seed(self):
         p = self.path / "seed.json"
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None

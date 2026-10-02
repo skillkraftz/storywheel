@@ -16,10 +16,10 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
-from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, Tabs, Tab, TextArea
+from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
-from . import fill, paths, promote, rename, schemas, settings, state, vault
+from . import fill, paths, promote, rename, schemas, settings, state, vault, writing_stats
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer"
@@ -33,7 +33,8 @@ HELP = f"""\
   [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
   [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
   [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
-  Top box: click selects and the wheel scrolls it; [b]right-click[/b] or [b]e[/b] edits the selected row.
+  Outline (right column, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
+  [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Notes
   [b]+[/b] [b]-[/b]      like / dislike the line
 
 [b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
@@ -201,6 +202,8 @@ class BuilderScreen(Screen):
         Binding("1", "tab(0)", "Characters", show=False), Binding("2", "tab(1)", "Places", show=False),
         Binding("3", "tab(2)", "Things", show=False), Binding("4", "tab(3)", "Groups", show=False),
         Binding("5", "tab(4)", "Notes", show=False),
+        Binding("6", "rtab('outline')", "Outline", show=False), Binding("7", "rtab('scenes')", "Scenes", show=False),
+        Binding("8", "rtab('notes')", "Notes (right)", show=False),
         Binding("N", "new_universe", "New universe", show=False),
         Binding("s", "universe_settings", "Universe settings", show=False),
         Binding("S", "story_settings", "Story settings", show=False),
@@ -218,7 +221,7 @@ class BuilderScreen(Screen):
     BuilderScreen #body { height: 1fr; }
     BuilderScreen #left { width: 36; border: round $primary-darken-2; }
     BuilderScreen #mid { width: 1fr; }
-    BuilderScreen #right { width: 46; border: round $primary-darken-2; }
+    BuilderScreen #right { width: 54; border: round $primary-darken-2; }
     BuilderScreen .title { background: $primary-darken-2; color: $text; padding: 0 1; height: 1; }
     BuilderScreen #universes { height: auto; max-height: 12; }
     BuilderScreen #stories { height: 1fr; }
@@ -226,8 +229,12 @@ class BuilderScreen(Screen):
     BuilderScreen .btns Button { height: 1; border: none; min-width: 6; padding: 0 1; margin-right: 1; }
     BuilderScreen #mid { overflow: hidden; }
     BuilderScreen #left, BuilderScreen #right { overflow: hidden; }
-    BuilderScreen #top-box { height: 14; max-height: 30%; border: round $primary-darken-2; }
-    BuilderScreen #top { height: 1fr; }
+    BuilderScreen #top-box { height: 8; border: round $primary-darken-2; }
+    BuilderScreen #stats { padding: 0 1; height: 1fr; }
+    BuilderScreen #rtabs { height: 1fr; }
+    BuilderScreen #outline, BuilderScreen #scenes { height: 1fr; }
+    BuilderScreen #outline-title { padding: 0 1; color: $text-muted; height: auto; }
+    BuilderScreen #notes-pane { height: 1fr; }
     BuilderScreen #tabs { height: 3; }
     BuilderScreen #work { height: 1fr; }
     BuilderScreen #entities { width: 30; min-width: 30; max-width: 30; height: 100%; border: round $primary-darken-2; }
@@ -251,6 +258,8 @@ class BuilderScreen(Screen):
         self.start = (universe_slug, story_slug)
         self.start_entity = None
         self.filler = None
+        self.scene_entries = []
+        self.start_rtab = "r-outline"
         self._busy = False
 
     # --- layout ---------------------------------------------------------------------------------------------
@@ -274,8 +283,8 @@ class BuilderScreen(Screen):
                 yield StoryOptions(id="stories")
             with Vertical(id="mid"):
                 with Vertical(id="top-box"):
-                    yield Static("", id="top-title", classes="title", markup=False)
-                    yield CardList(id="top")
+                    yield Static("Writing", id="top-title", classes="title", markup=False)
+                    yield Static("", id="stats", markup=False)
                 yield Tabs(*[Tab(schemas.get(t)["plural"], id=f"tab-{t}") for t in TYPE_ORDER], id="tabs",
                            active=f"tab-{self.type}")
                 with Horizontal(id="work"):
@@ -290,12 +299,22 @@ class BuilderScreen(Screen):
                         yield Static("", id="card-title", classes="title", markup=False)
                         yield CardList(id="card")
             with Vertical(id="right"):
-                yield Static("Notes", classes="title")
-                yield TextArea("", id="notes")
-                yield Static("Links", classes="title")
-                yield Static("", id="links", markup=False)
-                yield Static("Appears in", classes="title")
-                yield Static("", id="appears", markup=False)
+                with TabbedContent(id="rtabs", initial=self.start_rtab):
+                    with TabPane("Outline", id="r-outline"):
+                        yield Static("", id="outline-title", markup=False)
+                        yield CardList(id="outline")
+                    with TabPane("Scenes", id="r-scenes"):
+                        yield OptionList(id="scenes")
+                        with Horizontal(classes="btns"):
+                            yield _quiet(Button("Write here", id="sc-write"))
+                            yield _quiet(Button("+Scene", id="sc-add"))
+                    with TabPane("Notes", id="r-notes"):
+                        yield Static("Notes", classes="title")
+                        yield TextArea("", id="notes")
+                        yield Static("Links", classes="title")
+                        yield Static("", id="links", markup=False)
+                        yield Static("Appears in", classes="title")
+                        yield Static("", id="appears", markup=False)
         yield Static("", id="status", markup=False)
         yield Footer()
 
@@ -308,7 +327,7 @@ class BuilderScreen(Screen):
         if self.universe and self.start_entity:
             self.entity = self.universe.entity(self.start_entity)
         self.refresh_all()
-        self.top.history_wheel = False
+        self.outline.history_wheel = False
         self.query_one("#card", CardList).focus()
 
     # --- small accessors ---------------------------------------------------------------------------------------
@@ -318,8 +337,10 @@ class BuilderScreen(Screen):
         return self.query_one("#card", CardList)
 
     @property
-    def top(self):
-        return self.query_one("#top", CardList)
+    def outline(self):
+        return self.query_one("#outline", CardList)
+
+    top = outline                       # (the outline used to be the box at the top)
 
     @property
     def elist(self):
@@ -451,14 +472,57 @@ class BuilderScreen(Screen):
         return rows
 
     def refresh_top(self):
-        self._keep_view(self.top, self._build_top)
+        self.refresh_stats()
+        self._keep_view(self.outline, self._build_top)
+        self.refresh_scenes()
+
+    def refresh_stats(self):
+        """The box at the top: today against the goal, streaks, totals for the story and the universe."""
+        if not self.universe:
+            self.query_one("#stats", Static).update("Nothing here yet: promote a Wheel story or press N for a universe.")
+            return
+        sm = writing_stats.summary(self.universe, self.story)
+        goal = f" / {sm['goal']:,}" if sm["goal"] else ""
+        lines = [f"Today    {sm['today']:,}{goal} words" + (f"   {sm['bar']} {sm['percent']}%" if sm["goal"] else ""),
+                 f"Streak   {sm['streak']} day{'s' if sm['streak'] != 1 else ''} (best {sm['best_streak']})"
+                 f"      This week  {sm['week']:,} words"]
+        if self.story:
+            lines.append(f"Story    {sm['story_words']:,} words in {sm['story_scenes']} scene(s): {sm['story_title']}")
+        lines.append(f"Universe {sm['universe_words']:,} words across {sm['universe_stories']} stor"
+                     f"{'y' if sm['universe_stories'] == 1 else 'ies'}: {sm['universe_name']}")
+        self.query_one("#stats", Static).update("\n".join(lines))
+        self.query_one("#top-title", Static).update("Writing")
+
+    def refresh_scenes(self):
+        """The Scenes tab: the open story's scenes with their first lines; Enter opens the Writer there."""
+        lst = self.query_one("#scenes", OptionList)
+        keep = lst.highlighted
+        lst.clear_options()
+        self.scene_entries = self.story.scene_list() if self.story else []
+        if not self.story:
+            lst.add_options([Option(Text("Open a story (left column) to see its scenes.", style="dim"), id="none", disabled=True)])
+            return
+        if not self.scene_entries:
+            lst.add_options([Option(Text("No scenes yet. +Scene adds one; the Writer makes the first.", style="dim"),
+                                    id="none", disabled=True)])
+            return
+        rows = []
+        for e in self.scene_entries:
+            t = Text()
+            t.append(f"{e['n']:>2} ", style="dim")
+            t.append(e["title"], style="bold")
+            t.append(f"  {e['words']}w", style="dim")
+            t.append("\n   " + (e["first_line"][:46] + ("…" if len(e["first_line"]) > 46 else "")), style="")
+            rows.append(Option(t, id=str(e["n"] - 1)))
+        lst.add_options(rows)
+        lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
 
     def _build_top(self):
         rows = self.top_rows()
-        self.query_one("#top-title", Static).update(
+        self.query_one("#outline-title", Static).update(
             f"Story outline: {self.story.title}   (o: universe overview)" if self.story
             else (f"Universe: {self.universe.name}" if self.universe else "No universe"))
-        lst = self.top
+        lst = self.outline
         keep = lst.highlighted
         lst.clear_options()
         if not rows:
@@ -599,6 +663,8 @@ class BuilderScreen(Screen):
             self.refresh_all()
         elif lst == "entity-list":
             self.card.focus()
+        elif lst == "scenes" and oid not in (None, "none"):
+            self.write_scene(int(oid))
 
     def open_universe(self, slug):
         self.universe, self.story, self.entity = vault.get_universe(slug), None, None
@@ -606,7 +672,7 @@ class BuilderScreen(Screen):
         self.refresh_all()
 
     def on_card_list_field(self, event):
-        if event.source.id == "top":
+        if event.source.id == "outline":
             if event.button == 3:                       # a left-click only selects; right-click (or e) edits
                 self.edit_top(event.index)
             return
@@ -617,13 +683,13 @@ class BuilderScreen(Screen):
             self.roll_field(key)
 
     def on_card_list_rate(self, event):
-        if event.source.id == "top":
+        if event.source.id == "outline":
             return
         self.b.rate(self.universe, self.entity, self._key_at(event.index), event.value)
         self.refresh_card()
 
     def on_card_list_scrolled(self, event):
-        if event.source.id == "top":
+        if event.source.id == "outline":
             return
         self.step_history(self._key_at(event.index), event.direction)
 
@@ -637,7 +703,8 @@ class BuilderScreen(Screen):
         {"u-new": self.action_new_universe, "u-rename": lambda: self.universe_act("rename"),
          "u-delete": lambda: self.universe_act("delete"), "s-open": lambda: self.story_act("open"),
          "s-write": self.action_writer, "s-export": self.action_export, "s-draft": self.action_new_draft,
-         "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
+         "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
+         "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
          "e-delete": self.action_delete_entity}.get(name, lambda: None)()
 
     # --- field operations --------------------------------------------------------------------------------------------
@@ -880,6 +947,18 @@ class BuilderScreen(Screen):
             self._after_save(e, k, old_id)
             old_id = e.id
         self.say(f"Rolled {len(done)} field(s) again.")
+
+    def add_scene(self):
+        if not self.story:
+            self.say("Open a story first (left column).")
+            return
+        self.app.push_screen(EditScreen("New scene title", {"title": ""}), self._scene_added)
+
+    def _scene_added(self, out):
+        if out is not None:
+            self.story.add_scene(out["title"].strip() or "scene")
+            self.refresh_top()
+            self.say("Scene added. Press Enter on it to write.")
 
     def action_new_entity(self):
         if not self.universe:
@@ -1140,6 +1219,19 @@ class BuilderScreen(Screen):
     def action_noop_builder(self):
         self.say("You are in the Universe Builder.")
 
+    def write_scene(self, index=None):
+        """Open the Writer on the open story, at one of its scenes."""
+        entry = self.scene_entries[index] if index is not None and index < len(self.scene_entries) else None
+        self.b.open_writer(self, scene=entry)
+
+    def action_rtab(self, name):
+        self.query_one("#rtabs", TabbedContent).active = f"r-{name}"
+        self.b.remember(self)
+
+    def on_tabbed_content_tab_activated(self, event):
+        if event.control.id == "rtabs":
+            self.b.remember(self)
+
     def action_writer(self):
         self.b.open_writer(self)
 
@@ -1175,9 +1267,9 @@ class BuilderApp(App):
     BINDINGS = []
 
     def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None, tab=None,
-                 entity=None):
+                 entity=None, rtab=None):
         super().__init__()
-        self.start_tab, self.start_entity = tab, entity
+        self.start_tab, self.start_entity, self.start_rtab = tab, entity, rtab
         self.engine_factory = engine_factory
         self.ratings = ratings
         self.start = (universe, story)
@@ -1193,6 +1285,8 @@ class BuilderApp(App):
         self.screen_ref = BuilderScreen(self, *self.start)
         if self.start_tab in TYPE_ORDER:
             self.screen_ref.type = self.start_tab
+        if self.start_rtab in ("r-outline", "r-scenes", "r-notes"):
+            self.screen_ref.start_rtab = self.start_rtab
         self.screen_ref.start_entity = self.start_entity
         self.push_screen(self.screen_ref)
 
@@ -1208,7 +1302,8 @@ class BuilderApp(App):
             try:
                 self.state_store.update(mode="builder", universe=screen.universe.slug if screen.universe else None,
                                         story=screen.story.slug if screen.story else None, tab=screen.type,
-                                        entity=screen.entity.id if screen.entity else None)
+                                        entity=screen.entity.id if screen.entity else None,
+                                        rtab=screen.query_one("#rtabs", TabbedContent).active)
             except OSError:
                 pass
 
@@ -1231,8 +1326,8 @@ class BuilderApp(App):
         return self.ratings.rate(f"universe:{universe.slug}", entity.type, key, str(text), value, None, (),
                                  title=universe.name)
 
-    def open_writer(self, screen):
-        """Suspend this app, run Neovim on the story, and come back to exactly where we were."""
+    def open_writer(self, screen, scene=None):
+        """Suspend this app, run Neovim on the story (at a scene, if one is given), and come back to exactly where we were."""
         from . import writer
         story = screen.story
         if story is None and screen.universe is not None and screen.universe.stories():
@@ -1249,7 +1344,7 @@ class BuilderApp(App):
         if self.state_store is not None:
             self.state_store.update(mode="writer", universe=screen.universe.slug, story=story.slug)
         with self.suspend():
-            where = writer.run(story)
+            where = writer.run(story, scene)
         if self.state_store is not None:
             self.state_store.update(mode="builder")
         screen.refresh_all()
@@ -1302,7 +1397,8 @@ class BuilderApp(App):
                    else "Couldn't reach a clipboard (install wl-clipboard or xclip). Export a .txt instead (x).")
 
 
-def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None):
-    app = BuilderApp(ratings=ratings, universe=universe, story=story, state_store=state_store, tab=tab, entity=entity)
+def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None, rtab=None):
+    app = BuilderApp(ratings=ratings, universe=universe, story=story, state_store=state_store, tab=tab, entity=entity,
+                     rtab=rtab)
     app.run()
     return app

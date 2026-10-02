@@ -48,7 +48,7 @@ def run_builder(st, payload, get_ratings):
     from . import builder
     st.update(mode="builder")
     app = builder.run_builder(payload.get("universe") or st.get("universe"), payload.get("story") or st.get("story"),
-                              get_ratings(), st, tab=st.get("tab"), entity=st.get("entity"))
+                              get_ratings(), st, tab=st.get("tab"), entity=st.get("entity"), rtab=st.get("rtab"))
     return app.next
 
 

@@ -53,7 +53,7 @@ def test_three_columns_with_tabs_overview_and_empty_states(home):
         return flat(screen_text(app))
     text = run_builder(home, script)
     for needle in ("Universes", "Thornwood", "Stories in Thornwood", "Universe: Thornwood", "Genre leanings", "western",
-                   "Characters", "Places", "Things", "Groups", "Notes", "Notes", "Links", "Appears in",
+                   "Characters", "Places", "Things", "Groups", "Notes", "Outline", "Scenes", "Writing", "Today", "Streak",
                    "F1 Wheel", "Roll blanks"):
         assert needle in text, needle
 
@@ -61,7 +61,7 @@ def test_three_columns_with_tabs_overview_and_empty_states(home):
 def test_no_universe_yet_says_how_to_start(home):
     async def script(app, pilot):
         return flat(screen_text(app))
-    assert "press N to make a universe" in run_builder(home, script)
+    assert "press N for a universe" in run_builder(home, script)
 
 
 def test_the_five_tabs_switch_with_number_keys(home):
@@ -250,6 +250,8 @@ def test_the_right_column_shows_links_back_and_appearances(home):
         sc = app.screen_ref
         sc.elist.highlighted = [e.name for e in sc.items].index("Stacie")
         await pilot.pause()
+        await pilot.press("8")                                   # the Notes tab of the right column
+        await pilot.pause()
         return flat(screen_text(app))
     text = run_builder(home, script)
     assert "← The Horn (owner)" in text and "The Clause" in text
@@ -425,7 +427,7 @@ def test_editing_an_outline_box_writes_story_md(home):
         s.refresh_all()
         await pilot.pause()
         rows = [r[0] for r in s.top_rows()]
-        await pilot.click("#top", offset=(8, rows.index("section:Premise")), button=3)
+        await pilot.click("#outline", offset=(8, rows.index("section:Premise")), button=3)
         await pilot.pause()
         app.screen.query_one(Input).value = "New premise."
         await press(pilot, "enter")
