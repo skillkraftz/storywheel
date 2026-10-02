@@ -393,19 +393,25 @@ class BuilderScreen(Screen):
             return ", ".join((self.universe.resolve(v).name if self.universe.resolve(v) else v) for v in (value or []))
         return value or ""
 
-    def refresh_all(self, lists=True):
+    def refresh_all(self, lists=True, light=False):
         """Show everything again. With lists=False the entity list and the left column are left exactly as they are
-        (only the card, the top box and the right column change): rolling a field must not move the list."""
+        (only the card, the top box and the right column change): rolling a field must not move the list.
+        With light=True (one field of the selected entity changed) only the card and its links are redrawn: the stats
+        box, the outline and the notes cannot have changed."""
         self._busy = True
         try:
-            if lists:
-                self.refresh_universes()
-                self.refresh_stories()
-            self.refresh_top()
-            if lists:
-                self.refresh_entities()
-            self.refresh_card()
-            self.refresh_right()
+            if light:
+                self.refresh_card()
+                self.refresh_right(notes=False, appears=False)
+            else:
+                if lists:
+                    self.refresh_universes()
+                    self.refresh_stories()
+                self.refresh_top()
+                if lists:
+                    self.refresh_entities()
+                self.refresh_card()
+                self.refresh_right()
         finally:
             self._busy = False
         self.app.title = "storywheel · Universe Builder"
@@ -594,20 +600,20 @@ class BuilderScreen(Screen):
         if keep is not None:
             lst.highlighted = min(keep, len(options) - 1)
 
-    def refresh_right(self):
+    def refresh_right(self, notes=True, appears=True):
         e = self.entity
-        notes = self.query_one("#notes", TextArea)
-        links, appears = self.query_one("#links", Static), self.query_one("#appears", Static)
+        notes_box = self.query_one("#notes", TextArea)
+        links, appears_box = self.query_one("#links", Static), self.query_one("#appears", Static)
         if not e:
-            notes.load_text("")
+            notes_box.load_text("")
             links.update("")
-            appears.update("")
+            appears_box.update("")
             return
         body = e.fields.get("body", "") if e.type == "note" else e.body
-        if notes.text != body:
+        if notes and notes_box.text != body:
             self._busy = True
             try:
-                notes.load_text(body)
+                notes_box.load_text(body)
             finally:
                 self._busy = False
         lines = []
@@ -616,8 +622,9 @@ class BuilderScreen(Screen):
         for label, other in self.universe.links_to(e):
             lines.append(f"← {other.name or other.id} ({label.lower()})")
         links.update("\n".join(lines) or "(no links yet)")
-        found = self.universe.appearances(e)
-        appears.update("\n".join(s.title for s in found) or "(no story mentions it yet)")
+        if appears:
+            found = self.universe.appearances(e)
+            appears_box.update("\n".join(s.title for s in found) or "(no story mentions it yet)")
 
     # --- events -----------------------------------------------------------------------------------------------------
 
@@ -725,7 +732,7 @@ class BuilderScreen(Screen):
             self.universe.save_entity(e)
         self._remember(e, key)
         self.entity = self.universe.entity(e.id) or self.universe.entity(e.type + "-x") or e
-        self.refresh_all()
+        self.refresh_all(light=(key != "name"))
         if via:
             self.say(via)
 
@@ -785,7 +792,8 @@ class BuilderScreen(Screen):
             if eid == old_id and old_id != e.id:                  # a placeholder id became a real one: history follows
                 self.hist[(e.id, k)] = self.hist.pop((eid, k))
         self.entity = self.universe.entity(e.id)
-        self.refresh_all(lists=(key == "name" or e.id != old_id))
+        renamed = key == "name" or e.id != old_id
+        self.refresh_all(lists=renamed, light=not renamed)
 
     def write_field(self, key):
         e = self.entity

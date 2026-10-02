@@ -354,3 +354,54 @@ Full suite before the final commit: **811 passed** (all tests, including the rea
 5. Wheel: start it and quit without keeping anything; no draft appears in Past stories. Keep one step, quit, relaunch: it is there with "1/8".
 6. Open a finished draft: it lands on Twist (last step) with the "finished" line. Open a promoted draft: edits say "Read-only"; press C and edit the copy.
 7. Tick a universe in the Wheel: the counts line and the three groups below agree.
+
+---
+
+# Fourth pass: errors and performance from real use
+
+_Same status words. Tags `pass4-menus`, `pass4-export`, `pass4-perf`._
+
+## F1. Checklist
+
+### Writer menus (`pass4-menus`)
+| Item | Status | What's missing |
+|---|---|---|
+| Right-click "E329: No menu 'Go to definition'" | Works | reproduced headlessly (`doautocmd MenuPopup` raised it). Cause as you described: Neovim 0.11's `nvim.popupmenu` handler. `popup_menu()` now deletes every MenuPopup autocmd (by id, so the group name doesn't matter) and the group by name, in `pcall`s; test asserts none are left |
+| Other menu items show errors | Works | new tests open the right-click menu (MenuPopup fires, then each item runs via `emenu`, with and without a selection; Find is answered) and the Writer menu (every item by number, by Down+Enter, and by mouse click), and fail on anything in `v:errmsg` or `:messages`. They found: **Help** opened in Insert mode, so `q`/Esc did nothing and typing gave E21 (fixed: Normal mode, closes with q/Esc/Enter and returns to typing; the menu only restarts typing when you are back in the writing window); the **E31** left in `v:errmsg` by `aunmenu` (cleared). No other menu item errored |
+
+### Export location (`pass4-export`)
+| Item | Status | What's missing |
+|---|---|---|
+| Manuscripts folder, one folder per story | Works | setting `manuscripts_dir` (Settings F4 > Export, or `STORYWHEEL_MANUSCRIPTS`), default `~/Writing`. `<folder>/<Title>/<Title> <YYYY-MM-DD>.docx` (also odt, pdf, md, txt, fountain). The library's layout is unchanged; `exports/` inside stories is no longer used |
+| Conflicts | Works | a hidden `.storywheel-story` file in each folder holds `universe/story`. A folder owned by another story, or an existing folder with files and no marker, gets the universe name added ("Title (Universe)", then a number). A path equal to, inside or containing the library is refused or skipped, so nothing is written into the library. Same-day re-exports become "... -2", "... -3" (for odt/pdf too, including the .docx they are made from). Characters file systems refuse are dropped from titles |
+| Messages | Works | paths shown with `~`; warnings say "Settings (F4) > You". Writer: "Exported ~/Writing/..." |
+| Move existing exports | Works | `migrate.migrate_exports()` runs where the other migrations run (startup, `storywheel migrate`) and prints "Moved N exports out of your library to ~/Writing (one folder per story)." Files keep their own date |
+
+### Performance (`pass4-perf`)
+| Item | Status | What's missing |
+|---|---|---|
+| Keep the universe in memory, reload by modification time | Works | `vault.memo/stamp`: every entity file, story outline, manuscript text, word count and scene list is read once and remembered until the file's time or size changes (the Writer and Obsidian are noticed; our own writes forget a file at once). `entities()`/`entity()` hand out copies; internal lookups (`resolve`, `links_to`) use the shared objects. Schema files are read once per change of their folder |
+| Cache word counts and Appears in per story | Works | by story file stamps; the regex search runs only for a story whose files changed |
+| A field roll redraws only the card | Works | `refresh_all(light=True)`: card and links only; no stats box, outline, notes or Appears in. A name change still rebuilds the lists |
+| Performance test | Works | generated universe of 160 entities and four ~20k-word stories (`tests/bigworld.py`). Measured here: selecting an entity 10 ms (was 70), rolling a field 6-13 ms (was 140); the tests allow 50 ms. They also check a roll reads at most one entity file and does not recompute the stats box, and that outside changes are noticed |
+| Wheel and Settings | Works | checked with the same universe ticked: Wheel roll/keep/redraw 5-11 ms; Settings Stats tab 45 ms once, then cached. No reload-everything pattern left |
+
+## F2. Tests added in the fourth pass
+| Area | File | Tests |
+|---|---|---|
+| Every right-click and Writer menu item, run like a user | `test_menus.py` | 23 |
+| Export location, conflicts, migration, setting | `test_export_location.py` | 12 |
+| Performance and cache correctness | `test_performance.py` | 9 |
+
+## F3. Manual test script
+1. Right-click in the Writer on text and on a selection; try every entry; open the Writer menu (F12) and try Help (q closes it) and the sidebar. Nothing should print an error.
+2. Export from the Writer menu and from the Builder (`x`); look in `~/Writing/<Story Title>/`. Export again the same day: " -2" appears.
+3. Make a second story with the same title in another universe and export it: its folder has the universe name.
+4. Start the program once: if you had exports inside the library you get the "Moved N exports" line.
+5. In your real library: click around entities and roll fields; it should feel instant. If anything still lags, note which action.
+
+## F4. Known issues
+- Schema files edited in place (not added or removed) are noticed on the next start.
+- A file rewritten twice within the file system's timestamp tick with the same size by another program could be missed until it changes again; our own writes never are.
+
+Full suite before the final commit: **855 passed**.

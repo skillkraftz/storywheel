@@ -8,15 +8,38 @@ from .library import DATA
 TYPES = ("character", "place", "thing", "group", "note")
 
 
+_CACHE = {}
+
+
+def _roots():
+    return (DATA / "entities", paths.home() / "entities")
+
+
+def _signature():
+    """The schema folders' own change times: adding or replacing a schema file changes them (a file edited in place is
+    picked up the next time the program starts)."""
+    out = []
+    for root in _roots():
+        try:
+            out.append((str(root), root.stat().st_mtime_ns))
+        except OSError:
+            out.append((str(root), None))
+    return tuple(out)
+
+
 def load():
-    """{type: schema dict}, built-in then yours."""
+    """{type: schema dict}, built-in then yours. Read once; read again if a schema folder changes. Treat as read-only."""
+    sig = _signature()
+    if _CACHE.get("sig") == sig:
+        return _CACHE["found"]
     found = {}
-    for root in (DATA / "entities", paths.home() / "entities"):
+    for root in _roots():
         if not root.is_dir():
             continue
         for path in sorted(root.glob("*.json")):
             doc = json.loads(path.read_text(encoding="utf-8"))
             found[doc["type"]] = doc
+    _CACHE.update(sig=sig, found=found)
     return found
 
 

@@ -660,4 +660,15 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Text rewriting never changes part of a word: thread/stand-in replacement matches whole words (possessives included),
   `singular()` knows -ie, -us, -is and irregular nouns and leaves possessives alone, and a renamed protagonist's surname
   follows too.
+- Exports go to the manuscripts folder (`manuscripts_dir`, default `~/Writing`), `<Title>/<Title> <date>.<ext>`, one folder per story,
+  never inside the library. A hidden `.storywheel-story` marker holds the owning `universe/story`; a folder owned by another story, or
+  a hand-made folder with files, makes us use "Title (Universe)". Same-day re-exports add " -2". Old `exports/` folders are moved
+  out by `migrate.migrate_exports()` at startup. Warnings point to Settings (F4) > You.
+- The Writer's right-click menu deletes Neovim's own MenuPopup autocmds (Neovim 0.11's `nvim.popupmenu` raises E329 once the
+  default items are gone). Floating windows an item opens (Help, sidebar) keep Normal mode; the menu restarts typing only if the
+  writing window is current. `tests/test_menus.py` runs every item of both menus and fails on any error message.
+- Reading is remembered by file time and size (`vault.memo`): entities, outlines, manuscripts, word counts, scenes, "Appears in", and
+  schemas (by folder time). Our own writes forget a file at once; the Writer's and Obsidian's changes are noticed by time. Callers get
+  copies of entities, so changing one never changes what is remembered. A field roll redraws only the card and its links.
+  `tests/test_performance.py` guards 50 ms for a roll and a selection in a 160-entity, four-story universe.
 

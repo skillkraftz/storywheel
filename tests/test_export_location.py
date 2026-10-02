@@ -111,7 +111,7 @@ def test_old_exports_move_out_of_the_library_and_it_is_said(home):
     lines = migrate.migrate_exports()
     assert lines and "Moved 2 exports out of your library" in lines[0]
     folder = root() / "The Last Clause"
-    assert sorted(p.suffix for p in folder.iterdir() if p.is_file()) == [".docx", ".md"]
+    assert sorted(p.suffix for p in folder.iterdir() if p.is_file() and p.name != export.MARKER) == [".docx", ".md"]
     assert not old.exists()
     assert migrate.migrate_exports() == []
 

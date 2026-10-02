@@ -10,6 +10,7 @@ An entity is a markdown file: fields in the YAML frontmatter, free notes in the 
 name, without .md) never changes, so links by id survive renames; links are stored as ids in link fields.
 Deleting moves things to <library>/.trash/ instead of destroying them.
 """
+import copy
 import datetime
 import json
 import re
@@ -53,12 +54,50 @@ def trash(path):
     return dest
 
 
+# --- keeping what was read ---------------------------------------------------------------------------------
+# Files are read once and remembered until they change on disk (their modification time or size). Our own writes forget
+# a file at once; a file changed by the Writer or by another program is noticed by its time. `memo` is for values worked
+# out from one or more files (word counts, scenes, a parsed entity); `stamp` says whether any of them has changed.
+
+_MEMO = {}
+
+
+def stamp(*paths_):
+    """What identifies the current contents of files: (mtime, size) for each, None for a missing one."""
+    out = []
+    for p in paths_:
+        try:
+            st = Path(p).stat()
+            out.append((st.st_mtime_ns, st.st_size))
+        except OSError:
+            out.append(None)
+    return tuple(out)
+
+
+def memo(key, stamp_, compute):
+    """compute() once per (key, stamp_). The value is shared: copy it before changing it."""
+    hit = _MEMO.get(key)
+    if hit is not None and hit[0] == stamp_:
+        return hit[1]
+    value = compute()
+    _MEMO[key] = (stamp_, value)
+    return value
+
+
+def forget(path):
+    """Drop everything remembered about a file we are about to write."""
+    prefix = str(path)
+    for k in [k for k in _MEMO if k[0] == prefix or (isinstance(k[0], tuple) and prefix in k[0])]:
+        _MEMO.pop(k, None)
+
+
 def _write(path, text):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(text, encoding="utf-8")
     tmp.replace(path)                       # replace in one step: a crash never leaves half a file
+    forget(path)
 
 
 def _unique(base, taken):
@@ -89,6 +128,13 @@ class Entity:
 
     def __repr__(self):
         return f"Entity({self.type}, {self.id!r}, {self.name!r})"
+
+    def clone(self):
+        """A copy that can be changed without touching what is remembered."""
+        e = Entity(self.type, self.id, {k: (list(v) if isinstance(v, list) else v) for k, v in self.fields.items()},
+                   dict(self.custom), self.body, self.created)
+        e.path = self.path
+        return e
 
     def to_text(self):
         meta = {"id": self.id, "type": self.type}
@@ -147,10 +193,14 @@ class Story:
         return self.path / "story.md"
 
     def load_outline(self):
-        if not self.outline_path.exists():
-            return {}, {}
-        meta, body = frontmatter.loads(self.outline_path.read_text(encoding="utf-8"))
-        return meta, parse_sections(body)
+        """(meta, sections) of story.md, read again only when the file changes. Fresh dicts: change them freely."""
+        def read():
+            if not self.outline_path.exists():
+                return {}, {}
+            meta, body = frontmatter.loads(self.outline_path.read_text(encoding="utf-8"))
+            return meta, parse_sections(body)
+        meta, sections = memo((str(self.outline_path), "outline"), stamp(self.outline_path), read)
+        return copy.deepcopy(meta), dict(sections)
 
     def save_outline(self, meta, sections):
         _write(self.outline_path, frontmatter.dumps(meta, render_sections(meta.get("title", ""), sections)))
@@ -206,14 +256,22 @@ class Story:
     def scene_list(self):
         """The scenes in order, found by their markers (`* * *` or `* * * Title`) across all the files:
         [{n, title, label, first_line, words, path, line, file}]. `line` is the marker's line (1 for an unmarked first scene)."""
-        out = []
-        for p in self.files():
-            for sc in parse_scenes(p.read_text(encoding="utf-8")):
-                n = len(out) + 1
-                out.append({"n": n, "title": sc["label"] or (f"Scene {n}" if n > 1 or sc["marked"] else "Opening"),
-                            "label": sc["label"], "first_line": sc["first_line"], "words": sc["words"],
-                            "path": str(p), "line": sc["start"], "end": sc["end"], "file": p.name, "marked": sc["marked"]})
-        return out
+        def build():
+            out = []
+            for p in self.files():
+                for sc in parse_scenes(self._read(p)):
+                    n = len(out) + 1
+                    out.append({"n": n, "title": sc["label"] or (f"Scene {n}" if n > 1 or sc["marked"] else "Opening"),
+                                "label": sc["label"], "first_line": sc["first_line"], "words": sc["words"],
+                                "path": str(p), "line": sc["start"], "end": sc["end"], "file": p.name, "marked": sc["marked"]})
+            return out
+        return [dict(d) for d in memo((str(self.path), "scenes"), self._stamp(), build)]
+
+    def _stamp(self):
+        return stamp(*self.files())
+
+    def _read(self, path):
+        return memo((str(path), "text"), stamp(path), lambda: Path(path).read_text(encoding="utf-8"))
 
     def append_scene(self, title="", text=""):
         """A new scene at the end of the manuscript, marked `* * * Title` (in the last file; a first file is made if there is none)."""
@@ -271,10 +329,11 @@ class Story:
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
     def manuscript_text(self):
-        return "\n\n".join(p.read_text(encoding="utf-8").strip("\n") for p in self.files())
+        return memo((str(self.path), "manuscript"), self._stamp(),
+                    lambda: "\n\n".join(self._read(p).strip("\n") for p in self.files()))
 
     def word_count(self):
-        return sum(count_words(p.read_text(encoding="utf-8")) for p in self.scenes())
+        return memo((str(self.path), "words"), self._stamp(), lambda: sum(count_words(self._read(p)) for p in self.scenes()))
 
     def add_scene(self, title="", text=""):
         """A new manuscript FILE at the end: 03-the-letter.md (a chapter, in a novel; a short story uses append_scene)."""
@@ -416,30 +475,37 @@ class Universe:
     def _dir(self, type_):
         return self.path / schemas.get(type_)["folder"]
 
-    def entities(self, type_=None):
+    def _entities_shared(self, type_=None):
+        """The universe's entities, each read from disk only when its file has changed. The objects are SHARED: for looking,
+        not for changing (entities() and entity() hand out copies)."""
         found = []
         for t in ([type_] if type_ else [t for t in schemas.load()]):
             folder = self._dir(t)
             if folder.is_dir():
                 for p in sorted(folder.glob("*.md")):
+                    def read(p=p):
+                        return Entity.from_text(p.read_text(encoding="utf-8"), p)
                     try:
-                        found.append(Entity.from_text(p.read_text(encoding="utf-8"), p))
+                        found.append(memo((str(p), "entity"), stamp(p), read))
                     except OSError:
                         continue
         return found
 
+    def entities(self, type_=None):
+        return [e.clone() for e in self._entities_shared(type_)]
+
     def entity(self, id_):
-        for e in self.entities():
+        for e in self._entities_shared():
             if e.id == id_:
-                return e
+                return e.clone()
         return None
 
     def find_by_name(self, name, type_=None):
         want = (name or "").strip().lower()
-        return [e for e in self.entities(type_) if e.name.strip().lower() == want and want]
+        return [e.clone() for e in self._entities_shared(type_) if e.name.strip().lower() == want and want]
 
     def _all_ids(self):
-        return {e.id for e in self.entities()}
+        return {e.id for e in self._entities_shared()}
 
     def new_entity(self, type_, name="", fields=None):
         """A new entity, saved at once. With no name it is blank (and gets a placeholder id like character-1)."""
@@ -515,7 +581,7 @@ class Universe:
         """The entity a link field's value names (an id), or None if it's just text."""
         if not value or not isinstance(value, str):
             return None
-        e = self.entity(value)
+        e = next((x for x in self._entities_shared() if x.id == value), None)
         return e if e and (type_ is None or e.type == type_) else None
 
     def links_from(self, e):
@@ -533,10 +599,11 @@ class Universe:
     def links_to(self, e):
         """[(label, entity)] of entities that point at this one."""
         out = []
-        for other in self.entities():
+        known = schemas.load()
+        for other in self._entities_shared():
             if other.id == e.id:
                 continue
-            for f in schemas.get(other.type)["fields"]:
+            for f in known[other.type]["fields"] if other.type in known else ():
                 v = other.fields.get(f["key"])
                 if f.get("kind") == "link" and v == e.id or f.get("kind") == "links" and isinstance(v, list) and e.id in v:
                     out.append((f["label"], other))
@@ -545,14 +612,19 @@ class Universe:
     def appearances(self, e):
         """Stories that mention this entity: by name in the outline or manuscript, or recorded at promotion."""
         found = []
-        pat = re.compile(r"(?<![\w])" + re.escape(e.name) + r"(?:'s|’s)?(?![\w])", re.IGNORECASE) if e.name else None
         for s in self.stories():
-            meta, sections = s.load_outline()
-            recorded = e.id in (meta.get("cast") or [])
-            text = "\n".join(sections.values()) + "\n" + s.manuscript_text()
-            if recorded or (pat and pat.search(text)):
+            stamp_ = stamp(s.outline_path, *s.files())
+            if memo((str(s.path), "appears", e.id, e.name), stamp_, lambda s=s: self._mentions(s, e)):
                 found.append(s)
         return found
+
+    @staticmethod
+    def _mentions(s, e):
+        pat = re.compile(r"(?<![\w])" + re.escape(e.name) + r"(?:'s|’s)?(?![\w])", re.IGNORECASE) if e.name else None
+        meta, sections = s.load_outline()
+        recorded = e.id in (meta.get("cast") or [])
+        text = "\n".join(sections.values()) + "\n" + s.manuscript_text()
+        return bool(recorded or (pat and pat.search(text)))
 
     # --- stories
     def stories(self):
