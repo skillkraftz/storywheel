@@ -291,3 +291,25 @@ The Writer settings on that tab (notepad mode, Neovide, font, line spacing, para
 - The "list moves when clicked" report could not be reproduced headlessly (see above); please re-test by hand.
 - Past stories' button is labelled just "Send" (a longer label did not fit the column).
 
+---
+
+# Third pass: fixes from real use (screenshots reviewed)
+
+_Same status words. Tags `pass3-...`._
+
+## T1. Checklist
+
+### Builder layout (`pass3-layout`)
+| Item | Status | What's missing |
+|---|---|---|
+| Lists jump when clicked (the focused list lost its border) | Works | cause confirmed: `OptionList:focus { border: none }` removed the default border only when focused. Every list and text box in the Builder now has the same (no) border focused or not, and focus shows by colour. A test focuses every list, tree, text box and table in the Builder (all three right-hand tabs), the Wheel and Settings and fails if anything anywhere moves or resizes; it fails on the old CSS |
+| Links and Appears in under the entity card | Works | they sit at the bottom of the card (they describe the selected entity); the Notes tab is now only for notes |
+| Rebalance widths | Works | left column 46, entity list column 40, right column 52: every button (Roll blanks, Del, Outline, +Draft...) shows whole at 220, 180 and 160 columns; left-column titles wrap rather than truncate; each universe in the list shows "N entities" |
+| Outline tab as readable text | Works | one row per beat (numbered, or with its own label if the structure shows labels), setting lines as rows, no `**`, no list dashes, no "Once upon a time. Once upon a time,"; right-click or `e` edits just that beat or setting line and writes it back to story.md. Promotion no longer adds a label when the sentence already opens with it (older outlines are cleaned for showing) |
+
+## T2. Tests added in the third pass
+| Area | File | Tests |
+|---|---|---|
+| Focus never moves anything; layout holds together | `test_layout_stability.py` | 11 |
+| Outline as readable rows, one-row edits | `test_outline.py` | 8 |
+

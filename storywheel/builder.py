@@ -19,7 +19,8 @@ from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
-from . import fill, paths, promote, rename, schemas, settings, state, vault, writing_stats
+from . import fill, outline, paths, promote, rename, schemas, settings, state, vault, writing_stats
+from .text import motif_from
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings"
@@ -220,14 +221,14 @@ class BuilderScreen(Screen):
     ]
     DEFAULT_CSS = """
     BuilderScreen #body { height: 1fr; }
-    BuilderScreen #left { width: 36; border: round $primary-darken-2; }
+    BuilderScreen #left { width: 21%; min-width: 38; max-width: 46; border: round $primary-darken-2; }
     BuilderScreen #mid { width: 1fr; }
-    BuilderScreen #right { width: 54; border: round $primary-darken-2; }
+    BuilderScreen #right { width: 24%; min-width: 40; max-width: 52; border: round $primary-darken-2; }
     BuilderScreen .title { background: $primary-darken-2; color: $text; padding: 0 1; height: 1; }
     BuilderScreen #universes { height: auto; max-height: 12; }
     BuilderScreen #stories { height: 1fr; }
     BuilderScreen .btns { height: 1; }
-    BuilderScreen .btns Button { height: 1; border: none; min-width: 6; padding: 0 1; margin-right: 1; }
+    BuilderScreen .btns Button { height: 1; border: none; min-width: 4; padding: 0; margin-right: 1; }
     BuilderScreen #mid { overflow: hidden; }
     BuilderScreen #left, BuilderScreen #right { overflow: hidden; }
     BuilderScreen #top-box { height: 8; border: round $primary-darken-2; }
@@ -238,14 +239,18 @@ class BuilderScreen(Screen):
     BuilderScreen #notes-pane { height: 1fr; }
     BuilderScreen #tabs { height: 3; }
     BuilderScreen #work { height: 1fr; }
-    BuilderScreen #entities { width: 30; min-width: 30; max-width: 30; height: 100%; border: round $primary-darken-2; }
+    BuilderScreen #entities { width: 32%; min-width: 32; max-width: 40; height: 100%; border: round $primary-darken-2; }
     BuilderScreen #card-box { width: 1fr; height: 100%; overflow: hidden; border: round $primary; }
-    BuilderScreen OptionList { scrollbar-gutter: stable; }
+    /* every list has the same (no) border focused or not, so focusing one never moves or resizes its contents;
+       focus is shown by colour */
+    BuilderScreen OptionList, BuilderScreen TextArea { border: none; scrollbar-gutter: stable; }
+    BuilderScreen OptionList:focus, BuilderScreen TextArea:focus { border: none; background: $boost; }
     BuilderScreen #card { height: 1fr; border: none; }
     BuilderScreen #notes { height: 1fr; min-height: 8; }
-    BuilderScreen #links, BuilderScreen #appears { padding: 0 1; height: auto; max-height: 12; }
+    BuilderScreen #links, BuilderScreen #appears { padding: 0 1; height: auto; max-height: 6; }
+    BuilderScreen #card-box .title { margin-top: 0; }
+    BuilderScreen .title { height: auto; min-height: 1; }
     BuilderScreen #status { height: 1; padding: 0 1; background: $boost; }
-    BuilderScreen OptionList:focus { border: none; }
     """
 
     def __init__(self, app_ref, universe_slug=None, story_slug=None):
@@ -299,6 +304,10 @@ class BuilderScreen(Screen):
                     with Vertical(id="card-box"):
                         yield Static("", id="card-title", classes="title", markup=False)
                         yield CardList(id="card")
+                        yield Static("Links", classes="title", markup=False)
+                        yield Static("", id="links", markup=False)
+                        yield Static("Appears in", classes="title", markup=False)
+                        yield Static("", id="appears", markup=False)
             with Vertical(id="right"):
                 with TabbedContent(id="rtabs", initial=self.start_rtab):
                     with TabPane("Outline", id="r-outline"):
@@ -310,12 +319,8 @@ class BuilderScreen(Screen):
                             yield _quiet(Button("Write here", id="sc-write"))
                             yield _quiet(Button("+Scene", id="sc-add"))
                     with TabPane("Notes", id="r-notes"):
-                        yield Static("Notes", classes="title")
+                        yield Static("Free-form notes about the selected entity (saved as you type)", classes="title", markup=False)
                         yield TextArea("", id="notes")
-                        yield Static("Links", classes="title")
-                        yield Static("", id="links", markup=False)
-                        yield Static("Appears in", classes="title")
-                        yield Static("", id="appears", markup=False)
         yield Static("", id="status", markup=False)
         yield Footer()
 
@@ -416,8 +421,9 @@ class BuilderScreen(Screen):
             here = self.universe and u.slug == self.universe.slug
             t = Text()
             t.append("▶ " if here else "  ", style="bold cyan")
+            n = len(u.entities())
             t.append(u.name, style="bold" if here else "")
-            t.append(f"  {len(u.entities())}", style="dim")
+            t.append(f"  {n} entit{'y' if n == 1 else 'ies'}", style="dim")
             rows.append(Option(t, id=u.slug))
         if not rows:
             rows.append(Option(Text("(none yet: press N)", style="dim"), id="", disabled=True))
@@ -448,12 +454,7 @@ class BuilderScreen(Screen):
         """The boxes at the top: the universe overview, or the open story's outline."""
         rows = []
         if self.story:
-            meta, sections = self.story.load_outline()
-            rows.append(("meta:title", "Title", meta.get("title", "")))
-            rows.append(("meta:genre", "Genre", " · ".join(x for x in (meta.get("genre"), meta.get("mood")) if x)))
-            rows.append(("meta:structure", "Structure", meta.get("structure", "")))
-            for heading, text in sections.items():
-                rows.append((f"section:{heading}", heading, text.replace("\n\n", "  ")))
+            rows.extend(outline.rows(self.story))              # plain text, one beat per row (see outline.py)
             st = settings.load_story(self.story.path)
             rows.append(("settings", "Settings", f"{st['format']} · {st['font']} · goal {st['daily_goal']}/day · "
                                                  f"column {st['column_width']}"))
@@ -1117,9 +1118,8 @@ class BuilderScreen(Screen):
             return
         if key == "u:genres" or key == "u:mix":
             return self.action_universe_settings()
-        if key.startswith("meta:") or key.startswith("section:"):
-            raw = self.story.meta.get(key[5:], "") if key.startswith("meta:") else self.story.sections().get(key[8:], "")
-            return self.app.push_screen(EditScreen(f"Edit {label.lower()}", {label: raw}),
+        if key.split(":")[0] in ("meta", "section", "setting", "beat"):
+            return self.app.push_screen(EditScreen(f"Edit {label.lower().rstrip('.')}", {label: outline.raw(self.story, key)}),
                                         lambda out: self._top_written(key, label, out))
         if key.startswith("u:"):
             sett = self.universe.settings()
@@ -1131,10 +1131,12 @@ class BuilderScreen(Screen):
         if out is None:
             return
         text = out[label].strip()
-        if key.startswith("meta:"):
-            self.story.set_meta(**{key[5:]: text})
-        elif key.startswith("section:"):
-            self.story.set_section(key[8:], text)
+        if key.split(":")[0] in ("meta", "section", "setting", "beat"):
+            outline.save(self.story, key, text)
+            if key == "meta:title" and text:                 # a new title: what it is 'about' (the motif) follows it
+                motif = motif_from(text, lambda: self.story.meta.get("motif", ""))
+                self.story.set_meta(motif=motif)
+                self.say(f"Title changed; the motif is now '{motif}' (change it in the Wheel's title step if that is wrong).")
         elif key == "u:name":
             vault.rename_universe(self.universe, text or self.universe.name)
         elif key == "u:notes":

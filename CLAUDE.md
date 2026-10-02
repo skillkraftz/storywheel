@@ -642,4 +642,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Neovide is optional (`neovide` setting): started as `neovide --no-fork` with the same environment plus `STORYWHEEL_GUI=neovide`;
   if missing, the terminal is used and a message says so. The font, size and `line_spacing` (pixels) come from settings.
   In the terminal, `paragraph_spacing` adds display-only blank lines between paragraphs.
+- Focus never changes geometry: every list, tree and text box in every mode has the same border focused or not (none, for the
+  Builder's and the Wheel's lists) and shows focus by colour. `tests/test_layout_stability.py` enforces it for every mode.
+- The Builder's Outline tab is built by `outline.py` from story.md: one row per beat or setting line, markdown stripped for
+  showing, edited one row at a time. Promotion writes a beat's label (`**Label.** text`) only for structures that show their labels.
+- The Wheel panel's groups (Characters, Places, Things) count named entities, the same numbers the checklist shows; only
+  characters and towns can be a whole step, the rest are boosted atoms and say so when you try to "use" them.
 

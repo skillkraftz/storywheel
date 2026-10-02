@@ -324,7 +324,7 @@ def test_ticking_a_universe_saves_it_and_shows_its_people_and_places(home):
         await press(pilot, "k")
         return ticked, picked
     ticked, picked = run_tui(story, make_engine(home), script)
-    assert "☑ Thornwood" in ticked and "(1 ticked)" in ticked and "Characters (2)" in ticked and "Places (1)" in ticked
+    assert "☑ Thornwood" in ticked and "(1 ticked)" in ticked and "Characters (2)" in ticked and "Places (2)" in ticked and "Things (1)" in ticked and "2 characters · 2 places · 1 thing" in ticked
     assert picked == ["thornwood"] and store.load(story["id"])["universes"] == ["thornwood"]
 
 
@@ -362,7 +362,7 @@ def test_using_a_place_jumps_to_the_setting_step(home):
         s = app.session
         await press(pilot, "v", "enter")
         await pilot.click("#universe", offset=(5, 1)); await pilot.pause()      # Places group (second)
-        await pilot.click("#universe", offset=(8, 2)); await pilot.pause()
+        await pilot.click("#universe", offset=(8, 3)); await pilot.pause()      # (Hangman's Tree comes first, then Red Draw)
         await press(pilot, "enter")
         return s.step.key, s.fields["place"]
     assert run_tui(store.new_story(), make_engine(home), script) == ("setting", "Red Draw")

@@ -28,7 +28,7 @@ from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
 
-from . import clipboard, store, structures
+from . import clipboard, store, structures, universe_atoms
 from . import threads as T
 from .session import Session
 from .steps import public, steps_for
@@ -764,17 +764,17 @@ class MainScreen(Screen):
     MainScreen #stories-title { margin-top: 1; }
     MainScreen #stories { height: 1fr; }
     MainScreen #story-buttons { height: 1; }
-    MainScreen #story-buttons Button { height: 1; border: none; min-width: 4; padding: 0 1; margin-right: 1; }
+    MainScreen #story-buttons Button { height: 1; border: none; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
     MainScreen #uni-title { margin-top: 1; }
     MainScreen #uni-buttons { height: 1; }
-    MainScreen #uni-buttons Button { height: 1; border: none; min-width: 6; margin-right: 1; }
+    MainScreen #uni-buttons Button { height: 1; border: none; min-width: 6; margin-right: 1; padding: 0; }
     MainScreen #universe { height: 1fr; }
     MainScreen #banner { background: $warning 30%; color: $text; padding: 0 1; height: auto; }
     MainScreen #banner-buttons { height: 1; padding: 0 1; }
-    MainScreen #banner-buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; }
+    MainScreen #banner-buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; padding: 0; }
     MainScreen #buttons { height: 1; padding: 0 1; }
-    MainScreen #buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; }
+    MainScreen #buttons Button { height: 1; border: none; min-width: 8; margin-right: 1; padding: 0; }
     MainScreen #main { width: 1fr; }
     MainScreen #card-box { height: 3fr; border: round $primary; }
     MainScreen #hist-box { height: 2fr; border: round $primary-darken-2; }
@@ -1110,7 +1110,7 @@ class MainScreen(Screen):
             t = Text()
             t.append("☑ " if on else "☐ ", style="bold green" if on else "dim")
             t.append(u.name, style="bold" if on else "")
-            t.append(f"  {len(u.entities('character'))}c {len(u.entities('place'))}p {len(u.entities('thing'))}t", style="dim")
+            t.append("\n    " + universe_atoms.counts_text(u), style="dim")
             rows.append(Option(t, id=u.slug))
         if not rows:
             rows.append(Option(Text("(no universes yet: promote a story)", style="dim"), id="", disabled=True))
@@ -1124,14 +1124,15 @@ class MainScreen(Screen):
         if not hasattr(self, "_open_groups"):
             self._open_groups = set()
         tree.clear()
-        for step_key, label in (("protagonist", "Characters"), ("setting", "Places")):
-            entries = s.universe_entries(step_key)
+        ticked = s.selected_universes()
+        for type_, label, step_key in universe_atoms.GROUPS:
+            entries = [(u, e) for u in ticked for e in universe_atoms.named(u, type_)]
             if not entries:
                 continue
-            group = tree.root.add(f"{label} ({len(entries)})", data=("group", step_key), expand=step_key in self._open_groups)
-            for u, e, fields in entries:
-                prefix = f"{u.name}: " if len(chosen) > 1 else ""
-                group.add_leaf(prefix + e.name, data=("entity", step_key, u.slug, e.id))
+            group = tree.root.add(f"{label} ({len(entries)})", data=("group", type_), expand=type_ in self._open_groups)
+            for u, e in entries:
+                prefix = f"{u.name}: " if len(ticked) > 1 else ""
+                group.add_leaf(prefix + e.name, data=("entity", step_key or "", u.slug, e.id, type_))
         if not chosen:
             tree.root.add_leaf("(tick a universe above to see its people and places)", data=("none",))
         elif not tree.root.children:
@@ -1161,16 +1162,24 @@ class MainScreen(Screen):
         if not data:
             self.say("Select a person or place in the universe panel first.")
             return
-        _tag, step_key, slug, eid = data
-        found = next(((u, e, f) for u, e, f in self.session.universe_entries(step_key) if u.slug == slug and e.id == eid), None)
-        if not found:
+        _tag, step_key, slug, eid, type_ = data
+        from . import vault
+        u = vault.get_universe(slug)
+        e = u.entity(eid) if u else None
+        if not e:
             return
-        u, e, fields = found
+        usable = next(((uu, ee, f) for uu, ee, f in self.session.universe_entries(step_key) if uu.slug == slug and ee.id == eid), None) \
+            if step_key else None
+        fields = usable[2] if usable else {k: v for k, v in e.fields.items() if v and isinstance(v, str)}
         if action is None:
-            self.app.push_screen(UniverseEntryScreen(self.session.universe_label(step_key), fields, u.name),
+            label = self.session.universe_label(step_key) if usable else type_.title()
+            self.app.push_screen(UniverseEntryScreen(label, fields, u.name),
                                  lambda what: self.universe_act(what, data) if what else None)
         elif action == "use":
-            if self.session.use_universe_entry(step_key, fields):
+            if not usable:
+                self.say(f"A {type_} here is not a whole step: its name and details turn up in rolls (boosted) while the universe is ticked."
+                         + (" Landmarks and buildings can't be a setting on their own; pick the town they are in." if type_ == "place" else ""))
+            elif self.session.use_universe_entry(step_key, fields):
                 self.hist_mode = "rolls"
                 self.after()
                 self.card.focus()

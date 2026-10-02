@@ -55,7 +55,7 @@ def test_apply_creates_a_universe_entities_links_and_the_story_outline(home):
     meta, sections = story.load_outline()
     assert meta["title"] == d["kept"]["title"]["title"] and meta["promoted_from"] == d["id"] and hero.id in meta["cast"]
     assert sections["Premise"] == d["kept"]["premise"]["premise"] and "Twist" in sections
-    assert "Story Spine" in sections and sections["Story Spine"].count("**") >= 2 * len(d["kept"]["spine"])
+    assert "Story Spine" in sections and sections["Story Spine"].split("\n\n") == list(d["kept"]["spine"].values())
     assert "- **Place:** " + d["kept"]["setting"]["place"] in sections["Setting"]
     assert story.seed()["id"] == d["id"]
     assert d["promoted"] == {"universe": "thornwood", "story": story.slug}

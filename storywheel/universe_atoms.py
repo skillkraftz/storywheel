@@ -56,6 +56,23 @@ def build_lists(universe):
     return [WordList(f"universe:{universe.slug}/{slot}", slot, [t], entries) for slot, entries in by_slot.items() if entries]
 
 
+GROUPS = (("character", "Characters", "protagonist"), ("place", "Places", "setting"), ("thing", "Things", None))
+
+
+def named(universe, type_):
+    """The universe's named entities of one type (a blank, unnamed one is not shown or counted anywhere)."""
+    return [e for e in universe.entities(type_) if e.name.strip()]
+
+
+def counts_text(universe):
+    """'3 characters · 2 places · 2 things': the same numbers the Wheel's panel groups show."""
+    parts = []
+    for type_, label, _step in GROUPS:
+        n = len(named(universe, type_))
+        parts.append(f"{n} {label.lower() if n != 1 else label.lower().rstrip('s')}")
+    return " · ".join(parts)
+
+
 def step_candidates(universe, step_key):
     """Whole-step candidates from a universe: protagonist <- characters, setting <- places.
     Each is the dict of fields that step uses (blank ones are filled by an ordinary roll when it is used)."""

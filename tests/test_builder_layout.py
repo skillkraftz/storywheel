@@ -156,7 +156,7 @@ def test_the_outline_tab_shows_the_story_or_the_universe(world):
     assert "Universe: Thornwood" in uni_text and "Genre leanings" in uni_text
 
 
-def test_notes_links_and_appearances_live_in_the_notes_tab(world):
+def test_links_and_appearances_are_under_the_entity_card_and_notes_have_their_own_tab(world):
     u, s, s2 = world
     async def script(app, pilot):
         before = flat(screen_text(app))
@@ -164,7 +164,8 @@ def test_notes_links_and_appearances_live_in_the_notes_tab(world):
         await pilot.pause()
         return before, flat(screen_text(app))
     before, after = run(script)
-    assert "Appears in" not in before and "Appears in" in after and "Links" in after
+    assert "Appears in" in before and "Links" in before            # (they describe the selected entity, so they sit under its card)
+    assert "Free-form notes about the selected entity" in after
 
 
 def test_the_scenes_tab_lists_the_scenes_with_first_lines_and_words(world):
