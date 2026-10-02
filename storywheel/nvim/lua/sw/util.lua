@@ -43,10 +43,18 @@ end
 local keyword = vim.regex([[\k]])
 
 -- A scene marker is `* * *` or `* * * Title`. Returns nil for any other line, else the title ("" for a plain `* * *`).
+-- A line holding only `***`, `* * *` or `#` is a scene break; `* * * Title` (or `*** Title`) is a break that names its scene.
+-- `***bold italic***` inside a paragraph is not a break. (storywheel/vault.py: marker_label)
 function M.marker_label(line)
-  if line == "* * *" then return "" end
-  local label = line:match("^%* %* %*%s+(.-)%s*$")
+  local s = line:gsub("%s+$", "")
+  if s == "* * *" or s == "***" or s == "#" then return "" end
+  local label = s:match("^%* %* %*%s+(.-)$") or s:match("^%*%*%*%s+([^%*%s].-)$")
   return label
+end
+
+-- Is this line a scene break that is only a break (no title)?
+function M.is_plain_break(line)
+  return M.marker_label(line) == ""
 end
 
 -- Words in prose: runs of non-space characters holding a letter or digit. Marker lines are not prose.

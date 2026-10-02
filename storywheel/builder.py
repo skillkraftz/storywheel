@@ -16,6 +16,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
+from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
@@ -271,7 +272,7 @@ class BuilderScreen(Screen):
     # --- layout ---------------------------------------------------------------------------------------------
 
     def compose(self) -> ComposeResult:
-        yield Header()
+        yield QuietHeader()
         with Horizontal(id="body"):
             with Vertical(id="left"):
                 yield Static("Universes", classes="title")
@@ -1378,16 +1379,19 @@ class BuilderApp(App):
             return
         screen.story = story
         if fmt is None:
-            options = [("Word (.docx), Shunn manuscript format", "docx"), ("OpenDocument (.odt), needs LibreOffice", "odt"),
+            options = [("Word (.docx), Shunn manuscript format", "docx"), ("Word (.docx), anonymous: no name or contact block", "docx-anon"), ("OpenDocument (.odt), needs LibreOffice", "odt"),
                        ("PDF, needs LibreOffice", "pdf"), ("Markdown (.md)", "md"), ("Plain text (.txt)", "txt"),
                        ("Fountain screenplay (.fountain), a stub", "fountain")]
             self.push_screen(ChoiceScreen(f"Export '{story.title}' as…", options),
                              lambda f: self.export(screen, f) if f else None)
             return
+        anonymous = None
+        if fmt == "docx-anon":
+            fmt, anonymous = "docx", True
         screen.say(f"Exporting {story.title} as .{fmt} …")
         self.refresh()
         try:
-            result = exporter.export(story, fmt)
+            result = exporter.export(story, fmt, anonymous=anonymous)
         except exporter.ExportError as e:
             screen.say(str(e))
             return

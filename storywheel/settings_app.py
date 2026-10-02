@@ -9,6 +9,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
+from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
 from . import paths, settings, vault, writing_stats
@@ -125,7 +126,7 @@ class SettingsScreen(Screen):
     # --- layout ---------------------------------------------------------------------------------------------
 
     def compose(self) -> ComposeResult:
-        yield Header()
+        yield QuietHeader()
         g = settings.load_global()
         g["library"] = str(paths.library_root())
         g["manuscripts_dir"] = str(paths.manuscripts_root())

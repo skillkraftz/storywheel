@@ -25,9 +25,11 @@ M.HELP = {
   "",
   "Writing",
   "  Alt+I / Alt+B      italic / bold (Ctrl+B too; Ctrl+I only if your terminal can send it)",
-  "  Enter              starts a new paragraph (a blank line between, shown with an indent)",
-  "  Alt+S              scene break  (* * *  in the file, centered on screen)",
-  "  Tab                next name in the completion list (names from this universe)",
+  "  Enter              starts a new paragraph on the next line: one line is one paragraph, each shown with an indent",
+  "  Alt+S              scene break  (*** on a line of its own, centered on screen; typing *** and Enter works too)",
+  "  Alt+J              join the selected lines (or the lines around the cursor) into one paragraph",
+  "  Tab                next name in the completion list; at the start of a paragraph it does nothing (indents are automatic)",
+  "  (every shortcut can be changed in Settings F4 > Keys)",
   "",
   "With Vim keys on (not notepad mode), in Normal mode, with Space first",
   "  n  scene sidebar      p  peek at the name under the cursor (also F8)    a  new scene",
@@ -143,9 +145,10 @@ function M.copy_manuscript()
   return false
 end
 
-function M.export(format)
+function M.export(format, anonymous)
   backup.save_all()
   local args = { "manuscript", "export", story.universe .. "/" .. story.slug, "--format", format or "docx", "--json" }
+  if anonymous then args[#args + 1] = "--anonymous" end
   vim.api.nvim_echo({ { "Exporting…", "Normal" } }, false, {})
   local data, err = util.cli_json(args)
   if data and data.path then
@@ -265,8 +268,8 @@ function M.map_global()
   map({ "n", "i", "x" }, "<F2>", function() M.leave("builder") end, "to the Builder")
   map({ "n", "i", "x" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
   map({ "n", "i", "x" }, "<F4>", function() M.leave("settings") end, "to Settings")
-  map({ "n", "i" }, "<F9>", function() sidebar.toggle() end, "scene sidebar")
-  map({ "n", "i" }, "<F8>", function() world.peek() end, "peek")
+  map({ "n", "i" }, story.setting("key_sidebar", "<F9>"), function() sidebar.toggle() end, "scene sidebar")
+  map({ "n", "i" }, story.setting("key_peek", "<F8>"), function() world.peek() end, "peek")
   local leader = {
     n = function() sidebar.toggle() end, p = function() world.peek() end, a = function() M.new_scene() end,
     i = function() prose.toggle("invisibles") end, t = function() prose.toggle("typewriter") end,
@@ -292,6 +295,7 @@ function M.commands()
   c("SWSettings", function() M.edit_settings() end)
   c("SWKeyCheck", function() M.keycheck() end)
   c("SWSceneBreak", function() prose.scene_break() end)
+  c("SWJoin", function() notepad.join_lines() end)
   c("SWInvisibles", function() prose.toggle("invisibles") end)
   c("SWTypewriter", function() prose.toggle("typewriter") end)
   c("SWSpell", function() prose.toggle("spell") end)

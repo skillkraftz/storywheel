@@ -70,13 +70,21 @@ local function leave_selection()
 end
 
 -- Back to typing. `now` does it at once (from a key you pressed); otherwise it waits a moment (from a mode change).
+-- Never in a window that is not the writing window, or in a buffer that can't be changed (a menu, the help, the sidebar):
+-- Insert mode there would turn the next Enter into an error.
+function M.can_type()
+  local layout = require("sw.layout")
+  return M.enabled and layout.main ~= nil and vim.api.nvim_win_is_valid(layout.main)
+      and vim.api.nvim_get_current_win() == layout.main and vim.bo.modifiable
+end
+
 function M.insert(now)
   if now then
-    if M.enabled and vim.fn.mode() ~= "i" then vim.cmd("startinsert") end
+    if M.can_type() and vim.fn.mode() ~= "i" then vim.cmd("startinsert") end
     return
   end
   vim.schedule(function()
-    if M.enabled and vim.fn.mode() == "n" then vim.cmd("startinsert") end
+    if M.can_type() and vim.fn.mode() == "n" then vim.cmd("startinsert") end
   end)
 end
 
@@ -120,16 +128,59 @@ function M.delete_selection()
   vim.api.nvim_win_set_cursor(0, { r1 + 1, c1 })
 end
 
+-- Pasted text: one paragraph per line, flush left. Leading tabs and spaces are dropped (the indent is automatic), and so are
+-- empty lines (they mean nothing).
+function M.clean_pasted(lines)
+  local out = {}
+  for _, l in ipairs(lines) do
+    local t = l:gsub("\r$", "")
+    t = t:gsub("^[ \t]+", "")
+    while t:sub(1, 2) == "\194\160" do t = t:sub(3):gsub("^[ \t]+", "") end         -- (a non-breaking space too)
+    if t ~= "" or #lines == 1 then out[#out + 1] = t end
+  end
+  if #out == 0 then out = { "" } end
+  return out
+end
+
+-- Join the selected lines into one paragraph (for text that was hard-wrapped, from an email say). Blank lines and scene breaks
+-- inside the selection are dropped. Needs a selection: one line is one paragraph, so there is no "the paragraph" to guess.
+function M.join_lines()
+  local util = require("sw.util")
+  if not M.has_selection() then
+    vim.api.nvim_echo({ { "Select the lines to join first (Shift+Down, or drag with the mouse), then join.", "Normal" } }, true, {})
+    return false
+  end
+  local a, _, b = selection()
+  local r1, r2 = a + 1, b + 1
+  leave_selection()
+  local lines = vim.api.nvim_buf_get_lines(0, r1 - 1, r2, false)
+  local parts = {}
+  for _, l in ipairs(lines) do
+    local t = vim.trim(l)
+    if t ~= "" and util.marker_label(t) == nil then parts[#parts + 1] = t end
+  end
+  if #parts < 2 then
+    vim.api.nvim_echo({ { "Nothing to join: that is one line already.", "Normal" } }, false, {})
+    return false
+  end
+  vim.api.nvim_buf_set_lines(0, r1 - 1, r2, false, { table.concat(parts, " ") })
+  vim.api.nvim_win_set_cursor(0, { r1, 0 })
+  vim.api.nvim_echo({ { string.format("Joined %d lines into one paragraph.", #parts), "Normal" } }, true, {})
+  M.insert(true)
+  return true
+end
+
 -- Ctrl+V: paste, replacing the selection if there is one.
 function M.paste()
   local lines, linewise = get_register()
   if #lines == 0 then return false end
+  lines = M.clean_pasted(lines)
   if M.has_selection() then M.delete_selection() end
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if linewise then
-    -- a whole line pasted: it becomes a paragraph of its own
-    table.insert(lines, #lines + 1, "")
-    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, vim.list_extend({ "" }, lines))
+    -- whole lines pasted: each is a paragraph of its own, on its own line
+    vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+    vim.api.nvim_win_set_cursor(0, { row + #lines, 0 })
   else
     vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, lines)
     local last = lines[#lines]
@@ -228,14 +279,15 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, "<C-f>", function() M.find() end)
   map({ "i", "s", "x", "n" }, "<C-g>", function() M.find_next(1) end)
   map({ "i", "s", "x", "n" }, "<A-g>", function() M.find_next(-1) end)
-  map({ "i", "s", "x", "n" }, "<C-q>", function() require("sw").leave("builder") end)
-  map({ "i", "s", "x", "n" }, "<F12>", function() require("sw.menu").open() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_builder", "<C-q>"), function() require("sw").leave("builder") end)
+  map({ "i", "s", "x", "n" }, story.setting("key_menu", "<F12>"), function() require("sw.menu").open() end)
   map({ "i", "s", "x", "n" }, "<A-m>", function() require("sw.menu").open() end)
+  map({ "i", "s", "x" }, "<A-j>", function() M.join_lines() end)
   -- smaller undo steps: a break at every space
   map("i", "<Space>", "<C-g>u<Space>")
   -- the shortcuts that normal mode's leader keys give a Vim user
-  map({ "i", "s", "x", "n" }, "<F9>", function() require("sw.sidebar").toggle() end)
-  map({ "i", "s", "x", "n" }, "<F8>", function() require("sw.world").peek() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_sidebar", "<F9>"), function() require("sw.sidebar").toggle() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_peek", "<F8>"), function() require("sw.world").peek() end)
 end
 
 -- The right-click menu.
@@ -251,7 +303,7 @@ function M.popup_menu()
   local items = {
     { "Cut", "cut" }, { "Copy", "copy" }, { "Paste", "paste" }, { "Select All", "select_all" }, { "-" },
     { "Italic", "italic" }, { "Bold", "bold" }, { "Scene Break", "scene_break" }, { "-" },
-    { "Find", "find" }, { "Writer Menu", "menu" },
+    { "Find", "find" }, { "Join Lines", "join" }, { "Writer Menu", "menu" },
   }
   for i, it in ipairs(items) do
     if it[1] == "-" then
@@ -275,6 +327,7 @@ function M.run_menu_item(name)
       if M.has_selection() then prose.wrap_visual("**") else prose.toggle_insert("**") end
     end,
     scene_break = function() prose.scene_break() end,
+    join = function() M.join_lines() end,
     menu = function() require("sw.menu").open() end,
   }
   if actions[name] then actions[name]() end
@@ -293,6 +346,7 @@ function M.setup()
   o.virtualedit = "onemore"
   o.undolevels = 10000
   M.popup_menu()
+  M.wrap_paste()
   local group = vim.api.nvim_create_augroup("sw_notepad", { clear = true })
   -- never rest in Normal mode inside the writing window
   vim.api.nvim_create_autocmd("ModeChanged", {
@@ -308,13 +362,40 @@ function M.setup()
   if M.clipboard_note then util.notify(M.clipboard_note) end
 end
 
+-- Text pasted by the terminal (Ctrl+Shift+V, a middle click, the right-click Paste of the terminal) goes through vim.paste.
+-- In the writing window it is cleaned like our own paste: one paragraph per line, no leading tabs or spaces, no empty lines.
+-- A big paste arrives in chunks; they are gathered and cleaned as one.
+function M.wrap_paste()
+  if M.paste_wrapped then return end
+  M.paste_wrapped = true
+  local original = vim.paste
+  local acc
+  vim.paste = function(lines, phase)
+    if not (M.enabled and vim.bo.filetype == "storywheel" and vim.bo.modifiable) then return original(lines, phase) end
+    if phase == -1 then return original(M.clean_pasted(lines), -1) end
+    if phase == 1 or acc == nil then acc = {} end
+    if #acc == 0 then
+      acc = vim.deepcopy(lines)
+    else
+      acc[#acc] = acc[#acc] .. (lines[1] or "")
+      for i = 2, #lines do acc[#acc + 1] = lines[i] end
+    end
+    if phase == 3 then
+      local all = acc
+      acc = nil
+      return original(M.clean_pasted(all), -1)
+    end
+    return true
+  end
+end
+
 -- Used by tests and by the menu to step out of notepad behavior for a moment.
 function M.pause(on)
   M.paused = on
 end
 
 function M.start_typing()
-  if M.enabled then vim.cmd("startinsert") end
+  if M.can_type() then vim.cmd("startinsert") end
 end
 
 return M

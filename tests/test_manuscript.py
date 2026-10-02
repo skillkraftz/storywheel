@@ -15,8 +15,10 @@ pytestmark_nvim = pytest.mark.skipif(writer.check() is not None, reason="Neovim 
 def test_marker_lines():
     f = vault.marker_label
     assert f("* * *") == "" and f("* * * The Letter") == "The Letter" and f("* * *   spaced out  ") == "spaced out"
-    assert f("*  * *") is None and f("* * ") is None and f("***") is None and f(" * * *") is None and f("text * * *") is None
+    assert f("*  * *") is None and f("* * ") is None and f(" * * *") is None and f("text * * *") is None
     assert f("* * *x") is None
+    assert f("***") == "" and f("#") == "" and f("***  ") == "" and f("*** The Letter") == "The Letter"
+    assert f("***bold italic***") is None and f("***bold italic*** and more") is None and f("# Heading") is None
 
 
 def test_words_ignore_marker_lines_only():

@@ -88,6 +88,7 @@ def _refresh_copy(target):
 
 def environment(story, return_file):
     story.migrate_manuscript()
+    story.migrate_paragraphs()
     xdg = nvim_config()
     env = dict(os.environ)
     root = state_root()

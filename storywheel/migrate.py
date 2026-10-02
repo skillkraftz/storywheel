@@ -17,9 +17,9 @@ def migrate_manuscripts():
     lines = []
     for u in vault.list_universes():
         for s in u.stories():
-            message = s.migrate_manuscript()
-            if message:
-                lines.append(f"{u.name} / {s.title}: {message}")
+            for message in (s.migrate_manuscript(), s.migrate_paragraphs()):
+                if message:
+                    lines.append(f"{u.name} / {s.title}: {message}")
     return lines
 
 

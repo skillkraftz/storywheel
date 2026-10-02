@@ -324,6 +324,39 @@ class Story:
                 p.unlink()
         return f"Merged {len(files)} scene files into manuscript.md (the originals are in {backup})."
 
+    def migrate_paragraphs(self):
+        """Older manuscripts kept a paragraph as lines joined until a blank line. A paragraph is now one line. Once per story
+        (a `.one-line-paragraphs` file says it is done), hard-wrapped paragraphs are joined and blank lines dropped, with the
+        old files copied to <story>/.backups/paragraphs-DATE/ first. Returns a message when something changed, else None."""
+        flag = self.path / ".one-line-paragraphs"
+        if flag.exists() or not self.path.is_dir():
+            return None
+        changed, total_joined, dropped = [], 0, 0
+        files = self.files()
+        stamp_ = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        backup = self.path / ".backups" / f"paragraphs-{stamp_}"
+        for p in files:
+            old = p.read_text(encoding="utf-8")
+            new, joined = join_hard_wraps(old)
+            if new == old:
+                continue
+            backup.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(p, backup / p.name)
+            blanks = sum(1 for l in old.split("\n")[:-1] if not l.strip())
+            dropped += blanks
+            total_joined += joined
+            _write(p, new)
+            changed.append(p.name)
+        _write(flag, "one line = one paragraph\n")
+        if not changed:
+            return None
+        parts = []
+        if total_joined:
+            parts.append(f"joined {total_joined} hard-wrapped paragraph{'s' if total_joined != 1 else ''}")
+        if dropped:
+            parts.append(f"removed {dropped} blank line{'s' if dropped != 1 else ''}")
+        return f"Paragraphs are now one line each: {' and '.join(parts) or 'tidied'} in {', '.join(changed)} (the originals are in {backup})."
+
     def seed(self):
         p = self.path / "seed.json"
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
@@ -350,10 +383,49 @@ class Story:
         return trash(self.path)
 
 
+MARKERS = ("***", "* * *", "#")             # the scene breaks that can be chosen in Settings (the first is the default)
+
+
 def marker_label(line):
-    """None if the line is not a scene marker; else the scene's title ('' for a plain `* * *`)."""
-    m = re.fullmatch(r"\* \* \*(?:\s+(.*?))?\s*", line)
-    return None if m is None else (m.group(1) or "")
+    """None if the line is not a scene marker; else the scene's title ('' for a plain break). A line holding only `***`,
+    `* * *` or `#` is a break; `* * * Title` (or `*** Title`) is a break that names its scene. `***text***` inside a
+    paragraph is bold italic, not a break."""
+    s = line.rstrip()
+    if s in MARKERS:
+        return ""
+    m = re.fullmatch(r"\* \* \*\s+(.*)", s) or re.fullmatch(r"\*\*\*\s+([^*\s].*)", s)
+    return None if m is None else m.group(1).strip()
+
+
+def join_hard_wraps(text):
+    """The text in the one-line-one-paragraph form: each paragraph on one line, no blank lines, scene markers alone on their
+    lines. Lines of a hard-wrapped paragraph (no blank line between them) are joined with a space. Returns (text, joined)
+    where `joined` is how many paragraphs were put back together."""
+    out, block, joined = [], [], 0
+    lines = text.split("\n")
+    if not any(not l.strip() and 0 < i < len(lines) - 1 and any(x.strip() for x in lines[:i]) and any(x.strip() for x in lines[i + 1:])
+               for i, l in enumerate(lines)):
+        return text, 0                    # no blank line between paragraphs: already one paragraph per line
+
+    def flush():
+        nonlocal joined
+        if block:
+            if len(block) > 1:
+                joined += 1
+            out.append(" ".join(block))
+            block.clear()
+
+    for line in text.split("\n"):
+        s = line.strip()
+        if marker_label(s) is not None:
+            flush()
+            out.append(s)
+        elif s:
+            block.append(s)
+        else:
+            flush()
+    flush()
+    return "\n".join(out) + ("\n" if out else ""), joined
 
 
 def count_words(text):
@@ -643,6 +715,7 @@ class Universe:
         m = {"id": slug, "title": title, "universe": self.slug, "created": datetime.date.today().isoformat()}
         m.update(meta or {})
         s.save_outline(m, sections or {})
+        _write(s.path / ".one-line-paragraphs", "one line = one paragraph\n")      # (new stories already follow the rule)
         if seed is not None:
             _write(s.path / "seed.json", json.dumps(seed, indent=2))
         return s

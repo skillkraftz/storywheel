@@ -25,6 +25,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.message import Message
 from textual.screen import ModalScreen, Screen
+from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
 
@@ -600,7 +601,7 @@ class MixScreen(Screen):
         self.view = "tags"
 
     def compose(self) -> ComposeResult:
-        yield Header()
+        yield QuietHeader()
         yield Static("MIX: THIS STORY ONLY. Changes here never touch the genre profiles, and only "
                      "affect future rolls (nothing you have kept changes).", id="warn", markup=False)
         yield Static("", id="sub", markup=False)
@@ -797,7 +798,7 @@ class MainScreen(Screen):
     # --- layout ----------------------------------------------------------------------------------------------
 
     def compose(self) -> ComposeResult:
-        yield Header()
+        yield QuietHeader()
         with Horizontal(id="body"):
             with Vertical(id="left"):
                 yield Static("Steps", classes="title")

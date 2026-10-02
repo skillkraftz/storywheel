@@ -143,7 +143,7 @@ def cmd_manuscript(args):
         print(export.plain_text(story))
         return
     try:
-        result = export.export(story, args.format, args.out)
+        result = export.export(story, args.format, args.out, True if args.anonymous else None)
     except export.ExportError as e:
         if args.json:
             emit({"error": str(e)})
@@ -204,6 +204,7 @@ def add_parsers(sub):
     p.add_argument("target", help="universe/story")
     p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
     p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
+    p.add_argument("--anonymous", action="store_true", help="no name, contact block, byline or surname (header: Title / page)")
     p.add_argument("--json", action="store_true")
     sub.add_parser("migrate", help="bring old data up to date (the old universe.json, scene files -> one manuscript file)")
     sub.add_parser("settings", help="open Settings (who you are, goals, Writer preferences, export, library, stats)")

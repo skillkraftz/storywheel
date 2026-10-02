@@ -80,14 +80,19 @@ function M.decorate(buf)
         virt_text = chunks,
         virt_text_win_col = math.max(0, math.floor((width - total) / 2)),
       })
-    elseif gap > 0 and line == "" and i > 1 and lines[i - 1]:match("%S") and i < #lines then
-      local extra = {}
-      for _ = 1, gap do extra[#extra + 1] = { { "", "Normal" } } end
-      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, { virt_lines = extra })
-    elseif indent_on and line:match("%S") and (i == 1 or not lines[i - 1]:match("%S") or require("sw.util").marker_label(lines[i - 1]) ~= nil) then
-      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, {
-        virt_text = { { string.rep(" ", M.INDENT), "Normal" } }, virt_text_pos = "inline",
-      })
+    elseif line:match("%S") then
+      -- every line is a paragraph: it gets the indent, and (if asked for) a visual gap before the next paragraph line
+      if indent_on then
+        vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, {
+          virt_text = { { string.rep(" ", M.INDENT), "Normal" } }, virt_text_pos = "inline",
+        })
+      end
+      local nxt = lines[i + 1]
+      if gap > 0 and nxt and nxt:match("%S") and require("sw.util").marker_label(nxt) == nil then
+        local extra = {}
+        for _ = 1, gap do extra[#extra + 1] = { { "", "Normal" } } end
+        vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, { virt_lines = extra })
+      end
     end
   end
 end
@@ -168,7 +173,8 @@ end
 
 -- --- paragraphs and scene breaks ------------------------------------------------------------------------
 
--- Enter starts a new paragraph: a blank line between, nothing extra on an empty line.
+-- Enter starts a new paragraph on the next line (one line is one paragraph; no blank line). Nothing extra on an empty line.
+-- A line holding only `***` / `* * *` / `#` becomes the scene break chosen in Settings.
 -- The mapping is an expression that hands over to enter() through <Cmd>, so enter() runs after the text typed
 -- before it has gone into the buffer (an expression is evaluated early when keys are queued up).
 function M.enter_expr()
@@ -178,35 +184,43 @@ function M.enter_expr()
   return vim.api.nvim_replace_termcodes("<Cmd>lua require('sw.prose').enter()<CR>", true, false, true)
 end
 
+function M.break_text()
+  local m = story.setting("scene_marker", "***")
+  if m ~= "***" and m ~= "* * *" and m ~= "#" then m = "***" end
+  return m
+end
+
 function M.enter()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   local line = vim.api.nvim_get_current_line()
   if line == "" then return end
-  vim.api.nvim_buf_set_lines(0, row - 1, row, false, { line:sub(1, col), "", line:sub(col + 1) })
-  vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
+  if require("sw.util").is_plain_break(line) and col >= #line then
+    vim.api.nvim_buf_set_lines(0, row - 1, row, false, { M.break_text(), "" })     -- typed as a break: it is one, in the chosen form
+    vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
+    M.decorate(0)
+    return
+  end
+  vim.api.nvim_buf_set_lines(0, row - 1, row, false, { line:sub(1, col), line:sub(col + 1) })
+  vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
 end
 
--- Insert `* * *` between paragraphs (with a blank line each side) and leave the cursor on the empty line after it.
+-- Put a scene break (the form chosen in Settings) on a line of its own after the current paragraph, and leave the cursor on a new
+-- empty line after it. On an empty line, the break takes that line's place.
 function M.scene_break()
   local buf = 0
   local row = vim.api.nvim_win_get_cursor(0)[1]
-  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-  local line = lines[row] or ""
-  local nxt = lines[row + 1]
-  local next_blank = nxt ~= nil and not nxt:match("%S")
-  local new, target
+  local line = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)[1] or ""
+  local nxt = vim.api.nvim_buf_get_lines(buf, row, row + 1, false)[1]
+  local mark = M.break_text()
   if line:match("%S") then
-    new = { "", "* * *" }
-    if not next_blank then new[#new + 1] = "" end
-    target = row + 3                       -- the blank line after the break
+    local new = { mark }
+    if nxt == nil or nxt:match("%S") then new[2] = "" end                  -- (an empty line that is already there is used)
+    vim.api.nvim_buf_set_lines(buf, row, row, false, new)
+    vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
   else
-    new = { "* * *" }
-    if not next_blank then new[#new + 1] = "" end
-    target = row + 2
+    vim.api.nvim_buf_set_lines(buf, row - 1, row, false, { mark, "" })
+    vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
   end
-  vim.api.nvim_buf_set_lines(buf, row, row, false, new)
-  local count = vim.api.nvim_buf_line_count(buf)
-  vim.api.nvim_win_set_cursor(0, { math.min(target, count), 0 })
   M.decorate(buf)
 end
 
@@ -273,7 +287,7 @@ function M.map_buffer(buf)
   map("i", "<CR>", function() return M.enter_expr() end, { expr = true, replace_keycodes = false })
   map("n", "o", "A<CR>", { remap = true })
   -- formatting (Alt works in every terminal; Ctrl+I only where the terminal can tell it from Tab)
-  for _, spec in ipairs({ { "<A-i>", "*" }, { "<A-b>", "**" }, { "<C-b>", "**" } }) do
+  for _, spec in ipairs({ { story.setting("key_italic", "<A-i>"), "*" }, { story.setting("key_bold", "<A-b>"), "**" }, { "<C-b>", "**" } }) do
     map("i", spec[1], function() M.toggle_insert(spec[2]) end)
     map({ "x", "s" }, spec[1], function() M.wrap_visual(spec[2]) end)
   end
@@ -282,10 +296,18 @@ function M.map_buffer(buf)
     map({ "x", "s" }, "<C-i>", function() M.wrap_visual("*") end)
   end
   -- scene break
-  map({ "i", "n" }, "<A-s>", function() M.scene_break() end)
-  -- name completion with Tab
+  map({ "i", "n" }, story.setting("key_scene_break", "<A-s>"), function() M.scene_break() end)
+  -- Tab: next name in the completion list; at the start of a paragraph it does nothing (the indent is automatic)
   map("i", "<Tab>", function()
     if vim.fn.pumvisible() == 1 then return vim.api.nvim_replace_termcodes("<C-n>", true, false, true) end
+    local before = vim.api.nvim_get_current_line():sub(1, vim.api.nvim_win_get_cursor(0)[2])
+    if before:match("^%s*$") then
+      if not M.told_indent then
+        M.told_indent = true
+        vim.schedule(function() vim.api.nvim_echo({ { "Indents are automatic: every paragraph gets one, so Tab does nothing here.", "Normal" } }, true, {}) end)
+      end
+      return ""
+    end
     return vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
   end, { expr = true, replace_keycodes = false })
 end

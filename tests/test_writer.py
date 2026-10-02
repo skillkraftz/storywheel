@@ -185,20 +185,20 @@ def test_movement_is_by_displayed_line_and_markup_is_concealed(home, story):
 
 # --- paragraphs and the indent ------------------------------------------------------------------------------------
 
-def test_enter_starts_a_new_paragraph_and_never_stacks_blank_lines(home, story):
+def test_enter_starts_a_new_paragraph_on_the_next_line_and_never_stacks_empty_lines(home, story):
     r = run_typed(story, """
         vim.api.nvim_buf_set_lines(0, 0, -1, false, { "First paragraph." })
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
     """, "A<CR>Second.<CR><CR><CR>Third.", "R.lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)")
-    assert r["lines"] == ["First paragraph.", "", "Second.", "", "Third."]
+    assert r["lines"] == ["First paragraph.", "Second.", "Third."]            # one line is one paragraph: no blank lines are added
 
 
-def test_enter_in_the_middle_of_a_paragraph_splits_it_with_a_blank_line(home, story):
+def test_enter_in_the_middle_of_a_paragraph_splits_it_into_two_paragraph_lines(home, story):
     r = run_typed(story, """
         vim.api.nvim_buf_set_lines(0, 0, -1, false, { "One two three." })
         vim.api.nvim_win_set_cursor(0, { 1, 7 })
     """, "i<CR>", "R.lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)")
-    assert r["lines"] == ["One two", "", " three."]
+    assert r["lines"] == ["One two", " three."]
 
 
 def test_the_first_line_of_each_paragraph_gets_a_virtual_indent_not_typed_spaces(home, story):
@@ -214,7 +214,7 @@ def test_the_first_line_of_each_paragraph_gets_a_virtual_indent_not_typed_spaces
         R.lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     """)
     indented = sorted(m["row"] for m in r["rows"] if m["text"] == "    ")
-    assert indented == [0, 2, 7] and all(m["pos"] == "inline" for m in r["rows"] if m["text"] == "    ")
+    assert indented == [0, 2, 3, 7] and all(m["pos"] == "inline" for m in r["rows"] if m["text"] == "    ")
     assert r["lines"][2] == "Second para"                                 # nothing typed into the file
 
 
@@ -242,9 +242,9 @@ def test_the_scene_break_key_inserts_a_centered_break_between_paragraphs(home, s
             if m[4].conceal then R.break_marks[#R.break_marks + 1] = {{ row = m[2], col = m[4].virt_text_win_col, text = m[4].virt_text[1][1] }} end
         end
     """)
-    assert r["lines"] == ["End of scene.", "", "* * *", "", "Start of the next."]
-    assert r["cursor"] == [4, 0]                                              # on the empty line after the break
-    assert len(r["break_marks"]) == 1 and r["break_marks"][0]["row"] == 2
+    assert r["lines"] == ["End of scene.", "***", "", "Start of the next."]
+    assert r["cursor"] == [3, 0]                                              # on the empty line after the break
+    assert len(r["break_marks"]) == 1 and r["break_marks"][0]["row"] == 1
     assert r["break_marks"][0]["col"] == (72 - 11) // 2                        # centered in the column
 
 
@@ -253,7 +253,7 @@ def test_scene_break_at_the_end_of_a_scene_and_from_insert_mode(home, story):
         vim.api.nvim_buf_set_lines(0, 0, -1, false, { "The end of it." })
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
     """, "A<A-s>Then more.", "R.lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)")
-    assert r["lines"] == ["The end of it.", "", "* * *", "Then more."]
+    assert r["lines"] == ["The end of it.", "***", "Then more."]
 
 
 def test_a_scene_break_on_an_empty_line(home, story):
@@ -263,7 +263,7 @@ def test_a_scene_break_on_an_empty_line(home, story):
         require("sw.prose").scene_break()
         R.lines = {lines_of()}
     """)
-    assert r["lines"] == ["Para.", "", "* * *", ""]
+    assert r["lines"] == ["Para.", "***", ""]
 
 
 # --- italic and bold -----------------------------------------------------------------------------------------------------

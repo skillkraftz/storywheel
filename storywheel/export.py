@@ -64,24 +64,21 @@ def scene_texts(story):
     return [(p.name, normalize(p.read_text(encoding="utf-8"))) for p in story.files()]
 
 
-def paragraphs(text):
-    """Blocks of a text: [('scene_break', ''), ('text', 'a paragraph')...]. A marker line is a scene break wherever it is."""
-    out, buf = [], []
+def one_space(text):
+    """Double spaces after a full stop (and !, ?, …, with closing quotes or brackets) become one."""
+    return re.sub(r"([.!?…][\"'”’)\]*_]*)[ \t]{2,}(?=\S)", r"\1 ", text)
 
-    def flush():
-        if buf:
-            out.append(("text", " ".join(buf)))
-            buf.clear()
 
+def paragraphs(text, single_space=False):
+    """Blocks of a text: [('scene_break', ''), ('text', 'a paragraph')...]. One line is one paragraph; blank lines mean
+    nothing; a marker line is a scene break wherever it is."""
+    out = []
     for line in text.split("\n"):
-        if vault.marker_label(line.strip()) is not None:
-            flush()
+        s = line.strip()
+        if vault.marker_label(s) is not None:
             out.append(("scene_break", ""))
-        elif line.strip():
-            buf.append(line.strip())
-        else:
-            flush()
-    flush()
+        elif s:
+            out.append(("text", one_space(s) if single_space else s))
     return out
 
 
@@ -93,7 +90,7 @@ def compile_text(story):
 def plain_text(story):
     """No markup at all: scene breaks are '#', as in a manuscript."""
     blocks = []
-    for kind, text in paragraphs(compile_text(story)):
+    for kind, text in paragraphs(compile_text(story), _one_space(story)):
         blocks.append("#" if kind == "scene_break" else strip_markup(text))
     return "\n\n".join(blocks)
 
@@ -105,14 +102,22 @@ def round_words(n):
     return int(n / 100.0 + 0.5) * 100
 
 
-def author_info(story, g=None):
+def _one_space(story):
+    return bool(settings.load_story(story.path).get("export_one_space"))
+
+
+def author_info(story, g=None, anonymous=False):
+    """Who the manuscript is by. 'anonymous' is true when you asked for it or when there is no name to print: then there is
+    no contact block, byline or surname (never a placeholder name)."""
     g = g or settings.load_global()
     warnings = []
     legal = g.get("legal_name") or g.get("author_name") or ""
     byline = g.get("author_name") or g.get("legal_name") or ""
+    if anonymous:
+        return {"lines": [], "byline": "", "surname": "", "legal": "", "anonymous": True}, warnings
     if not legal:
-        legal = byline = "Your Name"
-        warnings.append("No author name yet: add it in Settings (F4) > You.")
+        warnings.append("No author name yet (Settings (F4) > You): exported anonymously, with no name or contact block.")
+        return {"lines": [], "byline": "", "surname": "", "legal": "", "anonymous": True}, warnings
     lines = [legal] + [l for l in (g.get("address") or "").split("\n") if l.strip()]
     if not g.get("address"):
         warnings.append("No address yet (Settings (F4) > You): the first page has none.")
@@ -120,8 +125,8 @@ def author_info(story, g=None):
         lines.append(g["email"])
     if g.get("phone"):
         lines.append(g["phone"])
-    surname = settings.surname(dict(g, legal_name=legal if legal != "Your Name" else ""))
-    return {"lines": lines, "byline": byline, "surname": surname, "legal": legal}, warnings
+    return {"lines": lines, "byline": byline, "surname": settings.surname(dict(g, legal_name=legal)), "legal": legal,
+            "anonymous": False}, warnings
 
 
 def title_keyword(story, st):
@@ -182,8 +187,9 @@ def _page_field(paragraph):
         run._r.append(el)
 
 
-def build_docx(story, path):
-    """Write the manuscript to `path` as a Shunn-format .docx. Returns (words, warnings)."""
+def build_docx(story, path, anonymous=None):
+    """Write the manuscript to `path` as a Shunn-format .docx. Returns (words, warnings). `anonymous` (None: the setting)
+    leaves out the name, contact block, byline and surname; the header is then "Title / page"."""
     try:
         import docx
         from docx.enum.section import WD_SECTION
@@ -193,7 +199,10 @@ def build_docx(story, path):
     except ImportError:
         raise ExportError("The Word export needs the python-docx package (pip install python-docx).")
     st = settings.load_story(story.path)
-    info, warnings = author_info(story)
+    if anonymous is None:
+        anonymous = bool(st.get("export_anonymous"))
+    info, warnings = author_info(story, anonymous=anonymous)
+    single = bool(st.get("export_one_space"))
     font = st.get("font") or "Times New Roman"
     novel = str(st.get("format", "short-story")).lower() == "novel"
     scenes = scene_texts(story)
@@ -240,20 +249,25 @@ def build_docx(story, path):
     block = info["lines"]
     first = para(single=True)
     first.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
-    first.add_run(block[0] + "\t" + f"about {round_words(words):,} words")
+    first.add_run((block[0] if block else "") + "\t" + f"about {round_words(words):,} words")
     for line in block[1:]:
         para(line, single=True, runs=False)
-    # the title, about halfway down the page, then the byline
-    used = len(block) * LINE_POINTS
-    para(story.title, WD_ALIGN_PARAGRAPH.CENTER, before=max(24, TITLE_DOWN_POINTS - used), runs=False)
-    para("by " + info["byline"], WD_ALIGN_PARAGRAPH.CENTER, runs=False)
+    # the title (bold unless you turned that off), about halfway down the page, then the byline
+    used = max(1, len(block)) * LINE_POINTS
+    title_p = para(story.title, WD_ALIGN_PARAGRAPH.CENTER, before=max(24, TITLE_DOWN_POINTS - used), runs=False)
+    if st.get("export_title_bold", True) is not False:
+        for r in title_p.runs:
+            r.bold = True
+    if not info["anonymous"]:
+        para("by " + info["byline"], WD_ALIGN_PARAGRAPH.CENTER, runs=False)
 
-    # headers: nothing on page 1; "Surname / Keyword / page" at the top right after that
+    # headers: nothing on page 1; "Surname / Title / page" at the top right after that ("Title / page" when anonymous)
     header = section.header
     hp = header.paragraphs[0]
     hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     hp.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
-    hp.add_run(f"{info['surname']} / {title_keyword(story, st)} / ")
+    shown = story.title if st.get("export_header", "full") != "keyword" else title_keyword(story, st)
+    hp.add_run((f"{info['surname']} / " if info["surname"] else "") + f"{shown} / ")
     _page_field(hp)
     section.first_page_header.paragraphs[0].text = ""
 
@@ -266,7 +280,7 @@ def build_docx(story, path):
             p.paragraph_format.page_break_before = chapter > 1
             if chapter > 1:
                 p.paragraph_format.space_before = Pt(TITLE_DOWN_POINTS / 3)
-        for kind, block_text in paragraphs(text):
+        for kind, block_text in paragraphs(text, single):
             if kind == "scene_break":
                 para("#", WD_ALIGN_PARAGRAPH.CENTER, runs=False)
             else:
@@ -280,16 +294,24 @@ def build_docx(story, path):
 
 # --- the other formats ---------------------------------------------------------------------------------------------------
 
-def build_md(story, path):
-    info, warnings = author_info(story)
-    text = f"# {story.title}\n\n*by {info['byline']}*\n\n{compile_text(story)}\n"
+def _byline_md(info):
+    return "" if info["anonymous"] else f"*by {info['byline']}*\n\n"
+
+
+def build_md(story, path, anonymous=None):
+    st = settings.load_story(story.path)
+    info, warnings = author_info(story, anonymous=bool(st.get("export_anonymous")) if anonymous is None else anonymous)
+    body = "\n\n".join("* * *" if k == "scene_break" else t for k, t in paragraphs(compile_text(story), _one_space(story)))
+    text = f"# {story.title}\n\n{_byline_md(info)}{body}\n"
     Path(path).write_text(text, encoding="utf-8")
     return warnings
 
 
-def build_txt(story, path):
-    info, warnings = author_info(story)
-    text = f"{story.title}\nby {info['byline']}\n\n{plain_text(story)}\n\nEND\n"
+def build_txt(story, path, anonymous=None):
+    st = settings.load_story(story.path)
+    info, warnings = author_info(story, anonymous=bool(st.get("export_anonymous")) if anonymous is None else anonymous)
+    by = "" if info["anonymous"] else f"by {info['byline']}\n"
+    text = f"{story.title}\n{by}\n{plain_text(story)}\n\nEND\n"
     Path(path).write_text(text, encoding="utf-8")
     return warnings
 
@@ -373,7 +395,7 @@ def convert(path, fmt):
     return target
 
 
-def export(story, fmt="docx", out_dir=None):
+def export(story, fmt="docx", out_dir=None, anonymous=None):
     """Write the manuscript in a format. Returns {'path', 'format', 'words', 'warnings'}; raises ExportError."""
     fmt = fmt.lower().lstrip(".")
     if fmt not in FORMATS:
@@ -391,20 +413,20 @@ def export(story, fmt="docx", out_dir=None):
         fmt = "fountain"
         warnings.append("This story's format is 'screenplay': exported as a .fountain file instead (screenplay layout is a stub).")
     if fmt == "docx":
-        words, warnings = build_docx(story, base.with_suffix(".docx"))
+        words, warnings = build_docx(story, base.with_suffix(".docx"), anonymous)
         path = base.with_suffix(".docx")
         if str(st.get("format", "")).lower() == "novel":
             warnings.append("Novel layout is partial: chapters start new pages, but Shunn's novel title page is not fully reproduced.")
     elif fmt in ("odt", "pdf"):
         docx_path = base.with_suffix(".docx")
-        words, warnings = build_docx(story, docx_path)
+        words, warnings = build_docx(story, docx_path, anonymous)
         path = convert(docx_path, fmt)
     elif fmt == "md":
         path = base.with_suffix(".md")
-        warnings = build_md(story, path)
+        warnings = build_md(story, path, anonymous)
     elif fmt == "txt":
         path = base.with_suffix(".txt")
-        warnings = build_txt(story, path)
+        warnings = build_txt(story, path, anonymous)
     else:
         path = base.with_suffix(".fountain")
         warnings += build_fountain(story, path)

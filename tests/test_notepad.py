@@ -60,7 +60,7 @@ def test_vim_keys_are_text_not_commands(home, story):
 
 def test_paragraphs_still_work(home, story):
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { '' })", "one<CR>two", LINES)
-    assert r["lines"] == ["one", "", "two"]
+    assert r["lines"] == ["one", "two"]
 
 
 def test_escape_closes_a_completion_popup_and_clears_a_search_highlight(home, story):
@@ -122,7 +122,7 @@ def test_ctrl_v_replaces_a_selection(home, story):
 
 def test_copy_and_paste_several_lines(home, story):
     r = run(story, AT % (1, 0), "<C-a><Cmd>lua require('sw.notepad').copy()<CR><Right><C-v>", LINES)
-    assert r["lines"] == ["Hello brave world", "", "second line hereHello brave world", "", "second line here"]
+    assert r["lines"] == ["Hello brave world", "", "second line hereHello brave world", "second line here"]
 
 
 def test_the_internal_clipboard_is_used_when_asked(home, story):
@@ -181,6 +181,10 @@ def test_ctrl_f_and_ctrl_g_are_mapped(home, story):
     assert all(r.values()), r
 
 
+def menu_labels(story):
+    return run(story, "", "", "R.labels = {}; for i, it in ipairs(require('sw.menu').items()) do R.labels[i] = it[1] end")["labels"]
+
+
 # --- menus -----------------------------------------------------------------------------------------------------------------
 
 def test_right_click_menu_has_the_edit_entries(home, story):
@@ -190,7 +194,7 @@ def test_right_click_menu_has_the_edit_entries(home, story):
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
-    assert names == ["Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Writer Menu"]
+    assert names == ["Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Join Lines", "Writer Menu"]
     assert r["mousemodel"] == "popup_setpos"
 
 
@@ -218,7 +222,7 @@ def test_the_writer_menu_lists_the_actions(home, story):
 
 
 def test_the_menu_runs_an_item_with_a_number_and_returns_you_to_typing(home, story):
-    r = run(story, "", "<F12>5", "R.inv = require('sw.prose').invisibles; R.mode = vim.fn.mode(); R.menu_open = require('sw.menu').last and vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
+    r = run(story, "", "<F12>" + str(menu_labels(story).index("Show invisibles") + 1), "R.inv = require('sw.prose').invisibles; R.mode = vim.fn.mode(); R.menu_open = require('sw.menu').last and vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
     assert r["inv"] is True and r["mode"] == "i" and r["menu_open"] is False
 
 
@@ -228,7 +232,7 @@ def test_the_menu_closes_with_escape_and_with_alt_m(home, story):
 
 
 def test_back_to_the_builder_from_the_menu_and_with_ctrl_q(home, story):
-    run(story, "", "<F12>" + "<Down>" * 12 + "<CR>", "", quits=True)             # "Back to the Builder (F2)" is the 13th entry
+    run(story, "", "<F12>" + "<Down>" * menu_labels(story).index("Back to the Builder (F2)") + "<CR>", "", quits=True)
     assert (story.path.parent / "return.txt").read_text() == "builder"
     (story.path.parent / "return.txt").write_text("")
     run(story, "", "<C-q>", "", quits=True)
@@ -236,7 +240,7 @@ def test_back_to_the_builder_from_the_menu_and_with_ctrl_q(home, story):
 
 
 def test_the_menu_can_switch_to_vim_keys_for_the_session(home, story):
-    r = run(story, "", "<F12>" + "<Down>" * 15 + "<CR>", "R.enabled = require('sw.notepad').enabled")
+    r = run(story, "", "<F12>" + "<Down>" * menu_labels(story).index("Switch to Vim keys (this session)") + "<CR>", "R.enabled = require('sw.notepad').enabled")
     assert r["enabled"] is False
 
 

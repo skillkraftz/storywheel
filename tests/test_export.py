@@ -118,20 +118,25 @@ def test_title_is_centered_about_halfway_down_with_the_byline_under_it(story):
     assert ps[i + 2].text.startswith("Stacie ran") or ps[i + 2].text == ""
 
 
-def test_header_on_pages_two_onwards_is_surname_keyword_and_a_page_number_field(story):
+def test_header_on_pages_two_onwards_is_surname_title_and_a_page_number_field(story):
     d, _ = read(story)
     s = d.sections[0]
     assert s.different_first_page_header_footer is True
     assert s.first_page_header.paragraphs[0].text == ""                                  # nothing on page 1
     h = s.header.paragraphs[0]
-    assert h.alignment == WD_ALIGN_PARAGRAPH.RIGHT and h.text == "Writer / Clause / "
+    assert h.alignment == WD_ALIGN_PARAGRAPH.RIGHT and h.text == "Writer / The Last Clause / "
     xml = h._p.xml
     assert "PAGE" in xml and 'w:fldCharType="begin"' in xml and 'w:fldCharType="end"' in xml
     assert h.paragraph_format.line_spacing_rule == WD_LINE_SPACING.SINGLE
 
 
-def test_the_header_keyword_falls_back_to_the_first_real_word_of_the_title(story):
+def test_the_header_can_use_shunns_keyword_which_falls_back_to_the_first_real_word_of_the_title(story):
     st = settings.load_story(story.path)
+    st["export_header"] = "keyword"
+    st["title_keyword"] = "Clause"
+    settings.save_story(story.path, st)
+    d, _ = read(story)
+    assert d.sections[0].header.paragraphs[0].text == "Writer / Clause / "
     st["title_keyword"] = ""
     settings.save_story(story.path, st)
     d, _ = read(story)
@@ -176,8 +181,10 @@ def test_missing_author_details_are_reported_not_hidden(home):
     s = u.new_story("Tale")
     s.add_scene("A", "Hello world.")
     d, result = read(s)
-    assert any("No author name" in w for w in result["warnings"])
-    assert d.paragraphs[0].text.startswith("Your Name\t")
+    assert any("No author name" in w and "anonymously" in w for w in result["warnings"])
+    text = "\n".join(p.text for p in d.paragraphs)
+    assert "Your Name" not in text and "Author" not in text and not any(p.text.startswith("by ") for p in d.paragraphs)
+    assert d.sections[0].header.paragraphs[0].text == "Tale / "
 
 
 def test_an_empty_manuscript_is_refused_plainly(home):
@@ -206,9 +213,9 @@ def test_the_docx_opens_in_libreoffice_and_has_the_right_pages(story):
     assert pdf.read_bytes().startswith(b"%PDF")
     if shutil.which("pdftotext"):
         page1 = subprocess.run(["pdftotext", "-f", "1", "-l", "1", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
-        assert "Andrew T. Writer" in page1 and "by Andy Writer" in page1 and "Writer / Clause" not in page1
+        assert "Andrew T. Writer" in page1 and "by Andy Writer" in page1 and "Writer / The Last Clause" not in page1
         full = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
-        assert "Writer / Clause / 2" in full and "END" in full and "#" in full
+        assert "Writer / The Last Clause / 2" in full and "END" in full and "#" in full
 
 
 # --- the other formats ----------------------------------------------------------------------------------------------
