@@ -19,7 +19,7 @@ from xml.etree import ElementTree as ET
 
 OEWN_URL = "https://github.com/globalwordnet/english-wordnet/releases/download/2025-edition/english-wordnet-2025.xml.gz"
 MOBY_URL = "https://www.gutenberg.org/files/3202/files/mthesaur.txt"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SCHEMA = """
 create table meta (key text primary key, value text);
@@ -31,6 +31,10 @@ create table senses (word_id integer not null, pos text not null, synset_id inte
 create index senses_word on senses (word_id, pos, ord);
 create table synsets (id integer primary key, pos text not null, defn text not null, ex text not null,
                       members text not null, hyper text not null, similar text not null);
+create table rels (synset_id integer not null, kind text not null, target integer not null);
+create index rels_synset on rels (synset_id, kind);
+create table related (word_id integer not null, other_id integer not null, kind text not null);
+create index related_word on related (word_id);
 create table antonyms (word_id integer not null, other_id integer not null);
 create index antonyms_word on antonyms (word_id);
 create table moby (word_id integer primary key, blob blob not null);
@@ -114,7 +118,9 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
                 senses = []
                 for s in el.findall("Sense"):
                     ants = [r.get("target") for r in s.findall("SenseRelation") if r.get("relType") == "antonym"]
-                    senses.append((s.get("synset"), s.get("id"), ants))
+                    links = [(r.get("relType"), r.get("target")) for r in s.findall("SenseRelation")
+                             if r.get("relType") in ("derivation", "pertainym", "participle")]
+                    senses.append((s.get("synset"), s.get("id"), ants, links))
                     sense_owner[s.get("id")] = (lemma, pos)
                 entries.append((lemma, pos, senses, [fm.get("writtenForm") for fm in el.findall("Form")]))
                 el.clear()
@@ -127,7 +133,7 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
                     "pos": el.get("partOfSpeech"), "members": (el.get("members") or "").split(),
                     "defn": " ".join(d.text or "" for d in el.findall("Definition")).strip(),
                     "ex": [e.text or "" for e in el.findall("Example")],
-                    "hyper": rels.get("hypernym", []), "similar": rels.get("similar", []),
+                    "hyper": rels.get("hypernym", []), "similar": rels.get("similar", []), "rels": rels,
                 }
                 el.clear()
     if not entries or not synsets:
@@ -137,7 +143,7 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
     progress(f"Writing {len(entries):,} words and {len(synsets):,} meanings…")
     for lemma, pos, senses, forms in entries:
         wid = word_id(lemma)
-        for order, (syn, _sid, _ants) in enumerate(senses):
+        for order, (syn, _sid, _ants, _links) in enumerate(senses):
             if syn in synset_ids:
                 db.execute("insert into senses values (?,?,?,?)", (wid, pos, synset_ids[syn], order))
         for form in forms:
@@ -146,7 +152,7 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
                 db.execute("insert into forms values (?,?)", (f, wid))
     by_synset = {}
     for lemma, pos, senses, _forms in entries:
-        for syn, _sid, _a in senses:
+        for syn, _sid, _a, _l in senses:
             by_synset.setdefault(syn, []).append(lemma)
     for key, s in synsets.items():
         member_ids = ",".join(str(word_id(w)) for w in by_synset.get(key, []))
@@ -154,15 +160,29 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
             synset_ids[key], s["pos"], s["defn"], "\x1f".join(s["ex"]), member_ids,
             ",".join(str(synset_ids[h]) for h in s["hyper"] if h in synset_ids),
             ",".join(str(synset_ids[h]) for h in s["similar"] if h in synset_ids)))
-    pairs = set()
+    pairs, links = set(), set()
     for lemma, pos, senses, _forms in entries:
-        for _syn, _sid, ants in senses:
+        for _syn, _sid, ants, sense_links in senses:
             for a in ants:
                 owner = sense_owner.get(a)
                 if owner:
                     pairs.add((word_id(lemma), word_id(owner[0])))
                     pairs.add((word_id(owner[0]), word_id(lemma)))
+            for kind, target in sense_links:
+                owner = sense_owner.get(target)
+                if owner and owner[0].lower() != lemma.lower():
+                    links.add((word_id(lemma), word_id(owner[0]), kind))
     db.executemany("insert into antonyms values (?,?)", sorted(pairs))
+    db.executemany("insert into related values (?,?,?)", sorted(links))
+    kept = ("hypernym", "hyponym", "mero_part", "mero_substance", "mero_member", "holo_part", "holo_substance", "holo_member",
+            "domain_topic", "has_domain_topic", "also", "attribute", "entails", "causes", "similar")
+    rows = []
+    for key, s in synsets.items():
+        for kind in kept:
+            for target in s["rels"].get(kind, []):
+                if target in synset_ids:
+                    rows.append((synset_ids[key], kind, synset_ids[target]))
+    db.executemany("insert into rels values (?,?,?)", rows)
 
     # --- Moby Thesaurus II ----------------------------------------------------------------------------------------------------------
     moby_roots = 0

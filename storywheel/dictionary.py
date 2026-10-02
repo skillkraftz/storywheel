@@ -11,11 +11,14 @@ import re
 import sqlite3
 
 from . import paths
-from .dictionary_build import unpack_ids
+from .dictionary_build import SCHEMA_VERSION, unpack_ids
 
 POS_NAMES = {"n": "noun", "v": "verb", "a": "adjective", "s": "adjective", "r": "adverb"}
 POS_ORDER = ["noun", "verb", "adjective", "adverb"]
 NOT_INSTALLED = "The dictionary isn't installed yet. Run:  storywheel dictionary install   (one download, about 40 MB)."
+
+
+OUT_OF_DATE = "The dictionary index is from an older version. Run:  storywheel dictionary install   (it rebuilds it)."
 
 
 class DictionaryMissing(Exception):
@@ -42,6 +45,13 @@ def connect(path=None):
         if not __import__("pathlib").Path(path).exists():
             raise DictionaryMissing(NOT_INSTALLED)
         conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True, check_same_thread=False)
+        try:
+            version = int(dict(conn.execute("select key, value from meta")).get("schema", 0))
+        except (sqlite3.Error, ValueError):
+            version = 0
+        if version < SCHEMA_VERSION:
+            conn.close()
+            raise DictionaryMissing(OUT_OF_DATE)
         _CONN[key] = conn
     return _CONN[key]
 
@@ -142,75 +152,104 @@ def base_words(db, text):
 
 # --- one word ------------------------------------------------------------------------------------------------------------------------
 
-def _words(db, id_csv):
-    out = []
-    for i in (id_csv or "").split(","):
-        if i:
-            row = db.execute("select w from words where id = ?", (int(i),)).fetchone()
-            if row:
-                out.append(row[0])
+def _word(db, wid):
+    row = db.execute("select w from words where id = ?", (wid,)).fetchone()
+    return row[0] if row else None
+
+
+def _ids(csv):
+    return [int(i) for i in (csv or "").split(",") if i]
+
+
+def _members(db, synset_id):
+    row = db.execute("select members from synsets where id = ?", (synset_id,)).fetchone()
+    return [w for w in (_word(db, i) for i in _ids(row[0] if row else "")) if w]
+
+
+def _targets(db, synset_id, kind):
+    return [t for (t,) in db.execute("select target from rels where synset_id = ? and kind = ?", (synset_id, kind))]
+
+
+def _members_of(db, synset_ids, skip=()):
+    out, seen = [], set(w.lower() for w in skip)
+    for sid in synset_ids:
+        for w in _members(db, sid):
+            if w.lower() not in seen:
+                seen.add(w.lower())
+                out.append(w)
     return out
 
 
-def _entry(db, wid, word, form_of, limit_similar):
+def _direct_antonyms(db, wid):
+    return [w for (w,) in db.execute("select w from words where id in (select other_id from antonyms where word_id = ?)", (wid,))]
+
+
+def _entry(db, wid, word, form_of):
     senses = db.execute("select pos, synset_id from senses where word_id = ? order by pos, ord", (wid,)).fetchall()
     groups = {}
-    similar, kinds = [], []
-    seen_syn = {word}
+    close, seen = [], {word}
     for pos, sid in senses:
-        row = db.execute("select defn, ex, members, hyper, similar from synsets where id = ?", (sid,)).fetchone()
+        row = db.execute("select defn, ex from synsets where id = ?", (sid,)).fetchone()
         if not row:
             continue
-        defn, ex, members, hyper, sim = row
-        syns = [m for m in _words(db, members) if m.lower() != word]
-        kind_of = []
-        for h in (hyper or "").split(",")[:2]:
-            if h:
-                hm = db.execute("select members from synsets where id = ?", (int(h),)).fetchone()
-                if hm:
-                    kind_of.append((_words(db, hm[0]) or [""])[0])
-        name = POS_NAMES.get(pos, pos)
-        groups.setdefault(name, []).append({
-            "definition": defn, "examples": [e for e in ex.split("\x1f") if e], "synonyms": syns, "kind_of": [k for k in kind_of if k]})
-        for s in syns:
-            if s.lower() not in seen_syn:
-                seen_syn.add(s.lower())
-                similar.append(s)
+        defn, ex = row
+        syns = [m for m in _members(db, sid) if m.lower() != word]
+        kind_of = [(_members(db, h) or [""])[0] for h in _targets(db, sid, "hypernym")[:3]]
+        types = _members_of(db, _targets(db, sid, "hyponym"), skip=[word])
+        has_parts = _members_of(db, [t for k in ("mero_part", "mero_substance", "mero_member") for t in _targets(db, sid, k)])
+        part_of = _members_of(db, [t for k in ("holo_part", "holo_substance", "holo_member") for t in _targets(db, sid, k)])
+        groups.setdefault(POS_NAMES.get(pos, pos), []).append({
+            "definition": defn, "examples": [e for e in ex.split("\x1f") if e], "synonyms": syns,
+            "kind_of": [k for k in kind_of if k], "types_of": types, "parts": has_parts, "part_of": part_of})
+        for sy in syns:
+            if sy.lower() not in seen:
+                seen.add(sy.lower())
+                close.append(sy)
     # opposites: direct ones, and for adjectives those of the head words the meaning is "similar" to
-    ants = [w for (w,) in db.execute("select w from words where id in (select other_id from antonyms where word_id = ?)", (wid,))]
+    ants = _direct_antonyms(db, wid)
     if not ants:
         for pos, sid in senses:
             if pos in ("a", "s"):
-                row = db.execute("select similar from synsets where id = ?", (sid,)).fetchone()
-                for h in (row[0] or "").split(",") if row else []:
-                    if not h:
-                        continue
-                    head = db.execute("select members from synsets where id = ?", (int(h),)).fetchone()
-                    for mid in _words_ids(db, head[0] if head else ""):
-                        for (w,) in db.execute("select w from words where id in (select other_id from antonyms where word_id = ?)", (mid,)):
+                for head in _targets(db, sid, "similar"):
+                    for member in _ids((db.execute("select members from synsets where id = ?", (head,)).fetchone() or [""])[0]):
+                        for w in _direct_antonyms(db, member):
                             if w not in ants:
                                 ants.append(w)
-    # many more similar words from the Moby thesaurus (after the WordNet ones)
+    # indirect opposites: the opposites of each similar word (labelled as such: "sad", because 'glad' is similar to 'happy')
+    indirect, known = [], set(a.lower() for a in ants) | {word}
+    for sy in close:
+        sid_ = _word_ids(db, sy.lower())
+        for a in (_direct_antonyms(db, sid_) if sid_ else []):
+            if a.lower() not in known:
+                known.add(a.lower())
+                indirect.append({"word": a, "via": sy})
+    # many more similar words from the Moby thesaurus (after the WordNet ones), alphabetical
     moby = db.execute("select blob from moby where word_id = ?", (wid,)).fetchone()
     wide = []
     if moby:
         for i in unpack_ids(moby[0]):
-            w = db.execute("select w from words where id = ?", (i,)).fetchone()
-            if w and w[0].lower() not in seen_syn and w[0].lower() != word:
-                seen_syn.add(w[0].lower())
-                wide.append(w[0])
+            w = _word(db, i)
+            if w and w.lower() not in seen:
+                seen.add(w.lower())
+                wide.append(w)
     wide.sort(key=str.lower)
+    related = {}
+    for other, kind in db.execute("select other_id, kind from related where word_id = ?", (wid,)):
+        w = _word(db, other)
+        if w and w.lower() != word and w not in related.get(kind, []):
+            related.setdefault(kind, []).append(w)
     ordered = [{"pos": p, "senses": groups[p]} for p in POS_ORDER if p in groups] + \
               [{"pos": p, "senses": g} for p, g in groups.items() if p not in POS_ORDER]
-    return {"word": word, "form_of": form_of, "parts": ordered, "synonyms": similar + wide[:max(0, limit_similar - len(similar))],
-            "more_synonyms": max(0, len(similar) + len(wide) - limit_similar), "close_synonyms": similar, "antonyms": ants}
+    return {"word": word, "form_of": form_of, "parts": ordered, "close_synonyms": close, "wide_synonyms": wide,
+            "synonyms": close + wide, "antonyms": ants, "indirect_antonyms": indirect, "related_forms": related}
 
 
-def _words_ids(db, id_csv):
-    return [int(i) for i in (id_csv or "").split(",") if i]
+def _word_ids(db, text):
+    row = db.execute("select id from words where w = ?", (text,)).fetchone()
+    return row[0] if row else None
 
 
-def lookup(word, limit_similar=80, db=None):
+def lookup(word, db=None):
     """Everything known about a word. 'found' is False when nothing matched; 'suggestions' then has close spellings."""
     db = db or connect()
     text = clean(word)
@@ -218,11 +257,47 @@ def lookup(word, limit_similar=80, db=None):
     if not text:
         return result
     for wid, w, note in base_words(db, text):
-        result["entries"].append(_entry(db, wid, w, note, limit_similar))
+        result["entries"].append(_entry(db, wid, w, note))
     result["found"] = bool(result["entries"])
     if not result["found"]:
         result["suggestions"] = suggest(db, text)
     return result
+
+
+def vocabulary(topic, db=None):
+    """Words around a topic, for the vocabulary builder: for each meaning of the word, the types of it, the parts of it and the
+    terms of its subject area (WordNet); plus the Moby thesaurus words related to it. Returns {topic, found, senses, related}."""
+    db = db or connect()
+    text = clean(topic)
+    out = {"topic": topic, "word": text, "found": False, "senses": [], "related": []}
+    if not text:
+        return out
+    seen_related = set()
+    for wid, w, _note in base_words(db, text):
+        for pos, sid in db.execute("select pos, synset_id from senses where word_id = ? order by pos, ord", (wid,)).fetchall():
+            defn = db.execute("select defn from synsets where id = ?", (sid,)).fetchone()[0]
+            types, frontier = [], _targets(db, sid, "hyponym")
+            for _depth in range(2):                                       # types of it, and types of those
+                types += _members_of(db, frontier, skip=[w] + types)
+                frontier = [t for f in frontier for t in _targets(db, f, "hyponym")]
+            parts = _members_of(db, [t for k in ("mero_part", "mero_substance", "mero_member") for t in _targets(db, sid, k)])
+            domain_synsets = _targets(db, sid, "has_domain_topic")
+            for topic_id in _targets(db, sid, "domain_topic"):
+                domain_synsets += [t for t in _targets(db, topic_id, "has_domain_topic") if t != sid]
+                domain_synsets.append(topic_id)
+            domain = _members_of(db, domain_synsets, skip=[w])
+            kinds = _members_of(db, _targets(db, sid, "hypernym"))
+            out["senses"].append({"word": w, "pos": POS_NAMES.get(pos, pos), "definition": defn, "types": types, "parts": parts,
+                                  "domain": domain, "kinds": kinds})
+        moby = db.execute("select blob from moby where word_id = ?", (wid,)).fetchone()
+        for i in (unpack_ids(moby[0]) if moby else []):
+            x = _word(db, i)
+            if x and x.lower() not in seen_related:
+                seen_related.add(x.lower())
+                out["related"].append(x)
+    out["related"].sort(key=str.lower)
+    out["found"] = bool(out["senses"] or out["related"])
+    return out
 
 
 def suggest(db, text, n=5):
@@ -236,8 +311,8 @@ def suggest(db, text, n=5):
 
 # --- text for screens and the CLI --------------------------------------------------------------------------------------------------------
 
-def card_lines(result, width=78, similar_shown=40):
-    """The result as plain text lines (the Wheel/Builder dialog and the CLI use it)."""
+def card_lines(result, width=78, **_ignored):
+    """The result as plain text lines (the CLI uses it): everything, nothing cut off."""
     import textwrap
     out = []
     if not result["found"]:
@@ -245,6 +320,13 @@ def card_lines(result, width=78, similar_shown=40):
         if result["suggestions"]:
             out.append("Did you mean: " + ", ".join(result["suggestions"]) + "?")
         return out
+
+    def listing(label, words):
+        if words:
+            out.append("")
+            out.append(label)
+            out.extend(textwrap.wrap(", ".join(words), width, initial_indent="  ", subsequent_indent="  "))
+
     for e in result["entries"]:
         title = e["word"] + (f"   (from '{e['form_of']}')" if e["form_of"] else "")
         out += [title, "=" * len(title)]
@@ -256,11 +338,13 @@ def card_lines(result, width=78, similar_shown=40):
                     out += textwrap.wrap(f"“{ex}”", width, initial_indent="     ", subsequent_indent="     ")
                 if s["kind_of"]:
                     out.append("     a kind of: " + ", ".join(s["kind_of"]))
-        if e["synonyms"]:
-            shown = e["synonyms"][:similar_shown]
-            out += ["", "Similar:"] + textwrap.wrap(", ".join(shown) + (f"  … and {len(e['synonyms']) - len(shown) + e['more_synonyms']} more" if len(e["synonyms"]) > len(shown) or e["more_synonyms"] else ""), width, initial_indent="  ", subsequent_indent="  ")
-        if e["antonyms"]:
-            out += ["", "Opposite:"] + textwrap.wrap(", ".join(e["antonyms"]), width, initial_indent="  ", subsequent_indent="  ")
+                if s["synonyms"]:
+                    out += textwrap.wrap("similar: " + ", ".join(s["synonyms"]), width, initial_indent="     ", subsequent_indent="       ")
+        listing("More similar words:", e["wide_synonyms"])
+        listing("Opposite:", e["antonyms"])
+        listing("Opposite (indirect, opposites of similar words):", [f"{a['word']} (of {a['via']})" for a in e["indirect_antonyms"]])
+        for kind, words in e["related_forms"].items():
+            listing(f"Related forms ({kind}):", words)
         out.append("")
     return out
 

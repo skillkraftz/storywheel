@@ -158,7 +158,10 @@ def cmd_lookup(args):
     """define / thesaurus / lookup WORD [--json]: meanings, similar words and opposite words, from the offline dictionary."""
     from . import dictionary
     try:
-        result = dictionary.lookup(" ".join(args.word), limit_similar=args.limit)
+        if args.command == "vocabulary":
+            result = dictionary.vocabulary(" ".join(args.word))
+        else:
+            result = dictionary.lookup(" ".join(args.word))
     except dictionary.DictionaryMissing as e:
         if args.json:
             emit({"error": str(e), "installed": False})
@@ -166,13 +169,29 @@ def cmd_lookup(args):
             print("  " + str(e))
         raise SystemExit(1)
     kind = args.command
+    if kind == "vocabulary":
+        if args.json:
+            emit(result)
+            return
+        if not result["found"]:
+            print(f"  Nothing found for '{result['word'] or result['topic']}'.")
+            return
+        for s in result["senses"]:
+            print(f"  {s['word']} ({s['pos']}): {s['definition']}")
+            for label, key in (("types", "types"), ("parts", "parts"), ("subject terms", "domain"), ("a kind of", "kinds")):
+                if s[key]:
+                    print(f"    {label}: " + ", ".join(s[key]))
+        if result["related"]:
+            print("  related words: " + ", ".join(result["related"]))
+        return
     if args.json:
         out = dict(result)
         if kind == "define":
-            out["entries"] = [{k: e[k] for k in ("word", "form_of", "parts")} for e in result["entries"]]
+            out["entries"] = [{k: e[k] for k in ("word", "form_of", "parts", "related_forms")} for e in result["entries"]]
         elif kind == "thesaurus":
             out["entries"] = [{"word": e["word"], "form_of": e["form_of"], "close_synonyms": e["close_synonyms"],
-                               "synonyms": e["synonyms"], "more_synonyms": e["more_synonyms"], "antonyms": e["antonyms"],
+                               "wide_synonyms": e["wide_synonyms"], "synonyms": e["synonyms"], "antonyms": e["antonyms"],
+                               "indirect_antonyms": e["indirect_antonyms"],
                                "kind_of": sorted({k for p in e["parts"] for s in p["senses"] for k in s["kind_of"]})} for e in result["entries"]]
         emit(out)
         return
@@ -181,8 +200,10 @@ def cmd_lookup(args):
             print(f"  {e['word']}" + (f"  (from '{e['form_of']}')" if e["form_of"] else ""))
             print("    similar:  " + (", ".join(e["synonyms"]) or "-"))
             print("    opposite: " + (", ".join(e["antonyms"]) or "-"))
+            if e["indirect_antonyms"]:
+                print("    opposite (indirect): " + ", ".join(f"{a['word']} (of {a['via']})" for a in e["indirect_antonyms"]))
         return
-    print("\n".join("  " + l for l in dictionary.card_lines(result, similar_shown=args.limit)))
+    print("\n".join("  " + l for l in dictionary.card_lines(result)))
 
 
 def cmd_dictionary(args):
@@ -266,7 +287,10 @@ def add_parsers(sub):
         p = sub.add_parser(name, help=text)
         p.add_argument("word", nargs="+")
         p.add_argument("--json", action="store_true")
-        p.add_argument("--limit", type=int, default=80, help="how many similar words to list")
+
+    p = sub.add_parser("vocabulary", help="words around a topic: types, parts, subject terms, related words")
+    p.add_argument("word", nargs="+")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("dictionary", help="the offline dictionary and thesaurus:  dictionary install | status | build --oewn FILE --moby FILE")
     p.add_argument("action", choices=["install", "status", "build"])
     p.add_argument("--oewn", help="build: the Open English WordNet .xml or .xml.gz")
@@ -280,4 +304,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "vocabulary": cmd_lookup, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

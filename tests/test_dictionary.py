@@ -23,7 +23,7 @@ def index(tmp_path, monkeypatch):
 
 def test_the_index_is_built_with_counts(tmp_path):
     out, counts = build_fixture(tmp_path)
-    assert out.exists() and counts["synsets"] == 11 and counts["moby_roots"] == 5 and counts["words"] > 15
+    assert out.exists() and counts["synsets"] == 18 and counts["moby_roots"] == 5 and counts["words"] > 15
 
 
 def test_ids_pack_and_unpack():
@@ -67,7 +67,7 @@ def test_leaves_gives_both_the_noun_and_the_verb_base(index):
 def test_opposites_come_from_wordnet_and_from_the_head_of_a_similar_adjective(index):
     assert dictionary.lookup("happy")["entries"][0]["antonyms"] == ["unhappy"]
     assert dictionary.lookup("unhappy")["entries"][0]["antonyms"] == ["happy"]
-    assert dictionary.lookup("cheerful")["entries"][0]["antonyms"] == ["unhappy"]          # via 'similar' to happy
+    assert dictionary.lookup("cheerful")["entries"][0]["antonyms"] == ["unhappy", "sad"]          # via "similar" to the head (happy, glad)
 
 
 def test_a_word_only_in_the_thesaurus_still_has_synonyms(index):
@@ -87,12 +87,56 @@ def test_a_missing_word_says_so_and_offers_close_spellings(index):
 def test_the_card_text_groups_by_part_of_speech(index):
     text = "\n".join(dictionary.card_lines(dictionary.lookup("run")))
     assert "verb" in text and "1. move fast by using legs" in text and "“She ran home”" in text
-    assert "Similar:" in text and "sprint" in text and "gallop" in text
+    assert "similar: sprint, dash" in text and "More similar words:" in text and "gallop" in text
 
 
-def test_the_limit_on_similar_words(index):
-    e = dictionary.lookup("dog", limit_similar=3)["entries"][0]
-    assert len(e["synonyms"]) == 3 and e["more_synonyms"] == 3
+def test_every_similar_word_is_returned_never_cut_off(index):
+    e = dictionary.lookup("dog")["entries"][0]
+    assert e["synonyms"] == ["domestic dog", "wretch", "cur", "hound", "mutt", "pooch"] and "more_synonyms" not in e
+    assert e["close_synonyms"] == ["domestic dog", "wretch"] and e["wide_synonyms"] == ["cur", "hound", "mutt", "pooch"]
+    assert "more" not in " ".join(dictionary.card_lines(dictionary.lookup("dog"))).replace("More similar words", "")
+
+
+def test_each_meaning_lists_its_own_similar_words_types_parts_and_related_forms(index):
+    e = dictionary.lookup("dog")["entries"][0]
+    noun = next(p for p in e["parts"] if p["pos"] == "noun")
+    first, second = noun["senses"]
+    assert first["synonyms"] == ["domestic dog"] and second["synonyms"] == ["wretch"]
+    assert first["types_of"] == ["puppy", "pup"] and first["parts"] == ["tail"] and first["kind_of"] == ["canine"]
+    assert e["related_forms"] == {"derivation": ["doggy"]}
+    tail = dictionary.lookup("tail")["entries"][0]["parts"][0]["senses"][0]
+    assert tail["part_of"] == ["dog", "domestic dog"]
+
+
+def test_indirect_opposites_are_the_opposites_of_similar_words_and_labelled(index):
+    e = dictionary.lookup("happy")["entries"][0]
+    assert e["antonyms"] == ["unhappy"]
+    assert e["indirect_antonyms"] == [{"word": "sad", "via": "glad"}]               # sad is the opposite of glad, which is similar to happy
+    text = "\n".join(dictionary.card_lines(dictionary.lookup("happy")))
+    assert "Opposite (indirect, opposites of similar words):" in text and "sad (of glad)" in text
+
+
+def test_vocabulary_gathers_types_parts_subject_terms_and_related_words(index):
+    v = dictionary.vocabulary("dog")
+    assert v["found"]
+    s = v["senses"][0]
+    assert s["types"] == ["puppy", "pup"] and s["parts"] == ["tail"] and s["kinds"] == ["canine"]
+    assert s["domain"] == ["kennel", "vaccinate", "veterinary medicine"] or set(s["domain"]) == {"kennel", "vaccinate", "veterinary medicine"}
+    assert v["related"] == ["cur", "hound", "mutt", "pooch"]
+    assert dictionary.vocabulary("zzzqx")["found"] is False
+
+
+def test_an_index_from_an_older_version_asks_to_be_rebuilt(tmp_path, monkeypatch):
+    import sqlite3
+    old = tmp_path / "old.sqlite"
+    db = sqlite3.connect(str(old))
+    db.execute("create table meta (key text, value text)")
+    db.execute("insert into meta values ('schema', '1')")
+    db.commit(); db.close()
+    monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(old))
+    dictionary.forget()
+    with pytest.raises(dictionary.DictionaryMissing, match="older version"):
+        dictionary.lookup("dog")
 
 
 def test_candidates_cover_the_regular_endings():
@@ -124,6 +168,9 @@ def test_cli_define_and_thesaurus_json(index):
     t = json.loads(cli("thesaurus", "happy", "--json", env_index=index).stdout)
     e = t["entries"][0]
     assert e["close_synonyms"] == ["glad"] and "joyful" in e["synonyms"] and e["antonyms"] == ["unhappy"] and "parts" not in e
+    assert e["indirect_antonyms"] == [{"word": "sad", "via": "glad"}] and "wide_synonyms" in e
+    v = json.loads(cli("vocabulary", "dog", "--json", env_index=index).stdout)
+    assert v["found"] and v["senses"][0]["types"] == ["puppy", "pup"]
     m = json.loads(cli("lookup", "happy", "--json", env_index=index).stdout)
     assert "parts" in m["entries"][0] and "synonyms" in m["entries"][0]
 

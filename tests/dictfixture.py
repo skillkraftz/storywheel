@@ -6,7 +6,14 @@ XML = """<?xml version="1.0" encoding="UTF-8"?>
 <LexicalResource xmlns:dc="https://globalwordnet.github.io/schemas/dc/">
   <Lexicon id="oewn" label="Open English Wordnet" language="en" email="x@y" license="https://creativecommons.org/licenses/by/4.0" version="2025" url="x">
     <LexicalEntry id="oewn-dog-n"><Lemma writtenForm="dog" partOfSpeech="n"/>
-      <Sense id="oewn-dog__1.05.00.." synset="oewn-1-n"/><Sense id="oewn-dog__1.18.01.." synset="oewn-2-n"/></LexicalEntry>
+      <Sense id="oewn-dog__1.05.00.." synset="oewn-1-n"><SenseRelation relType="derivation" target="oewn-doggy__3.00.00.."/></Sense><Sense id="oewn-dog__1.18.01.." synset="oewn-2-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-doggy-a"><Lemma writtenForm="doggy" partOfSpeech="a"/><Sense id="oewn-doggy__3.00.00.." synset="oewn-12-a"/></LexicalEntry>
+    <LexicalEntry id="oewn-puppy-n"><Lemma writtenForm="puppy" partOfSpeech="n"/><Sense id="oewn-puppy__1.05.00.." synset="oewn-13-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-pup-n"><Lemma writtenForm="pup" partOfSpeech="n"/><Sense id="oewn-pup__1.05.00.." synset="oewn-13-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-tail-n"><Lemma writtenForm="tail" partOfSpeech="n"/><Sense id="oewn-tail__1.05.00.." synset="oewn-14-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-kennel-n"><Lemma writtenForm="kennel" partOfSpeech="n"/><Sense id="oewn-kennel__1.06.00.." synset="oewn-15-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-veterinary-n"><Lemma writtenForm="veterinary medicine" partOfSpeech="n"/><Sense id="oewn-vet__1.09.00.." synset="oewn-16-n"/></LexicalEntry>
+    <LexicalEntry id="oewn-vaccinate-v"><Lemma writtenForm="vaccinate" partOfSpeech="v"/><Sense id="oewn-vaccinate__2.00.00.." synset="oewn-17-v"/></LexicalEntry>
     <LexicalEntry id="oewn-domestic_dog-n"><Lemma writtenForm="domestic dog" partOfSpeech="n"/><Sense id="oewn-domestic_dog__1.05.00.." synset="oewn-1-n"/></LexicalEntry>
     <LexicalEntry id="oewn-canine-n"><Lemma writtenForm="canine" partOfSpeech="n"/><Sense id="oewn-canine__1.05.00.." synset="oewn-3-n"/></LexicalEntry>
     <LexicalEntry id="oewn-wretch-n"><Lemma writtenForm="wretch" partOfSpeech="n"/><Sense id="oewn-wretch__1.18.00.." synset="oewn-2-n"/></LexicalEntry>
@@ -17,20 +24,32 @@ XML = """<?xml version="1.0" encoding="UTF-8"?>
     <LexicalEntry id="oewn-dash-v"><Lemma writtenForm="dash" partOfSpeech="v"/><Sense id="oewn-dash__2.38.00.." synset="oewn-6-v"/></LexicalEntry>
     <LexicalEntry id="oewn-happy-a"><Lemma writtenForm="happy" partOfSpeech="a"/>
       <Sense id="oewn-happy__3.00.00.." synset="oewn-7-a"><SenseRelation relType="antonym" target="oewn-unhappy__3.00.00.."/></Sense></LexicalEntry>
-    <LexicalEntry id="oewn-glad-a"><Lemma writtenForm="glad" partOfSpeech="a"/><Sense id="oewn-glad__3.00.00.." synset="oewn-7-a"/></LexicalEntry>
+    <LexicalEntry id="oewn-glad-a"><Lemma writtenForm="glad" partOfSpeech="a"/>
+      <Sense id="oewn-glad__3.00.00.." synset="oewn-7-a"><SenseRelation relType="antonym" target="oewn-sad__3.00.00.."/></Sense></LexicalEntry>
+    <LexicalEntry id="oewn-sad-a"><Lemma writtenForm="sad" partOfSpeech="a"/>
+      <Sense id="oewn-sad__3.00.00.." synset="oewn-18-a"><SenseRelation relType="antonym" target="oewn-glad__3.00.00.."/></Sense></LexicalEntry>
     <LexicalEntry id="oewn-unhappy-a"><Lemma writtenForm="unhappy" partOfSpeech="a"/>
       <Sense id="oewn-unhappy__3.00.00.." synset="oewn-8-a"><SenseRelation relType="antonym" target="oewn-happy__3.00.00.."/></Sense></LexicalEntry>
     <LexicalEntry id="oewn-cheerful-s"><Lemma writtenForm="cheerful" partOfSpeech="s"/><Sense id="oewn-cheerful__3.00.01.." synset="oewn-9-s"/></LexicalEntry>
     <LexicalEntry id="oewn-leaf-n"><Lemma writtenForm="leaf" partOfSpeech="n"/><Form writtenForm="leaves"/><Sense id="oewn-leaf__1.20.00.." synset="oewn-10-n"/></LexicalEntry>
     <LexicalEntry id="oewn-leave-v"><Lemma writtenForm="leave" partOfSpeech="v"/><Sense id="oewn-leave__2.38.01.." synset="oewn-11-v"/></LexicalEntry>
     <Synset id="oewn-1-n" members="oewn-dog-n oewn-domestic_dog-n" partOfSpeech="n"><Definition>a domesticated canine</Definition>
-      <Example>the dog barked</Example><SynsetRelation relType="hypernym" target="oewn-3-n"/></Synset>
+      <Example>the dog barked</Example><SynsetRelation relType="hypernym" target="oewn-3-n"/><SynsetRelation relType="hyponym" target="oewn-13-n"/>
+      <SynsetRelation relType="mero_part" target="oewn-14-n"/><SynsetRelation relType="domain_topic" target="oewn-16-n"/></Synset>
+    <Synset id="oewn-12-a" members="oewn-doggy-a" partOfSpeech="a"><Definition>like a dog</Definition></Synset>
+    <Synset id="oewn-13-n" members="oewn-puppy-n oewn-pup-n" partOfSpeech="n"><Definition>a young dog</Definition><SynsetRelation relType="hypernym" target="oewn-1-n"/></Synset>
+    <Synset id="oewn-14-n" members="oewn-tail-n" partOfSpeech="n"><Definition>the rear appendage</Definition><SynsetRelation relType="holo_part" target="oewn-1-n"/></Synset>
+    <Synset id="oewn-15-n" members="oewn-kennel-n" partOfSpeech="n"><Definition>a shelter for dogs</Definition><SynsetRelation relType="domain_topic" target="oewn-16-n"/></Synset>
+    <Synset id="oewn-16-n" members="oewn-veterinary-n" partOfSpeech="n"><Definition>the branch of medicine for animals</Definition>
+      <SynsetRelation relType="has_domain_topic" target="oewn-1-n"/><SynsetRelation relType="has_domain_topic" target="oewn-15-n"/><SynsetRelation relType="has_domain_topic" target="oewn-17-v"/></Synset>
+    <Synset id="oewn-17-v" members="oewn-vaccinate-v" partOfSpeech="v"><Definition>inoculate against disease</Definition><SynsetRelation relType="domain_topic" target="oewn-16-n"/></Synset>
     <Synset id="oewn-2-n" members="oewn-dog-n oewn-wretch-n" partOfSpeech="n"><Definition>a despicable person</Definition></Synset>
     <Synset id="oewn-3-n" members="oewn-canine-n" partOfSpeech="n"><Definition>any of various fissiped mammals</Definition></Synset>
     <Synset id="oewn-4-n" members="oewn-goose-n" partOfSpeech="n"><Definition>web-footed long-necked birds</Definition></Synset>
     <Synset id="oewn-5-n" members="oewn-wolf-n" partOfSpeech="n"><Definition>a wild canine</Definition></Synset>
     <Synset id="oewn-6-v" members="oewn-run-v oewn-sprint-v oewn-dash-v" partOfSpeech="v"><Definition>move fast by using legs</Definition><Example>She ran home</Example></Synset>
     <Synset id="oewn-7-a" members="oewn-happy-a oewn-glad-a" partOfSpeech="a"><Definition>enjoying or showing joy</Definition></Synset>
+    <Synset id="oewn-18-a" members="oewn-sad-a" partOfSpeech="a"><Definition>feeling sorrow</Definition></Synset>
     <Synset id="oewn-8-a" members="oewn-unhappy-a" partOfSpeech="a"><Definition>experiencing sorrow</Definition></Synset>
     <Synset id="oewn-9-s" members="oewn-cheerful-s" partOfSpeech="s"><Definition>full of good spirits</Definition><SynsetRelation relType="similar" target="oewn-7-a"/></Synset>
     <Synset id="oewn-10-n" members="oewn-leaf-n" partOfSpeech="n"><Definition>the main organ of photosynthesis</Definition></Synset>

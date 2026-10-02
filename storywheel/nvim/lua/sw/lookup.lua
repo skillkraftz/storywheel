@@ -47,7 +47,7 @@ end
 
 -- Ask the CLI. Returns the decoded result, or nil and a message.
 function M.fetch(word)
-  local out = vim.fn.system(util.cli({ "lookup", word, "--json", "--limit", "60" }))
+  local out = vim.fn.system(util.cli({ "lookup", word, "--json" }))
   local ok, data = pcall(vim.json.decode, out)
   if not ok or type(data) ~= "table" then return nil, "The dictionary lookup failed (is storywheel installed for python3?)." end
   if data.error then return nil, data.error end
