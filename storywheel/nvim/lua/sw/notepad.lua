@@ -304,6 +304,8 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, "<C-f>", function() M.find() end)
   map({ "i", "s", "x", "n" }, "<C-g>", function() M.find_next(1) end)
   map({ "i", "s", "x", "n" }, story.setting("key_replace", "<C-h>"), function() require("sw.replace").open() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_lookup", "<F7>"), function() require("sw.lookup").word() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_lookup_word", "<F6>"), function() require("sw.lookup").ask() end)
   map({ "i", "s", "x", "n" }, "<A-g>", function() M.find_next(-1) end)
   map({ "i", "s", "x", "n" }, story.setting("key_builder", "<C-q>"), function() require("sw").leave("builder") end)
   map({ "i", "s", "x", "n" }, story.setting("key_menu", "<F12>"), function() require("sw.menu").open() end)
@@ -329,7 +331,7 @@ function M.popup_menu()
   local items = {
     { "Cut", "cut" }, { "Copy", "copy" }, { "Paste", "paste" }, { "Select All", "select_all" }, { "-" },
     { "Italic", "italic" }, { "Bold", "bold" }, { "Scene Break", "scene_break" }, { "-" },
-    { "Find", "find" }, { "Join Lines", "join" }, { "Writer Menu", "menu" },
+    { "Find", "find" }, { "Look Up", "lookup" }, { "Join Lines", "join" }, { "Writer Menu", "menu" },
   }
   for i, it in ipairs(items) do
     if it[1] == "-" then
@@ -354,6 +356,7 @@ function M.run_menu_item(name)
     end,
     scene_break = function() prose.scene_break() end,
     join = function() M.join_lines() end,
+    lookup = function() require("sw.lookup").word() end,
     menu = function() require("sw.menu").open() end,
   }
   if actions[name] then actions[name]() end

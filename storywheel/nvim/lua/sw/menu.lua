@@ -11,6 +11,8 @@ local function actions()
     { "New scene", function() sw.new_scene() end },
     { "Find…", function() notepad.find() end },
     { "Find and replace…", function() require("sw.replace").open() end },
+    { "Look up the word under the cursor", function() require("sw.lookup").word() end },
+    { "Look up a word…", function() require("sw.lookup").ask() end },
     { "Join lines into one paragraph", function() notepad.join_lines() end },
     { "Peek at the name under the cursor", function() require("sw.world").peek() end },
     { "Show invisibles", function() prose.toggle("invisibles") end },

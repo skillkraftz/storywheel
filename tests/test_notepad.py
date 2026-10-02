@@ -194,7 +194,7 @@ def test_right_click_menu_has_the_edit_entries(home, story):
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
-    assert names == ["Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Join Lines", "Writer Menu"]
+    assert names == ["Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Look Up", "Join Lines", "Writer Menu"]
     assert r["mousemodel"] == "popup_setpos"
 
 

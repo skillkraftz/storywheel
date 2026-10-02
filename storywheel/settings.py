@@ -23,7 +23,7 @@ GLOBAL_DEFAULTS = {
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False,
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
-    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-h>",
+    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-h>", "key_lookup": "<F7>", "key_lookup_word": "<F6>",
     "atom_boost": 1.5,
 }
 STORY_DEFAULTS = {
@@ -35,13 +35,13 @@ STORY_DEFAULTS = {
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False,
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
-    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-h>",
+    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-h>", "key_lookup": "<F7>", "key_lookup_word": "<F6>",
 }
 # story settings that fall back to your global settings
 INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
              "notepad_mode", "neovide", "writer_font", "writer_font_size", "line_spacing", "paragraph_spacing",
              "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space",
-             "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_builder", "key_replace")
+             "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_builder", "key_replace", "key_lookup", "key_lookup_word")
 
 
 def _mini_parse(text):
