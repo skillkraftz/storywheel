@@ -194,7 +194,7 @@ def test_right_click_menu_has_the_edit_entries(home, story):
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
-    assert names == ["Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Look Up", "Join Lines", "Writer Menu"]
+    assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Look Up", "Join Lines", "Writer Menu"]
     assert r["mousemodel"] == "popup_setpos"
 
 
@@ -222,7 +222,7 @@ def test_the_writer_menu_lists_the_actions(home, story):
 
 
 def test_the_menu_runs_an_item_with_a_number_and_returns_you_to_typing(home, story):
-    r = run(story, "", "<F12>" + str(menu_labels(story).index("Show invisibles") + 1), "R.inv = require('sw.prose').invisibles; R.mode = vim.fn.mode(); R.menu_open = require('sw.menu').last and vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
+    r = run(story, "", "<F12>" + "<Down>" * menu_labels(story).index("Show invisibles") + "<CR>", "R.inv = require('sw.prose').invisibles; R.mode = vim.fn.mode(); R.menu_open = require('sw.menu').last and vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
     assert r["inv"] is True and r["mode"] == "i" and r["menu_open"] is False
 
 
@@ -416,3 +416,26 @@ def test_the_default_replace_key_is_ctrl_r_and_ctrl_h_is_not_replace(home, story
     assert r["open"] is True
     r = run(story, setup, "<C-h>", "R.open = require('sw.replace').win ~= nil and vim.api.nvim_win_is_valid(require('sw.replace').win)")
     assert not r["open"]
+
+
+def test_the_right_click_menu_shows_the_key_beside_each_entry_and_undo_redo_work(home, story):
+    settings.save_story(story.path, {"key_italic": "<A-u>"})
+    r = run(story, "", "", """
+        R.hints = {}
+        for _, m in ipairs(vim.fn.menu_get("PopUp")[1].submenus) do R.hints[m.name] = m.actext end
+    """)
+    h = r["hints"]
+    assert h["Undo"] == "Ctrl+Z" and h["Redo"] == "Ctrl+Y" and h["Cut"] == "Ctrl+X" and h["Find"] == "Ctrl+F"
+    assert h["Replace"] == "Ctrl+R" and h["Italic"] == "Alt+U" and h["Writer Menu"] == "F12" and h["Look Up"] == "F7"
+    # Undo and Redo through the menu do what Ctrl+Z / Ctrl+Y do
+    r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'abc' })\nvim.cmd('let &undolevels = &undolevels')\nvim.api.nvim_win_set_cursor(0, { 1, 3 })",
+            "def<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Undo<CR>", LINES + "; R.mode = vim.fn.mode()")
+    assert r["lines"] == ["abc"] and r["mode"] == "i"
+    r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'abc' })\nvim.cmd('let &undolevels = &undolevels')\nvim.api.nvim_win_set_cursor(0, { 1, 3 })",
+            "def<Cmd>emenu PopUp.Undo<CR><Cmd>emenu PopUp.Redo<CR>", LINES)
+    assert r["lines"] == ["abcdef"]
+
+
+def test_the_writer_menu_lists_undo_and_redo_with_their_keys(home, story):
+    labels = run(story, "", "", "R.labels = {}; for i, it in ipairs(require('sw.menu').items()) do R.labels[i] = it[1] end")["labels"]
+    assert "Undo (Ctrl+Z)" in labels and "Redo (Ctrl+Y)" in labels

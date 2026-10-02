@@ -52,6 +52,17 @@ function M.marker_label(line)
   return label
 end
 
+-- <A-i> -> Alt+I, <C-q> -> Ctrl+Q, <F12> -> F12 (for menus and help). (storywheel/keys.py: label)
+function M.key_label(key)
+  local mods, k = key:match("^<(.-)%-?([^%-]+)>$")
+  if not k then return key end
+  local names = { A = "Alt", C = "Ctrl", S = "Shift" }
+  local out = {}
+  for m in (mods or ""):gmatch("[ACS]") do out[#out + 1] = names[m] end
+  out[#out + 1] = #k == 1 and k:upper() or k
+  return table.concat(out, "+")
+end
+
 -- Is this line a scene break that is only a break (no title)?
 function M.is_plain_break(line)
   return M.marker_label(line) == ""

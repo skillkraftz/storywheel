@@ -415,17 +415,23 @@ function M.popup_menu()
     if a.group then pcall(vim.api.nvim_del_autocmd, a.id) end
   end
   pcall(vim.api.nvim_del_augroup_by_name, "nvim.popupmenu")
+  -- { name, action, the key shown beside it: text, or { setting, default } for a key you can change }
   local items = {
-    { "Cut", "cut" }, { "Copy", "copy" }, { "Paste", "paste" }, { "Select All", "select_all" }, { "-" },
-    { "Italic", "italic" }, { "Bold", "bold" }, { "Scene Break", "scene_break" }, { "-" },
-    { "Find", "find" }, { "Look Up", "lookup" }, { "Join Lines", "join" }, { "Writer Menu", "menu" },
+    { "Undo", "undo", "Ctrl+Z" }, { "Redo", "redo", "Ctrl+Y" }, { "-" },
+    { "Cut", "cut", "Ctrl+X" }, { "Copy", "copy", "Ctrl+C" }, { "Paste", "paste", "Ctrl+V" }, { "Select All", "select_all", "Ctrl+A" }, { "-" },
+    { "Italic", "italic", { "key_italic", "<A-i>" } }, { "Bold", "bold", { "key_bold", "<A-b>" } },
+    { "Scene Break", "scene_break", { "key_scene_break", "<A-s>" } }, { "-" },
+    { "Find", "find", "Ctrl+F" }, { "Replace", "replace", { "key_replace", "<C-r>" } },
+    { "Look Up", "lookup", { "key_lookup", "<F7>" } }, { "Join Lines", "join", "Alt+J" }, { "Writer Menu", "menu", { "key_menu", "<F12>" } },
   }
   for i, it in ipairs(items) do
     if it[1] == "-" then
       vim.cmd(string.format("amenu 10.%d PopUp.-sep%d- :", 100 + i, i))
     else
-      vim.cmd(string.format("anoremenu 10.%d PopUp.%s <Cmd>lua require('sw.notepad').run_menu_item('%s')<CR>",
-        100 + i, it[1]:gsub(" ", "\\ "), it[2]))
+      local hint = it[3]
+      if type(hint) == "table" then hint = util.key_label(story.setting(hint[1], hint[2])) end
+      vim.cmd(string.format("anoremenu 10.%d PopUp.%s<Tab>%s <Cmd>lua require('sw.notepad').run_menu_item('%s')<CR>",
+        100 + i, (it[1]:gsub(" ", "\\ ")), (hint or ""):gsub(" ", "\\ "), it[2]))
     end
   end
   M.popup_items = items
@@ -435,6 +441,7 @@ function M.run_menu_item(name)
   local prose = require("sw.prose")
   local actions = {
     cut = M.cut, copy = M.copy, paste = M.paste, select_all = M.select_all, find = function() M.find() end,
+    undo = function() M.undo() end, redo = function() M.redo() end, replace = function() require("sw.replace").open() end,
     italic = function()
       if M.has_selection() then prose.wrap_visual("*") else prose.toggle_insert("*") end
     end,

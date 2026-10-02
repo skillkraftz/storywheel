@@ -1,5 +1,6 @@
 -- A menu of Writer actions (F12 / Alt+M): a small floating list. Arrow keys or a number choose, Enter runs, Esc closes;
 -- a mouse click on an entry runs it too.
+local util = require("sw.util")
 local M = {}
 
 local function actions()
@@ -9,6 +10,8 @@ local function actions()
   return {
     { "Scenes sidebar", function() require("sw.sidebar").toggle() end },
     { "New scene", function() sw.new_scene() end },
+    { "Undo (" .. util.key_label("<C-z>") .. ")", function() notepad.undo() end },
+    { "Redo (" .. util.key_label("<C-y>") .. ")", function() notepad.redo() end },
     { "Find…", function() notepad.find() end },
     { "Find and replace…", function() require("sw.replace").open() end },
     { "Look up the word under the cursor", function() require("sw.lookup").word() end },
