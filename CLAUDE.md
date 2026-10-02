@@ -725,3 +725,20 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   setting; each universe has a generated names list (`spell/names.utf-8.add`, with possessives) and a user list (`spell/en.utf-8.add`,
   written by Add to Dictionary); both are compiled with `mkspell!` at Writer start. `spelllang`/`spellfile` are set on every manuscript buffer.
 
+- Batch 3 (clarity and safety): `q` means "back" in every mode (the previous mode from a trail kept in `modes.TRAIL`, or closing the panel/dialog);
+  `Q` is "Quit storywheel" and always asks; in the Writer it is Alt+Q (`key_quit`). F1-F5 are labelled as modes in every footer
+  (`navigation.py` builds the bindings for all modes).
+- Backups can be listed and restored per story (`backups.py`, CLI `backups`, Writer menu, Builder "Backups…"). A restore first copies the current
+  file to `.backups/restore-<date>-<time>/`, so it can itself be undone; backup ids are paths relative to `.backups`.
+- The Writer menu is grouped with titles (Edit, Look up, Story, Leave, More); the status line reads "words: in this scene N · in the story N ·
+  written today N of GOAL".
+- Missing tools are all worded by `tools.missing()`: "<X> isn't installed. <What needs it>. To fix it, run:  <command>". The commands assume
+  Debian/Ubuntu and pipx; they live in one table in `tools.py`. (Lua messages repeat the clipboard text.)
+- Builder field history lives in `<universe>/.field-history/<entity id>.json` (values per field, plus the frame and atoms that produced each rolled
+  value); it follows a placeholder id when the entity is first named, and goes when the entity is deleted. Ratings given in the Builder carry that
+  provenance and slot-filled fields apply `atom_bias`, so they change rolls the way the Wheel's do (step fields already did via the engine).
+- Words: "Universe words" lists and removes the words added to a universe's lists (`wordbank.added_words/remove_added`); Vocabulary has Start over
+  (forget words seen; Known and Learning stay) and My words takes words typed by hand (meaning from the dictionary).
+- Wheel renames: "Use: no/mix/only" is "Whole characters/places from these: no / sometimes / only" (stored values unchanged), Mix is Flavor,
+  Past stories Send/+Prot/+Place are Promote/Use protagonist/Use setting.
+

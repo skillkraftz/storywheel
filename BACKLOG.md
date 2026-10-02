@@ -1,7 +1,7 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after the fifth pass (925 tests,
-tag pass5-export). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 3 (1311 tests,
+tag b3-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -25,11 +25,6 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
   block, word count, title, byline), each chapter starting on a new page about
   a third of the way down with its heading, chapters as the sidebar's top
   level with scenes inside them, and adding, renaming and reordering chapters.
-- **Builder ratings** are recorded but don't change rolls. *Partial.* Entity
-  field rolls need the same provenance (frame and atoms) the Wheel has, so +/-
-  can down-weight them.
-- **Builder field history** isn't saved between runs. *Partial.* Save it with
-  the entity (or beside it) so the scroll wheel still works tomorrow.
 - **Neovide** look is unchecked. *Verify.* Checked in batch 1: Neovide 0.16.2 is
   installed here and starts with our config, stays running, and prints no
   errors. What is not checked is how it looks (font, size, line spacing); a
@@ -52,10 +47,6 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
 
 ## 3. Missing basics for a writing app
 
-- **Restore from backups.** *Missing.* Rolling backups and conversion backups
-  exist, but there's no way to browse and restore one. A list of backups per
-  story with date, word count and a preview, and "restore" that itself backs
-  up the current version first.
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys
   covers the Writer only. Extend it to the Wheel, Builder and Settings keys,
   including the F1–F5 mode keys, with the same conflict checks.
@@ -139,10 +130,10 @@ Built in batches 1 and 2a (see Done). Still open:
   would make Ctrl+I italic work outside Neovide. Not code; a setup note.
 
 
-## 7. Review: what a writer would find confusing (batch 2b)
+## 7. Review: what a writer would find confusing (batch 2b; **addressed in batch 3**, see Done)
 
 I walked the Wheel, Builder, Settings, Words and the Writer as a writer would. Each row: the control, what it really does, and what is
-unclear about it. Nothing here was changed in batch 2b (these are for you to decide); "Fix" is my suggestion.
+unclear about it. Batch 3 applied these; the tables are kept as the record of what was unclear; "Fix" is my suggestion.
 
 ### The Wheel
 | Control | What it does | What is unclear / fix |
@@ -204,6 +195,14 @@ unclear about it. Nothing here was changed in batch 2b (these are for you to dec
 - F1-F5 are the modes everywhere, but only the Wheel's footer labels them as "modes"; elsewhere they look like commands.
 - Messages about missing tools (dictionary, wordfreq, Neovim, LibreOffice) are good but each is worded differently.
 
+### Found in batch 3
+- **Peek and the world.** The Writer's F8 peek still doesn't say which names it knows; a short "no entity called X in <universe>" line would help.
+- **Builder `Notes` entity tab** (type) and **Entity notes** (right-hand tab) are now distinct in name, but key `5` and key `8` are easy to mix up.
+- **Field-history files** (`<universe>/.field-history/`) are never pruned except when an entity is deleted; they are small.
+- **Ratings** on a hand-written value record the line but cannot teach the generator (no frame or atoms): by design, noted in the status line only for rolled values.
+- **Missing-tool commands** assume Debian/Ubuntu (`sudo apt install ...`); edit `storywheel/tools.py` for another system.
+- **Keys outside the Writer** are still fixed (section 3).
+
 ## Suggested batches
 
 1. ~~Bugs (section 1), the verify items, find and replace, and the dictionary
@@ -215,6 +214,25 @@ unclear about it. Nothing here was changed in batch 2b (these are for you to dec
 
 
 ## Done
+
+### Batch 3: clarity and safety
+
+- **Autocorrect:** `wont` and `cant` removed (real words); a lone `i` before a full stop is left alone (`i.e.`, `e.g.`), tested — `b3-autocorrect-words`, `b3-autocorrect-ie`.
+- **`q` is back, `Q` is Quit storywheel** (with a confirmation) in every mode; a trail of modes so back returns to where you were — `b3-q-back`.
+  Footers label F1-F5 as modes everywhere — `b3-footer-modes`.
+- **Renames (section 7):** Wheel (`b3-rename-wheel`: "Whole characters/places from these: no / sometimes / only", Flavor, Promote, Use protagonist,
+  Use setting, "Open in the Builder"), Builder (`b3-rename-builder`: +Universe, +Character/+Place/+Thing/+Group/+Note per tab, +Wheel draft, Entity notes),
+  Words (`b3-rename-words`: Learn this word, Use in this universe's stories), Settings (`b3-rename-settings`).
+- **On-screen explanations** (`b3-legends`): ▲▼ and ✎ and Roll blanks in the Builder, ▲▼ in the Wheel, ★ ✓ and difficulty examples in Vocabulary,
+  why Use in Writer is greyed out, `o` in the Builder footer.
+- **Writer menu** grouped (Edit, Look up, Story, Leave, More), "Use Vim keys for now", Settings (F4) instead of settings.toml — `b3-writer-menu`;
+  the status line labels its three numbers — `b3-statusline`; `Alt+Q` quits storywheel from the Writer — `b3-writer-menu`.
+- **One wording for missing tools** (`storywheel/tools.py`): "X isn't installed. <what needs it>. To fix it, run:  <command>" — `b3-tools-messages`.
+- **Restore from backups:** CLI `storywheel backups list|show|restore` — `b3-restore-cli`; Writer menu — `b3-restore-writer`; Builder
+  "Backups…" screen (button and `b` on a story) — `b3-restore-builder`. A restore first copies the current version aside.
+- **Builder field history saved** beside the entity — `b3-field-history`. **Builder ratings change rolls** — `b3-builder-ratings`.
+- **Universe words screen** (Words > Universe words: see and remove the words added to a universe's lists) — `b3-universe-words`.
+- **Vocabulary:** Start over (forget words seen) — `b3-vocab-startover`; add a word to learn by hand in My words — `b3-vocab-add-by-hand`.
 
 ### Batch 2b: corrections to Words, appearance and spellcheck
 

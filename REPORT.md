@@ -636,3 +636,62 @@ frequency package: `pipx inject storywheel wordfreq` (a fresh `pipx install .` b
 
 
 Full suite at the end of batch 2b: **1240 passed**.
+
+
+# Batch 3: clarity and safety
+
+_Tags `b3-autocorrect-words`, `b3-autocorrect-ie`, `b3-q-back`, `b3-footer-modes`, `b3-rename-wheel`, `b3-rename-builder`, `b3-rename-words`, `b3-rename-settings`, `b3-legends`, `b3-writer-menu`, `b3-statusline`, `b3-tools-messages`, `b3-restore-cli`, `b3-restore-writer`, `b3-restore-builder`, `b3-field-history`, `b3-builder-ratings`, `b3-universe-words`, `b3-vocab-startover`, `b3-vocab-add-by-hand`._
+
+## L1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Autocorrect: `wont`, `cant` removed | Works | both are real words and stay as typed |
+| Autocorrect: `i.e.` | Works | a lone `i` followed by `.` is left alone (`i.e.`, `e.g.` unchanged); `i. wait`, `i, i; i!` still become `I`; tested |
+| `q` = back, `Q` = Quit storywheel (with a confirmation) | Works | every mode, footers and help screens; back returns along a trail of modes (or closes the panel/dialog); the plain-prompt fallback keeps its own `q` |
+| Footers label F1-F5 as modes | Works | "Modes: Wheel F1 ..." in each footer; the current mode is greyed out |
+| Wheel renames | Works | "Whole characters/places from these: no / sometimes / only", Flavor (button, key `m`, screen), Promote, Use protagonist, Use setting, "Open in the Builder" |
+| Builder renames | Works | +Universe; +Character / +Place / +Thing / +Group / +Note follows the tab; +Wheel draft; right-column tab "Entity notes" |
+| Settings renames | Works | "Preference for your own names", "Default export type", "Space between paragraphs (terminal)", Default format hint says novel is partial and screenplay a stub |
+| Words renames | Works | "Learn this word", "Use in this universe's stories" (buttons, keys, help) |
+| On-screen explanations | Works | ▲▼ / ✎ / Roll blanks legend under the Builder card; ▲▼ line in the Wheel; ★ ✓ and difficulty examples in Vocabulary; grey note on why Use in Writer is disabled; `o` shown in the Builder footer as "Universe overview" |
+| Writer menu | Works | grouped (Edit, Look up, Story, Leave, More) with titles; "Use Vim keys for now"; Settings (F4) instead of settings.toml; Quit storywheel (Alt+Q) |
+| Status line labels | Works | "words: in this scene N · in the story N · written today N of GOAL" |
+| One wording for missing tools | Works | `tools.missing()` for dictionary, wordfreq, Neovim, LibreOffice, Neovide, clipboard, python-docx; the Lua clipboard messages repeat the text. Commands assume Debian/Ubuntu + pipx |
+| Restore from backups | Works | CLI `storywheel backups list/show/restore`; Writer menu (list + preview, Enter restores after asking); Builder "Backups…" screen (button or `b` on a story). Lists rolling, conversion and migration backups with date, kind, file, words and a preview; a restore first copies the current version to `.backups/restore-...` |
+| Builder field history saved | Works | `<universe>/.field-history/<id>.json`; follows the placeholder id rename; removed with the entity |
+| Builder ratings change rolls | Works | frame and atoms are kept with a rolled value (also across runs); slot fields apply `atom_bias`; step fields already used the engine's ratings. Hand-written values can be rated but teach nothing |
+| Review/remove words added to a universe's lists | Works | Words > Universe words (select, `d` or button) |
+| Vocabulary: start over, add by hand | Works | Start over forgets words seen (Known/Learning stay); My words takes typed words (comma separated), meaning from the dictionary; a Known word typed again is learning again |
+| Quit key in other places (Alt+Q) | Works | Writer only; the Builder/Wheel use `Q` |
+
+## L2. Tests added in batch 3
+| Area | File | Tests |
+|---|---|---|
+| Autocorrect (wont, cant, i.e.) | `test_spelling.py` | cases updated/added |
+| Navigation: q, Q, trail, footers | `test_navigation.py` | 19 |
+| Backups (list, preview, restore, CLI) | `test_backups.py` | 8 |
+| Restore in the Writer | `test_restore_writer.py` | 8 |
+| Missing-tool wording | `test_tools.py` | 10 (4 functions, parametrized) |
+| Words: labels, notes, start over, add by hand, universe words | `test_words.py` | 10 new |
+| Field history | `test_field_history.py` | 7 |
+| Builder ratings | `test_builder_ratings.py` | 4 |
+| Existing tests updated | layout stability, mouse, settings, status line, Writer, Builder, Wheel | labels, keys |
+
+## L3. Manual test script
+1. Press `q` in Settings, Words and the Builder: you go back to the mode you came from. Press `Q`: "Quit storywheel?" asks first. In the Writer press Alt+Q.
+2. Look at each footer: F1-F5 are labelled as modes.
+3. Builder: select a story, press `b` (or "Backups…"); pick a backup, read the preview, press `r` and confirm; the manuscript is the old one and the previous version is under `.backups/restore-...`. Do the same from the Writer menu (F12 > Restore from a backup…).
+4. Builder: make a character, roll a few fields, scroll the wheel back; quit and reopen; the wheel still goes back. Press ▼ on a generated line several times over a session and watch it come up less.
+5. Words: Vocabulary > Start over; My words > type "lantern, gallivant" and Add; Universe words > remove an entry.
+6. Rename tour: Wheel (universe panel, buttons under the card, Past stories), Builder tabs, Settings > Universes/Export/Writer.
+7. Rename `dictionary` away or run without wordfreq/LibreOffice and read the message: what, why, the command.
+8. The Writer: F12 menu groups; the status line labels.
+
+## L4. Known issues / questions
+- The commands in `tools.py` assume Debian/Ubuntu.
+- Ratings on a hand-written Builder value cannot teach the generator.
+- Field-history files are only pruned when an entity is deleted.
+- Keys outside the Writer are still not configurable (BACKLOG 3).
+
+
+Full suite at the end of batch 3: **1311 passed** (1310 in the full run, plus the one menu test fixed after it started and re-run: tests/test_notepad.py 73 passed).

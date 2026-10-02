@@ -216,7 +216,7 @@ def test_the_writer_menu_lists_the_actions(home, story):
     """)
     text = "\n".join(r["labels"])
     for needle in ("Scenes sidebar", "Export manuscript (.docx)", "Show invisibles", "Settings (F4)", "Back to the Builder (F2)", "Typewriter mode",
-                   "Spellcheck", "This story's settings.toml", "Switch to Vim keys"):
+                   "Spellcheck", "Use Vim keys for now", "Quit storywheel"):
         assert needle in text, needle
     assert r["float"] == "editor" and r["in_menu"] is True
 
@@ -240,7 +240,7 @@ def test_back_to_the_builder_from_the_menu_and_with_ctrl_q(home, story):
 
 
 def test_the_menu_can_switch_to_vim_keys_for_the_session(home, story):
-    r = run(story, "", "<F12>" + "<Down>" * menu_labels(story).index("Switch to Vim keys (this session)") + "<CR>", "R.enabled = require('sw.notepad').enabled")
+    r = run(story, "", "<F12>" + "<Down>" * menu_labels(story).index("Use Vim keys for now") + "<CR>", "R.enabled = require('sw.notepad').enabled")
     assert r["enabled"] is False
 
 
