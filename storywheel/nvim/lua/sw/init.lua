@@ -170,7 +170,14 @@ function M.help()
   width = math.min(width + 2, vim.o.columns - 4)
   local win = vim.api.nvim_open_win(buf, true, { relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2),
     width = width, height = math.min(#M.HELP, vim.o.lines - 6), style = "minimal", border = "rounded" })
-  for _, k in ipairs({ "q", "<Esc>", "<CR>", "?" }) do vim.keymap.set("n", k, function() vim.api.nvim_win_close(win, true) end, { buffer = buf }) end
+  vim.cmd("stopinsert")
+  local function close()
+    if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
+    local layout = require("sw.layout")
+    if layout.main and vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
+    require("sw.notepad").insert(true)
+  end
+  for _, k in ipairs({ "q", "<Esc>", "<CR>", "?" }) do vim.keymap.set("n", k, close, { buffer = buf, nowait = true }) end
   return win
 end
 

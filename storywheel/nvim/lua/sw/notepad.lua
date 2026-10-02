@@ -240,7 +240,14 @@ end
 
 -- The right-click menu.
 function M.popup_menu()
-  pcall(vim.cmd, "aunmenu PopUp")
+  pcall(vim.cmd, "aunmenu PopUp")           -- (removing Neovim's own items leaves "E31: No such mapping" in v:errmsg; harmless)
+  vim.v.errmsg = ""
+  -- Neovim 0.11 installs a MenuPopup handler that enables/disables its own items ("Go to definition"...) and raises
+  -- E329 once they are gone. Drop every MenuPopup autocmd that is not ours (the group name varies by version).
+  for _, a in ipairs(vim.api.nvim_get_autocmds({ event = "MenuPopup" })) do
+    if a.group then pcall(vim.api.nvim_del_autocmd, a.id) end
+  end
+  pcall(vim.api.nvim_del_augroup_by_name, "nvim.popupmenu")
   local items = {
     { "Cut", "cut" }, { "Copy", "copy" }, { "Paste", "paste" }, { "Select All", "select_all" }, { "-" },
     { "Italic", "italic" }, { "Bold", "bold" }, { "Scene Break", "scene_break" }, { "-" },

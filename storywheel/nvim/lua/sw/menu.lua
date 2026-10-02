@@ -66,7 +66,9 @@ function M.open()
     close()
     if item then
       item[2]()
-      np.insert(true)
+      -- back to typing only when we are in the writing window: a help or sidebar window that the item opened keeps Normal mode
+      local layout = require("sw.layout")
+      if layout.main and vim.api.nvim_get_current_win() == layout.main then np.insert(true) end
     end
   end
   local function row() return vim.api.nvim_win_get_cursor(win)[1] end
