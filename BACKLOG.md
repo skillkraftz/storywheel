@@ -58,42 +58,48 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
   up the current version first.
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys
   covers the Writer only. Extend it to the Wheel, Builder and Settings keys,
-  including the F1–F4 mode keys, with the same conflict checks.
+  including the F1–F5 mode keys, with the same conflict checks.
 - **Obsidian `[[wikilinks]]` resolving to entities.** *Missing.* CLAUDE.md says
   wikilinks in notes "should resolve to entities where possible"; nothing reads
   them. Resolve `[[Name]]` in entity notes and outlines (Builder: show as links
   and in "Links"/"Appears in"; Writer: peek and completion).
 
-## 4. Dictionary and thesaurus: follow-ups
+## 4. Dictionary, thesaurus and Words: follow-ups
 
-Built in batch 1 (see Done). Still open:
+Built in batches 1 and 2a (see Done). Still open:
 
-- **Inflect the replacement.** *Idea.* Looking up "running" and picking
-  "sprint" gives "sprint", not "sprinting". Match the looked-up form (plural,
-  past tense, -ing) when replacing.
-- **Look up from a Builder field's right-click menu** ("look up" the word under
-  the mouse). *Missing.*
-- **Part of speech in the Writer card.** *Idea.* Group the similar words by
-  the meaning (sense) they belong to instead of one flat list; the flat list
-  is long for common words.
-- **Bundling the index.** *Idea.* It is 28 MB, so it is downloaded on request
-  (`storywheel dictionary install`, 6 seconds) rather than shipped. Revisit if
-  a smaller index (common words only) is wanted in the package.
-- **Lookup history / recent words** in the dialog and card. *Idea.*
+- **Roget's Thesaurus (1911) for "opposite ideas".** *Missing, evaluated.* The Roget file that ships with the Moby
+  project (`roget13a.txt`, Project Gutenberg #3202) has 1,000 numbered categories but the pairing of opposite
+  categories is not in the data: its own header says the side-by-side layout "has been abandoned" and words are listed in
+  entry order. Adjacent categories are often opposites (31 Greatness / 32 Smallness) but not always (7 State / 8
+  Circumstance), so an automatic pairing would sometimes show unrelated ideas as opposites. Not used. If wanted: pair
+  categories by hand once (about 400 pairs), or by title prefixes (in-/un-/non-) and review the list.
+- **Indirect opposites per meaning.** *Idea.* They are computed from all of a word's similar words, so a word with
+  several meanings can show an opposite that belongs to another meaning ("fast" → "mobile", via "immobile"). Compute
+  them per meaning, and show them under that meaning.
+- **Shift+Home/End twice, and Ctrl+Shift+arrows.** *Idea.* The rest of the notepad selection keys.
+- **Look up from a Builder field's right-click menu** ("look up" the word under the mouse). *Missing.*
+- **Bundling the index.** *Idea.* It is 42 MB now (relations added), so it is downloaded on request
+  (`storywheel dictionary install`, about 10 seconds) rather than shipped. Revisit if a smaller index (common words
+  only) is wanted in the package.
+- **Words: richer overused-word checks.** *Idea.* Repeated sentence openings, adverbs in -ly, "filter" words (felt, saw,
+  noticed); a per-scene view; a threshold setting.
+- **Words: word bank in the Writer.** *Idea.* Complete from the bank while typing, like character names.
+- **Words: look up a word from the Wheel's cards** (a key on the selected field's text). *Idea.*
+- **Inflection** covers regular English plus about 150 irregular verbs and 80 irregular nouns; multi-word phrases inflect
+  the first word of a verb phrase and the last of a noun phrase. Rare irregulars and adjective/adverb edge cases may
+  come out plain ("more joyful" for a long adjective is deliberate). *Note.*
 
+## 4b. Found in batch 1 and 2a
 
-## 4b. Found in batch 1
-
-- **Shift+Home / Shift+End** in notepad mode still select to the start/end of
-  the whole line, not the visible wrapped line. *Partial.*
-- **Find and replace** works on the current file only (a novel has one file per
-  chapter) and is literal text only. *Idea:* replace in all chapters; regular
-  expressions.
-- **Ctrl+H** reaches Neovim as Backspace in terminals that send ^H for
-  Backspace (most send DEL, so it works; if yours doesn't, set another key in
-  Settings > Keys, for example Alt+H). *Verify* in the owner's terminal.
-- **`storywheel lookup` start-up time** is fine (under 0.1 s) because the CLI
-  imports lazily; keep it that way when adding commands. *Note.*
+- **Find and replace** works on the current file only (a novel has one file per chapter) and is literal text only.
+  *Idea:* replace in all chapters; regular expressions.
+- **Ctrl+R** is the default for replace now. *Verify* in the owner's terminal that Ctrl+R arrives as itself (VTE
+  sends 0x12 for it, which is distinct from Tab, Enter and Backspace, so it should).
+- **`storywheel lookup` start-up time** is fine (under 0.1 s) because the CLI imports lazily; keep it that way when
+  adding commands. *Note.*
+- **The dictionary index must be rebuilt** after upgrading to batch 2a (schema 2): `storywheel dictionary install`.
+  Lookups say so plainly if the index is older. *Note.*
 
 ## 5. Content and generator
 
@@ -137,4 +143,27 @@ Built in batch 1 (see Done). Still open:
 - **Find and replace in the Writer** (Ctrl+H or the Settings > Keys choice; match case, whole word, replace one,
   replace all in one undo step, live match count) — `b1-replace`.
 - **Dictionary and thesaurus** — data and lookups (`b1-dictionary-core`), the Lookup dialog on F5 in every mode
-  (`b1-dictionary-tui`), the Writer card on F7/F6 with replace-in-place (`b1-dictionary-writer`).
+  (`b1-dictionary-tui`, replaced by the Words mode in batch 2a), the Writer card on F7/F6 with replace-in-place
+  (`b1-dictionary-writer`).
+
+### Batch 2a: the Writer's keys and the language tools
+
+- **Neovim's insert-mode Ctrl keys** (Ctrl+U deleting a line, W, T, D, O, R, K, E, N, P, J, L, ], ^, _, @, \) do nothing in
+  notepad mode — `b2a-ctrl-keys`.
+- **Unmapped function keys** do nothing (F5 used to type "<F5>"; F5 is now Words) — `b2a-fkeys`.
+- **Ctrl+H / Ctrl+Backspace** delete the previous word (Ctrl+Delete the next); **replace** moved to Ctrl+R —
+  `b2a-replace-key`.
+- **Shift+Home / Shift+End** select to the start/end of the visible line — `b2a-shift-home`.
+- **Undo and Redo** in the right-click menu and the Writer menu, every right-click entry labelled with its key —
+  `b2a-undo-menu`.
+- **Writer card:** every similar word, grouped by meaning, then the full broad list, scrollable, with a filter
+  (`b2a-card-all`); opposites plus indirect opposites, labelled; Roget evaluated and not used (`b2a-card-opposites`);
+  the same keys for F6 and F7 — Enter looks a word up, b/n back and forward, r replaces, i inserts, c copies, keys in
+  the footer (`b2a-card-keys`); replacements in the same form as the original, running → sprinting (`b2a-card-form`,
+  with the engine in `b2a-inflect`).
+- **Words mode (F5)** — a fifth mode, from every mode including the Writer: `b2a-words-mode`; Lookup with meanings,
+  every similar and opposite word, wider/narrower words, parts, related forms, history (`b2a-words-lookup`); Use in
+  Writer (`b2a-words-use`); vocabulary builder (`b2a-words-vocab`); word bank per story or universe saved as an atom
+  list (`b2a-words-bank`); overused words (`b2a-words-overused`, data layer `b2a-overused-data`, `b2a-wordbank`).
+- **Shift+Home/End** and the **"Inflect the replacement"**, **"Part of speech in the card"** and **"Lookup history"**
+  follow-ups from batch 1 are done (above).

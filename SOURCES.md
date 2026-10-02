@@ -18,6 +18,9 @@ ships in `storywheel/data/`.
 | [Open English WordNet](https://en-word.net/) 2025 edition (`english-wordnet-2025.xml.gz`, github.com/globalwordnet/english-wordnet) | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Stated in the file's own header (`license="https://creativecommons.org/licenses/by/4.0"`) and the project page. Checked 2026-10-02. Attribution: shown in `storywheel dictionary status` and on the lookup screens. | Meanings, examples, synonyms, opposites and "kind of" for the dictionary and thesaurus | **Not shipped in the package.** `storywheel dictionary install` downloads it on request (the one network use) and builds `~/.storywheel/dictionary.sqlite`; `storywheel/dictionary_build.py` |
 | [Moby Thesaurus II](https://www.gutenberg.org/ebooks/3202) by Grady Ward (`mthesaur.txt`, Project Gutenberg #3202) | Public domain: the file's documentation says "Public Domain material by grant from the author, January, 2001". Checked 2026-10-02. | Broader lists of similar words in the thesaurus | Same: downloaded by `storywheel dictionary install`, not shipped |
 
+Roget's Thesaurus (1911) in the Moby download (`roget13a.txt`) was evaluated for "opposite ideas" and **not used**: its category
+pairing is not in the data (see BACKLOG.md), and nothing from it is in the program or its data.
+
 Deliberately **not** used from the same repository: `words/spells.json` (fetched, found
 to be spells from the Harry Potter books, which doesn't sit well with the CC0 label, and
 deleted) and `humans/tolkienCharacterNames.json` (names from a copyrighted work; never

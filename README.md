@@ -278,10 +278,24 @@ One-time setup (the only time storywheel uses the network, and only when you ask
 Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB, and builds a 28 MB index in
 `~/.storywheel/dictionary.sqlite`. Sources and licenses are in SOURCES.md.
 
-- **F5** in the Wheel, Builder and Settings: the Lookup dialog (type a word, Enter).
-- **Writer:** **F7** on the word under the cursor (or a selection) opens a card; move to a similar or opposite word and press Enter
-  to replace it, keeping capital letters. **F6** looks up a typed word. Also in the F12 menu and the right-click menu.
-- **Find and replace:** **Ctrl+H** in the Writer (match case, whole word, replace one or all, a count). Keys are in Settings > Keys.
+- **Words (F5)** is a mode of its own, reachable from every mode, including the Writer (which hands over the word under the cursor):
+  - *Lookup*: meanings, every similar and opposite word (and the opposites of similar words, labelled as indirect), wider and narrower
+    words ("a kind of" / "types of it"), parts, related forms. Enter or a click on a word looks it up; back and forward remember your
+    path; `/` filters. **Use in Writer** (`u`) goes back to the Writer and replaces the word you were on with the one you picked, in
+    the same form (running → sprinting, geese → swans, happier → gladder), keeping capital letters.
+  - *Vocabulary*: from a word or topic, gather types of it, parts of it, terms from its subject, and related words; choose the ones
+    you like into a *word bank*, kept per story or per universe. **Save as atom list** writes the bank into the universe's lists for a
+    slot (job, thing, place...), so the Wheel and the Builder roll with it.
+  - *Overused*: a story's most frequent words (everyday words left out) and words repeated close together, with where they are;
+    Enter on a place opens the Writer there.
+- **Writer card:** **F7** on the word under the cursor (or a selection) opens a card grouped by meaning, then the full list of
+  similar words, scrollable, with a filter (`/`). Enter looks a word up (`b` back, `n` forward); **`r` replaces** the word you were
+  on (same form, capitals kept), **`i` inserts** the word at the cursor, **`c` copies** it. **F6** looks up a typed word and works
+  the same way. Also in the F12 menu and the right-click menu.
+- **Find and replace:** **Ctrl+R** in the Writer (match case, whole word, replace one or all, a count). Keys are in Settings > Keys.
+- **Keys in the Writer:** Ctrl+Z / Ctrl+Y undo and redo (also in the right-click menu), Ctrl+Backspace (Ctrl+H) deletes the previous
+  word, Shift+Home / Shift+End select to the start / end of the visible line. The other Ctrl keys of Neovim's Insert mode (Ctrl+U, W, T, D,
+  O, K, E...) and unused function keys do nothing, so they can't delete or type anything by accident.
 - Command line: `storywheel define WORD`, `storywheel thesaurus WORD`, `storywheel lookup WORD`, each with `--json`.
 
 ### Command line (all with `--json` where it makes sense)

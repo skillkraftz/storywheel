@@ -523,3 +523,62 @@ _Tags `b1-header`, `b1-homeend`, `b1-verify`, `b1-replace`, `b1-dictionary-core`
 
 
 Full suite at the end of batch 1: **998 passed**.
+
+---
+
+# Batch 2a (BACKLOG.md): the Writer's keys and the language tools
+
+_Tags `b2a-ctrl-keys`, `b2a-fkeys`, `b2a-replace-key`, `b2a-shift-home`, `b2a-undo-menu`, `b2a-inflect`, `b2a-card-all`, `b2a-card-opposites`, `b2a-card-keys`, `b2a-card-form`, `b2a-wordbank`, `b2a-overused-data`, `b2a-words-mode`, `b2a-words-lookup`, `b2a-words-use`, `b2a-words-vocab`, `b2a-words-bank`, `b2a-words-overused`. Several items were done in one commit and carry all their tags._
+
+**You need to run `storywheel dictionary install` again** (the index has relations now, schema 2); until then lookups and Words say so.
+
+## J1. Writer keys
+| Item | Status | What's missing |
+|---|---|---|
+| Neovim's insert/select-mode Ctrl keys | Works | in notepad mode every Ctrl letter that is not deliberately mapped (and Ctrl+@ ] ^ _ \ Space) does nothing in Insert and Select mode: U, W, T, D, O, R(was register paste), K, E, L, J, N, P (these two still walk a completion list when one is open) and the rest. Ctrl+M (Enter), Ctrl+I (Tab) and Ctrl+[ (Escape) are left alone. Tests press each key and check the text, cursor and mode did not change; Ctrl+U no longer deletes the line |
+| Undo/Redo in the menus, labelled | Works | right-click menu: Undo, Redo first, and every entry shows its key beside it (Ctrl+X, Alt+I, F12...; the configurable ones show the configured key); the F12 menu has "Undo (Ctrl+Z)" and "Redo (Ctrl+Y)". Tests run both through the menu |
+| Ctrl+H / Ctrl+Backspace | Works | both delete the previous word (with a selection: delete the selection); Ctrl+Delete deletes the next word. **Replace moved to Ctrl+R** (a distinct code in VTE: 0x12, not Tab, Enter or Backspace). I can't press keys in your VTE from here: please check (BACKLOG 4b). Both are reserved in Settings > Keys, and replace can be given another key there |
+| Unmapped function keys | Works | F1-F12 with Shift/Ctrl/Alt do nothing in Insert and Select mode (F5 used to type "<F5>"); F1-F5 are the modes, and F6-F9, F12 are the configured keys |
+| Shift+Home / Shift+End | Works | select to the start / end of the visible (wrapped) line, the other end stays where it was; again extends; typing replaces, Ctrl+C copies |
+
+## J2. Writer cards (F7 and F6)
+| Item | Status | What's missing |
+|---|---|---|
+| All similar words, grouped, scrollable, filter | Works | no limit and no "N more" anywhere (CLI `--limit` is gone). Each meaning lists its own similar words; then "More similar words (N)", the full Moby list, alphabetical; the card scrolls; `/` filters every list, Esc clears the filter. Words are wrapped like text and the one under the cursor is highlighted (arrows, Tab for the next group, mouse click) |
+| Opposites: indirect, and Roget | Partial | indirect opposites (the opposites of each similar word, shown as "sad (glad)") are in the card, labelled. **Roget 1911 was evaluated and not used**: the file's own notes say the opposite-side-by-side layout was abandoned, so the pairing of opposing categories is not in the data and adjacency is not reliable (31 Greatness / 32 Smallness, but 7 State / 8 Circumstance). Recorded in BACKLOG.md and SOURCES.md; nothing from it is in the program. Indirect opposites are computed for the word as a whole, so a word with several meanings can show one from another meaning (BACKLOG) |
+| Same behaviour for F6 and F7 | Works | Enter looks the word under the cursor up; `b` back / `n` forward (a position like [2/3] in the title); `r` replaces the word that was under the cursor when the card was opened (F6 uses the word under the cursor too); `i` inserts at the cursor; `c` copies; `w` asks for another word; keys are in the footer (`r` only when there is a word to replace) |
+| Replacement matches the original's form | Works | `inflect.py`: running → sprinting, ran → sprinted, dogs → domestic dogs, geese → swans, happier → gladder, happiest → most joyful, wrote/written; capitals kept (Running → Sprinting, DOGS → DOMESTIC DOGS). WordNet's own irregular-form lists turned out incomplete and untagged ("write" lists "written" but not "wrote"), so irregulars come from tables in the code (about 150 verbs, 80 nouns, the irregular adjectives); the lookup tells which base word and form the original is; `storywheel inflect ORIGINAL BASE WORD` does the work |
+
+## J3. Words mode (F5)
+| Item | Status | What's missing |
+|---|---|---|
+| F5 from every mode, including the Writer | Works | the Wheel, Builder, Settings and Words itself have F1-F5; in the Writer F5 saves, hands over the word under the cursor (or the selection) and where it is, and leaves (like F2); help screens, footers, the Writer's help and menu, and the Settings > Keys notes all list F5. The old F5 Lookup dialog is gone (Words replaces it) |
+| Lookup | Works | meanings, examples, every similar word per meaning, the broad list, every opposite and the indirect ones, wider ("a kind of") and narrower ("types of it") words, parts and "part of", related forms (derivation etc.); Enter or a click on a word looks it up; back/forward (keys and buttons) with a history; a filter box; `a` adds the word to the word bank, `c` copies it |
+| Use in Writer | Works | `u` / button: returns to the Writer at the same spot with the original word replaced by the picked one in the same form and with the original's capitals; the Writer applies it before the first screen, saves the file, and puts the cursor after the new word; if the text changed meanwhile nothing is replaced and it says so. Without a word from the Writer the button is disabled and a message says to press F5 in the Writer |
+| Vocabulary builder | Works | from a word or topic: kinds of it, types of it (two levels), parts of it, terms from its WordNet subject domain, and the Moby thesaurus's related words; Enter/space chooses a word, `g` a whole group, `a` adds the chosen to the word bank (with the topic as a note), `l` looks one up. CLI: `storywheel vocabulary WORD [--json]` |
+| Word bank per story or universe; save as atom list | Works | `wordbank.json` in the story or universe folder (choose in the tab); add by hand (comma separated), remove with `d`; "Save as atom list" with a slot (every slot of the built-in lists) writes `<universe>/lists/<slot>/wordbank-<name>.json` tagged with the universe's genres, so the Wheel and Builder roll with it (tested: the words are drawn). Atoms are five words at most: longer entries are skipped and the message says how many |
+| Overused words | Works | for a story you pick (default: the current one): the most frequent non-everyday words, counted by stem (walk + walked + walks), with the forms; and words repeated within about 50 words; choosing one lists every place with its scene, line and a snippet; Enter on a place opens the Writer at that line |
+
+## J4. Tests added in batch 2a
+| Area | File | Tests |
+|---|---|---|
+| Ctrl keys, function keys, Shift+Home/End, Ctrl+H, menu keys | `test_notepad.py` | 36 more |
+| Word forms | `test_inflect.py` | 71 |
+| Dictionary index v2, vocabulary, indirect opposites, inflect CLI | `test_dictionary.py` | 37 (was 31) |
+| Writer card | `test_lookup_writer.py` | 24 |
+| Words mode | `test_words.py` | 28 |
+| Writer hand-over | `test_words_writer.py` | 8 |
+| Word bank and overused words | `test_wordbank_overused.py` | 8 |
+
+## J5. Manual test script
+1. `storywheel dictionary install` (rebuilds the index). Then try `storywheel lookup running`.
+2. In the Writer: press Ctrl+U, Ctrl+W, Ctrl+T, Ctrl+D, F5 (it goes to Words now), F10: nothing should be typed or deleted. Ctrl+Backspace deletes a word. **Ctrl+R opens replace** (tell me if it doesn't in your terminal).
+3. Right-click: Undo and Redo with their keys listed.
+4. Shift+End / Shift+Home in a long wrapped paragraph, then type.
+5. F7 on "running": r should give "sprinting"-style replacements; try a plural, a past tense, a capitalized word, an ALL CAPS word. Enter on a word, then b and n. `/` to filter.
+6. F5 in the Writer on a word: Lookup opens on it; pick another word; `u` returns and replaces it.
+7. Words > Vocabulary: "kitchen" or "saddle"; choose words; Word bank: save as an atom list; roll in the Builder or Wheel in that universe.
+8. Words > Overused on your longest story; Enter on a place opens the Writer there.
+
+
+Full suite at the end of batch 2a: **1162 passed**.

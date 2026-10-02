@@ -695,4 +695,20 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   sources on request (the only network use) and builds it. `dictionary.py` does the lookups (inflected forms by OEWN's own forms
   plus regular endings; close spellings for misses). One CLI entry, `lookup`, serves the Writer; `define` and `thesaurus` show parts of it.
   Screens: F5 dialog in the Wheel, Builder and Settings; F7/F6 card in the Writer. Sources and licenses are in SOURCES.md.
+- Notepad mode disables, for Insert and Select mode, every Ctrl letter that is not deliberately mapped (and Ctrl+@ ] ^ _ \ Space)
+  and every unmapped function key (they used to type their own name). Ctrl+H and Ctrl+Backspace delete the previous word. Find and
+  replace is Ctrl+R by default (Ctrl+H arrives as Ctrl+Backspace in VTE terminals). Shift+Home/End select the visible line.
+- The right-click menu entries are labelled with their keys (`<Tab>Ctrl+Z` in the menu name), including Undo and Redo.
+- Words is a fifth mode (F5, `words_app.py`): Lookup, Vocabulary, Word bank, Overused. It replaces the F5 Lookup dialog. From the Writer
+  it receives `{word, replace: {file,row,start,end,text}}` through `<return file>.data` (written by `sw.leave("words", data)`); "Use in
+  Writer" returns `replace.new` (the picked word, inflected and capitalized like the original) in the next Writer payload, which sets
+  `STORYWHEEL_REPLACE`; the Writer applies it before its first screen.
+- The dictionary index is schema 2 (relations, related forms); an older index says to run `dictionary install` again. A word's
+  similar words are never cut off. Indirect opposites are labelled as such. Roget's 1911 thesaurus was evaluated for "opposite ideas" and
+  not used: the opposing-category pairing is not in the data.
+- Word forms (`inflect.py`): irregular verbs/nouns/adjectives come from tables in the code because WordNet's own irregular lists are
+  incomplete and untagged; the rest follows spelling rules. A lookup reports its base word and form so a replacement can be put in the same form.
+- Word banks are `wordbank.json` in a story or universe folder; "Save as atom list" writes `<universe>/lists/<slot>/wordbank-<name>.json`
+  tagged with the universe's genres (atoms are at most five words). Overused words are stem-counted, leave out everyday words, and report
+  scene, line and a snippet for each place.
 
