@@ -41,6 +41,11 @@ def build_story(engine, genres, exclude_tags=(), structure=None):
     return story
 
 
+def _with_article(rival):
+    """'sheriff' -> 'the sheriff'; a proper name ('Sheriff Lund') stands alone."""
+    return rival if rival[:1].isupper() else f"the {rival}"
+
+
 def render(story, number=None, width=78):
     k = story["kept"]
 
@@ -55,7 +60,7 @@ def render(story, number=None, width=78):
            "",
            wrap(fix_articles(f"{p['name']}, {p['age']}, a {p['trait']} {p['job']}. ")
                 + f"Wants {p['want']}. Needs {p['need']}. Flaw: {p['flaw']}. "
-                f"Secret: {p['secret']}. Rival: the {p['rival']}.", "  * "),
+                f"Secret: {p['secret']}. Rival: {_with_article(p['rival'])}.", "  * "),
            wrap(f"{s['place']} · {s['era']} · {s['season']}. Landmark: {s['landmark']}. "
                 f"Rumor: {s['rumor']}.", "  * "),
            "",

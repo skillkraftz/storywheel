@@ -618,4 +618,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - `python-docx` is a required dependency; `pyte` is a dev dependency (terminal-screen tests).
 - "Send to Builder" is a button (and `B`) in the Wheel from the first kept step, "Open in Builder" once sent; F2 from an unsent
   draft with kept steps asks whether to send it first. Sending asks only "new or existing universe", then shows the usual preview.
+- Builder lists: rolling a field does not rebuild the entity list (only a name change does, and it keeps its scroll); columns
+  never scroll themselves. In the top box only right-click or `e` edits, and the wheel scrolls.
+- Proper names: instead of flagging atoms, the text filler drops "the/a/an" directly before the name of any character or place
+  in the ticked universes (`Engine.proper`), so templates that say "the {rival}" read "Sheriff Lund".
 

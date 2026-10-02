@@ -33,6 +33,7 @@ HELP = f"""\
   [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
   [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
   [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
+  Top box: click selects and the wheel scrolls it; [b]right-click[/b] or [b]e[/b] edits the selected row.
   [b]+[/b] [b]-[/b]      like / dislike the line
 
 [b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
@@ -223,12 +224,15 @@ class BuilderScreen(Screen):
     BuilderScreen #stories { height: 1fr; }
     BuilderScreen .btns { height: 1; }
     BuilderScreen .btns Button { height: 1; border: none; min-width: 6; padding: 0 1; margin-right: 1; }
-    BuilderScreen #top-box { height: 14; border: round $primary-darken-2; }
+    BuilderScreen #mid { overflow: hidden; }
+    BuilderScreen #left, BuilderScreen #right { overflow: hidden; }
+    BuilderScreen #top-box { height: 14; max-height: 30%; border: round $primary-darken-2; }
     BuilderScreen #top { height: 1fr; }
     BuilderScreen #tabs { height: 3; }
     BuilderScreen #work { height: 1fr; }
-    BuilderScreen #entities { width: 30; border: round $primary-darken-2; }
-    BuilderScreen #card-box { width: 1fr; border: round $primary; }
+    BuilderScreen #entities { width: 30; min-width: 30; max-width: 30; height: 100%; border: round $primary-darken-2; }
+    BuilderScreen #card-box { width: 1fr; height: 100%; overflow: hidden; border: round $primary; }
+    BuilderScreen OptionList { scrollbar-gutter: stable; }
     BuilderScreen #card { height: 1fr; border: none; }
     BuilderScreen #notes { height: 1fr; min-height: 8; }
     BuilderScreen #links, BuilderScreen #appears { padding: 0 1; height: auto; max-height: 12; }
@@ -304,6 +308,7 @@ class BuilderScreen(Screen):
         if self.universe and self.start_entity:
             self.entity = self.universe.entity(self.start_entity)
         self.refresh_all()
+        self.top.history_wheel = False
         self.query_one("#card", CardList).focus()
 
     # --- small accessors ---------------------------------------------------------------------------------------
@@ -361,13 +366,17 @@ class BuilderScreen(Screen):
             return ", ".join((self.universe.resolve(v).name if self.universe.resolve(v) else v) for v in (value or []))
         return value or ""
 
-    def refresh_all(self):
+    def refresh_all(self, lists=True):
+        """Show everything again. With lists=False the entity list and the left column are left exactly as they are
+        (only the card, the top box and the right column change): rolling a field must not move the list."""
         self._busy = True
         try:
-            self.refresh_universes()
-            self.refresh_stories()
+            if lists:
+                self.refresh_universes()
+                self.refresh_stories()
             self.refresh_top()
-            self.refresh_entities()
+            if lists:
+                self.refresh_entities()
             self.refresh_card()
             self.refresh_right()
         finally:
@@ -442,6 +451,9 @@ class BuilderScreen(Screen):
         return rows
 
     def refresh_top(self):
+        self._keep_view(self.top, self._build_top)
+
+    def _build_top(self):
         rows = self.top_rows()
         self.query_one("#top-title", Static).update(
             f"Story outline: {self.story.title}   (o: universe overview)" if self.story
@@ -458,6 +470,9 @@ class BuilderScreen(Screen):
             lst.highlighted = min(keep, len(rows) - 1)
 
     def refresh_entities(self):
+        self._keep_view(self.elist, self._build_entities)
+
+    def _build_entities(self):
         lst = self.elist
         keep_id = self.entity.id if self.entity else None
         lst.clear_options()
@@ -487,6 +502,9 @@ class BuilderScreen(Screen):
             tabs.active = f"tab-{self.type}"
 
     def refresh_card(self):
+        self._keep_view(self.card, self._build_card)
+
+    def _build_card(self):
         e = self.entity
         lst = self.card
         keep = lst.highlighted
@@ -589,7 +607,9 @@ class BuilderScreen(Screen):
 
     def on_card_list_field(self, event):
         if event.source.id == "top":
-            return self.edit_top(event.index)
+            if event.button == 3:                       # a left-click only selects; right-click (or e) edits
+                self.edit_top(event.index)
+            return
         key = self._key_at(event.index)
         if event.button == 3:
             self.write_field(key)
@@ -675,6 +695,18 @@ class BuilderScreen(Screen):
         self.universe.save_entity(e)
         self._after_save(e, key, old_id)
 
+    def _keep_view(self, lst, build):
+        """Rebuild an option list without moving it: the scroll position is put back unless the highlighted row
+        would then be out of sight."""
+        y = lst.scroll_y
+        build()
+        def restore():
+            h = lst.highlighted
+            height = lst.size.height
+            if h is None or y <= h < y + height:
+                lst.scroll_to(y=y, animate=False)
+        lst.call_after_refresh(restore)
+
     def _after_save(self, e, key, old_id):
         seq = self.hist.setdefault((e.id, key), [])
         v = e.fields.get(key)
@@ -684,7 +716,7 @@ class BuilderScreen(Screen):
             if eid == old_id and old_id != e.id:                  # a placeholder id became a real one: history follows
                 self.hist[(e.id, k)] = self.hist.pop((eid, k))
         self.entity = self.universe.entity(e.id)
-        self.refresh_all()
+        self.refresh_all(lists=(key == "name" or e.id != old_id))
 
     def write_field(self, key):
         e = self.entity
@@ -804,6 +836,10 @@ class BuilderScreen(Screen):
         self.roll_field(self.field_key())
 
     def action_write_field(self):
+        if self.focused is self.top:
+            if self.top.highlighted is not None:
+                self.edit_top(self.top.highlighted)
+            return
         self.write_field(self.field_key())
 
     def action_roll_blank(self):

@@ -187,15 +187,30 @@ _Status words as above. Updated after each area; each area has a tag `pass2-...`
 | A visible "Send to Builder" button and key (`B`) in the Wheel once a story has kept steps; same on Past stories | Works | the button is under the card from the start (greyed out until something is kept); once sent it reads "Open in Builder" and `B` opens the story there; Past stories has a "Send" button (and `P`) |
 | F2 from a draft with kept steps offers to send it first | Works | choices: send it first, just go, or Escape to stay; a draft with nothing kept or already sent goes straight through |
 
+### Builder fixes (`pass2-builder-fixes`)
+| Item | Status | What's missing |
+|---|---|---|
+| The entity list must not move when an item is clicked; list and card in stable, separate areas | Partial | I could **not** reproduce a jump on a plain click in an automated run, so I fixed what I could reproduce and what could plausibly cause it: rolling a field used to rebuild the list and reset its scroll to the top (now the list is left alone unless a name changes, and then it keeps its scroll); the list, card and columns now have fixed sizes and never scroll themselves; list scrollbars reserve their space; the top box takes at most 30% of the height so the list keeps room on a short screen. **Needs your eyes** (manual script step 3) |
+| Top box: left-click selects and allows scrolling; only right-click or `e` edits | Works | the wheel scrolls the top box (it no longer steps through history there); Enter does nothing |
+| Universe entities know they're proper names ("the {rival}" renders "Sheriff Lund") | Works | done as a rule in the text filler (an article directly before a universe character's or place's name is dropped), so it also fixes "a/the" before places; names that already start with an article are left alone |
+
 ## P2. Tests added in the second pass
 | Area | File | Tests |
 |---|---|---|
 | Send to Builder | `test_send_to_builder.py` | 9 |
+| Builder fixes | `test_builder_fixes.py` | 13 |
 
 ## P3. Manual test script additions
 1. In the Wheel, keep one step: the **Send to Builder** button under the card should light up. Click it (or press `B`).
 2. Press **F2** in a draft with kept steps: you should be offered "send it first".
 
+3. In the Builder with a long list of entities: scroll the list, click an item near the top and the bottom edge, roll fields on the card
+   (click a field, press space): the list should stay put and the card should change beside it. Tell me if it still shifts, and
+   what size your terminal is.
+4. In a story's outline box (top): left-click a row (it highlights, nothing opens), scroll the wheel (it scrolls), right-click or press `e` (an edit box opens).
+5. Put a universe character in the rival slot (`Use: only` is not needed; boost the universe): the text says "Sheriff Lund", not "the Sheriff Lund".
+
 ## P4. Known issues / open questions (second pass)
+- The "list moves when clicked" report could not be reproduced headlessly (see above); please re-test by hand.
 - Past stories' button is labelled just "Send" (a longer label did not fit the column).
 

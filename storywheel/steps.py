@@ -335,8 +335,9 @@ def fill(c, template):
             break
         text = text.format_map(c)
     name = dict.get(c, "name", "")
-    return fix_articles(pronouns(text, dict.get(c, "first") or (name.split() or [""])[0],
+    text = fix_articles(pronouns(text, dict.get(c, "first") or (name.split() or [""])[0],
                                  c.engine.object_words))
+    return c.engine.proper(text)
 
 
 def beat(opening, slot, closing="."):

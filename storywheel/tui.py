@@ -158,7 +158,11 @@ class CardList(OptionList):
         else:
             self.post_message(self.Field(index, event.button, self))
 
+    history_wheel = True              # the wheel steps through a field's values; off, it just scrolls the list
+
     def _wheel(self, event, direction):
+        if not self.history_wheel:
+            return
         event.stop()
         event.prevent_default()
         index = event.style.meta.get("option")

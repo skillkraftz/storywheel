@@ -64,6 +64,29 @@ class Engine:
         self.library.replace_lists("universe:", lists)
         self.universes = list(universes)
         self._feature_index = None
+        self._proper = self._proper_names_pattern(universes)
+
+    @staticmethod
+    def _proper_names_pattern(universes):
+        """A pattern for the names of the universes' people and places, so 'the Sheriff Lund' can become 'Sheriff Lund'."""
+        import re
+        from .promote import ARTICLE
+        names = set()
+        for u in universes:
+            for kind in ("character", "place"):
+                for e in u.entities(kind):
+                    n = e.name.strip()
+                    if len(n) >= 3 and not ARTICLE.match(n):
+                        names.add(n)
+        if not names:
+            return None
+        alt = "|".join(re.escape(n) for n in sorted(names, key=len, reverse=True))
+        return re.compile(r"\b(?:the|a|an)\s+(?=(?:%s)\b)" % alt, re.IGNORECASE)
+
+    def proper(self, text):
+        """Templates say 'the {rival}'; a universe character is a proper name, so the article goes."""
+        pattern = getattr(self, "_proper", None)
+        return pattern.sub("", text) if pattern else text
 
     def mix_for(self, story):
         """The mix for rolling this story: its own, plus the selected universes' genres and atom boosts.
