@@ -21,6 +21,11 @@ function M.setup()
   end
   -- extra pixels between lines: about the font size looks double spaced
   vim.o.linespace = tonumber(story.setting("line_spacing", 12)) or 12
+  -- the window's opacity (its own setting; 1 when the background is not meant to be transparent)
+  local opacity = story.setting("transparent_background", true) ~= false and tonumber(story.setting("neovide_opacity", 0.85)) or 1.0
+  opacity = math.max(0.1, math.min(1.0, opacity or 1.0))
+  vim.g.neovide_opacity = opacity
+  vim.g.neovide_normal_opacity = opacity
   vim.g.neovide_scroll_animation_length = 0.12
   vim.g.neovide_cursor_animation_length = 0.04
   vim.g.neovide_cursor_vfx_mode = ""

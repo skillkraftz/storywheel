@@ -9,6 +9,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
+from . import appearance
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
@@ -28,6 +29,13 @@ SECTIONS = [
     ]),
     ("Goals", [
         ("daily_goal", "Daily word goal", "int", None, "Shown in the Writer's status line and the Builder's stats box. 0 turns it off."),
+    ]),
+    ("Appearance", [
+        ("transparent_background", "Transparent background", "bool", None,
+         "Use your terminal's own background, so a translucent terminal (kitty background_opacity...) shows through. Applies to every mode and to the Writer."),
+        ("text_color", "Text color", "color", None, "Blank: your terminal's own text color. A name (white, cream, amber...) or a hex color like #e8e1d0."),
+        ("accent_color", "Accent color", "color", None, "Titles, borders, scene breaks, the chosen item. Blank: the usual blue. A name or a hex color like #5fafd7."),
+        ("neovide_opacity", "Neovide window opacity", "float", None, "Only for Neovide (it makes its own window): 0.85 is a little see-through, 1 is solid. Used when the background is transparent."),
     ]),
     ("Writer", [
         ("notepad_mode", "Notepad mode", "bool", None, "On: type like in an ordinary editor (Escape does not change modes). Off: Vim behavior."),
@@ -129,7 +137,7 @@ class SettingsScreen(Screen):
     SettingsScreen #status { height: 1; padding: 0 1; background: $boost; }
     SettingsScreen DataTable { height: 1fr; min-height: 8; }
     SettingsScreen #summary { padding: 0 1; height: auto; }
-    SettingsScreen .title { background: $primary-darken-2; padding: 0 1; height: 1; }
+    SettingsScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
     """
 
     def __init__(self, app_ref):
@@ -215,7 +223,25 @@ class SettingsScreen(Screen):
         g = settings.load_global()
         g[key] = value
         settings.save_global(g)
+        if key in ("transparent_background",):
+            appearance.apply(self.app)
         self.say(f"Saved: {key} = {value!r}")
+
+    def save_color(self, key, text, box=None):
+        """A color: a name (white, cream, amber...) or a hex color; blank means the terminal's own / the usual. Applies at once."""
+        value = appearance.parse_color(text)
+        if value is None:
+            self.say("That isn't a color I know. Try a name (white, cream, amber, cyan...) or a hex color like #e8e1d0, or leave it blank.")
+            return False
+        g = settings.load_global()
+        g[key] = value
+        settings.save_global(g)
+        self.values[key] = value
+        if box is not None:
+            box.value = value
+        appearance.apply(self.app)
+        self.say(f"Saved: {key.replace('_', ' ')} = {value or '(your terminal\'s own)'}. The Writer picks it up the next time it starts.")
+        return True
 
     def save_key(self, key, text, box=None):
         """Check a shortcut (a form we understand, not used by anything else) and save it in Neovim's notation."""
@@ -283,7 +309,7 @@ class SettingsScreen(Screen):
     def on_input_changed(self, event):
         key = (event.input.id or "")[2:]
         kind = self.kind_of(key)
-        if kind in ("path", "key"):
+        if kind in ("path", "key", "color"):
             return                                              # saved on Enter, not on every keystroke
         ok, value = parse(kind, event.value)
         if not ok:
@@ -301,6 +327,8 @@ class SettingsScreen(Screen):
             (self.save_manuscripts if key == "manuscripts_dir" else self.save_library)(event.value)
         elif kind == "key":
             self.save_key(key, event.value, event.input)
+        elif kind == "color":
+            self.save_color(key, event.value, event.input)
 
     def on_switch_changed(self, event):
         key = (event.switch.id or "")[2:]
@@ -377,6 +405,7 @@ class SettingsApp(App):
 
     def __init__(self, state_store=None, back="builder"):
         super().__init__()
+        appearance.apply(self)
         self.state_store = state_store
         self.back = back
         self.next = None

@@ -19,6 +19,7 @@ from textual.widgets import Button, Footer, Input, Label, OptionList, Select, St
 from textual.widgets.option_list import Option
 
 from . import dictionary, inflect, learn, overused, vault, wordbank
+from . import appearance
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -743,6 +744,7 @@ class WordsApp(App):
 
     def __init__(self, state_store=None, back="builder", payload=None):
         super().__init__()
+        appearance.apply(self)
         self.state_store = state_store
         self.back = back
         self.payload = payload or {}

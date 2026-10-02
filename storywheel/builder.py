@@ -16,6 +16,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
+from . import appearance
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -228,7 +229,7 @@ class BuilderScreen(Screen):
     BuilderScreen #left { width: 21%; min-width: 38; max-width: 46; border: round $primary-darken-2; }
     BuilderScreen #mid { width: 1fr; }
     BuilderScreen #right { width: 24%; min-width: 40; max-width: 52; border: round $primary-darken-2; }
-    BuilderScreen .title { background: $primary-darken-2; color: $text; padding: 0 1; height: 1; }
+    BuilderScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
     BuilderScreen #universes { height: auto; max-height: 12; }
     BuilderScreen #stories { height: 1fr; }
     BuilderScreen .btns { height: 1; }
@@ -1288,6 +1289,7 @@ class BuilderApp(App):
     def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None, tab=None,
                  entity=None, rtab=None):
         super().__init__()
+        appearance.apply(self)
         self.start_tab, self.start_entity, self.start_rtab = tab, entity, rtab
         self.engine_factory = engine_factory
         self.ratings = ratings

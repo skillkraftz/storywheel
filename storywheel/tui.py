@@ -25,6 +25,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.message import Message
 from textual.screen import ModalScreen, Screen
+from . import appearance
 from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
@@ -782,7 +783,7 @@ class MainScreen(Screen):
     MainScreen #main { width: 1fr; }
     MainScreen #card-box { height: 3fr; border: round $primary; }
     MainScreen #hist-box { height: 2fr; border: round $primary-darken-2; }
-    MainScreen .title { background: $primary-darken-2; color: $text; padding: 0 1; height: 1; }
+    MainScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
     MainScreen #hint { color: $text-muted; padding: 0 1; height: auto; max-height: 4; }
     MainScreen #meta { padding: 0 1; height: 1; color: $accent; }
     MainScreen #extra { color: $text-muted; padding: 0 1; height: auto; }
@@ -1618,6 +1619,7 @@ class StorywheelApp(App):
 
     def __init__(self, story, engine, state_store=None, notice=""):
         super().__init__()
+        appearance.apply(self)
         self.story, self.engine = story, engine
         self.state_store = state_store
         self.session = Session(story, engine, ratings=engine.ratings)
