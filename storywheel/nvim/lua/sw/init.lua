@@ -184,7 +184,7 @@ function M.copy_manuscript()
     vim.api.nvim_echo({ { string.format("Copied the manuscript (%d words) as plain text.", util.count_words(text)), "Normal" } }, false, {})
     return true
   end
-  vim.api.nvim_echo({ { "Couldn't reach the clipboard (install xclip or wl-clipboard). Use the Builder's export for a .txt file.", "ErrorMsg" } }, true, {})
+  vim.api.nvim_echo({ { "A clipboard tool isn't installed. Copying to the system clipboard needs one. To fix it, run:  sudo apt install xclip   Or export a .txt file instead.", "ErrorMsg" } }, true, {})
   return false
 end
 

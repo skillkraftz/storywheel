@@ -10,15 +10,15 @@ import difflib
 import re
 import sqlite3
 
-from . import inflect, paths
+from . import inflect, paths, tools
 from .dictionary_build import SCHEMA_VERSION, unpack_ids
 
 POS_NAMES = {"n": "noun", "v": "verb", "a": "adjective", "s": "adjective", "r": "adverb"}
 POS_ORDER = ["noun", "verb", "adjective", "adverb"]
-NOT_INSTALLED = "The dictionary isn't installed yet. Run:  storywheel dictionary install   (one download, about 40 MB)."
+NOT_INSTALLED = tools.missing("dictionary", "(one download, about 40 MB)")
 
 
-OUT_OF_DATE = "The dictionary index is from an older version. Run:  storywheel dictionary install   (it rebuilds it)."
+OUT_OF_DATE = "The dictionary index is from an older version. To fix it, run:  storywheel dictionary install   (it rebuilds it)."
 
 
 class DictionaryMissing(Exception):

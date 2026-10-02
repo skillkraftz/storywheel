@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from . import paths
+from . import paths, tools
 
 APPNAME = "storywheel-writer"
 PACKAGE_CONFIG = Path(__file__).parent / "nvim"
@@ -46,7 +46,7 @@ def check():
     """A plain message if the Writer can't run here, else None."""
     exe = nvim_exe()
     if not exe:
-        return "Neovim isn't installed (the Writer needs Neovim 0.10 or newer: install it with your package manager)."
+        return tools.missing("neovim")
     version = nvim_version(exe)
     if version is None or version < MIN_NVIM:
         have = ".".join(map(str, version)) if version else "unknown"
@@ -129,8 +129,7 @@ def launch(story, return_file=None):
             argv = [exe, "--no-fork"]                 # wait for the window to close, like the terminal Neovim does
             env["STORYWHEEL_GUI"] = "neovide"
         else:
-            note = ("Neovide isn't installed, so the Writer opened in the terminal. "
-                    "Install Neovide, or turn 'Use Neovide' off in Settings (F4).")
+            note = tools.missing("neovide", "Or turn 'Use Neovide' off in Settings (F4).")
     return argv, env, note
 
 

@@ -24,7 +24,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from . import paths, quotes, settings, vault
+from . import paths, quotes, settings, tools, vault
 
 FORMATS = ("docx", "odt", "pdf", "md", "txt", "fountain")
 INDENT_INCHES = 0.5
@@ -208,7 +208,7 @@ def build_docx(story, path, anonymous=None):
         from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_LINE_SPACING, WD_TAB_ALIGNMENT
         from docx.shared import Inches, Pt
     except ImportError:
-        raise ExportError("The Word export needs the python-docx package (pip install python-docx).")
+        raise ExportError(tools.missing("python-docx"))
     st = settings.load_story(story.path)
     if anonymous is None:
         anonymous = bool(st.get("export_anonymous"))
@@ -394,7 +394,7 @@ def convert(path, fmt):
     """Convert a .docx to .odt or .pdf with LibreOffice. Returns the new path."""
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
     if not soffice:
-        raise ExportError(f"Making a .{fmt} needs LibreOffice ('soffice'), which isn't installed. The .docx was written.")
+        raise ExportError(tools.missing("libreoffice", "The .docx was written."))
     out = Path(path).parent
     try:
         res = subprocess.run([soffice, "--headless", "--convert-to", fmt, "--outdir", str(out), str(path)],

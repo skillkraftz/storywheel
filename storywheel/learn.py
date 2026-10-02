@@ -8,7 +8,7 @@ import json
 import random
 import re
 
-from . import dictionary, paths
+from . import dictionary, paths, tools
 
 DIFFICULTY = {          # name: (lowest, highest Zipf frequency)  -- the higher, the more everyday
     "any": (1.5, 3.8), "uncommon": (3.0, 3.8), "rare": (2.3, 3.0), "very rare": (1.5, 2.3),
@@ -36,8 +36,7 @@ class WordfreqMissing(Exception):
     pass
 
 
-MISSING = ("Word frequencies need the 'wordfreq' package (it works offline). Install it with:  pipx inject storywheel wordfreq   "
-           "(or  pip install wordfreq).")
+MISSING = tools.missing("wordfreq", "(or  pip install wordfreq)")
 
 
 def zipf(word):
@@ -174,6 +173,13 @@ class MyWords:
         self.data["learning"] = [e for e in self.data["learning"] if e["word"].lower() != word.lower()]
         self.save()
         return before - len(self.data["learning"])
+
+    def add_by_hand(self, word, pos="", definition=""):
+        """A word you want to learn that the batches did not offer. Returns "new", "relearn" (it was marked Known) or "have"."""
+        had = word.lower() in self.learning_words()
+        was_known = word.lower() in self.known
+        self.mark_learning(word, pos, definition)
+        return "have" if had else ("relearn" if was_known else "new")
 
     def forget_seen(self):
         self.data["seen"] = []

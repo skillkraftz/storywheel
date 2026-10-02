@@ -390,7 +390,7 @@ def test_the_status_line_shows_scene_manuscript_and_today_against_the_goal(home,
         R.line = require("sw.stats").line()
         R.statusline = vim.o.statusline
     """)
-    assert r["line"] == "  scene 9 · manuscript 14 · today 0/1,000"
+    assert r["line"] == "  words: in this scene 9 · in the story 14 · written today 0 of 1,000"
     assert "sw.stats" in r["statusline"]
 
 
@@ -704,6 +704,7 @@ def test_copy_manuscript_as_plain_text(home, story):
 
 @pytest.mark.skipif(not hasattr(os, "fork"), reason="needs a pseudo-terminal")
 def test_in_a_real_terminal_the_writer_starts_draws_the_text_and_f2_returns(home, story):
+    settings.save_story(story.path, {"spellcheck": False})            # (the underline of a misspelling splits the text with escape codes)
     import pty
     import select
     import struct
@@ -741,7 +742,7 @@ def test_in_a_real_terminal_the_writer_starts_draws_the_text_and_f2_returns(home
     _, status = os.waitpid(pid, 0)
     text = out.decode("utf-8", "replace")
     assert os.WEXITSTATUS(status) == 0
-    assert "Stacie ran down the road" in text and "scene " in text and "manuscript" in text
+    assert "Stacie ran down the road" in text and "in this scene" in text and "written today" in text
     assert "E5108" not in text and "E5113" not in text and "Error" not in text.split("Stacie")[0][-500:]
     assert (story.path.parent / "return-pty.txt").read_text() == "builder"
     assert "hello from the pty" in story.scenes()[0].read_text()

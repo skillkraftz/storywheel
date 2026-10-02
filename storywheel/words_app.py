@@ -19,7 +19,7 @@ from textual.widgets import Button, Footer, Input, Label, OptionList, Select, St
 from textual.widgets.option_list import Option
 
 from . import dictionary, inflect, learn, overused, vault, wordbank
-from . import appearance, navigation
+from . import appearance, navigation, tools
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -29,16 +29,20 @@ HELP = f"""\
 
 [b]Lookup[/b]  type a word and press Enter. Plurals, past tenses and misspellings work.
   [b]Enter[/b] or a click on a word looks it up       [b]b[/b] / [b]n[/b]  back / forward through the words you looked up
-  [b]/[/b]  filter the lists                          [b]c[/b]  copy the word       [b]a[/b]  add it to My words
-  [b]w[/b]  Add to this universe's word list (pick the slot: job, thing, place...) so the Wheel and Builder use it
+  [b]/[/b]  filter the lists                          [b]c[/b]  copy the word       [b]a[/b]  Learn this word (it goes to My words)
+  [b]w[/b]  Use in this universe's stories: pick the slot (job, thing, place...) and the Wheel and Builder will use the word
   [b]u[/b]  Use in Writer: go back to the Writer and replace the word you were on (only when you came from the Writer)
 
 [b]Vocabulary[/b]  words worth learning: not everyday, not obscure, each with a one-line meaning. Pick how rare, the part of
-  speech and the subject, then [b]New batch[/b] (it never repeats a word you have seen). [b]Enter[/b] opens the full entry in Lookup;
-  [b]l[/b] marks a word Learning (it goes to My words), [b]k[/b] marks it Known (never offered again).
+  speech and the subject, then [b]New batch[/b] (it never repeats a word you have seen; [b]Start over[/b] forgets what you have seen).
+  [b]Enter[/b] opens the full entry in Lookup; [b]l[/b] marks a word ★ Learning (it goes to My words), [b]k[/b] marks it ✓ Known
+  (never offered again). Difficulty: uncommon (like "lantern"), rare (like "serendipity"), very rare (like "gallivant").
 
 [b]My words[/b]  the words you are learning, with meanings. [b]Enter[/b] looks one up, [b]k[/b] marks it Known (removes it),
-  [b]d[/b] removes it, [b]w[/b] adds it to the universe's word list, [b]f[/b] flashcards (the word first; space shows the meaning).
+  [b]d[/b] removes it, [b]w[/b] Use in this universe's stories, [b]f[/b] flashcards (the word first; space shows the meaning). You can type
+  a word of your own to learn.
+
+[b]Universe words[/b]  the words you put on this universe's lists with [b]w[/b]: see them by slot and remove any ([b]d[/b]).
 
 [b]Overused[/b]  the most frequent words of a story (everyday words left out) and words repeated close together. Enter on a
   place opens the Writer there.
@@ -232,9 +236,9 @@ class WordsScreen(Screen):
         Binding("n", "forward", "Forward", show=False),
         Binding("slash", "filter", "Filter", show=False),
         Binding("u", "use", "Use in Writer", show=False),
-        Binding("a", "add", "Add to My words", show=False),
+        Binding("a", "add", "Learn this word", show=False),
         Binding("c", "copy", "Copy", show=False),
-        Binding("w", "wordlist", "Universe word list", show=False),
+        Binding("w", "wordlist", "Use in this universe's stories", show=False),
         Binding("k", "known", "Known", show=False),
         Binding("l", "learning", "Learning", show=False),
         Binding("d", "remove", "Remove", show=False),
@@ -288,16 +292,20 @@ class WordsScreen(Screen):
                 yield OptionList(id="results")
                 with Horizontal(id="tools", classes="bar"):
                     yield Button("Use in Writer", id="use")
-                    yield Button("Add to My words", id="add")
-                    yield Button("Add to universe word list", id="lookuplist")
+                    yield Button("Learn this word", id="add")
+                    yield Button("Use in this universe's stories", id="lookuplist")
                     yield Button("Copy", id="copy")
+                yield Static("", id="usenote", classes="note", markup=False)
             with TabPane("Vocabulary", id="t-vocab"):
                 with Horizontal(classes="bar"):
                     yield Select([(d, d) for d in learn.DIFFICULTY], value="any", id="difficulty", allow_blank=False)
                     yield Select([("Any part of speech", "any")] + [(p, p) for p in learn.POS], value="any", id="vpos", allow_blank=False)
                     yield Select([("Any subject", "any")], value="any", id="subject", allow_blank=False)
                     yield Button("New batch", id="newbatch")
-                yield Static("Words worth learning: not everyday, not obscure. Enter opens the full entry; l = Learning, k = Known.", classes="note")
+                    yield Button("Start over", id="startover")
+                yield Static("Words worth learning: not everyday, not obscure.   ★ Learning (in My words)   ✓ Known (never offered again)   "
+                             "Enter opens the full entry; l = Learning, k = Known.", classes="note", markup=False)
+                yield Static("How rare: uncommon (like “lantern”)   rare (like “serendipity”)   very rare (like “gallivant”)", classes="note", markup=False)
                 yield OptionList(id="learn")
                 with Horizontal(id="learntools", classes="bar"):
                     yield Button("Learning", id="learning")
@@ -305,12 +313,20 @@ class WordsScreen(Screen):
                     yield Button("Open in Lookup", id="openlookup")
             with TabPane("My words", id="t-mine"):
                 yield Static("", id="minenote", classes="note")
+                with Horizontal(classes="bar"):
+                    yield Input(placeholder="a word you want to learn  (Enter adds it)", id="myword")
+                    yield Button("Add", id="myadd")
                 yield OptionList(id="mine")
                 with Horizontal(id="minetools", classes="bar"):
                     yield Button("Flashcards", id="flash")
                     yield Button("Known", id="mineknown")
                     yield Button("Remove", id="remove")
-                    yield Button("Add to universe word list", id="minelist")
+                    yield Button("Use in this universe's stories", id="minelist")
+            with TabPane("Universe words", id="t-uwords"):
+                yield Static("", id="uwnote", classes="note")
+                yield OptionList(id="uwords")
+                with Horizontal(classes="bar"):
+                    yield Button("Remove from the list", id="uwremove")
             with TabPane("Overused", id="t-over"):
                 with Horizontal(classes="bar"):
                     yield Select([("(no story yet)", "none")], id="overstory", allow_blank=False)
@@ -336,6 +352,7 @@ class WordsScreen(Screen):
         self.setup_subjects()
         migrated = wordbank.migrate_banks(self.my)
         self.refresh_mine()
+        self.refresh_uwords()
         if not dictionary.installed():
             self.say(dictionary.NOT_INSTALLED)
         elif migrated:
@@ -355,6 +372,9 @@ class WordsScreen(Screen):
     def refresh_buttons(self):
         use = self.query_one("#use", Button)
         use.disabled = not (self.handover and self.handover.get("replace"))
+        self.query_one("#usenote", Static).update(
+            "" if not use.disabled else "“Use in Writer” is greyed out because you didn't come from the Writer: press F5 on a word in the Writer, "
+            "pick a word here, then Use in Writer brings it back and replaces that word.")
         self.query_one("#back", Button).disabled = self.pos <= 0
         self.query_one("#forward", Button).disabled = self.pos >= len(self.history) - 1
 
@@ -409,6 +429,8 @@ class WordsScreen(Screen):
         if i == "word":
             self.lookup(event.value)
             self.query_one("#results", OptionList).focus()
+        elif i == "myword":
+            self.add_by_hand(event.value)
 
     def on_input_changed(self, event):
         if event.input.id == "filter":
@@ -435,6 +457,8 @@ class WordsScreen(Screen):
          "newbatch": self.new_batch, "learning": lambda: self.mark("learning"), "known": lambda: self.mark("known"),
          "openlookup": lambda: self.batch_word() and self.open_in_lookup(self.batch_word()["word"]),
          "flash": self.action_flashcards, "mineknown": lambda: self.mark("known"), "remove": self.action_remove,
+         "startover": self.start_over, "myadd": lambda: self.add_by_hand(self.query_one("#myword", Input).value),
+         "uwremove": self.action_remove,
          "minelist": self.action_wordlist, "analyze": self.analyze}.get(event.button.id or "", lambda: None)()
 
     def action_back(self):
@@ -468,7 +492,7 @@ class WordsScreen(Screen):
             return
         from . import clipboard
         how = clipboard.copy(w, self.app)
-        self.say(f"Copied “{w}”." if how else f"Couldn't reach a clipboard (install xclip or wl-clipboard). The word is: {w}")
+        self.say(f"Copied “{w}”." if how else tools.missing("clipboard", f"The word is: {w}"))
 
     def action_add(self):
         """Add the highlighted Lookup word to My words, with its meaning."""
@@ -618,13 +642,43 @@ class WordsScreen(Screen):
         return self.mine[lst.highlighted]
 
     def action_remove(self):
-        if self.query_one(TabbedContent).active != "t-mine":
+        tab = self.query_one(TabbedContent).active
+        if tab == "t-uwords":
+            lst = self.query_one("#uwords", OptionList)
+            if lst.highlighted is not None and getattr(self, "uw", None) and lst.highlighted < len(self.uw):
+                slot, word = self.uw[lst.highlighted]
+                wordbank.remove_added(self.universe, slot, word)
+                self.refresh_uwords()
+                self.say(f"Took “{word}” off the '{slot}' list: the Wheel and Builder won't use it any more.")
+            return
+        if tab != "t-mine":
             return
         e = self.mine_entry()
         if e:
             self.my.remove(e["word"])
             self.refresh_mine()
             self.say(f"Removed “{e['word']}” from My words.")
+
+    def add_by_hand(self, text):
+        """A word you want to learn, typed in (several can be separated by commas). Its part of speech and meaning come from the dictionary."""
+        words = [w.strip() for w in (text or "").replace("\n", ",").split(",") if w.strip()]
+        if not words:
+            return
+        results = []
+        for w in words:
+            entry = learn.fill_definition({"word": w, "pos": "", "definition": ""})
+            results.append((w, self.my.add_by_hand(w, entry.get("pos") or "", entry.get("definition") or "")))
+        self.query_one("#myword", Input).value = ""
+        self.refresh_mine()
+        new = [w for w, r in results if r != "have"]
+        self.say((f"Added {', '.join('“' + w + '”' for w in new)} to My words." if new else "") +
+                 (" Already there: " + ", ".join(w for w, r in results if r == "have") + "." if len(new) != len(results) else ""))
+
+    def start_over(self):
+        """Forget which words the batches have shown (Known and Learning words stay as they are), so New batch can offer them again."""
+        n = len(self.my.seen)
+        self.my.forget_seen()
+        self.say(f"Forgot the {n} words you had been shown. Words you marked Known or Learning stay that way." if n else "Nothing had been shown yet.")
 
     def action_flashcards(self):
         if not getattr(self, "mine", None):
@@ -637,6 +691,28 @@ class WordsScreen(Screen):
             if known:
                 self.say(f"{len(known)} word{'s' if len(known) != 1 else ''} marked Known and taken off your list.")
         self.app.push_screen(FlashcardScreen(list(self.mine)), done)
+
+    # --- Universe words: what was put on this universe's lists -------------------------------------------------------------------------
+
+    def refresh_uwords(self):
+        lst = self.query_one("#uwords", OptionList)
+        previous = lst.highlighted
+        lst.clear_options()
+        if self.universe is None:
+            self.uw = []
+            lst.add_options([_opt("Open a universe in the Builder (F2) to have word lists.", None, style="dim")])
+            self.query_one("#uwnote", Static).update("")
+            return
+        self.uw = wordbank.added_words(self.universe)
+        if not self.uw:
+            lst.add_options([_opt("Nothing yet: press w on a word in Lookup or My words (Use in this universe's stories).", None, style="dim")])
+            self.query_one("#uwnote", Static).update(f"{self.universe.name}'s own word lists are empty.")
+            return
+        lst.add_options([_opt(f"  {slot:<16} {word}", f"x:{i}") for i, (slot, word) in enumerate(self.uw)])
+        self.query_one("#uwnote", Static).update(f"{len(self.uw)} word{'s' if len(self.uw) != 1 else ''} the Wheel and Builder can use in {self.universe.name}. "
+                                                 "The slot is the kind of thing it stands for (job, thing, place...).")
+        if previous is not None:
+            lst.highlighted = min(previous, len(self.uw) - 1)
 
     # --- Add to this universe's word list ------------------------------------------------------------------------------------------------
 
@@ -667,6 +743,7 @@ class WordsScreen(Screen):
             self.say(str(e))
             return
         from . import paths
+        self.refresh_uwords()
         self.say((f"Added “{word}” to {self.universe.name}'s '{slot}' list" if new else f"“{word}” was already on the '{slot}' list")
                  + f" ({paths.tilde(path)}). The Wheel and Builder use it for this universe.")
 

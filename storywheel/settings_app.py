@@ -43,7 +43,7 @@ SECTIONS = [
         ("writer_font", "Font in Neovide", "text", None, "Blank: Neovide's default monospace font."),
         ("writer_font_size", "Font size in Neovide", "int", None, "Points."),
         ("line_spacing", "Extra line spacing in Neovide", "int", None, "Pixels; about the font size looks double spaced."),
-        ("paragraph_spacing", "Terminal: blank lines between paragraphs", "int", None, "The closest a terminal gets to double spacing (shown, not typed)."),
+        ("paragraph_spacing", "Space between paragraphs (terminal)", "int", None, "Blank lines shown between paragraphs when the Writer runs in a terminal (shown, not typed). Neovide has real line spacing instead."),
         ("scene_marker", "Scene break in the file", "choice", ["***", "* * *", "#"],
          "What the scene-break key inserts: a line holding only this. (*** or * * * or # lines are all recognized when you type them.)"),
         ("column_width", "Column width", "int", None, "Characters."),
@@ -55,8 +55,9 @@ SECTIONS = [
     ]),
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
-        ("format", "Default format", "choice", ["short-story", "novel", "screenplay"], "A story can choose its own."),
-        ("export_format", "Quick export file type", "choice", ["docx", "odt", "pdf", "md", "txt"], ""),
+        ("format", "Default format", "choice", ["short-story", "novel", "screenplay"],
+         "For new stories (a story can choose its own). short-story is complete; novel is partial (chapters start new pages); screenplay is a stub."),
+        ("export_format", "Default export type", "choice", ["docx", "odt", "pdf", "md", "txt"], "The file type the one-key export makes; you can pick another each time."),
         ("export_title_bold", "Title in bold", "bool", None, "On the first page of the .docx."),
         ("export_header", "Page header shows", "choice", ["full", "keyword"],
          "full: the whole title.  keyword: Shunn's one-word short title (a story can set its own title_keyword)."),
@@ -71,8 +72,9 @@ SECTIONS = [
     ("Keys", [(k, label, "key", None, f"Default {keys.label(default)}. Type a key such as Alt+I, Ctrl+B or F9 and press Enter.")
               for k, (label, default) in keys.WRITER_KEYS.items()]),
     ("Universes", [
-        ("atom_boost", "How much likelier a universe's own people and places are", "float", None,
-         "Your default for every universe (1.5 is a strong genre list's share); a universe can set its own."),
+        ("atom_boost", "Preference for your own names", "float", None,
+         "How much likelier a universe's own people, places and things are in rolls than ordinary ones. 1.5 is about a strong genre list's share. "
+         "Your default for every universe; a universe can set its own."),
     ]),
     ("Library", [
         ("library", "Library folder", "path", None, "Where universes, stories and manuscripts live. Changing it does not move anything."),

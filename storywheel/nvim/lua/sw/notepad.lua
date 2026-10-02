@@ -37,7 +37,7 @@ function M.ensure_clipboard()
     paste = { ["+"] = function() return store["+"] end, ["*"] = function() return store["*"] end },
   }
   M.clipboard_kind = "internal"
-  M.clipboard_note = (not forced) and "No clipboard tool found (xclip, wl-copy, xsel...): copy and paste work inside the Writer only." or nil
+  M.clipboard_note = (not forced) and "A clipboard tool isn't installed. Copy and paste work inside the Writer only. To fix it, run:  sudo apt install xclip" or nil
 end
 
 local function put_register(text, linewise)

@@ -518,7 +518,7 @@ def test_old_word_banks_are_in_my_words_when_words_opens(index, world):
 def test_the_old_tabs_are_gone(index, world):
     async def script(app, pilot):
         return [p.id for p in app.screen.query(TabPane)]
-    assert run(script, {}) == ["t-lookup", "t-vocab", "t-mine", "t-over"]
+    assert run(script, {}) == ["t-lookup", "t-vocab", "t-mine", "t-uwords", "t-over"]
 
 
 # --- Overused ------------------------------------------------------------------------------------------------------------------------
@@ -564,3 +564,123 @@ def test_a_word_in_several_lists_does_not_break_the_screen(index, world):
     ids = [i for _t, i, _s in rows if i]
     assert len(ids) == 5 and len(set(ids)) == 5 and {plain(i) for i in ids} == {"w:a|noun", "w:a|"}
 
+
+
+# --- batch 3: clearer words, start over, add by hand, review the universe's words ------------------------------------------------------
+
+def labels(app):
+    return {b.id: str(b.label) for b in app.screen.query(Button)}
+
+
+def test_the_buttons_say_what_they_do(index, world):
+    async def script(app, pilot):
+        return labels(app)
+    got = run(script, {"universe": "thornwood"})
+    assert got["add"] == "Learn this word" and got["lookuplist"] == "Use in this universe's stories" and got["minelist"] == "Use in this universe's stories"
+    assert got["startover"] == "Start over" and got["myadd"] == "Add"
+    assert "Add to My words" not in " ".join(got.values()) and "word list" not in " ".join(got.values())
+
+
+def test_use_in_writer_being_greyed_out_is_explained_on_screen(index, world):
+    async def script(app, pilot):
+        return flat(screen_text(app))
+    text = run(script, {"universe": "thornwood"})
+    assert "greyed out because you didn't come from the Writer" in text and "press F5 on a word in the Writer" in text
+    text = run(script, handover("running"))
+    assert "greyed out" not in text
+
+
+def test_vocabulary_explains_its_markers_and_difficulty_with_examples(index, world):
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        return flat(screen_text(app))
+    text = run(script, {})
+    assert "★ Learning (in My words)" in text and "✓ Known (never offered again)" in text
+    assert "uncommon (like “lantern”)" in text and "rare (like “serendipity”)" in text and "very rare (like “gallivant”)" in text
+
+
+def test_start_over_forgets_what_was_shown_but_keeps_known_and_learning(index, world):
+    my = learn.MyWords()
+    my.mark_seen(["puppy", "kennel", "wretch"]); my.mark_known("canine"); my.mark_learning("sprint")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        await pilot.click("#startover")
+        await pilot.pause()
+        return flat(screen_text(app))
+    text = run(script, {})
+    assert "Forgot the 3 words you had been shown" in text
+    again = learn.MyWords()
+    assert again.seen == set() and again.known == {"canine"} and again.learning_words() == {"sprint"}
+
+
+def test_a_word_of_your_own_can_be_added_to_my_words_with_its_meaning(index, world):
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-mine")
+        await type_word(app, pilot, "puppy, zzzqx", box="myword")
+        return [t for i, t in options(app, "mine") if i], flat(screen_text(app))
+    rows, text = run(script, {})
+    assert any("puppy" in r and "a young dog" in r and "noun" in r for r in rows) and any("zzzqx" in r for r in rows)
+    assert "Added “puppy”, “zzzqx” to My words" in text
+    assert learn.MyWords().learning_words() == {"puppy", "zzzqx"}
+
+
+def test_adding_a_word_that_was_marked_known_makes_it_learning_again(index, world):
+    learn.MyWords().mark_known("puppy")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-mine")
+        await type_word(app, pilot, "puppy", box="myword")
+    run(script, {})
+    again = learn.MyWords()
+    assert again.learning_words() == {"puppy"} and "puppy" not in again.known
+
+
+def test_universe_words_lists_what_was_added_and_removes_it(index, world):
+    u, s = world
+    wordbank.add_to_universe_list(u, "bell-ringer", "job")
+    wordbank.add_to_universe_list(u, "gravedigger", "job")
+    wordbank.add_to_universe_list(u, "kennel", "place")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-uwords")
+        rows = [t for i, t in options(app, "uwords") if i]
+        lst = app.screen.query_one("#uwords", OptionList)
+        lst.focus()
+        lst.highlighted = 1
+        await pilot.pause()
+        await pilot.press("d")
+        await pilot.pause()
+        return rows, [t for i, t in options(app, "uwords") if i], flat(screen_text(app))
+    rows, left, text = run(script, {"universe": "thornwood", "story": s.slug})
+    assert [r.split() for r in rows] == [["job", "bell-ringer"], ["job", "gravedigger"], ["place", "kennel"]]
+    assert [r.split() for r in left] == [["job", "bell-ringer"], ["place", "kennel"]]
+    assert "Took “gravedigger” off the 'job' list" in text
+    assert json.loads((u.lists_dir / "job" / "words-added.json").read_text())["entries"] == ["bell-ringer"]
+
+
+def test_removing_the_last_word_removes_the_list_file(home):
+    u = vault.create_universe("U", ["western"])
+    path, _ = wordbank.add_to_universe_list(u, "only", "job")
+    assert wordbank.remove_added(u, "job", "only") is True and not path.exists()
+    assert wordbank.remove_added(u, "job", "only") is False and wordbank.added_words(u) == []
+
+
+def test_a_new_word_added_from_lookup_shows_in_universe_words_at_once(index, world):
+    u, s = world
+    async def script(app, pilot):
+        await type_word(app, pilot, "dog")
+        ids = [i for i, _t in options(app, "results")]
+        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:hound|")
+        app.screen.query_one("#results", OptionList).focus()
+        await pilot.press("w")
+        await pilot.pause()
+        app.screen.query_one("#slot", Select).value = "thing"
+        await pilot.click("#ok")
+        await pilot.pause()
+        await show_tab(app, pilot, "t-uwords")
+        return [t for i, t in options(app, "uwords") if i]
+    rows = run(script, {"universe": "thornwood", "story": s.slug})
+    assert [r.split() for r in rows] == [["thing", "hound"]]
+
+
+def test_the_help_explains_the_new_words(index):
+    for needle in ("Start over", "Learn this word", "Use in this universe's stories", "Universe words", "lantern"):
+        assert needle in words_app.HELP

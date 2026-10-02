@@ -227,7 +227,7 @@ def test_the_mode_keys_leave_settings_and_q_goes_back(home):
         await pilot.press("q")
         await pilot.pause()
         return app.next
-    assert run(back, back="wheel") == ("wheel", {}) and run(back, back="builder") == ("builder", {})
+    assert run(back, back="wheel") == ("back", {"fallback": "wheel"}) and run(back, back="builder") == ("back", {"fallback": "builder"})
 
 
 def test_typing_q_in_a_box_does_not_leave(home):

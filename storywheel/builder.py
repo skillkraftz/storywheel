@@ -16,7 +16,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
-from . import appearance, navigation
+from . import appearance, navigation, tools
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -39,7 +39,7 @@ HELP = f"""\
   [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
   [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
   Outline (right column, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
-  [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Notes
+  [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Entity notes (the selected entity's own notes)
   [b]+[/b] [b]-[/b]      like / dislike the line
 
 [b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
@@ -181,9 +181,88 @@ class EntityList(OptionList):
     pass
 
 
+class BackupsScreen(ModalScreen):
+    """Every backup of a story (rolling copies, and the copies made before a conversion or a restore): date, kind, file, words, and what
+    the highlighted one holds. Restore puts it back; the version it replaces is copied aside first."""
+    BINDINGS = [Binding("escape,q", "close", "Close"), Binding("r", "restore", "Restore")]
+    DEFAULT_CSS = """
+    BackupsScreen { align: center middle; }
+    BackupsScreen #dlg { width: 110; max-width: 98%; height: 90%; border: round $accent; background: $surface; padding: 1 2; }
+    BackupsScreen OptionList { height: 1fr; border: none; }
+    BackupsScreen OptionList:focus { border: none; }
+    BackupsScreen #preview { height: 10; border: round $primary-darken-2; padding: 0 1; }
+    BackupsScreen #hint { height: auto; color: $text-muted; }
+    BackupsScreen Horizontal { height: 1; margin-top: 1; }
+    BackupsScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 10; }
+    """
+
+    def __init__(self, story):
+        super().__init__()
+        self.story = story
+        self.rows = []
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="dlg"):
+            yield Static(f"Backups of “{self.story.title}”", markup=False)
+            yield Static("Newest first. Restoring puts the highlighted backup back as that file; the version it replaces is copied aside "
+                         "first (it appears here as “before a restore”), so a restore can be undone.", id="hint", markup=False)
+            yield OptionList(id="list")
+            yield Static("", id="preview", markup=False)
+            with Horizontal():
+                yield _quiet(Button("Restore (r)", id="restore", variant="primary"))
+                yield _quiet(Button("Close (q)", id="close"))
+
+    def on_mount(self):
+        from . import backups
+        self.rows = backups.list_backups(self.story)
+        lst = self.query_one("#list", OptionList)
+        if not self.rows:
+            lst.add_options([Option(Text("No backups yet: they are made while you write in the Writer.", style="dim"), id="none", disabled=True)])
+            self.query_one("#restore", Button).disabled = True
+        else:
+            lst.add_options([Option(f" {r['when']}   {r['what']:<32} {r['file']:<18} {r['words']:>7,} words", id=str(i))
+                             for i, r in enumerate(self.rows)])
+            lst.highlighted = 0
+        lst.focus()
+        self.show_preview()
+
+    def current(self):
+        i = self.query_one("#list", OptionList).highlighted
+        return self.rows[i] if i is not None and i < len(self.rows) else None
+
+    def show_preview(self):
+        from . import backups
+        e = self.current()
+        self.query_one("#preview", Static).update(backups.preview(e, lines=8) if e else "")
+
+    def on_option_list_option_highlighted(self, event):
+        self.show_preview()
+
+    def on_option_list_option_selected(self, event):
+        self.action_restore()
+
+    def on_button_pressed(self, event):
+        event.stop()
+        self.action_restore() if event.button.id == "restore" else self.dismiss(None)
+
+    def action_restore(self):
+        e = self.current()
+        if not e:
+            return
+        self.app.push_screen(ConfirmScreen(f"Restore {e['file']} from {e['when']} ({e['what']})?\n\nThe version you have now is copied aside "
+                                           "first, so you can undo this."), lambda yes: self._do(e) if yes else None)
+
+    def _do(self, e):
+        from . import backups
+        self.dismiss(backups.restore(self.story, e["id"]))
+
+    def action_close(self):
+        self.dismiss(None)
+
+
 class StoryOptions(OptionList):
     BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
-                Binding("x", "act('export')", "Export")]
+                Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -204,9 +283,9 @@ class BuilderScreen(Screen):
         Binding("minus", "rate(-1)", "Dislike", show=False),
         Binding("1", "tab(0)", "Characters", show=False), Binding("2", "tab(1)", "Places", show=False),
         Binding("3", "tab(2)", "Things", show=False), Binding("4", "tab(3)", "Groups", show=False),
-        Binding("5", "tab(4)", "Notes", show=False),
+        Binding("5", "tab(4)", "Notes (entity type)", show=False),
         Binding("6", "rtab('outline')", "Outline", show=False), Binding("7", "rtab('scenes')", "Scenes", show=False),
-        Binding("8", "rtab('notes')", "Notes (right)", show=False),
+        Binding("8", "rtab('notes')", "Entity notes", show=False),
         Binding("N", "new_universe", "New universe", show=False),
         Binding("s", "universe_settings", "Universe settings", show=False),
         Binding("S", "story_settings", "Story settings", show=False),
@@ -279,7 +358,7 @@ class BuilderScreen(Screen):
                 yield Static("Universes", classes="title")
                 yield UniverseList(id="universes")
                 with Horizontal(classes="btns"):
-                    yield _quiet(Button("+New", id="u-new"))
+                    yield _quiet(Button("+Universe", id="u-new"))
                     yield _quiet(Button("Rename", id="u-rename"))
                     yield _quiet(Button("Del", id="u-delete"))
                 yield Static("Stories", id="stories-title", classes="title", markup=False)
@@ -287,7 +366,9 @@ class BuilderScreen(Screen):
                     yield _quiet(Button("Outline", id="s-open"))
                     yield _quiet(Button("Write", id="s-write"))
                     yield _quiet(Button("Export", id="s-export"))
-                    yield _quiet(Button("+Draft", id="s-draft"))
+                with Horizontal(classes="btns"):
+                    yield _quiet(Button("+Wheel draft", id="s-draft"))
+                    yield _quiet(Button("Backups…", id="s-backups"))
                 yield StoryOptions(id="stories")
             with Vertical(id="mid"):
                 with Vertical(id="top-box"):
@@ -300,12 +381,15 @@ class BuilderScreen(Screen):
                         yield Static("", id="entities-title", classes="title", markup=False)
                         yield EntityList(id="entity-list")
                         with Horizontal(classes="btns"):
-                            yield _quiet(Button("+New", id="e-new"))
+                            yield _quiet(Button("+Character", id="e-new"))
                             yield _quiet(Button("Roll blanks", id="e-blank"))
                             yield _quiet(Button("Del", id="e-delete"))
                     with Vertical(id="card-box"):
                         yield Static("", id="card-title", classes="title", markup=False)
                         yield CardList(id="card")
+                        yield Static("▲ ▼ like or dislike a value (liked wording is used more, disliked less in later rolls)    ✎ the generator can't "
+                                     "fill this field: write it yourself    Roll blanks fills only empty fields; it never changes what you wrote.",
+                                     id="legend", markup=False)
                         yield Static("Links", classes="title", markup=False)
                         yield Static("", id="links", markup=False)
                         yield Static("Appears in", classes="title", markup=False)
@@ -320,7 +404,7 @@ class BuilderScreen(Screen):
                         with Horizontal(classes="btns"):
                             yield _quiet(Button("Write here", id="sc-write"))
                             yield _quiet(Button("+Scene", id="sc-add"))
-                    with TabPane("Notes", id="r-notes"):
+                    with TabPane("Entity notes", id="r-notes"):
                         yield Static("Free-form notes about the selected entity (saved as you type)", classes="title", markup=False)
                         yield TextArea("", id="notes")
         yield Static("", id="status", markup=False)
@@ -543,7 +627,15 @@ class BuilderScreen(Screen):
         if keep is not None:
             lst.highlighted = min(keep, len(rows) - 1)
 
+    def update_new_label(self):
+        """The button that makes an entity says which kind it makes: +Character, +Place, +Thing, +Group or +Note."""
+        try:
+            self.query_one("#e-new", Button).label = "+" + schemas.get(self.type)["label"]
+        except Exception:
+            pass
+
     def refresh_entities(self):
+        self.update_new_label()
         self._keep_view(self.elist, self._build_entities)
 
     def _build_entities(self):
@@ -650,6 +742,7 @@ class BuilderScreen(Screen):
         t = event.tab.id.replace("tab-", "")
         if t != self.type:
             self.type, self.entity = t, None
+            self.update_new_label()
             self.refresh_entities()
             self.refresh_card()
             self.refresh_right()
@@ -714,6 +807,7 @@ class BuilderScreen(Screen):
         {"u-new": self.action_new_universe, "u-rename": lambda: self.universe_act("rename"),
          "u-delete": lambda: self.universe_act("delete"), "s-open": lambda: self.story_act("open"),
          "s-write": self.action_writer, "s-export": self.action_export, "s-draft": self.action_new_draft,
+         "s-backups": lambda: self.story_act("backups"),
          "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
          "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
          "e-delete": self.action_delete_entity}.get(name, lambda: None)()
@@ -1117,10 +1211,19 @@ class BuilderScreen(Screen):
         elif what == "export":
             self.story = s
             self.action_export()
+        elif what == "backups":
+            self.story = s
+            self.app.push_screen(BackupsScreen(s), lambda result: self._restored(result))
         elif what == "delete":
             self.app.push_screen(ConfirmScreen(f"Delete the story '{s.title}' and its manuscript?\n\n"
                                                "It moves to the library's .trash folder."),
                                  lambda yes: self._story_deleted(s, yes))
+
+    def _restored(self, result):
+        self.refresh_all()
+        if result:
+            self.say(f"Restored {result['restored']} ({result['words']:,} words)."
+                     + (" The version it replaced is kept in the story's .backups folder." if result["kept"] else ""))
 
     def _story_deleted(self, s, yes):
         if yes:
@@ -1429,7 +1532,7 @@ class BuilderApp(App):
             return
         how = clipboard.copy(text, self)
         screen.say(f"Copied the manuscript of '{story.title}' ({len(text.split())} words) as plain text via {how}." if how
-                   else "Couldn't reach a clipboard (install wl-clipboard or xclip). Export a .txt instead (x).")
+                   else tools.missing("clipboard", "Or export a .txt instead (x)."))
 
 
 def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None, rtab=None):

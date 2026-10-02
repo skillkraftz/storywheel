@@ -35,6 +35,41 @@ def migrate_banks(my_words):
     return n
 
 
+def added_words(universe):
+    """[(slot, word)] on the universe's own 'words added' lists, by slot."""
+    out = []
+    folder = universe.lists_dir
+    if not folder.is_dir():
+        return out
+    for slot_dir in sorted(p for p in folder.iterdir() if p.is_dir()):
+        path = slot_dir / "words-added.json"
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        out += [(slot_dir.name, w) for w in doc.get("entries", [])]
+    return out
+
+
+def remove_added(universe, slot, word):
+    """Take a word off the universe's 'words added' list for a slot (the file goes when the list is empty). Returns True if it was there."""
+    path = universe.lists_dir / slot / "words-added.json"
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    before = len(doc.get("entries", []))
+    doc["entries"] = [w for w in doc.get("entries", []) if w != word]
+    if len(doc["entries"]) == before:
+        return False
+    if doc["entries"]:
+        vault._write(path, json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
+    else:
+        vault.forget(path)
+        path.unlink()
+    return True
+
+
 def slots():
     """The slots a list can fill (job, thing, place, landmark, someone...), from the built-in lists."""
     return sorted(p.name for p in (DATA / "lists").iterdir() if p.is_dir())

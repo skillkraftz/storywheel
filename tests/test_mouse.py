@@ -236,7 +236,7 @@ def test_the_button_row_is_on_screen_and_does_not_take_the_keyboard(home):
         await press(pilot, "tab")
         return screen_text(app), focused_after_click, app.focused.id
     text, after_click, after_tab = run_tui(new_story(), make_engine(home), script)
-    for name in ("Roll", "Keep", "Back", "Skip", "Mix"):
+    for name in ("Roll", "Keep", "Back", "Skip", "Flavor"):
         assert name in text
     assert after_click == "card" and after_tab not in (None, "btn-keep")
 

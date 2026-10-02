@@ -5,12 +5,12 @@ plain prompt uses, so the keys do exactly what they do there.
     steps (left)        which are kept, skipped, current; Enter or a click jumps to one
     universe (left)     what you have saved, by kind; Enter previews, v focuses it
     card (middle)       the current candidate; up/down select a field
-    buttons             Roll, Keep, Back, Skip, Mix
+    buttons             Roll, Keep, Back, Skip, Flavor
     history (below)     every roll and what changed; with h, the selected field's own history
     footer              the keys
 
 Tab moves between the lists. Space rolls; k keeps; f (or Enter) rerolls the selected field;
-e edits it; E opens $EDITOR; w writes your own; + and - rate; u / U universe; m mix editor;
+e edits it; E opens $EDITOR; w writes your own; + and - rate; u / U universe; m flavor (what this story leans toward);
 h history; b back a step; x skip; q back to the previous mode; Q quit storywheel; ? help.
 
 The mouse works on the card too: click a field to reroll it, right-click to edit it, scroll
@@ -25,7 +25,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.message import Message
 from textual.screen import ModalScreen, Screen
-from . import appearance, navigation
+from . import appearance, navigation, tools
 from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
@@ -58,7 +58,7 @@ HELP = """\
   [b]c[/b]       copy the story so far to the clipboard (plain text)
   [b]i[/b]       ignore a stale warning
   [b]a[/b]       update a stale candidate (see below)
-  [b]m[/b]       mix editor: what this story favors
+  [b]m[/b]       flavor: which kinds of material this story leans toward or avoids (the mix editor)
   [b]b[/b]       go back a step
   [b]x[/b]       skip this step
   [b]q[/b]       back to the mode you came from (the draft is saved)
@@ -89,7 +89,7 @@ HELP = """\
   [b]right-click[/b] a field edit it (like e)
   [b]scroll[/b] over a field step through its earlier values
   [b]▲ ▼[/b] at the end of a line rate it (like + and -)
-  buttons under the card: Roll, Keep, Back, Skip, Mix
+  buttons under the card: Roll, Keep, Back, Skip, Flavor
   click a step to jump to it, a history row to pick it
 
   To select text with the mouse while this app has it,
@@ -111,7 +111,7 @@ HELP = """\
   [b]enter[/b]  preview an entry: then enter or u uses it in this story
           (as a new candidate; nothing is kept until you press k),
           e edits it, d deletes it (with a confirm)
-  [b]n[/b]      add a new entry from scratch    [b]t[/b]  no / mix / only for this story
+  [b]n[/b]      add a new entry from scratch    [b]t[/b]  whole characters/places from these universes: no / sometimes / only, for this story
 
 Press esc to close.
 """
@@ -605,7 +605,7 @@ class MixScreen(Screen):
 
     def compose(self) -> ComposeResult:
         yield QuietHeader()
-        yield Static("MIX: THIS STORY ONLY. Changes here never touch the genre profiles, and only "
+        yield Static("FLAVOR: THIS STORY ONLY. Changes here never touch the genre profiles, and only "
                      "affect future rolls (nothing you have kept changes).", id="warn", markup=False)
         yield Static("", id="sub", markup=False)
         yield DataTable(id="mix", cursor_type="row", zebra_stripes=True)
@@ -613,7 +613,7 @@ class MixScreen(Screen):
         yield Footer()
 
     def on_mount(self):
-        self.app.sub_title = "Mix editor (this story only)"
+        self.app.sub_title = "Flavor of this story (the mix; this story only)"
         self.rebuild()
         self.query_one("#mix", DataTable).focus()
 
@@ -744,7 +744,7 @@ class MainScreen(Screen):
         Binding("plus,equals_sign", "rate(1)", "Rate", key_display="+/-"),
         Binding("minus", "rate(-1)", "Dislike", show=False),
         Binding("h", "history", "Hist"),
-        Binding("m", "mix", "Mix"),
+        Binding("m", "mix", "Flavor"),
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
         Binding("c", "copy_story", "Copy story"),
@@ -767,12 +767,13 @@ class MainScreen(Screen):
     MainScreen #sofar { padding: 0 1; height: auto; }
     MainScreen #stories-title { margin-top: 1; }
     MainScreen #stories { height: 1fr; }
-    MainScreen #story-buttons { height: 1; }
-    MainScreen #story-buttons Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
+    MainScreen #story-buttons, MainScreen #story-buttons2 { height: 1; }
+    MainScreen #story-buttons Button, MainScreen #story-buttons2 Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
     MainScreen #uni-title { margin-top: 1; }
-    MainScreen #uni-buttons { height: 1; }
-    MainScreen #uni-buttons Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
+    MainScreen #uni-buttons, MainScreen #uni-buttons2 { height: 1; }
+    MainScreen #uni-mode-label { width: auto; }
+    MainScreen #uni-buttons Button, MainScreen #uni-buttons2 Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
     MainScreen #universe { height: 1fr; }
     MainScreen #banner { background: $warning 30%; color: $text; padding: 0 1; height: auto; }
     MainScreen #banner-buttons { height: 1; padding: 0 1; }
@@ -808,16 +809,19 @@ class MainScreen(Screen):
                 yield Static("Universes to draw from", id="uni-title", classes="title", markup=False)
                 yield UniverseChecklist(id="uni-check")
                 with Horizontal(id="uni-buttons"):
-                    yield _quiet(Button("Use: no  ", id="uni-mode"))
-                    yield _quiet(Button("Builder (F2)", id="uni-builder"))
+                    yield Static("Whole characters/places from these: ", id="uni-mode-label", markup=False)
+                    yield _quiet(Button("no       ", id="uni-mode"))
+                with Horizontal(id="uni-buttons2"):
+                    yield _quiet(Button("Open in the Builder", id="uni-builder"))
                 yield UniverseTree("Universe", id="universe")
                 yield Static("Past stories", id="stories-title", classes="title", markup=False)
                 with Horizontal(id="story-buttons"):
                     yield _quiet(Button("Open", id="st-open"))
                     yield _quiet(Button("Del", id="st-delete"))
-                    yield _quiet(Button("+Prot", id="st-protagonist"))
-                    yield _quiet(Button("+Place", id="st-setting"))
-                    yield _quiet(Button("Send", id="st-promote"))
+                    yield _quiet(Button("Promote", id="st-promote"))
+                with Horizontal(id="story-buttons2"):
+                    yield _quiet(Button("Use protagonist", id="st-protagonist"))
+                    yield _quiet(Button("Use setting", id="st-setting"))
                 yield StoryList(id="stories")
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
@@ -830,9 +834,10 @@ class MainScreen(Screen):
                     yield Static("", id="meta", markup=False)
                     yield CardList(id="card")
                     yield Static("", id="extra", markup=False)
+                    yield Static("▲ ▼ like or dislike a line: liked wording is used more, disliked less in later rolls.", id="legend", markup=False)
                     with Horizontal(id="buttons"):
                         for label, name in (("Roll", "roll"), ("Keep", "keep"), ("Back", "back"),
-                                            ("Skip", "skip"), ("Mix", "mix"), ("Send to Builder", "send")):
+                                            ("Skip", "skip"), ("Flavor", "mix"), ("Send to Builder", "send")):
                             yield _quiet(Button(label, id=f"btn-{name}"))
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
@@ -1122,7 +1127,7 @@ class MainScreen(Screen):
             values = s.field_values(field)
             lst.highlighted = values.index(current) if current in values else len(values) - 1
 
-    MODE_WORDS = {"n": "no", "m": "mix", "o": "only"}
+    MODE_WORDS = {"n": "no", "m": "sometimes", "o": "only"}
 
     def refresh_universe(self):
         """The universe panel: a checklist of universes to draw from, the mode for whole-step candidates, and
@@ -1147,7 +1152,7 @@ class MainScreen(Screen):
         check.highlighted = min(keep, len(rows) - 1) if keep is not None else (0 if unis else None)
         self.query_one("#uni-title", Static).update(f"Universes to draw from ({len(chosen)} ticked)")
         button = self.query_one("#uni-mode", Button)
-        button.label = f"Use: {self.MODE_WORDS[s.universe_mode]:<4}"          # same width every time
+        button.label = f"{self.MODE_WORDS[s.universe_mode]:<9}"          # same width every time
         button.refresh(layout=True)
         tree = self.query_one("#universe", UniverseTree)
         if not hasattr(self, "_open_groups"):
@@ -1488,7 +1493,7 @@ class MainScreen(Screen):
         self.history.focus()
 
     def action_mix(self):
-        self.app.push_screen(MixScreen(self.session), lambda _: self.after("Mix saved for this story."))
+        self.app.push_screen(MixScreen(self.session), lambda _: self.after("Flavor saved for this story."))
 
     def action_back(self):
         self.session.back()
@@ -1622,7 +1627,7 @@ class MainScreen(Screen):
             return
         how = clipboard.copy(text, self.app)
         self.say(f"Copied the story so far ({len(text)} characters) via {how}." if how
-                 else "Couldn't reach a clipboard (install wl-clipboard or xclip).")
+                 else tools.missing("clipboard"))
 
 
 class StorywheelApp(App):

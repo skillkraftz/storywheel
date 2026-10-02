@@ -114,8 +114,8 @@ def test_buttons_and_titles_are_whole_at_desktop_sizes(home, size):
     async def script(app, pilot):
         return flat(screen_text(app))
     text = run(script, size=size)
-    for needle in ("+New", "Roll blanks", "Del", "Universes", "Stories in Thornwood", "Characters (1)", "Outline", "Scenes", "Notes",
-                   "Outline", "Write", "Export", "+Draft", "Rename"):
+    for needle in ("+Universe", "+Character", "Roll blanks", "Del", "Universes", "Stories in Thornwood", "Characters (1)", "Outline", "Scenes", "Entity notes",
+                   "Outline", "Write", "Export", "+Wheel draft", "Backups…", "Rename"):
         assert needle in text, (size, needle)
     assert "2 entities" in text                                      # the universe's count has a label
 
@@ -124,7 +124,7 @@ def test_the_entity_buttons_have_room_for_their_labels(home):
     world(home)
     async def script(app, pilot):
         out = {}
-        for wid in ("e-new", "e-blank", "e-delete", "u-new", "u-rename", "u-delete", "s-open", "s-write", "s-export", "s-draft"):
+        for wid in ("e-new", "e-blank", "e-delete", "u-new", "u-rename", "u-delete", "s-open", "s-write", "s-export", "s-draft", "s-backups"):
             b = app.screen_ref.query_one("#" + wid)
             out[wid] = (b.size.width, len(str(b.label)) + 2, b.region.right <= b.parent.region.right)
         return out
