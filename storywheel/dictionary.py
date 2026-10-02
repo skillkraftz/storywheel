@@ -10,7 +10,7 @@ import difflib
 import re
 import sqlite3
 
-from . import paths
+from . import inflect, paths
 from .dictionary_build import SCHEMA_VERSION, unpack_ids
 
 POS_NAMES = {"n": "noun", "v": "verb", "a": "adjective", "s": "adjective", "r": "adverb"}
@@ -261,6 +261,13 @@ def lookup(word, db=None):
     result["found"] = bool(result["entries"])
     if not result["found"]:
         result["suggestions"] = suggest(db, text)
+    # which base word, and which form of it, the looked-up word is (so a replacement can be put in the same form)
+    result["base"], result["form_kind"] = text, "base"
+    for e in result["entries"]:
+        kind = inflect.classify(text, e["word"])
+        e["form_kind"] = kind
+        if kind not in (None, "base") and result["form_kind"] == "base":
+            result["base"], result["form_kind"] = e["word"], kind
     return result
 
 

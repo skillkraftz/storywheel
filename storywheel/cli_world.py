@@ -206,6 +206,17 @@ def cmd_lookup(args):
     print("\n".join("  " + l for l in dictionary.card_lines(result)))
 
 
+def cmd_inflect(args):
+    """inflect ORIGINAL BASE WORD: WORD in the same form as ORIGINAL is of BASE (running, run, sprint -> sprinting)."""
+    from . import dictionary, inflect
+    try:
+        db = dictionary.connect()
+    except dictionary.DictionaryMissing:
+        db = None
+    word = inflect.reinflect(args.original, args.base, args.word, args.pos, db=db)
+    emit({"word": word, "kind": inflect.classify(args.original, args.base)}) if args.json else print(word)
+
+
 def cmd_dictionary(args):
     from . import dictionary, dictionary_build, paths
     if args.action == "status":
@@ -291,6 +302,12 @@ def add_parsers(sub):
     p = sub.add_parser("vocabulary", help="words around a topic: types, parts, subject terms, related words")
     p.add_argument("word", nargs="+")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("inflect", help="a word in the same form as another (inflect running run sprint -> sprinting)")
+    p.add_argument("original")
+    p.add_argument("base")
+    p.add_argument("word")
+    p.add_argument("--pos", choices=["noun", "verb", "adjective", "adverb"])
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("dictionary", help="the offline dictionary and thesaurus:  dictionary install | status | build --oewn FILE --moby FILE")
     p.add_argument("action", choices=["install", "status", "build"])
     p.add_argument("--oewn", help="build: the Open English WordNet .xml or .xml.gz")
@@ -304,4 +321,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "vocabulary": cmd_lookup, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "vocabulary": cmd_lookup, "inflect": cmd_inflect, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}

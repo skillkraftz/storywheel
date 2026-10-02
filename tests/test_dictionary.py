@@ -220,3 +220,20 @@ def test_a_lookup_takes_milliseconds(index):
     for w in ("dog", "running", "geese", "happy", "hapyp"):
         dictionary.lookup(w)
     assert (time.perf_counter() - t) / 5 < 0.05
+
+
+def test_the_lookup_says_which_base_and_form_the_word_is(index):
+    r = dictionary.lookup("running")
+    assert r["base"] == "run" and r["form_kind"] == "ing"
+    r = dictionary.lookup("geese")
+    assert r["base"] == "goose" and r["form_kind"] == "s"
+    r = dictionary.lookup("dog")
+    assert r["base"] == "dog" and r["form_kind"] == "base"
+    assert dictionary.lookup("zzzqx")["form_kind"] == "base"
+
+
+def test_cli_inflect(index):
+    assert cli("inflect", "running", "run", "sprint", env_index=index).stdout.strip() == "sprinting"
+    out = json.loads(cli("inflect", "geese", "goose", "wolf", "--json", env_index=index).stdout)
+    assert out == {"word": "wolves", "kind": "s"}
+    assert cli("inflect", "ran", "run", "dash", "--pos", "verb", env_index=index).stdout.strip() == "dashed"
