@@ -684,4 +684,15 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   sentences.
 - Shortcuts (Settings > Keys) are stored in Neovim notation, validated by `keys.py` (modifier or F key; not a reserved or already used
   key) and read by the Writer at start-up.
+- The title bar handler calls `event.prevent_default()`: Textual runs the handler of every class in the MRO, so an override alone
+  does not stop `Header._on_click`.
+- Home/End in notepad mode act on the visible (wrapped) line; Home again goes to the paragraph start.
+- Find and replace (Ctrl+H, `key_replace`) is a two-line floating form that matches literal text (case and whole-word options) in
+  the current file; replace-all is one undo step.
+- Dictionary and thesaurus: Open English WordNet 2025 (CC BY 4.0, meanings, examples, synonyms, opposites, "kind of") and Moby
+  Thesaurus II (public domain, wider similar words) in one SQLite index (`dictionary.sqlite` in app storage), built by
+  `dictionary_build.py` with the standard library only. The index is NOT shipped (28 MB): `storywheel dictionary install` downloads the
+  sources on request (the only network use) and builds it. `dictionary.py` does the lookups (inflected forms by OEWN's own forms
+  plus regular endings; close spellings for misses). One CLI entry, `lookup`, serves the Writer; `define` and `thesaurus` show parts of it.
+  Screens: F5 dialog in the Wheel, Builder and Settings; F7/F6 card in the Writer. Sources and licenses are in SOURCES.md.
 

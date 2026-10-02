@@ -11,15 +11,7 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
 
 ## 1. Bugs
 
-- **Title bar still expands when clicked.** *Bug.* `QuietHeader._on_click`
-  overrides the method, but Textual calls the click handler of every class in
-  the MRO, so `Header._on_click` still runs and toggles `-tall`. Fix: take the
-  event and call `event.prevent_default()`. Verified: with that change the
-  header stays 1 line after a click; with the current code it goes 1 → 3.
-  Add a pilot test that clicks the title in every mode and checks the height.
-- **Home and End** go to the start and end of the whole paragraph, not the
-  visible wrapped line. *Partial.* In a notepad-style editor they should act on
-  the screen line (and Home twice could go to the paragraph start).
+(none open)
 
 
 ## 2. Stubs and partials
@@ -38,8 +30,11 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
   can down-weight them.
 - **Builder field history** isn't saved between runs. *Partial.* Save it with
   the entity (or beside it) so the scroll wheel still works tomorrow.
-- **Neovide** is untested on a real install. *Verify.* Install it, try the
-  font, size and line-spacing settings, and fix what shows up.
+- **Neovide** look is unchecked. *Verify.* Checked in batch 1: Neovide 0.16.2 is
+  installed here and starts with our config, stays running, and prints no
+  errors. What is not checked is how it looks (font, size, line spacing); a
+  screenshot from this session could not see the window (Wayland). Try the
+  three settings and report.
 - **A draft can only be promoted once.** *Partial.* Decide whether
   re-promoting should update the universe (with a preview) or stay one-way.
 - **Words typed outside the Writer aren't counted** (for example in
@@ -53,16 +48,10 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
   the run of lines around the cursor could be friendlier.
 - **Schema files edited in place** are only noticed on restart. *Partial,
   low priority.*
-- **Scenes tab → Writer** at the chosen scene. *Verify.* Earlier marked
-  Partial ("the Writer doesn't jump to it yet"); the one-file manuscript pass
-  may have finished it.
 
 
 ## 3. Missing basics for a writing app
 
-- **Find and replace in the Writer.** *Missing.* Ctrl+F finds; there's no
-  replace. Ctrl+H (or a configurable key) with replace-one, replace-all, match
-  case and whole word, and a count of replacements.
 - **Restore from backups.** *Missing.* Rolling backups and conversion backups
   exist, but there's no way to browse and restore one. A list of backups per
   story with date, word count and a preview, and "restore" that itself backs
@@ -70,45 +59,41 @@ Status words match REPORT.md: **Bug**, **Stub**, **Partial**, **Missing**,
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys
   covers the Writer only. Extend it to the Wheel, Builder and Settings keys,
   including the F1–F4 mode keys, with the same conflict checks.
-- **Briefed features to confirm.** *Verify.* Audit CLAUDE.md against the
-  code and list anything described there that doesn't exist yet (for example
-  Obsidian `[[wikilinks]]` resolving to entities, universe-specific atom lists,
-  starting a Wheel draft from inside a universe).
+- **Obsidian `[[wikilinks]]` resolving to entities.** *Missing.* CLAUDE.md says
+  wikilinks in notes "should resolve to entities where possible"; nothing reads
+  them. Resolve `[[Name]]` in entity notes and outlines (Builder: show as links
+  and in "Links"/"Appears in"; Writer: peek and completion).
+
+## 4. Dictionary and thesaurus: follow-ups
+
+Built in batch 1 (see Done). Still open:
+
+- **Inflect the replacement.** *Idea.* Looking up "running" and picking
+  "sprint" gives "sprint", not "sprinting". Match the looked-up form (plural,
+  past tense, -ing) when replacing.
+- **Look up from a Builder field's right-click menu** ("look up" the word under
+  the mouse). *Missing.*
+- **Part of speech in the Writer card.** *Idea.* Group the similar words by
+  the meaning (sense) they belong to instead of one flat list; the flat list
+  is long for common words.
+- **Bundling the index.** *Idea.* It is 28 MB, so it is downloaded on request
+  (`storywheel dictionary install`, 6 seconds) rather than shipped. Revisit if
+  a smaller index (common words only) is wanted in the package.
+- **Lookup history / recent words** in the dialog and card. *Idea.*
 
 
-## 4. Dictionary and thesaurus (new)
+## 4b. Found in batch 1
 
-Look up any word without leaving the program: definitions, similar words and
-opposite words, fully offline.
-
-**Data.** Open English WordNet (CC BY 4.0, the maintained successor to
-Princeton WordNet) gives definitions by part of speech, example sentences,
-synonyms, antonyms, and "kind of" relations. Moby Thesaurus II (public domain)
-adds much broader synonym lists. Build a compact SQLite index once, so
-lookups take milliseconds; either bundle it if the size is reasonable, or
-fetch it with a one-time `storywheel dictionary install` command (the only
-network use, and only when asked). Record sources and licenses in SOURCES.md.
-
-**Lookups** understand inflected forms ("running" finds "run", "geese" finds
-"goose"), and say plainly when a word isn't found, with close spellings.
-
-**In the Writer.** A key (configurable, for example F7) on the word under the
-cursor, or on a selection, opens a floating card: definitions grouped by part
-of speech, synonyms, antonyms. Picking a synonym replaces the word, keeping
-its capitalization. A second key opens the same card for a typed word. Also in
-the right-click menu.
-
-**In the TUI.** A Lookup dialog reachable from every mode with one key: type a
-word, see the same card. In the Builder, a field's right-click menu could
-offer "look up" for the word under the mouse.
-
-**CLI.** `storywheel define WORD --json` and `storywheel thesaurus WORD
---json`, which the Writer uses.
-
-**Tests.** Lookups for common, inflected and missing words; the Writer card
-opens and replaces with capitalization kept; the TUI dialog; no network use
-at run time.
-
+- **Shift+Home / Shift+End** in notepad mode still select to the start/end of
+  the whole line, not the visible wrapped line. *Partial.*
+- **Find and replace** works on the current file only (a novel has one file per
+  chapter) and is literal text only. *Idea:* replace in all chapters; regular
+  expressions.
+- **Ctrl+H** reaches Neovim as Backspace in terminals that send ^H for
+  Backspace (most send DEL, so it works; if yours doesn't, set another key in
+  Settings > Keys, for example Alt+H). *Verify* in the owner's terminal.
+- **`storywheel lookup` start-up time** is fine (under 0.1 s) because the CLI
+  imports lazily; keep it that way when adding commands. *Note.*
 
 ## 5. Content and generator
 
@@ -133,8 +118,8 @@ at run time.
 
 ## Suggested batches
 
-1. Bugs (section 1), the verify items, find and replace, and the dictionary
-   and thesaurus.
+1. ~~Bugs (section 1), the verify items, find and replace, and the dictionary
+   and thesaurus.~~ Done (tags b1-*).
 2. Novel and screenplay profiles.
 3. The rest of section 2, backups restore, and configurable keys everywhere.
 4. Content: the twelve genres, a few at a time.
@@ -143,4 +128,13 @@ at run time.
 
 ## Done
 
-(Move items here with the tag that finished them.)
+- **Title bar clicks** (`prevent_default()`; pilot test in every mode; the old code goes 1 → 3) — `b1-header`.
+- **Home and End** act on the visible wrapped line; Home again goes to the paragraph start — `b1-homeend`.
+- **Verify, section 2:** Scenes tab → Writer at the chosen scene (works; covered by tests) — `b1-verify`.
+  Neovide: starts and runs, look unchecked (see section 2).
+- **Verify, section 3:** the CLAUDE.md audit. Universe-own atom lists and starting a Wheel draft from inside a
+  universe both work and now have tests; wikilinks are missing (listed in section 3) — `b1-verify`.
+- **Find and replace in the Writer** (Ctrl+H or the Settings > Keys choice; match case, whole word, replace one,
+  replace all in one undo step, live match count) — `b1-replace`.
+- **Dictionary and thesaurus** — data and lookups (`b1-dictionary-core`), the Lookup dialog on F5 in every mode
+  (`b1-dictionary-tui`), the Writer card on F7/F6 with replace-in-place (`b1-dictionary-writer`).

@@ -479,3 +479,45 @@ _Same status words. Tags `pass5-paragraphs`, `pass5-menus`, `pass5-keys`, `pass5
 
 
 Full suite before the final commit: **925 passed**.
+
+---
+
+# Batch 1 (BACKLOG.md): title bar, Home/End, verify items, find and replace, dictionary and thesaurus
+
+_Tags `b1-header`, `b1-homeend`, `b1-verify`, `b1-replace`, `b1-dictionary-core`, `b1-dictionary-tui`, `b1-dictionary-writer`._
+
+## H1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Title bar expands on click | Works | `QuietHeader._on_click(event)` calls `event.prevent_default()`, which stops the base Header handler (Textual runs every class's handler in the MRO). Pilot test clicks the title three times in the Wheel, Builder and Settings and checks the height stays 1; with the old override the same test fails (1 → 3) |
+| Home/End on the visible wrapped line | Works | Home goes to the start of the screen line, and again to the paragraph start; End to the end of the screen line (after the last character on the last one). Shift+Home/End still select by whole line (BACKLOG 4b) |
+| Verify items, section 2 | Works / Partial | Scenes tab → Writer at the scene: works (existing tests). Neovide: it is installed here (0.16.2), starts with our config, stays running, prints no errors. How it looks could not be checked (a screenshot of the Wayland session came back black), so that stays a Verify for you |
+| Verify items, section 3 (CLAUDE.md audit) | Done | Checked against the code; two features now have tests: a universe's own `lists/` are merged and used when rolling in it, and "+Draft" from a universe starts a Wheel draft with it ticked. **Missing:** Obsidian `[[wikilinks]]` resolving to entities (no code reads them): in BACKLOG section 3. Everything else in the brief exists |
+| Find and replace (Ctrl+H, configurable) | Works | a form over the writing window: Find and Replace lines, Enter = next, Alt+R replace this one, Alt+A replace all (one undo step), Alt+C match case, Alt+W whole word; the title shows "N matches" live, highlights them, says "replaced N"/"not found"/"nothing to replace". Literal text only; current file only (BACKLOG 4b). Prefills from a selection. In the F12 menu; `:SWReplace`; key in Settings > Keys (`key_replace`) |
+| Dictionary: data and lookups | Works | Open English WordNet 2025 (CC BY 4.0) + Moby Thesaurus II (public domain) in one 28 MB SQLite file (178,351 words, 107,519 meanings, 30,260 thesaurus entries), built in ~5 s. Lookups take 1-25 ms. Inflected forms by WordNet's own irregular forms plus the regular endings (running, geese, wolves, ran, leaves → leaf and leave, happier...); a missing word returns close spellings (misspellings with the same letters first). Opposites include those reached through "similar" adjectives (cheerful → unhappy). Both licenses checked 2026-10-02 against the files themselves and recorded in SOURCES.md |
+| Dictionary: install | Works | **Not bundled** (28 MB would be heavy in the repo and the package); `storywheel dictionary install` downloads both files (36 MB, the only network use, only when asked) and builds the index in about 6 seconds (run end to end here into a temporary home). `dictionary status`, and `dictionary build --oewn FILE --moby FILE` for files you already have. **You need to run `storywheel dictionary install` once** before F5/F7 work; until then they say so |
+| TUI Lookup dialog | Works | F5 in the Wheel, Builder and Settings (also in each help and footer); type a word, Enter; shows the same card; credit line for the licenses. In the Builder's right-click menu: not done (BACKLOG 4) |
+| Writer card | Works | F7 on the word under the cursor or a selection, F6 for a typed word, "Look Up" in the right-click menu, two entries in the F12 menu; keys configurable in Settings > Keys. The card shows meanings by part of speech with an example, similar words (WordNet's first) and opposite words; arrows/j/k move, Tab jumps to the next section, Enter on a word replaces the looked-up word keeping capitalization (Dog → Hound, DOG → HOUND); for a typed word Enter inserts at the cursor; Esc closes and you are typing again. Not found → close spellings you can pick |
+| CLI | Works | `storywheel define|thesaurus|lookup WORD [--json] [--limit N]`, `dictionary install|status|build`; without the index the JSON has `"error"` and `"installed": false` and the exit code is 1. The Writer uses `lookup` (one process instead of two) |
+
+## H2. Tests added in batch 1
+| Area | File | Tests |
+|---|---|---|
+| Title bar in every mode | `test_header.py` | 4 |
+| Home/End | `test_notepad.py` | 4 |
+| Audit (own lists, draft from a universe) | `test_audit.py` | 2 |
+| Find and replace | `test_replace.py` | 11 |
+| Dictionary core, CLI, no network, speed | `test_dictionary.py` | 31 |
+| Lookup dialog | `test_lookup_screen.py` | 6 |
+| Writer card | `test_lookup_writer.py` | 16 |
+(The tests use a tiny hand-made index, `tests/dictfixture.py`, so they never download anything.)
+
+## H3. Manual test script
+1. Run `storywheel dictionary install` once. Then `storywheel define serendipity`.
+2. F5 in each mode: look up "geese", "running", a misspelling. Esc closes.
+3. In the Writer, put the cursor in a word, press F7, pick a similar word with Enter; try a capitalized word and an ALL CAPS word. Try F6.
+4. Ctrl+H in the Writer: find a word, replace one, replace all, Ctrl+Z once to undo the lot.
+5. Home/End in a long wrapped paragraph.
+6. Click the title bar in every mode.
+7. Settings > Writer: turn on Use Neovide and try the font settings; tell me how it looks.
+

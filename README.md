@@ -269,6 +269,21 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
+### Dictionary and thesaurus
+
+Look up any word without leaving the program, offline: meanings by part of speech, examples, similar words and opposite words.
+Inflected forms work ("running" finds "run", "geese" finds "goose"); a word that isn't there comes back with close spellings.
+
+One-time setup (the only time storywheel uses the network, and only when you ask): `storywheel dictionary install` downloads
+Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB, and builds a 28 MB index in
+`~/.storywheel/dictionary.sqlite`. Sources and licenses are in SOURCES.md.
+
+- **F5** in the Wheel, Builder and Settings: the Lookup dialog (type a word, Enter).
+- **Writer:** **F7** on the word under the cursor (or a selection) opens a card; move to a similar or opposite word and press Enter
+  to replace it, keeping capital letters. **F6** looks up a typed word. Also in the F12 menu and the right-click menu.
+- **Find and replace:** **Ctrl+H** in the Writer (match case, whole word, replace one or all, a count). Keys are in Settings > Keys.
+- Command line: `storywheel define WORD`, `storywheel thesaurus WORD`, `storywheel lookup WORD`, each with `--json`.
+
 ### Command line (all with `--json` where it makes sense)
 
     storywheel                       reopen where you left off        storywheel wheel | builder | writer
