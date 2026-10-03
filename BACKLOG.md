@@ -211,6 +211,10 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 ## Done
 
+### `storywheel update` fixed (`b6-update-fix`)
+
+- Compares installed with the source folder (from pip's direct_url.json), fetches the folder's own remote, reinstalls on a version difference; no private clone.
+
 ### Batch 6: smoother switching, tidier layouts, downloads
 
 - **Downloads:** a normal User-Agent on every download, curl/wget fallback when a server refuses (fixes `grammar install` HTTP 403) — `b6-downloads`.
@@ -226,6 +230,11 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 - **Optional grammar checking with a local LanguageTool:** install/status/start/stop CLI — `b5-grammar-server`; checking changed paragraphs after a pause with
   offsets kept across markup — `b5-grammar-check`; right-click menu, next/list keys — `b5-grammar-ui`; Settings > Grammar, help text — `b5-grammar-settings`;
   tests with a fake server — `b5-grammar-tests`; README/CHANGELOG — `b5-final`.
+
+### Found in the update fix
+- A pip install from an index or wheel records no source folder; then the git checkout the code runs from is used, and with neither the update remote (a temporary clone).
+- The reinstall uses pipx when the install lives in a pipx environment (or pipx is on PATH), otherwise pip in the running environment; neither path was run for real here (tests use a fake runner and real local git repositories).
+- If the source folder is newer than the installed code *and* has uncommitted changes but no remote, it is installed as it is.
 
 ### Found in batch 6
 - **No git remote is configured** in this checkout, so "push" could not be done; add one (`git remote add origin URL`) and `git push --follow-tags`.

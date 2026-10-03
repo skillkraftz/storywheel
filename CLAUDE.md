@@ -792,3 +792,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   the `-narrow` class (thinner side columns; the Builder shows its right column in place of the cards on demand). Settings and Words use Textual's
   compact Input/Select/Button; a disabled button's border is removed by an inline style because the theme re-adds it.
 
+- `storywheel update` (0.6.1): the comparison is always installed version (the running code) against the version in the install's source folder. The
+  folder comes from pip's `direct_url.json` (PEP 610; an editable install is the folder itself), else the git checkout the code runs from. If that folder has
+  a git remote it is fetched (the Settings remote, if set, otherwise the first remote, passed to git exactly as written) and fast-forwarded when clean; with no
+  remote it is only read. A different (newer) version reinstalls with pipx, or pip outside pipx; the same version with new commits only runs `post-update`.
+  There is no private clone: `update_remote` is used only when the source folder is gone, for a temporary clone that is deleted afterwards.
+

@@ -103,7 +103,7 @@ SECTIONS = [
     ]),
     ("Updates", [
         ("update_remote", "Git remote to update from", "text", None,
-         "Where  storywheel update  pulls from: a git URL, or user@computer:path. Blank = the checkout's own 'origin'."),
+         "Optional. storywheel update uses the folder storywheel was installed from (and that folder's own git remote). This is only for when that folder is gone: a git URL, or user@computer:path."),
     ]),
 ]
 

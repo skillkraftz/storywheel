@@ -1,10 +1,16 @@
-"""`storywheel update`: pull the newest storywheel from a git remote, reinstall only if the version changed, run migrations, rebuild what
-needs it (the dictionary index from its kept sources, the spelling lists), and show what changed.
+"""`storywheel update`: bring the installed storywheel up to the version of its source folder, run migrations and rebuild what needs it, and show what
+changed.
 
-Where the code comes from:
-  * run from a git checkout (an editable install, or `pipx install --editable`): that checkout is updated in place;
-  * otherwise the remote in Settings (`update_remote`) is cloned to ~/.storywheel/source and storywheel is reinstalled from it with pipx.
-Nothing local is ever overwritten: an unclean checkout or a history that has diverged stops with a message.
+What is compared is always the INSTALLED version (the running code) with the SOURCE folder's version. The source folder comes from the install itself:
+pip records where it installed from in the package's direct_url.json (PEP 610), and an editable install runs straight from its folder.
+
+  * if the source folder has a git remote (the typewriter's checkout pulls from xps:projects/storywheel), it is fetched and fast-forwarded first;
+    with no remote (xps) the folder is simply read;
+  * if its version differs from the installed one, storywheel is reinstalled from it (pipx; pip for a plain venv); an editable install needs none;
+  * then migrations, the dictionary index and the spelling lists are brought up to date in a fresh process.
+
+The Settings "update_remote" is optional: it is only used when the source folder is gone (a temporary clone is made and removed again).
+Nothing local is ever overwritten: an unclean checkout with a remote, or a history that has diverged, stops with a message.
 """
 import re
 import shutil
@@ -64,72 +70,158 @@ def _key(v):
     return tuple(int(x) for x in re.findall(r"\d+", v or "0"))
 
 
-def source_dir(remote):
-    """The checkout to update. A clone in ~/.storywheel/source when this isn't running from one."""
+def installed_version():
+    """The version of the code that is running (what is installed)."""
+    return __version__
+
+
+def installed_source():
+    """(folder, editable) that this install came from, from pip's direct_url.json; None if pip recorded none (installed from an index or a wheel)."""
+    import json
+    from importlib import metadata
+    from urllib.parse import unquote, urlparse
+    try:
+        text = metadata.distribution("storywheel").read_text("direct_url.json")
+        info = json.loads(text) if text else None
+    except (metadata.PackageNotFoundError, ValueError, OSError):
+        return None
+    if not info or not str(info.get("url", "")).startswith("file:"):
+        return None
+    return Path(unquote(urlparse(info["url"]).path)), bool((info.get("dir_info") or {}).get("editable"))
+
+
+def find_source():
+    """(folder or None, editable). A folder recorded by the install, else the git checkout the code runs from."""
+    found = installed_source()
+    if found:
+        return found
     here = checkout_dir()
-    if here:
-        return here, True
-    if not remote:
-        raise UpdateError("There is no git remote to update from. Set one in Settings (F4) > Updates, or run  storywheel setup.")
-    clone = paths.home() / "source"
-    if not (clone / ".git").exists():
-        clone.parent.mkdir(parents=True, exist_ok=True)
-        r = subprocess.run(["git", "clone", "--", remote, str(clone)], capture_output=True, text=True)
-        if r.returncode != 0:
-            raise UpdateError(f"Could not clone {remote}: {(r.stderr or r.stdout).strip()}")
-    return clone, False
+    return (here, True) if here else (None, False)
 
 
-def update(say=print, check_only=False, runner=subprocess.run):
-    """Returns a short status word: 'up-to-date', 'updated' or 'available' (check_only)."""
-    remote = (settings.load_global().get("update_remote") or "").strip()
-    repo, editable = source_dir(remote)
+def is_source(folder):
+    return folder is not None and (Path(folder) / "storywheel" / "__init__.py").is_file()
+
+
+def remotes(repo):
+    if not (Path(repo) / ".git").exists():
+        return []
+    return git(repo, "remote", check=False).stdout.split()
+
+
+def remote_version(repo):
+    """The version in the commit that was just fetched."""
+    r = git(repo, "show", "FETCH_HEAD:storywheel/__init__.py", check=False)
+    m = VERSION_RE.search(r.stdout or "")
+    return m.group(1) if m else None
+
+
+def fetch_and_forward(repo, say, check_only, remote_setting):
+    """Fetch the source folder's remote and fast-forward it. Returns the number of new commits (or, with check_only, how many there are)."""
+    names = remotes(repo)
+    if not names:
+        say(f"{paths.tilde(repo)} has no git remote, so it is only read.")
+        return 0
     if git(repo, "status", "--porcelain").stdout.strip():
         raise UpdateError(f"{paths.tilde(repo)} has changes that are not committed, so it was left alone. Commit or stash them first.")
     branch = git(repo, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
-    fetch_from = remote or "origin"
-    git(repo, "fetch", "--", fetch_from, branch)         # (the remote goes to git exactly as given: "xps:projects/storywheel" works)
+    source = remote_setting or names[0]                  # (a remote given in Settings goes to git exactly as written: "xps:projects/storywheel" works)
+    git(repo, "fetch", "--", source, branch)
     head = git(repo, "rev-parse", "HEAD").stdout.strip()
     theirs = git(repo, "rev-parse", "FETCH_HEAD").stdout.strip()
-    installed = __version__
     if head == theirs or git(repo, "merge-base", "--is-ancestor", theirs, head, check=False).returncode == 0:
-        say(f"Already up to date (storywheel {installed}).")
-        return "up-to-date"
+        return 0
     if git(repo, "merge-base", "--is-ancestor", head, theirs, check=False).returncode != 0:
         raise UpdateError("Your copy and the remote have both changed since they last agreed, so nothing was merged. "
                           f"Look at it with:  git -C {paths.tilde(repo)} log --oneline --graph --all")
     commits = git(repo, "log", "--oneline", f"{head}..{theirs}").stdout.strip().splitlines()
-    say(f"{len(commits)} new change(s):")
+    say(f"{len(commits)} new change(s) {'on' if check_only else 'fetched from'} {source}:")
     for c in commits[:15]:
         say("  " + c)
     if len(commits) > 15:
         say(f"  ... and {len(commits) - 15} more")
-    if check_only:
-        return "available"
-    git(repo, "merge", "--ff-only", "FETCH_HEAD")
-    new = version_in(repo) or installed
-    notes = changelog_since(repo, installed)
-    if _key(new) != _key(installed):
-        say(f"Version {installed} -> {new}.")
+    if not check_only:
+        git(repo, "merge", "--ff-only", "FETCH_HEAD")
+    return len(commits)
+
+
+def reinstall(folder, say, runner):
+    """Install storywheel again from `folder`: with pipx when this is a pipx install, else with pip in the environment that is running."""
+    in_pipx = "pipx" in Path(sys.prefix).parts or "pipx" in str(sys.prefix)
+    pipx = shutil.which("pipx")
+    if in_pipx or pipx:
+        if not pipx:
+            raise UpdateError(tools.missing("pipx"))
+        argv = [pipx, "install", "--force", str(folder)]
+    else:
+        argv = [sys.executable, "-m", "pip", "install", "--upgrade", str(folder)]
+    r = runner(argv, capture_output=True, text=True)
+    if r.returncode != 0:
+        raise UpdateError(f"{'pipx' if argv[0] == pipx else 'pip'} could not reinstall storywheel: " + (r.stderr or r.stdout).strip()[:300])
+
+
+def update(say=print, check_only=False, runner=subprocess.run):
+    """Returns 'up-to-date', 'updated', or (check_only) 'available'."""
+    remote_setting = (settings.load_global().get("update_remote") or "").strip()
+    folder, editable = find_source()
+    temporary = None
+    if not is_source(folder):
+        if not remote_setting:
+            where = f" ({paths.tilde(folder)})" if folder else ""
+            raise UpdateError(f"The folder storywheel was installed from{where} is not there any more, and no update remote is set. "
+                              "Set one in Settings (F4) > Updates (a git URL, or user@computer:path/storywheel), or reinstall from a checkout.")
+        import tempfile
+        temporary = Path(tempfile.mkdtemp(prefix="storywheel-update-"))
+        say(f"The folder storywheel was installed from is gone; cloning {remote_setting} for this update.")
+        r = subprocess.run(["git", "clone", "--", remote_setting, str(temporary / "storywheel")], capture_output=True, text=True)
+        if r.returncode != 0:
+            shutil.rmtree(temporary, ignore_errors=True)
+            raise UpdateError(f"Could not clone {remote_setting}: {(r.stderr or r.stdout).strip()}")
+        folder, editable = temporary / "storywheel", False
+    try:
+        installed = installed_version()
+        fetched = 0 if temporary else fetch_and_forward(folder, say, check_only, remote_setting)
+        source_version = version_in(folder)
+        if check_only and fetched:
+            source_version = remote_version(folder) or source_version
+        if not source_version:
+            raise UpdateError(f"{paths.tilde(folder)} has no storywheel/__init__.py with a version in it.")
+        say(f"Installed: {installed}. Source {paths.tilde(folder)}: {source_version}." + ("" if _key(source_version) != _key(installed) else " Same version."))
+        if _key(source_version) == _key(installed):
+            if fetched and not check_only:                    # new commits, same version: nothing to reinstall, but rebuild what might need it
+                say("The code changed without a new version number, so storywheel was not reinstalled.")
+                _post(runner, say)
+                return "updated"
+            say("Already up to date.")
+            return "up-to-date"
+        if _key(source_version) < _key(installed):
+            say("The source is older than what is installed, so nothing was changed.")
+            return "up-to-date"
+        notes = changelog_since(folder, installed)
+        if check_only:
+            say("An update is available. Run  storywheel update  to install it.")
+            if notes:
+                say("\n" + notes + "\n")
+            return "available"
         if notes:
             say("\n" + notes + "\n")
-        if not editable:
-            pipx = shutil.which("pipx")
-            if not pipx:
-                raise UpdateError(tools.missing("pipx"))
-            say("Reinstalling…")
-            r = runner([pipx, "install", "--force", str(repo)], capture_output=True, text=True)
-            if r.returncode != 0:
-                raise UpdateError("pipx could not reinstall storywheel: " + (r.stderr or r.stdout).strip()[:300])
+        if editable:
+            say("This install runs straight from that folder, so the new code is already in use.")
         else:
-            say("(This is a checkout installed in place, so the new code is already in use.)")
-    else:
-        say(f"Version {installed} is unchanged, so storywheel was not reinstalled.")
-    # migrations and rebuilds run in a fresh process: the new code, not the code that is running now
+            say("Reinstalling.")
+            reinstall(folder, say, runner)
+        _post(runner, say)
+        return "updated"
+    finally:
+        if temporary:
+            shutil.rmtree(temporary, ignore_errors=True)
+
+
+def _post(runner, say):
+    """Migrations and rebuilds run in a fresh process: the new code, not the code that is running now."""
     r = runner([sys.executable, "-m", "storywheel", "post-update"], capture_output=True, text=True)
     for line in (r.stdout or "").splitlines():
         say(line)
-    return "updated"
 
 
 def post_update(say=print):

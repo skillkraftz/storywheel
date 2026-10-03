@@ -84,33 +84,23 @@ def git(cwd, *args):
     return subprocess.run(["git", "-C", str(cwd), *args], capture_output=True, text=True, check=True).stdout.strip()
 
 
-@pytest.fixture
-def remote_and_clone(tmp_path):
-    """A 'remote' repo with storywheel's package files, and a clone of it that update() works on."""
-    origin = tmp_path / "origin"
-    (origin / "storywheel").mkdir(parents=True)
-    (origin / "storywheel" / "__init__.py").write_text(f'__version__ = "{__version__}"\n')
-    (origin / "CHANGELOG.md").write_text(f"# Changelog\n\n## {__version__} — now\n- start\n")
-    git(tmp_path, "init", "-q", "-b", "main", str(origin))
-    git(origin, "config", "user.email", "t@t")
-    git(origin, "config", "user.name", "t")
-    git(origin, "add", "-A")
-    git(origin, "commit", "-q", "-m", "first")
-    clone = tmp_path / "clone"
-    subprocess.run(["git", "clone", "-q", str(origin), str(clone)], check=True)
-    git(clone, "config", "user.email", "t@t")
-    git(clone, "config", "user.name", "t")
-    return origin, clone
+def make_repo(path, version):
+    (path / "storywheel").mkdir(parents=True)
+    (path / "storywheel" / "__init__.py").write_text(f'__version__ = "{version}"\n')
+    (path / "CHANGELOG.md").write_text(f"# Changelog\n\n## {version} — now\n- start\n")
+    git(path.parent, "init", "-q", "-b", "main", str(path))
+    git(path, "config", "user.email", "t@t")
+    git(path, "config", "user.name", "t")
+    git(path, "add", "-A")
+    git(path, "commit", "-q", "-m", "first")
 
 
-def commit(origin, text, version=None, note=""):
-    if version:
-        (origin / "storywheel" / "__init__.py").write_text(f'__version__ = "{version}"\n')
-        old = (origin / "CHANGELOG.md").read_text()
-        (origin / "CHANGELOG.md").write_text(old.replace("# Changelog\n", f"# Changelog\n\n## {version} — new\n- {note}\n", 1))
-    (origin / "note.txt").write_text(text)
-    git(origin, "add", "-A")
-    git(origin, "commit", "-q", "-m", text)
+def release(repo, version, note="a brand new thing"):
+    (repo / "storywheel" / "__init__.py").write_text(f'__version__ = "{version}"\n')
+    old = (repo / "CHANGELOG.md").read_text()
+    (repo / "CHANGELOG.md").write_text(old.replace("# Changelog\n", f"# Changelog\n\n## {version} — new\n- {note}\n", 1))
+    git(repo, "add", "-A")
+    git(repo, "commit", "-q", "-m", f"release {version}")
 
 
 class FakeRun:
@@ -118,83 +108,220 @@ class FakeRun:
         self.calls = []
 
     def __call__(self, cmd, **kw):
-        self.calls.append(cmd)
+        self.calls.append(list(cmd))
         return subprocess.CompletedProcess(cmd, 0, stdout="  Migrations and rebuilds are done.\n", stderr="")
+
+    def installs(self):
+        return [c for c in self.calls if "install" in c]
 
 
 @pytest.fixture
-def at(monkeypatch, remote_and_clone):
-    origin, clone = remote_and_clone
-    monkeypatch.setattr(update, "checkout_dir", lambda: clone)
-    return origin, clone
+def install(monkeypatch):
+    """Pretend storywheel 0.5.0 is installed from a folder; returns a function to say which folder and whether it is editable."""
+    monkeypatch.setattr(update, "installed_version", lambda: "0.5.0")
+    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/pipx" if name == "pipx" else None)
+    def from_folder(folder, editable=False):
+        monkeypatch.setattr(update, "installed_source", lambda: (folder, editable))
+    return from_folder
 
 
-def test_already_up_to_date(home, at):
-    said = []
-    assert update.update(said.append, runner=FakeRun()) == "up-to-date"
-    assert said == [f"Already up to date (storywheel {__version__})."]
-
-
-def test_new_commits_without_a_new_version_pull_but_do_not_reinstall(home, at):
-    origin, clone = at
-    commit(origin, "tweak")
+def test_the_installed_version_is_compared_with_the_source_folder_not_with_a_clone(home, tmp_path, install):
+    """The bug: a clone was compared with the remote, so 'already up to date' was said while 0.6.0 was waiting."""
+    src = tmp_path / "projects" / "storywheel"
+    make_repo(src, "0.6.0")                                           # xps: no remote at all
+    install(src)
     said, run = [], FakeRun()
     assert update.update(said.append, runner=run) == "updated"
     text = "\n".join(said)
-    assert "1 new change(s)" in text and "tweak" in text and "unchanged, so storywheel was not reinstalled" in text
-    assert (clone / "note.txt").read_text() == "tweak"
-    assert all("pipx" not in " ".join(map(str, c)) for c in run.calls) and "-m" in run.calls[-1] and "post-update" in run.calls[-1]
+    assert f"Installed: 0.5.0. Source {paths.tilde(src)}: 0.6.0." in text and "Reinstalling." in text and "## 0.6.0" in text
+    assert run.installs() == [["/usr/bin/pipx", "install", "--force", str(src)]]
+    assert run.calls[-1][1:] == ["-m", "storywheel", "post-update"]                 # then the usual migrations and rebuilds
+    assert not (paths.home() / "source").exists()                                  # no private clone any more
 
 
-def test_a_new_version_on_an_editable_checkout_shows_the_changelog_and_does_not_reinstall(home, at):
-    origin, clone = at
-    commit(origin, "bigger", version="9.9.9", note="a brand new thing")
+def test_the_same_version_says_so_and_does_nothing(home, tmp_path, install):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    install(src)
     said, run = [], FakeRun()
-    update.update(said.append, runner=run)
-    text = "\n".join(said)
-    assert f"Version {__version__} -> 9.9.9" in text and "a brand new thing" in text and "already in use" in text
-    assert not any("pipx" in " ".join(map(str, c)) for c in run.calls)
+    assert update.update(said.append, runner=run) == "up-to-date"
+    assert any("Installed: 0.5.0." in m and "0.5.0." in m and "Same version" in m for m in said) and "Already up to date." in said and run.calls == []
 
 
-def test_a_new_version_of_a_plain_install_is_reinstalled_with_pipx(home, tmp_path, remote_and_clone, monkeypatch):
-    origin, _ = remote_and_clone
-    monkeypatch.setattr(update, "checkout_dir", lambda: None)
-    settings.save_global({"update_remote": str(origin)})
-    monkeypatch.setattr("shutil.which", lambda name: "/usr/bin/pipx" if name == "pipx" else None)
-    update.update(lambda m: None, runner=FakeRun())                          # (the first run clones the remote: up to date)
-    commit(origin, "bigger", version="9.9.9", note="x")
+def test_a_source_older_than_the_installed_one_is_left_alone(home, tmp_path, install):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.4.0")
+    install(src)
     run = FakeRun()
     said = []
-    update.update(said.append, runner=run)
-    assert any(c[:3] == ["/usr/bin/pipx", "install", "--force"] for c in run.calls)
-    assert (paths.home() / "source" / ".git").exists() and any("Reinstalling" in s for s in said)
+    assert update.update(said.append, runner=run) == "up-to-date" and "older than what is installed" in " ".join(said) and run.calls == []
 
 
-def test_check_only_reports_without_changing_anything(home, at):
-    origin, clone = at
-    commit(origin, "tweak")
+def test_a_checkout_with_a_remote_is_fetched_and_fast_forwarded_first(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "typewriter" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    git(typewriter, "config", "user.email", "t@t")
+    git(typewriter, "config", "user.name", "t")
+    release(xps, "0.6.0")                                              # work done on xps since
+    install(typewriter)
+    said, run = [], FakeRun()
+    assert update.update(said.append, runner=run) == "updated"
+    text = "\n".join(said)
+    assert "1 new change(s) fetched from origin" in text and "release 0.6.0" in text
+    assert f"Installed: 0.5.0. Source {paths.tilde(typewriter)}: 0.6.0." in text and "Reinstalling." in text
+    assert (typewriter / "storywheel" / "__init__.py").read_text() == '__version__ = "0.6.0"\n'
+    assert run.installs() == [["/usr/bin/pipx", "install", "--force", str(typewriter)]]
+
+
+def test_check_only_fetches_but_changes_and_installs_nothing(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "t" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    release(xps, "0.6.0")
+    install(typewriter)
+    said, run = [], FakeRun()
+    assert update.update(said.append, check_only=True, runner=run) == "available"
+    assert "Source" in " ".join(said) and "0.6.0" in " ".join(said) and "An update is available" in " ".join(said)
+    assert (typewriter / "storywheel" / "__init__.py").read_text() == '__version__ = "0.5.0"\n' and run.calls == []
+
+
+def test_new_commits_with_the_same_version_rebuild_but_do_not_reinstall(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "t" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    (xps / "note.txt").write_text("x")
+    git(xps, "add", "-A")
+    git(xps, "commit", "-q", "-m", "tweak")
+    install(typewriter)
+    run = FakeRun()
     said = []
-    assert update.update(said.append, check_only=True, runner=FakeRun()) == "available"
-    assert not (clone / "note.txt").exists() and "tweak" in "\n".join(said)
+    assert update.update(said.append, runner=run) == "updated" and run.installs() == [] and "without a new version number" in " ".join(said)
+    assert run.calls[-1][1:] == ["-m", "storywheel", "post-update"]
 
 
-def test_it_never_overwrites_local_work(home, at):
-    origin, clone = at
-    commit(origin, "theirs")
-    (clone / "mine.txt").write_text("uncommitted")
-    git(clone, "add", "mine.txt")
+def test_an_editable_install_is_not_reinstalled(home, tmp_path, install):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.6.0")
+    install(src, editable=True)
+    run = FakeRun()
+    said = []
+    assert update.update(said.append, runner=run) == "updated"
+    assert "runs straight from that folder" in " ".join(said) and run.installs() == [] and run.calls[-1][1:] == ["-m", "storywheel", "post-update"]
+
+
+def test_a_missing_source_folder_without_a_remote_says_what_to_do(home, tmp_path, install):
+    install(tmp_path / "gone" / "storywheel")
+    with pytest.raises(update.UpdateError) as e:
+        update.update(lambda m: None, runner=FakeRun())
+    assert "is not there any more" in str(e.value) and "no update remote is set" in str(e.value) and "Settings (F4) > Updates" in str(e.value)
+
+
+def test_a_missing_source_folder_uses_the_update_remote_for_a_temporary_clone(home, tmp_path, install):
+    remote = tmp_path / "remote" / "storywheel"
+    make_repo(remote, "0.6.0")
+    install(tmp_path / "gone")
+    settings.save_global({"update_remote": str(remote)})
+    said, run = [], FakeRun()
+    assert update.update(said.append, runner=run) == "updated"
+    text = "\n".join(said)
+    assert "is gone; cloning" in text and "Reinstalling." in text
+    target = run.installs()[0][-1]
+    assert not Path(target).exists()                                 # (the temporary clone is removed again)
+
+
+def test_a_dirty_checkout_with_a_remote_is_not_touched(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "t" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    (typewriter / "mine.txt").write_text("work")
+    git(typewriter, "add", "mine.txt")
+    install(typewriter)
     with pytest.raises(update.UpdateError, match="not committed"):
         update.update(lambda m: None, runner=FakeRun())
-    git(clone, "commit", "-q", "-m", "mine")
+
+
+def test_a_diverged_checkout_is_not_merged(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "t" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    git(typewriter, "config", "user.email", "t@t")
+    git(typewriter, "config", "user.name", "t")
+    (typewriter / "mine.txt").write_text("work")
+    git(typewriter, "add", "-A")
+    git(typewriter, "commit", "-q", "-m", "mine")
+    release(xps, "0.6.0")
+    install(typewriter)
     with pytest.raises(update.UpdateError, match="both changed"):
         update.update(lambda m: None, runner=FakeRun())
-    assert (clone / "mine.txt").exists() and not (clone / "note.txt").exists()
+    assert (typewriter / "mine.txt").exists()
 
 
-def test_no_remote_says_what_to_do(home, monkeypatch):
+def test_the_source_folder_is_found_from_pips_direct_url(home, tmp_path, monkeypatch):
+    import json
+    class Dist:
+        def __init__(self, text):
+            self.text = text
+        def read_text(self, name):
+            return self.text if name == "direct_url.json" else None
+    from importlib import metadata
+    folder = tmp_path / "my projects" / "storywheel"
+    monkeypatch.setattr(metadata, "distribution", lambda name: Dist(json.dumps({"url": "file://" + str(folder).replace(" ", "%20"), "dir_info": {}})))
+    assert update.installed_source() == (folder, False)
+    monkeypatch.setattr(metadata, "distribution", lambda name: Dist(json.dumps({"url": "file://" + str(folder), "dir_info": {"editable": True}})))
+    assert update.installed_source() == (folder, True)
+    monkeypatch.setattr(metadata, "distribution", lambda name: Dist(None))
+    assert update.installed_source() is None
+    monkeypatch.setattr(metadata, "distribution", lambda name: Dist(json.dumps({"url": "https://example.org/x.zip", "archive_info": {}})))
+    assert update.installed_source() is None
+    def missing(name):
+        raise metadata.PackageNotFoundError(name)
+    monkeypatch.setattr(metadata, "distribution", missing)
+    assert update.installed_source() is None
+
+
+def test_without_a_recorded_source_the_checkout_the_code_runs_from_is_used(home, tmp_path, monkeypatch):
+    monkeypatch.setattr(update, "installed_source", lambda: None)
+    monkeypatch.setattr(update, "checkout_dir", lambda: tmp_path)
+    assert update.find_source() == (tmp_path, True)
     monkeypatch.setattr(update, "checkout_dir", lambda: None)
-    with pytest.raises(update.UpdateError, match="no git remote"):
-        update.update(lambda m: None, runner=FakeRun())
+    assert update.find_source() == (None, False)
+
+
+def test_a_remote_set_in_settings_reaches_git_exactly_as_written(home, tmp_path, install, monkeypatch):
+    """Hostnames like xps:projects/storywheel (ssh style) must reach git untouched."""
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    git(src, "remote", "add", "origin", "somewhere")
+    install(src)
+    calls = []
+    real = update.git
+    def spy(repo, *args, check=True):
+        calls.append(args)
+        if args[0] == "fetch":
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        if args[0] == "rev-parse" and args[1] == "FETCH_HEAD":
+            return real(repo, "rev-parse", "HEAD")
+        return real(repo, *args, check=check)
+    monkeypatch.setattr(update, "git", spy)
+    settings.save_global({"update_remote": "xps:projects/storywheel"})
+    update.update(lambda m: None, check_only=True, runner=FakeRun())
+    assert next(c for c in calls if c[0] == "fetch") == ("fetch", "--", "xps:projects/storywheel", "main")
+
+
+def test_the_real_installed_package_reports_where_it_came_from_or_none():
+    found = update.installed_source()
+    assert found is None or (isinstance(found[0], Path) and isinstance(found[1], bool))
 
 
 def test_changelog_since_only_lists_newer_entries(tmp_path):
@@ -205,10 +332,11 @@ def test_changelog_since_only_lists_newer_entries(tmp_path):
 
 
 def test_the_command_reports_errors_plainly(home, monkeypatch, capsys):
+    monkeypatch.setattr(update, "installed_source", lambda: None)
     monkeypatch.setattr(update, "checkout_dir", lambda: None)
     with pytest.raises(SystemExit):
         cli(["update"])
-    assert "no git remote" in capsys.readouterr().out
+    assert "no update remote is set" in capsys.readouterr().out
 
 
 def test_post_update_runs_migrations_and_says_when_done(home, capsys):
@@ -222,17 +350,3 @@ def test_version_flag_and_the_version_live_in_one_place():
     root = Path(__file__).resolve().parent.parent
     assert 'dynamic = ["version"]' in (root / "pyproject.toml").read_text()
     assert f"## {__version__}" in (root / "CHANGELOG.md").read_text()
-
-
-def test_a_remote_is_given_to_git_exactly_as_written(home, monkeypatch):
-    """Hostnames like xps:projects/storywheel (ssh style) must reach git untouched."""
-    calls = []
-    def fake_git(repo, *args, check=True):
-        calls.append(args)
-        return subprocess.CompletedProcess(args, 0, stdout="main\n" if "--abbrev-ref" in args else "", stderr="")
-    monkeypatch.setattr(update, "checkout_dir", lambda: Path(__file__).parent.parent)
-    monkeypatch.setattr(update, "git", fake_git)
-    settings.save_global({"update_remote": "xps:projects/storywheel"})
-    update.update(lambda m: None, check_only=True, runner=FakeRun())
-    fetch = next(c for c in calls if c[0] == "fetch")
-    assert fetch == ("fetch", "--", "xps:projects/storywheel", "main")

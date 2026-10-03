@@ -40,10 +40,12 @@ To tinker with the word lists and see changes immediately, install it editable: 
   Neovide, transparency and fetching the dictionary, and the update remote. It remembers what it asked; running it again asks only what is new
   (`--again` asks everything, `--defaults` asks nothing). Every answer can be changed later in Settings (F4).
 - `storywheel --version` shows the version; CHANGELOG.md lists what each version added.
-- `storywheel update` pulls the newest storywheel from your git remote (Settings > Updates > *Git remote to update from*; a private GitHub
-  repository, or another computer as `user@host:path/storywheel`; blank = this checkout's `origin`; it is passed to git exactly as written, so `xps:projects/storywheel` works). It shows what changed, reinstalls with pipx
-  only if the version changed, runs migrations, and rebuilds the dictionary index and the spelling lists if needed. Local changes are never
-  overwritten. `storywheel update --check` only says whether there is something new.
+- `storywheel update` compares the **installed** version with the version in the folder it was installed from (pip records that folder; an editable
+  install runs from it). If that folder is a git checkout with a remote (the typewriter's pulls from `xps:projects/storywheel`) it is fetched and
+  fast-forwarded first; with no remote (xps) it is just read. If the versions differ it reinstalls (pipx, or pip in a plain environment; an editable
+  install needs none), then runs migrations and rebuilds the dictionary index and spelling lists. It says what it compared: `Installed: 0.5.0. Source
+  ~/projects/storywheel: 0.6.0. Reinstalling.` Local changes are never overwritten. `storywheel update --check` only says whether there is something new.
+  The *Git remote to update from* setting (Settings > Updates) is optional: it is used only if the source folder is gone, for a temporary clone.
 
 ### Two computers
 

@@ -866,3 +866,21 @@ gives the real numbers.
 See BACKLOG.md "Found in batch 6" (no git remote configured, so nothing was pushed; the Pi times are estimates; Switch widgets are still tall).
 
 Full suite at the end of batch 6 (one run): **1462 passed**.
+
+
+# `storywheel update` fixed (0.6.1, tag `b6-update-fix`)
+
+## R1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Always compare against the installed version | Works | `Installed: X. Source <folder>: Y.` is printed; the old private clone compared with its own remote is gone (it is never created; a test checks) |
+| Find the source folder from the install (PEP 610) | Works | `installed_source()` reads `direct_url.json` (editable flag too); falls back to the checkout the code runs from; the `update_remote` setting is now optional, used only for a temporary clone when the folder is gone |
+| Fetch and fast-forward the folder's remote; none = just compare | Works | tested with a real "xps" repo and a clone ("typewriter"); dirty and diverged checkouts stop with a message; a remote typed in Settings still reaches git unchanged |
+| Reinstall when the versions differ, then migrations and rebuilds | Works | pipx (or pip); tested with a fake runner. New commits with the same version rebuild but do not reinstall; an older source changes nothing; an editable install needs no reinstall |
+| Messages say what was compared | Works | exactly the form asked for, plus "Same version", "Already up to date.", and what is fetched |
+| Tests | Works | 14 update tests replace the old ones in `test_setup_update.py` (older, same, source ahead after a fetch, folder missing with and without a remote, editable, dirty, diverged, direct_url parsing, fallback) |
+
+## R2. Manual test
+On the typewriter: `storywheel update --check`, then `storywheel update`, then `storywheel --version`.
+
+Full suite after the fix: **1469 passed**.

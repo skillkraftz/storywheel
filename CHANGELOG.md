@@ -2,6 +2,13 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.6.1 — `storywheel update` fixed
+- It compared a private clone with the remote and said "Already up to date" while a newer version waited. It now compares the INSTALLED version with the
+  version in the folder the install came from (found in pip's `direct_url.json`; an editable install runs from it), fetching and fast-forwarding that
+  folder's git remote first if it has one (the typewriter pulls from xps), reinstalling when the versions differ, then running migrations and rebuilds.
+  The `~/.storywheel/source` clone is gone; the update remote setting is optional (used only if the source folder is missing). Messages say what was
+  compared: `Installed: 0.5.0. Source ~/projects/storywheel: 0.6.0. Reinstalling.`
+
 ## 0.6.0 — Batch 6: smoother switching, tidier layouts, downloads
 - One Textual app now holds the Wheel, Builder, Settings and Words as kept screens (`hub.py`): F1, F2, F4 and F5 switch instantly, nothing is rebuilt, and
   each mode keeps its place (selection, scroll, open tab, the word you typed). The Writer starts from the same app and the screen is cleared on the way in

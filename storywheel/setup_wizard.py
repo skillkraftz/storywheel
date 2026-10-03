@@ -94,8 +94,8 @@ class Setup:
 
     def ask_update(self):
         current = self.g.get("update_remote") or ""
-        self.say("`storywheel update` pulls the newest storywheel from a git remote (a private GitHub repository, or another computer: "
-                 "user@host:path/storywheel). Leave blank to use the checkout's own 'origin', or to skip.")
+        self.say("`storywheel update` reinstalls from the folder storywheel was installed from (fetching its git remote first, if it has one). "
+                 "A remote here is optional: it is used only if that folder is gone (a git URL, or user@host:path/storywheel). Leave it blank to skip.")
         settings.save_global({"update_remote": self.ask("Git remote to update from", current)})
 
     # --- running -------------------------------------------------------------------------------------------------------------------------
