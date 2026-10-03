@@ -762,6 +762,12 @@ class MainScreen(Screen):
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
     MainScreen #left { width: 46; }
+    MainScreen.-narrow #left { width: 36; }
+    MainScreen.-narrow #right { width: 32; }
+    MainScreen.-narrow #uni-buttons { layout: vertical; height: auto; }
+    MainScreen.-narrow #uni-mode-label { width: 100%; height: auto; }
+    MainScreen.-narrow #buttons { layout: grid; grid-size: 2; grid-gutter: 0 1; height: 3; }
+    MainScreen.-narrow #buttons Button { width: 100%; }
     MainScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
     MainScreen #steps-box { height: auto; }
     MainScreen #uni-box { height: 2fr; min-height: 10; }
@@ -936,6 +942,9 @@ class MainScreen(Screen):
         self.app.remember(self.session)
         self.app.title = f"storywheel · {title}" if title else "storywheel"
         self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
+
+    def on_resize(self, event):
+        self.set_class(event.size.width < 150, "-narrow")             # a narrow terminal: the side columns get thinner
 
     def on_screen_resume(self):
         """Coming back from another mode: the draft is as it was; only the title bar needs doing again."""

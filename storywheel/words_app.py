@@ -249,8 +249,10 @@ class WordsScreen(Screen):
     WordsScreen TabbedContent { height: 1fr; }
     WordsScreen TabPane { height: 1fr; }
     WordsScreen #status { height: 1; padding: 0 1; background: $boost; }
-    WordsScreen .bar { height: 3; }
+    WordsScreen .bar { height: 1; margin-bottom: 1; }
     WordsScreen .bar Input { width: 1fr; }
+    WordsScreen Button, WordsScreen Button.-textual-compact:disabled, WordsScreen Button.-style-default:disabled,
+    WordsScreen Button:disabled, WordsScreen Button:hover, WordsScreen Button:focus { height: 1 !important; border: none !important; border-top: none !important; border-bottom: none !important; }
     WordsScreen .bar Button { margin-left: 1; min-width: 12; }
     WordsScreen OptionList { height: 1fr; border: none; scrollbar-gutter: stable; }
     WordsScreen OptionList:focus { border: none; }
@@ -339,6 +341,8 @@ class WordsScreen(Screen):
         yield FitFooter()
 
     def on_mount(self):
+        for w in self.query("Input, Select, Button"):
+            w.compact = True                                        # one-line boxes and buttons: more room for the words
         self.start()
 
     def on_screen_resume(self):
@@ -403,6 +407,8 @@ class WordsScreen(Screen):
             "pick a word here, then Use in Writer brings it back and replaces that word.")
         self.query_one("#back", Button).disabled = self.pos <= 0
         self.query_one("#forward", Button).disabled = self.pos >= len(self.history) - 1
+        for b in self.query(Button):                                   # (a greyed-out button must stay one line high too)
+            b.styles.border = ("none", "black")
 
     # --- Lookup ------------------------------------------------------------------------------------------------------------------
 

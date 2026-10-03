@@ -44,6 +44,7 @@ HELP = f"""\
   [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
   Outline (right column, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
   [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Entity notes (the selected entity's own notes)
+  [b]backslash[/b]  on a narrow terminal (under 150 columns) the right column takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back
   [b]+[/b] [b]-[/b]      like / dislike the line
 
 [b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
@@ -305,6 +306,7 @@ class BuilderScreen(Screen):
         navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("escape", "focus_card", "", show=False),
+        Binding("backslash", "toggle_right", "Side panel", show=False),
     ]
     DEFAULT_CSS = """
     BuilderScreen #body { height: 1fr; }
@@ -312,6 +314,11 @@ class BuilderScreen(Screen):
     BuilderScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
     BuilderScreen #universes-box { height: auto; max-height: 40%; }
     BuilderScreen #stories-box { height: 1fr; }
+    /* a narrow terminal (under 150 columns): the right column is shown instead of the middle one when you ask for it (keys 6 7 8, backslash) */
+    BuilderScreen.-narrow #left { width: 34; min-width: 34; max-width: 34; }
+    BuilderScreen.-narrow #right { display: none; width: 1fr; max-width: 100%; }
+    BuilderScreen.-narrow.-show-right #right { display: block; }
+    BuilderScreen.-narrow.-show-right #mid { display: none; }
     BuilderScreen #legend { height: 1; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis; }
     BuilderScreen #mid { width: 1fr; }
     BuilderScreen #right { width: 22%; min-width: 40; max-width: 46; border: round $primary-darken-2; }
@@ -1176,6 +1183,7 @@ class BuilderScreen(Screen):
             self.refresh_card()
 
     def action_tab(self, i):
+        self.remove_class("-show-right")
         self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
 
     def action_fix_names(self):
@@ -1203,6 +1211,7 @@ class BuilderScreen(Screen):
         self.refresh_all()
 
     def action_focus_card(self):
+        self.remove_class("-show-right")
         self.card.focus()
 
     def action_help(self):
@@ -1440,7 +1449,22 @@ class BuilderScreen(Screen):
 
     def action_rtab(self, name):
         self.query_one("#rtabs", TabbedContent).active = f"r-{name}"
+        if self.has_class("-narrow"):
+            self.add_class("-show-right")
         self.b.remember(self)
+
+    def action_toggle_right(self):
+        """On a narrow terminal the outline, scenes and entity notes take turns with the cards; elsewhere both are always shown."""
+        if self.has_class("-narrow"):
+            self.set_class(not self.has_class("-show-right"), "-show-right")
+        else:
+            self.say("Both columns are showing: this terminal is wide enough.")
+
+    def on_resize(self, event):
+        narrow = event.size.width < 150
+        self.set_class(narrow, "-narrow")
+        if not narrow:
+            self.remove_class("-show-right")
 
     def on_tabbed_content_tab_activated(self, event):
         if event.control.id == "rtabs":

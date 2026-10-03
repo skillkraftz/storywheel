@@ -157,7 +157,7 @@ class SettingsScreen(Screen):
     SettingsScreen .label { text-style: bold; }
     SettingsScreen .hint { color: $text-muted; }
     SettingsScreen Input, SettingsScreen Select { width: 70; }
-    SettingsScreen TextArea { width: 70; height: 6; }
+    SettingsScreen TextArea { width: 70; height: 5; }
     SettingsScreen #status { height: 1; padding: 0 1; background: $boost; }
     SettingsScreen DataTable { height: 1fr; min-height: 8; }
     SettingsScreen #summary { padding: 0 1; height: auto; }
@@ -234,6 +234,8 @@ class SettingsScreen(Screen):
         return [Input("" if value is None else str(value), id=wid)]
 
     def on_mount(self):
+        for w in self.query("Input, Select, TextArea"):
+            w.compact = True                                        # one line per box, so a whole tab fits on the screen
         self.app.title = "storywheel · Settings"
         self.app.sub_title = "saved as you go"
         self.refresh_stats()
