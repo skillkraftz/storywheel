@@ -1,0 +1,141 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "mayor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "chairman of the committee",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "bake sale rival",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival florist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "parish council head",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "know-it-all cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "vicar",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "town crier",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "golf club captain",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "lady of the manor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "head of the garden society",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "school inspector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "newspaper columnist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "tea room owner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "local magician",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "chief constable",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "headmistress",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "bank manager",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

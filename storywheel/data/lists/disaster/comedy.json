@@ -1,0 +1,214 @@
+{
+ "_note": "Troubles that hit a small town. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "a flooded cellar",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a power cut",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a double-booked hall",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a flower show scandal",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a goat on the loose",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failed fireworks display",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sinkhole outside the bakery",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a heat wave",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a shortage of jam",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bin strike",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a traffic jam",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a mix-up with the census",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a wedding gone wrong",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a plague of garden gnomes",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a runaway cheese",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a county-wide gossip",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a burst water main",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a village fete disaster",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a food poisoning scare",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a tourist invasion",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lost-property flood",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a broken clock tower",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rain-soaked parade",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a disastrous talent show",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an inspector's visit",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a swarm of wasps",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a cancelled train",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a chimney fire",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a sudden fog",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rumour of a ghost",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}

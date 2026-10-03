@@ -1,0 +1,111 @@
+{
+ "_note": "Title nouns for comedies. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "marrow",
+  "trombone",
+  "committee",
+  "cake",
+  "raffle",
+  "hat",
+  "gnome",
+  "trophy",
+  "fete",
+  "cheese",
+  "umbrella",
+  "wedding",
+  "teapot",
+  "rosette",
+  "bicycle",
+  "sandwich",
+  "pudding",
+  "bandstand",
+  "moustache",
+  "tuba",
+  "chandelier",
+  "casserole",
+  "pageant",
+  "jumble",
+  "picnic",
+  "regatta",
+  "tombola",
+  "biscuit",
+  "costume",
+  "clipboard",
+  {
+   "text": "goat",
+   "kind": "creature"
+  },
+  {
+   "text": "llama",
+   "kind": "creature"
+  },
+  {
+   "text": "parrot",
+   "kind": "creature"
+  },
+  {
+   "text": "swan",
+   "kind": "creature"
+  },
+  {
+   "text": "hamster",
+   "kind": "creature"
+  },
+  {
+   "text": "impostor",
+   "kind": "person"
+  },
+  {
+   "text": "mayor",
+   "kind": "person"
+  },
+  {
+   "text": "bridesmaid",
+   "kind": "person"
+  },
+  {
+   "text": "vicar",
+   "kind": "person"
+  },
+  {
+   "text": "inspector",
+   "kind": "person"
+  },
+  {
+   "text": "magician",
+   "kind": "person"
+  },
+  {
+   "text": "tearoom",
+   "kind": "place"
+  },
+  {
+   "text": "village hall",
+   "kind": "place"
+  },
+  {
+   "text": "misunderstanding",
+   "kind": "idea"
+  },
+  {
+   "text": "scheme",
+   "kind": "idea"
+  },
+  {
+   "text": "fib",
+   "kind": "idea"
+  },
+  {
+   "text": "bet",
+   "kind": "idea"
+  },
+  {
+   "text": "alibi",
+   "kind": "idea"
+  }
+ ]
+}

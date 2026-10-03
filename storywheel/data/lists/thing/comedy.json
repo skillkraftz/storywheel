@@ -1,0 +1,332 @@
+{
+ "_note": "Things that go missing, get borrowed or cause trouble in a comic small town.",
+ "slot": "thing",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "a prize marrow",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stolen garden gnome",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a borrowed wedding cake",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a ceremonial sash",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cracked trophy",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pair of trick scissors",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a ventriloquist's dummy",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a tray of jam tarts",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a crate of fireworks",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a rented llama",
+   "features": [
+    "living",
+    "bulky"
+   ]
+  },
+  {
+   "text": "an unopened birthday card",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a wedding ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a misdelivered parcel",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a very large cheese",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a golden egg cup",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a brass band tuba",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a suspicious casserole",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "an inflatable swan",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a forged raffle ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a mayor's speech",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a library fine notice",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a hamster in a teacup",
+   "features": [
+    "portable",
+    "living"
+   ]
+  },
+  {
+   "text": "a signed cricket bat",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a lost umbrella",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rubber chicken",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a chocolate fountain",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a stuffed pike",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a box of party hats",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rented tuxedo",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a bag of confetti",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a fake moustache",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a jar of pickled onions",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a prize-winning cabbage",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a pantomime horse",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a bicycle with no brakes",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a stack of parking tickets",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a tin of mystery soup",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a swearing parrot",
+   "features": [
+    "portable",
+    "living"
+   ]
+  },
+  {
+   "text": "a bridesmaid's bouquet",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a very old fruitcake",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pair of clown shoes",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a leaking canoe",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a church bell rope",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a chain of office",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a fridge full of trifle",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "an embarrassing photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a spare set of keys",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

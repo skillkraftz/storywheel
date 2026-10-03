@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_setup",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first}, a {trait} {job} in {place}, chaired the {TITLE_NOUN} committee and wanted {want}.",
+  "Everyone in {place} knew {first} as a {trait} {job}, and {first} wanted {want}.",
+  "{first} was a {trait} {job} in {place}, where {VICE} had cost {first} dearly.",
+  "In {place}, {first}, a {trait} {job}, rehearsed a speech about {VALUE} at {landmark} {MANNER}.",
+  "{place} thought {first} was a {trait} {job} of great importance, and {first} never corrected anyone.",
+  "{first} had one rule as a {trait} {job} in {place}: never mention {TOPIC}.",
+  "{first}, a {trait} {job}, kept {THING} {HIDING} and wished for {PRIZE:!inner}.",
+  "Nobody in {place} took {first} seriously, least of all the {rival}."
+ ]
+}

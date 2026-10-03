@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "resolution",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} {HABIT_PERSON} {CLOSE:human} and never fibs about {TOPIC}",
+  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {CLOSE}",
+  "{first} {HABIT_THING} {THING:!living} {HIDING}, just in case",
+  "the {rival} {HABIT_PERSON} {first} with great politeness",
+  "every {season}, {place} holds a {TITLE_NOUN} contest in honor of {first}",
+  "{first} {HABIT_PLACE} {landmark} and tells the story {MANNER}",
+  "{first} {HABIT_PERSON} {the_someone:human}, and the {rival} keeps well away",
+  "{place} still talks about {the_disaster}, and {first} {HABIT_PLACE} {landmark}",
+  "{first} keeps {the_thing:!living} {HIDING} and {HABIT_PERSON} {CLOSE}",
+  "nobody in {place} mentions {TOPIC}, and {first} {HABIT_THING} {THING:!living}"
+ ]
+}

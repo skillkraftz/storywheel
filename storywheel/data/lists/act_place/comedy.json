@@ -1,0 +1,148 @@
+{
+ "_note": "Past-tense verbs for comedy that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "gatecrashed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "wandered into",
+   "subject": [
+    "human"
+   ]
+  },
+  "flooded",
+  {
+   "text": "redecorated",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "closed down",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "sneaked into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  "cleared out",
+  "blocked off",
+  {
+   "text": "rented out",
+   "object": [
+    "built"
+   ]
+  },
+  "got lost in",
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "tidied",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wrecked",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "opened",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "strolled through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "visited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "opened up",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "unlocked",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

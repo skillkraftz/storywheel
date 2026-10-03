@@ -1,0 +1,326 @@
+{
+ "_note": "Places in a small, fussy town.",
+ "slot": "landmark",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "the town hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bakery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the village green",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the bandstand",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the pub",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the post office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the garden centre",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the duck pond",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the tea room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the church hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the roundabout",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the war memorial",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the leisure centre",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the car park",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the bowling club",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sewage works",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cricket pavilion",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the allotments",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the village shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the community noticeboard",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hotel lobby",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the railway halt",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the public library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the fountain",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the high street",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the market square",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the school gymnasium",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the butcher's",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the antique shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bus shelter",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the wedding marquee",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the vicarage garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the cheese shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the golf course",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the town museum",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the barber's shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the picnic area",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the county fair",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the launderette",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cemetery gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the old windmill",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ice cream van",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the jumble sale",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lost property office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the maze",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  }
+ ]
+}

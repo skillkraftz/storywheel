@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} Affair of {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "Much Ado About {TITLE_NOUN} in {place}",
+  "All the {title_nouns} in {place}",
+  "The Great {place} {TITLE_NOUN} Disaster",
+  "{first}'s {TITLE_ADJ} {TITLE_NOUN}",
+  "Nobody Likes a {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "A {TITLE_NOUN} for the {rival}"
+ ]
+}

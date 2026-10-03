@@ -1,0 +1,97 @@
+{
+ "_note": "Where something is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "in a biscuit tin",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the hat stand",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind the tea urn",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a teapot",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside the piano",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in the lost property box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow wedding cake",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the vicarage rug",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hat box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind the dartboard",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a jar of pickles",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in the bandstand bunting",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

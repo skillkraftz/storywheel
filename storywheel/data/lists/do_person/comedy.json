@@ -1,0 +1,24 @@
+{
+ "_note": "Base-form verbs for comedy that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "impress",
+  "avoid",
+  "apologize to",
+  "outwit",
+  {
+   "text": "humor",
+   "object": [
+    "!threatening"
+   ]
+  },
+  "stand up to",
+  "charm",
+  "fool",
+  "flatter",
+  "hide from"
+ ]
+}

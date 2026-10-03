@@ -1,0 +1,54 @@
+{
+ "_note": "Base-form verbs for comedy that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "return",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "smuggle",
+   "object": [
+    "!bulky"
+   ]
+  },
+  {
+   "text": "polish",
+   "object": [
+    "!living"
+   ]
+  },
+  "borrow",
+  {
+   "text": "rehearse with",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sell",
+   "object": [
+    "!living"
+   ]
+  },
+  "swap",
+  {
+   "text": "bake around",
+   "object": [
+    "!bulky"
+   ]
+  },
+  "disguise",
+  {
+   "text": "raffle off",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

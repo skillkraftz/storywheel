@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "rumor",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "the {rival} {ACT_THING} {THING} {MANNER}",
+  "{SOMEONE:human,!plural} once {ACT_PERSON} the {rival} at {landmark}",
+  "{THING:buryable} {lies|lie} under {landmark:diggable}",
+  "{DISASTER:manmade} {was} started by the {rival}",
+  "everyone knows the {rival} {ACT_MESSAGE} {MESSAGE:physical}",
+  "{landmark:built} {was} built to hide {THING:!living}",
+  "{SOMEONE:human,!plural} is hiding from the {rival} at {landmark}",
+  "{THING:valuable} {lies|lie} {HIDING}"
+ ]
+}

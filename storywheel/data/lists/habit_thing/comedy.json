@@ -1,0 +1,54 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "comedy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "polishes",
+   "object": [
+    "!living"
+   ]
+  },
+  "apologizes for",
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "rehearses with",
+   "object": [
+    "!living"
+   ]
+  },
+  "brags about",
+  {
+   "text": "lends out",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps safe",
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "dusts",
+   "object": [
+    "!living"
+   ]
+  },
+  "guards jealously"
+ ]
+}

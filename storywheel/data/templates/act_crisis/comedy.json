@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_crisis",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost {LOSS}.",
+  "{the_message:physical} was read aloud at {landmark}, and {first} wished for the floor to open.",
+  "{CLOSE:human} found out about {TOPIC}, and {first} had no more excuses.",
+  "{the_thing} was discovered {HIDING}, and the {rival} demanded an explanation.",
+  "Everyone in {place} turned on {first}, and {VICE} offered no help at all.",
+  "{first} {ACT_PERSON} {the_someone:human} {MANNER}, and the whole plan collapsed.",
+  "The {rival} offered {first} {PRIZE:!inner}, and it cost {VALUE}.",
+  "Alone at {landmark}, {first} faced {FEELING} and a long list of {VICE}."
+ ]
+}

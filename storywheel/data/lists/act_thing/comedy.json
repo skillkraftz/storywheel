@@ -1,0 +1,174 @@
+{
+ "_note": "Past-tense verbs for comedy that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "misplaced",
+   "object": [
+    "!living"
+   ]
+  },
+  "swapped",
+  {
+   "text": "broke",
+   "object": [
+    "!living"
+   ]
+  },
+  "rigged",
+  "borrowed",
+  {
+   "text": "dropped",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "knocked over",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "accidentally sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "rented out",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "mislabeled",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "smuggled",
+   "object": [
+    "!bulky"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "wrapped",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "returned",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "lent",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "dressed up",
+   "object": [
+    "!bulky"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "tucked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "squirreled away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "sorted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "counted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "labeled",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "traded away",
+   "features": [
+    "trades"
+   ]
+  }
+ ]
+}

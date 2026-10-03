@@ -1,0 +1,37 @@
+{
+ "_note": "First half of a comic town name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "Upper",
+  "Lower",
+  "Little",
+  "Great",
+  "Nether",
+  "Old",
+  "New",
+  "West",
+  "East",
+  "North",
+  "South",
+  "Mount",
+  "Port",
+  "Saint",
+  "Higher",
+  "Lesser",
+  "Wooden",
+  "Middle",
+  "Long",
+  "Short",
+  "Farther",
+  "Fair",
+  "Pleasant",
+  "Merry",
+  "Dull",
+  "Quiet",
+  "Sleepy",
+  "Grand"
+ ]
+}

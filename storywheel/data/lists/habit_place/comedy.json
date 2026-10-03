@@ -1,0 +1,40 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "comedy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "sneaks into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "paints",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "reopens",
+   "object": [
+    "built"
+   ]
+  },
+  "inspects",
+  "loiters near",
+  {
+   "text": "waters",
+   "object": [
+    "diggable"
+   ]
+  },
+  "tidies",
+  "hangs about outside"
+ ]
+}

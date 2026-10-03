@@ -1,0 +1,23 @@
+{
+ "_note": "",
+ "slot": "premise",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "A {trait} {job} in {place} tells one small lie about {THING}, and it grows until even the {rival} believes it.",
+  "When {SOMEONE:!plural} mistakes {first}, a {trait} {job}, for someone important, {first} plays along {MANNER}.",
+  "{first}, a {trait} {job} in {place}, schemes to win {PRIZE:!inner} {DEADLINE}, and every fix makes things worse.",
+  "After {DISASTER:strikes} hit {place}, {first} {ACT_THING:stows} {THING:!living} {HIDING} rather than admit what happened.",
+  "A feud with the {rival} over {THING:!living} drags all of {place} into {TOPIC}.",
+  "{first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, and the {rival} is watching.",
+  "Everyone in {place} believes {first}, a {trait} {job}, owns {THING}, and {first} cannot afford to say otherwise.",
+  "When {MESSAGE:physical} arrives for the wrong {job}, {first} opens it, and {SOMEONE:human,!plural} comes calling.",
+  "{first}, a {trait} {job} in {place}, hires {SOMEONE:human} to {DO_PERSON} the {rival}, and regrets it {DEADLINE}.",
+  "A {trait} {job} named {first} accidentally enters the contest for {PRIZE:!inner} and, worse, starts winning.",
+  "To impress {CLOSE:human}, {first}, a {trait} {job} in {place}, claims to know {SOMEONE:human,!plural}.",
+  "{first}, a {trait} {job} in {place}, must find {THING:!living} {DEADLINE} or lose {PRIZE:!inner}.",
+  "The whole of {place} turns up at {landmark} when {first}, a {trait} {job}, announces {PRIZE:!inner}.",
+  "{first}, a {trait} {job} in {place}, tries to keep {TOPIC} from the {rival}, and keeps making it worse."
+ ]
+}

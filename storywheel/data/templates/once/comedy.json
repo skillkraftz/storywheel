@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "once",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first}, a {trait} {job} in {place}, swore never to fib again about {TOPIC}",
+  "in {place}, a {trait} {job} named {first} wanted {want} more than anything",
+  "{first} was the most {trait} {job} in all of {place}, and wanted {want}",
+  "the {rival} of {place} and {first}, a {trait} {job}, had not spoken since {TOPIC}",
+  "{first}, a {job} in {place}, kept {THING} {HIDING} and told {CLOSE:human} nothing",
+  "everyone in {place} thought {first}, a {trait} {job}, was more important than {first} was",
+  "{first}, a {trait} {job}, chaired the {TITLE_NOUN} committee in {place}",
+  "{first} was a {trait} {job} in {place}, where {VICE} had cost {first} dearly",
+  "{place} still talked about the day {first}, a {trait} {job}, lost {THING}",
+  "nothing in {place} mattered more to {first}, a {trait} {job}, than {PRIZE:!inner}",
+  "a {trait} {job} named {first} lived in {place} and dreaded the {rival}",
+  "{first}, a {trait} {job}, believed {place} could not manage without a {TITLE_NOUN}"
+ ]
+}

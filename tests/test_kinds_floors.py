@@ -178,11 +178,15 @@ def test_invented_names_are_at_least_four_letters_and_never_dictionary_words():
 
 # --- profiles and the psychology lists -----------------------------------------------------------------------------
 
-def test_every_profile_has_general_03_and_modern_01():
+# how much "modern" (Faker names, cities and jobs, everyday jobs) fits each genre; 0.1 unless the genre's content says otherwise
+MODERN = {"comedy": 0.2}
+
+
+def test_every_profile_has_general_03_and_its_own_modern_share():
     lib = Library.load()
     assert len(lib.profiles) >= 14
     for genre, profile in lib.profiles.items():
-        assert profile["general"] == 0.3 and profile["modern"] == 0.1, genre
+        assert profile["general"] == 0.3 and profile["modern"] == MODERN.get(genre, 0.1), genre
 
 
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place",

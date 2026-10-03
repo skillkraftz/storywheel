@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_trials",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
+  "Each time {first} neared {PRIZE:!inner}, {VICE} tripped everything up.",
+  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
+  "{first} {ACT_THING:trades} {THING} to keep {the_someone:human} quiet.",
+  "{first} told one more fib to {CLOSE:human}, and {landmark} filled with gossip.",
+  "{first} tried to {DO_THING} {THING} and ended up in the {rival}'s office.",
+  "{DISASTER:strikes} hit {place} again, and {first} blamed {SOMEONE:!plural}.",
+  "{first} was caught between {VALUE} and {PRIZE:!inner} {MANNER}."
+ ]
+}

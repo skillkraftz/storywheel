@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_midpoint",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} won a small victory over the {rival}, then {ACT_THING} {THING} {MANNER}.",
+  "The truth about {TOPIC} nearly came out: {SOMEONE:human,!plural} saw {first} with {THING}.",
+  "The {rival} invited {first} to tea at {landmark}, and {first} told more lies.",
+  "{first} gave a speech about {VALUE} at {landmark}, and everybody believed it.",
+  "{the_someone:human} turned out to know {CLOSE:human}, and {first} {ACT_PERSON} the {rival} {MANNER}.",
+  "{first} was named guest of honor, and {the_someone:human} was not pleased.",
+  "{first} earned {PRIZE:!inner}, and the whole of {place} wanted a share.",
+  "Everything was going well until {the_thing} turned up at {landmark}."
+ ]
+}

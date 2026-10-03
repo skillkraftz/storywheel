@@ -1,0 +1,34 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "comedy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "bickers with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "waves at",
+  "avoids",
+  "sends cakes to",
+  "keeps an eye on",
+  "gossips about",
+  "lectures",
+  "hums at",
+  {
+   "text": "hosts tea for",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

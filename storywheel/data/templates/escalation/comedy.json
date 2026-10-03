@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "escalation",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
+  "{CLOSE} {ACT_PERSON} {first} {MANNER}, and the whole of {place} found out",
+  "{SOMEONE:human,!plural} {ACT_THING} {THING} {MANNER}, and nobody could stop it",
+  "{DISASTER:strikes} hit {place}, and everyone blamed {first}",
+  "the {rival} told everyone in {place} about {TOPIC}",
+  "{the_someone:human} {ACT_THING} {the_thing} {MANNER}, which made matters worse",
+  "{the_thing:!bulky,!living} ended up {HIDING}, and {CLOSE:human} found it",
+  "{the_someone:!plural} brought three friends who all wanted {PRIZE:!inner}",
+  "{the_message:physical} was read aloud at {landmark}, to the horror of {CLOSE:human}",
+  "{first} {ACT_PERSON} {the_someone:human} to cover the mess, and the {rival} noticed",
+  "the {rival} entered {first} for {PRIZE:!inner} {MANNER}",
+  "{the_disaster} grew worse when {first} {ACT_THING} {THING}"
+ ]
+}

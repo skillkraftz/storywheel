@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "climax",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} confessed everything to the {rival} at {landmark} {MANNER}",
+  "{first} told the plain truth about {TOPIC} at {landmark}, and {place} cheered",
+  "the whole of {place} gathered at {landmark} to watch {first} {DO_THING} {THING}",
+  "{first} {ACT_THING} {the_thing}, and the {rival} took the blame",
+  "{the_someone:human} stood up at {landmark} and confessed to everything",
+  "{first} chose {VALUE} over {PRIZE}, and {place} applauded {MANNER}",
+  "the {rival} slipped on {the_thing:portable} {MANNER}, and the secret was out",
+  "{the_message} was finally read aloud, and {first} said sorry to {CLOSE:human}",
+  "{first} gave up {PRIZE:!inner} and owned up to {the_someone:human}",
+  "{the_disaster} passed, and {CLOSE:human} found {first} out {MANNER}",
+  "{first} stood before {place} and admitted {VICE} had run the whole affair",
+  "{first} {ACT_PERSON} the {rival} in front of {CLOSE:human}, and chose {VALUE}"
+ ]
+}

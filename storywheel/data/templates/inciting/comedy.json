@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "inciting",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{SOMEONE:!plural} arrived in {place} and mistook {first} for someone important",
+  "{first} accidentally ordered {THING} for the whole of {place}",
+  "{DISASTER:strikes} hit {place} on the very morning of the {TITLE_NOUN} contest",
+  "{first} told one small fib to {SOMEONE:human,!plural}, and it spread through {place} by noon",
+  "{MESSAGE:physical} meant for the {rival} landed in {first}'s hands",
+  "{first} found {THING:!living,!bulky} {HIDING}, and nobody knew whose it was {MANNER}",
+  "the {rival} announced a contest for {PRIZE:!inner}, and {first} entered by mistake",
+  "{SOMEONE:human,!plural} claimed to be {first}'s long-lost cousin and moved in",
+  "{first} lent {THING:!living} to {SOMEONE:human,!plural}, who promptly lost it",
+  "{SOMEONE} turned up at {landmark} {MANNER} and demanded to see {first}",
+  "{first} won {PRIZE:!inner} by a clerical error, and the {rival} demanded a recount",
+  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and said yes without thinking"
+ ]
+}

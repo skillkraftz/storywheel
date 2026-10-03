@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_turn",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} decided to {DO_THING} {THING} {DEADLINE}, whatever {VICE} said.",
+  "{first} dressed up as {SOMEONE:human,!plural} and {ACT_PLACE:mundane} {landmark} {MANNER}.",
+  "{first} promised {PRIZE:!inner} to {CLOSE:human} {DEADLINE}, and could not turn back.",
+  "{first} hired {SOMEONE:human} to {DO_THING} {THING}, and regretted it at once.",
+  "{first} blamed {SOMEONE:!plural} for {DISASTER} and hoped for the best.",
+  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} {MANNER} and could not turn back.",
+  "{first} {ACT_THING:stows} {THING:!living} {HIDING}, and the plan was in motion.",
+  "{first} started a committee about {TOPIC}, and put {CLOSE:human} in the chair."
+ ]
+}

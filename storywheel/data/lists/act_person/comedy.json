@@ -1,0 +1,72 @@
+{
+ "_note": "Past-tense verbs for comedy that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "flattered",
+  "fibbed to",
+  "snubbed",
+  "tricked",
+  "hid from",
+  "impressed",
+  "bribed",
+  "sweet-talked",
+  "mortified",
+  "charmed",
+  "outbid",
+  "double-crossed",
+  "caught out",
+  "eavesdropped on",
+  "bossed around",
+  {
+   "text": "impersonated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "stood up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "apologized to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "cornered",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "barged in on",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "humored",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  }
+ ]
+}

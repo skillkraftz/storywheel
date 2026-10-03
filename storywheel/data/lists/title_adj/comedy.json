@@ -1,0 +1,43 @@
+{
+ "_note": "Title adjectives for comedies.",
+ "slot": "title_adj",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "unlikely",
+  "awkward",
+  "accidental",
+  "ridiculous",
+  "borrowed",
+  "unsuitable",
+  "enormous",
+  "anxious",
+  "mislaid",
+  "wobbling",
+  "polite",
+  "fabulous",
+  "embarrassing",
+  "pompous",
+  "disastrous",
+  "wonderful",
+  "unexpected",
+  "suspicious",
+  "flustered",
+  "second-best",
+  "honorary",
+  "unreliable",
+  "notorious",
+  "blushing",
+  "sensible",
+  "hopeless",
+  "dreadful",
+  "lucky",
+  "reluctant",
+  "last-minute",
+  "splendid",
+  "fussy",
+  "nervous",
+  "mistaken"
+ ]
+}

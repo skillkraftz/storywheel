@@ -1,0 +1,71 @@
+{
+ "_note": "Past-tense verbs for comedy that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "misread",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "mislaid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "read aloud",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "framed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "ripped up",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "posted publicly",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  "ignored",
+  {
+   "text": "filed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "photocopied",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "signed",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

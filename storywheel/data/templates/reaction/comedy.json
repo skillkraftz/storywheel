@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "reaction",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{ACT_THING:stows} {THING} {HIDING}, hoping nobody would ask",
+  "{ACT_PERSON} {SOMEONE:human} {MANNER}, which made things worse",
+  "dressed up as {SOMEONE:human,!plural} and {ACT_PLACE:mundane} {landmark}",
+  "blamed {SOMEONE:!plural} for {DISASTER}",
+  "promised {PRIZE:!inner} to {CLOSE:human} {DEADLINE}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and told no one",
+  "hired {SOMEONE:human} to {DO_THING} {THING} {DEADLINE}",
+  "{ACT_PLACE} {landmark} {MANNER} to look for {THING}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material}",
+  "{ACT_PERSON:mundane} the {rival} and lied about {TOPIC}",
+  "started a committee about {TOPIC}, with {CLOSE:human} in the chair",
+  "asked {CLOSE:human} to {DO_PERSON} {SOMEONE:human,!plural} {MANNER}"
+ ]
+}

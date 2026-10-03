@@ -1,0 +1,87 @@
+{
+ "_note": "What people want in a comic town.",
+ "slot": "prize",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "the Best in Show ribbon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the mayor's chain",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a blue rosette",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the village cup",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a week at the spa",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the chairmanship",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a front-row seat",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a free dinner",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a place in the parade",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a quiet life",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a good review",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the last tart",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a spot on television",
+   "features": [
+    "social"
+   ]
+  }
+ ]
+}

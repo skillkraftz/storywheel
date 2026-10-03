@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "act_climax",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{first} confessed everything to the {rival} at {landmark} {MANNER}, and chose {VALUE}.",
+  "{first} stood before {place} with {THING} and told the plain truth about {TOPIC}.",
+  "{the_someone:human} confessed too, and {first} {ACT_PERSON} the {rival} in front of {CLOSE:human}.",
+  "The whole of {place} gathered at {landmark}, and {first} {ACT_PERSON} the {rival} {MANNER}.",
+  "{first} gave up {PRIZE:!inner} and owned up to {the_someone:human} in public.",
+  "{first} found {the_thing:portable} at the last minute and {ACT_PERSON} {SOMEONE:human} {MANNER}.",
+  "{first} walked out to meet the {rival} {MANNER}, with the truth and nothing else.",
+  "{the_disaster} ended at {landmark}, and {first} owned up to everything."
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "_note": "Towns that are built from parts, plus hand-picked ones. Small, fussy and slightly absurd.",
+ "slot": "place",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "Little Dunning",
+  "Great Pudding",
+  "Upper Snoring",
+  "Muddlecombe",
+  "Nettlebed",
+  "Dribbleton",
+  "Biscuit Green",
+  "Cluckington",
+  "Pennywhistle",
+  "Marrowby",
+  "Gossamer Cross",
+  "Tuppenny End",
+  "Wetherby Parva",
+  "Dozing",
+  "Bunting",
+  "Teacup",
+  "Hummock",
+  "Pickleton",
+  "Fiddlesham",
+  "Ramsbottom Cross"
+ ]
+}

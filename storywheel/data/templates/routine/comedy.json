@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "routine",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} {MANNER}, hoping nobody noticed",
+  "{ACT_THING:mundane} {THING} {MANNER} and complained about {TOPIC}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER}, as {first} had for years",
+  "walked past {landmark} and pretended not to see {SOMEONE}",
+  "practiced a speech about {VALUE} in front of {landmark}",
+  "checked {landmark} for signs of {DISASTER}",
+  "ate lunch at {landmark} and told {CLOSE:human} a small fib {MANNER}",
+  "kept an eye on the {rival} from {landmark}",
+  "rehearsed a toast about {TOPIC} {MANNER}",
+  "{ACT_THING:mundane} {THING} and avoided the {rival} {MANNER}",
+  "complained to {CLOSE:human} about {VICE} and {ACT_PLACE:mundane} {landmark}",
+  "wrote a stern note about {TOPIC} and posted it at {landmark}"
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_note": "",
+ "slot": "ketsu",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt lighter.",
+  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
+  "{first} apologized to the {rival}, and they shared {THING:!living} over tea.",
+  "{place} had its {TITLE_NOUN} contest at {landmark}, and nobody minded who won.",
+  "{first} told {CLOSE:human} the truth about {TOPIC}, and laughed about {VICE}."
+ ]
+}

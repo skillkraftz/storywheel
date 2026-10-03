@@ -1,0 +1,268 @@
+{
+ "_note": "People and animals who turn up and make things worse.",
+ "slot": "someone",
+ "tags": [
+  "comedy"
+ ],
+ "entries": [
+  {
+   "text": "a visiting inspector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "an overconfident magician",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired colonel",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a nervous bridegroom",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a television chef",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a very polite burglar",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a lost tourist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a scheming cousin",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a pompous councillor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a runaway goat",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a gossiping neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bridesmaid in tears",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a vicar with a secret",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a famous author",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smooth-talking salesman",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a dog in a waistcoat",
+   "features": [
+    "creature",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an overbearing aunt",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a disguised critic",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired spy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a determined newlywed",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a very old countess",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a failed comedian",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lovesick postman",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a rival's twin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a mysterious foreigner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an escaped parrot",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a stern headmistress",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a clumsy waiter",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a shifty bookie",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a school-trip teacher",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "two quarrelling brothers",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a charming con man",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hungry badger",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a sleepwalking mayor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a very loud tourist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a village idiot's cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nosy reporter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bumbling constable",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a swan with a grudge",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a famous aunt",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}
