@@ -46,6 +46,8 @@ HELP = f"""\
   [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Entity notes (the selected entity's own notes)
   [b]backslash[/b]  on a narrow terminal (under 150 columns) the right column takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back
   [b]+[/b] [b]-[/b]      like / dislike the line
+  Under the card: ▲ ▼ like or dislike a value (liked wording is used more, disliked less in later rolls); ✎ the generator can't fill this
+  field, so write it yourself; [b]space[/b] (Roll blanks) fills only empty fields and never changes what you wrote.
 
 [b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
          [b]▲ ▼[/b] rate.  Fields marked ✎ are write-only (the generator can't fill them).

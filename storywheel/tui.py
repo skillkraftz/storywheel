@@ -764,8 +764,7 @@ class MainScreen(Screen):
     MainScreen #left { width: 46; }
     MainScreen.-narrow #left { width: 36; }
     MainScreen.-narrow #right { width: 32; }
-    MainScreen.-narrow #uni-buttons { layout: vertical; height: auto; }
-    MainScreen.-narrow #uni-mode-label { width: 100%; height: auto; }
+
     MainScreen.-narrow #buttons { layout: grid; grid-size: 2; grid-gutter: 0 1; height: 3; }
     MainScreen.-narrow #buttons Button { width: 100%; }
     MainScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
@@ -781,7 +780,8 @@ class MainScreen(Screen):
     MainScreen #story-buttons Button, MainScreen #story-buttons2 Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
     MainScreen #uni-buttons, MainScreen #uni-buttons2 { height: 1; }
-    MainScreen #uni-mode-label { width: auto; }
+    MainScreen #uni-buttons { layout: vertical; height: auto; }
+    MainScreen #uni-mode-label { width: 100%; height: auto; }
     MainScreen #uni-buttons Button, MainScreen #uni-buttons2 Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
     MainScreen #universe { height: 1fr; min-height: 3; }
     MainScreen #uni-check { height: auto; max-height: 8; }
