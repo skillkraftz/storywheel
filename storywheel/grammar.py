@@ -161,15 +161,14 @@ def install(from_file=None, progress=lambda m: None, url=DOWNLOAD_URL):
         if not src.is_file():
             raise GrammarError(f"There is no file {src}.")
     else:
-        progress(f"Downloading {url} (about 200 MB)…")
+        from . import download as dl
         src = tmp = paths.home() / "languagetool-download.zip"
-        src.parent.mkdir(parents=True, exist_ok=True)
         try:
-            with urllib.request.urlopen(url, timeout=60) as r, open(src, "wb") as f:
-                shutil.copyfileobj(r, f)
-        except (OSError, urllib.error.URLError) as e:
-            raise GrammarError(f"Could not download LanguageTool: {e}. On a machine without internet, copy LanguageTool-stable.zip over "
-                               "and run:  storywheel grammar install --from LanguageTool-stable.zip")
+            dl.fetch(url, src, lambda m: progress(m.replace(" …", " (about 200 MB) …")))
+        except dl.DownloadError as e:
+            tmp.unlink(missing_ok=True)
+            raise GrammarError(f"{e}  On a machine without internet, or if the download keeps failing, get LanguageTool-stable.zip another way and run:  "
+                               "storywheel grammar install --from LanguageTool-stable.zip")
     try:
         if not zipfile.is_zipfile(src):
             raise GrammarError(f"{src} is not a zip file.")

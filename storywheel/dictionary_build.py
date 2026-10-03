@@ -214,15 +214,11 @@ def build(oewn_path, moby_path, out_path, progress=lambda msg: None):
 
 
 def download(url, dest, progress=lambda msg: None):
-    dest = Path(dest)
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    progress(f"Downloading {url} …")
+    from . import download as dl
     try:
-        with urllib.request.urlopen(url, timeout=60) as r, open(dest, "wb") as f:
-            shutil.copyfileobj(r, f)
-    except OSError as e:
-        raise DictionaryBuildError(f"Couldn't download {url}: {e}")
-    return dest
+        return dl.fetch(url, dest, progress)
+    except dl.DownloadError as e:
+        raise DictionaryBuildError(str(e))
 
 
 def sources_dir(out_path):

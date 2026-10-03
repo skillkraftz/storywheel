@@ -199,7 +199,8 @@ def test_only_install_can_touch_the_network():
     import inspect
     from storywheel import dictionary as d, dictionary_build as b
     assert "urllib" not in inspect.getsource(d) and "socket" not in inspect.getsource(d)
-    assert "urlopen" in inspect.getsource(b.download)
+    from storywheel import download as dl
+    assert "urlopen" in inspect.getsource(dl) and "dl.fetch" in inspect.getsource(b.download)      # (every download goes through download.py)
 
 
 def test_a_lookup_takes_milliseconds(index):
