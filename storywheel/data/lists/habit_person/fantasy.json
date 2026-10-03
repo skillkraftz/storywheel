@@ -1,0 +1,46 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "fantasy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "prays for",
+  {
+   "text": "swears again to",
+   "subject": [
+    "human"
+   ]
+  },
+  "watches over",
+  "remembers",
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  {
+   "text": "spars with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "shelters",
+   "object": [
+    "!threatening"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "_note": "",
+ "slot": "premise",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "When {SOMEONE:!plural} brings {THING} to {place}, a {trait} {job} named {first} must choose between {PRIZE:!inner} and {VALUE}.",
+  "{first}, a {trait} {job} of {place}, must {DO_THING} {THING} {DEADLINE}, or the {rival} will claim the realm.",
+  "After {DISASTER:strikes} fell on {place}, {first}, a {trait} {job}, sets out to {DO_THING} {THING} and pays for it with {LOSS}.",
+  "A {trait} {job} named {first} learns that {SOMEONE:human,!plural} has sworn to destroy {place}, and that only {THING:magic} can stop it.",
+  "The old war is not over: {first}, a {trait} {job} in {place}, finds {THING:!living,!bulky} {HIDING}, and the {rival} wants it.",
+  "{first}, a {trait} {job} sworn to the {rival}, is ordered to {DO_THING} {THING}, and refuses.",
+  "To win {PRIZE:!inner}, {first}, a {trait} {job}, must {DO_PERSON} {SOMEONE:human,!plural} at {landmark} {DEADLINE}.",
+  "Magic returns to {place}, and {first}, a {trait} {job}, alone can pay its price in {LOSS}.",
+  "{first}, a {trait} {job} from {place}, carries {MESSAGE:physical} through a land at war {DEADLINE}.",
+  "The last {job} of {place}, {first}, must choose between the oath {first} swore and {VALUE}.",
+  "After {DISASTER:strikes} fell on {place}, the {rival} blamed the Order, and {first}, a {trait} {job}, takes up {THING:!living} to answer.",
+  "{first}, a {trait} {job}, discovers that {landmark:built} was raised over {THING:magic}, and the {rival} knows.",
+  "A {trait} {job} named {first} inherits {THING:magic,!living} and a debt of {LOSS} to {SOMEONE:magic,!plural}."
+ ]
+}

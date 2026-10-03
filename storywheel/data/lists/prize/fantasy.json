@@ -1,0 +1,93 @@
+{
+ "_note": "What people fight for in an old world.",
+ "slot": "prize",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "the throne",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a high council seat",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a lordship",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a knight's spurs",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a fortress",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a hoard of dragon-gold",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the Order's blessing",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "an end to the war",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "redemption",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "vengeance",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a warhorse",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "command of the northern host",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a royal pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a blade of legend",
+   "features": [
+    "material"
+   ]
+  }
+ ]
+}

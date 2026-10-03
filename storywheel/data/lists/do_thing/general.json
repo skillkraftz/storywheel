@@ -26,10 +26,10 @@
     {"text": "wager", "tags": ["western", "historical"], "object": ["valuable|living"]},
     {"text": "stake", "tags": ["western", "historical"], "object": ["valuable"]},
     {"text": "ship", "tags": ["western", "historical"]},
-    {"text": "enchant", "tags": ["fairy tale", "fantasy"], "subject": ["magic"], "object": ["!magic", "!living"]},
-    {"text": "bless", "tags": ["fairy tale", "fantasy"], "subject": ["magic"], "object": ["!living"]},
-    {"text": "whisper to", "tags": ["fairy tale", "fantasy"], "object": ["magic|living"]},
-    {"text": "bargain away", "tags": ["fairy tale", "fantasy"]},
+    {"text": "enchant", "tags": ["fairy tale"], "subject": ["magic"], "object": ["!magic", "!living"]},
+    {"text": "bless", "tags": ["fairy tale"], "subject": ["magic"], "object": ["!living"]},
+    {"text": "whisper to", "tags": ["fairy tale"], "object": ["magic|living"]},
+    {"text": "bargain away", "tags": ["fairy tale"]},
     {"text": "brand", "tags": ["western", "historical"], "object": ["living"]},
     {"text": "cache", "tags": ["western", "historical"], "object": ["buryable"]}
   ]

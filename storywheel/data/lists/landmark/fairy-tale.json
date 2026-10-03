@@ -1,7 +1,7 @@
 {
   "_note": "Places in a village, castle or wood out of an old tale.",
   "slot": "landmark",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "the old mill", "features": ["built", "indoor"]},
     {"text": "the wishing well", "features": ["built", "outdoor"]},

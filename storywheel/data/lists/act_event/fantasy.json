@@ -1,0 +1,34 @@
+{
+ "_note": "Past-tense verbs for epic fantasy that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "foretold",
+   "object": [
+    "magic|natural"
+   ]
+  },
+  "survived",
+  "fought off",
+  "rode out",
+  "caused",
+  {
+   "text": "unleashed",
+   "object": [
+    "magic"
+   ]
+  },
+  "stirred up",
+  {
+   "text": "predicted",
+   "object": [
+    "magic|natural"
+   ]
+  },
+  "ended",
+  "blamed"
+ ]
+}

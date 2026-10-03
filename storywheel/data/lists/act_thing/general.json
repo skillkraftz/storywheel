@@ -37,20 +37,20 @@
     {"text": "staked", "tags": ["western", "historical"], "object": ["valuable"], "features": ["trades"]},
     {"text": "shipped", "tags": ["western", "historical"]},
     {"text": "cached", "tags": ["western", "historical"], "object": ["buryable"], "features": ["stows"]},
-    {"text": "enchanted", "tags": ["fairy tale", "fantasy"], "subject": ["magic"], "object": ["!magic", "!living"]},
-    {"text": "whispered to", "tags": ["fairy tale", "fantasy"], "object": ["magic|living"]},
+    {"text": "enchanted", "tags": ["fairy tale"], "subject": ["magic"], "object": ["!magic", "!living"]},
+    {"text": "whispered to", "tags": ["fairy tale"], "object": ["magic|living"]},
     {"text": "counted", "object": ["valuable", "!living"], "features": ["mundane"]},
     {"text": "fed", "object": ["living"], "features": ["mundane"]},
     {"text": "looked after", "features": ["mundane"]},
     {"text": "lent out", "object": ["!living"], "features": ["mundane"]},
-    {"text": "blessed", "tags": ["fairy tale", "fantasy"], "subject": ["magic"], "object": ["!living"]},
-    {"text": "sang to", "tags": ["fairy tale", "fantasy"], "object": ["magic|living"]},
-    {"text": "bargained away", "tags": ["fairy tale", "fantasy"], "features": ["trades"]},
+    {"text": "blessed", "tags": ["fairy tale"], "subject": ["magic"], "object": ["!living"]},
+    {"text": "sang to", "tags": ["fairy tale"], "object": ["magic|living"]},
+    {"text": "bargained away", "tags": ["fairy tale"], "features": ["trades"]},
     {"text": "branded", "tags": ["western", "historical"], "object": ["living"], "features": ["mundane"]},
     {"text": "stabled", "tags": ["western", "historical"], "object": ["living"], "features": ["mundane", "stows"]},
-    {"text": "tucked away", "tags": ["fairy tale", "fantasy"], "features": ["stows", "mundane"], "object": ["!living"]},
+    {"text": "tucked away", "tags": ["fairy tale"], "features": ["stows", "mundane"], "object": ["!living"]},
     {"text": "laid by", "tags": ["western", "historical"], "features": ["stows", "mundane"], "object": ["!living"]},
     {"text": "pledged", "tags": ["western", "historical"], "features": ["trades"], "object": ["valuable"]},
-    {"text": "gifted", "tags": ["fairy tale", "fantasy"], "features": ["trades"]}
+    {"text": "gifted", "tags": ["fairy tale"], "features": ["trades"]}
   ]
 }

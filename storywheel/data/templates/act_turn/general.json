@@ -17,7 +17,7 @@
     },
     {
       "text": "{first} followed a strange path to {landmark}, carrying {THING:portable}.",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

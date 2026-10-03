@@ -1,0 +1,119 @@
+{
+ "_note": "Past-tense verbs for epic fantasy that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "besieged",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  "fled",
+  {
+   "text": "marched on",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "rode to",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "burned down",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "warded",
+   "subject": [
+    "magic"
+   ]
+  },
+  {
+   "text": "raided",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "scouted",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "patrolled",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked the walls of",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "guarded",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "held",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  "abandoned",
+  {
+   "text": "entered by night",
+   "object": [
+    "built"
+   ]
+  }
+ ]
+}

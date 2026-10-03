@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "twist",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "The {rival} had been {first}'s oldest friend, bound by {VALUE}.",
+  "{the_thing:magic} was no weapon: it opened {landmark:built}.",
+  "{the_someone:human,!plural} was the last heir, and {ACT_PERSON} {first} {MANNER}.",
+  "The curse was {first}'s own: {first} {ACT_THING} {THING} {MANNER} long ago.",
+  "{the_message:physical} was written by {CLOSE:human}, who wanted {first} far from {place}.",
+  "The magic had always cost {LOSS}, and {first} had paid it {MANNER}.",
+  "{DISASTER:manmade|magic} was the {rival}'s doing, meant to hide {the_thing}.",
+  "{the_thing:!living} was a decoy: the {rival} had {ACT_THING:stows} the real one {HIDING}.",
+  "{first} was the lost heir, and {the_someone:human} knew it all along.",
+  "The Order had sworn to guard {the_thing:!living}, not to use it: {first} used it {MANNER} anyway.",
+  "{the_someone:human,!plural} had died long ago, and {SOMEONE:magic,!plural} wore the face for the {rival}.",
+  "The dead king's heir was {CLOSE:human}, and the {rival} had known it {MANNER}."
+ ]
+}

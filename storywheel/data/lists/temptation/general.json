@@ -18,10 +18,10 @@
     {"text": "a card game", "tags": ["western", "historical"]},
     {"text": "a fast horse", "tags": ["western", "historical"]},
     {"text": "a loaded die", "tags": ["western", "historical"]},
-    {"text": "a riddle", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a wish", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a shiny thing", "tags": ["fairy tale", "fantasy"]},
-    {"text": "an open gate", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a strange path", "tags": ["fairy tale", "fantasy"]}
+    {"text": "a riddle", "tags": ["fairy tale"]},
+    {"text": "a wish", "tags": ["fairy tale"]},
+    {"text": "a shiny thing", "tags": ["fairy tale"]},
+    {"text": "an open gate", "tags": ["fairy tale"]},
+    {"text": "a strange path", "tags": ["fairy tale"]}
   ]
 }

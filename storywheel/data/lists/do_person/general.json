@@ -31,9 +31,9 @@
     {"text": "vouch for", "tags": ["western", "historical"], "subject": ["human"], "object": ["human"]},
     {"text": "bail out", "tags": ["western", "historical"], "subject": ["human"], "object": ["human"]},
     {"text": "face down", "tags": ["western", "historical"], "subject": ["human"], "object": ["threatening|human"]},
-    {"text": "befriend", "tags": ["fairy tale", "fantasy"], "object": ["!threatening"]},
-    {"text": "spare", "tags": ["fairy tale", "fantasy"], "subject": ["threatening|authority|magic"]},
-    {"text": "break the spell on", "tags": ["fairy tale", "fantasy"]},
-    {"text": "serve", "tags": ["fairy tale", "fantasy"], "subject": ["human"], "object": ["authority|magic|threatening"]}
+    {"text": "befriend", "tags": ["fairy tale"], "object": ["!threatening"]},
+    {"text": "spare", "tags": ["fairy tale"], "subject": ["threatening|authority|magic"]},
+    {"text": "break the spell on", "tags": ["fairy tale"]},
+    {"text": "serve", "tags": ["fairy tale"], "subject": ["human"], "object": ["authority|magic|threatening"]}
   ]
 }

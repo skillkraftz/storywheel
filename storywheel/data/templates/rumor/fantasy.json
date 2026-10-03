@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "rumor",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{THING:magic} {lies|lie} sealed beneath {landmark:diggable}",
+  "{DISASTER:magic|manmade} {was} summoned by the {rival}",
+  "{SOMEONE:magic,!plural} once {ACT_PLACE} {landmark} {MANNER}",
+  "{THING:valuable} {lies|lie} {HIDING}, lost with the last king",
+  "{landmark:built} {was} raised to hold {THING:magic}",
+  "the {rival} sold {place} to {SOMEONE:threatening}",
+  "{SOMEONE:human,!plural} is hiding from the {rival} at {landmark}",
+  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} before the war"
+ ]
+}

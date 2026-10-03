@@ -28,12 +28,12 @@
     {"text": "rode out of", "tags": ["western", "historical"], "subject": ["human"]},
     {"text": "shot up", "tags": ["western", "historical"], "subject": ["human"], "object": ["built"]},
     {"text": "held up", "tags": ["western", "historical"], "subject": ["human"], "object": ["built", "indoor"]},
-    {"text": "wandered into", "tags": ["fairy tale", "fantasy"], "object": ["natural"]},
-    {"text": "crossed", "tags": ["fairy tale", "fantasy"], "object": ["outdoor"]},
-    {"text": "entered", "tags": ["fairy tale", "fantasy"], "object": ["built"]},
-    {"text": "followed the path to", "tags": ["fairy tale", "fantasy"]},
-    {"text": "dreamed of", "tags": ["fairy tale", "fantasy"]},
-    {"text": "sang at", "tags": ["fairy tale", "fantasy"]},
+    {"text": "wandered into", "tags": ["fairy tale"], "object": ["natural"]},
+    {"text": "crossed", "tags": ["fairy tale"], "object": ["outdoor"]},
+    {"text": "entered", "tags": ["fairy tale"], "object": ["built"]},
+    {"text": "followed the path to", "tags": ["fairy tale"]},
+    {"text": "dreamed of", "tags": ["fairy tale"]},
+    {"text": "sang at", "tags": ["fairy tale"]},
     {"text": "walked past", "features": ["mundane"]},
     {"text": "swept", "object": ["indoor"], "features": ["mundane"]}
   ]

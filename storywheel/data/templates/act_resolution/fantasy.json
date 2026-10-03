@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_resolution",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "In the end, {first} had {PRIZE:!inner} but kept {VALUE}.",
+  "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
+  "{first} learned {need}, and {place} forgot {TOPIC}.",
+  "The songs of {place} named {first}, and {first} paid {LOSS} in silence.",
+  "The {rival} was gone, and {first} {HABIT_PLACE} {landmark} every {season}.",
+  "{first} kept {the_thing:!living} {HIDING} and never spoke of {TOPIC}.",
+  "{place} lit a beacon at {landmark} {MANNER} for {first}."
+ ]
+}

@@ -1,0 +1,103 @@
+{
+ "_note": "Base-form verbs for epic fantasy that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "swear fealty to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  "free",
+  "defy",
+  {
+   "text": "avenge",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "betray",
+  "follow",
+  {
+   "text": "slay",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "threatening|human"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "anoint",
+   "subject": [
+    "authority"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "grieve for",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "let go of",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "believe in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "fantasy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "walks the walls of",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  "lights a beacon at",
+  "guards",
+  "returns to",
+  {
+   "text": "prays at",
+   "object": [
+    "built"
+   ]
+  },
+  "tends the ward at",
+  "keeps watch over",
+  "mourns at"
+ ]
+}

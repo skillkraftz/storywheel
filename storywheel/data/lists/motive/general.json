@@ -24,13 +24,13 @@
     "kindness",
     "pity",
     {"text": "honor", "tags": ["western", "historical"]},
-    {"text": "enchantment", "tags": ["fairy tale", "fantasy"]},
+    {"text": "enchantment", "tags": ["fairy tale"]},
     {"text": "a grudge", "tags": ["western", "historical"]},
     {"text": "hard pride", "tags": ["western", "historical"]},
     {"text": "hunger", "tags": ["western", "historical"]},
     {"text": "bitterness", "tags": ["western", "historical"]},
-    {"text": "mischief", "tags": ["fairy tale", "fantasy"]},
-    {"text": "wonder", "tags": ["fairy tale", "fantasy"]},
-    {"text": "devotion", "tags": ["fairy tale", "fantasy"]}
+    {"text": "mischief", "tags": ["fairy tale"]},
+    {"text": "wonder", "tags": ["fairy tale"]},
+    {"text": "devotion", "tags": ["fairy tale"]}
   ]
 }

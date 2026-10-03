@@ -13,7 +13,7 @@
     "trust",
     "a kept word",
     "kindness",
-    {"text": "a sworn oath", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a sworn oath", "tags": ["fairy tale"]},
     "a clean slate",
     "mercy",
     "patience",
@@ -22,7 +22,7 @@
     "independence",
     "humility",
     "a sense of humor",
-    {"text": "a kept bargain", "tags": ["fairy tale", "fantasy"]},
+    {"text": "a kept bargain", "tags": ["fairy tale"]},
     "forgiveness",
     "gratitude",
     "fairness",
@@ -32,8 +32,8 @@
     {"text": "grit", "tags": ["western", "historical"]},
     {"text": "fair play", "tags": ["western", "historical"]},
     {"text": "neighborliness", "tags": ["western", "historical"]},
-    {"text": "wonder", "tags": ["fairy tale", "fantasy"]},
-    {"text": "a gentle heart", "tags": ["fairy tale", "fantasy"]},
-    {"text": "good faith", "tags": ["fairy tale", "fantasy"]}
+    {"text": "wonder", "tags": ["fairy tale"]},
+    {"text": "a gentle heart", "tags": ["fairy tale"]},
+    {"text": "good faith", "tags": ["fairy tale"]}
   ]
 }

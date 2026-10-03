@@ -24,14 +24,14 @@
     {"text": "teaches", "subject": ["human"], "object": ["human"]},
     {"text": "plays cards with", "tags": ["western", "historical"], "subject": ["human"], "object": ["human"]},
     {"text": "rides out to meet", "tags": ["western", "historical"], "subject": ["human"]},
-    {"text": "leaves bread for", "tags": ["fairy tale", "fantasy"]},
-    {"text": "greets", "tags": ["fairy tale", "fantasy"]},
-    {"text": "bows to", "tags": ["fairy tale", "fantasy"], "object": ["authority|magic|threatening"]},
+    {"text": "leaves bread for", "tags": ["fairy tale"]},
+    {"text": "greets", "tags": ["fairy tale"]},
+    {"text": "bows to", "tags": ["fairy tale"], "object": ["authority|magic|threatening"]},
     {"text": "shares whiskey with", "tags": ["western", "historical"], "subject": ["human"], "object": ["human", "!threatening"]},
     {"text": "tips a hat to", "tags": ["western", "historical"], "subject": ["human"], "object": ["human"]},
     {"text": "shoes a horse for", "tags": ["western", "historical"], "subject": ["human"], "object": ["human"]},
-    {"text": "lights a candle for", "tags": ["fairy tale", "fantasy"]},
-    {"text": "shares bread with", "tags": ["fairy tale", "fantasy"], "subject": ["human"], "object": ["!threatening"]}
+    {"text": "lights a candle for", "tags": ["fairy tale"]},
+    {"text": "shares bread with", "tags": ["fairy tale"], "subject": ["human"], "object": ["!threatening"]}
   ],
   "subject": ["!plural"]
 }

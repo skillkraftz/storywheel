@@ -40,16 +40,16 @@
     {"text": "unhurried", "tags": ["western", "historical"]},
     {"text": "tight-lipped", "tags": ["western", "historical"]},
     {"text": "sure-handed", "tags": ["western", "historical"]},
-    {"text": "wide-eyed", "tags": ["fairy tale", "fantasy"]},
-    {"text": "wistful", "tags": ["fairy tale", "fantasy"]},
-    {"text": "bashful", "tags": ["fairy tale", "fantasy"]},
-    {"text": "wily", "tags": ["fairy tale", "fantasy"]},
-    {"text": "trusting", "tags": ["fairy tale", "fantasy"]},
-    {"text": "mischievous", "tags": ["fairy tale", "fantasy"]},
-    {"text": "kindly", "tags": ["fairy tale", "fantasy"]},
-    {"text": "spry", "tags": ["fairy tale", "fantasy"]},
-    {"text": "dutiful", "tags": ["fairy tale", "fantasy"]},
-    {"text": "tongue-tied", "tags": ["fairy tale", "fantasy"]},
-    {"text": "plain-spoken", "tags": ["fairy tale", "fantasy"]}
+    {"text": "wide-eyed", "tags": ["fairy tale"]},
+    {"text": "wistful", "tags": ["fairy tale"]},
+    {"text": "bashful", "tags": ["fairy tale"]},
+    {"text": "wily", "tags": ["fairy tale"]},
+    {"text": "trusting", "tags": ["fairy tale"]},
+    {"text": "mischievous", "tags": ["fairy tale"]},
+    {"text": "kindly", "tags": ["fairy tale"]},
+    {"text": "spry", "tags": ["fairy tale"]},
+    {"text": "dutiful", "tags": ["fairy tale"]},
+    {"text": "tongue-tied", "tags": ["fairy tale"]},
+    {"text": "plain-spoken", "tags": ["fairy tale"]}
   ]
 }

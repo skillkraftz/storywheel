@@ -1,7 +1,7 @@
 {
   "_note": "Who stands in the protagonist's way. Phrased to follow 'the': 'the baron'.",
   "slot": "rival",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "wicked stepmother", "features": ["human", "threatening"]},
     {"text": "baron", "features": ["human", "authority"]},

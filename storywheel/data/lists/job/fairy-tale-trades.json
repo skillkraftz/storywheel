@@ -1,7 +1,7 @@
 {
   "_note": "Village and castle work from the old tales. A few come from Kazemi's corpora (humans/obsolete-occupations.json, CC0): charcoal burner, town crier, chapman, lamplighter, water carrier, whipping boy, cup-bearer, plague doctor, ragpicker.",
   "slot": "job",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     "woodcutter",
     "miller",

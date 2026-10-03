@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for epic fantasy that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "decoded",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "intercepted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "carried",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "read aloud",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered"
+ ]
+}

@@ -32,11 +32,11 @@
     },
     {
       "text": "asked the crows to {DO_PERSON:!inner} {SOMEONE}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "set out for {landmark} with {THING:portable}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

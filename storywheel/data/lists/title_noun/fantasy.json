@@ -1,0 +1,113 @@
+{
+ "_note": "Title nouns for epic fantasy. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "crown",
+  "oath",
+  "blade",
+  "throne",
+  "spire",
+  "rune",
+  "ember",
+  "ward",
+  "banner",
+  "gate",
+  "tide",
+  "vow",
+  "helm",
+  "shield",
+  "siege",
+  "pyre",
+  "relic",
+  "saga",
+  "torch",
+  "war",
+  {
+   "text": "dragon",
+   "kind": "creature"
+  },
+  {
+   "text": "wolf",
+   "kind": "creature"
+  },
+  {
+   "text": "raven",
+   "kind": "creature"
+  },
+  {
+   "text": "griffin",
+   "kind": "creature"
+  },
+  {
+   "text": "sorcerer",
+   "kind": "person"
+  },
+  {
+   "text": "queen",
+   "kind": "person"
+  },
+  {
+   "text": "knight",
+   "kind": "person"
+  },
+  {
+   "text": "exile",
+   "kind": "person"
+  },
+  {
+   "text": "oracle",
+   "kind": "person"
+  },
+  {
+   "text": "king",
+   "kind": "person"
+  },
+  {
+   "text": "citadel",
+   "kind": "place"
+  },
+  {
+   "text": "marches",
+   "kind": "place"
+  },
+  {
+   "text": "barrow",
+   "kind": "place"
+  },
+  {
+   "text": "wastes",
+   "kind": "place"
+  },
+  {
+   "text": "fortress",
+   "kind": "place"
+  },
+  {
+   "text": "prophecy",
+   "kind": "idea"
+  },
+  {
+   "text": "curse",
+   "kind": "idea"
+  },
+  {
+   "text": "betrayal",
+   "kind": "idea"
+  },
+  {
+   "text": "vengeance",
+   "kind": "idea"
+  },
+  {
+   "text": "reckoning",
+   "kind": "idea"
+  },
+  {
+   "text": "legacy",
+   "kind": "idea"
+  }
+ ]
+}

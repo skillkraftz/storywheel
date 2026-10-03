@@ -1,7 +1,7 @@
 {
   "_note": "Folk out of an old tale. A few creatures (troll, hag, selkie, pixie, ogre, goblin, brownie, nymph, dryad) were suggested by Kazemi's corpora mythology/monsters.json (CC0).",
   "slot": "someone",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "a wandering minstrel", "features": ["human"]},
     {"text": "a ribbon witch", "features": ["human", "magic"]},

@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_turn",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{first} swore an oath to {SOMEONE:human,!plural} and rode for {landmark} {MANNER}.",
+  "{first} paid {LOSS} to wake the old magic in {THING:magic}.",
+  "{first} left {place} {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} gathered {CLOSE:human} at {landmark} and swore to {DO_PERSON} {SOMEONE:human,!plural}.",
+  "{first} {ACT_THING:stows} {THING:!living} {HIDING} and took the northern road.",
+  "{first} broke an old oath to {DO_PERSON:!inner} {CLOSE:human}.",
+  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and could not turn back."
+ ]
+}

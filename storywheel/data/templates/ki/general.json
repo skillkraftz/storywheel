@@ -17,7 +17,7 @@
     },
     {
       "text": "In {place}, {first} {ACT_THING:mundane} {THING} by the hearth {MANNER}, as the {season} began.",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

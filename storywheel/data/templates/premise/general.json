@@ -25,11 +25,11 @@
     },
     {
       "text": "To save {place} from {DISASTER:strikes}, a {trait} {job} named {first} must carry {THING:portable} {DEADLINE}.",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "{SOMEONE:magic,!plural} offers {first}, a {trait} {job}, {PRIZE:!inner} in exchange for {THING}.",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

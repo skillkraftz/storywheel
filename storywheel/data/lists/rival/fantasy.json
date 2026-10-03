@@ -1,0 +1,140 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "archmage",
+   "features": [
+    "human",
+    "magic",
+    "authority"
+   ]
+  },
+  {
+   "text": "high priest",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "warlord",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "usurper",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "witch-queen",
+   "features": [
+    "human",
+    "magic",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "knight-commander",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "king's chancellor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "guildmaster of thieves",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "spymaster",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "pretender",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "inquisitor",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "dragon-lord",
+   "features": [
+    "human",
+    "magic",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "regent",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "necromancer",
+   "features": [
+    "human",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "betrayer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "rival house's heir",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "bandit king",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "warden of the north",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

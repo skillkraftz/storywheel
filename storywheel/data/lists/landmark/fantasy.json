@@ -1,0 +1,331 @@
+{
+ "_note": "Ruins, strongholds and wild places in an old, war-scarred realm.",
+ "slot": "landmark",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "the ruined watchtower",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the throne room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sundered bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the obsidian gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the old battlefield",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the temple of the sun",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the royal library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the wizard's tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dragon's barrow",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the shattered citadel",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the high cathedral",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the northern wall",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the war council tent",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the black fortress",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the crypt of kings",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the standing stones",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the haunted marsh",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the forgotten road",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the frozen pass",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ancient oak",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the war-forge",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the guild hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the border fort",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sunken temple",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the field of banners",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the hermit's tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the beacon hill",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the burned abbey",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the mage college",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sea cliffs",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the dragonbone arch",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cursed well",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the smugglers' cove",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the high king's grave",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the great hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the siege camp",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the mountain monastery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the old wardstone",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the river ferry",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ash plains",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the abandoned mine",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the sword garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the armory",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dungeon stairs",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the forest shrine",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  }
+ ]
+}

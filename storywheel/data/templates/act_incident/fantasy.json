@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_incident",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{SOMEONE:!plural} came to {place} {MANNER} bearing {THING}, and asked for {first}.",
+  "{DISASTER:strikes} fell on {place}, and the {rival} named {first} the cause.",
+  "{first} found {THING:!living,!bulky} {HIDING}, bound with an old ward.",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, summoning {first} to {landmark}.",
+  "The ward over {landmark} failed, and {SOMEONE} crawled out {MANNER}.",
+  "{SOMEONE:authority} offered {first} {PRIZE:!inner} to {DO_THING} {THING}.",
+  "The {rival} called {place} to war {DEADLINE}, and {first} was named in the muster."
+ ]
+}

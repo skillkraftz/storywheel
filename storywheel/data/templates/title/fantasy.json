@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "Oath of the {TITLE_ADJ} {TITLE_NOUN}",
+  "Last {TITLE_NOUN} of {place}",
+  "{TITLE_ADJ} {title_nouns} of {place}",
+  "The {TITLE_NOUN} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "The Fall of {place} and the {TITLE_NOUN}",
+  "Blood and {TITLE_NOUN} in {place}",
+  "{first}'s {TITLE_ADJ} {TITLE_NOUN}"
+ ]
+}

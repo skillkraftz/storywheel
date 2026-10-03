@@ -12,8 +12,9 @@ from storywheel.sample import build_story
 from storywheel.engine import Engine
 
 FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing", "someone", "disaster"]
-GENRES = ["comedy"]
+GENRES = ["comedy", "fantasy"]
 BLENDS = [["comedy", "fairy tale"]]
+GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",
               "rival", "landmark", "job", "title_adj", "title_noun", "era"]
@@ -58,7 +59,7 @@ def genre_atoms(lib, slot, tag):
 @pytest.mark.parametrize("genre", GENRES)
 def test_the_genre_has_a_profile_and_its_modern_share_is_chosen_not_defaulted(lib, genre):
     profile = lib.profiles[genre]
-    assert profile[genre] >= 3 and profile["general"] == 0.3 and "modern" in profile
+    assert profile[genre] >= 3 and profile["general"] == GENERAL.get(genre, 0.3) and "modern" in profile
 
 
 @pytest.mark.parametrize("genre", GENRES)
@@ -137,3 +138,24 @@ def test_blends_read_like_both_and_do_not_repeat(genres):
     for g in genres:
         own = sum(1 for slot, _l, tags, _t in trace if slot in FLAVORED_SLOTS and g in tags)
         assert own / sum(1 for t in trace if t[0] in FLAVORED_SLOTS) >= 0.2, g
+
+
+def test_fantasy_and_fairy_tale_are_different_worlds(lib):
+    """Fantasy is epic and high (orders, ruins, old wars, magic with a cost); fairy tale is woodcutters and talking foxes. No list is shared."""
+    for wl in lib.lists.values():
+        assert not ({"fantasy", "fairy tale"} <= set(wl.tags)), wl.id
+    both = [(wl.id, e.text) for wl in lib.lists.values() for e in wl.entries if {"fantasy", "fairy tale"} <= set(e.tags)]
+    assert len(both) <= 5, both                                           # a few things really are both (a castle ruin, a cursed mirror)
+    for mine, other in (("fantasy", "fairy tale"), ("fairy tale", "fantasy")):
+        _, flavor, trace = run([mine], stories=100)
+        picks = [t for t in trace if t[0] in FLAVORED_SLOTS]
+        theirs = sum(1 for t in picks if other in t[2] and mine not in t[2])
+        assert theirs / len(picks) < 0.08, (mine, other, theirs / len(picks))
+    seen, flavor, _ = shares(["fairy tale"])
+    assert "fantasy" not in flavor and "medieval" in flavor
+
+
+def test_fantasy_uses_no_modern_names_or_jobs_beyond_the_floor():
+    _, flavor, trace = run(["fantasy"], stories=150)
+    names = [t for t in trace if t[0] in ("first_name", "last_name", "job")]
+    assert sum(1 for t in names if "modern" in t[2]) / len(names) < 0.02

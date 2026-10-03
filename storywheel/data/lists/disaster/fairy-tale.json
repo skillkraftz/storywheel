@@ -1,7 +1,7 @@
 {
   "_note": "Trouble that can hit a village in an old tale.",
   "slot": "disaster",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "a plague of rats", "features": ["natural", "strikes"]},
     {"text": "an endless winter", "features": ["natural", "strikes"]},

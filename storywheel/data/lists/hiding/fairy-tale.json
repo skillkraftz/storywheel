@@ -1,7 +1,7 @@
 {
   "_note": "Where something is hidden.",
   "slot": "hiding",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "in an oak hollow", "subject": ["!living"]},
     {"text": "down the well", "subject": ["!living"]},

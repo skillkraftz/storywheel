@@ -1,0 +1,357 @@
+{
+ "_note": "Relics, weapons and burdens in an old world where magic has a cost.",
+ "slot": "thing",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "a sword with a name",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a staff of bone",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a crown of thorns",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a rune-stone",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a grimoire bound in leather",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "paper"
+   ]
+  },
+  {
+   "text": "a vial of dragon's blood",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a map of the war",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "the seal of the order",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "an oath-ring",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a bell for the dead",
+   "features": [
+    "portable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a broken crown's shard",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a lantern of true sight",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a sealed scroll",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a lost house's banner",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hand-forged key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a battle horn",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a purse of silver crowns",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a dragon's tooth",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a cursed amulet",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "an old-tongue grimoire",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "paper"
+   ]
+  },
+  {
+   "text": "a knight's gauntlet",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a warhorse",
+   "features": [
+    "living",
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a blade of cold iron",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a first-sword fragment",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a king's signet",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a hound of old breed",
+   "features": [
+    "living"
+   ]
+  },
+  {
+   "text": "a ringed-leg hawk",
+   "features": [
+    "portable",
+    "living"
+   ]
+  },
+  {
+   "text": "a wizard's ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "magic"
+   ]
+  },
+  {
+   "text": "a chest of tribute",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a prophecy in verse",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "magic"
+   ]
+  },
+  {
+   "text": "a standard of the legion",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a star-metal dagger",
+   "features": [
+    "portable",
+    "buryable",
+    "magic",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bottle of forgotten memories",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a barrel of black powder",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a map of the underways",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a coronation cloak",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ward-chain of iron",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a priest's censer",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cracked-boss shield",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a war-chest of gold",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a hag-stone",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a mirror of the dead",
+   "features": [
+    "portable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a flask of holy oil",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rusted helm",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a throne-room tapestry",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  }
+ ]
+}

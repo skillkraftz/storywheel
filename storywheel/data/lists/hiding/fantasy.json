@@ -1,0 +1,95 @@
+{
+ "_note": "Where something is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "in a sealed crypt",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "behind the altar stone",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow tree trunk",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "beneath the throne",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a hidden vault",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a reliquary",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a false-bottomed chest",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under a loose flagstone",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "among the restricted books",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in a forgotten tunnel",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "inside a hollow statue",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a dead man's saddlebag",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

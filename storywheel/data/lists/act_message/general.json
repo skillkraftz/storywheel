@@ -24,8 +24,8 @@
     {"text": "wired back", "tags": ["western", "historical"]},
     {"text": "nailed up", "tags": ["western", "historical"], "object": ["physical"]},
     {"text": "rode off with", "tags": ["western", "historical"], "subject": ["human"], "object": ["physical"]},
-    {"text": "whispered", "tags": ["fairy tale", "fantasy"]},
-    {"text": "sang", "tags": ["fairy tale", "fantasy"]},
-    {"text": "sealed", "tags": ["fairy tale", "fantasy"], "object": ["physical"]}
+    {"text": "whispered", "tags": ["fairy tale"]},
+    {"text": "sang", "tags": ["fairy tale"]},
+    {"text": "sealed", "tags": ["fairy tale"], "object": ["physical"]}
   ]
 }

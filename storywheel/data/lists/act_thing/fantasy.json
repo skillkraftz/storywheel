@@ -1,0 +1,164 @@
+{
+ "_note": "Past-tense verbs for epic fantasy that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "forged",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "reforged",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "wielded",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "shattered",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "carried into battle",
+   "object": [
+    "portable"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  "sacrificed",
+  {
+   "text": "warded",
+   "subject": [
+    "magic"
+   ],
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "unsealed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "pawned",
+   "features": [
+    "trades"
+   ]
+  },
+  "stole",
+  {
+   "text": "bore",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "sealed away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "stowed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "entombed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "sharpened",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "oiled",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "repaired",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "counted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "guarded",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "bartered",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "bargained away",
+   "features": [
+    "trades"
+   ]
+  }
+ ]
+}

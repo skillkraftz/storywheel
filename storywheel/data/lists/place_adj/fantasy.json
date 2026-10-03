@@ -1,0 +1,37 @@
+{
+ "_note": "First half of a fantasy place name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "Black",
+  "Ashen",
+  "High",
+  "Iron",
+  "Grey",
+  "Fallen",
+  "Silver",
+  "Storm",
+  "Old",
+  "Frost",
+  "Ember",
+  "Shattered",
+  "Hollow",
+  "Crimson",
+  "Lost",
+  "Broken",
+  "Dread",
+  "Pale",
+  "Winter",
+  "Dawn",
+  "Raven",
+  "Wolf",
+  "Stone",
+  "Sunken",
+  "Burning",
+  "Hidden",
+  "Bitter",
+  "Thorn"
+ ]
+}

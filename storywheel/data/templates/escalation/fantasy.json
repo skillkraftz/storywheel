@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "escalation",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
+  "{CLOSE} {ACT_PERSON} {first} {MANNER}, and the muster was lost",
+  "{DISASTER:strikes} fell on {place}, and the {rival} blamed {first}",
+  "{the_someone:human} {ACT_THING} {the_thing} {MANNER}, and the old magic woke",
+  "{the_thing:magic} demanded {LOSS}, and {first} paid it",
+  "{the_message} was read at {landmark}, and the war council turned on {first}",
+  "{the_disaster:strikes} spread, and {SOMEONE:human,!plural} offered {first} a dark bargain",
+  "the {rival} offered {first} {PRIZE:!inner} to give up {the_thing}",
+  "{the_someone:human} betrayed {first} {MANNER}, and {CLOSE:human} fell",
+  "an army marched on {landmark}, led by {the_someone}",
+  "{first} used {the_thing:magic} again and paid {LOSS}",
+  "{the_message} proved a forgery, and the {rival} closed the gates of {place}"
+ ]
+}

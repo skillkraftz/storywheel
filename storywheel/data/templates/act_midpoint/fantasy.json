@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_midpoint",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{first} won a hard victory over the {rival}, then lost {LOSS}.",
+  "The truth about {TOPIC} came out: {the_someone:human} {ACT_THING} {the_thing:!living} all along.",
+  "{the_thing:magic} woke at {landmark}, and the price was {LOSS}.",
+  "{first} learned that {SOMEONE:human,!plural} was working for the {rival}, and nothing was the same.",
+  "At the war council, {first} named the traitor, and the {rival} laughed.",
+  "{first} held {landmark} against the host {MANNER} and earned {PRIZE:!inner}.",
+  "{the_message} was read at {landmark}, and the council turned on {first}."
+ ]
+}

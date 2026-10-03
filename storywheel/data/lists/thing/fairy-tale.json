@@ -1,7 +1,7 @@
 {
   "_note": "Things out of an old tale: charms, tokens, tools with a secret.",
   "slot": "thing",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     {"text": "a spindle", "features": ["portable", "buryable"]},
     {"text": "a golden thimble", "features": ["portable", "buryable", "valuable"]},

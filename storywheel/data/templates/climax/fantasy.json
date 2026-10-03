@@ -1,0 +1,20 @@
+{
+ "_note": "",
+ "slot": "climax",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{first} met the {rival} at {landmark} with {the_thing:portable} {MANNER}",
+  "{first} gave up {LOSS} to {DO_THING} {the_thing}, and {place} was saved",
+  "{first} stood before {landmark} and swore the last oath for {VALUE}",
+  "the {rival} fell at {landmark}, and {first} chose {VALUE} over {PRIZE}",
+  "{first} unleashed {the_thing:magic} at {landmark} and paid {LOSS}",
+  "{the_someone:human} forsook the {rival} and fought beside {first} at {landmark}",
+  "{first} read {the_message} to the host and named {SOMEONE:human,!plural}",
+  "{the_disaster} broke upon {landmark}, and {first} held the line {MANNER}",
+  "{first} {ACT_PERSON} the {rival} {MANNER} and took the crown of {place}",
+  "the oath was kept: {first} gave {PRIZE:material} to {CLOSE:human}",
+  "{first} {ACT_PERSON} {the_someone:human} at {landmark} and chose mercy over {VICE}"
+ ]
+}

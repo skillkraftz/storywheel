@@ -27,15 +27,15 @@
     },
     {
       "text": "{SOMEONE} came out of the wood with {THING}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "a raven brought {first} {MESSAGE:physical}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "{first} was granted {PRIZE:!inner}, but only {DEADLINE}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

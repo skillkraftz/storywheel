@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_climax",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{first} met the {rival} at {landmark} {MANNER}, and chose {VALUE}.",
+  "{first} unleashed {the_thing:magic} at {landmark} and paid {LOSS}.",
+  "{the_someone:human} forsook the {rival} and fought beside {first}.",
+  "{first} gave up {PRIZE:!inner} to save {CLOSE:human}.",
+  "The old oath was kept: {first} stood on {landmark} and faced {the_disaster}.",
+  "{first} read {the_message} to the host and named {SOMEONE:human,!plural}.",
+  "{first} walked out to meet the {rival} {MANNER}, with {the_thing:portable} and nothing else."
+ ]
+}

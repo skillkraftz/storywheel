@@ -1,0 +1,145 @@
+{
+ "_note": "Past-tense verbs for epic fantasy that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "betrayed",
+  {
+   "text": "swore fealty to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "dueled",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "bound",
+  {
+   "text": "exiled",
+   "subject": [
+    "authority"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "anointed",
+   "subject": [
+    "authority"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "spared",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "hunted",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "knighted",
+   "subject": [
+    "authority"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "cursed",
+   "subject": [
+    "magic"
+   ]
+  },
+  {
+   "text": "confessed to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "defied",
+  {
+   "text": "pledged to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "fought beside",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "scryed on",
+   "subject": [
+    "magic"
+   ]
+  },
+  {
+   "text": "pardoned",
+   "subject": [
+    "authority"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "sheltered",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "rallied",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "outwitted",
+  {
+   "text": "slew",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "threatening"
+   ]
+  }
+ ]
+}

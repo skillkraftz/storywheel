@@ -1,0 +1,64 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "fantasy"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "sharpens",
+   "object": [
+    "!living"
+   ]
+  },
+  "guards",
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "wards",
+   "subject": [
+    "magic"
+   ],
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "carries",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "tends",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hoards",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "buries again",
+   "object": [
+    "buryable"
+   ],
+   "features": [
+    "stows"
+   ]
+  }
+ ]
+}

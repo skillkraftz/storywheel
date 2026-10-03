@@ -1,0 +1,62 @@
+{
+ "_note": "Base-form verbs for epic fantasy that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "unseal",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "reforge",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "carry",
+   "object": [
+    "portable"
+   ]
+  },
+  "guard",
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  "claim",
+  {
+   "text": "break",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "ward",
+   "subject": [
+    "magic"
+   ],
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
   "_note": "Storybook villages and kingdoms: built from parts plus a few hand-picked names.",
   "slot": "place",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": ["{PLACE_STEM}{PLACE_END}", "{PLACE_STEM}{PLACE_END}", "{PLACE_STEM}{PLACE_END}", "{PLACE_STEM}{PLACE_END}", "{PLACE_STEM}{PLACE_END}", "{PLACE_STEM}{PLACE_END}", "Hollowmere", "Brindlewick", "Ashenfell", "Thistledown", "Greywater", "Lindenhall", "Mossbridge", "Eldermoor", "Wolfsbrook", "Sorrowfield", "Glasswater", "Nightingale Green", "Cobweb Hollow", "Hundred Oaks", "Starfall", "Greenhallow", "Rookery End", "Little Fennick", "Ravensbourne", "Bellweather"]
 }

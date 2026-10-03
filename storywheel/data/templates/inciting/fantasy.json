@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "inciting",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{SOMEONE:!plural} came to {place} {MANNER} bearing {THING}, and asked for {first}",
+  "{DISASTER:strikes} fell on {place}, and the {rival} named {first} the cause",
+  "{first} found {THING:!living,!bulky} {HIDING}, bound with an old ward",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, summoning {first} to {landmark}",
+  "the {rival} called {place} to war, and {first} was named to {DO_THING} {THING} {DEADLINE}",
+  "{first} woke to find {THING:magic,!living} humming {HIDING}",
+  "an old enemy, {SOMEONE:human,!plural}, rode into {place} {MANNER} with {THING}",
+  "{first} was chosen to {DO_THING} {THING} before {DISASTER:strikes} fell on {place}",
+  "the ward over {landmark} failed, and {SOMEONE} crawled out {MANNER}",
+  "{first} swore an oath to {SOMEONE:human,!plural} in exchange for {PRIZE:!inner}",
+  "{SOMEONE:authority} offered {first} {PRIZE:!inner} to {DO_THING} {THING}",
+  "the dead walked at {landmark}, and {first} alone knew where {THING} lay"
+ ]
+}

@@ -28,10 +28,10 @@
     {"text": "under a false name", "tags": ["western", "historical"]},
     {"text": "at the next stop", "tags": ["western", "historical"]},
     {"text": "at sundown", "tags": ["western", "historical"]},
-    {"text": "by moonlight", "tags": ["fairy tale", "fantasy"]},
-    {"text": "barefoot", "tags": ["fairy tale", "fantasy"]},
-    {"text": "in a borrowed cloak", "tags": ["fairy tale", "fantasy"]},
-    {"text": "at the stroke of midnight", "tags": ["fairy tale", "fantasy"]},
-    {"text": "three times over", "tags": ["fairy tale", "fantasy"]}
+    {"text": "by moonlight", "tags": ["fairy tale"]},
+    {"text": "barefoot", "tags": ["fairy tale"]},
+    {"text": "in a borrowed cloak", "tags": ["fairy tale"]},
+    {"text": "at the stroke of midnight", "tags": ["fairy tale"]},
+    {"text": "three times over", "tags": ["fairy tale"]}
   ]
 }

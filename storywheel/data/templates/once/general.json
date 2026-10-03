@@ -24,11 +24,11 @@
     },
     {
       "text": "in a cottage near {place}, {first}, a {trait} {job}, kept {THING} {HIDING}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "beyond the wood, in {place}, lived a {trait} {job} named {first}, who feared {FEELING}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

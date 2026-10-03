@@ -20,7 +20,7 @@
     },
     {
       "text": "{SOMEONE:magic} traded {THING:magic} for {PRIZE:material} at {landmark}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

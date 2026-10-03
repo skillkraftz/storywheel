@@ -1,7 +1,7 @@
 {
   "_note": "Old-world storybook first names. Half of all picks are invented by a Markov name maker.",
   "slot": "first_name",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "markov": 0.5,
   "entries": ["Aldric", "Bertrand", "Cedric", "Dietrich", "Eadric", "Fenwick", "Godwin", "Hartmut", "Ivo", "Jorin", "Konrad", "Lothar", "Matthias", "Norbert", "Osric", "Piers", "Rainer", "Tiber", "Ulric", "Wendel", "Wolfram", "Anselm", "Benedikt", "Corwin", "Emeric", "Tam", "Jack", "Peter", "Jorund", "Ansgar", "Adelheid", "Brigitta", "Clothilde", "Dorothea", "Elsbeth", "Freya", "Greta", "Hedwig", "Ilse", "Johanna", "Katrin", "Liesl", "Maren", "Neve", "Odile", "Petronella", "Rosamund", "Sibylla", "Thea", "Ursula", "Vesna", "Wilhelmina", "Yrsa", "Aurelia", "Beatrix", "Cordelia", "Delphine", "Eglantine", "Fiora", "Gisela", "Heloise", "Isolde", "Juniper", "Linnea", "Marguerite", "Philippa", "Tamsin", "Verity", "Wren"]
 }

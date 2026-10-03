@@ -32,15 +32,15 @@
     {"text": "a fast horse", "tags": ["western", "historical"], "features": ["material"]},
     {"text": "passage out West", "tags": ["western", "historical"], "features": ["material"]},
     {"text": "a water right", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a small kingdom", "tags": ["fairy tale", "fantasy"], "features": ["material", "social"]},
-    {"text": "a wish granted", "tags": ["fairy tale", "fantasy"], "features": ["social"]},
-    {"text": "a place at court", "tags": ["fairy tale", "fantasy"], "features": ["social"]},
-    {"text": "a broken curse", "tags": ["fairy tale", "fantasy"], "features": ["social"]},
-    {"text": "a true name", "tags": ["fairy tale", "fantasy"], "features": ["social"]},
-    {"text": "a home in the wood", "tags": ["fairy tale", "fantasy"], "features": ["material"]},
-    {"text": "three wishes", "tags": ["fairy tale", "fantasy"], "features": ["material"]},
-    {"text": "a dragon's hoard", "tags": ["fairy tale", "fantasy"], "features": ["material"]},
-    {"text": "bread for winter", "tags": ["fairy tale", "fantasy"], "features": ["material"]},
-    {"text": "a royal pardon", "tags": ["fairy tale", "fantasy"], "features": ["social"]}
+    {"text": "a small kingdom", "tags": ["fairy tale"], "features": ["material", "social"]},
+    {"text": "a wish granted", "tags": ["fairy tale"], "features": ["social"]},
+    {"text": "a place at court", "tags": ["fairy tale"], "features": ["social"]},
+    {"text": "a broken curse", "tags": ["fairy tale"], "features": ["social"]},
+    {"text": "a true name", "tags": ["fairy tale"], "features": ["social"]},
+    {"text": "a home in the wood", "tags": ["fairy tale"], "features": ["material"]},
+    {"text": "three wishes", "tags": ["fairy tale"], "features": ["material"]},
+    {"text": "a dragon's hoard", "tags": ["fairy tale"], "features": ["material"]},
+    {"text": "bread for winter", "tags": ["fairy tale"], "features": ["material"]},
+    {"text": "a royal pardon", "tags": ["fairy tale"], "features": ["social"]}
   ]
 }

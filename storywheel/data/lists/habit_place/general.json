@@ -20,11 +20,11 @@
     {"text": "opens up", "object": ["built", "indoor"]},
     {"text": "rides past", "tags": ["western", "historical"], "subject": ["human"]},
     {"text": "sits on the porch of", "tags": ["western", "historical"], "object": ["built", "indoor"]},
-    {"text": "lights a candle at", "tags": ["fairy tale", "fantasy"], "object": ["built"]},
-    {"text": "blesses", "tags": ["fairy tale", "fantasy"], "subject": ["magic"]},
+    {"text": "lights a candle at", "tags": ["fairy tale"], "object": ["built"]},
+    {"text": "blesses", "tags": ["fairy tale"], "subject": ["magic"]},
     {"text": "tips a hat at", "tags": ["western", "historical"]},
-    {"text": "leaves flowers at", "tags": ["fairy tale", "fantasy"], "object": ["outdoor"]},
-    {"text": "whistles past", "tags": ["fairy tale", "fantasy"]}
+    {"text": "leaves flowers at", "tags": ["fairy tale"], "object": ["outdoor"]},
+    {"text": "whistles past", "tags": ["fairy tale"]}
   ],
   "subject": ["!plural"]
 }

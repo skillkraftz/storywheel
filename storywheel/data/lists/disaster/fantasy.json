@@ -1,0 +1,220 @@
+{
+ "_note": "Troubles that fall on a realm. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "a dragon attack",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a plague of shadow",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a goblin raid",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a siege",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a magical blight",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an undead uprising",
+   "features": [
+    "magic",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failing ward",
+   "features": [
+    "magic"
+   ]
+  },
+  {
+   "text": "a blood moon",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a poisoned river",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a mage war",
+   "features": [
+    "magic",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a long winter",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a famine",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a war between houses",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sundering earthquake",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rift in the sky",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a curse on the harvest",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a traitor in the council",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a night of wolves",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fire in the wood",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an invasion from the north",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a storm of ash",
+   "features": [
+    "natural",
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a pretender's rebellion",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a plague of crows",
+   "features": [
+    "natural",
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a wave of madness",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "the return of the dead",
+   "features": [
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a broken treaty",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a coup in the keep",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a sea of fog",
+   "features": [
+    "natural",
+    "magic",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a dying king",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a slave revolt",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}

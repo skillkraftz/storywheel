@@ -1,0 +1,39 @@
+{
+ "_note": "First part of an invented fantasy place name: {PLACE_STEM}{PLACE_END}.",
+ "slot": "place_stem",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "Kor",
+  "Eld",
+  "Thal",
+  "Vael",
+  "Dun",
+  "Mor",
+  "Aur",
+  "Syl",
+  "Brae",
+  "Cael",
+  "Drav",
+  "Esk",
+  "Fal",
+  "Gwyn",
+  "Hal",
+  "Isk",
+  "Jor",
+  "Kar",
+  "Lor",
+  "Myr",
+  "Nor",
+  "Orm",
+  "Pyr",
+  "Rhun",
+  "Tol",
+  "Ulm",
+  "Vel",
+  "Wyn",
+  "Yar",
+  "Zan"
+ ]
+}

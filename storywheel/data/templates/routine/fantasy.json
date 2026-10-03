@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "routine",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "walked the walls of {landmark} {MANNER}, watching for {DISASTER}",
+  "{ACT_THING:mundane} {THING} and swore again to {DO_PERSON} {CLOSE:human}",
+  "trained {MANNER} at {landmark} and dreamed of {PRIZE:!inner}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER}, and kept faith with {VALUE}",
+  "polished {THING:!living} {MANNER} and told no one about {FEELING}",
+  "prayed at {landmark} for {VALUE} and cursed {VICE}",
+  "read the old maps {MANNER} and avoided the {rival}",
+  "{ACT_PLACE:mundane} {landmark} {MANNER}, as the old oath demanded",
+  "tended the ward at {landmark}, and feared {DISASTER}",
+  "kept watch at {landmark} {MANNER} and spoke of {TOPIC} to no one",
+  "{ACT_THING:mundane} {THING} {MANNER} and listened for the war-horns"
+ ]
+}

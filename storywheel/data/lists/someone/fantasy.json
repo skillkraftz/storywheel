@@ -1,0 +1,277 @@
+{
+ "_note": "People and creatures of an old, hard world.",
+ "slot": "someone",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  {
+   "text": "a disgraced knight",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an exiled prince",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a mercenary captain",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hooded seer",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a dying mage",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a wandering prophet",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a goblin envoy",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "an archmage",
+   "features": [
+    "human",
+    "magic",
+    "authority"
+   ]
+  },
+  {
+   "text": "a rogue priestess",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a half-elf scout",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a dwarf smith",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a wyrm in human form",
+   "features": [
+    "creature",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a wolf-lord",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a masked assassin",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a squire with a secret",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a banished queen",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a pale necromancer",
+   "features": [
+    "human",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "an old war hero",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a temple oracle",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a raven-speaker",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a runaway heir",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a warhorse breeder",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a grave-robber",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a bandit king",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a shapeshifter",
+   "features": [
+    "creature",
+    "magic"
+   ]
+  },
+  {
+   "text": "a battle-weary healer",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a rival house's envoy",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a lost legionnaire",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a voice in the dark",
+   "features": [
+    "creature",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a troll bridge-keeper",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a wounded griffin",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a sworn bodyguard",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a hunted witch",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "two feuding brothers",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a scarred veteran",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a star-gazing hermit",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a frost giant",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a captured spy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a charred knight",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  }
+ ]
+}

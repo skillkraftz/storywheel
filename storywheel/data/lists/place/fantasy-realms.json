@@ -1,0 +1,38 @@
+{
+ "_note": "Kingdoms, strongholds and cities, built from parts (so there are thousands) plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "fantasy"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{PLACE_STEM}{PLACE_END}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "Eldoria's End",
+  "Valdrath",
+  "Kingsmoor",
+  "Hollowreach",
+  "Dunmarrow",
+  "Stormgate",
+  "Ashenfall",
+  "Greymarch",
+  "Thornhold",
+  "Oakenhelm",
+  "Wolfsreach",
+  "Cindermere",
+  "Ravenhold",
+  "Highwatch",
+  "Winterdeep",
+  "Blackmoor"
+ ]
+}

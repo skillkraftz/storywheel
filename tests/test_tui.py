@@ -346,7 +346,7 @@ def test_the_mix_editor_lists_every_tag_with_its_weight(home):
         await press(pilot, "m")
         return [r for r in app.screen.tag_rows()]
     rows = {r[0]: r for r in run_tui(new_story(), make_engine(home), script)}
-    assert {"western", "fairy tale", "historical", "fantasy", "general", "modern"} <= set(rows)
+    assert {"western", "fairy tale", "historical", "medieval", "general", "modern"} <= set(rows)
     assert rows["western"][3] == "1.5" and rows["general"][3] == "0.3"
 
 

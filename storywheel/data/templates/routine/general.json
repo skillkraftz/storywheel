@@ -20,7 +20,7 @@
     },
     {
       "text": "walked to {landmark} and {ACT_THING:mundane} {THING}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "_note": "Title nouns for fairy tales. Each noun can carry a \"kind\" (person, creature, place, idea; no kind means object). A person or creature motif may turn up as a character; a non-object motif is not used as a thing to be found, buried or stolen.",
   "slot": "title_noun",
-  "tags": ["fairy tale", "fantasy", "medieval"],
+  "tags": ["fairy tale", "medieval"],
   "entries": [
     "spindle",
     {"text": "raven", "kind": "creature"},

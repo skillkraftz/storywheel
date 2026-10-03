@@ -53,43 +53,43 @@
     },
     {
       "text": "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The {job} and the {TITLE_NOUN}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The Three {TITLE_ADJ} {title_nouns}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "Seven {TITLE_ADJ} {title_nouns}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "{first} of the {TITLE_NOUN}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The {TITLE_ADJ} Wolf of {place}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The {TITLE_NOUN} in {landmark}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "{TITLE_ADJ} {title_nouns}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The Last {TITLE_NOUN} of {place}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     },
     {
       "text": "The Twelve {title_nouns} of {first}",
-      "tags": ["fairy tale", "fantasy"]
+      "tags": ["fairy tale"]
     }
   ]
 }
