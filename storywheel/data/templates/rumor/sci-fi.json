@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "rumor",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
+  "{DISASTER:manmade} {was} covered up by the {rival}",
+  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
+  "{landmark:built} {was} the scene of {DISASTER:manmade}",
+  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
+  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
+  "{THING:portable} {lies|lie} {HIDING} where no scan looks",
+  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+ ]
+}

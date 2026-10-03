@@ -1,0 +1,70 @@
+{
+ "_note": "Base-form verbs for sci-fi that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "rescue",
+   "object": [
+    "!threatening"
+   ]
+  },
+  "warn",
+  "track",
+  "outrun",
+  {
+   "text": "evacuate",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "brief",
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stand by",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "let go of",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

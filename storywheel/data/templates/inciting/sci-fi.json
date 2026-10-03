@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "inciting",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}",
+  "{first} found {THING:!living,!bulky} {HIDING}, and it was on no manifest",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}",
+  "{SOMEONE:!plural} came aboard {place} {MANNER} and asked for {first}",
+  "the {rival} blamed {SOMEONE:human,!plural} for {DISASTER}, and {first} knew the logs said otherwise",
+  "{first} found a door open at {landmark} {MANNER}, from the inside",
+  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it",
+  "{first} woke to find {THING:portable} moved {HIDING}",
+  "{DISASTER:manmade} came to light {MANNER}, and the {rival} wanted it buried {DEADLINE}",
+  "{first} was told to {DO_THING} {THING} {DEADLINE}, and wondered why"
+ ]
+}

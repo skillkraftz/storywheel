@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "routine",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "{ACT_THING:mundane} {THING} {MANNER} and listened for {DISASTER}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
+  "walked through {landmark} {MANNER} and logged every sound",
+  "{ACT_THING:mundane} {THING} {MANNER} and told no one about {TOPIC}",
+  "ate alone at {landmark} {MANNER} and hoped for {PRIZE:!inner}",
+  "read the manifests {MANNER} and avoided the {rival}",
+  "{ACT_PLACE:mundane} {landmark} every shift and said nothing of {TOPIC}",
+  "checked the airlocks {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "counted the oxygen {MANNER} and feared {FEELING}"
+ ]
+}

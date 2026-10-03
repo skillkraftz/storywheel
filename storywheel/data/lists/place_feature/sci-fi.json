@@ -1,0 +1,29 @@
+{
+ "_note": "Second half of a station or colony name.",
+ "slot": "place_feature",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "Haven",
+  "Landing",
+  "Station",
+  "Drift",
+  "Reach",
+  "Anchorage",
+  "Colony",
+  "Ring",
+  "Spindle",
+  "Depot",
+  "Hub",
+  "Basin",
+  "Terminus",
+  "Yards",
+  "Gate",
+  "Dock",
+  "Platform",
+  "Harbor",
+  "Array",
+  "Verge"
+ ]
+}

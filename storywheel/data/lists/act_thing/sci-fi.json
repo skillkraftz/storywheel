@@ -1,0 +1,155 @@
+{
+ "_note": "Past-tense verbs for sci-fi that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "salvaged",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hacked",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "decrypted",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "smuggled",
+   "object": [
+    "!living"
+   ]
+  },
+  "sold",
+  {
+   "text": "installed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "deleted",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "scanned",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "stowed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "ejected",
+   "object": [
+    "!living"
+   ]
+  },
+  "stole",
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "pawned",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold off",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "traded away",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "calibrated",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "inspected",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "logged",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "repaired",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "recharged",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "cleaned",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

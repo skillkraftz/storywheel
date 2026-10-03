@@ -1,0 +1,22 @@
+{
+ "_note": "",
+ "slot": "twist",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
+  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
+  "{the_message:physical} was sent by {CLOSE:human}, who wanted {first} off {landmark:built}.",
+  "{the_disaster:strikes} was no accident: it was staged {MANNER} to hide {TOPIC}.",
+  "{the_thing:!living} was a decoy, and {THING:portable} lay {HIDING}.",
+  "The alibi {the_someone:human} offered was forged, and {the_thing} was the proof.",
+  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
+  "The victim was never gone: {the_someone:human,!plural} lay in cryo at {landmark:built} all along.",
+  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
+  "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
+  "Everyone wanted a way out, but {the_someone:human} kept {the_thing:portable}.",
+  "The {rival} had planted {THING:portable} {HIDING} to frame {SOMEONE:human,!plural}.",
+  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone knew it {MANNER}."
+ ]
+}

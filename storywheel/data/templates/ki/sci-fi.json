@@ -1,0 +1,15 @@
+{
+ "_note": "",
+ "slot": "ki",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{first} was a {trait} {job} on {place}, where each {season} meant {PRIZE:!inner} for someone else.",
+  "On {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as always.",
+  "{first}, a {trait} {job}, kept {THING:!living} and feared {FEELING}.",
+  "Every {season}, {first}, a {trait} {job} of {place}, walked through {landmark} {MANNER}.",
+  "{first} kept logs on {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "On {place}, {first} {ACT_THING:mundane} {THING} {MANNER} while the crew slept."
+ ]
+}

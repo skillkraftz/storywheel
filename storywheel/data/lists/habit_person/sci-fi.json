@@ -1,0 +1,43 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "sci-fi"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "messages",
+  "checks on",
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  {
+   "text": "mentors",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "calls",
+  {
+   "text": "keeps in touch with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  }
+ ]
+}

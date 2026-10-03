@@ -1,0 +1,104 @@
+{
+ "_note": "Past-tense verbs for sci-fi that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "docked at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "boarded",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "scouted",
+   "subject": [
+    "human"
+   ]
+  },
+  "evacuated",
+  {
+   "text": "sealed off",
+   "object": [
+    "built"
+   ]
+  },
+  "fled",
+  {
+   "text": "patrolled",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "inspected",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "cleaned",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked down",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "broke into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "orbited",
+   "object": [
+    "natural"
+   ]
+  }
+ ]
+}

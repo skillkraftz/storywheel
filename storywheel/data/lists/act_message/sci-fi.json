@@ -1,0 +1,59 @@
+{
+ "_note": "Past-tense verbs for sci-fi that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "decrypted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "intercepted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "broadcast",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "deleted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "relayed",
+   "object": [
+    "physical"
+   ]
+  },
+  "ignored",
+  {
+   "text": "logged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered"
+ ]
+}

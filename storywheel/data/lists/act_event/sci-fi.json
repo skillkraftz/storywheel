@@ -1,0 +1,39 @@
+{
+ "_note": "Past-tense verbs for sci-fi that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "survived",
+  "caused",
+  "predicted",
+  "reported",
+  {
+   "text": "sabotaged",
+   "object": [
+    "manmade"
+   ]
+  },
+  "blamed",
+  {
+   "text": "outran",
+   "object": [
+    "natural"
+   ]
+  },
+  "ignored",
+  {
+   "text": "covered up",
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "investigated",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

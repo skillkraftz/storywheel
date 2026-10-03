@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} at {place}",
+  "Last {TITLE_NOUN} to {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "A {TITLE_ADJ} {TITLE_NOUN} over {place}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "{TITLE_ADJ} Signal from {place}",
+  "Beyond the {TITLE_ADJ} {TITLE_NOUN}"
+ ]
+}

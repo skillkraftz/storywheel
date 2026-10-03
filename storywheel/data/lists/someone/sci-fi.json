@@ -1,0 +1,262 @@
+{
+ "_note": "People, machines and things from outside.",
+ "slot": "someone",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "a ship's AI",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a rogue drone",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "an alien envoy",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a corporate auditor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a stowaway",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a security chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a clone of the captain",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smuggler",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a station doctor",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a mutinous engineer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a colony governor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a lost cosmonaut",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bounty hunter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hacker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a refugee child",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a cryo patient",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an android steward",
+   "features": [
+    "creature",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a ghost in the machine",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a veteran pilot",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a rival captain",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a drifting survivor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "two quarrelling twins",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a nervous courier",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a fleet commander",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a data broker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a mining foreman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a masked trader",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a silent monk",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stranded botanist",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a charming con artist",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a signal from deep space",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a quiet technician",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a deserter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a board director",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a weary medic",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an unknown passenger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a space-sick intern",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a retired admiral",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "want",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{PRIZE:!inner} {DEADLINE}",
+  "{PRIZE:!inner} for {CLOSE:human}",
+  "{THING:valuable,!living} and {PRIZE:social,!inner}",
+  "{PRIZE:material,!inner} {DEADLINE}",
+  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
+  "{PRIZE:social,!inner} and peace for {place}",
+  "{THING:valuable,!living} at {landmark}",
+  "{PRIZE:material,!inner} for {CLOSE:human}"
+ ]
+}

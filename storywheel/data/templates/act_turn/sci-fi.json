@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_turn",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
+  "{first} questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}.",
+  "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
+  "{first} kept the clue {HIDING} and took the case {MANNER}.",
+  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and went in."
+ ]
+}

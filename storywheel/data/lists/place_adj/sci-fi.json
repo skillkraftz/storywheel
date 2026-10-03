@@ -1,0 +1,32 @@
+{
+ "_note": "First half of a station or colony name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "New",
+  "Port",
+  "Outer",
+  "Low",
+  "High",
+  "Deep",
+  "Far",
+  "Cold",
+  "Red",
+  "Silent",
+  "Little",
+  "Lost",
+  "Dust",
+  "Bright",
+  "Iron",
+  "Ember",
+  "Pale",
+  "Long",
+  "Dark",
+  "Blue",
+  "Orbital",
+  "Distant",
+  "Sunward"
+ ]
+}

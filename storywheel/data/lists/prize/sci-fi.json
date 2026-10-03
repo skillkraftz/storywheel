@@ -1,0 +1,87 @@
+{
+ "_note": "What people want out there.",
+ "slot": "prize",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "a shuttle berth",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a seat on the board",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a captain's chair",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a clean record",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "enough credits",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a working reactor",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the truth about the signal",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a quiet shift",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "passage out of here",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a way home",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a ship to captain",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a patent",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a pardon",
+   "features": [
+    "social"
+   ]
+  }
+ ]
+}

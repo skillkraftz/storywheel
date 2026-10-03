@@ -1,0 +1,59 @@
+{
+ "_note": "Base-form verbs for sci-fi that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "salvage",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hack",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "decrypt",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "smuggle",
+   "object": [
+    "!living"
+   ]
+  },
+  "deliver",
+  {
+   "text": "seal",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "install",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  "recover",
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

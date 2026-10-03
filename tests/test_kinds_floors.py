@@ -203,7 +203,7 @@ def test_invented_names_are_at_least_four_letters_and_never_dictionary_words():
 # --- profiles and the psychology lists -----------------------------------------------------------------------------
 
 # how much "modern" (Faker names, cities and jobs, everyday jobs) fits each genre; 0.1 unless the genre's content says otherwise
-MODERN = {"comedy": 0.2, "fantasy": 0, "mystery": 0.2}
+MODERN = {"comedy": 0.2, "fantasy": 0, "mystery": 0.2, "sci-fi": 0.3}
 GENERAL = {"fantasy": 0.15}
 
 

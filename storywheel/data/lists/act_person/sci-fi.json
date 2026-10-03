@@ -1,0 +1,135 @@
+{
+ "_note": "Past-tense verbs for sci-fi that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "hailed",
+  {
+   "text": "interrogated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "blackmailed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "rescued",
+   "subject": [
+    "human"
+   ]
+  },
+  "abandoned",
+  {
+   "text": "recruited",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "betrayed",
+  "tracked",
+  "pursued",
+  "scanned",
+  {
+   "text": "evacuated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "stranded",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "sheltered",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "shot at",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "hired",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "briefed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "trained",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

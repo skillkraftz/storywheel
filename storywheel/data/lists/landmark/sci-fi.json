@@ -1,0 +1,307 @@
+{
+ "_note": "Places aboard ships and stations, and out on worlds.",
+ "slot": "landmark",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "the observation deck",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cargo bay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airlock",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the reactor core",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bridge",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hydroponics garden",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the docking ring",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the medbay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cryo vault",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the engine room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the maintenance crawlway",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the shuttle bay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the colony dome",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the mining shaft",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the landing pad",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the data vault",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the relay tower",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the comm array",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the zero-g gym",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the terraforming plant",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the quarantine ward",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the boardroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the customs deck",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the derelict hull",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ice field",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the crater rim",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the beacon",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the orbital elevator",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sealed lab",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the black market deck",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the maglev platform",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the server farm",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sky bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the corporate tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the vacuum dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the refugee hold",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the escape pod bay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lower decks",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ore processing floor",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the garden ring",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the observation blister",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dust plain",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "sci-fi"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "inspects",
+  "returns to",
+  {
+   "text": "walks through",
+   "subject": [
+    "human"
+   ]
+  },
+  "avoids",
+  "keeps watch over",
+  "stops at",
+  {
+   "text": "docks at",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

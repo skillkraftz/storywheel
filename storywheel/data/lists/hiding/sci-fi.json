@@ -1,0 +1,90 @@
+{
+ "_note": "Where something is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "in the cargo hold",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "behind a bulkhead panel",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the ventilation shaft",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a cryo pod",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in an airlock locker",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the deck plating",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a sealed crate",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "on a dead drive",
+   "subject": [
+    "paper"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in the engine compartment",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a maintenance locker",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a spacesuit",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

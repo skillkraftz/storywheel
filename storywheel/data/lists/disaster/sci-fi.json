@@ -1,0 +1,201 @@
+{
+ "_note": "Crises aboard and out there. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "a hull breach",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a reactor leak",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a power outage",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a quarantine",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a mutiny",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hijacking",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an AI malfunction",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a solar flare",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an oxygen shortage",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a debris storm",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a corporate takeover",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a plague aboard",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a navigation failure",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blockade",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fuel shortage",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a system blackout",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a data breach",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a meteor strike",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stranded convoy",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a cryo failure",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "an act of sabotage",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a gravity failure",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing shuttle",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a false alarm",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a hostile boarding",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a signal from nowhere",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rationing order",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a clone scandal",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a failed jump",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a leaked memo",
+   "features": [
+    "manmade"
+   ]
+  }
+ ]
+}

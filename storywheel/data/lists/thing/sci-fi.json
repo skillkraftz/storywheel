@@ -1,0 +1,314 @@
+{
+ "_note": "Gear, cargo and secrets small enough to move.",
+ "slot": "thing",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "a datapad",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cracked helmet",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sealed cargo crate",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a stolen reactor core",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a forged manifest",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a memory chip",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a tangle of cables",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "an encrypted drive",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pocket reactor",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a broken drone",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a medical scanner",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a signed contract",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "an AI core",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pressure suit",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a navigation chart",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a cryo pod",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a sample vial",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "an old locket",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a patent file",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a fuel cell",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a boarding pass",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a hacked badge",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a plasma cutter",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a seed vault",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ration crate",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a ship's log",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a holo-recorder",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a drive key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hull patch",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a survival kit",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a comms relay",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "an alien artifact",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bag of credits",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a captain's ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a coolant canister",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a star map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pair of mag boots",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a diagnostic wand",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sealed black box",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a vial of nanites",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ration card",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a radio beacon",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

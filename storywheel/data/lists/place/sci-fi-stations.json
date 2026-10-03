@@ -1,0 +1,34 @@
+{
+ "_note": "Stations, colonies and ports, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} Station",
+  "{LAST_NAME}'s Landing",
+  "{LAST_NAME} Colony",
+  "{LAST_NAME} Ring",
+  "Ceres Dock",
+  "Kepler Landing",
+  "Tycho Spindle",
+  "Europa Deep",
+  "Titan Anchorage",
+  "Ganymede Yards",
+  "Callisto Ring",
+  "Proxima Landing",
+  "Luna Gate",
+  "Vesta Spindle",
+  "New Cairo",
+  "Eridani Dock",
+  "Mars Basin",
+  "Oort Station"
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "sci-fi"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "calibrates",
+   "object": [
+    "!living"
+   ]
+  },
+  "checks",
+  "logs",
+  {
+   "text": "recharges",
+   "object": [
+    "!living"
+   ]
+  },
+  "guards",
+  {
+   "text": "backs up",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "tends",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

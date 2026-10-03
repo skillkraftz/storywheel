@@ -1,0 +1,105 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  {
+   "text": "corporate auditor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "station chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "fleet admiral",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival captain",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "board director",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "colony governor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "chief engineer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "security chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "quartermaster",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "bounty hunter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "shipping magnate",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "AI overseer",
+   "features": [
+    "creature",
+    "authority"
+   ]
+  },
+  {
+   "text": "port inspector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "mining boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

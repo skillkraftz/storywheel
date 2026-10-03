@@ -1,0 +1,92 @@
+{
+ "_note": "Title nouns for sci-fi. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "sci-fi"
+ ],
+ "entries": [
+  "signal",
+  "orbit",
+  "horizon",
+  "drift",
+  {
+   "text": "void",
+   "kind": "place"
+  },
+  "beacon",
+  "relay",
+  "engine",
+  {
+   "text": "colony",
+   "kind": "place"
+  },
+  {
+   "text": "station",
+   "kind": "place"
+  },
+  "ship",
+  "probe",
+  "tether",
+  "array",
+  {
+   "text": "protocol",
+   "kind": "idea"
+  },
+  {
+   "text": "anomaly",
+   "kind": "idea"
+  },
+  {
+   "text": "ghost",
+   "kind": "person"
+  },
+  {
+   "text": "captain",
+   "kind": "person"
+  },
+  {
+   "text": "pilot",
+   "kind": "person"
+  },
+  {
+   "text": "stranger",
+   "kind": "person"
+  },
+  {
+   "text": "outpost",
+   "kind": "place"
+  },
+  {
+   "text": "jump",
+   "kind": "idea"
+  },
+  {
+   "text": "countdown",
+   "kind": "idea"
+  },
+  {
+   "text": "archive",
+   "kind": "idea"
+  },
+  "airlock",
+  "comet",
+  {
+   "text": "engineer",
+   "kind": "person"
+  },
+  {
+   "text": "mutiny",
+   "kind": "idea"
+  },
+  "contract",
+  {
+   "text": "algorithm",
+   "kind": "idea"
+  },
+  {
+   "text": "dark",
+   "kind": "idea"
+  },
+  "cargo"
+ ]
+}
