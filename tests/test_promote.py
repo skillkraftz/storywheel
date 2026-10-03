@@ -112,10 +112,10 @@ def test_thread_kinds_become_stubs(home):
     d["threads"] = {"someone": {"text": "a wandering minstrel"}, "message": {"text": "a letter"},
                     "disaster": {"text": "the flood"}, "thing": {"text": "a silver key"}}
     items = by_key(promote.build_plan(d, None, make_engine(home)))
-    assert (items["thread:someone"].type, items["thread:someone"].name) == ("character", "Wandering minstrel")
+    assert (items["thread:someone"].type, items["thread:someone"].name) == ("character", "a wandering minstrel")
     assert items["thread:message"].type == "thing" and "message" in items["thread:message"].fields["description"]
     assert items["thread:disaster"].type == "note" and "flood" in items["thread:disaster"].fields["body"]
-    assert items["thread:thing"].name == "Silver key"
+    assert items["thread:thing"].name == "a silver key"
 
 
 def test_a_person_motif_becomes_a_character(home):

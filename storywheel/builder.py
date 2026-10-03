@@ -48,6 +48,7 @@ HELP = f"""\
 
 [b]Universe and stories[/b]
   [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
+  [b]N[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
   [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
@@ -292,6 +293,7 @@ class BuilderScreen(Screen):
         Binding("S", "story_settings", "Story settings", show=False),
         Binding("G", "global_settings", "Your details", show=False),
         Binding("o", "overview", "Universe overview"),
+        Binding("N", "fix_names", "Fix names", show=False),
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
@@ -824,6 +826,8 @@ class BuilderScreen(Screen):
             self.universe.save_entity(e)
         else:
             old = e.fields.get(key)
+            if key == "name" and isinstance(value, str):
+                e.proper = promote.is_proper(value)                  # a hand-written name is as typed: capitals mean a proper name
             if key == "name" and old and old != value and isinstance(old, str):
                 return self._rename(e, value)
             e.fields[key] = value
@@ -865,6 +869,8 @@ class BuilderScreen(Screen):
             return
         self.hist.setdefault((e.id, key), [])
         filler = self.get_filler()
+        if key == "name" and filler.last_proper is not None:
+            e.proper = filler.last_proper
         if filler.last_atoms and isinstance(value, str):
             frame, atoms = R.provenance(filler.engine.library, filler.last_atoms)
             self.hist.set_provenance(e.id, key, value, frame, [list(a) for a in atoms])
@@ -1147,6 +1153,26 @@ class BuilderScreen(Screen):
 
     def action_tab(self, i):
         self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
+
+    def action_fix_names(self):
+        from . import names
+        if not self.universe:
+            return
+        fixes = names.scan(self.universe)
+        if not fixes:
+            self.say("Every name in this universe already reads right.")
+            return
+        shown = [f.line() for f in fixes[:12]] + ([f"... and {len(fixes) - 12} more"] if len(fixes) > 12 else [])
+        text = (f"{len(fixes)} name(s) were written in the wrong capitals. Change them?\n\n" + "\n".join(shown) +
+                "\n\nThe ids stay. Mentions in notes and manuscripts are not rewritten.")
+        self.app.push_screen(ConfirmScreen(text), lambda yes: self._names_fixed(fixes, yes))
+
+    def _names_fixed(self, fixes, yes):
+        if yes:
+            from . import names
+            n = names.apply(self.universe, fixes)
+            self.refresh_all(lists=True)
+            self.say(f"Changed {n} name(s).")
 
     def action_overview(self):
         self.story = None

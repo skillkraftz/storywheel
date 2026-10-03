@@ -130,7 +130,11 @@ def save_piece(universe, step_key, label, fields):
     e = universe.new_entity(type_, name, data)
     if rival:
         e.fields["rival"] = rival
+    if type_ != "note":
+        e.proper = promote.is_proper(name)
     universe.save_entity(e)
     if step_key == "setting" and fields.get("landmark"):
-        universe.new_entity("place", promote.tidy(fields["landmark"]), {"kind": "landmark", "parent": e.id})
+        landmark = universe.new_entity("place", promote.tidy(fields["landmark"]), {"kind": "landmark", "parent": e.id})
+        landmark.proper = promote.is_proper(landmark.name)
+        universe.save_entity(landmark)
     return e, f"Saved '{name}' to {universe.name} as a {type_}."

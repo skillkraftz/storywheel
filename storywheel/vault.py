@@ -118,6 +118,7 @@ class Entity:
         self.body = body                        # free-form notes
         self.created = created or datetime.date.today().isoformat()
         self.path = None
+        self.proper = None                      # True: a proper name (Title Case); False: a description ("a locked box"); None: not recorded
 
     @property
     def name(self):
@@ -134,10 +135,13 @@ class Entity:
         e = Entity(self.type, self.id, {k: (list(v) if isinstance(v, list) else v) for k, v in self.fields.items()},
                    dict(self.custom), self.body, self.created)
         e.path = self.path
+        e.proper = self.proper
         return e
 
     def to_text(self):
         meta = {"id": self.id, "type": self.type}
+        if self.proper is not None:
+            meta["proper"] = "yes" if self.proper else "no"
         body_key = next((f["key"] for f in schemas.get(self.type)["fields"] if f.get("body")), None)
         for f in schemas.get(self.type)["fields"]:
             if f.get("body"):
@@ -175,6 +179,8 @@ class Entity:
         e = cls(type_, meta.get("id") or (Path(path).stem if path else ""), fields, custom,
                 "" if any(f.get("body") for f in sch["fields"]) else body, meta.get("created"))
         e.path = Path(path) if path else None
+        flag = str(meta.get("proper", "")).strip().lower()
+        e.proper = True if flag == "yes" else False if flag == "no" else None
         return e
 
 

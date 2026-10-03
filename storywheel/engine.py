@@ -76,7 +76,7 @@ class Engine:
             for kind in ("character", "place"):
                 for e in u.entities(kind):
                     n = e.name.strip()
-                    if len(n) >= 3 and not ARTICLE.match(n):
+                    if len(n) >= 3 and not ARTICLE.match(n) and e.proper is not False:
                         names.add(n)
         if not names:
             return None

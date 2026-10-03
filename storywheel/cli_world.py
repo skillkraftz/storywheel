@@ -11,7 +11,7 @@ def emit(data):
 
 def entity_json(e, universe=None):
     out = {"id": e.id, "type": e.type, "name": e.name, "fields": e.fields, "custom": e.custom, "notes": e.body,
-           "universe": universe.slug if universe else None}
+           "universe": universe.slug if universe else None, "proper": e.proper}
     if universe is not None:                    # link fields shown as names, for the Writer's peek card
         shown = {}
         for f in schemas.get(e.type)["fields"]:
@@ -84,6 +84,23 @@ def cmd_entity(args):
         return
     for e in items:
         print(f"  {e.type:<10} {e.id:<28} {e.name}")
+
+
+def cmd_names(args):
+    """names fix UNIVERSE [--apply]: names written in the wrong capitals; without --apply only a preview is shown."""
+    from . import names
+    u = _universe(args.universe)
+    fixes = names.scan(u)
+    if not fixes:
+        print(f"Every name in {u.name} already reads right.")
+        return
+    print(f"{len(fixes)} name(s) in {u.name} would change:")
+    for f in fixes:
+        print("  " + f.line())
+    if args.apply:
+        print(f"Changed {names.apply(u, fixes)}. (The ids stay; mentions in notes and manuscripts are not rewritten.)")
+    else:
+        print("Nothing was changed. Add --apply to change them.")
 
 
 def cmd_story(args):
@@ -287,6 +304,10 @@ def add_parsers(sub):
     p.add_argument("id", nargs="?")
     p.add_argument("--type", choices=list(schemas.TYPES))
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("names", help="fix names written in the wrong capitals:  names fix UNIVERSE [--apply]")
+    p.add_argument("action", choices=["fix"])
+    p.add_argument("universe")
+    p.add_argument("--apply", action="store_true")
     p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
     p.add_argument("action", choices=["list", "show"])
     p.add_argument("target", nargs="?", help="for show: universe/story")
@@ -337,4 +358,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names}

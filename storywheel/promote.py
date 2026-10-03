@@ -19,10 +19,36 @@ from .steps import public
 ARTICLE = re.compile(r"^(?:a|an|the)\s+", re.IGNORECASE)
 
 
-def tidy(text):
-    """'the sheriff' -> 'Sheriff', 'a locked box' -> 'Locked box'."""
-    text = ARTICLE.sub("", (text or "").strip())
-    return text[:1].upper() + text[1:]
+SMALL_WORDS = {"of", "the", "and", "de", "del", "la", "le", "von", "van", "der", "du", "on", "in", "at", "to"}
+
+
+def is_proper(text):
+    """Does this text read as a proper name? 'Stacie Anderson', 'Red Draw': yes. 'a locked box', 'the sheriff', 'sheriff': no."""
+    text = (text or "").strip()
+    rest = ARTICLE.sub("", text)
+    return bool(rest) and rest[:1].isupper()                  # "Red Draw", "The Hunting Horn"; not "The sheriff"
+
+
+def titled(text):
+    """A proper name in Title Case, without a leading article ('the silver birch grove' -> 'Silver Birch Grove')."""
+    words = ARTICLE.sub("", (text or "").strip()).split()
+    return " ".join(w if (w[:1].isupper() or (i and w.lower() in SMALL_WORDS)) else w[:1].upper() + w[1:] for i, w in enumerate(words))
+
+
+def described(text):
+    """A description keeps its article and is lowercase, the way a sentence uses it: 'a locked box', 'the sheriff'."""
+    text = (text or "").strip()
+    if len(text) > 1 and text[0].isupper() and text[1].islower():
+        text = text[0].lower() + text[1:]
+    return text
+
+
+def tidy(text, proper=False):
+    """The name an entity gets from generated text. A description stays a description ('a locked box', 'the sheriff'); a proper name
+    is Title Case ('Red Draw'). Text that already reads as a proper name is left as it is."""
+    if proper:
+        return titled(text)
+    return (text or "").strip() if is_proper(text) else described(text)
 
 
 def same_name(a, b):
@@ -37,6 +63,7 @@ class Item:
         self.body = body
         self.links = dict(links or {})          # field -> key of another item (resolved to an id on apply)
         self.why = why                          # "protagonist", "rival", "landmark"...
+        self.proper = is_proper(name) if type_ != "note" else None       # a proper name or a description (see tidy)
         self.existing = None                    # an entity with the same name already in the universe
         self.merge = False                      # use that one (fill its blanks) instead of creating a new one
 
@@ -134,6 +161,8 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
         text = tidy(thread.get("text", ""))
         if not text:
             continue
+        note_title = ARTICLE.sub("", text)
+        note_title = note_title[:1].upper() + note_title[1:]               # (a note is a title, so it is in sentence case)
         if kind == "someone":
             add(Item(f"thread:{kind}", "character", text, {"role": "supporting"}, why="from the story body"))
         elif kind == "thing":
@@ -143,7 +172,7 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
             add(Item(f"thread:{kind}", "thing", text, {"description": "A message or document in the story."},
                      why="from the story body"))
         elif kind == "disaster":
-            add(Item(f"thread:{kind}", "note", text, {"body": f"An event in '{title}': {thread.get('text', '').strip()}."},
+            add(Item(f"thread:{kind}", "note", note_title, {"body": f"An event in '{title}': {thread.get('text', '').strip()}."},
                      why="event in the story body"))
     if universe is not None:
         for item in items:
@@ -194,6 +223,9 @@ def apply_plan(plan, universe=None, draft=None):
             report.append(f"Merged into {e.type} '{e.name}'" + (f" (filled {', '.join(filled)})." if filled else "."))
         else:
             e = universe.new_entity(item.type, item.name, {**item.fields, **links})
+            if item.proper is not None:
+                e.proper = item.proper
+                universe.save_entity(e)
             e.custom.update(item.custom)
             if item.body and item.type != "note":
                 e.body = item.body

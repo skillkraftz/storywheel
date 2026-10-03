@@ -40,6 +40,7 @@ class Filler:
         self.engine = engine or make_engine(universe)
         self.rng = rng or self.engine.rng
         self.last_atoms = []               # [[slot, text], ...] the last roll drew (what a rating needs to know)
+        self.last_proper = None            # was the last name rolled a proper name (True) or a description (False)?
 
     # --- context --------------------------------------------------------------------------------------
 
@@ -72,6 +73,7 @@ class Filler:
         spec = schemas.field_spec(entity.type, key)
         fill = (spec or {}).get("fill") or {}
         self.last_atoms = []
+        self.last_proper = None
         if not spec or fill.get("write") or not fill:
             raise ValueError(f"'{key}' is write-only")
         link = fill.get("link")
@@ -89,6 +91,7 @@ class Filler:
             step = step_by_key(fill["step"], story)
             value, _t, atoms = step.reroll_value(self.engine, story, self._context(entity, spec), fill["field"])
             self.last_atoms = [list(a) for a in atoms]
+            self.last_proper = True                                 # (a step's name fields are people's and towns' names)
             return value
         if fill.get("slot"):
             from .mix import Mix
@@ -97,9 +100,13 @@ class Filler:
             bias = (lambda e: ratings.atom_bias(fill["slot"], e.text, ())) if ratings is not None else None     # ratings change rolls here too
             wl, entry = self.engine.pick_item(fill["slot"], mix, bias=bias)
             self.last_atoms = [[fill["slot"], entry.text]]
-            text = promote.tidy(entry.text) if spec["key"] == "name" else entry.text
+            text = entry.text
             if fill.get("format"):
                 text = fill["format"].replace("{x}", entry.text.split()[-1].capitalize())
+                self.last_proper = True
+            elif spec["key"] == "name":
+                text = promote.tidy(entry.text)                     # a description stays one: "a locked box"
+                self.last_proper = promote.is_proper(text)
             return text
         raise ValueError(f"don't know how to fill '{key}'")
 
@@ -111,6 +118,8 @@ class Filler:
                 continue
             try:
                 entity.fields[spec["key"]] = self.roll(entity, spec["key"])
+                if spec["key"] == "name" and self.last_proper is not None:
+                    entity.proper = self.last_proper
                 done.append(spec["key"])
             except NothingToLink:
                 continue
