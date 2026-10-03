@@ -403,13 +403,23 @@ from them offline (with a one-line message); it only downloads again if they are
     *★ Learning*: the words you are learning, with their meanings (Enter looks one up, `k` Known, `d` remove, `f` flashcards: the word
     first, Space shows the meaning). Type a word of your own in the box and press Enter to learn it. How common a word is comes from the
     offline `wordfreq` package.
-  - *Genre words*: the generator's own lists, to browse. **Genres…** picks the genres (the story's own to start with; tick more to borrow
-    from them), a box picks the category (first and last names, jobs, places, landmarks, things, people, troubles, title words, traits,
-    flaws, wants, needs, secrets, rumors, verbs, premises and twists...), and a search box narrows the list. Each row shows the genres it
-    belongs to. Enter looks a word up, `c` copies it, `u` uses it in the Writer (replacing the word you came with), `e` adds it to the
-    universe (a name becomes a character, a place a place, a thing a thing; anything else goes on the universe's generator list for its
-    slot), `w` always puts it on the generator list. `m` (*More like these*) invents new names in the style of the chosen genres with the
-    same Markov name maker the generator uses.
+  - *Genre words*: long lists of **words**, not the generator's slot lists. The first box picks **Nouns, Verbs, Adjectives or Adverbs**: every
+    lemma of that part of speech in the dictionary, each with a one-line meaning like Vocabulary's. **Genres…** picks *Any genre* (the
+    whole list, most common words first) or one or more genres, which **rank** the words by how well they fit; nothing is hidden, and a
+    small mark shows the fit (●●● strong, ●●○, ●○○, ··· none). The other boxes pick how common a word is (*everyday*, *uncommon*, *rare*,
+    *very rare*: Vocabulary's bands), the order (genre fit, commonness, A to Z) and a search that filters as you type. The lists are read
+    a page at a time, so even 100,000 nouns open at once and scroll smoothly. Enter opens the full entry in Lookup, `l` marks the word
+    ★ Learning (it shows in Vocabulary's ★ Learning view), `c` copies it, `u` uses it in the Writer (replacing the word you came with),
+    `w` puts it on a generator list. At the bottom of the first box, *From the Wheel* keeps the generator's own short lists: first and
+    last names (`m`, *More like these*, invents new ones in the genres' style), jobs, places and things, which `e` adds to the universe.
+    How the **genre fit** is worked out: the words in each genre's own lists and sentence frames are the seeds; each seed lights its
+    WordNet meanings (the first most) and the glow spreads with a decaying weight through synonyms, similar-to, also-see, broader and
+    narrower meanings, parts and wholes, and one step through derivationally related words (storm, stormy); words the Moby thesaurus
+    lists beside a strong seed get a small share; WordNet's subject domains (`_domains` in `genres.json`: sci-fi gets astronomy,
+    computing, physics; mystery gets law and crime...) give their meanings a share. A word every genre uses counts for nothing. It is
+    done once and kept in the dictionary index (`storywheel dictionary install` and `storywheel update` do it), and done again, in a
+    minute at most, the first time you open the tab after the genre lists change. Without the dictionary the tab says so and offers
+    only the *From the Wheel* lists.
   - *Story words*: built from the manuscript itself (one story, or the whole universe). ◆ is a name from your universe (with how many
     times it is written), ? a word the dictionary does not know (made-up names, jargon, typos), ≈ a look-alike: "Glass Water" for
     "Glasswater", "Stacy" for "Stacie". Enter shows where each one is (Enter on a place opens the Writer there). `s` adds the word to the

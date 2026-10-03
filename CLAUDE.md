@@ -835,3 +835,19 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   Romance's lists are deliberately portable (towns, bookshops, letters, keepsakes) because it is the commonest pairing; `test_romance_blends_with_every_other_written_genre`
   checks it against every written genre. The repetition report only flags an entry that is also 4 standard deviations above chance, so a rare entry
   (a mood) picked 5 times against 1 expected is not reported.
+
+- Batch 8 rework (Genre words): the tab lists WORDS, not generator slots. `wordlists.py` reads the dictionary's lemmas by part of speech from a `lexicon`
+  table (one row per word and part of speech; a satellite adjective is an adjective; its first meaning; Zipf x 100 from wordfreq) and holds only the
+  ordered row ids; `View.page` reads 64 rows with their meanings at a time into `virtuallist.VirtualList`, a ScrollView that renders only the visible lines.
+  Genres rank (`fit` table, best score over the chosen genres), never filter. Bands are Vocabulary's, in Zipf x 100: everyday >= 380, uncommon 300-380,
+  rare 230-300, very rare below 230. Proper nouns are not told apart (the index keeps lowercase lemmas).
+- `genrefit.py` builds `lexicon`, `fit` and `meta.fit_stamp` INTO the existing index from the index itself (no sources or network needed, so it works on an
+  index built by an older version), and `ensure()` does it when the stamp (a hash of seed words, part-of-speech hints, `_domains`, the code version and
+  the index) differs. A seed's weight falls with the number of genres using the word (1, .6, .3, then 0), with how many meanings the word has, and a
+  frame's fixed words count a third of an atom; a seed from an adjective/verb/noun list lights that part of speech fully and the others half. A word's
+  fit by a meaning that is far down its own list of meanings is reduced. Subject domains are WordNet lemmas of topics (`genres.json` `_domains`).
+  `cli_world.cmd_dictionary` and `update.post_update` call `ensure`; the Genre words tab runs it in a background thread the first time it is shown.
+- The sentence-template categories were removed from Genre words ("they aren't words"); `genrewords.py` keeps only first and last names, jobs, places
+  (places and landmarks) and things as the "From the Wheel" group.
+- Pitfall met twice: markdown backticks in an UNQUOTED shell heredoc make the shell run them. Always `<<'EOF'`.
+

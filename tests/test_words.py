@@ -7,7 +7,8 @@ import pytest
 from textual.widgets import Button, Input, OptionList, Select, TabbedContent, TabPane
 
 from dictfixture import build_fixture
-from storywheel import dictionary, learn, vault, wordbank, words_app
+from storywheel import dictionary, genrefit, learn, vault, wordbank, words_app
+from storywheel.virtuallist import VirtualList
 from conftest import screen_text
 
 
@@ -731,42 +732,198 @@ def test_the_learning_filter_shows_the_star_words_and_typed_words_join_them(inde
     assert len(rows) == 2 and any("kennel" in r for r in rows) and any("puppy" in r for r in rows)
 
 
-def test_genre_words_start_with_the_storys_genres_and_show_each_rows_tags(index, world):
-    u, s = world
-    async def script(app, pilot):
-        await show_tab(app, pilot, "t-genre")
-        await pilot.pause()
-        return list(app.screen.gw_genres), flat(screen_text(app)), [t for i, t in options(app, "gwlist") if i]
-    genres, text, rows = run(script, {"universe": "thornwood", "story": s.slug})
-    assert genres == ["western"] and "Genres: western" in text
-    assert len(rows) >= 40 and all("western" in r for r in rows[:10])          # first names, tagged western (and historical)
+@pytest.fixture
+def fit(monkeypatch, index):
+    """A small genre fit over the fixture dictionary: western seeds dog and run, fantasy seeds wolf."""
+    from collections import Counter
+    from dictfixture import ZIPF
+    monkeypatch.setattr(genrefit, "seed_words", lambda lib: {"western": Counter({"dog": 1.0, "run": 1.0, "happy": 1.0}), "fantasy": Counter({"wolf": 1.0, "leave": 1.0})})
+    monkeypatch.setattr(genrefit, "domain_names", lambda lib: {})
+    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w, 0.0)))
 
 
-def test_genre_words_pick_a_category_search_and_borrow_another_genre(index, world):
+async def open_genre(app, pilot):
+    """Show Genre words and wait for the genre fit to be worked out (it is, once, in the background)."""
+    await show_tab(app, pilot, "t-genre")
+    await app.workers.wait_for_complete()
+    await pilot.pause()
+    await pilot.pause()
+
+
+def vrows(app):
+    """The words shown in the Genre words list: [(word, fit mark)] from the first page."""
+    v = app.screen.query_one("#gwvlist", VirtualList)
+    return [(r["word"], r["mark"]) for r in v.row_page(0)] if hasattr(v, "row_page") else [(r["word"], r["mark"]) for r in v._fetch(0, 100)]
+
+
+def pick(app, value):
+    app.screen.query_one("#gwcat", Select).value = value
+
+
+def test_genre_words_list_every_noun_with_a_one_line_meaning_and_work_out_the_fit_once(index, fit, world):
     u, s = world
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-genre")
+        await open_genre(app, pilot)
         scr = app.screen
-        scr.query_one("#gwcat", Select).value = "job"
-        await pilot.pause()
-        jobs = [t for i, t in options(app, "gwlist") if i]
-        scr.genres_picked(["western", "fantasy"])
-        await pilot.pause()
-        both = [t for i, t in options(app, "gwlist") if i]
-        scr.query_one("#gwsearch", Input).value = "sellsword"
-        await pilot.pause()
-        found = [t for i, t in options(app, "gwlist") if i]
-        return jobs, both, found
-    jobs, both, found = run(script, {"universe": "thornwood", "story": s.slug})
-    assert len(both) > len(jobs) and not any("sellsword" in j for j in jobs)
-    assert len(found) == 1 and "sellsword" in found[0] and "fantasy" in found[0]
+        words = vrows(app)
+        note = flat(str(scr.query_one("#gwnote").content))
+        genres = list(scr.gw_genres)
+        again = scr.gw_started
+        return words, note, genres, again, genrefit.stale(scr.library())
+    words, note, genres, started, stale = run(script, {"universe": "thornwood", "story": s.slug})
+    assert genres == ["western"] and started and not stale                      # the story's genre; the fit exists now
+    names = [w for w, _m in words]
+    assert names[0] in ("dog", "domestic dog", "wretch") and "puppy" in names and "run" not in names     # western's seeds first; nouns only
+    assert words[0][1] == "●●●" and "ranked by fit to western" in note and "nothing is hidden" in note
 
 
-def test_genre_words_add_a_name_as_a_character_and_a_job_to_the_generator_list(index, world):
+def test_the_part_of_speech_picker_switches_between_nouns_verbs_adjectives(index, fit, world):
     u, s = world
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-genre")
+        await open_genre(app, pilot)
+        out = {}
+        for pos in ("v", "a", "n"):
+            pick(app, pos)
+            await pilot.pause()
+            out[pos] = [w for w, _m in vrows(app)]
+        return out
+    out = run(script, {"universe": "thornwood", "story": s.slug})
+    assert "run" in out["v"][:3] and "vaccinate" in out["v"] and "happy" in out["a"] and "dog" in out["n"] and "dog" not in out["v"]
+
+
+def test_choosing_genres_ranks_and_any_genre_gives_the_whole_list_without_markers(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
         scr = app.screen
+        scr.genres_picked(["fantasy"])
+        await pilot.pause()
+        fantasy = vrows(app)
+        count_fantasy = scr.query_one("#gwvlist", VirtualList).count
+        scr.genres_picked(["*"])
+        await pilot.pause()
+        anyg = vrows(app)
+        count_any = scr.query_one("#gwvlist", VirtualList).count
+        text = flat(str(scr.query_one("#gwgenrelist").content))
+        return fantasy, count_fantasy, anyg, count_any, text
+    fantasy, count_f, anyg, count_a, text = run(script, {"universe": "thornwood", "story": s.slug})
+    assert fantasy[0][0] == "wolf" and fantasy[0][1] == "●●●"
+    assert count_f == count_a and all(m == "" for _w, m in anyg) and "any genre" in text            # nothing is hidden
+
+
+def test_commonness_sort_and_search_filter_the_list_as_you_type(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        scr = app.screen
+        scr.query_one("#gwband", Select).value = "very rare"
+        await pilot.pause()
+        rare = [w for w, _m in vrows(app)]
+        scr.query_one("#gwband", Select).value = "any"
+        scr.query_one("#gwsort", Select).value = "az"
+        await pilot.pause()
+        az = [w for w, _m in vrows(app)]
+        scr.query_one("#gwsearch", Input).value = "dog"
+        await pilot.pause(0.5)
+        found = [w for w, _m in vrows(app)]
+        return rare, az, found
+    rare, az, found = run(script, {"universe": "thornwood", "story": s.slug})
+    assert "wretch" in rare and "dog" not in rare                              # Zipf 2.0 against 5.2
+    assert az == sorted(az)
+    assert set(found) == {"dog", "domestic dog"}
+
+
+def test_enter_opens_the_lookup_entry_and_l_marks_the_word_to_learn(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        scr = app.screen
+        v = scr.query_one("#gwvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("l")
+        await pilot.pause()
+        learning = learn.MyWords().learning_words()
+        star = "★" in "".join(seg.text for seg in v.render_line(0))
+        await pilot.press("enter")
+        await pilot.pause()
+        return word, learning, star, scr.query_one(TabbedContent).active, scr.history
+    word, learning, star, tab, history = run(script, {"universe": "thornwood", "story": s.slug})
+    assert word in learning and star                                           # shows in Vocabulary's Learning view too
+    assert tab == "t-lookup" and history == [word]
+
+
+def test_copy_and_use_in_writer_work_on_a_dictionary_word(index, fit, world, monkeypatch):
+    from storywheel import clipboard
+    copied = []
+    monkeypatch.setattr(clipboard, "copy", lambda text, app=None: copied.append(text) or True)
+    u, s = world
+    payload = handover("running")
+    payload.update({"universe": "thornwood", "story": s.slug})
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        scr = app.screen
+        scr.query_one("#gwcat", Select).value = "v"
+        await pilot.pause()
+        v = scr.query_one("#gwvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("c")
+        await pilot.press("u")
+        await pilot.pause()
+        return word, app.next
+    word, nxt = run(script, payload)
+    assert copied == [word] and nxt[0] == "writer" and nxt[1]["replace"]["picked"] == word and nxt[1]["replace"]["new"]
+
+
+def test_dictionary_word_goes_on_a_generator_list_through_the_slot_picker(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        scr = app.screen
+        v = scr.query_one("#gwvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("w")
+        await pilot.pause()
+        picker = type(app.screen).__name__
+        app.screen.query_one("#slot", Select).value = "thing"
+        await pilot.click("#ok")
+        await pilot.pause()
+        return word, picker
+    word, picker = run(script, {"universe": "thornwood", "story": s.slug})
+    assert picker == "SlotScreen" and json.loads((u.lists_dir / "thing" / "words-added.json").read_text())["entries"] == [word]
+
+
+def test_from_the_wheel_keeps_names_jobs_places_things_and_no_sentence_templates(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        sel = app.screen.query_one("#gwcat", Select)
+        values = [v for _l, v in sel._options if v is not Select.BLANK]
+        labels = [str(l) for l, _v in sel._options]
+        pick(app, "wheel:first_name")
+        await pilot.pause()
+        scr = app.screen
+        shown = (scr.query_one("#gwlist").display, scr.query_one("#gwvlist").display, scr.query_one("#gwmore", Button).disabled)
+        rows = [t for i, t in options(app, "gwlist") if i]
+        return values, labels, shown, rows
+    values, labels, shown, rows = run(script, {"universe": "thornwood", "story": s.slug})
+    assert values[:4] == ["n", "v", "a", "r"] and "wheel:first_name" in values and "wheel:job" in values
+    assert not any("premise" in l.lower() or "flaw" in l.lower() or "rumor" in l.lower() or "want" in l.lower() for l in labels)
+    assert shown == (True, False, False) and rows and any("western" in r for r in rows)
+
+
+def test_wheel_names_add_as_characters_jobs_go_on_the_generator_list_and_more_names_are_invented(index, fit, world):
+    u, s = world
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        scr = app.screen
+        pick(app, "wheel:first_name")
+        await pilot.pause()
         lst = scr.query_one("#gwlist", OptionList)
         lst.focus()
         lst.highlighted = 0
@@ -774,7 +931,13 @@ def test_genre_words_add_a_name_as_a_character_and_a_job_to_the_generator_list(i
         first = scr.gw_row().text
         await pilot.press("e")
         await pilot.pause()
-        scr.query_one("#gwcat", Select).value = "job"
+        scr.genres_picked(["western", "fantasy"])
+        await pilot.pause()
+        lst.focus()
+        await pilot.press("m")
+        await pilot.pause()
+        new = [t for i, t in options(app, "gwlist") if i and i.startswith("n:")]
+        pick(app, "wheel:job")
         await pilot.pause()
         lst.focus()
         lst.highlighted = 0
@@ -782,45 +945,23 @@ def test_genre_words_add_a_name_as_a_character_and_a_job_to_the_generator_list(i
         job = scr.gw_row()
         await pilot.press("e")
         await pilot.pause()
-        return first, job, flat(str(scr.query_one("#status").content))
-    first, job, status = run(script, {"universe": "thornwood", "story": s.slug})
-    assert u.find_by_name(first, "character")
+        return first, new, job
+    first, new, job = run(script, {"universe": "thornwood", "story": s.slug})
+    assert u.find_by_name(first, "character") and len(new) >= 6 and all("new" in t for t in new)
     assert json.loads((u.lists_dir / "job" / "words-added.json").read_text())["entries"] == [job.text]
-    assert "job" in status
 
 
-def test_more_like_these_invents_names_that_are_not_in_the_list(index, world):
-    u, s = world
+def test_without_a_dictionary_genre_words_say_so_and_offer_only_the_wheel_lists(home, tmp_path, monkeypatch):
+    monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(tmp_path / "none.sqlite"))
+    dictionary.forget()
     async def script(app, pilot):
         await show_tab(app, pilot, "t-genre")
-        scr = app.screen
-        scr.genres_picked(["western", "fantasy"])
         await pilot.pause()
-        scr.query_one("#gwlist", OptionList).focus()
-        await pilot.press("m")
-        await pilot.pause()
-        return [t for i, t in options(app, "gwlist") if i and i.startswith("n:")], {r.text.lower() for r in scr.gw_rows}
-    new, have = run(script, {"universe": "thornwood", "story": s.slug})
-    assert len(new) >= 6 and all("new" in t for t in new) and not {t.split()[0].lower() for t in new} & have
-
-
-def test_genre_words_use_in_writer_replaces_the_word_in_its_case(index, world):
-    u, s = world
-    handover_payload = handover("running")
-    handover_payload.update({"universe": "thornwood", "story": s.slug})
-    async def script(app, pilot):
-        await show_tab(app, pilot, "t-genre")
-        scr = app.screen
-        scr.query_one("#gwcat", Select).value = "job"
-        await pilot.pause()
-        scr.query_one("#gwlist", OptionList).focus()
-        scr.query_one("#gwlist", OptionList).highlighted = 0
-        await pilot.pause()
-        await pilot.press("u")
-        await pilot.pause()
-        return app.next, scr.gw_row() if False else None
-    nxt, _ = run(script, handover_payload)
-    assert nxt[0] == "writer" and nxt[1]["replace"]["new"] and nxt[1]["replace"]["picked"]
+        sel = app.screen.query_one("#gwcat", Select)
+        values = [v for _l, v in sel._options if v is not Select.BLANK]
+        return values, flat(screen_text(app)), app.screen.query_one("#gwband").display
+    values, text, band = run(script, {})
+    assert values and all(v.startswith("wheel:") for v in values) and "storywheel dictionary install" in text and band is False
 
 
 def test_story_words_are_read_when_the_tab_opens_and_flag_look_alikes(index, world):

@@ -22,9 +22,11 @@ def index(tmp_path, monkeypatch):
 
 # --- Genre words --------------------------------------------------------------------------------------------------------------------
 
-def test_categories_have_labels_and_every_genre_is_offered(lib):
+def test_the_wheel_group_is_names_jobs_places_things_and_no_sentence_templates(lib):
     labels = dict(genrewords.labels())
-    assert labels["First names"] == "first_name" and "Jobs" in labels and "Troubles" in labels and "Title words" in labels
+    assert list(labels) == ["First names", "Last names", "Jobs", "Places", "Things"]
+    for gone in ("Premises and twists", "Rumors", "Wants", "Needs", "Flaws", "Secrets", "Messages", "Manners", "Motives"):
+        assert gone not in labels
     assert "general" in genrewords.genres(lib) and "fantasy" in genrewords.genres(lib)
 
 
@@ -38,10 +40,14 @@ def test_rows_come_from_the_chosen_genres_only_and_carry_their_tags(lib):
     assert {r.text for r in both} == {r.text for r in fantasy} | {r.text for r in western}
 
 
-def test_patterns_are_left_out_of_atom_lists_but_frames_are_shown_whole(lib):
+def test_patterns_that_need_other_slots_are_left_out_of_the_lists(lib):
     assert not [r for r in genrewords.rows(lib, ["fantasy"], "place") if "{" in r.text]
-    flaws = genrewords.rows(lib, ["fantasy"], "flaw")
-    assert any(r.frame and "{" in r.text for r in flaws) and any(not r.frame for r in flaws)
+    assert not any(r.frame for c in genrewords.CATEGORIES for r in genrewords.rows(lib, ["fantasy"], c[0]))
+
+
+def test_any_genre_lists_every_genres_rows(lib):
+    anyg = genrewords.rows(lib, [], "job")
+    assert len(anyg) > len(genrewords.rows(lib, ["fantasy"], "job")) and {"sellsword", "sheriff"} & {r.text for r in anyg}
 
 
 def test_search_narrows_the_rows(lib):
@@ -61,7 +67,7 @@ def test_a_name_becomes_a_character_a_place_a_place_and_a_thing_a_thing(home):
     u = vault.create_universe("U", ["fantasy"])
     msg, e = genrewords.add_to_universe(u, "first_name", "Aldric", "first_name")
     assert e.type == "character" and u.find_by_name("Aldric", "character") and "character" in msg
-    msg, e = genrewords.add_to_universe(u, "landmark", "the ruined watchtower", "landmark")
+    msg, e = genrewords.add_to_universe(u, "place", "the ruined watchtower", "landmark")
     assert e.type == "place"
     msg, e = genrewords.add_to_universe(u, "thing", "a sword with a name", "thing")
     assert e.type == "thing"

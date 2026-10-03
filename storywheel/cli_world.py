@@ -370,8 +370,11 @@ def cmd_dictionary(args):
         print("  " + str(e))
         raise SystemExit(1)
     dictionary.forget()
-    from . import spelldict, writer
+    from . import genrefit, spelldict, writer
     note = spelldict.ensure(writer.nvim_exe(), lambda m: print("  " + m))
+    if note:
+        print("  " + note)
+    note = genrefit.ensure(lambda m: print("  " + m))
     if note:
         print("  " + note)
     print(f"  Dictionary ready at {paths.tilde(dest)}: {counts['words']:,} words, {counts['synsets']:,} meanings, "

@@ -1,4 +1,5 @@
-"""Genre words: browse the generator's own lists by genre and category (first names, jobs, places, troubles...), and borrow from them.
+"""The "From the Wheel" lists of the Genre words tab: the generator's own short lists (first and last names, jobs, places, things) by genre,
+to borrow from. (The long lists of nouns, verbs, adjectives and adverbs are `wordlists`.)
 
 `rows` lists the entries of the chosen genres, each with its genre tags; `more_names` invents new names with the same Markov name
 maker the generator uses; `add_to_universe` turns a name into a character, a place into a place, a thing into a thing, or puts any
@@ -13,25 +14,8 @@ CATEGORIES = [
     ("first_name", "First names", ("first_name",), (), "character"),
     ("last_name", "Last names", ("last_name",), (), "character"),
     ("job", "Jobs", ("job",), (), None),
-    ("place", "Places", ("place",), (), "place"),
-    ("landmark", "Landmarks", ("landmark",), (), "place"),
+    ("place", "Places", ("place", "landmark"), (), "place"),
     ("thing", "Things", ("thing",), (), "thing"),
-    ("people", "People", ("someone", "rival", "close"), (), "character"),
-    ("trouble", "Troubles", ("disaster",), (), "note"),
-    ("title", "Title words", ("title_adj", "title_noun"), (), None),
-    ("trait", "Traits", ("trait",), (), None),
-    ("flaw", "Flaws", ("vice",), ("flaw",), None),
-    ("want", "Wants", ("prize",), ("want",), None),
-    ("need", "Needs", ("value",), ("need",), None),
-    ("secret", "Secrets", ("hiding", "temptation"), ("secret",), None),
-    ("rumor", "Rumors", (), ("rumor",), None),
-    ("message", "Messages", ("message",), (), "thing"),
-    ("when", "Eras, seasons, moods", ("era", "season", "mood", "deadline"), (), None),
-    ("manner", "Manners", ("manner",), (), None),
-    ("motive", "Motives", ("motive",), (), None),
-    ("verbs", "Verbs", ("act_person", "act_thing", "act_place", "act_message", "act_event", "do_person", "do_thing", "habit_person",
-                         "habit_thing", "habit_place"), (), None),
-    ("beats", "Premises and twists", (), ("premise", "twist", "title"), None),
 ]
 NAME_CATEGORIES = {"first_name", "last_name"}
 GENERAL = "general"
@@ -129,7 +113,7 @@ def add_to_universe(universe, key, text, slot):
     """Add a word to a universe. A name becomes a character, a place a place, a thing a thing (new, with that name); anything else
     goes on the universe's own generator list for its slot. Returns (what happened in words, entity or None)."""
     etype = entity_type(key)
-    if etype and key != "people":
+    if etype:
         existing = universe.find_by_name(text, etype)
         if existing:
             return f"{text} is already a {etype} in {universe.name}.", existing[0]
@@ -138,11 +122,5 @@ def add_to_universe(universe, key, text, slot):
             fields["role"] = "supporting"
         e = universe.new_entity(etype, text, fields)
         return f"Made a {etype}, {text}, in {universe.name}.", e
-    if etype == "character" and key == "people":
-        existing = universe.find_by_name(text, "character")
-        if existing:
-            return f"{text} is already a character in {universe.name}.", existing[0]
-        e = universe.new_entity("character", text.replace("a ", "", 1) if text.startswith(("a ", "an ")) else text, {"role": "supporting"})
-        return f"Made a character, {e.name}, in {universe.name}.", e
     path, new = wordbank.add_to_universe_list(universe, text, slot)
     return (f"Added {text} to {universe.name}'s '{slot}' list." if new else f"{text} was already on the '{slot}' list."), None

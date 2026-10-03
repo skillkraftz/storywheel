@@ -20,6 +20,23 @@
     "coming-of-age": ["domestic", "romance", "comedy", "adventure"],
     "adventure": ["western", "historical", "mythological", "fantasy"]
   },
+  "_domains_note": "Subject domains WordNet knows (a meaning 'in astronomy'): the words of a genre's domains get a share of the genre's fit in the Words mode's Genre words. Names are WordNet lemmas of the domain (law, physics...).",
+  "_domains": {
+    "sci-fi": ["astronomy", "computer science", "physics", "electronics", "computer", "optics", "telecom", "genetic science", "cosmogeny", "aeronautics"],
+    "mystery": ["law", "crime", "logic", "analysis", "pathology", "psychological science"],
+    "thriller": ["crime", "act of terrorism", "armed forces", "driving"],
+    "noir": ["crime", "law", "driving", "card game"],
+    "heist": ["commerce", "securities market", "architecture", "card game", "business"],
+    "horror": ["anatomy", "folklore", "astrology"],
+    "ghost story": ["folklore", "divinity", "church", "astrology", "christian religion"],
+    "fantasy": ["heraldry", "norse mythology", "greek mythology", "astrology", "divinity", "folklore", "armed forces"],
+    "fairy tale": ["folklore", "norse mythology", "greek mythology", "botany", "agriculture"],
+    "western": ["animal husbandry", "horseback riding", "agriculture", "card game", "geology"],
+    "romance": ["music", "poesy", "literature", "dramatic art", "cookery"],
+    "comedy": ["performing arts", "dramatic art", "card game", "cookery"],
+    "adventure": ["navigation", "ship", "geology", "horseback riding", "aircraft"],
+    "coming-of-age": ["athletics", "music", "basketball", "football", "grammar"]
+  },
   "_default": {"general": 1, "modern": 0.5},
 
   "mystery":       {"mystery": 4, "noir": 1, "thriller": 1, "urban": 0.5, "general": 0.3, "modern": 0.2},

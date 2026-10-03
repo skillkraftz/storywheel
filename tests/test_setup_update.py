@@ -417,6 +417,19 @@ def test_post_update_runs_migrations_and_says_when_done(home, capsys):
     assert "Migrations and rebuilds are done." in capsys.readouterr().out
 
 
+def test_post_update_works_out_the_genre_fit_when_a_dictionary_is_there(home, tmp_path, monkeypatch, capsys):
+    from dictfixture import build_fixture
+    from storywheel import dictionary, genrefit
+    out, _ = build_fixture(tmp_path / "dict")
+    monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(out))
+    dictionary.forget()
+    monkeypatch.setattr("storywheel.spelldict.ensure", lambda *a, **k: None)
+    monkeypatch.setattr(genrefit, "ensure", lambda *a, **k: "Worked out which of 9 dictionary words fit each genre (1 scores).")
+    cli(["post-update"])
+    assert "Worked out which of 9 dictionary words" in capsys.readouterr().out
+    dictionary.forget()
+
+
 def test_version_flag_and_the_version_live_in_one_place():
     r = subprocess.run([sys.executable, "-m", "storywheel", "--version"], capture_output=True, text=True)
     assert r.stdout.strip() == f"storywheel {__version__}"

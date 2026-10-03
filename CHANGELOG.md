@@ -2,6 +2,25 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
+- **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
+  main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,
+  which only RANK the words (a small ●●● ●●○ ●○○ mark shows the fit; nothing is hidden); a commonness filter uses Vocabulary's bands
+  (everyday / uncommon / rare / very rare); sort by genre fit, commonness or A to Z; a search box filters as you type. Enter opens the Lookup
+  entry, `c` copies, `u` uses the word in the Writer, `l` marks it ★ Learning (it shows in Vocabulary's Learning view), `w` puts it on a generator list.
+- The lists are virtual (`virtuallist.py`): only the rows on screen and a page either side are read and drawn, so 100,000 nouns open in about
+  a tenth of a second on this machine and scroll smoothly; the order is held as plain integers and rows are read 64 at a time.
+- **Genre fit** (`genrefit.py`) is worked out once and kept in the dictionary index (tables `lexicon`, `fit`, `meta.fit_stamp`): seeds are the
+  words in each genre's own lists and frames; the glow spreads through WordNet synonyms, similar-to, also-see, broader/narrower, parts/wholes, one
+  step of derivation, and (a small share) Moby neighbors, with decaying weight; WordNet subject domains mapped to genres in `genres.json`
+  (`_domains`) add their meanings. It is built by `storywheel dictionary install`, by `storywheel update`, and in the background the first time
+  the tab opens after the genre lists change (the stamp is a hash of the seed words and domains). It works from the index you already have: no download.
+- A short *From the Wheel* group is kept at the bottom of the main box: first and last names (with *More like these*), jobs, places, things.
+  The sentence-template categories (premises and twists, rumors, wants, needs, flaws, secrets, messages, manners, motives) and the others are gone.
+- Without the dictionary installed the tab says so and offers only *From the Wheel*.
+- `tools/genre_fit_report.py` prints the best-fitting words of each genre (REPORT.md has the top 30 adjectives and verbs).
+- The full suite now passes in one run (1887 tests before this change).
+
 ## 0.8.0 — Batch 8: neighbors, Words tabs, three more genres
 Part A: fixes from the batch 7 samples
 - The wildcard floor no longer spreads over every other genre. `genres.json` has `_neighbors` for each genre; the floor's share goes to untagged lists

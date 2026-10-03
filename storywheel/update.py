@@ -292,7 +292,7 @@ def _post(runner, say):
 
 def post_update(say=print):
     """What a new version may need: migrations, the dictionary index and the spelling lists."""
-    from . import dictionary, migrate, spelldict, writer
+    from . import dictionary, genrefit, migrate, spelldict, writer
     lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links()
     for line in lines:
         say("  " + line)
@@ -304,6 +304,9 @@ def post_update(say=print):
         except dictionary.DictionaryMissing as e:
             say("  " + str(e))
         note = spelldict.ensure(writer.nvim_exe())
+        if note:
+            say("  " + note)
+        note = genrefit.ensure()
         if note:
             say("  " + note)
     say("  Migrations and rebuilds are done." if True else "")

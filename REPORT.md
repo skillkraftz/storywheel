@@ -2033,3 +2033,68 @@ Tests added: `tests/test_genre_content.py` now covers six genres and seven blend
 
 
 Full suite at the end of batch 8: **1886 passed, 1 failed** in the last full run (`test_engine::test_genre_steers_entry_picks`: romance had added an "observatory" landmark and sci-fi's own landmarks diluted the test's draw). Fixed afterwards (romance lost its "the observatory"; the test draws within the one list); that test and the genre tests were re-run and pass, the whole suite was not run again.
+
+
+# Genre words rework (0.8.1)
+
+## Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Start with a FULL suite run | Works | 1887 passed in one run (14 min) before any change |
+| Main picker: Nouns / Verbs / Adjectives / Adverbs from the index, word + one-line meaning | Works | all lemmas (97,000 nouns, 11,600 verbs here); proper nouns are not separated |
+| Long lists scroll smoothly (pages / virtual, never all rows) | Works | `VirtualList` renders the visible lines; rows are read 64 at a time; tested with 500,000 rows (at most two page reads on opening); Pi 4 speed is estimated, not measured |
+| Genre picker: Any genre, or genres that RANK; fit marker per row | Works | ●●● ●●○ ●○○ ···; nothing hidden (a test checks the counts) |
+| Commonness filter with Vocabulary's bands; sort fit / commonness / A-Z; search as you type | Works | the search waits 0.15 s after the last key |
+| Row actions: Enter opens Lookup; copy; use in Writer; mark to learn (★ in Vocabulary) | Works | also `w` to a generator list |
+| Genre fit computed once, stored in the index; seeds, WordNet spread, Moby, subject domains, decay | Works | `genrefit.py`; built from the existing index (no download), stamped, rebuilt when the genre lists or domains change; also run by `dictionary install` and `update` |
+| Seeded top-30 adjectives and verbs per genre | Works | below |
+| Smaller "From the Wheel" group at the bottom of the picker; template categories removed | Works | first and last names (More like these), jobs, places, things |
+| Without the dictionary: say so, offer only From the Wheel | Works | tested |
+
+## Tests added
+`tests/test_wordlists.py` (22: seeds, the spread and its decay, domains, stamp and rebuild, the views, the bands, search, pages, and the virtual list with 500,000 rows),
+11 in `tests/test_words.py` (the new tab end to end), the From the Wheel tests in `tests/test_genre_words.py` adjusted.
+
+## Manual test
+1. F5, Genre words: the first time, a line says the fit is being worked out (a few seconds); then Nouns, ranked by your story's genres.
+2. Switch to Adjectives, press Genres…, pick *Horror* only: the first rows should read like horror. Pick *Any genre* and sort by commonness.
+3. Type a few letters in the search; press `l` on a word, then look in Vocabulary > ★ Learning.
+4. Page down quickly through the nouns on the Pi: it should stay smooth.
+5. Read the lists below and tell me which genres read wrong.
+
+## Top 30 adjectives and verbs per genre (`tools/genre_fit_report.py`, deterministic)
+```
+### comedy
+adjectives: last-minute, wonderful, heavy-handed, enormous, self-satisfied, tremendous, ham-handed, hot and bothered, notorious, infamous, disastrous, sleepy, honorary, ill-famed, interfering, marvelous, sleepy-eyed, marvellous, smug, meddling, howling, rattling, rattled, wondrous, blushing, woolly-headed, flustered, muddled, bumbling, ham-fisted
+verbs: thank, give thanks, sweet-talk, hang around, mess about, mill about, mill around, practise, reopen, flatter, coax, rehearse, tarry, loiter, redecorate, misplace, blarney, cajole, wheedle, inveigle, mislay, blandish, lollygag, footle, lallygag, apologize, borrow, outbid, lounge, loaf
+
+### fairy tale
+adjectives: tongue-tied, trusting, enchanted, agile, sly, crafty, nimble, foxy, wily, bewitched, spry, trustful, tricksy, knavish, guileful, ensorcelled, round-eyed, wide-eyed, foolish, barefoot, mischievous, thorny, dewy-eyed, shoeless, impish, barefooted, pixilated, puckish, prankish, implike
+verbs: befriend, entrance, charm, trance, enchant, captivate, bewitch, enthrall, enthral, enrapture, enamor, enamour, further, till, garden, stable, landscape, foster, disk, harness, cultivate, sow, sow in, hoe, plow, yoke, harrow, restock, fertilize, inseminate
+
+### fantasy
+adjectives: cloud-covered, shattered, ruthless, disgraced, overcast, blighted, dishonored, remorseless, pitiless, sunless, stormbound, unpitying, firm, drawn, grave, righteous, god-fearing, fearless, solemn, devout, steadfast, unwavering, livid, fey, haggard, mournful, unafraid, ashen, plaintive, unshakable
+verbs: lay to rest, revenge, inter, avenge, retaliate, unseal, entomb, scry, reforge, inhume, pray, mourn, wield, anoint, desert, desolate, forsake, bury, remodel, off, murder, bump off, herald, withstand, defy, unleash, slay, shatter, circumvent, harbinger
+
+### horror
+adjectives: superstitious, snowbound, heard, edgy, high-strung, highly strung, uptight, jumpy, restive, nervy, unquiet, plainspoken, overstrung, august, alert, open-eyed, mourning, grieving, grief-stricken, vigilant, watchful, bereaved, lordly, wakeful, sorrowing, sympathetic, distal, proximal, atrial, parietal
+verbs: reread, outlast, outlive, mourn, unlock, explore, hear, outrun, research, wallpaper, survive, ignore, scare, thumb, disregard, fright, frighten, snub, hitchhike, affright, can, team, look into, team up, room, board, cover up, visit, stop dead, search
+
+### mystery
+adjectives: searching, clever, probing, dogged, canny, faithless, treasonous, traitorous, unyielding, dour, cagey, treasonable, pertinacious, cagy, inquisitory, prior, reserved, precise, grim, relentless, shrewd, astute, unrelenting, uninvited, tactful, inexorable, unappeasable, tenacious, sharp-eyed, hawk-eyed
+verbs: revisit, decipher, decode, decrypt, arrive, re-examine, accuse, confide, criminate, figure out, solve, puzzle out, amplify, magnify, come, buy off, take the stand, black market, traffic, file, stick up, kick back, jail, sentence, put behind bars, take exception, bear witness, palm off, shanghai, bail out
+
+### romance
+adjectives: witty, lavender, dreamy, lilac, lilac-colored, woolgathering, neither, misunderstood, waiting, ready and waiting, generous, spent, in agreement, agreed, warmed, pop, solo, singing, measured, carved, disconnected, tenor, bowed, copyrighted, plucked, crescendo, fretted, staccato, dissonant, conjunct
+verbs: reread, outlast, outlive, misjudge, look up to, admire, confide, misunderstand, be amiss, misconstrue, misapprehend, misconceive, confess, remind, can, season, set to music, brown, ice, cook, strike up, cook out, cook up, cream, salt, rice, sing, bread, sight-read, pressure-cook
+
+### sci-fi
+adjectives: cynical, departing, outward-bound, uncharted, resourceful, outbound, homesick, misanthropic, unmapped, chartless, misanthropical, drifting, idealistic, vagrant, outward, minimum, driven, outer, minimal, goaded, answering, respondent, dimmed, real-time, in series, open-source, stand-alone, two-channel, single-channel, floating
+verbs: decipher, decode, decrypt, recharge, reload, delete, install, calibrate, instal, phone, access, network, google, cell phone, email, e-mail, programme, cable, telephone, input, freeze out, freeze down, spam, telegraph, dial, scroll, decay, solidify, spool, overwrite
+
+### western
+adjectives: waste, sure-handed, hard-boiled, god-fearing, hard-bitten, devout, terse, laconic, taciturn, godforsaken, pugnacious, dust-covered, baked, dusty, scorched, parched, unhurried, flinty, sunbaked, adust, curt, lawless, anarchic, anarchical, saddled, incumbent, tectonic, bedded, proterozoic, archean
+verbs: outdraw, deputize, deputise, further, step in, ride, till, garden, stable, landscape, foster, disk, harness, bluff, bluff out, cultivate, sow, sow in, ride horseback, ante, revoke, hoe, plow, skunk, yoke, harrow, ruff, gallop, reshuffle, restock
+```
+
+Full suite after the rework: **1916 passed** in one run (before the rework, from a clean start: 1887 passed in one run).

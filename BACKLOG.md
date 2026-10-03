@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 8 (tag b8-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after the Genre words rework (tag b8-genre-words). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -255,6 +255,21 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 ### Batch 8, part C: horror, sci-fi, romance
 
 - **Horror** — `b8-horror`; **sci-fi** — `b8-scifi`; **romance** — `b8-romance`.
+
+### Genre words rework (0.8.1)
+
+- **Genre words are long lists of words by part of speech, ranked by genre fit** (virtual list, commonness bands, search, sort, ★ learn, use in the
+  Writer), with the genre fit stored in the index; the template categories removed; the full suite passes in a single run — `b8-genre-words`.
+
+### Found in the Genre words rework
+
+- **The fit is a guess**: it ranks, it never hides. Judge it with the lists in REPORT.md (or `tools/genre_fit_report.py`) and tell me which genres read wrong.
+  Easy dials: `DECAY`, `MOBY_SHARE`, `DOMAIN_SHARE`, `KEEP` in `genrefit.py`, and each genre's `_domains` in `genres.json`.
+- **Genres without lists of their own** (heist, ghost story, coming-of-age, noir, thriller, adventure) rank only by their subject domains until
+  their lists are written; they are offered anyway.
+- **Proper nouns and abbreviations** are in the noun list (WordNet lemmas are lowercased in the index), so a name like "abraham" is a noun.
+- **Index size**: the fit adds about 13 MB to the index (lexicon, fit scores).
+- **Pi 4 timing is an estimate**: the nouns list opens in about 0.1 s here; the first fit takes about 3 s here (a minute on a Pi at worst).
 
 ### Found in batch 8, part C
 
