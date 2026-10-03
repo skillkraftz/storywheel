@@ -50,6 +50,8 @@ SECTIONS = [
         ("indent_display", "Show a paragraph indent", "bool", None, ""),
         ("typewriter", "Typewriter mode", "bool", None, "Keep the current line in the middle of the screen."),
         ("invisibles", "Show invisibles", "bool", None, ""),
+    ]),
+    ("Spelling", [
         ("spellcheck", "Spellcheck", "bool", None, "Underlines words the dictionary doesn't know. Names from the universe are known; right-click > Add to Dictionary teaches it more."),
         ("spell_dictionary", "Spellcheck knows the dictionary's words", "bool", None,
          "Besides Neovim's English list, accept every word in the offline dictionary (and its plurals, -ing, -ed, -er, -est forms). Needs the dictionary: run storywheel dictionary install."),
@@ -85,6 +87,13 @@ SECTIONS = [
     ]),
     ("Library", [
         ("library", "Library folder", "path", None, "Where universes, stories and manuscripts live. Changing it does not move anything."),
+    ]),
+    ("Sync", [
+        ("sync_folder", "Sync folder (Syncthing)", "path", None,
+         "The one folder you share between computers with Syncthing. To start or change it, run:  storywheel sync link FOLDER  (or storywheel setup); this only shows it. "
+         "Settings, ratings, vocabulary and your lists live in its .storywheel folder; folders, Neovide and fonts stay on each machine."),
+        ("update_remote", "Git remote to update from", "text", None,
+         "Where  storywheel update  pulls from: a git URL, or user@computer:path. Blank = the checkout's own 'origin'."),
     ]),
 ]
 

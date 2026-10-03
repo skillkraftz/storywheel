@@ -1,8 +1,10 @@
 """Commands for the library: universes, entities and stories (all with --json for other programs)."""
+import argparse
 import json
 import sys
+from pathlib import Path
 
-from . import migrate, schemas, settings, vault
+from . import migrate, schemas, settings, tools, vault
 
 
 def emit(data):
@@ -101,6 +103,76 @@ def cmd_names(args):
         print(f"Changed {names.apply(u, fixes)}. (The ids stay; mentions in notes and manuscripts are not rewritten.)")
     else:
         print("Nothing was changed. Add --apply to change them.")
+
+
+def cmd_setup(args):
+    from . import setup_wizard
+    setup_wizard.run(again=args.again, defaults=args.defaults)
+
+
+def cmd_update(args):
+    from . import update
+    try:
+        update.update(print, check_only=args.check)
+    except update.UpdateError as e:
+        print("  " + str(e))
+        raise SystemExit(1)
+
+
+def cmd_post_update(args):
+    from . import update
+    update.post_update()
+
+
+def cmd_sync(args):
+    from . import paths, sync
+    act = args.action
+    if act == "link":
+        if not args.path:
+            sys.exit("Give the folder to keep in sync:  storywheel sync link ~/Writing")
+        folder = Path(args.path).expanduser()
+        print("  This will:")
+        for name, what in sync.plan(folder):
+            print(f"    {name}: {what}")
+        for line in sync.link(folder):
+            print("  " + line)
+        print("\n" + sync.steps_text(folder))
+        if not sync.syncthing_installed():
+            print("\n  " + tools.missing("syncthing"))
+    elif act == "unlink":
+        print("\n".join("  " + l for l in sync.unlink()))
+    elif act == "conflicts":
+        found = sync.find_conflicts()
+        if args.json:
+            emit([{"path": str(c.path), "original": str(c.original), "when": c.when.isoformat(), "summary": c.summary()} for c in found])
+        elif not found:
+            print("  No sync conflicts.")
+        else:
+            print(f"  {len(found)} sync conflict(s): the same file was changed on two machines.")
+            for c in found:
+                print(f"  {c.summary()}\n    {paths.tilde(c.path)}")
+            print("  Compare:  storywheel sync diff PATH     Keep one:  storywheel sync keep PATH --mine | --other")
+    elif act in ("diff", "keep"):
+        if not args.path:
+            sys.exit("Give the conflict file (the .sync-conflict-... one).")
+        c = next((c for c in sync.find_conflicts() if str(c.path) == str(Path(args.path).expanduser()) or c.path.name == Path(args.path).name), None)
+        if c is None:
+            sys.exit(f"No sync conflict file {args.path}")
+        if act == "diff":
+            print("\n".join(sync.diff(c)))
+        else:
+            if not (args.mine or args.other):
+                sys.exit("Say which to keep:  --mine (your file) or --other (the other copy)")
+            print("  " + sync.keep(c, "mine" if args.mine else "other"))
+    else:
+        st = sync.status()
+        if args.json:
+            emit(st)
+            return
+        print(f"  Sync folder: {paths.tilde(st['folder']) if st['folder'] else '(not set up: storywheel sync link FOLDER, or storywheel setup)'}")
+        print(f"  Linked into it: {', '.join(st['linked']) or 'nothing'}")
+        print(f"  Syncthing: {'installed' if st['syncthing'] else tools.missing('syncthing')}")
+        print(f"  Conflicts: {st['conflicts']}")
 
 
 def cmd_story(args):
@@ -312,6 +384,18 @@ def add_parsers(sub):
     p.add_argument("action", choices=["fix"])
     p.add_argument("universe")
     p.add_argument("--apply", action="store_true")
+    p = sub.add_parser("setup", help="a short questionnaire for this machine (asks only what is new)")
+    p.add_argument("--again", action="store_true", help="ask every question again")
+    p.add_argument("--defaults", action="store_true", help="accept every default without asking")
+    p = sub.add_parser("update", help="pull the newest storywheel from your git remote, reinstall if the version changed, migrate")
+    p.add_argument("--check", action="store_true", help="only say whether there is something new")
+    sub.add_parser("post-update", help=argparse.SUPPRESS)
+    p = sub.add_parser("sync", help="keep your writing in step between machines (Syncthing):  sync [status] | link FOLDER | conflicts | diff PATH | keep PATH --mine|--other")
+    p.add_argument("action", nargs="?", choices=["status", "link", "unlink", "conflicts", "diff", "keep"], default="status")
+    p.add_argument("path", nargs="?")
+    p.add_argument("--mine", action="store_true")
+    p.add_argument("--other", action="store_true")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
     p.add_argument("action", choices=["list", "show"])
     p.add_argument("target", nargs="?", help="for show: universe/story")
@@ -362,4 +446,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update, "sync": cmd_sync}
