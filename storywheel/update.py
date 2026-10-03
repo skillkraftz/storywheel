@@ -160,6 +160,59 @@ def reinstall(folder, say, runner):
         raise UpdateError(f"{'pipx' if argv[0] == pipx else 'pip'} could not reinstall storywheel: " + (r.stderr or r.stdout).strip()[:300])
 
 
+def fingerprint(folder):
+    """Which code is in the source folder: its commit, plus a hash of any uncommitted changes. None if it is not a git checkout."""
+    if not (Path(folder) / ".git").exists():
+        return None
+    head = git(folder, "rev-parse", "HEAD", check=False)
+    if head.returncode != 0:
+        return None
+    fp = head.stdout.strip()
+    diff = git(folder, "diff", "HEAD", check=False).stdout
+    if diff.strip():
+        import hashlib
+        fp += "+" + hashlib.sha1(diff.encode("utf-8", "replace")).hexdigest()[:10]
+    return fp
+
+
+def record_path():
+    return paths.home() / "installed-source.json"
+
+
+def recorded():
+    """What was installed last time we know of: {"fingerprint", "version", "folder"} or {}."""
+    import json
+    try:
+        data = json.loads(record_path().read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def record_install(folder, fp, version=None):
+    """Remember which source commit is installed now, so the next update notices fixes committed without a version bump."""
+    import json
+    if fp is None:
+        record_path().unlink(missing_ok=True)
+        return
+    record_path().parent.mkdir(parents=True, exist_ok=True)
+    record_path().write_text(json.dumps({"fingerprint": fp, "version": version or version_in(folder), "folder": str(folder)}), encoding="utf-8")
+
+
+def short(fp):
+    return (fp or "")[:7] + ("+changes" if fp and "+" in fp else "")
+
+
+def record_current(say=print):
+    """`storywheel update --record`: say that the installed code is what the source folder holds now (after installing by hand)."""
+    folder, _editable = find_source()
+    if not is_source(folder):
+        raise UpdateError("There is no source folder to record.")
+    fp = fingerprint(folder)
+    record_install(folder, fp)
+    say(f"Recorded the installed source: {paths.tilde(folder)} at {short(fp) or 'a folder that is not a git checkout'}.")
+
+
 def update(say=print, check_only=False, runner=subprocess.run):
     """Returns 'up-to-date', 'updated', or (check_only) 'available'."""
     remote_setting = (settings.load_global().get("update_remote") or "").strip()
@@ -182,22 +235,34 @@ def update(say=print, check_only=False, runner=subprocess.run):
         installed = installed_version()
         fetched = 0 if temporary else fetch_and_forward(folder, say, check_only, remote_setting)
         source_version = version_in(folder)
+        source_fp = fingerprint(folder)
         if check_only and fetched:
             source_version = remote_version(folder) or source_version
+            fetch_head = git(folder, "rev-parse", "FETCH_HEAD", check=False).stdout.strip()
+            source_fp = fetch_head or source_fp
         if not source_version:
             raise UpdateError(f"{paths.tilde(folder)} has no storywheel/__init__.py with a version in it.")
-        say(f"Installed: {installed}. Source {paths.tilde(folder)}: {source_version}." + ("" if _key(source_version) != _key(installed) else " Same version."))
-        if _key(source_version) == _key(installed):
-            if fetched and not check_only:                    # new commits, same version: nothing to reinstall, but rebuild what might need it
-                say("The code changed without a new version number, so storywheel was not reinstalled.")
+        installed_fp = recorded().get("fingerprint")
+        have = f" (commit {short(installed_fp)})" if installed_fp else " (which commit is not recorded)"
+        there = f" (commit {short(source_fp)})" if source_fp else ""
+        say(f"Installed: {installed}{have}. Source {paths.tilde(folder)}: {source_version}{there}.")
+        newer, older = _key(source_version) > _key(installed), _key(source_version) < _key(installed)
+        if older:
+            say("The source is older than what is installed, so nothing was changed.")
+            return "up-to-date"
+        # the same version number can still be different code: fixes committed without a bump must reach an installed copy too
+        recommit = (not newer) and (not editable) and source_fp is not None and source_fp != installed_fp
+        if not newer and not recommit:
+            if editable and fetched and not check_only:
+                say("This install runs straight from that folder; the fetched changes are already in use.")
                 _post(runner, say)
                 return "updated"
             say("Already up to date.")
             return "up-to-date"
-        if _key(source_version) < _key(installed):
-            say("The source is older than what is installed, so nothing was changed.")
-            return "up-to-date"
-        notes = changelog_since(folder, installed)
+        notes = changelog_since(folder, installed) if newer else ""
+        if recommit:
+            say("Same version number, but " + (f"the source is at commit {short(source_fp)}, not {short(installed_fp)}." if installed_fp else
+                "storywheel does not know which commit is installed, so it reinstalls once to record it."))
         if check_only:
             say("An update is available. Run  storywheel update  to install it.")
             if notes:
@@ -210,6 +275,7 @@ def update(say=print, check_only=False, runner=subprocess.run):
         else:
             say("Reinstalling.")
             reinstall(folder, say, runner)
+            record_install(folder, source_fp, source_version)
         _post(runner, say)
         return "updated"
     finally:

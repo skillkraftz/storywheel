@@ -157,6 +157,7 @@ if [ "$DRY" = 1 ]; then
 else
   have storywheel || { say "   storywheel was installed but is not on PATH yet. Open a new terminal and run:  storywheel setup"; exit 0; }
   say "   $(storywheel --version)"
+  [ -d "$SOURCE/.git" ] && storywheel update --record >/dev/null 2>&1      # remember which commit this is, so `storywheel update` notices fixes without a version bump
   step "Setup (a few questions; everything can be changed later in Settings, F4)"
   if [ "$YES" = 1 ]; then storywheel setup --defaults; else storywheel setup; fi
 fi

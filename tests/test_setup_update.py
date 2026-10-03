@@ -133,19 +133,91 @@ def test_the_installed_version_is_compared_with_the_source_folder_not_with_a_clo
     said, run = [], FakeRun()
     assert update.update(said.append, runner=run) == "updated"
     text = "\n".join(said)
-    assert f"Installed: 0.5.0. Source {paths.tilde(src)}: 0.6.0." in text and "Reinstalling." in text and "## 0.6.0" in text
+    assert "Installed: 0.5.0 " in text and f"Source {paths.tilde(src)}: 0.6.0 (commit " in text and "Reinstalling." in text and "## 0.6.0" in text
     assert run.installs() == [["/usr/bin/pipx", "install", "--force", str(src)]]
     assert run.calls[-1][1:] == ["-m", "storywheel", "post-update"]                 # then the usual migrations and rebuilds
     assert not (paths.home() / "source").exists()                                  # no private clone any more
 
 
-def test_the_same_version_says_so_and_does_nothing(home, tmp_path, install):
+def test_the_same_version_and_the_same_commit_says_so_and_does_nothing(home, tmp_path, install):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    update.record_install(src, update.fingerprint(src))                  # (what an earlier update or install.sh recorded)
+    install(src)
+    said, run = [], FakeRun()
+    assert update.update(said.append, runner=run) == "up-to-date"
+    assert any(m.startswith("Installed: 0.5.0 (commit ") and "Source" in m and "0.5.0 (commit " in m for m in said) and "Already up to date." in said and run.calls == []
+
+
+def test_a_fix_committed_without_a_version_bump_is_reinstalled(home, tmp_path, install):
+    """The gap: 'same version, new commits' used to skip the reinstall, so such fixes never reached a non-editable install."""
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    first = update.fingerprint(src)
+    update.record_install(src, first)
+    install(src)
+    (src / "fix.txt").write_text("a fix")
+    git(src, "add", "-A")
+    git(src, "commit", "-q", "-m", "fix without a bump")
+    said, run = [], FakeRun()
+    assert update.update(said.append, runner=run) == "updated"
+    text = "\n".join(said)
+    assert "Same version number, but the source is at commit" in text and update.short(first) in text and "Reinstalling." in text
+    assert run.installs() == [["/usr/bin/pipx", "install", "--force", str(src)]]
+    assert update.recorded()["fingerprint"] == update.fingerprint(src) != first                   # recorded at install time
+    run2, said2 = FakeRun(), []
+    assert update.update(said2.append, runner=run2) == "up-to-date" and run2.calls == []         # and now it is up to date
+
+
+def test_an_unrecorded_install_is_reinstalled_once_to_record_it(home, tmp_path, install):
     src = tmp_path / "storywheel"
     make_repo(src, "0.5.0")
     install(src)
     said, run = [], FakeRun()
-    assert update.update(said.append, runner=run) == "up-to-date"
-    assert any("Installed: 0.5.0." in m and "0.5.0." in m and "Same version" in m for m in said) and "Already up to date." in said and run.calls == []
+    assert update.update(said.append, runner=run) == "updated"
+    assert "does not know which commit is installed" in " ".join(said) and "(which commit is not recorded)" in " ".join(said) and len(run.installs()) == 1
+    assert update.recorded()["fingerprint"] == update.fingerprint(src)
+    run2 = FakeRun()
+    assert update.update(lambda m: None, runner=run2) == "up-to-date" and run2.calls == []
+
+
+def test_uncommitted_changes_in_the_source_count_as_different_code(home, tmp_path, install):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    update.record_install(src, update.fingerprint(src))
+    install(src)
+    (src / "storywheel" / "__init__.py").write_text('__version__ = "0.5.0"\n# edited\n')
+    run = FakeRun()
+    assert update.update(lambda m: None, runner=run) == "updated" and len(run.installs()) == 1
+    assert "+" in update.recorded()["fingerprint"]
+    run2 = FakeRun()
+    assert update.update(lambda m: None, runner=run2) == "up-to-date"                         # (the same edit is not reinstalled again)
+    (src / "storywheel" / "__init__.py").write_text('__version__ = "0.5.0"\n# edited again\n')
+    assert update.update(lambda m: None, runner=FakeRun()) == "updated"
+
+
+def test_check_only_reports_a_same_version_fix_and_changes_nothing(home, tmp_path, install):
+    xps = tmp_path / "xps" / "storywheel"
+    make_repo(xps, "0.5.0")
+    typewriter = tmp_path / "t" / "storywheel"
+    typewriter.parent.mkdir()
+    subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    update.record_install(typewriter, update.fingerprint(typewriter))
+    (xps / "fix.txt").write_text("x")
+    git(xps, "add", "-A")
+    git(xps, "commit", "-q", "-m", "fix")
+    install(typewriter)
+    said, run = [], FakeRun()
+    assert update.update(said.append, check_only=True, runner=run) == "available" and run.calls == [] and "An update is available" in " ".join(said)
+    assert not (typewriter / "fix.txt").exists()
+
+
+def test_record_flag_remembers_the_installed_commit(home, tmp_path, install, capsys):
+    src = tmp_path / "storywheel"
+    make_repo(src, "0.5.0")
+    install(src)
+    cli(["update", "--record"])
+    assert "Recorded the installed source" in capsys.readouterr().out and update.recorded()["fingerprint"] == update.fingerprint(src)
 
 
 def test_a_source_older_than_the_installed_one_is_left_alone(home, tmp_path, install):
@@ -171,7 +243,7 @@ def test_a_checkout_with_a_remote_is_fetched_and_fast_forwarded_first(home, tmp_
     assert update.update(said.append, runner=run) == "updated"
     text = "\n".join(said)
     assert "1 new change(s) fetched from origin" in text and "release 0.6.0" in text
-    assert f"Installed: 0.5.0. Source {paths.tilde(typewriter)}: 0.6.0." in text and "Reinstalling." in text
+    assert "Installed: 0.5.0 " in text and f"Source {paths.tilde(typewriter)}: 0.6.0 (commit " in text and "Reinstalling." in text
     assert (typewriter / "storywheel" / "__init__.py").read_text() == '__version__ = "0.6.0"\n'
     assert run.installs() == [["/usr/bin/pipx", "install", "--force", str(typewriter)]]
 
@@ -190,19 +262,20 @@ def test_check_only_fetches_but_changes_and_installs_nothing(home, tmp_path, ins
     assert (typewriter / "storywheel" / "__init__.py").read_text() == '__version__ = "0.5.0"\n' and run.calls == []
 
 
-def test_new_commits_with_the_same_version_rebuild_but_do_not_reinstall(home, tmp_path, install):
+def test_new_commits_with_the_same_version_are_fetched_and_reinstalled(home, tmp_path, install):
     xps = tmp_path / "xps" / "storywheel"
     make_repo(xps, "0.5.0")
     typewriter = tmp_path / "t" / "storywheel"
     typewriter.parent.mkdir()
     subprocess.run(["git", "clone", "-q", str(xps), str(typewriter)], check=True)
+    update.record_install(typewriter, update.fingerprint(typewriter))
     (xps / "note.txt").write_text("x")
     git(xps, "add", "-A")
     git(xps, "commit", "-q", "-m", "tweak")
     install(typewriter)
     run = FakeRun()
     said = []
-    assert update.update(said.append, runner=run) == "updated" and run.installs() == [] and "without a new version number" in " ".join(said)
+    assert update.update(said.append, runner=run) == "updated" and len(run.installs()) == 1 and "tweak" in " ".join(said)
     assert run.calls[-1][1:] == ["-m", "storywheel", "post-update"]
 
 

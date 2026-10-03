@@ -113,6 +113,9 @@ def cmd_setup(args):
 def cmd_update(args):
     from . import update
     try:
+        if args.record:
+            update.record_current(print)
+            return
         update.update(print, check_only=args.check)
     except update.UpdateError as e:
         print("  " + str(e))
@@ -417,6 +420,7 @@ def add_parsers(sub):
     p.add_argument("--defaults", action="store_true", help="accept every default without asking")
     p = sub.add_parser("update", help="pull the newest storywheel from your git remote, reinstall if the version changed, migrate")
     p.add_argument("--check", action="store_true", help="only say whether there is something new")
+    p.add_argument("--record", action="store_true", help="after installing by hand: remember which source commit is installed")
     sub.add_parser("post-update", help=argparse.SUPPRESS)
     p = sub.add_parser("kitty", help="open storywheel in its own kitty window with a chosen font and taller lines")
     p.add_argument("--font", default="", help="font family (default: Settings > Writer > font)")
