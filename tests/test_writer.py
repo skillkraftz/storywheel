@@ -626,12 +626,43 @@ def test_names_complete_while_typing(home, story):
     assert "Stacie Anderson" in r["words"] and "Stacie" in r["words"]
 
 
+def test_completion_starts_on_any_word_of_3_letters_in_any_case_and_inserts_the_names_case(home, story):
+    r = run_lua(story, """
+        local w = require("sw.world")
+        local function words(p) return vim.tbl_map(function(i) return i.word end, w.matches(p)) end
+        R.sta, R.and_, R.red, R.short, R.draw = words("sta"), words("AND"), words("red"), words("st"), words("dra")
+    """)
+    assert "Stacie" in r["sta"] and "Stacie Anderson" in r["sta"]                    # (lowercase prefix; first word, and the whole name)
+    assert r["and_"] == ["Anderson"]                                                   # (the last name, typed in capitals)
+    assert r["red"] == ["Red Draw"]
+    assert r["short"] == [] and r["draw"] == ["Draw"]
+
+
+def test_a_finished_word_that_is_a_known_name_in_the_wrong_case_is_corrected(home, story):
+    """The fixture universe has Stacie Anderson and Red Draw. "red" and "hope" are ordinary words and are left alone."""
+    import re
+    slow = lambda t: re.sub(r"([ .,;:!?)])", r"\1<Cmd>lua vim.wait(25)<CR>", t)
+    on = "<Cmd>lua vim.wo.spell = true; vim.bo.spelllang = 'en'<CR>"
+    r = run_typed(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { '' })",
+                  "i" + on + slow("she met stacie and anderson, then a red door and hope "), "R.line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]")
+    assert r["line"] == "she met Stacie and Anderson, then a red door and hope "
+
+
+def test_name_correction_needs_the_spellchecker_and_the_autocorrect_setting(home, story):
+    settings.save_story(story.path, {"autocorrect": False})
+    import re
+    slow = lambda t: re.sub(r"([ .,;:!?)])", r"\1<Cmd>lua vim.wait(25)<CR>", t)
+    r = run_typed(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { '' })",
+                  "i<Cmd>lua vim.wo.spell = true<CR>" + slow("then stacie came. "), "R.line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]")
+    assert r["line"] == "then stacie came. "
+
+
 def test_no_completion_for_lowercase_words_or_unknown_names(home, story):
     r = run_typed(story, """
         vim.api.nvim_buf_set_lines(0, 0, -1, false, { "" })
         R.seen = false
         vim.api.nvim_create_autocmd("TextChangedI", { callback = function() if vim.fn.pumvisible() == 1 then R.seen = true end end })
-    """, "istac Zzz Qq", "")
+    """, "ixyzq Zzz Qq", "")
     assert r["seen"] is False
 
 

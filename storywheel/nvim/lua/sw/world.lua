@@ -15,9 +15,23 @@ function M.load()
   M.index()
 end
 
+-- A proper name is a person's or place's name ("Stacie Gise", "Red Draw"), not a description ("a locked box").
+local function is_proper(e)
+  if e.proper ~= nil and e.proper ~= vim.NIL then return e.proper end
+  return e.type ~= "thing" and e.name:match("^%u") ~= nil
+end
+M.is_proper = is_proper
+
 function M.index()
   M.names = {}
+  M.words = {}          -- lowercase word -> { word = "Gise", entity = e }, for the words of proper names
   for _, e in ipairs(M.entities) do
+    if e.type ~= "note" and e.name and e.name ~= "" and is_proper(e) then
+      for _, w in ipairs(vim.split(e.name, "[%s]+", { trimempty = true })) do
+        local clean = w:gsub("^[%p]+", ""):gsub("[%p]+$", "")
+        if #clean >= 3 and clean:match("^%u") then M.words[clean:lower()] = M.words[clean:lower()] or { word = clean, entity = e } end
+      end
+    end
     if e.type ~= "note" and e.name and e.name ~= "" then
       M.names[#M.names + 1] = { text = e.name, entity = e }
       local words = vim.split(e.name, "%s+", { trimempty = true })
@@ -105,23 +119,51 @@ function M.peek()
   return e
 end
 
--- While typing a capitalised word, offer matching names from the universe (Tab picks the next one).
+-- Completions for what has been typed of a word: any word of a proper name that starts with it (case does not matter), and the whole
+-- name when it is the first word. Accepting inserts the name's own capitals. Needs 3 letters.
+function M.matches(prefix)
+  local items, seen = {}, {}
+  if #prefix < 3 then return items end
+  local lp = prefix:lower()
+  for _, e in ipairs(M.entities) do
+    if e.type ~= "note" and e.name and e.name ~= "" and is_proper(e) then
+      local words = vim.split(e.name, "%s+", { trimempty = true })
+      for i, w in ipairs(words) do
+        local clean = w:gsub("^[%p]+", ""):gsub("[%p]+$", "")
+        if #clean > #prefix and clean:lower():sub(1, #prefix) == lp and clean:match("^%u") and not seen[clean] then
+          seen[clean] = true
+          items[#items + 1] = { word = clean, menu = "[" .. e.type .. "]" }
+        end
+        if i == 1 and #words > 1 and #clean >= #prefix and clean:lower():sub(1, #prefix) == lp and not seen[e.name] then
+          seen[e.name] = true
+          items[#items + 1] = { word = e.name, menu = "[" .. e.type .. "]" }
+        end
+      end
+    end
+  end
+  return items
+end
+
+-- While typing a word of 3 or more letters, offer matching names from the universe.
 function M.complete()
-  if vim.fn.pumvisible() == 1 or #M.names == 0 then return end
+  if vim.fn.pumvisible() == 1 or #M.entities == 0 then return end
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local before = line:sub(1, col)
-  local prefix = before:match("(%u[%w'’]*)$")
-  if not prefix or #prefix < 2 then return end
-  local items, seen = {}, {}
-  local lp = prefix:lower()
-  for _, n in ipairs(M.names) do
-    if #n.text > #prefix and n.text:lower():sub(1, #prefix) == lp and not seen[n.text] then
-      seen[n.text] = true
-      items[#items + 1] = { word = n.text, menu = "[" .. n.entity.type .. "]" }
-    end
-  end
+  local prefix = before:match("([%a][%a'’]*)$")
+  if not prefix or #prefix < 3 then return end
+  local items = M.matches(prefix)
   if #items > 0 then vim.fn.complete(col - #prefix + 1, items) end
+end
+
+-- A finished word that is a known proper name in the wrong case ("gise ") is put right, unless the lowercase word is ordinary English.
+function M.fix_case(word)
+  if #word < 3 or word:match("^%u") then return nil end
+  local hit = M.words and M.words[word:lower()]
+  if not hit or hit.word == word then return nil end
+  if not vim.wo.spell then return nil end                                -- without the spellchecker there is no telling "hope" from "Gise"
+  if (vim.fn.spellbadword(word)[1] or "") == "" then return nil end      -- the lowercase word is a real word ("hope", "will"): leave it
+  return hit.word
 end
 
 function M.setup()

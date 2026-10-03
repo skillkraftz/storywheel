@@ -51,6 +51,10 @@ local function fix_before_cursor(buf, want_row, want_col, delimiter)
   -- "i." is the start of "i.e." (and "e.g.", "a.m."...): a lone letter before a full stop is not the pronoun
   if word:lower() == "i" and delimiter == "." then return end
   local fix = M.correct(word)
+  if not fix then
+    local ok, world = pcall(require, "sw.world")
+    fix = ok and world.fix_case and world.fix_case(word) or nil
+  end
   if not fix then return end
   vim.api.nvim_buf_set_text(buf, row - 1, s - 1, row - 1, e, { fix })
   vim.api.nvim_win_set_cursor(0, { row, col + #fix - #word })

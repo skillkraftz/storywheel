@@ -246,3 +246,4 @@ def test_spellcheck_is_on_by_default_and_the_setting_turns_it_off(home, story):
     other.add_scene("A", "x")
     settings.save_story(other.path, {"spellcheck": False, "notepad_mode": False})
     assert run(other, "", "", "R.s = vim.wo[require('sw.prose').window].spell")["s"] is False
+
