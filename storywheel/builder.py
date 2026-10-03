@@ -482,6 +482,32 @@ class BuilderScreen(Screen):
             return ", ".join((self.universe.resolve(v).name if self.universe.resolve(v) else v) for v in (value or []))
         return value or ""
 
+    def apply_start(self, tab, rtab, entity):
+        """Where to open: the entity type tab, the right-hand tab and the entity (from where you left off)."""
+        if tab in TYPE_ORDER:
+            self.type = tab
+        if rtab in ("r-outline", "r-scenes", "r-notes"):
+            self.start_rtab = rtab
+        self.start_entity = entity
+
+    def enter(self, payload):
+        """Back from another mode (or told to open something): show the universe and story asked for, and everything again,
+        because other modes may have changed the library (a promoted story, new words, settings)."""
+        slug, story = payload.get("universe"), payload.get("story")
+        if slug and (self.universe is None or self.universe.slug != slug):
+            u = vault.get_universe(slug)
+            if u is not None:
+                self.universe, self.story, self.entity = u, None, None
+        if story and self.universe is not None:
+            found = self.universe.story(story)
+            if found is not None:
+                self.story = found
+        elif self.universe is None:
+            unis = vault.list_universes()
+            if unis:
+                self.universe = unis[0]
+        self.refresh_all()
+
     def refresh_all(self, lists=True, light=False):
         """Show everything again. With lists=False the entity list and the left column are left exactly as they are
         (only the card, the top box and the right column change): rolling a field must not move the list.
@@ -1451,41 +1477,15 @@ def _text_row(label, value, rated):
     return t
 
 
-class BuilderApp(App):
-    TITLE = "storywheel · Universe Builder"
-    ENABLE_COMMAND_PALETTE = False
-    BINDINGS = []
-
-    def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None, tab=None,
-                 entity=None, rtab=None):
-        super().__init__()
-        appearance.apply(self)
-        self.start_tab, self.start_entity, self.start_rtab = tab, entity, rtab
-        self.engine_factory = engine_factory
-        self.ratings = ratings
-        self.start = (universe, story)
-        self.next = None                   # ("wheel", {...}) / ("quit", {}) after the app closes
-        self.changed = False
-        self.screen_ref = None
-        self.state_store = state_store
+class BuilderHooks:
+    """What the Builder screen asks of whatever hosts it: the standalone BuilderApp, or the hub's handle for it."""
+    engine_factory = None
+    ratings = None
+    state_store = None
+    changed = False
 
     def make_engine(self, universe):
         return self.engine_factory(universe) if self.engine_factory else fill.make_engine(universe, ratings=self.ratings)
-
-    def on_mount(self):
-        self.screen_ref = BuilderScreen(self, *self.start)
-        if self.start_tab in TYPE_ORDER:
-            self.screen_ref.type = self.start_tab
-        if self.start_rtab in ("r-outline", "r-scenes", "r-notes"):
-            self.screen_ref.start_rtab = self.start_rtab
-        self.screen_ref.start_entity = self.start_entity
-        self.push_screen(self.screen_ref)
-
-    # --- hooks the screen calls ---------------------------------------------------------------------------------------
-
-    def go(self, where, payload=None):
-        self.next = (where, payload or {})
-        self.exit()
 
     def remember(self, screen):
         """Record where we are (state.json), so plain `storywheel` comes back here."""
@@ -1535,6 +1535,11 @@ class BuilderApp(App):
         note = writer.neovide_note(story)
         if self.state_store is not None:
             self.state_store.update(mode="writer", universe=screen.universe.slug, story=story.slug)
+        self.run_writer(screen, story, scene, note)
+
+    def run_writer(self, screen, story, scene, note):
+        """Standalone: suspend this app, run Neovim, come back to exactly where we were."""
+        from . import writer
         with self.suspend():
             where = writer.run(story, scene)
         if self.state_store is not None:
@@ -1589,6 +1594,34 @@ class BuilderApp(App):
         how = clipboard.copy(text, self)
         screen.say(f"Copied the manuscript of '{story.title}' ({len(text.split())} words) as plain text via {how}." if how
                    else tools.missing("clipboard", "Or export a .txt instead (x)."))
+
+
+class BuilderApp(BuilderHooks, App):
+    TITLE = "storywheel · Universe Builder"
+    ENABLE_COMMAND_PALETTE = False
+    BINDINGS = []
+
+    def __init__(self, engine_factory=None, ratings=None, universe=None, story=None, state_store=None, tab=None,
+                 entity=None, rtab=None):
+        super().__init__()
+        appearance.apply(self)
+        self.start_tab, self.start_entity, self.start_rtab = tab, entity, rtab
+        self.engine_factory = engine_factory
+        self.ratings = ratings
+        self.start = (universe, story)
+        self.next = None                   # ("wheel", {...}) / ("quit", {}) after the app closes
+        self.changed = False
+        self.screen_ref = None
+        self.state_store = state_store
+
+    def on_mount(self):
+        self.screen_ref = BuilderScreen(self, *self.start)
+        self.screen_ref.apply_start(self.start_tab, self.start_rtab, self.start_entity)
+        self.push_screen(self.screen_ref)
+
+    def go(self, where, payload=None):
+        self.next = (where, payload or {})
+        self.exit()
 
 
 def run_builder(universe=None, story=None, ratings=None, state_store=None, tab=None, entity=None, rtab=None):

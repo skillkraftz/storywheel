@@ -115,7 +115,7 @@ def test_the_loop_follows_each_modes_request_until_one_quits(home, monkeypatch):
     monkeypatch.setattr(modes, "run_wheel", fake("wheel"))
     monkeypatch.setattr(modes, "run_builder", fake("builder"))
     monkeypatch.setattr(modes, "run_writer", fake("writer"))
-    modes.run(("wheel", {}), lambda: None, lambda: None)
+    modes.run_classic(("wheel", {}), lambda: None, lambda: None)
     assert [c[0] for c in calls] == ["wheel", "builder", "writer", "wheel"]
     assert calls[1][1] == {"universe": "u"} and calls[3][1] == {"new": True}
 
@@ -124,15 +124,15 @@ def test_with_no_state_it_starts_in_the_wheel_and_with_state_it_resumes_the_mode
     seen = []
     monkeypatch.setattr(modes, "run_wheel", lambda *a, **k: seen.append("wheel"))
     monkeypatch.setattr(modes, "run_builder", lambda *a, **k: seen.append("builder"))
-    modes.run(None, None, None)
+    modes.run_classic(None, None, None)
     state.State().update(mode="builder")
-    modes.run(None, None, None)
+    modes.run_classic(None, None, None)
     assert seen == ["wheel", "builder"]
 
 
 def test_an_unknown_request_stops_the_loop(home, monkeypatch):
     monkeypatch.setattr(modes, "run_wheel", lambda *a, **k: ("nowhere", {}))
-    modes.run(("wheel", {}), None, None)
+    modes.run_classic(("wheel", {}), None, None)
 
 
 def test_the_writer_story_comes_from_the_request_or_from_where_you_were(home, world):

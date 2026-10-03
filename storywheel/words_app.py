@@ -338,6 +338,30 @@ class WordsScreen(Screen):
         yield Footer()
 
     def on_mount(self):
+        self.start()
+
+    def on_screen_resume(self):
+        self.app.title = "storywheel · Words"
+        self.app.sub_title = "offline dictionary and thesaurus"
+        self.b.remember()
+
+    def enter(self, payload):
+        """Words was kept alive while you were elsewhere. A word handed over from the Writer, or a different universe, starts it afresh
+        (the lookup path, tabs and lists stay as they were otherwise)."""
+        payload = payload or {}
+        handed = payload.get("handover")
+        old = self.universe.slug if self.universe else None
+        new = payload.get("universe") or old
+        if handed or new != old:
+            self.payload = payload
+            self.handover = handed
+            self.start(keep_view=not handed)
+        else:
+            self.refresh_mine()
+            self.refresh_uwords()
+            self.refresh_buttons()
+
+    def start(self, keep_view=False):
         self.app.title = "storywheel · Words"
         self.app.sub_title = "offline dictionary and thesaurus"
         self.universe = vault.get_universe(self.payload.get("universe")) if self.payload.get("universe") else None
@@ -358,6 +382,7 @@ class WordsScreen(Screen):
         elif migrated:
             self.say(f"Your old word banks ({migrated} words) are now in My words.")
         if self.handover and self.handover.get("word"):
+            self.query_one(TabbedContent).active = "t-lookup"
             self.query_one("#word", Input).value = self.handover["word"]
             self.lookup(self.handover["word"], origin=True)
             self.query_one("#results", OptionList).focus()

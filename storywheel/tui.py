@@ -930,6 +930,13 @@ class MainScreen(Screen):
         self.app.title = f"storywheel · {title}" if title else "storywheel"
         self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
 
+    def on_screen_resume(self):
+        """Coming back from another mode: the draft is as it was; only the title bar needs doing again."""
+        title = self.session.story["kept"].get("title", {}).get("title")
+        self.app.title = f"storywheel · {title}" if title else "storywheel"
+        self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
+        self.app.remember(self.session)
+
     def refresh_steps(self):
         s = self.session
         lst = self.steps_list
@@ -1264,8 +1271,7 @@ class MainScreen(Screen):
             return
         if story.get("promoted"):
             s.save()
-            self.app.next = ("builder", dict(story["promoted"]))
-            self.app.exit(None)
+            self.app.go("builder", dict(story["promoted"]))
             return
         s.save()
         self.app.push_screen(ChoiceScreen("Send this story to the Universe Builder: into…",
@@ -1286,8 +1292,7 @@ class MainScreen(Screen):
     def _leave(self, which):
         self.session.save()
         slug = (self.session.story.get("universes") or [None])[0]
-        self.app.next = (which, {"universe": slug})
-        self.app.exit(None)
+        self.app.go(which, {"universe": slug})
 
     def on_button_pressed(self, event):
         event.stop()
@@ -1559,13 +1564,18 @@ class MainScreen(Screen):
         """Save the story and leave, printing it as plain text, then where it went."""
         s = self.session
         path = s.save()
+        after, self._after_promotion = getattr(self, "_after_promotion", None), None
         parts = [store.to_plain(s.story)]
         if extra:
             parts.append(extra)
         if path:
             parts.append(f"Markdown: {path}")
         parts.append(f"Resume with:  storywheel resume {s.story['id']}")
-        self.app.exit("\n\n".join(p for p in parts if p))
+        full = "\n\n".join(p for p in parts if p)
+        if after:                                       # promoted: carry on into the Builder (its status line says what was made)
+            self.app.go(after[0], after[1], message=extra, full=full)
+            return
+        self.app.exit(full)
 
     # --- promotion: bringing a draft into a universe -------------------------------------------------------
 
@@ -1612,7 +1622,8 @@ class MainScreen(Screen):
         story, report = promote.apply_plan(plan, universe, draft)
         u = story.universe
         store.save_draft(draft)
-        self.app.next = ("builder", {"universe": u.slug, "story": story.slug})
+        if then == "exit":
+            self._after_promotion = ("builder", {"universe": u.slug, "story": story.slug})
         message = f"Promoted into the universe '{u.name}' as the story '{story.title}'.\n" + "\n".join(report)
         if then == "exit":
             self._finish(message)
@@ -1644,6 +1655,11 @@ class StorywheelApp(App):
         self.main = MainScreen(self.session)
         self.next = None                  # where to go after the app closes: ("builder", {...}) or None
         self.notice = notice              # said once, on the status line, when the Wheel opens
+
+    def go(self, where, payload=None, message=None, full=None):
+        """Leave the Wheel for another mode (the standalone app closes and says where; the hub just switches)."""
+        self.next = (where, payload or {})
+        self.exit(full or message)
 
     def remember(self, session):
         """Record where we are (state.json), so plain `storywheel` comes back here."""

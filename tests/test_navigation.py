@@ -145,7 +145,7 @@ def test_the_loop_resolves_back_to_the_mode_you_came_from(home, monkeypatch):
     monkeypatch.setattr(modes, "run_words", lambda st, p: make_runner("words")())
     monkeypatch.setattr(modes, "run_wheel", lambda st, p, e, plain=False: make_runner("wheel")())
     script["builder"].append(None)
-    modes.run(("builder", {}), None, None)
+    modes.run_classic(("builder", {}), None, None)
     assert seen == ["builder", "words", "builder"]
 
 
@@ -153,7 +153,7 @@ def test_back_with_an_empty_trail_uses_the_fallback(home, monkeypatch):
     seen = []
     monkeypatch.setattr(modes, "run_settings", lambda st, p: seen.append("settings") or ("back", {"fallback": "words"}) if len(seen) == 0 else None)
     monkeypatch.setattr(modes, "run_words", lambda st, p: seen.append("words") or None)
-    modes.run(("settings", {}), None, None)
+    modes.run_classic(("settings", {}), None, None)
     assert seen == ["settings", "words"]
 
 

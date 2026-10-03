@@ -278,7 +278,7 @@ def test_the_mode_loop_remembers_where_to_come_back_to(home, monkeypatch):
     monkeypatch.setattr(modes, "run_wheel", lambda *a, **k: next(script))
     monkeypatch.setattr(modes, "run_settings", lambda st, payload: (seen.append(payload.get("back")), next(script))[1])
     monkeypatch.setattr(modes, "run_builder", lambda *a, **k: next(script))
-    modes.run(("wheel", {}), None, None)
+    modes.run_classic(("wheel", {}), None, None)
     assert seen == ["wheel"]
 
 

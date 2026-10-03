@@ -284,7 +284,7 @@ def test_the_loop_tells_words_where_it_came_from_and_hands_the_writer_its_word(h
         seen["writer"] = payload
         return None
     monkeypatch.setattr(modes, "run_writer", fake_writer)
-    modes.run(("builder", {}), None, None)
+    modes.run_classic(("builder", {}), None, None)
     assert seen["words"]["back"] == "builder" and seen["writer"]["replace"] == {"new": "x"}
 
 

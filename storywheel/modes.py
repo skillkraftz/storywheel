@@ -4,6 +4,7 @@ The three modes and the hotkeys between them (F1 Wheel, F2 Builder, F3 Writer), 
 `run()` keeps going until you quit: each mode runs, says where it wants to go next, and the loop takes it there. What
 you were doing is kept in ~/.storywheel/state.json, so plain `storywheel` reopens exactly there.
 """
+import os
 import sys
 
 from . import paths, state as state_mod, store, vault, writer
@@ -106,6 +107,16 @@ def run_words(st, payload):
 
 
 def run(start=None, get_engine=None, get_ratings=None):
+    """Run the modes until the writer quits: one Textual app holds them all (hub.py). `run_classic` is the older loop that closes one
+    app and starts the next; STORYWHEEL_CLASSIC=1 uses it."""
+    if os.environ.get("STORYWHEEL_CLASSIC"):
+        return run_classic(start, get_engine, get_ratings)
+    from . import hub
+    st = state_mod.State()
+    return hub.run(start or (st.get("mode") or "wheel", {}), get_engine, get_ratings)
+
+
+def run_classic(start=None, get_engine=None, get_ratings=None):
     """Run modes until the writer quits. `start` is (mode, payload) or None (use the saved state)."""
     st = state_mod.State()
     mode, payload = start or (st.get("mode") or "wheel", {})

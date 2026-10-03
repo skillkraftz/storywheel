@@ -238,6 +238,34 @@ class SettingsScreen(Screen):
         self.refresh_stats()
         self.b.remember()
 
+    def on_screen_resume(self):
+        self.app.title = "storywheel · Settings"
+        self.app.sub_title = "saved as you go"
+        self.b.remember()
+
+    def enter(self, payload=None):
+        """Back in Settings from another mode: other modes may have changed settings, so show what is saved now."""
+        g = settings.load_global()
+        g["library"] = str(paths.library_root())
+        g["manuscripts_dir"] = str(paths.manuscripts_root())
+        for key, value in g.items():
+            if self.values.get(key) == value:
+                continue
+            self.values[key] = value                                     # (first, so the widgets' own change events see nothing new)
+            for w in self.query(f"#f-{key}"):
+                try:
+                    if isinstance(w, TextArea):
+                        w.text = str(value or "")
+                    elif isinstance(w, Switch):
+                        w.value = bool(value)
+                    elif isinstance(w, Select):
+                        w.value = value
+                    elif isinstance(w, Input):
+                        w.value = "" if value is None else str(value)
+                except Exception:
+                    pass
+        self.refresh_stats()
+
     def say(self, message):
         self.query_one("#status", Static).update(message)
 
