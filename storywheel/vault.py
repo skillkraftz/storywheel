@@ -29,6 +29,15 @@ def slugify(text, fallback="untitled"):
     return text[:60].strip("-") or fallback
 
 
+def entity_slug(name, type_=""):
+    """An entity's id from its name: no leading article, so "a locked box" is `locked-box` and "the sheriff" is `sheriff`
+    (a note's name is a title, so it keeps its "The")."""
+    if type_ == "note":
+        return slugify(name)
+    rest = re.sub(r"^(?:a|an|the)\s+", "", (name or "").strip(), flags=re.IGNORECASE)
+    return slugify(rest or name)
+
+
 def root():
     return paths.library_root()
 
@@ -615,7 +624,7 @@ class Universe:
         """A new entity, saved at once. With no name it is blank (and gets a placeholder id like character-1)."""
         taken = self._all_ids()
         if name:
-            id_ = _unique(slugify(name), taken)
+            id_ = _unique(entity_slug(name, type_), taken)
         else:
             n = 1
             while f"{type_}-{n}" in taken:
@@ -633,7 +642,7 @@ class Universe:
         links to it are rewritten, so nothing breaks."""
         if PLACEHOLDER.match(e.id) and e.name.strip():
             old = e.id
-            new = _unique(slugify(e.name), self._all_ids() - {old})
+            new = _unique(entity_slug(e.name, e.type), self._all_ids() - {old})
             if new != old:
                 old_path = self._dir(e.type) / f"{old}.md"
                 e.id = new

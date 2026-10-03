@@ -695,3 +695,57 @@ _Tags `b3-autocorrect-words`, `b3-autocorrect-ie`, `b3-q-back`, `b3-footer-modes
 
 
 Full suite at the end of batch 3: **1311 passed** (1310 in the full run, plus the one menu test fixed after it started and re-run: tests/test_notepad.py 73 passed).
+
+
+# Batch 4: fixes from use, installing, updating and syncing
+
+_Tags `b4-names-case`, `b4-name-completion`, `b4-spell-dictionary`, `b4-spell-lenient`, `b4-spell-marks`, `b4-dictionary-sources`, `b4-version`, `b4-install-script`, `b4-setup`, `b4-update`, `b4-sync-layout`, `b4-sync-conflicts`, `b4-final`. Version 0.4.0._
+
+The full suite before starting (one run, not two partial ones): **1311 passed**.
+
+## M1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Names: proper vs description | Works | entities record `proper: yes/no`; promotion, the Builder's rolls and hand-written names set it; "a locked box" / "the sheriff" stay as descriptions, "Red Draw" is Title Case; the engine only drops "the" before proper names |
+| Fix existing entities with a preview | Works | `storywheel names fix UNIVERSE [--apply]`, Builder `F` (a confirm lists every change); finds names that match a generator atom, or a thing with only its first word capitalised. Other odd names stay; mentions in notes/manuscripts aren't rewritten |
+| Writer name completion | Works | starts at 3 letters of any word of a proper name (first, last, any), any case, inserts the name's own capitals; the whole name is offered for its first word. Headless-tested; the popup's look is for manual checking |
+| Wrong-case names corrected | Works | "gise " → "Gise" like autocorrect (needs the spellchecker on; skips ordinary words such as "hope"); off with autocorrect |
+| Spell list from the dictionary | Works | `swdict` (WordNet + Moby words, plural/-s/-ed/-ing/-er/-est), compiled by headless Neovim into `~/.storywheel/spelllang/`, rebuilt when the index changes (also at `dictionary install` and Writer start). Real index: about 330,000 words, compiled in a fraction of a second |
+| Lenient setting | Works | `swlenient`: known word + -ing -ed -er -ers -ly -ness -less -ful, un-/re-; a second Neovim spell file added to `spelllang` (Settings > Spelling, default on). A few non-words slip through ("unhouse") |
+| Secondary spelling marks | Works | `spell_marks`: subtle (default, dotted grey), all, misspellings only; the Writer's help (F-keys `?`) and Settings say which colour is which |
+| Dictionary sources kept; offline rebuild | Works | `~/.storywheel/dictionary-sources/`; an older index is rebuilt from them with a one-line note; download only if missing |
+| `--version`, CHANGELOG.md | Works | 0.4.0, one place (`storywheel/__init__.py`); bump it every batch |
+| install.sh | Partial | tested as a dry run on pretend machines (bare, old Neovim, new distro Neovim, arm64, URL source); the real downloads (Neovim release, Neovide) weren't run here; the Neovim tarball names are those of recent releases |
+| storywheel setup | Works | author details, folders, terminal/Neovide, transparency, dictionary, sync, update remote; remembers answers (`setup_done` in settings.local.toml); `--again`, `--defaults` |
+| storywheel update | Works | git fetch + fast-forward only; reinstall with pipx only when the version changed; `post-update` migrations and rebuilds in a new process; shows commits and CHANGELOG entries; `--check`. Tested against local git repositories with a fake pipx |
+| Syncthing layout | Works | `sync link FOLDER` moves shared app files to `<folder>/.storywheel/` with links back; machine-only settings in `settings.local.toml`; `.stignore`; never overwrites (the other copy wins, yours is set aside) |
+| Conflicts | Works | `*.sync-conflict-*` found anywhere in the folder; compared (diff) and one kept (the other to `.trash`): CLI and Builder `Y` (and a message when the Builder opens) |
+| Sync question in setup | Works | explains the steps, checks whether Syncthing is installed (with the exact command), offers the library/manuscripts folders inside the sync folder; documented in the README |
+
+## M2. Tests added in batch 4
+| Area | File | Tests |
+|---|---|---|
+| Names (flag, promotion, rolls, repair, engine) | `test_names.py` | 8 |
+| Name completion and case correction | `test_writer.py` | 3 new |
+| Spelling from the dictionary, lenient, marks | `test_spelldict.py` | 8 |
+| Kept sources, offline rebuild | `test_dictionary.py` | 3 new |
+| Setup and update, version | `test_setup_update.py` | 18 |
+| Sync (layout, settings split, conflicts, CLI, Builder) | `test_sync.py` | 15 |
+| install.sh | `test_install_script.py` | 8 |
+
+## M3. Manual test script
+1. `./install.sh --dry-run` on this machine and, if you have one, on a fresh Debian/Ubuntu/Pi: read the plan. Then run it for real there.
+2. `storywheel --version`, `storywheel setup` (answer a few), run it again (it asks nothing), `storywheel setup --again`.
+3. `storywheel names fix THE-UNIVERSE`: does the list look right? `--apply`, or press `F` in the Builder.
+4. In the Writer type `sta` (a lowercase start of a character's name): is it offered? Type a character's name in lowercase and a space: does it get its capital? Type "hope " (no change).
+5. Type "gunsmithing", "unlatching": no red line. Try Settings > Spelling > Spelling marks with a lowercase sentence start and a word like "colour".
+6. `storywheel dictionary install` on a second machine; move `~/.storywheel/dictionary-sources/` away and run Words after a version bump to see the message.
+7. Two machines: `storywheel sync link ~/Writing`, share it in Syncthing, `storywheel setup` on the other. Edit the same scene on both while offline, reconnect, open the Builder: press `Y`.
+8. `storywheel update --check` and `storywheel update` against your git remote.
+
+## M4. Known issues / questions
+- See BACKLOG.md "Found in batch 4".
+- Syncthing is not run or checked by tests; the symlinked settings assume the tool that edits them writes through links (storywheel does).
+
+
+Full suite at the end of batch 4 (one run): **1378 passed**.

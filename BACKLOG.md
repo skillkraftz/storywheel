@@ -1,7 +1,7 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 3 (1311 tests,
-tag b3-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 4 (1378 tests,
+tag b4-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -195,6 +195,17 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 - F1-F5 are the modes everywhere, but only the Wheel's footer labels them as "modes"; elsewhere they look like commands.
 - Messages about missing tools (dictionary, wordfreq, Neovim, LibreOffice) are good but each is worded differently.
 
+### Found in batch 4
+- **Names recorded as proper or description** only for new entities; older ones are fixed with `names fix` (the preview covers only names that match a
+  generator atom, or a thing with one capitalised word); other odd names stay as they are.
+- **Renaming a "fixed" name** does not rewrite old mentions in notes and manuscripts ("Locked box" stays where it was typed).
+- **The lenient spelling list** accepts any known word + ending, so a few non-words slip through ("unhouse"); turn it off in Settings > Spelling.
+- **Name case correction** needs the spellchecker on and skips names that are also ordinary words ("Hope", "Will").
+- **`storywheel update` of a plain install** needs a git remote that serves the repository (not a tarball); there is no signature check.
+- **Syncthing's `.stversions` and conflict files in `.backups`** are ignored/not searched; no check that Syncthing is actually running.
+- **`install.sh`** is tested only as a dry run on a pretend machine; the real downloads (Neovim, Neovide) are unchecked here.
+- **Neovide** has no ready-made build for arm64.
+
 ### Found in batch 3
 - **Peek and the world.** The Writer's F8 peek still doesn't say which names it knows; a short "no entity called X in <universe>" line would help.
 - **Builder `Notes` entity tab** (type) and **Entity notes** (right-hand tab) are now distinct in name, but key `5` and key `8` are easy to mix up.
@@ -214,6 +225,18 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 
 
 ## Done
+
+### Batch 4: fixes from use, installing, updating, syncing
+
+- **Names and capitals:** entities record proper or description; promotion/rolls keep descriptions as descriptions; `names fix` and Builder `F` with a
+  preview — `b4-names-case`. Writer name completion on any word of 3+ letters, any case, and wrong-case correction — `b4-name-completion`.
+- **Spellcheck:** the dictionary's words and forms — `b4-spell-dictionary`; lenient endings/prefixes — `b4-spell-lenient`; softened or hidden secondary
+  marks, explained in help — `b4-spell-marks`.
+- **Dictionary sources kept; older index rebuilt offline** — `b4-dictionary-sources`.
+- **Version and changelog** (`--version`, CHANGELOG.md) — `b4-version`. **install.sh** — `b4-install-script`. **storywheel setup** — `b4-setup`.
+  **storywheel update** — `b4-update`.
+- **Sync:** one folder holds everything (settings split into machine-only `settings.local.toml`), `.stignore` — `b4-sync-layout`; conflicts found,
+  compared and resolved (CLI and Builder `Y`) — `b4-sync-conflicts`; setup explains the Syncthing steps and checks it; README — `b4-final`.
 
 ### Batch 3: clarity and safety
 

@@ -17,15 +17,47 @@ Everything you keep is plain files: markdown with YAML frontmatter, so the libra
 
 ## Install
 
-You need Python 3.9+ with pipx, **Neovim 0.10 or newer** (for the Writer) and, optionally, LibreOffice (only for .odt
-and .pdf export). From the folder containing `pyproject.toml`:
+### A new machine (Debian, Ubuntu, Raspberry Pi OS; x86_64 or arm64)
+
+    ./install.sh              (from this folder; add --dry-run to see what it would do, --yes to accept the defaults)
+
+It checks for, and installs when missing, Python 3.9+, pipx, git and **Neovim 0.10 or newer** (the distribution's package is often older: it then
+fetches the official release into `~/.local`), offers LibreOffice (only for .odt and .pdf export) and Neovide (a window of its own for the
+Writer), installs storywheel, and runs `storywheel setup`.
+
+### By hand
+
+You need Python 3.9+ with pipx and **Neovim 0.10 or newer**. From the folder containing `pyproject.toml`:
 
     pipx install .
 
 No pipx? `sudo apt install pipx` first, or use a virtualenv and `pip install .`
+To tinker with the word lists and see changes immediately, install it editable: `pipx install --editable .`
 
-If you want to tinker with the word lists and see changes immediately,
-install it editable instead: `pipx install --editable .`
+### Setup, version and updates
+
+- `storywheel setup` is a short questionnaire: your details for the manuscript's first page, the library and manuscripts folders, terminal or
+  Neovide, transparency, fetching the dictionary, and syncing. It remembers what it asked; running it again asks only what is new
+  (`--again` asks everything, `--defaults` asks nothing). Every answer can be changed later in Settings (F4).
+- `storywheel --version` shows the version; CHANGELOG.md lists what each version added.
+- `storywheel update` pulls the newest storywheel from your git remote (Settings > Sync > *Git remote to update from*; a private GitHub
+  repository, or another computer as `user@host:path/storywheel`; blank = this checkout's `origin`). It shows what changed, reinstalls with pipx
+  only if the version changed, runs migrations, and rebuilds the dictionary index and the spelling lists if needed. Local changes are never
+  overwritten. `storywheel update --check` only says whether there is something new.
+
+### Two computers (Syncthing)
+
+storywheel does not sync anything itself; use [Syncthing](https://syncthing.net) (one computer in use at a time).
+
+1. Install Syncthing on both computers (`sudo apt install syncthing`).
+2. On the first one run `storywheel setup` (or `storywheel sync link ~/Writing`). Everything worth keeping goes under that one folder:
+   the library (`storywheel/`), exported manuscripts, and `.storywheel/` with your settings, ratings, vocabulary, your own lists and structures
+   and your Wheel drafts. Folders, Neovide and fonts (`settings.local.toml`), Neovim's state, the dictionary index and the spelling lists
+   stay on each machine; `.stignore` lists what Syncthing leaves out.
+3. Share that folder in Syncthing to the other computer, wait for "Up to Date", then run `storywheel setup` there and give the same folder.
+4. If the same file was changed on both before they synced, Syncthing leaves a `*.sync-conflict-*` copy. The Builder says so when it opens;
+   **Y** shows what differs and lets you keep one (the other goes to the library's `.trash`). Also `storywheel sync conflicts | diff PATH |
+   keep PATH --mine|--other`, and `storywheel sync` for the status.
 
 ## Use
 
@@ -279,8 +311,29 @@ hex color), and Neovide's window opacity.
 
 Spellcheck is on. The manuscript keeps straight quotes (`'` and `"`), because the spellchecker can't read `’` in "couldn’t"; typed or pasted
 curly marks become straight, and the export makes them curly (Settings > Export). Autocorrect fixes common slips as you finish a word
-(`i` → `I`, `im` → `I'm`, `dont` → `don't`). The universe's names (people, places, things, and the proper nouns in the story's outline) are
-known to the spellchecker; right-click > **Add to Dictionary** teaches it more, for every story in that universe.
+(`i` → `I`, `im` → `I'm`, `dont` → `don't`; `wont` and `cant` are real words and stay). The universe's names (people, places, things, and the
+proper nouns in the story's outline) are known to the spellchecker; right-click > **Add to Dictionary** teaches it more, for every story in
+that universe.
+
+With the dictionary installed (below) the spellchecker also knows **every word in it** and its plurals and -s, -ed, -ing, -er, -est forms
+(`storywheel/spelldict.py` writes the list and a headless Neovim compiles it; it is rebuilt when the dictionary index changes). A second,
+**lenient** list (Settings > Spelling, on by default) accepts a known word with a common ending or beginning (-ing, -ed, -er, -ers, -ly, -ness,
+-less, -ful, un-, re-), so "gunsmithing" passes. These are plain Neovim spell files, so Neovim does the checking.
+
+The marks: **red wavy** = not a word. **Blue** = a lowercase letter where a capital belongs (SpellCap). **Pink** = a rare word (SpellRare).
+**Cyan** = another region's spelling (SpellLocal). Settings > Spelling > *Spelling marks* shows the last three as a faint dotted line
+(`subtle`, the default), as before (`all`), or not at all (`misspellings only`).
+
+**Names** in the Writer: type three letters of any word of a character's or place's name, in any case, and it is offered (accepting inserts the
+name's own capitals); a finished word that is a known name in the wrong case ("gise ") is corrected like autocorrect, unless the lowercase
+word is an ordinary word ("hope"). Names that are descriptions ("a locked box", "the sheriff") are not completed.
+
+### Names and capitals
+
+An entity records whether its name is **proper** (a person or a named place: Title Case) or a **description** (an object, a role, an unnamed
+landmark: lowercase, with the article a sentence uses, "a locked box", "the sheriff"). Promotion and the generator use what they know about the
+text; a hand-written name stays as typed. Entities made earlier can be repaired: `storywheel names fix UNIVERSE` shows what would change,
+`--apply` changes it (in the Builder: **F**, with a preview). Ids stay the same; mentions in notes and manuscripts are not rewritten.
 
 ### Dictionary and thesaurus
 
@@ -289,7 +342,8 @@ Inflected forms work ("running" finds "run", "geese" finds "goose"); a word that
 
 One-time setup (the only time storywheel uses the network, and only when you ask): `storywheel dictionary install` downloads
 Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB, and builds a 28 MB index in
-`~/.storywheel/dictionary.sqlite`. Sources and licenses are in SOURCES.md.
+`~/.storywheel/dictionary.sqlite`. The downloaded files are kept in `~/.storywheel/dictionary-sources/`, so a newer index format is rebuilt
+from them offline (with a one-line message); it only downloads again if they are missing. Sources and licenses are in SOURCES.md.
 
 - **Words (F5)** is a mode of its own, reachable from every mode, including the Writer (which hands over the word under the cursor):
   - *Lookup*: meanings, every similar and opposite word (and the opposites of similar words, labelled as indirect), wider and narrower

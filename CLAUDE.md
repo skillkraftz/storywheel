@@ -582,8 +582,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Builder entity tabs are a `Tabs` bar over one shared list and card (keys 1-5), not five separate panes.
 - Renames: matching is case-sensitive and whole-word (possessives included); the entity's `id:` and `name:` lines are
   never rewritten as text. "One at a time" is done by toggling matches in the preview list.
-- Entity field history in the Builder lives for the session only.
-- Ratings on Builder fields are recorded but do not (yet) down-weight anything.
+- Entity field history in the Builder is kept beside the entity (batch 3: `<universe>/.field-history/`).
+- Ratings on Builder fields carry the same provenance as the Wheel's and change later rolls (batch 3).
 - The Wheel's universe panel no longer asks a question on start. A draft's universes are ticked in the panel and saved
   with the draft (`universes`), default none; no/mix/only (`universe_mode`) still governs whole-step candidates.
 - Universe atoms are tagged `universe:<slug>` and boosted through the story's mix (never saved into it). The
@@ -741,4 +741,25 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   (forget words seen; Known and Learning stay) and My words takes words typed by hand (meaning from the dictionary).
 - Wheel renames: "Use: no/mix/only" is "Whole characters/places from these: no / sometimes / only" (stored values unchanged), Mix is Flavor,
   Past stories Send/+Prot/+Place are Promote/Use protagonist/Use setting.
+
+- Batch 4: an entity records `proper: yes|no` in its frontmatter (absent = not recorded). Proper names are Title Case without an article; descriptions are
+  lowercase and keep their article ("a locked box", "the sheriff"). `promote.is_proper` decides from text ("Red Draw", "The Hunting Horn" proper; "The sheriff"
+  not); rolled names carry what the generator knows (`Filler.last_proper`: step name fields and group names proper, thing atoms as written); a hand-written
+  name is judged by how it was typed. Only proper names stop the engine adding "the" (`Engine.proper`). `names.py` repairs older entities by matching the
+  generator's atoms, with a preview (CLI `names fix`, Builder `F`).
+- Writer name completion uses the words of proper names (3+ letters, any case; whole name when it is the first word). A finished lowercase word that is a
+  known name word is capitalised only if the spellchecker is on and calls the lowercase word bad.
+- Spelling lists from the dictionary (`spelldict.py`): `swdict` (all WordNet and Moby words plus plural/-s/-ed/-ing/-er/-est forms) and `swlenient` (known
+  word + -ing -ed -er -ers -ly -ness -less -ful, un-/re-), compiled by a headless Neovim into `<home>/spelllang/spell/*.utf-8.spl` (a runtimepath folder, so
+  `spelllang=en_us,swdict,swlenient`); stamped with the index's time and size and rebuilt when it changes. SpellCap/Rare/Local are dotted in grey by default
+  (`spell_marks`: all, subtle, misspellings only; the last also clears `spellcapcheck`).
+- Dictionary sources stay in `<home>/dictionary-sources/`; an index older than the schema is rebuilt from them offline when first opened (a note is queued
+  in `dictionary.NOTES`), and only an absent source asks for a download.
+- Version lives in `storywheel/__init__.py` (`pyproject` reads it); CHANGELOG.md has one entry per batch. `install.sh` supports Debian-family on x86_64/arm64.
+- Machine-only settings (library, manuscripts_dir, sync_folder, update_remote, Neovide, fonts, line/paragraph spacing, setup_done) live in
+  `settings.local.toml`; `settings.toml` is the shareable part. Sync: `sync.link` moves shared app files into `<sync>/.storywheel/` and leaves symlinks
+  (never overwriting: the other machine's copy wins and this one is set aside in `~/.storywheel/.pre-sync/`). Conflicts are Syncthing's
+  `*.sync-conflict-*` files; keeping one trashes the other (never deletes).
+- `storywheel update` fast-forwards only (an unclean tree or diverged history stops it), reinstalls with pipx only when the version changed (an in-place checkout
+  needs none), and runs `post-update` in a new process so the new code does the migrations and rebuilds.
 

@@ -132,7 +132,7 @@ def test_possessives_survive_wheel_promotion_outline_builder_and_export(home):
     # the entities made from it
     u = story.universe
     names = {e.name for e in u.entities()}
-    assert "Maeve O'Brien" in names and "Sorcerer's apprentice" in names and "King's steward" in names
+    assert "Maeve O'Brien" in names and "a sorcerer's apprentice" in names and "king's steward" in names
     assert u.entity("maeve-obrien").fields["need"] == "to trust the miller's daughter"
     assert u.entity("maeve-obrien").fields["secret"] == "she's afraid of the king's steward"
     assert {e.id for e in u.entities()} >= {"maeve-obrien", "sorcerers-apprentice", "kings-steward"}

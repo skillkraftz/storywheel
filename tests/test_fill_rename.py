@@ -1,7 +1,7 @@
 """Rolling entity fields with the generator, and renames with a preview."""
 import pytest
 
-from storywheel import fill, rename, schemas, vault
+from storywheel import fill, promote, rename, schemas, vault
 from storywheel.fill import Filler, NothingToLink
 
 
@@ -52,7 +52,7 @@ def test_places_things_and_groups_roll(home):
     f = filler(u)
     place, thing, group = u.new_entity("place"), u.new_entity("thing"), u.new_entity("group")
     assert {"name", "era", "feature", "rumor"} <= set(f.roll_blank(place))
-    assert f.roll_blank(thing) == ["name"] and thing.fields["name"][0].isupper()
+    assert f.roll_blank(thing) == ["name"] and thing.fields["name"] and thing.proper == promote.is_proper(thing.fields["name"])    # (a thing keeps its wording: "a locked box")
     assert f.roll_blank(group) == ["name", "goal"] and group.fields["name"].startswith("The ") and group.fields["name"].endswith("Company")
 
 

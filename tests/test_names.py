@@ -116,3 +116,12 @@ def test_descriptive_entities_are_not_proper_names_for_the_engine(home):
     e.set_universes([u])
     assert e.proper("the Sheriff Lund rode") == "Sheriff Lund rode"
     assert e.proper("the marshal rode") == "the marshal rode"
+
+
+def test_ids_drop_a_leading_article_except_for_notes(home):
+    u = vault.create_universe("U")
+    assert u.new_entity("thing", "a locked box").id == "locked-box"
+    assert u.new_entity("character", "the sheriff").id == "sheriff"
+    assert u.new_entity("note", "The Dry Years").id == "the-dry-years"
+    assert u.new_entity("place", "Red Draw").id == "red-draw"
+    assert vault.entity_slug("a") == "a"
