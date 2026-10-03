@@ -2,6 +2,22 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.8.0 — Batch 8: neighbors, Words tabs, three more genres
+Part A: fixes from the batch 7 samples
+- The wildcard floor no longer spreads over every other genre. `genres.json` has `_neighbors` for each genre; the floor's share goes to untagged lists
+  and lists of neighboring genres, and genres that are not neighbors get a tenth of it between them. Where a slot has no neighbor lists, the floor
+  shrinks to that tenth (the rest stays with the story's own and the general lists). Fantasy no longer gets an insurance adjuster, comedy no longer
+  gets dragon's blood. A genre with no `_neighbors` entry keeps the old even floor. The fidelity thresholds loosened in batch 7 are restored,
+  except the per-slot threshold for the western/fairy tale blend (2 points), which has no neighbor lists of its own.
+- An era that names a season sets it ("the week before Christmas" is winter; `data/seasons.json` lists the words). Rerolling the season follows the
+  era; rerolling the era passes over eras that name another season.
+- Moods lean toward the genre: each mood is tagged with the genres it suits ("absurd" is comedy's, "eerie" is horror's, ghost story's, mystery's and
+  fantasy's), so "comedy · eerie" is rare. Moods skip the recent-picks memory, which flattened them.
+- Sentence breaks: particle verbs take a pronoun in the middle ("traded it away"); lint now flags a manner phrase after a preposition ("a favor from
+  in the king's name") and a prize placed at a landmark ("Wants a fortress at the village cinema"); manners that only fit some verbs ("in the old
+  tongue", "with drawn steel", "in silent dread") carry the restricted features `speech`, `carrying`, `feeling` and are drawn only where a frame asks
+  for them (`{MANNER:speech}`); lint also reports a restricted atom no frame asks for.
+
 ## 0.7.0 — Batch 7: update by commit, and three genres written
 - `storywheel update` now remembers the commit it installed from (`~/.storywheel/installed-source.json`, written by the update and by install.sh) and
   reinstalls whenever the source folder's commit differs, not only when the version number does. A fix committed without a version bump reaches the

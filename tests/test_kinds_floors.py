@@ -124,6 +124,29 @@ def test_anchor_slots_get_a_low_floor_and_one_off_slots_keep_the_default():
     assert mix.floor_for("rival") == 0.04 and mix.floor_for("anything") == 0.12
 
 
+def test_the_floor_goes_to_neighbors_and_untagged_lists_and_only_a_tenth_to_the_rest():
+    lib = floor_library({})
+    lib.neighbors = {"western": ["romance"]}
+    lists = [wl("thing/west", ["western"]), wl("thing/hist", ["romance"]), wl("thing/space", ["sci-fi"]), wl("thing/plain", [])]
+    probs = dict(zip(["west", "hist", "space", "plain"], mix_for(lib, "western").list_probabilities(lists)))
+    assert probs["west"] == pytest.approx(0.88)
+    assert probs["hist"] == probs["plain"] == pytest.approx(0.12 * 0.45)
+    assert probs["space"] == pytest.approx(0.12 * 0.1)
+
+
+def test_with_no_neighbor_lists_in_a_slot_the_floor_shrinks_to_a_tenth():
+    lib = floor_library({})
+    lib.neighbors = {"western": ["romance"]}
+    lists = [wl("thing/west", ["western"]), wl("thing/space", ["sci-fi"])]
+    assert mix_for(lib, "western").list_probabilities(lists) == pytest.approx([1 - 0.012, 0.012])
+
+
+def test_every_shipped_genre_names_its_neighbors():
+    lib = Library.load()
+    for genre in lib.profiles:
+        assert lib.neighbors.get(genre), genre
+
+
 def test_floors_are_configurable_in_genres_json(tmp_path):
     write_json(tmp_path / "genres.json", {"_floors": {"rival": 0.5}, "steampunk": {"steampunk": 3}})
     lib = Library.load(tmp_path)
@@ -138,7 +161,7 @@ def test_shipped_floors_cover_the_anchor_slots():
     assert "disaster" not in lib.floors
 
 
-def test_a_western_story_rarely_has_a_fairy_tale_rival_but_often_a_fairy_tale_disaster():
+def test_a_western_story_rarely_has_a_fairy_tale_rival_or_disaster():
     engine = Engine(seed=7)
     engine.trace = []
     for _ in range(300):
@@ -147,7 +170,8 @@ def test_a_western_story_rarely_has_a_fairy_tale_rival_but_often_a_fairy_tale_di
         picks = [t for t in engine.trace if t[0] == slot]
         return sum("fairy tale" in t[2] for t in picks) / len(picks)
     assert share("rival") < 0.09
-    assert 0.02 < share("disaster") < 0.25            # (was 0.05: three more genres now share the wildcard floor)
+    # fairy tale is not next door to western, so since batch 8 it gets only a tenth of the one-off floor (it used to get 5% to 25%)
+    assert share("disaster") < 0.05
 
 
 # --- markov filters -------------------------------------------------------------------------------------------

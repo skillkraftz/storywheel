@@ -37,11 +37,11 @@ def test_western_fairy_tale_draws_from_matching_tags():
     for slot in FLAVORED_SLOTS:
         hits, total = seen[slot]
         assert total >= 30, f"{slot}: only {total} picks, test is not measuring much"
-        assert hits / total >= THRESHOLD - 0.05, f"{slot}: {hits / total:.0%} of {total} match"      # (every genre written adds lists the wildcard floor can draw from)
+        assert hits / total >= THRESHOLD - 0.02, f"{slot}: {hits / total:.0%} of {total} match"      # (western and fairy tale have no neighbor lists, so the whole floor still spreads over the genres written since; was exact before batch 7)
 
     hits = sum(seen[s][0] for s in FLAVORED_SLOTS)
     total = sum(seen[s][1] for s in FLAVORED_SLOTS)
-    assert hits / total >= THRESHOLD + 0.02, f"overall {hits / total:.0%}"      # (a seeded sample of 200 stories moves about a point when lists are added)
+    assert hits / total >= THRESHOLD + 0.05, f"overall {hits / total:.0%}"
 
 
 def test_the_rest_is_general_modern_or_wildcard():

@@ -1,12 +1,19 @@
 {
   "_note": "How something was done. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
   "slot": "manner",
-  "tags": ["general"],
+  "tags": [
+    "general"
+  ],
   "entries": [
     "in secret",
     "at dawn",
     "by night",
-    "without a word",
+    {
+      "text": "without a word",
+      "features": [
+        "speech"
+      ]
+    },
     "against orders",
     "in disguise",
     "alone",
@@ -17,21 +24,105 @@
     "on foot",
     "in a hurry",
     "behind everyone's back",
-    "with a heavy heart",
+    {
+      "text": "with a heavy heart",
+      "features": [
+        "feeling"
+      ]
+    },
     "before breakfast",
     "in the rain",
     "without asking",
     "too late",
     "in front of everyone",
-    {"text": "at high noon", "tags": ["western", "historical"]},
-    {"text": "on horseback", "tags": ["western", "historical"]},
-    {"text": "under a false name", "tags": ["western", "historical"]},
-    {"text": "at the next stop", "tags": ["western", "historical"]},
-    {"text": "at sundown", "tags": ["western", "historical"]},
-    {"text": "by moonlight", "tags": ["fairy tale"]},
-    {"text": "barefoot", "tags": ["fairy tale"]},
-    {"text": "in a borrowed cloak", "tags": ["fairy tale"]},
-    {"text": "at the stroke of midnight", "tags": ["fairy tale"]},
-    {"text": "three times over", "tags": ["fairy tale"]}
+    {
+      "text": "at high noon",
+      "tags": [
+        "western",
+        "historical"
+      ]
+    },
+    {
+      "text": "on horseback",
+      "tags": [
+        "western",
+        "historical"
+      ]
+    },
+    {
+      "text": "under a false name",
+      "tags": [
+        "western",
+        "historical"
+      ]
+    },
+    {
+      "text": "at the next stop",
+      "tags": [
+        "western",
+        "historical"
+      ]
+    },
+    {
+      "text": "at sundown",
+      "tags": [
+        "western",
+        "historical"
+      ]
+    },
+    {
+      "text": "by moonlight",
+      "tags": [
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "barefoot",
+      "tags": [
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "in a borrowed cloak",
+      "tags": [
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "at the stroke of midnight",
+      "tags": [
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "three times over",
+      "tags": [
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "in despair",
+      "features": [
+        "feeling"
+      ]
+    },
+    {
+      "text": "with a sigh",
+      "features": [
+        "feeling"
+      ]
+    },
+    {
+      "text": "in a whisper",
+      "features": [
+        "speech"
+      ]
+    },
+    {
+      "text": "with a lantern",
+      "features": [
+        "carrying"
+      ]
+    }
   ]
 }

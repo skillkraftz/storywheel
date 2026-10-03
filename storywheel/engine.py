@@ -31,6 +31,10 @@ BLOCKED_WORDS = re.compile(
     r"wetback|incest\w*|lynch\w*)$", re.IGNORECASE)
 
 
+# Slots whose weights are the point (a mood leans toward the genre): the recent-picks memory would flatten them.
+MEMORYLESS = {"mood"}
+
+
 class Engine:
     def __init__(self, seed=None, library=None, user_dir=None, rng=None, persist=False, ratings=None):
         """`persist=True` loads and saves the recent-picks memory in user_dir. Leave it
@@ -202,7 +206,7 @@ class Engine:
             options = [(e, w) for e, w in options if (wl.slot, e.text) not in avoid]
             if not options:
                 return None
-        recent = self._recent_for(wl)
+        recent = () if wl.slot in MEMORYLESS else self._recent_for(wl)
         used = lambda e: bool(avoid) and (wl.slot, e.text) in avoid
         # fresh in this story and not picked lately; relax memory first, then the story's set
         for keep in (lambda e: not used(e) and e.text not in recent,

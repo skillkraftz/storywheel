@@ -1,17 +1,17 @@
 {
- "_note": "",
- "slot": "want",
- "tags": [
-  "fantasy"
- ],
- "entries": [
-  "{PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} for {CLOSE:human}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner}",
-  "{THING:magic,!living} and {PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} at {landmark}",
-  "{PRIZE:material,!inner} for {CLOSE:human}",
-  "{PRIZE:social,!inner} and peace for {place}",
-  "{THING:portable,!living} back from {SOMEONE:human,!plural}"
- ]
+  "_note": "",
+  "slot": "want",
+  "tags": [
+    "fantasy"
+  ],
+  "entries": [
+    "{PRIZE:!inner} {DEADLINE}",
+    "{PRIZE:!inner} for {CLOSE:human}",
+    "{THING:valuable,!living} and {PRIZE:social,!inner}",
+    "{THING:magic,!living} and {PRIZE:!inner} {DEADLINE}",
+    "{THING:valuable,!living} at {landmark}",
+    "{PRIZE:material,!inner} for {CLOSE:human}",
+    "{PRIZE:social,!inner} and peace for {place}",
+    "{THING:portable,!living} back from {SOMEONE:human,!plural}"
+  ]
 }

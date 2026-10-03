@@ -18,11 +18,14 @@ How weights work (the one place this is decided):
   off-genre surprises still happen. Slots that repeat all through a story
   (rival, job, place, names) get a lower floor, set per slot in genres.json. If a slot has no mentioned
   lists they get everything; if it has no wildcard lists the mentioned ones do.
+* The floor is not spread evenly over every other genre: lists tagged with a neighbor of the story's genres (`_neighbors` in
+  genres.json) and untagged lists share it, and genres that are not neighbors get only FAR_SHARE (10%) of it between them. With no neighbor lists in a slot, the floor shrinks to that tenth.
 * Inside a list, a plain string has weight 1. An entry with its own tags uses
   those tags' weight instead (so a "western" entry is 3x likelier in a
   western story), or OFF_WEIGHT if the mix doesn't mention them.
 """
 
+FAR_SHARE = 0.1           # of the wildcard floor, the part that may go to genres that are not neighbors of the story's genres
 OFF_WEIGHT = 0.1          # an entry tagged with something the mix ignores
 UNKNOWN_GENRE_WEIGHT = 3  # a genre with no profile becomes a tag with this weight
 
@@ -59,6 +62,7 @@ class Mix:
         self.default = library.default_profile
         self.floor = library.floor
         self.floors = library.floors
+        self.neighbors = getattr(library, "neighbors", {})
 
     @classmethod
     def for_story(cls, story, library):
@@ -113,6 +117,18 @@ class Mix:
             return 0.0
         return self.tags_weight(entry.tags, weights) or OFF_WEIGHT
 
+    def near_tags(self):
+        """Tags of the genres next door to the story's genres (from genres.json `_neighbors`), plus the genres' own tags."""
+        near = set()
+        for name in self.data["base"]:
+            near.add(name.lower())
+            near.update(self.neighbors.get(name.lower(), ()))
+        return near
+
+    def is_near(self, wl, near):
+        """A list the floor may draw from freely: untagged, or tagged with a neighboring genre."""
+        return not wl.tags or any(t in near for t in wl.tags)
+
     def floor_for(self, slot):
         """The wildcard share for a slot: anchor slots that repeat through a story
         (rival, job, place, names...) get a lower one than one-off blocks."""
@@ -136,6 +152,15 @@ class Mix:
         floor = self.floor_for(lists[0].slot)
         wild_share = 0.0 if not wild else (1.0 if not mentioned else floor)
         total = sum(w[wl.id] for wl in mentioned)
+        near_tags = self.near_tags()
+        known = any(name.lower() in self.neighbors for name in self.data["base"])     # genres without neighbors listed keep the even floor
+        near = [wl for wl in wild if not known or self.is_near(wl, near_tags)]
+        far = [wl for wl in wild if wl not in near]
+        if mentioned and known and not near:
+            wild_share *= FAR_SHARE        # no neighbors written for this slot: the rest of the floor stays with the story's own and the general lists
+        far_part = 1.0 if not near else FAR_SHARE if far else 0.0
+        wild_part = {wl.id: (1.0 - far_part) / len(near) for wl in near}
+        wild_part.update({wl.id: far_part / len(far) for wl in far})
         probs = []
         for wl in lists:
             if wl not in live:
@@ -143,7 +168,7 @@ class Mix:
             elif w[wl.id] > 0:
                 probs.append((1.0 - wild_share) * w[wl.id] / total)
             else:
-                probs.append(wild_share / len(wild))
+                probs.append(wild_share * wild_part[wl.id])
         return probs
 
     # --- editing this story's mix (used by the mix editor) ----------------------------

@@ -144,7 +144,7 @@ def test_fantasy_and_fairy_tale_are_different_worlds(lib):
     """Fantasy is epic and high (orders, ruins, old wars, magic with a cost); fairy tale is woodcutters and talking foxes. No list is shared."""
     for wl in lib.lists.values():
         assert not ({"fantasy", "fairy tale"} <= set(wl.tags)), wl.id
-    both = [(wl.id, e.text) for wl in lib.lists.values() for e in wl.entries if {"fantasy", "fairy tale"} <= set(e.tags)]
+    both = [(wl.id, e.text) for wl in lib.lists.values() if wl.slot != "mood" for e in wl.entries if {"fantasy", "fairy tale"} <= set(e.tags)]
     assert len(both) <= 5, both                                           # a few things really are both (a castle ruin, a cursed mirror)
     for mine, other in (("fantasy", "fairy tale"), ("fairy tale", "fantasy")):
         _, flavor, trace = run([mine], stories=100)

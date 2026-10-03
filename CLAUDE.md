@@ -808,3 +808,15 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   profile gives "medieval" 1.5. "Magic with a cost" is a `loss` list (slot `{LOSS}`) used in fantasy frames.
 - Mystery keeps its clues in the thread system: its escalation, climax and twist frames use `{the_thing}`, `{the_someone}`, `{the_message}` and
   `{the_disaster}`, and a test checks that threads recur in later beats.
+
+- Batch 8 (A): `genres.json` has `_neighbors` (genre -> tags of the genres next door). `Mix.list_probabilities` splits the wildcard floor into "near"
+  lists (untagged, or tagged with a neighbor or the story's own genre) and "far" ones; far lists share FAR_SHARE (10%) of it, and where a slot has no near
+  lists the floor shrinks to that tenth. A genre without a `_neighbors` entry keeps the even floor (tests with made-up genres rely on that).
+- An era's own words fix the season (`data/seasons.json`; `steps.season_of`). The setting step rolls the era first and the season follows it; a
+  single reroll of the era passes over eras naming another season.
+- Moods are entries tagged with genres, drawn by `steps.mood_field` with a mix based on the genre just rolled (`roll_mood` for samples). The `mood` slot is
+  `MEMORYLESS`: the recent-picks memory would flatten its weights.
+- Restricted features (`frames.RESTRICTED`: speech, carrying, feeling): an atom carrying one is drawn only by a slot that names it. Lint
+  (`report.grammar_problems`) rejects a manner phrase after a preposition, a prize at a landmark, and a restricted atom no frame asks for.
+  `text.fix_particles` moves a pronoun inside a particle verb the library knows ("traded away it" -> "traded it away").
+- The genre scripts used to write batch 7's JSON are not kept; the JSON files are the source, edit them directly.

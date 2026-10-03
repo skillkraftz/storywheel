@@ -1449,3 +1449,25 @@ See BACKLOG.md "Found in batch 7".
 
 
 Full suite at the end of batch 7 (one run): **1663 passed**.
+
+
+# Batch 8 (0.8.0)
+
+## Part A: fixes from the batch 7 samples
+
+| Item | Status | What's missing |
+|---|---|---|
+| Neighbors in genres.json; floor goes to general and neighbors, a tenth to the rest | Works | all 14 genres name neighbors; a test checks that; off-genre picks in fantasy/comedy/western fell to about 1% of the slot picks |
+| Restore the batch 7 fidelity thresholds | Partial | all restored except the western/fairy tale per-slot threshold (-0.02): neither has neighbor lists |
+| Era and season agree | Works | `data/seasons.json`; reroll of either field follows |
+| Moods lean toward the genre | Works | comedy: under 8% eerie/dreadful/bleak/uneasy; mystery over 15% |
+| "traded away it" | Works | `fix_particles` for the particle verbs in the library |
+| "a favor from in the king's name" | Works | lint rule and template fixed |
+| "crawled out in the old tongue", "paid ... in silent dread" | Works | restricted manner features |
+| "Wants a fortress at the village cinema" | Works | lint rule; the want/rumor templates use a thing |
+| Scan of a few hundred samples for more | Works | 5 genres x 120 stories (7,895 distinct lines) scanned for particle pronouns, repeated words, chained prepositions; nothing else found that a rule could catch |
+
+Tests added: `tests/test_sentence_polish.py` (9), 3 in `test_kinds_floors.py` (neighbors).
+
+
+Full suite after part A: **1675 passed**.

@@ -45,6 +45,38 @@ _CONSONANT_SOUND = r"(?:one|once|uni|use|used|useful|usual|euro|ewe|ubiq)"
 _VOWEL_SOUND = r"(?:hour|honest|honor|heir)"
 
 
+_PARTICLE_WORDS = {"away", "out", "up", "down", "off", "back", "over", "aside", "along", "in", "on"}
+
+
+def particle_verbs(library):
+    """The verb phrases in the library's verb atoms that end in a particle ('traded away', 'locked up'), as
+    {phrase}. Only these are moved: 'jumped off it' is not 'jumped it off'."""
+    cached = getattr(library, "_particle_verbs", None)
+    if cached is None:
+        cached = set()
+        for slot, lists in library.by_slot.items():
+            if slot.split("_")[0] in ("act", "do", "habit"):
+                for wl in lists:
+                    for e in wl.entries:
+                        words = e.text.split()
+                        if len(words) >= 2 and words[-1] in _PARTICLE_WORDS:
+                            cached.add(e.text)
+                            if words[0].endswith("e"):
+                                cached.add(" ".join([words[0] + "d"] + words[1:]))
+        library._particle_verbs = cached
+    return cached
+
+
+def fix_particles(text, verbs):
+    """A particle verb takes a pronoun in the middle: 'traded away it' -> 'traded it away'. (Only it, them and him:
+    'her' could be 'picked up her coat'.)"""
+    for phrase in verbs:
+        if " " in phrase and phrase in text:
+            head, _, particle = phrase.rpartition(" ")
+            text = re.sub(rf"\b{re.escape(phrase)} (it|them|him)\b(?! of\b)", rf"{head} \1 {particle}", text)
+    return text
+
+
 def fix_articles(text):
     text = re.sub(rf"\b([Aa]) (?=(?!{_CONSONANT_SOUND}\b|{_CONSONANT_SOUND}-|uni)[aeiouAEIOU])", r"\1n ", text)
     text = re.sub(rf"\b([Aa])n (?=(?:{_CONSONANT_SOUND}\b|{_CONSONANT_SOUND}-|uni[a-z]))", r"\1 ", text)

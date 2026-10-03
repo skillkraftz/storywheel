@@ -1,17 +1,17 @@
 {
- "_note": "",
- "slot": "want",
- "tags": [
-  "comedy"
- ],
- "entries": [
-  "{PRIZE:!inner} before the whole of {place} hears of it",
-  "{PRIZE:!inner} without telling {CLOSE:human}",
-  "{THING:portable,!living} back, and {PRIZE:social,!inner} too",
-  "{PRIZE:!inner} to impress {CLOSE:human}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner} {DEADLINE}",
-  "{PRIZE:!inner} at {landmark} {DEADLINE}",
-  "an apology from {CLOSE:human} and {PRIZE:!inner}",
-  "{THING:portable} for {CLOSE:human} {DEADLINE}"
- ]
+  "_note": "",
+  "slot": "want",
+  "tags": [
+    "comedy"
+  ],
+  "entries": [
+    "{PRIZE:!inner} before the whole of {place} hears of it",
+    "{PRIZE:!inner} without telling {CLOSE:human}",
+    "{THING:portable,!living} back, and {PRIZE:social,!inner} too",
+    "{PRIZE:!inner} to impress {CLOSE:human}",
+    "{THING:valuable,!living} and {PRIZE:social,!inner} {DEADLINE}",
+    "{THING:valuable,!living} at {landmark} {DEADLINE}",
+    "an apology from {CLOSE:human} and {PRIZE:!inner}",
+    "{THING:portable} for {CLOSE:human} {DEADLINE}"
+  ]
 }

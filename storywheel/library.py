@@ -150,18 +150,20 @@ def _read_profiles(path):
             profiles[name.strip().lower()] = {norm_tag(t): float(w) for t, w in weights.items()}
     default = {norm_tag(t): float(w) for t, w in doc.get("_default", {}).items()}
     floors = {slot: float(f) for slot, f in doc.get("_floors", {}).items()}
-    return profiles, default, doc.get("_floor"), floors
+    neighbors = {name.strip().lower(): [norm_tag(t) for t in tags] for name, tags in doc.get("_neighbors", {}).items()}
+    return profiles, default, doc.get("_floor"), floors, neighbors
 
 
 class Library:
     """Everything loaded from disk: lists by slot, genre profiles, the floor."""
 
-    def __init__(self, lists, profiles, default_profile=None, floor=DEFAULT_FLOOR, floors=None):
+    def __init__(self, lists, profiles, default_profile=None, floor=DEFAULT_FLOOR, floors=None, neighbors=None):
         self.lists = lists                                  # id -> WordList
         self.profiles = profiles                            # genre -> {tag: weight}
         self.default_profile = default_profile or {"general": 1.0}
         self.floor = floor                                  # wildcard share for one-off slots
         self.floors = floors or {}                          # slot -> its own (usually lower) share
+        self.neighbors = neighbors or {}                    # genre -> tags of the genres whose lists the floor may draw from
         self.by_slot = {}
         for wl in lists.values():
             self.by_slot.setdefault(wl.slot, []).append(wl)
@@ -170,19 +172,20 @@ class Library:
     def load(cls, user_dir=None, extra_roots=()):
         """Built-in data, then your own in user_dir, then `extra_roots` (a universe's own lists folder)."""
         roots = [DATA / "lists", DATA / "templates"]
-        profiles, default, floor, floors = _read_profiles(DATA / "genres.json")
+        profiles, default, floor, floors, neighbors = _read_profiles(DATA / "genres.json")
         if user_dir:
             user_dir = Path(user_dir)
             roots += [user_dir / "lists", user_dir / "templates"]
             if (user_dir / "genres.json").exists():
-                more, more_default, more_floor, more_floors = _read_profiles(user_dir / "genres.json")
+                more, more_default, more_floor, more_floors, more_neighbors = _read_profiles(user_dir / "genres.json")
                 profiles.update(more)
                 default = more_default or default
                 floor = more_floor if more_floor is not None else floor
                 floors.update(more_floors)
+                neighbors.update(more_neighbors)
         roots += [Path(r) for r in extra_roots]
         return cls(load_lists(roots), profiles, default,
-                   DEFAULT_FLOOR if floor is None else float(floor), floors)
+                   DEFAULT_FLOOR if floor is None else float(floor), floors, neighbors)
 
     def replace_lists(self, prefix, new_lists):
         """Swap every list whose id starts with `prefix` for `new_lists` (used for universe atoms)."""

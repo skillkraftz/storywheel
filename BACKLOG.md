@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 7 (tag b7-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 8 part A (tag b8-a). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -241,6 +241,19 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 - **`storywheel update` reinstalls when the source commit differs**, not only when the version does — `b7-update-commit`.
 - **Comedy** — `b7-comedy`; **fantasy** (own content; fairy tale untagged as fantasy) — `b7-fantasy`; **mystery** — `b7-mystery`.
+
+### Batch 8, part A: neighbors, seasons, moods, sentence breaks
+
+- **Floor draws from neighbors** (`_neighbors` in genres.json), seasons follow eras, moods lean toward the genre, particle verbs and manner phrases
+  fixed, with lint for their causes — `b8-a`.
+
+### Found in batch 8, part A
+
+- **Western and fairy tale have no neighbor lists**, so their blend still loses a couple of points of own-material share to the genres written since.
+  Writing a few `rural`/`mythological` lists would give the floor somewhere to go.
+- **Manner phrases are still coarse**: three restricted features cover the worst clashes, but "by torchlight" still fits some verbs better than others.
+- **The scan for sentence breaks** is a regex pass over 5 genres x 120 samples (tools could do more): repeated words, prepositions in a row, particle
+  pronouns. Note any odd sentence you meet.
 
 ### Found in batch 7
 

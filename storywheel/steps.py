@@ -8,13 +8,15 @@ of the story body come from a structure (see structures.py), not from this file.
 The words themselves live in JSON (storywheel/data); this file only says how
 they are put together.
 """
+import json
 import re
+from pathlib import Path
 
 from . import frames, structures
 from . import threads as T
 from .library import Entry
 from .mix import Mix
-from .text import fix_articles, implicit, motif_from, plural, pronouns, title_case
+from .text import fix_articles, fix_particles, implicit, particle_verbs, motif_from, plural, pronouns, title_case
 
 MOTIF_SOMEONE_CHANCE = 0.25    # how often a person or creature motif is offered as a {SOMEONE}
 
@@ -335,8 +337,8 @@ def fill(c, template):
             break
         text = text.format_map(c)
     name = dict.get(c, "name", "")
-    text = fix_articles(pronouns(text, dict.get(c, "first") or (name.split() or [""])[0],
-                                 c.engine.object_words))
+    text = fix_particles(fix_articles(pronouns(text, dict.get(c, "first") or (name.split() or [""])[0],
+                                 c.engine.object_words)), particle_verbs(c.engine.library))
     return c.engine.proper(text)
 
 
@@ -355,6 +357,61 @@ def beat(opening, slot, closing="."):
 def field(key):
     """A field made the ordinary way: reuse a seed, or invent from the slot."""
     return lambda c: c.seeded(key)
+
+
+_SEASON_WORDS = None
+
+
+def season_of(era):
+    """The season an era's own words fix ("the week before Christmas" is winter), or None."""
+    global _SEASON_WORDS
+    if _SEASON_WORDS is None:
+        doc = json.loads((Path(__file__).parent / "data" / "seasons.json").read_text(encoding="utf-8"))
+        _SEASON_WORDS = {k: v for k, v in doc.items() if not k.startswith("_")}
+    text = (era or "").lower()
+    for season, words in _SEASON_WORDS.items():
+        if any(re.search(r"\b" + re.escape(w) + r"\b", text) for w in words):
+            return season
+    return None
+
+
+def era_field(c):
+    """An era. If the setting already has a season, an era that names a different one is passed over."""
+    have = dict.get(c, "season")
+    era = c.seeded("era")
+    for _ in range(12):
+        implied = season_of(era)
+        if not have or not implied or implied == have:
+            break
+        era = c.invent("era")
+    return era
+
+
+def mood_field(c):
+    """A mood that leans toward the genres just rolled (the story keeps its genre only after this step)."""
+    genres = [g.strip().lower() for g in str(dict.get(c, "genre", "")).replace(",", "/").split("/") if g.strip()]
+    old = c.mix
+    if genres:
+        data = dict(old.data)
+        data["base"] = genres
+        c.mix = Mix(data, c.engine.library)
+    try:
+        return c.seeded("mood")
+    finally:
+        c.mix = old
+
+
+def roll_mood(engine, story, genres):
+    """A mood for genres the writer has already chosen (samples, and the Wheel's own pick of a genre)."""
+    c = Ctx(engine, story, exclude="genre", fresh=False)
+    c["genre"] = " / ".join(genres)
+    c.field = "mood"
+    return str(mood_field(c))
+
+
+def season_field(c):
+    """A season: the one the era names, if it names one."""
+    return season_of(dict.get(c, "era")) or c.seeded("season")
 
 
 # --- steps -----------------------------------------------------------------------
@@ -471,7 +528,7 @@ def steps_for(story):
         Step("genre", "Genre & mood",
              "Two genres rubbing together is a shortcut to something fresh. "
              "Later steps lean toward ideas that fit what you keep here.",
-             {"genre": field("genre"), "mood": field("mood")}),
+             {"genre": field("genre"), "mood": mood_field}),
 
         Step("structure", "Structure", structure_hint(), {"structure": field("structure")}),
 
@@ -491,7 +548,7 @@ def steps_for(story):
         Step("setting", "Setting",
              "A good setting puts pressure on the character. Ask what this place "
              "makes hard for them.",
-             {k: field(k) for k in ("place", "era", "season", "landmark", "rumor")}),
+             {"place": field("place"), "era": era_field, "season": season_field, "landmark": field("landmark"), "rumor": field("rumor")}),
 
         Step("premise", "Premise",
              "One sentence: who, what they're up against, and what's at stake.",

@@ -83,9 +83,17 @@ VOCAB = {
     "gentle": "a kind or reconciling act (forgave, thanked, took in): what an ending is made of",
     "stows": "puts something somewhere and leaves it there (hid, buried, kept): goes with a hiding place",
     "trades": "gives something up for something else (sold, pawned, traded away): goes with 'to pay for'",
+    # manners (how something is done)
+    "speech": "a spoken manner ('in the old tongue', 'in whispers'): fits speaking, not crawling or paying",
+    "carrying": "needs something in hand ('with drawn steel', 'with a clipboard')",
+    "feeling": "a state of mind ('in silent dread', 'in a panic'): only where a frame asks for it",
     # anything
     "plural": "takes 'are' and 'were': 'the stockyards', 'two scarred brothers'",
 }
+
+# Features that limit where an atom may be used: an atom with one of these is drawn only by a slot that asks for it
+# ({MANNER:speech}), never by a plain {MANNER}.
+RESTRICTED = {"speech", "carrying", "feeling"}
 
 # Which slots are whose nouns, for binding verbs to subjects and objects.
 SLOT_KIND = {"someone": "person", "close": "person", "thing": "thing", "message": "message",
@@ -160,6 +168,16 @@ def satisfies(features, reqs):
                    for alt in (a.strip() for a in req.split("|"))):
             return False
     return True
+
+
+def allowed(features, reqs):
+    """Meets the requirements, and carries no restricted feature the slot did not ask for."""
+    if not satisfies(features, reqs):
+        return False
+    if not features:
+        return True
+    asked = {a.strip() for r in reqs for a in r.split("|")}
+    return not any(f in RESTRICTED and f not in asked for f in features)
 
 
 def check_vocabulary(entry):
@@ -250,7 +268,7 @@ def solve(ctx, text, relax=False):
         picks, local = {}, set()
         ok = True
         for i in plain:                                    # nouns and plain atoms first
-            got = ctx.pick_atom(slots[i].atom, (lambda e, sp=slots[i].spec: relax or satisfies(e.features, sp)), local)
+            got = ctx.pick_atom(slots[i].atom, (lambda e, sp=slots[i].spec: relax or allowed(e.features, sp)), local)
             if got is None:
                 if relax:
                     raise Starved(f"nothing for {slots[i].atom}")
@@ -264,7 +282,7 @@ def solve(ctx, text, relax=False):
             sf = values.get(subj) if subj is not None else None
             of = values.get(obj) if obj is not None else None
             accept = (lambda e, sl=sl, sf=sf, of=of:
-                      relax or (satisfies(e.features, sl.spec) and satisfies(sf, e.subject) and satisfies(of, e.object)))
+                      relax or (allowed(e.features, sl.spec) and satisfies(sf, e.subject) and satisfies(of, e.object)))
             got = ctx.pick_atom(sl.atom, accept, local)
             if got is None:
                 ok = False

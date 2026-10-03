@@ -82,9 +82,43 @@ def lint(library):
                 for name in _frames.unknown_names(library, e.text):
                     problems.append((wl.id, e.text, f"nothing can fill {{{name}}}"))
     problems += reframe_problems(library)
+    problems += grammar_problems(library)
     from . import frames
     problems += frames.lint(library)                    # can every frame be filled?
     return problems
+
+
+# Phrase shapes that read badly whatever the atoms are (found by scanning hundreds of samples):
+_PREP_BEFORE_MANNER = re.compile(r"\b(from|of|to|with|for|at|by|in|on|about|after|over|under|through|before|during|and|but|or|than|as) \{MANNER\b")
+_PRIZE_AT_PLACE = re.compile(r"\{PRIZE[^}]*\} (?:at|in|inside|near|from) \{landmark")
+
+
+def grammar_problems(library):
+    """Templates whose wording clashes with whatever fills them: a manner phrase ("in the old tongue") after a preposition
+    ("a favor from in the old tongue"), or a prize ("a fortress") said to be at a landmark. A manner that suits only some
+    verbs is a restricted feature (speech, carrying, feeling) that a frame has to ask for."""
+    out = []
+    for wl in library.lists.values():
+        if not wl.is_template:
+            continue
+        for e in wl.entries:
+            if _PREP_BEFORE_MANNER.search(e.text):
+                out.append((wl.id, e.text, "a manner phrase follows a preposition"))
+            if _PRIZE_AT_PLACE.search(e.text):
+                out.append((wl.id, e.text, "a prize is placed at a landmark (use a {THING} for something that can be there)"))
+    from . import frames
+    asked = set()
+    for wl in library.lists.values():
+        if wl.is_template:
+            for e in wl.entries:
+                for m in re.finditer(r"\{[A-Z_]+:([^}]*)\}", e.text):
+                    asked.update(a.strip().lstrip("!") for r in m.group(1).split(",") for a in r.split("|"))
+    for wl in library.lists.values():
+        for e in (wl.entries if not wl.is_template else ()):
+            for f in frames.RESTRICTED & set(e.features or ()):
+                if f not in asked:
+                    out.append((wl.id, e.text, f"restricted feature '{f}' that no frame asks for (the atom can never be drawn)"))
+    return out
 
 
 REFRAME_ATOMS = {"motive", "vice", "value", "feeling", "manner"}      # abstractions: no new facts

@@ -19,7 +19,7 @@
       "tags": ["western", "historical"]
     },
     {
-      "text": "{SOMEONE:magic} traded {THING:magic} for {PRIZE:material} at {landmark}",
+      "text": "{SOMEONE:magic} traded {THING:magic} for {THING:valuable,!living} at {landmark}",
       "tags": ["fairy tale"]
     }
   ]

@@ -1,23 +1,41 @@
 {
- "_note": "How things get done.",
- "slot": "manner",
- "tags": [
-  "fantasy"
- ],
- "entries": [
-  "by torchlight",
-  "before dawn",
-  "in the old tongue",
-  "with drawn steel",
-  "in silent dread",
-  "under a false banner",
-  "at great cost",
-  "on the eve of battle",
-  "under the black moon",
-  "with a heavy heart",
-  "in the king's name",
-  "through the storm",
-  "oath upon oath",
-  "at an army's head"
- ]
+  "_note": "How things get done.",
+  "slot": "manner",
+  "tags": [
+    "fantasy"
+  ],
+  "entries": [
+    "by torchlight",
+    "before dawn",
+    {
+      "text": "in the old tongue",
+      "features": [
+        "speech"
+      ]
+    },
+    {
+      "text": "with drawn steel",
+      "features": [
+        "carrying"
+      ]
+    },
+    {
+      "text": "in silent dread",
+      "features": [
+        "feeling"
+      ]
+    },
+    "under a false banner",
+    "at great cost",
+    "on the eve of battle",
+    "under the black moon",
+    {
+      "text": "with a heavy heart",
+      "features": [
+        "feeling"
+      ]
+    },
+    "in the king's name",
+    "through the storm"
+  ]
 }

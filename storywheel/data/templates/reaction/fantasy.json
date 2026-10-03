@@ -1,21 +1,21 @@
 {
- "_note": "",
- "slot": "reaction",
- "tags": [
-  "fantasy"
- ],
- "entries": [
-  "{ACT_THING:stows} {THING} {HIDING} and rode for {landmark} {MANNER}",
-  "{ACT_PERSON} {SOMEONE:human} {MANNER} and paid with {LOSS}",
-  "swore an oath to {SOMEONE:human,!plural} and {ACT_PLACE:mundane} {landmark} {MANNER}",
-  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
-  "paid {LOSS} to wake the old magic in {THING:magic}",
-  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-  "gathered {CLOSE:human} at {landmark} and swore to {DO_THING} {THING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-  "left {place} {MANNER} to {DO_THING} {THING} {DEADLINE}",
-  "broke an old oath to {DO_PERSON:!inner} {CLOSE:human}",
-  "bargained with {SOMEONE:magic} for {PRIZE:!inner} and gave up {LOSS}",
-  "rode to {landmark} to ask {SOMEONE:human,!plural} about {TOPIC}"
- ]
+  "_note": "",
+  "slot": "reaction",
+  "tags": [
+    "fantasy"
+  ],
+  "entries": [
+    "{ACT_THING:stows} {THING} {HIDING} and rode for {landmark} {MANNER}",
+    "{ACT_PERSON} {SOMEONE:human} {MANNER} and paid with {LOSS}",
+    "swore an oath to {SOMEONE:human,!plural} {MANNER:speech} and {ACT_PLACE:mundane} {landmark}",
+    "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
+    "paid {LOSS} to wake the old magic in {THING:magic}",
+    "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
+    "gathered {CLOSE:human} at {landmark} and swore to {DO_THING} {THING}",
+    "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
+    "left {place} {MANNER} to {DO_THING} {THING} {DEADLINE}",
+    "broke an old oath to {DO_PERSON:!inner} {CLOSE:human}",
+    "bargained with {SOMEONE:magic} for {PRIZE:!inner} and gave up {LOSS}",
+    "rode to {landmark} to ask {SOMEONE:human,!plural} about {TOPIC}"
+  ]
 }

@@ -1,17 +1,17 @@
 {
- "_note": "",
- "slot": "want",
- "tags": [
-  "mystery"
- ],
- "entries": [
-  "{PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} for {CLOSE:human}",
-  "{THING:portable,!living} from {landmark}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner}",
-  "{PRIZE:material,!inner} at {landmark}",
-  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
-  "{PRIZE:social,!inner} and peace for {place}",
-  "{PRIZE:material,!inner} {DEADLINE}"
- ]
+  "_note": "",
+  "slot": "want",
+  "tags": [
+    "mystery"
+  ],
+  "entries": [
+    "{PRIZE:!inner} {DEADLINE}",
+    "{PRIZE:!inner} for {CLOSE:human}",
+    "{THING:portable,!living} from {landmark}",
+    "{THING:valuable,!living} and {PRIZE:social,!inner}",
+    "{THING:valuable,!living} at {landmark}",
+    "{THING:portable,!living} back from {SOMEONE:human,!plural}",
+    "{PRIZE:social,!inner} and peace for {place}",
+    "{PRIZE:material,!inner} {DEADLINE}"
+  ]
 }

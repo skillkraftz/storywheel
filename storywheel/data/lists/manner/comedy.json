@@ -1,27 +1,47 @@
 {
- "_note": "How things get done.",
- "slot": "manner",
- "tags": [
-  "comedy"
- ],
- "entries": [
-  "with great dignity",
-  "in a panic",
-  "very loudly",
-  "in a disguise",
-  "by accident",
-  "in front of everyone",
-  "at the worst moment",
-  "with a straight face",
-  "politely",
-  "on a dare",
-  "during the fete",
-  "in a borrowed hat",
-  "with a clipboard",
-  "with a flourish",
-  "over tea",
-  "by mistake",
-  "in full view",
-  "without a plan"
- ]
+  "_note": "How things get done.",
+  "slot": "manner",
+  "tags": [
+    "comedy"
+  ],
+  "entries": [
+    "with great dignity",
+    {
+      "text": "in a panic",
+      "features": [
+        "feeling"
+      ]
+    },
+    {
+      "text": "very loudly",
+      "features": [
+        "speech"
+      ]
+    },
+    "in a disguise",
+    "by accident",
+    "in front of everyone",
+    "at the worst moment",
+    "with a straight face",
+    {
+      "text": "politely",
+      "features": [
+        "speech"
+      ]
+    },
+    "on a dare",
+    "during the fete",
+    "in a borrowed hat",
+    {
+      "text": "with a clipboard",
+      "features": [
+        "carrying"
+      ]
+    },
+    "with a flourish",
+    "over tea",
+    "by mistake",
+    "in full view",
+    "without a plan"
+  ]
 }

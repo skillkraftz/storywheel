@@ -8,7 +8,7 @@ import textwrap
 
 from . import store, structures
 from .mix import sync_base
-from .steps import STEPS, public, steps_for
+from .steps import STEPS, public, roll_mood, steps_for
 from .text import fix_articles
 from .threads import describe
 
@@ -18,10 +18,10 @@ def build_story(engine, genres, exclude_tags=(), structure=None):
     The structure is picked at random unless one is given (by name or label)."""
     story = store.new_story()
     steps = steps_for(story)
-    mood = steps[0].roll(engine, story, fresh=False)["mood"]
-    story["kept"]["genre"] = {"genre": " / ".join(genres), "mood": mood}
+    story["kept"]["genre"] = {"genre": " / ".join(genres), "mood": ""}
     sync_base(story)
     story["mix"]["exclude_tags"] = [t.lower() for t in exclude_tags]
+    story["kept"]["genre"]["mood"] = roll_mood(engine, story, genres)
     if structure:
         found = structures.find(structure)
         if not found:

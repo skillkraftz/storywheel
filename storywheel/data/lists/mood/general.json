@@ -1,6 +1,209 @@
 {
-  "_note": "Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
+  "_note": "Moods lean toward the genres they are tagged with: an entry tagged with something the story's mix likes is much likelier than one that is not (\"absurd\" is comedy's; \"eerie\" is horror's, ghost story's, mystery's and fantasy's). An entry tagged with a genre the mix ignores is rare, not impossible.",
   "slot": "mood",
-  "tags": ["general"],
-  "entries": ["cozy", "eerie", "bittersweet", "absurd", "tense", "melancholy", "hopeful", "gritty", "whimsical", "quiet"]
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    {
+      "text": "cozy",
+      "tags": [
+        "comedy",
+        "romance",
+        "coming-of-age",
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "eerie",
+      "tags": [
+        "horror",
+        "ghost story",
+        "mystery",
+        "fantasy"
+      ]
+    },
+    {
+      "text": "bittersweet",
+      "tags": [
+        "romance",
+        "coming-of-age",
+        "western",
+        "fairy tale",
+        "ghost story"
+      ]
+    },
+    {
+      "text": "absurd",
+      "tags": [
+        "comedy"
+      ]
+    },
+    {
+      "text": "tense",
+      "tags": [
+        "thriller",
+        "mystery",
+        "heist",
+        "horror",
+        "noir",
+        "sci-fi",
+        "western"
+      ]
+    },
+    {
+      "text": "melancholy",
+      "tags": [
+        "noir",
+        "ghost story",
+        "western",
+        "coming-of-age",
+        "romance",
+        "sci-fi"
+      ]
+    },
+    {
+      "text": "hopeful",
+      "tags": [
+        "adventure",
+        "fantasy",
+        "sci-fi",
+        "coming-of-age",
+        "romance",
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "gritty",
+      "tags": [
+        "western",
+        "noir",
+        "thriller",
+        "heist",
+        "horror",
+        "fantasy"
+      ]
+    },
+    {
+      "text": "whimsical",
+      "tags": [
+        "comedy",
+        "fairy tale",
+        "coming-of-age",
+        "romance",
+        "fantasy"
+      ]
+    },
+    {
+      "text": "quiet",
+      "tags": [
+        "mystery",
+        "coming-of-age",
+        "ghost story",
+        "romance",
+        "western",
+        "horror"
+      ]
+    },
+    {
+      "text": "wry",
+      "tags": [
+        "comedy",
+        "noir",
+        "heist",
+        "mystery",
+        "romance"
+      ]
+    },
+    {
+      "text": "tender",
+      "tags": [
+        "romance",
+        "coming-of-age",
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "brooding",
+      "tags": [
+        "fantasy",
+        "noir",
+        "horror",
+        "western",
+        "ghost story"
+      ]
+    },
+    {
+      "text": "epic",
+      "tags": [
+        "fantasy",
+        "adventure",
+        "sci-fi",
+        "western"
+      ]
+    },
+    {
+      "text": "playful",
+      "tags": [
+        "comedy",
+        "romance",
+        "heist",
+        "adventure",
+        "fairy tale"
+      ]
+    },
+    {
+      "text": "bleak",
+      "tags": [
+        "horror",
+        "noir",
+        "western",
+        "sci-fi",
+        "thriller"
+      ]
+    },
+    {
+      "text": "wistful",
+      "tags": [
+        "romance",
+        "coming-of-age",
+        "fairy tale",
+        "ghost story"
+      ]
+    },
+    {
+      "text": "uneasy",
+      "tags": [
+        "horror",
+        "mystery",
+        "ghost story",
+        "thriller",
+        "sci-fi"
+      ]
+    },
+    {
+      "text": "wondrous",
+      "tags": [
+        "sci-fi",
+        "fantasy",
+        "fairy tale",
+        "adventure"
+      ]
+    },
+    {
+      "text": "swashbuckling",
+      "tags": [
+        "adventure",
+        "heist",
+        "western"
+      ]
+    },
+    {
+      "text": "dreadful",
+      "tags": [
+        "horror",
+        "ghost story"
+      ]
+    }
+  ]
 }

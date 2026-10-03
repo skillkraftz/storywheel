@@ -1,16 +1,16 @@
 {
- "_note": "",
- "slot": "act_crisis",
- "tags": [
-  "fantasy"
- ],
- "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost {LOSS}.",
-  "{the_thing:magic} demanded more, and {first} had nothing left but {VALUE}.",
-  "{the_someone:human} betrayed {first} at {landmark}, and the host broke.",
-  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
-  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
-  "The gates of {place} fell, and {first} stood alone against {the_disaster}.",
-  "{first} learned the true cost of {the_thing} and wept {MANNER}."
- ]
+  "_note": "",
+  "slot": "act_crisis",
+  "tags": [
+    "fantasy"
+  ],
+  "entries": [
+    "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost {LOSS}.",
+    "{the_thing:magic} demanded more, and {first} had nothing left but {VALUE}.",
+    "{the_someone:human} betrayed {first} at {landmark}, and the host broke.",
+    "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
+    "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
+    "The gates of {place} fell, and {first} stood alone against {the_disaster}.",
+    "{first} learned the true cost of {the_thing} and wept {MANNER:feeling}."
+  ]
 }

@@ -1,0 +1,7 @@
+{
+  "_note": "Words in an era that fix the season. When the era says one of these, the setting's season is that season (and an era that says a different season is not drawn for a setting that already has one).",
+  "winter": ["winter", "christmas", "midwinter", "yuletide", "december", "january", "february", "snow", "frost", "solstice"],
+  "spring": ["spring", "easter", "march", "april", "may day", "thaw", "blossom"],
+  "summer": ["summer", "june", "july", "august", "midsummer", "dog days", "heatwave"],
+  "autumn": ["autumn", "fall of the leaves", "harvest", "september", "october", "november", "halloween", "michaelmas"]
+}
