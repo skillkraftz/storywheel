@@ -48,7 +48,7 @@ HELP = f"""\
 
 [b]Universe and stories[/b]
   [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
-  [b]N[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
+  [b]F[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
   [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
@@ -293,7 +293,7 @@ class BuilderScreen(Screen):
         Binding("S", "story_settings", "Story settings", show=False),
         Binding("G", "global_settings", "Your details", show=False),
         Binding("o", "overview", "Universe overview"),
-        Binding("N", "fix_names", "Fix names", show=False),
+        Binding("F", "fix_names", "Fix names", show=False),
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),

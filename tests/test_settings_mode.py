@@ -98,7 +98,8 @@ def test_other_keys_in_the_file_are_not_lost(home):
     async def script(app, pilot):
         await type_into(pilot, app, "#f-email", "e@x.org")
     run(script)
-    assert 'library = "/somewhere"' in (home / "home" / "settings.toml").read_text()
+    assert 'library = "/somewhere"' in (home / "home" / "settings.local.toml").read_text()          # (machine settings moved to their own file)
+    assert "library" not in (home / "home" / "settings.toml").read_text()
 
 
 def test_the_library_location_is_a_setting_and_nothing_is_moved(home, monkeypatch, tmp_path):
@@ -115,7 +116,7 @@ def test_the_library_location_is_a_setting_and_nothing_is_moved(home, monkeypatc
     said = run(script)
     assert "Nothing was moved" in said and new.is_dir()
     assert paths.library_root() == new
-    assert 'library = "%s"' % new in (home / "home" / "settings.toml").read_text()
+    assert 'library = "%s"' % new in (home / "home" / "settings.local.toml").read_text()
 
 
 def test_the_environment_variable_still_wins(home, tmp_path):

@@ -509,6 +509,8 @@ def main(argv=None):
                               help="use the simple prompt instead of the full-screen app")
     parser = argparse.ArgumentParser(prog="storywheel", description="Roll a story one piece at a time.",
                                      parents=[plain_parent])
+    from . import __version__
+    parser.add_argument("--version", action="version", version=f"storywheel {__version__}")
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("new", parents=[plain_parent], help="start a new Wheel draft")
     sub.add_parser("wheel", parents=[plain_parent], help="open the Wheel (on the draft you were on)")

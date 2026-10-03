@@ -16,3 +16,9 @@ def missing(name, extra=""):
     thing, why, command = TOOLS[name]
     text = f"{thing} isn't installed. {why[:1].upper()}{why[1:]}. To fix it, run:  {command}"
     return text + (f"   {extra}" if extra else "")
+
+TOOLS.update({
+    "pipx": ("pipx", "installing and updating storywheel needs it", "sudo apt install pipx && pipx ensurepath"),
+    "git": ("git", "updating storywheel needs it", "sudo apt install git"),
+    "syncthing": ("Syncthing", "syncing your writing between machines needs it", "sudo apt install syncthing"),
+})

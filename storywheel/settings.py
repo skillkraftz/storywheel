@@ -128,22 +128,43 @@ def _load(path, defaults):
     return out
 
 
+# What belongs to this machine and is NOT shared when the settings are synced: folders, the Neovide window, fonts, and what this
+# machine's setup has asked. They live in settings.local.toml (the rest in settings.toml, which a sync tool may carry between machines).
+LOCAL_KEYS = ("library", "manuscripts_dir", "sync_folder", "update_remote", "neovide", "writer_font", "writer_font_size", "line_spacing",
+              "paragraph_spacing", "neovide_opacity", "setup_done")
+
+
 def global_path():
     return paths.home() / "settings.toml"
 
 
+def local_path():
+    return paths.home() / "settings.local.toml"
+
+
 def load_global():
-    return _load(global_path(), GLOBAL_DEFAULTS)
+    out = _load(global_path(), GLOBAL_DEFAULTS)
+    out.update(_load(local_path(), {}))                      # this machine's own values win
+    return out
 
 
 def save_global(values):
     path = global_path()
     path.parent.mkdir(parents=True, exist_ok=True)
-    keep = {k: v for k, v in _load(path, {}).items()} if path.exists() else {}     # keys we don't know (library = ...) stay
-    merged = dict(GLOBAL_DEFAULTS, **keep)
-    merged.update(values)
-    path.write_text(dump_toml(merged, "storywheel settings: who you are, and defaults for new stories."),
-                    encoding="utf-8")
+    shared = _load(path, {}) if path.exists() else {}                     # keys we don't know stay
+    local = _load(local_path(), {}) if local_path().exists() else {}
+    for key in LOCAL_KEYS:                                               # (an older settings.toml kept these: move them)
+        if key in shared:
+            local.setdefault(key, shared.pop(key))
+    merged = dict(GLOBAL_DEFAULTS, **shared)
+    for key, value in values.items():
+        (local if key in LOCAL_KEYS else merged)[key] = value
+    for key in LOCAL_KEYS:
+        merged.pop(key, None)
+    path.write_text(dump_toml(merged, "storywheel settings: who you are, and defaults for new stories."), encoding="utf-8")
+    if local:
+        local_path().write_text(dump_toml(local, "this machine only (folders, Neovide, fonts): not shared when your settings are synced."),
+                                encoding="utf-8")
     return path
 
 
