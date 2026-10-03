@@ -20,6 +20,7 @@ from textual.widgets.option_list import Option
 
 from . import dictionary, inflect, learn, overused, vault, wordbank
 from . import appearance, navigation, tools
+from .footer import FitFooter
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -335,7 +336,7 @@ class WordsScreen(Screen):
                 yield OptionList(id="over")
                 yield OptionList(id="occ")
         yield Static("", id="status", markup=False)
-        yield Footer()
+        yield FitFooter()
 
     def on_mount(self):
         self.start()

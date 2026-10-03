@@ -138,7 +138,7 @@ def test_the_entity_list_column_is_wide_and_the_card_uses_the_space(home):
         s = app.screen_ref
         return s.query_one("#entities").size.width, s.query_one("#card-box").size.width, s.query_one("#left").size.width
     entities, card, left = run(script)
-    assert entities >= 36 and left >= 42 and card >= 70
+    assert entities >= 30 and left >= 38 and card >= 70      # (the list needs room for its three buttons; the card gets the rest)
 
 
 def test_links_and_appears_in_sit_at_the_bottom_of_the_entity_card(home):

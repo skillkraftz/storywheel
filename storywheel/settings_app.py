@@ -11,6 +11,7 @@ from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
 from .grammar_categories import CATEGORIES as GRAMMAR_CATEGORIES
 from . import appearance, navigation
+from .footer import FitFooter
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
@@ -217,7 +218,7 @@ class SettingsScreen(Screen):
                 yield Static("Per story", classes="title")
                 yield DataTable(id="stories")
         yield Static("", id="status", markup=False)
-        yield Footer()
+        yield FitFooter()
 
     def control(self, key, kind, extra, value):
         wid = f"f-{key}"

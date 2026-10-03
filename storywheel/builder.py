@@ -11,6 +11,8 @@ steps through that field's history, space rolls every blank field, R rolls the w
 Mode keys everywhere: F1 Wheel, F2 Builder, F3 Writer (and in the Writer, F2 comes back here).
 """
 from rich.style import Style
+from rich.cells import cell_len
+from rich.table import Table
 from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.binding import Binding
@@ -18,6 +20,7 @@ from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
 from . import appearance, fieldhistory, navigation, tools
 from . import ratings as R
+from .footer import FitFooter
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -305,9 +308,13 @@ class BuilderScreen(Screen):
     ]
     DEFAULT_CSS = """
     BuilderScreen #body { height: 1fr; }
-    BuilderScreen #left { width: 21%; min-width: 38; max-width: 46; border: round $primary-darken-2; }
+    BuilderScreen #left { width: 21%; min-width: 38; max-width: 40; }
+    BuilderScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
+    BuilderScreen #universes-box { height: auto; max-height: 40%; }
+    BuilderScreen #stories-box { height: 1fr; }
+    BuilderScreen #legend { height: 1; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis; }
     BuilderScreen #mid { width: 1fr; }
-    BuilderScreen #right { width: 24%; min-width: 40; max-width: 52; border: round $primary-darken-2; }
+    BuilderScreen #right { width: 22%; min-width: 40; max-width: 46; border: round $primary-darken-2; }
     BuilderScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
     BuilderScreen #universes { height: auto; max-height: 12; }
     BuilderScreen #stories { height: 1fr; }
@@ -321,9 +328,9 @@ class BuilderScreen(Screen):
     BuilderScreen #outline, BuilderScreen #scenes { height: 1fr; }
     BuilderScreen #outline-title { padding: 0 1; color: $text-muted; height: auto; }
     BuilderScreen #notes-pane { height: 1fr; }
-    BuilderScreen #tabs { height: 3; }
+    BuilderScreen #tabs { height: 2; }
     BuilderScreen #work { height: 1fr; }
-    BuilderScreen #entities { width: 32%; min-width: 32; max-width: 40; height: 100%; border: round $primary-darken-2; }
+    BuilderScreen #entities { width: 36; height: 100%; border: round $primary-darken-2; }
     BuilderScreen #card-box { width: 1fr; height: 100%; overflow: hidden; border: round $primary; }
     /* every list has the same (no) border focused or not, so focusing one never moves or resizes its contents;
        focus is shown by colour */
@@ -358,21 +365,23 @@ class BuilderScreen(Screen):
         yield QuietHeader()
         with Horizontal(id="body"):
             with Vertical(id="left"):
-                yield Static("Universes", classes="title")
-                yield UniverseList(id="universes")
-                with Horizontal(classes="btns"):
-                    yield _quiet(Button("+Universe", id="u-new"))
-                    yield _quiet(Button("Rename", id="u-rename"))
-                    yield _quiet(Button("Del", id="u-delete"))
-                yield Static("Stories", id="stories-title", classes="title", markup=False)
-                with Horizontal(classes="btns"):
-                    yield _quiet(Button("Outline", id="s-open"))
-                    yield _quiet(Button("Write", id="s-write"))
-                    yield _quiet(Button("Export", id="s-export"))
-                with Horizontal(classes="btns"):
-                    yield _quiet(Button("+Wheel draft", id="s-draft"))
-                    yield _quiet(Button("Backups…", id="s-backups"))
-                yield StoryOptions(id="stories")
+                with Vertical(id="universes-box", classes="box") as box:
+                    box.border_title = "Universes"
+                    yield UniverseList(id="universes")
+                    with Horizontal(classes="btns"):
+                        yield _quiet(Button("+Universe", id="u-new"))
+                        yield _quiet(Button("Rename", id="u-rename"))
+                        yield _quiet(Button("Delete", id="u-delete"))
+                with Vertical(id="stories-box", classes="box") as box:
+                    box.border_title = "Stories"
+                    yield StoryOptions(id="stories")
+                    with Horizontal(classes="btns"):
+                        yield _quiet(Button("Outline", id="s-open"))
+                        yield _quiet(Button("Write", id="s-write"))
+                        yield _quiet(Button("Export", id="s-export"))
+                    with Horizontal(classes="btns"):
+                        yield _quiet(Button("+Wheel draft", id="s-draft"))
+                        yield _quiet(Button("Backups…", id="s-backups"))
             with Vertical(id="mid"):
                 with Vertical(id="top-box"):
                     yield Static("Writing", id="top-title", classes="title", markup=False)
@@ -390,9 +399,7 @@ class BuilderScreen(Screen):
                     with Vertical(id="card-box"):
                         yield Static("", id="card-title", classes="title", markup=False)
                         yield CardList(id="card")
-                        yield Static("▲ ▼ like or dislike a value (liked wording is used more, disliked less in later rolls)    ✎ the generator can't "
-                                     "fill this field: write it yourself    Roll blanks fills only empty fields; it never changes what you wrote.",
-                                     id="legend", markup=False)
+                        yield Static(LEGEND, id="legend", markup=False)
                         yield Static("Links", classes="title", markup=False)
                         yield Static("", id="links", markup=False)
                         yield Static("Appears in", classes="title", markup=False)
@@ -411,7 +418,7 @@ class BuilderScreen(Screen):
                         yield Static("Free-form notes about the selected entity (saved as you type)", classes="title", markup=False)
                         yield TextArea("", id="notes")
         yield Static("", id="status", markup=False)
-        yield Footer()
+        yield FitFooter()
 
     def on_mount(self):
         slug, story = self.start
@@ -540,12 +547,8 @@ class BuilderScreen(Screen):
         rows = []
         for u in vault.list_universes():
             here = self.universe and u.slug == self.universe.slug
-            t = Text()
-            t.append("▶ " if here else "  ", style="bold cyan")
             n = len(u.entities())
-            t.append(u.name, style="bold" if here else "")
-            t.append(f"  {n} entit{'y' if n == 1 else 'ies'}", style="dim")
-            rows.append(Option(t, id=u.slug))
+            rows.append(Option(_name_and_count(u.name, f"{n} entit{'y' if n == 1 else 'ies'}", bool(here)), id=u.slug))
         if not rows:
             rows.append(Option(Text("(none yet: press N)", style="dim"), id="", disabled=True))
         lst.add_options(rows)
@@ -560,16 +563,11 @@ class BuilderScreen(Screen):
         rows = []
         if self.universe:
             for s in self.universe.stories():
-                t = Text()
-                t.append("▶ " if self.story and s.slug == self.story.slug else "  ", style="bold cyan")
-                t.append(s.title)
-                t.append(f"  {s.word_count()}w", style="dim")
-                rows.append(Option(t, id=s.slug))
+                rows.append(Option(_name_and_count(s.title, f"{s.word_count()}w", bool(self.story and s.slug == self.story.slug)), id=s.slug))
         if not rows:
             rows.append(Option(Text("(no stories in this universe)", style="dim"), id="", disabled=True))
         lst.add_options(rows)
-        self.query_one("#stories-title", Static).update(
-            f"Stories in {self.universe.name}" if self.universe else "Stories")
+        self.query_one("#stories-box").border_title = _fit_title("Stories in" if self.universe else "Stories", self.universe.name if self.universe else "", 30)
 
     def top_rows(self):
         """The boxes at the top: the universe overview, or the open story's outline."""
@@ -709,16 +707,16 @@ class BuilderScreen(Screen):
             title.update("")
             lst.add_options([Option(Text("No entity selected. Press n for a new one.", style="dim"), id="none")])
             return
-        title.update(f"{schemas.get(e.type)['label']}: {e.name or '(blank)'}   "
-                     "click/f: roll   right-click/e: write   wheel: history   space: roll blanks")
+        title.update(f"{schemas.get(e.type)['label']}: {e.name or '(blank)'}")
         rows = self.rows()
-        width = max(len(r[1]) + (2 if (r[3] is None or not schemas.can_roll(r[3])) else 0) for r in rows) + 2      # (room for the ✎ too)
+        width = max(cell_len(r[1]) + (2 if (r[3] is None or not schemas.can_roll(r[3])) else 0) for r in rows) + 1      # (room for the ✎ too: some terminals draw it two cells wide)
         options = []
         for key, label, value, spec in rows:
             write_only = spec is not None and not schemas.can_roll(spec)
             rating = self.b.rating(self.universe, e, key)
-            options.append(Option(_text_row((label + (" ✎" if write_only or spec is None else "")).ljust(width), value,
-                                            rated=rating), id=key))
+            shown = label + (" ✎" if write_only or spec is None else "")
+            options.append(Option(_text_row(shown + " " * (width - cell_len(shown)), value, rated=rating), id=key))
+
         lst.add_options(options)
         if keep is not None:
             lst.highlighted = min(keep, len(options) - 1)
@@ -1461,20 +1459,40 @@ class BuilderScreen(Screen):
         self.b.go("wheel", {"universe": self.universe.slug if self.universe else None, "new": True})
 
 
+LEGEND = "▲ ▼ rate · ✎ write it yourself · space fills blanks · ? help"
+
+
+def _fit_title(prefix, name, limit):
+    """'Stories · Name' cut to `limit` characters with an ellipsis, never wrapped."""
+    text = f"{prefix} {name}" if name else prefix
+    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
+
+
 def _text_row(label, value, rated):
-    """One line of a card: label, value, and (for entity fields) the clickable ▲ ▼."""
-    t = Text()
-    t.append(label, style="bold cyan")
-    t.append("  ")
-    if value:
-        t.append(value)
-    else:
-        t.append("(blank)", style="dim italic")
+    """One line of a card in columns: the label, the value (long values wrap under themselves, not under the label), and the clickable ▲ ▼."""
+    grid = Table.grid(padding=(0, 1), expand=True)
+    grid.add_column(width=cell_len(label), no_wrap=True)
+    grid.add_column(ratio=1)
+    cells = [Text(label, style="bold cyan"), Text(value) if value else Text("(blank)", style="dim italic")]
     if rated is not None:
-        t.append(" ")
-        t.append(" ▲ ", style=Style(color="green" if rated > 0 else "grey50", bold=rated > 0, meta={"rate": 1}))
-        t.append(" ▼ ", style=Style(color="red" if rated < 0 else "grey50", bold=rated < 0, meta={"rate": -1}))
-    return t
+        grid.add_column(width=7, no_wrap=True, justify="right")
+        stars = Text()
+        stars.append(" ▲ ", style=Style(color="green" if rated > 0 else "grey50", bold=rated > 0, meta={"rate": 1}))
+        stars.append(" ▼ ", style=Style(color="red" if rated < 0 else "grey50", bold=rated < 0, meta={"rate": -1}))
+        cells.append(stars)
+    grid.add_row(*cells)
+    return grid
+
+
+def _name_and_count(name, count, here=False):
+    """A list row: the name on one line (cut with an ellipsis, never wrapped) and a dim count at the right."""
+    grid = Table.grid(padding=(0, 1), expand=True)
+    grid.add_column(ratio=1, no_wrap=True, overflow="ellipsis")
+    grid.add_column(no_wrap=True, justify="right")
+    mark = Text("▶ " if here else "  ", style="bold cyan")
+    mark.append(name, style="bold" if here else "")
+    grid.add_row(mark, Text(count, style="dim"))
+    return grid
 
 
 class BuilderHooks:

@@ -26,6 +26,7 @@ from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.message import Message
 from textual.screen import ModalScreen, Screen
 from . import appearance, navigation, tools
+from .footer import FitFooter
 from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
@@ -610,7 +611,7 @@ class MixScreen(Screen):
         yield Static("", id="sub", markup=False)
         yield DataTable(id="mix", cursor_type="row", zebra_stripes=True)
         yield Static("", id="msg", markup=False)
-        yield Footer()
+        yield FitFooter()
 
     def on_mount(self):
         self.app.sub_title = "Flavor of this story (the mix; this story only)"
@@ -760,21 +761,24 @@ class MainScreen(Screen):
     ]
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
-    MainScreen #left { width: 46; border: round $primary-darken-2; }
+    MainScreen #left { width: 46; }
+    MainScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
+    MainScreen #steps-box { height: auto; }
+    MainScreen #uni-box { height: 2fr; min-height: 10; }
+    MainScreen #stories-box { height: 2fr; min-height: 8; }
     MainScreen #right { width: 48; border: round $primary-darken-2; }
     MainScreen #sofar-box { height: 1fr; }
     MainScreen #issues { padding: 0 1; height: auto; }
     MainScreen #sofar { padding: 0 1; height: auto; }
-    MainScreen #stories-title { margin-top: 1; }
-    MainScreen #stories { height: 1fr; }
+    MainScreen #stories { height: 1fr; min-height: 3; }
     MainScreen #story-buttons, MainScreen #story-buttons2 { height: 1; }
     MainScreen #story-buttons Button, MainScreen #story-buttons2 Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
-    MainScreen #uni-title { margin-top: 1; }
     MainScreen #uni-buttons, MainScreen #uni-buttons2 { height: 1; }
     MainScreen #uni-mode-label { width: auto; }
     MainScreen #uni-buttons Button, MainScreen #uni-buttons2 Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
-    MainScreen #universe { height: 1fr; }
+    MainScreen #universe { height: 1fr; min-height: 3; }
+    MainScreen #uni-check { height: auto; max-height: 8; }
     MainScreen #banner { background: $warning 30%; color: $text; padding: 0 1; height: auto; }
     MainScreen #banner-buttons { height: 1; padding: 0 1; }
     MainScreen #banner-buttons Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 1; padding: 0; }
@@ -804,25 +808,28 @@ class MainScreen(Screen):
         yield QuietHeader()
         with Horizontal(id="body"):
             with Vertical(id="left"):
-                yield Static("Steps", classes="title")
-                yield OptionList(id="steps")
-                yield Static("Universes to draw from", id="uni-title", classes="title", markup=False)
-                yield UniverseChecklist(id="uni-check")
-                with Horizontal(id="uni-buttons"):
-                    yield Static("Whole characters/places from these: ", id="uni-mode-label", markup=False)
-                    yield _quiet(Button("no       ", id="uni-mode"))
-                with Horizontal(id="uni-buttons2"):
-                    yield _quiet(Button("Open in the Builder", id="uni-builder"))
-                yield UniverseTree("Universe", id="universe")
-                yield Static("Past stories", id="stories-title", classes="title", markup=False)
-                with Horizontal(id="story-buttons"):
-                    yield _quiet(Button("Open", id="st-open"))
-                    yield _quiet(Button("Del", id="st-delete"))
-                    yield _quiet(Button("Promote", id="st-promote"))
-                with Horizontal(id="story-buttons2"):
-                    yield _quiet(Button("Use protagonist", id="st-protagonist"))
-                    yield _quiet(Button("Use setting", id="st-setting"))
-                yield StoryList(id="stories")
+                with Vertical(id="steps-box", classes="box") as box:
+                    box.border_title = "Steps"
+                    yield OptionList(id="steps")
+                with Vertical(id="uni-box", classes="box") as box:
+                    box.border_title = "Universes to draw from"
+                    yield UniverseChecklist(id="uni-check")
+                    with Horizontal(id="uni-buttons"):
+                        yield Static("Whole characters/places from these: ", id="uni-mode-label", markup=False)
+                        yield _quiet(Button("no       ", id="uni-mode"))
+                    with Horizontal(id="uni-buttons2"):
+                        yield _quiet(Button("Open in the Builder", id="uni-builder"))
+                    yield UniverseTree("Universe", id="universe")
+                with Vertical(id="stories-box", classes="box") as box:
+                    box.border_title = "Past stories"
+                    yield StoryList(id="stories")
+                    with Horizontal(id="story-buttons"):
+                        yield _quiet(Button("Open", id="st-open"))
+                        yield _quiet(Button("Del", id="st-delete"))
+                        yield _quiet(Button("Promote", id="st-promote"))
+                    with Horizontal(id="story-buttons2"):
+                        yield _quiet(Button("Use protagonist", id="st-protagonist"))
+                        yield _quiet(Button("Use setting", id="st-setting"))
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
                     yield Static("", id="hint", markup=False)
@@ -848,7 +855,7 @@ class MainScreen(Screen):
                     yield Static("", id="issues", markup=False)
                     yield Static("", id="sofar", markup=False)
         yield Static("", id="status", markup=False)
-        yield Footer()
+        yield FitFooter()
 
     def on_mount(self):
         self.session.enter(store.open_step(self.session.story))
@@ -1157,7 +1164,7 @@ class MainScreen(Screen):
             rows.append(Option(Text("(no universes yet: promote a story)", style="dim"), id="", disabled=True))
         check.add_options(rows)
         check.highlighted = min(keep, len(rows) - 1) if keep is not None else (0 if unis else None)
-        self.query_one("#uni-title", Static).update(f"Universes to draw from ({len(chosen)} ticked)")
+        self.query_one("#uni-box").border_title = f"Universes to draw from ({len(chosen)} ticked)"
         button = self.query_one("#uni-mode", Button)
         button.label = f"{self.MODE_WORDS[s.universe_mode]:<9}"          # same width every time
         button.refresh(layout=True)
