@@ -11,6 +11,17 @@ TOOLS = {
 }
 
 
+def is_arm64():
+    """True on a 64-bit ARM machine (a Raspberry Pi). STORYWHEEL_ARCH overrides it, for tests."""
+    import os
+    import platform
+    return (os.environ.get("STORYWHEEL_ARCH") or platform.machine()).lower() in ("aarch64", "arm64")
+
+
+NEOVIDE_ARM64 = ("Neovide has no ready-made build for arm64 (this machine), so the Writer uses the terminal. "
+                 "To build it yourself (optional, slow):  cargo install neovide")
+
+
 def missing(name, extra=""):
     """'<Thing> isn't installed. <What needs it>. To fix it, run:  <command>'  (plus an optional extra sentence)."""
     thing, why, command = TOOLS[name]

@@ -39,7 +39,7 @@ SECTIONS = [
     ]),
     ("Writer", [
         ("notepad_mode", "Notepad mode", "bool", None, "On: type like in an ordinary editor (Escape does not change modes). Off: Vim behavior."),
-        ("neovide", "Use Neovide", "bool", None, "A window with real fonts, if Neovide is installed (otherwise the terminal is used and you are told)."),
+        ("neovide", "Use Neovide", "bool", None, "A window with real fonts, if Neovide is installed (otherwise the terminal is used and you are told). Not available on arm64 (a Raspberry Pi): there is no ready-made build."),
         ("writer_font", "Font in Neovide", "text", None, "Blank: Neovide's default monospace font."),
         ("writer_font_size", "Font size in Neovide", "int", None, "Points."),
         ("line_spacing", "Extra line spacing in Neovide", "int", None, "Pixels; about the font size looks double spaced."),
@@ -182,7 +182,10 @@ class SettingsScreen(Screen):
                         if title == "Writer":
                             from . import writer as _writer
                             exe = _writer.neovide_exe()
-                            yield Static(f"Neovide: {'installed at ' + exe if exe else 'not installed (the Writer then uses the terminal)'}"
+                            from . import tools as _tools
+                            none = "not available on arm64 (no ready-made build): the Writer uses the terminal" if _tools.is_arm64() else \
+                                "not installed (the Writer then uses the terminal)"
+                            yield Static(f"Neovide: {'installed at ' + exe if exe else none}"
                                          f"      Neovim: {'.'.join(map(str, _writer.nvim_version() or ())) or 'not installed'}",
                                          id="writer-tools", markup=False)
                         if title == "Library":
@@ -232,6 +235,11 @@ class SettingsScreen(Screen):
             return self.save_library(value)
         if key == "manuscripts_dir":
             return self.save_manuscripts(value)
+        if key == "neovide" and value:
+            from . import tools as _tools, writer as _writer
+            if _tools.is_arm64() and not _writer.neovide_exe():
+                self.say(_tools.NEOVIDE_ARM64)
+                return False
         g = settings.load_global()
         g[key] = value
         settings.save_global(g)
@@ -346,7 +354,9 @@ class SettingsScreen(Screen):
         key = (event.switch.id or "")[2:]
         if self.values.get(key) != event.value:
             self.values[key] = event.value
-            self.save(key, bool(event.value))
+            if self.save(key, bool(event.value)) is False:         # refused (Neovide on arm64): put the switch back
+                self.values[key] = not event.value
+                event.switch.value = not event.value
 
     def on_select_changed(self, event):
         key = (event.select.id or "")[2:]

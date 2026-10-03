@@ -1,7 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 4 (1378 tests,
-tag b4-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 5 (tag b5-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -75,7 +74,8 @@ Built in batches 1 and 2a (see Done). Still open:
   only) is wanted in the package.
 - **Words: richer overused-word checks.** *Idea.* Repeated sentence openings, adverbs in -ly, "filter" words (felt, saw,
   noticed); a per-scene view; a threshold setting.
-- **Words: word bank in the Writer.** *Idea.* Complete from the bank while typing, like character names.
+- **Words: complete from the universe's own added words in the Writer.** *Idea.* The words put on a universe's lists (Words > Universe words) could
+  complete while typing, like character names.
 - **Words: look up a word from the Wheel's cards** (a key on the selected field's text). *Idea.*
 - **Inflection** covers regular English plus about 150 irregular verbs and 80 irregular nouns; multi-word phrases inflect
   the first word of a verb phrase and the last of a noun phrase. Rare irregulars and adjective/adverb edge cases may
@@ -89,8 +89,6 @@ Built in batches 1 and 2a (see Done). Still open:
   sends 0x12 for it, which is distinct from Tab, Enter and Backspace, so it should).
 - **`storywheel lookup` start-up time** is fine (under 0.1 s) because the CLI imports lazily; keep it that way when
   adding commands. *Note.*
-- **The dictionary index must be rebuilt** after upgrading to batch 2a (schema 2): `storywheel dictionary install`.
-  Lookups say so plainly if the index is older. *Note.*
 
 ## 4c. Found in batch 2b
 
@@ -102,12 +100,10 @@ Built in batches 1 and 2a (see Done). Still open:
   starts; a list you can edit in Settings.
 - **wordfreq is a dependency** (about 57 MB installed). `pipx inject storywheel wordfreq` adds it to an existing install; a fresh
   `pipx install .` brings it. Words > Vocabulary says so if it is missing. *Note.*
-- **Vocabulary**: "forget what I've seen" (start the batches over) and an editable word to learn by hand. *Missing.* The subject list
-  uses WordNet's categories (Animals, Moving...) plus the most used subject areas; a plainer set would be friendlier.
+- **Vocabulary subjects.** *Idea.* The subject list uses WordNet's categories (Animals, Moving...) plus the most used subject areas; a plainer set
+  would be friendlier.
 - **Transparent background**: selected rows, cursor and scrollbars still use solid colors (deliberately: they must stay visible).
   Textual's ANSI theme uses your terminal's own colors for text and accents unless you set Text color / Accent color. *Note.*
-- **Add to this universe's word list** appends to `lists/<slot>/words-added.json`; there is no screen to review or remove those entries
-  (edit the file). *Missing.*
 
 ## 5. Content and generator
 
@@ -124,11 +120,6 @@ Built in batches 1 and 2a (see Done). Still open:
 ## 6. Ideas (not decided)
 
 - **Writing sprints:** a timer with a word target, shown in the status line.
-- **Overused words:** highlight words repeated close together, and a report of
-  the most frequent words in a story.
-- **A terminal that sends Ctrl+I distinctly** (kitty, WezTerm, foot, ghostty)
-  would make Ctrl+I italic work outside Neovide. Not code; a setup note.
-
 
 ## 7. Review: what a writer would find confusing (batch 2b; **addressed in batch 3**, see Done)
 
@@ -190,11 +181,6 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 | Status line `scene / manuscript / today` | Words in this scene, in the story, and written today against the goal | The three numbers aren't labelled in the narrow layout |
 | The pad windows | Blank columns either side that centre the text | Invisible; clicking in them does nothing |
 
-### Everywhere
-- The footer shows different things per mode and `q` means Quit in the Wheel and Builder but Back in Settings and Words.
-- F1-F5 are the modes everywhere, but only the Wheel's footer labels them as "modes"; elsewhere they look like commands.
-- Messages about missing tools (dictionary, wordfreq, Neovim, LibreOffice) are good but each is worded differently.
-
 ### Found in batch 4
 - **Names recorded as proper or description** only for new entities; older ones are fixed with `names fix` (the preview covers only names that match a
   generator atom, or a thing with one capitalised word); other odd names stay as they are.
@@ -203,7 +189,6 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 - **Name case correction** needs the spellchecker on and skips names that are also ordinary words ("Hope", "Will").
 - **`storywheel update` of a plain install** needs a git remote that serves the repository (not a tarball); there is no signature check.
 - **`install.sh`** is tested only as a dry run on a pretend machine; the real downloads (Neovim, Neovide) are unchecked here.
-- **Neovide** has no ready-made build for arm64.
 
 ### Found in batch 3
 - **Peek and the world.** The Writer's F8 peek still doesn't say which names it knows; a short "no entity called X in <universe>" line would help.
@@ -215,12 +200,13 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 
 ## Suggested batches
 
-1. ~~Bugs (section 1), the verify items, find and replace, and the dictionary
-   and thesaurus.~~ Done (tags b1-*).
-2. Novel and screenplay profiles.
-3. The rest of section 2, backups restore, and configurable keys everywhere.
-4. Content: the twelve genres, a few at a time.
-5. The world model.
+Done: bugs, verify items, find and replace, dictionary and thesaurus (b1); Words mode (b2a); Vocabulary, appearance, spellcheck (b2b); clarity,
+backups restore, half-done items (b3); names, spelling lists, install/update (b4); typewriter notes and grammar (b5).
+
+1. Novel and screenplay profiles (section 2).
+2. The rest of section 2, and configurable keys everywhere (section 3).
+3. Content: the twelve genres, a few at a time.
+4. The world model.
 
 
 ## Done

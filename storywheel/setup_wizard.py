@@ -62,7 +62,10 @@ class Setup:
             settings.save_global({key: str(path)})
 
     def ask_window(self):
-        if shutil.which("neovide"):
+        if not shutil.which("neovide") and tools.is_arm64():
+            self.say(tools.NEOVIDE_ARM64)
+            settings.save_global({"neovide": False})
+        elif shutil.which("neovide"):
             use = self.yes("Neovide is installed. Write in its own window rather than in this terminal?", bool(self.g.get("neovide")))
             settings.save_global({"neovide": use})
         else:

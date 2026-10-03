@@ -136,6 +136,8 @@ def launch(story, return_file=None):
         if exe:
             argv = [exe, "--no-fork"]                 # wait for the window to close, like the terminal Neovim does
             env["STORYWHEEL_GUI"] = "neovide"
+        elif tools.is_arm64():
+            note = tools.NEOVIDE_ARM64
         else:
             note = tools.missing("neovide", "Or turn 'Use Neovide' off in Settings (F4).")
     return argv, env, note
