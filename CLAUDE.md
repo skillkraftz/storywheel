@@ -134,9 +134,9 @@ Outline and Kishōtenketsu ship today. User structures go in
 
 **Ratings** gently down-weight frames and atom pairs that keep getting -.
 
-**Content status**: western and fairy tale are fully written and annotated
-with features. The other twelve genres run on general atoms until their lists
-are written. Expanding genre content is ongoing work outside this sweep.
+**Content status**: western, fairy tale, comedy, fantasy and mystery are fully
+written and annotated with features. The other nine genres run on general
+atoms until their lists are written. Expanding genre content is ongoing work outside this sweep.
 
 
 ## Core concepts
@@ -797,4 +797,14 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   a git remote it is fetched (the Settings remote, if set, otherwise the first remote, passed to git exactly as written) and fast-forwarded when clean; with no
   remote it is only read. A different (newer) version reinstalls with pipx, or pip outside pipx; the same version with new commits only runs `post-update`.
   There is no private clone: `update_remote` is used only when the source folder is gone, for a temporary clone that is deleted afterwards.
-
+- `storywheel update` records the installed source's fingerprint (git HEAD, plus "+" and a hash of `git diff HEAD` when dirty) in
+  `~/.storywheel/installed-source.json` (written after each reinstall, by `update --record`, and by install.sh) and reinstalls whenever the source's
+  fingerprint differs from it, even with the same version. No record means one reinstall to make one.
+- Genre content lives in per-genre files tagged by the genre (`lists/<slot>/<genre>.json`, `templates/<slot>/<genre>.json`); a genre's profile weight is 4
+  where its own material should be about 85% of picks. Comedy: modern 0.2. Fantasy: modern 0 and general 0.15 (it has so much of its own, and general
+  atoms are mostly everyday). Mystery: modern 0.2. `tests/test_genre_content.py` holds every written genre to the same checks (sizes, annotations,
+  fidelity, voice, repetition, blends); adding a genre means adding it to `GENRES`.
+- Fantasy is epic and high fantasy and shares no list with fairy tale: fairy-tale lists are tagged `["fairy tale", "medieval"]` and the fairy tale
+  profile gives "medieval" 1.5. "Magic with a cost" is a `loss` list (slot `{LOSS}`) used in fantasy frames.
+- Mystery keeps its clues in the thread system: its escalation, climax and twist frames use `{the_thing}`, `{the_someone}`, `{the_message}` and
+  `{the_disaster}`, and a test checks that threads recur in later beats.

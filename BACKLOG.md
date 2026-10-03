@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 6 (1462 tests, tag b6-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 7 (tag b7-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -107,11 +107,12 @@ Built in batches 1 and 2a (see Done). Still open:
 
 ## 5. Content and generator
 
-- **The other twelve genres.** Write and annotate atom lists, templates and
-  name sets for mystery, romance, horror, sci-fi, comedy, heist, ghost story,
-  coming-of-age, noir, thriller, fantasy and adventure, the way western and
-  fairy tale were done (features on every atom, the fidelity and repetition
-  reports). Raise "modern" where sci-fi, comedy and heist need it.
+- **The other nine genres.** Write and annotate atom lists, templates and
+  name sets for romance, horror, sci-fi, heist, ghost story, coming-of-age,
+  noir, thriller and adventure, the way western, fairy tale, comedy, fantasy
+  and mystery were done (features on every atom, the fidelity and repetition
+  reports, `tests/test_genre_content.py`, which just needs the genre added to
+  `GENRES`). Raise "modern" where sci-fi and heist need it.
 - **The world model.** See CLAUDE.md's roadmap: simulate a small cast with
   values, goals and relationships and pick events whose preconditions hold, so
   "because of that" is literally true. Universes are its natural input.
@@ -235,6 +236,20 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 - A pip install from an index or wheel records no source folder; then the git checkout the code runs from is used, and with neither the update remote (a temporary clone).
 - The reinstall uses pipx when the install lives in a pipx environment (or pipx is on PATH), otherwise pip in the running environment; neither path was run for real here (tests use a fake runner and real local git repositories).
 - If the source folder is newer than the installed code *and* has uncommitted changes but no remote, it is installed as it is.
+
+### Batch 7: update by commit, three genres
+
+- **`storywheel update` reinstalls when the source commit differs**, not only when the version does — `b7-update-commit`.
+- **Comedy** — `b7-comedy`; **fantasy** (own content; fairy tale untagged as fantasy) — `b7-fantasy`; **mystery** — `b7-mystery`.
+
+### Found in batch 7
+
+- **Fairy tale lost its fantasy tag**, so a fairy-tale story draws on "medieval" instead; blends such as fairy tale/western now have a slightly lower
+  share of their own material (tests relaxed by 2 to 5 points, noted in the tests).
+- **A western story's fairy-tale disasters** dropped from 5% to about 2.5% as more genres joined the wildcard floor. Expected; the test bound moved.
+- **Fantasy has no "feelings" or "topics" of its own**; those abstractions still come from the general lists.
+- **Sample reading:** a few comedy/mystery lines still pair a mundane verb with an odd object ("sold a bottle of moonlight" came from a fairy-tale
+  thread in a blend). Note any that read badly while you use it.
 
 ### Found in batch 6
 - **No git remote is configured** in this checkout, so "push" could not be done; add one (`git remote add origin URL`) and `git push --follow-tags`.

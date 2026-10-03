@@ -8,7 +8,7 @@
   "{first} {HABIT_PLACE} {landmark} every {season} and {HABIT_PERSON} {CLOSE}",
   "{place} keeps the memory of {the_disaster}, and {first} {HABIT_THING} {THING:!living}",
   "{first} {HABIT_PERSON} {the_someone:human} and keeps the old oath",
-  "the songs of {place} name {first}, and {first} {HABIT_PLACE} {landmark} in silence",
+  "the songs of {place} name {first}, and {first} {HABIT_PLACE} {landmark} {MANNER}",
   "{first} {HABIT_THING} {the_thing:!living} {HIDING}, and never speaks of {TOPIC}",
   "the {rival} is gone, and {first} {HABIT_PLACE} {landmark} {MANNER}",
   "{place} lights a beacon at {landmark} {MANNER} for {first}",

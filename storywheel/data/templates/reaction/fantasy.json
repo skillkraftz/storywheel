@@ -12,7 +12,7 @@
   "paid {LOSS} to wake the old magic in {THING:magic}",
   "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
   "gathered {CLOSE:human} at {landmark} and swore to {DO_THING} {THING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
   "left {place} {MANNER} to {DO_THING} {THING} {DEADLINE}",
   "broke an old oath to {DO_PERSON:!inner} {CLOSE:human}",
   "bargained with {SOMEONE:magic} for {PRIZE:!inner} and gave up {LOSS}",

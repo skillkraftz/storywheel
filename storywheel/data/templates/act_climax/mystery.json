@@ -11,6 +11,8 @@
   "{the_someone:human} confessed to {the_disaster} when {first} showed {the_thing:portable}.",
   "{first} laid a trap at {landmark} {MANNER}, baited with {the_thing:portable}.",
   "{the_thing} proved the alibi false, and {the_someone:human} ran {MANNER}.",
+  "{first} named {SOMEONE:human,!plural} at {landmark} {MANNER}, and chose {VALUE}.",
+  "{first} laid a trap at {landmark} {MANNER}, baited with {THING:portable}.",
   "{first} unmasked the {rival} at {landmark}, and chose {VALUE}."
  ]
 }

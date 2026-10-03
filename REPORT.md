@@ -884,3 +884,568 @@ Full suite at the end of batch 6 (one run): **1462 passed**.
 On the typewriter: `storywheel update --check`, then `storywheel update`, then `storywheel --version`.
 
 Full suite after the fix: **1469 passed**.
+
+
+# Batch 7: update by commit, and three genres (0.7.0)
+
+## B1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Update records the commit installed from | Works | `installed-source.json`; written after reinstalling, by `update --record` and by install.sh |
+| Reinstall whenever the source commit differs | Works | also for uncommitted changes (fingerprint "+hash"); no record means one reinstall; messages name both commits; `--check` changes nothing |
+| Comedy | Works | 28 atom lists + 27 template slots (245 frames); situations and people, not jokes; 85% own material |
+| Fantasy | Works | own epic/high content incl. magic-with-cost (`loss`), orders, ruins, old wars; fairy tale untagged; 90% own material |
+| Mystery | Works | clues, suspects, alibis, reveals; village names; later beats reuse the clue, suspect and crime via threads; 85% own material |
+| Profiles in genres.json, incl. "modern" share | Works | comedy 4/0.2, fantasy 4/0 (general 0.15), mystery 4/0.2 |
+| Fidelity, repetition report, lint | Works | see B2 |
+| Blends comedy/fairy tale, fantasy/mystery, mystery/western | Works | 85%, 88%, 85% own material, both genres at least 20% of picks, nothing repeated |
+| Names with Markov training sets | Works | 85-90 first names and 55-65 surnames per genre, `markov: 0.5` |
+
+## B2. Numbers (200 stories, seed 101)
+| Genre | Own material | Lines repeated 5+ times | Entries over 3x fair share | Lint |
+|---|---|---|---|---|
+| comedy | 85% | 0 | 0 | clean |
+| fantasy | 90% | 0 | 0 | clean |
+| mystery | 85% | 0 | 0 | clean |
+| comedy / fairy tale | 85% | - | - | - |
+| fantasy / mystery | 88% | - | - | - |
+| mystery / western | 85% | - | - | - |
+
+## B3. Tests added
+- `tests/test_genre_content.py` (parameterised by genre and blend): profile, name list sizes, atoms and frames per slot, annotation ratios, per-slot and overall
+  fidelity, voice in verbs, repetition, blends; plus fantasy vs fairy tale share no list, fantasy has no modern names, and mystery clues recur in later beats.
+- `tests/test_setup_update.py`: 5 new update tests (same-version fix, unrecorded install, dirty source, check-only, `--record`).
+- Thresholds relaxed by a few points (and noted) in test_fidelity and test_kinds_floors because every new genre adds lists the wildcard floor can draw from.
+
+## B4. Manual test script
+1. `storywheel update --check`, commit a change on xps, `storywheel update` on the typewriter: it should say "Same version number, but the source is at commit …".
+2. `storywheel sample comedy -n 3`, `sample fantasy -n 3`, `sample mystery -n 3`: read them for lines that sound wrong.
+3. In the Wheel, choose Fantasy, then Fairy tale, and see that they read differently; try Mystery with Western.
+4. Pick Mystery and look at the Threads line: the clue should come back in the climax and the twist.
+
+## B5. Known issues
+See BACKLOG.md "Found in batch 7".
+
+## B6. Seeded samples (`storywheel sample GENRE -n 5 --seed 7`)
+
+### Comedy
+```
+1. THE GREAT LOWER TITTERING COMMITTEE DISASTER   (motif: committee)
+   comedy · absurd · Story Spine
+
+  * Ferdinald Chiswick, 40, a fussy vicar. Wants a wedding ring and a place in
+    the parade before anyone wakes up. Needs to laugh at bossiness instead of
+    hiding fear behind it. Flaw: turns every small problem into a plague of
+    garden gnomes and blames vanity. Secret: entered a contest for a spot on
+    television under a false name without a plan. Rival: the lady of the
+    manor.
+  * Lower Tittering · the week before Christmas · summer. Landmark: the public
+    library. Rumor: the lady of the manor accidentally sold a pair of trick
+    scissors in a panic.
+
+    A fussy vicar named Ferdinald accidentally enters the contest for a free
+    dinner and, worse, starts winning.
+
+    Once upon a time, in Lower Tittering, a fussy vicar named Ferdinald kept a
+    secret: Ferdinald entered a contest for a spot on television under a false
+    name without a plan.
+    Every day, Ferdinald walked past the public library politely and hoped for
+    a blue rosette.
+    One day, a postcard from nowhere meant for the lady of the manor landed in
+    Ferdinald's hands.
+    Because of that, Ferdinald promised the mayor's chain to their ex before
+    the cake is cut.
+    Because of that, a scheming cousin lied to Ferdinald in a disguise, and a
+    borrowed ladder went missing.
+    Until finally, Ferdinald gave up the committee to sell the borrowed
+    ladder, and Lower Tittering was saved.
+    Ever since then, Ferdinald keeps safe a flask of holy oil buried at the
+    public library, just in case.
+
+    Twist: Ferdinald had held the borrowed ladder behind the tea urn all
+    along, and the lady of the manor knew.
+    Threads: message: a postcard from nowhere (One day) · someone: a scheming
+    cousin (Because of that) · thing: a borrowed ladder (Because of that)
+
+2. THE UNSUITABLE CAKE   (motif: cake)
+   comedy · melancholy · Three-Act Outline
+
+  * Darry Pettle, 81, a busybody tourist board officer. Wants a front-row seat
+    and peace for Pennywhistle. Needs to admit the truth about the cake to
+    their mother. Flaw: boasts about the reward and hides pride behind
+    obsession. Secret: writes letters to their business partner about the fire
+    as a fan. Rival: the head of the garden society.
+  * Pennywhistle · the talent show night · autumn. Landmark: the picnic area.
+    Rumor: a determined newlywed is looking for a stack of parking tickets
+    near Pennywhistle.
+
+    Darry, a busybody tourist board officer in Pennywhistle, must find a
+    telegram by the first chime or lose the village cup.
+
+    Act I: Setup — Everyone in Pennywhistle knew Darry as a busybody tourist
+    board officer, and Darry wanted a front-row seat and peace for
+    Pennywhistle.
+    Act I: Inciting incident — Darry won a house in Pennywhistle, and a
+    disguised old king came to collect.
+    Act I: First turn — Darry promised the Best in Show ribbon to their sister
+    before the guests leave, and could not turn back.
+    Act II: Rising action — Darry was caught between friendship and the
+    chairmanship at the worst moment.
+    Act II: Midpoint — The disguised old king turned out to know Darry's
+    spouse, and Darry defended the head of the garden society very loudly.
+    Act II: Crisis — Darry shielded the disguised old king at the last minute,
+    and the whole plan collapsed.
+    Act III: Climax — The whole of Pennywhistle gathered at the picnic area,
+    and Darry flattered the head of the garden society during the fete.
+    Act III: Resolution — Pennywhistle laughed about it for years: Darry
+    waters the picnic area and keeps an eye on their brother.
+
+    Twist: The head of the garden society and Darry were alike: both secretly
+    wanted a good review.
+    Threads: someone: a disguised old king (Act I: Inciting incident)
+
+3. LINDA'S FUSSY GOAT   (motif: goat)
+   comedy · bittersweet · Story Spine
+
+  * Linda Underwood, 48, a polite hat maker. Wants a vial of dragon's blood
+    for their son before the fete opens. Needs to let their neighbor win a
+    spot on television for once. Flaw: always says too much about the secret
+    meeting and calls it a clear conscience. Secret: lied under oath about the
+    third key in a borrowed hat. Rival: the estate manager.
+  * Dribbleton · the great marrow summer · spring. Landmark: the cheese shop.
+    Rumor: everyone knows the estate manager answered an anonymous letter.
+
+    A polite hat maker in Dribbleton tells one small lie about a gambler's
+    ring, and it grows until even the estate manager believes it.
+
+    Once upon a time, Linda, a polite hat maker of Dribbleton, kept a mayoral
+    sash under the hat stand and feared boredom.
+    Every day, Linda complained to their twin about fibbing and circled the
+    cheese shop.
+    One day, the goat arrived in Dribbleton and mistook Linda for someone
+    important.
+    Because of that, Linda filed a chain letter and told no one.
+    Because of that, the chain letter was read aloud at the cheese shop, to
+    the horror of Linda's one true ally.
+    Until finally, the estate manager slipped on the mayoral sash in disguise,
+    and the secret was out.
+    Ever since then, Linda paints the cheese shop every spring, and avoids
+    their father.
+
+    Twist: The mayoral sash had never been lost: Linda's best customer had it
+    inside the piano all along.
+    Threads: thing: a mayoral sash (Once upon a time) · someone: the goat (One
+    day) · message: a chain letter (Because of that)
+
+4. FRESH FORTS FOR SIDNEY   (motif: fort)
+   comedy · whimsical · Kishōtenketsu
+
+  * Sidney Nightwatch, 27, an anxious estate agent. Wants an apology from
+    their cousin and the last tart. Needs to trust their old teacher with the
+    truth about the money. Flaw: swears oaths in anger and keeps exaggeration
+    over the quiet life. Secret: once dropped a golden egg at the barber's
+    shop during a plague of crows. Rival: the neighbor.
+  * Hobbs's Nettleby · this very week · winter. Landmark: the barber's shop.
+    Rumor: the barber's shop was built to hide a rented tuxedo.
+
+    To impress Sidney's business partner, Sidney, an anxious estate agent in
+    Hobbs's Nettleby, claims to know a gossiping neighbor.
+
+    Ki (introduction) — In Hobbs's Nettleby, Sidney dusted the barber's shop
+    in full view, as Sidney did every winter.
+    Shō (development) — Sidney kept meaning to return a chocolate fountain,
+    and the winter slipped by.
+    Ten (twist) — Then Sidney saw the chocolate fountain anew; it had never
+    been about an apology from their cousin and the last tart.
+    Ketsu (reconciliation) — In the end, Sidney understood the inheritance,
+    and dignity mattered more than a free dinner.
+
+    Twist: None of it was real: a failed comedian and Sidney's ex had staged
+    it for the mayor's chain.
+    Threads: thing: a chocolate fountain (Shō (development))
+
+5. THE LUCKY PORTRAIT   (motif: portrait)
+   comedy · eerie · Story Spine
+
+  * Hortimer Fotherham, 60, a blustering choir master. Wants a very old
+    fruitcake back, and a place in the parade too. Needs to value honest work
+    more than a front-row seat. Flaw: cannot resist a spare key, whatever it
+    costs a clear conscience. Secret: told a fortune teller a lie about the
+    hidden letter long ago. Rival: the local magician.
+  * Great Pudding · present day · autumn. Landmark: the launderette. Rumor: a
+    spindle lies buried near the launderette.
+
+    Everyone in Great Pudding believes Hortimer, a blustering choir master,
+    owns a jar of pickled onions, and Hortimer cannot afford to say otherwise.
+
+    Once upon a time, Hortimer, a blustering choir master in Great Pudding,
+    guarded a brass band tuba and a secret.
+    Every day, Hortimer dusted a fridge full of trifle in front of everyone
+    and complained about the family curse.
+    One day, a forged reference arrived from a very old countess, asking
+    Hortimer to come to the launderette.
+    Because of that, Hortimer hid a stuffed pike in a dead man's coat, hoping
+    nobody would ask.
+    Because of that, the very old countess tucked away the brass band tuba on
+    a dare, which made matters worse.
+    Until finally, the very old countess stood up at the launderette and
+    confessed to everything.
+    Ever since then, Hortimer gossips about their mother and never fibs about
+    the empty grave.
+
+    Twist: The brass band tuba was worth a week at the spa, and the very old
+    countess traded away it for a song.
+    Threads: thing: a brass band tuba (Once upon a time) · message: a forged
+    reference (One day) · someone: a very old countess (One day)
+```
+
+### Fantasy
+```
+1. LAST OATHS OF SHATTERED WATCH   (motif: oath)
+   fantasy · absurd · Story Spine
+
+  * Lioba Hart, 46, a cunning insurance adjuster. Wants a royal pardon at the
+    crypt of kings. Needs to stop hiding wonder and trust their best customer.
+    Flaw: trusts a whispered promise over the realm. Secret: was there when a
+    siege began, and said nothing to their cousin. Rival: the inquisitor.
+  * Shattered Watch · the order's third age · autumn. Landmark: the crypt of
+    kings. Rumor: a storm of ash was summoned by the inquisitor.
+
+    Every guest at the crypt of kings has a motive for an undead uprising, and
+    Lioba, a cunning insurance adjuster, must name one before the gates fall.
+
+    Once upon a time, Shattered Watch stood at the wastes' edge, and Lioba, a
+    cunning insurance adjuster, kept a barrel of black powder beneath the
+    throne.
+    Every day, Lioba prayed at the crypt of kings for courage and cursed
+    doubt.
+    One day, someone broke into the crypt of kings and took a chest of
+    tribute.
+    Because of that, Lioba bargained with a hunted witch for a lordship and
+    gave up their oath.
+    Because of that, the hunted witch betrayed Lioba in the king's name, and
+    their daughter fell.
+    Until finally, the inquisitor fell at the crypt of kings, and Lioba chose
+    duty over vengeance.
+    Ever since then, Lioba sharpens the barrel of black powder and watches
+    over the hunted witch.
+
+    Twist: The Order had sworn to guard the barrel of black powder, not to use
+    it: Lioba used it at an army's head anyway.
+    Threads: thing: a barrel of black powder (Once upon a time) · someone: a
+    hunted witch (Because of that)
+
+2. THE SWORN DRAGON OF CINDERMERE   (motif: dragon)
+   fantasy · cozy · Three-Act Outline
+
+  * Gunnar Hartwell, 39, a guarded exiled prince. Wants a rune-stone and a
+    blade of legend before the vicar notices. Needs to stop running from
+    regret and reconcile with their landlady. Flaw: cannot forgive the dragon
+    and calls it the old ways. Secret: carries a mirror of the dead inside a
+    hollow statue. Rival: the usurper.
+  * Cindermere · the war's fourth winter · spring. Landmark: the old
+    wardstone. Rumor: a lost legionnaire is hiding from the usurper at the old
+    wardstone.
+
+    After a goblin raid fell on Cindermere, the usurper blamed the Order, and
+    Gunnar, a guarded exiled prince, takes up a knight's gauntlet to answer.
+
+    Act I: Setup — In Cindermere, Gunnar was a guarded exiled prince who
+    wanted a rune-stone and a blade of legend before the vicar notices and was
+    kept from it by bloodlust.
+    Act I: Inciting incident — A mercenary captain came to Cindermere at great
+    cost bearing a coronation cloak, and asked for Gunnar.
+    Act I: First turn — Gunnar swore an oath to a prince in disguise and rode
+    for the old wardstone by torchlight.
+    Act II: Rising action — At the old wardstone, Gunnar met a captured spy,
+    who offered help in the old tongue.
+    Act II: Midpoint — The truth about Gunnar's real name came out: the prince
+    in disguise guarded the coronation cloak all along.
+    Act II: Crisis — The prince in disguise took the coronation cloak, and
+    Gunnar had nothing left to bargain with.
+    Act III: Climax — The prince in disguise forsook the usurper and fought
+    beside Gunnar.
+    Act III: Resolution — The songs of Cindermere named Gunnar, and Gunnar
+    paid their memory of home in silent dread.
+
+    Twist: Gunnar was the lost heir, and the prince in disguise knew it all
+    along.
+    Threads: thing: a coronation cloak (Act I: Inciting incident) · someone: a
+    prince in disguise (Act I: First turn)
+
+3. TAMSIN AND THE CURSED CURSE   (motif: curse)
+   fantasy · gritty · Story Spine
+
+  * Tamsin Whitecliff, 70, a grim tax-reeve. Wants a ball of golden thread and
+    a knight's spurs. Needs to let go of despair and keep faith with a sworn
+    word. Flaw: always says too much about the deal with the rival house's
+    heir and calls it loyalty. Secret: once stashed a set of blueprints for a
+    hooded seer. Rival: the high priest.
+  * Ashenfall · the age of ruin · winter. Landmark: the ash plains. Rumor: a
+    war-chest of gold lies in a sealed crypt, lost with the last king.
+
+    After a blood moon fell on Ashenfall, Tamsin, a grim tax-reeve, sets out
+    to carry a talking mirror and pays for it with their sword arm.
+
+    Once upon a time, Tamsin, a grim tax-reeve of Ashenfall, served the Order
+    and wanted a ball of golden thread and a knight's spurs.
+    Every day, Tamsin patrolled the ash plains before dawn and carried into
+    battle a blade of cold iron.
+    One day, Tamsin woke to find a bottle of forgotten memories humming under
+    a loose flagstone.
+    Because of that, Tamsin rode to the ash plains to ask a rival house's
+    envoy about the debt.
+    Because of that, Tamsin's son dueled them through the storm, and the
+    muster was lost.
+    Until finally, Tamsin bound the rival house's envoy at the ash plains and
+    chose mercy over cowardice.
+    Ever since then, the songs of Ashenfall name Tamsin, and Tamsin mourns at
+    the ash plains under the black moon.
+
+    Twist: Tamsin had held the blade of cold iron in a dead man's saddlebag
+    all along, and the high priest knew.
+    Threads: thing: a blade of cold iron (Every day) · someone: a rival
+    house's envoy (Because of that)
+
+4. THE BLOODIED MARCH   (motif: march)
+   fantasy · tense · Story Spine
+
+  * Lysander Penhall, 36, a dutiful dragon scout. Wants a warhorse for their
+    one true ally. Needs to say sorry to their godmother about the lost
+    heirloom. Flaw: would sooner unseal a prophecy in verse than admit
+    homesickness. Secret: once sacrificed a staff of bone at the lake during a
+    county-wide gossip. Rival: the archmage.
+  * Highwatch · the age of broken crowns · autumn. Landmark: the lake. Rumor:
+    the archmage burned a war-council summons before the war.
+
+    To win the throne, Lysander, a dutiful dragon scout, must slay a reporter
+    at the lake before the cake is cut.
+
+    Once upon a time, when the realm was young, Lysander, a dutiful dragon
+    scout, served Highwatch and feared tenderness.
+    Every day, Lysander sharpened a cursed amulet and had tea with their
+    foster sibling.
+    One day, an old enemy, a charred knight, rode into Highwatch on the eve of
+    battle with a dragon's tooth.
+    Because of that, Lysander left behind a throne-room tapestry in a hidden
+    vault and rode for the lake at the last minute.
+    Because of that, the cursed amulet demanded their voice, and Lysander paid
+    it.
+    Until finally, Lysander gave up their shadow to hide the cursed amulet,
+    and Highwatch was saved.
+    Ever since then, Lysander corresponds with the charred knight and keeps
+    the old oath.
+
+    Twist: The cursed amulet was a decoy: the archmage had stowed the real one
+    in a reliquary.
+    Threads: thing: a cursed amulet (Every day) · someone: a charred knight
+    (One day)
+
+5. DERYN'S UNBOWED SIEGE   (motif: siege)
+   fantasy · melancholy · Three-Act Outline
+
+  * Deryn Highthorn, 21, a loyal oathkeeper. Wants a high council seat and
+    peace for Dunmarrow. Needs to put honor before ambition. Flaw: mistakes
+    dread for the realm. Secret: owes a disgraced knight a favor from in the
+    king's name. Rival: the king's chancellor.
+  * Dunmarrow · the old kings' dying · spring. Landmark: the standing stones.
+    Rumor: the king's chancellor sold Dunmarrow to a grave-robber.
+
+    A loyal oathkeeper named Deryn inherits a ward-chain of iron and a debt of
+    their name to a rogue priestess.
+
+    Act I: Setup — The king's chancellor ran Dunmarrow, and Deryn, a loyal
+    oathkeeper, watched with drawn steel.
+    Act I: Inciting incident — The ward over the standing stones failed, and a
+    silent gardener crawled out in the old tongue.
+    Act I: First turn — Deryn staked out the standing stones in a panic and
+    stashed a hag-stone in a hollow tree trunk.
+    Act II: Rising action — The silent gardener hunted Deryn's sister out of
+    prophecy.
+    Act II: Midpoint — Deryn won a hard victory over the king's chancellor,
+    then lost their oath.
+    Act II: Crisis — The hag-stone was destroyed, and Deryn had nothing left
+    but loyalty.
+    Act III: Climax — Deryn walked out to meet the king's chancellor at great
+    cost, with the hag-stone and nothing else.
+    Act III: Resolution — Deryn kept the hag-stone in a false-bottomed chest
+    as a reminder of vengefulness.
+
+    Twist: The king's chancellor had been Deryn's oldest friend, bound by
+    courage.
+    Threads: someone: a silent gardener (Act I: Inciting incident) · thing: a
+    hag-stone (Act I: First turn)
+```
+
+### Mystery
+```
+1. LOCKED MOTIVES OF NORTH COMBE   (motif: motive)
+   mystery · absurd · Story Spine
+
+  * Eustace Ington, 43, a dry pathologist. Wants a fortress at the village
+    cinema. Needs to stop hiding homesickness and confide in their cousin.
+    Flaw: keeps notes on everyone and trusts envy over forgiveness. Secret:
+    keeps a dead man's ledger in the cellar wall and tells no one of the will.
+    Rival: the village gossip.
+  * North Combe · the house party weekend · autumn. Landmark: the village
+    cinema. Rumor: a hired nurse is hiding from the village gossip at the
+    village cinema.
+
+    After a hit-and-run in North Combe, the village gossip accuses a lady with
+    a veil, and Eustace, a dry pathologist, thinks otherwise.
+
+    Once upon a time, North Combe had never seen an arson at the mill, and
+    Eustace, a dry pathologist, liked it so.
+    Every day, Eustace wrote down every oddity in North Combe in the fog and
+    told no one.
+    One day, Eustace was asked to return a railway timetable by midnight, and
+    wondered why.
+    Because of that, Eustace burned a late telegram and unmasked a preacher
+    with a secret.
+    Because of that, the arson at the mill grew worse when Eustace dusted for
+    prints a muddy bootprint.
+    Until finally, Eustace unmasked the village gossip at the village cinema
+    with the railway timetable and the family name.
+    Ever since then, Eustace avoids their oldest friend and never speaks of
+    the third key.
+
+    Twist: The village gossip had planted the railway timetable behind a
+    bookcase to frame the preacher with a secret.
+    Threads: disaster: an arson at the mill (Once upon a time) · thing: a
+    railway timetable (One day) · message: a late telegram (Because of that) ·
+    someone: a preacher with a secret (Because of that)
+
+2. THE INQUEST AT BLACKMERE   (motif: inquest)
+   mystery · hopeful · Three-Act Outline
+
+  * Reginah Eversley, 20, a wary parish clerk. Wants a will missing a codicil
+    and a promotion. Needs to forgive the lost heirloom and keep loyalty.
+    Flaw: reaches for a bribe to avoid shame. Secret: once tucked away a
+    monogrammed handkerchief for a retired spy under a false name. Rival: the
+    insurance investigator.
+  * Blackmere · the night of the dinner · winter. Landmark: the tea shop.
+    Rumor: a pawn ticket lies under a loose floorboard where no one looks.
+
+    Reginah, a wary parish clerk, receives an anonymous letter from a
+    gossiping housekeeper and has until midnight to solve a bin strike.
+
+    Act I: Setup — The insurance investigator ran Blackmere, and Reginah, a
+    wary parish clerk, watched at an army's head.
+    Act I: Inciting incident — Reginah was called to the tea shop, where a
+    blood moon had left a wedding veil behind.
+    Act I: First turn — Reginah walked past the tea shop before breakfast and
+    stashed a locked jewel case in a sealed crypt.
+    Act II: Rising action — Each time Reginah neared a blade of legend, deceit
+    pulled the other way.
+    Act II: Midpoint — At the war council, Reginah named the traitor, and the
+    insurance investigator laughed.
+    Act II: Crisis — Reginah learned the true cost of the wedding veil and
+    wept at the last minute.
+    Act III: Climax — Reginah laid a trap at the tea shop by candlelight,
+    baited with a smudged fingerprint card.
+    Act III: Resolution — Blackmere changed: Reginah locks up the tea shop and
+    trusts a little less their son.
+
+    Twist: The wedding veil was a decoy; a pair of spectacles lay in a teapot.
+    Threads: disaster: a blood moon (Act I: Inciting incident) · thing: a
+    wedding veil (Act I: Inciting incident)
+
+3. FRESH FORTS FOR VICTOR   (motif: fort)
+   mystery · gritty · Kishōtenketsu
+
+  * Victor Elliersley, 26, a methodical police sergeant. Wants a candlestick
+    from the gatehouse. Needs to laugh at secrecy instead of hiding longing
+    behind it. Flaw: mistakes greed for justice. Secret: was there when a
+    locked-room death began, and said nothing to their godmother. Rival: the
+    magistrate.
+  * Oddington · wartime · spring. Landmark: the gatehouse. Rumor: the
+    magistrate paid a con artist to keep quiet behind closed doors.
+
+    Victor, a methodical police sergeant, is the last person to see a
+    detective from the Yard, and the first suspect in a series of thefts.
+
+    Ki (introduction) — Every spring, Victor, a methodical police sergeant of
+    Oddington, walked past the gatehouse without asking.
+    Shō (development) — A quiet trouble came: a bomb threat touched Oddington,
+    and Victor called on the magistrate in whispers.
+    Ten (twist) — Then Victor saw that the magistrate had wanted a candlestick
+    from the gatehouse too, and had hidden panic behind temper.
+    Ketsu (reconciliation) — Victor laid down pride at the gatehouse, and the
+    case was closed.
+
+    Twist: A fatal fall was staged with great dignity to hide the night of the
+    storm.
+    Threads: disaster: a bomb threat (Shō (development))
+
+4. THE CASE OF THE WHISPERING WITNESS   (motif: witness)
+   mystery · eerie · Three-Act Outline
+
+  * Ottilippa Haversham, 56, a vain undertaker. Wants the reward before the
+    police arrive. Needs to give up recklessness and choose the truth. Flaw:
+    hides hope behind vanity. Secret: owes the witness a favor from on a dare.
+    Rival: the suspicious solicitor.
+  * Kingsbridge St Mary · the jazz age · summer. Landmark: the river bridge.
+    Rumor: the river bridge is where a retired doctor burned a spare key.
+
+    In Kingsbridge St Mary, Ottilippa, a vain undertaker, is asked to hide a
+    stopped watch, and learns that the suspicious solicitor lied about the
+    money.
+
+    Act I: Setup — Ottilippa, a vain undertaker of Kingsbridge St Mary,
+    noticed their real name and wanted the reward before the police arrive.
+    Act I: Inciting incident — Ottilippa found a cufflink buried at the river
+    bridge, and knew it did not belong.
+    Act I: First turn — With Ottilippa's grandmother watching, Ottilippa
+    returned to the river bridge and began.
+    Act II: Rising action — A break-in at the vicarage hit Kingsbridge St Mary
+    again, and Ottilippa blamed a grieving widow.
+    Act II: Midpoint — The cufflink turned up in a locked desk drawer, and the
+    grieving widow denied everything.
+    Act II: Crisis — Ottilippa learned that their foster sibling had lied
+    about the cufflink in plain sight.
+    Act III: Climax — Ottilippa laid a trap at the river bridge without a
+    witness, baited with the cufflink.
+    Act III: Resolution — Ottilippa learned to give up recklessness and choose
+    the truth, and Kingsbridge St Mary forgot the false alibi.
+
+    Twist: The alibi the grieving widow offered was false, and the cufflink
+    was the proof.
+    Threads: thing: a cufflink (Act I: Inciting incident) · someone: a
+    grieving widow (Act II: Rising action)
+
+5. DEATH AND THE WATCH AT WYCHWOOD   (motif: watch)
+   mystery · tense · Story Spine
+
+  * Gwen Ington, 42, a meticulous head gardener. Wants a pardon before the
+    inquest. Needs to admit the truth about the empty grave to their father.
+    Flaw: trusts a closed case over mercy. Secret: has been paid by a retired
+    colonel over tea to keep quiet. Rival: the jealous neighbor.
+  * Wychwood · a foggy November · autumn. Landmark: the quarry. Rumor: a
+    missing witness once walked past the quarry after dark.
+
+    When a walking stick turns up in a hatbox, Gwen, a meticulous head
+    gardener of Wychwood, uncovers a kidnapping no one remembers.
+
+    Once upon a time, the old war had ended in Wychwood, and Gwen, a
+    meticulous head gardener, wanted a pardon before the inquest.
+    Every day, Gwen locked up a staff of bone in the fog and noticed
+    everything at the quarry.
+    One day, a prophecy in verse arrived from a crooked solicitor, asking Gwen
+    to come to the quarry.
+    Because of that, Gwen pocketed a broken pocket watch on the quiet and
+    wrote down the stranger's visit.
+    Because of that, the jealous neighbor trailed Gwen under a false name for
+    asking about the staff of bone.
+    Until finally, Gwen named the crooked solicitor at the quarry too late,
+    with the staff of bone as proof.
+    Ever since then, Gwen visits the crooked solicitor and studies the staff
+    of bone in a flowerpot.
+
+    Twist: Everyone had a motive, but only the crooked solicitor had the staff
+    of bone.
+    Threads: thing: a staff of bone (Every day) · message: a prophecy in verse
+    (One day) · someone: a crooked solicitor (One day)
+```
+
+
+Full suite at the end of batch 7 (one run): **1663 passed**.

@@ -11,7 +11,7 @@
   "{first} was the one who {ACT_THING} {THING} all along.",
   "{the_message:physical} was never meant for {first}: {the_someone:human} {ACT_MESSAGE} the real one.",
   "The whole thing began because {first} {ACT_THING} {THING} {MANNER} years ago.",
-  "{the_thing:!living} was worth {PRIZE:material}, and {the_someone:human} {ACT_THING:trades} it for a song.",
+  "{the_thing:!living} was worth {PRIZE:material,!inner}, and {the_someone:human} {ACT_THING:trades} it for a song.",
   "{SOMEONE:human,!plural} had been {first}'s biggest fan the whole time.",
   "The {rival} and {first} were alike: both secretly wanted {PRIZE:!inner}.",
   "None of it was real: {SOMEONE:human,!plural} and {CLOSE:human} had staged it for {PRIZE:!inner}.",

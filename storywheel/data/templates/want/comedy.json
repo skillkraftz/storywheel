@@ -7,9 +7,9 @@
  "entries": [
   "{PRIZE:!inner} before the whole of {place} hears of it",
   "{PRIZE:!inner} without telling {CLOSE:human}",
-  "{THING:portable,!living} back, and {PRIZE:social} too",
+  "{THING:portable,!living} back, and {PRIZE:social,!inner} too",
   "{PRIZE:!inner} to impress {CLOSE:human}",
-  "{THING:valuable,!living} and {PRIZE:social} {DEADLINE}",
+  "{THING:valuable,!living} and {PRIZE:social,!inner} {DEADLINE}",
   "{PRIZE:!inner} at {landmark} {DEADLINE}",
   "an apology from {CLOSE:human} and {PRIZE:!inner}",
   "{THING:portable} for {CLOSE:human} {DEADLINE}"

@@ -7,7 +7,7 @@
  "entries": [
   "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
   "walked the walls of {landmark} {MANNER}, watching for {DISASTER}",
-  "{ACT_THING:mundane} {THING} and swore again to {DO_PERSON} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} and {ACT_PERSON:mundane} {CLOSE:human}",
   "trained {MANNER} at {landmark} and dreamed of {PRIZE:!inner}",
   "{ACT_PERSON:mundane} {CLOSE:human} {MANNER}, and kept faith with {VALUE}",
   "polished {THING:!living} {MANNER} and told no one about {FEELING}",

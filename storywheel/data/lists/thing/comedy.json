@@ -6,6 +6,70 @@
  ],
  "entries": [
   {
+   "text": "a borrowed ladder",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a wedding cake",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a lost tuba",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a mayoral sash",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a stuffed badger",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a competition trophy",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a forged invitation",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pair of stilts",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a very long banner",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
    "text": "a prize marrow",
    "features": [
     "portable",

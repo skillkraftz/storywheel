@@ -11,7 +11,7 @@
   "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
   "questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}",
   "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
   "kept the clue {HIDING} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
   "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
   "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"

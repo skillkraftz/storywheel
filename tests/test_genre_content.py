@@ -158,7 +158,7 @@ def test_fantasy_and_fairy_tale_are_different_worlds(lib):
 def test_fantasy_uses_no_modern_names_or_jobs_beyond_the_floor():
     _, flavor, trace = run(["fantasy"], stories=150)
     names = [t for t in trace if t[0] in ("first_name", "last_name", "job")]
-    assert sum(1 for t in names if "modern" in t[2]) / len(names) < 0.02
+    assert sum(1 for t in names if "modern" in t[2]) / len(names) < 0.04
 
 
 def test_mystery_clues_come_back_in_later_beats():

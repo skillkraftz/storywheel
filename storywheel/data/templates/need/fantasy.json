@@ -11,7 +11,7 @@
   "to trust {CLOSE:human} with the truth about {TOPIC}",
   "to forgive {TOPIC} and choose {VALUE}",
   "to stop running from {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
-  "to value {VALUE} above {PRIZE:social}",
+  "to value {VALUE} above {PRIZE:social,!inner}",
   "to let go of {VICE} and keep faith with {VALUE}"
  ]
 }

@@ -14,6 +14,9 @@
   "{the_someone:human} offered {first} {PRIZE:!inner} to drop the case {MANNER}",
   "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
   "a second clue, {THING:portable}, matched {the_thing} {MANNER}",
+  "{SOMEONE:human,!plural} lied to {first} {MANNER}, and {THING:portable} went missing",
+  "a second alibi fell apart at {landmark}, and the {rival} grew uneasy",
+  "{first} was warned off {TOPIC} by the {rival} {MANNER}",
   "{CLOSE:human} confessed to {TOPIC}, but not to {the_disaster}",
   "{the_someone:human} vanished {MANNER}, leaving {the_thing:portable} behind"
  ]

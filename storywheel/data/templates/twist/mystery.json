@@ -15,6 +15,9 @@
   "The victim was never gone: {the_someone:human,!plural} had staged {the_disaster:manmade} {MANNER}.",
   "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
   "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
+  "The {rival} had planted {THING:portable} {HIDING} to frame {SOMEONE:human,!plural}.",
+  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone knew it {MANNER}.",
+  "{DISASTER:manmade} was staged {MANNER} to hide {TOPIC}.",
   "Everyone had a motive, but only {the_someone:human} had {the_thing:portable}."
  ]
 }

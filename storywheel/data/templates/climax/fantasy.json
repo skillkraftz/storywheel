@@ -14,7 +14,7 @@
   "{first} read {the_message} to the host and named {SOMEONE:human,!plural}",
   "{the_disaster} broke upon {landmark}, and {first} held the line {MANNER}",
   "{first} {ACT_PERSON} the {rival} {MANNER} and took the crown of {place}",
-  "the oath was kept: {first} gave {PRIZE:material} to {CLOSE:human}",
+  "the oath was kept: {first} gave {PRIZE:material,!inner} to {CLOSE:human}",
   "{first} {ACT_PERSON} {the_someone:human} at {landmark} and chose mercy over {VICE}"
  ]
 }

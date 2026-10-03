@@ -7,11 +7,11 @@
  "entries": [
   "{PRIZE:!inner} {DEADLINE}",
   "{PRIZE:!inner} for {CLOSE:human}",
-  "{PRIZE:inner} about {TOPIC}",
-  "{THING:valuable,!living} and {PRIZE:social}",
-  "{PRIZE:material} at {landmark}",
+  "{THING:portable,!living} from {landmark}",
+  "{THING:valuable,!living} and {PRIZE:social,!inner}",
+  "{PRIZE:material,!inner} at {landmark}",
   "{THING:portable,!living} back from {SOMEONE:human,!plural}",
-  "{PRIZE:social} and peace for {place}",
-  "{PRIZE:inner} {DEADLINE}"
+  "{PRIZE:social,!inner} and peace for {place}",
+  "{PRIZE:material,!inner} {DEADLINE}"
  ]
 }

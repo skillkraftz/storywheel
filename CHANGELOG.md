@@ -2,6 +2,21 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.7.0 — Batch 7: update by commit, and three genres written
+- `storywheel update` now remembers the commit it installed from (`~/.storywheel/installed-source.json`, written by the update and by install.sh) and
+  reinstalls whenever the source folder's commit differs, not only when the version number does. A fix committed without a version bump reaches the
+  typewriter. Uncommitted changes in the source count as different code. An install with no record reinstalls once to make one. Messages:
+  `Installed: 0.7.0 (commit abc1234). Source ~/projects/storywheel: 0.7.0 (commit def5678). Same version number, but the source is at commit def5678. Reinstalling.`
+  `update --record` just records.
+- Genre content for **comedy**, **fantasy** and **mystery**, written the way western and fairy tale were: their own names (with Markov training sets),
+  jobs, places and town-name parts, landmarks, things, people, troubles, rivals, title words, traits, verbs, abstractions, and frames for every
+  premise, twist and beat of all three structures; every atom carries features. Comedy is situations and people (misunderstandings, schemes, pride,
+  escalating mishaps), not jokes. Mystery has clues, suspects, alibis and reveals, and later beats reuse the clue, suspect and crime through threads.
+- Fantasy is epic and high fantasy (orders, ruins, old wars, magic that costs something) and no longer shares lists with fairy tale. Fairy-tale lists
+  were untagged as fantasy; fairy tale's profile leans on the "medieval" tag instead.
+- Profiles: comedy 4 (modern 0.2), fantasy 4 (general 0.15, modern 0), mystery 4 (modern 0.2). Fidelity (own material): comedy 85%, fantasy 90%, mystery 85%;
+  comedy/fairy tale 85%, fantasy/mystery 88%, mystery/western 85%. Repetition report: no line five times or more, nothing over 3x its fair share.
+
 ## 0.6.1 — `storywheel update` fixed
 - It compared a private clone with the remote and said "Already up to date" while a newer version waited. It now compares the INSTALLED version with the
   version in the folder the install came from (found in pip's `direct_url.json`; an editable install runs from it), fetching and fast-forwarding that

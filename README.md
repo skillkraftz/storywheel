@@ -44,7 +44,7 @@ To tinker with the word lists and see changes immediately, install it editable: 
   install runs from it). If that folder is a git checkout with a remote (the typewriter's pulls from `xps:projects/storywheel`) it is fetched and
   fast-forwarded first; with no remote (xps) it is just read. If the versions differ it reinstalls (pipx, or pip in a plain environment; an editable
   install needs none), then runs migrations and rebuilds the dictionary index and spelling lists. It says what it compared: `Installed: 0.5.0. Source
-  ~/projects/storywheel: 0.6.0. Reinstalling.` Local changes are never overwritten. `storywheel update --check` only says whether there is something new.
+  ~/projects/storywheel: 0.6.0. Reinstalling.` Local changes are never overwritten. It also remembers the commit it installed, so a fix committed without a version bump still reinstalls (`Same version number, but the source is at commit …`). `storywheel update --check` only says whether there is something new.
   The *Git remote to update from* setting (Settings > Updates) is optional: it is used only if the source folder is gone, for a temporary clone.
 
 ### Two computers

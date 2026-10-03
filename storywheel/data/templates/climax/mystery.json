@@ -13,6 +13,9 @@
   "{the_thing} proved the alibi false, and {the_someone:human} ran {MANNER}",
   "{first} unmasked the {rival} at {landmark} with {the_thing:portable} and {VALUE}",
   "{the_someone:human} broke down at {landmark}, and {first} named {MOTIVE}",
+  "{first} gathered the suspects at {landmark} and named {SOMEONE:human,!plural} {MANNER}",
+  "{first} laid a trap at {landmark} {MANNER}, baited with {THING:portable}",
+  "{SOMEONE:human,!plural} confessed to {DISASTER:manmade} at {landmark} {MANNER}",
   "{first} put {the_thing} on the table {MANNER} and let {the_someone:human} speak"
  ]
 }

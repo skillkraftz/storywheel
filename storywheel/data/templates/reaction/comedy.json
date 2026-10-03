@@ -13,7 +13,7 @@
   "{ACT_MESSAGE} {MESSAGE:physical} and told no one",
   "hired {SOMEONE:human} to {DO_THING} {THING} {DEADLINE}",
   "{ACT_PLACE} {landmark} {MANNER} to look for {THING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
   "{ACT_PERSON:mundane} the {rival} and lied about {TOPIC}",
   "started a committee about {TOPIC}, with {CLOSE:human} in the chair",
   "asked {CLOSE:human} to {DO_PERSON} {SOMEONE:human,!plural} {MANNER}"

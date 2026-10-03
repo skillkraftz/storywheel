@@ -6,11 +6,11 @@
  ],
  "entries": [
   "lets {VICE} get the better of {VALUE}",
-  "fibs about {TOPIC} rather than lose {PRIZE:social}",
+  "fibs about {TOPIC} rather than lose {PRIZE:social,!inner}",
   "cannot resist {TEMPTATION}, whatever it costs {VALUE}",
   "turns every small problem into {DISASTER} and blames {VICE}",
   "would sooner {DO_THING} {THING} than admit {FEELING}",
-  "boasts about {PRIZE:material} and hides {FEELING} behind {VICE}",
+  "boasts about {PRIZE:material,!inner} and hides {FEELING} behind {VICE}",
   "always says too much about {TOPIC} and calls it {VALUE}",
   "mistakes {VICE} for {VALUE}"
  ]
