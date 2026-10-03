@@ -29,6 +29,7 @@ def missing(name, extra=""):
     return text + (f"   {extra}" if extra else "")
 
 TOOLS.update({
+    "kitty": ("kitty", "`storywheel kitty` needs it", "sudo apt install kitty"),
     "pipx": ("pipx", "installing and updating storywheel needs it", "sudo apt install pipx && pipx ensurepath"),
     "git": ("git", "updating storywheel needs it", "sudo apt install git"),
 })

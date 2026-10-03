@@ -124,6 +124,31 @@ def cmd_post_update(args):
     update.post_update()
 
 
+def kitty_command(font="", size=0, line_height=140, extra=()):
+    """The kitty command line that opens storywheel in its own window: a chosen font and taller lines (modify_font cell_height).
+    Font and size default to the Writer's own settings (Settings > Writer)."""
+    g = settings.load_global()
+    font = font or g.get("writer_font") or ""
+    size = size or g.get("writer_font_size") or 15
+    argv = ["kitty", "--class", "storywheel", "--title", "storywheel", "-o", f"font_size={size}",
+            "-o", f"modify_font=cell_height {int(line_height)}%", "-o", "remember_window_size=no", "--start-as=maximized"]
+    if font:
+        argv += ["-o", f"font_family={font}"]
+    return argv + list(extra) + ["storywheel"]
+
+
+def cmd_kitty(args):
+    import os
+    import shutil
+    argv = kitty_command(args.font, args.size, args.line_height)
+    if args.print:
+        print(" ".join(f'"{a}"' if " " in a else a for a in argv))
+        return
+    if not shutil.which("kitty"):
+        sys.exit(tools.missing("kitty"))
+    os.execvp(argv[0], argv)
+
+
 def cmd_story(args):
     if args.action == "list":
         unis = [_universe(args.universe)] if args.universe else vault.list_universes()
@@ -339,6 +364,11 @@ def add_parsers(sub):
     p = sub.add_parser("update", help="pull the newest storywheel from your git remote, reinstall if the version changed, migrate")
     p.add_argument("--check", action="store_true", help="only say whether there is something new")
     sub.add_parser("post-update", help=argparse.SUPPRESS)
+    p = sub.add_parser("kitty", help="open storywheel in its own kitty window with a chosen font and taller lines")
+    p.add_argument("--font", default="", help="font family (default: Settings > Writer > font)")
+    p.add_argument("--size", type=float, default=0, help="font size (default: Settings > Writer)")
+    p.add_argument("--line-height", type=int, default=140, help="line height as a percent of the font's (kitty modify_font cell_height); default 140")
+    p.add_argument("--print", action="store_true", help="only show the command")
     p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
     p.add_argument("action", choices=["list", "show"])
     p.add_argument("target", nargs="?", help="for show: universe/story")
@@ -389,4 +419,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
