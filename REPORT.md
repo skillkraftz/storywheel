@@ -373,7 +373,6 @@ _Same status words. Tags `pass4-menus`, `pass4-export`, `pass4-perf`._
 | Item | Status | What's missing |
 |---|---|---|
 | Manuscripts folder, one folder per story | Works | setting `manuscripts_dir` (Settings F4 > Export, or `STORYWHEEL_MANUSCRIPTS`), default `~/Writing`. `<folder>/<Title>/<Title> <YYYY-MM-DD>.docx` (also odt, pdf, md, txt, fountain). The library's layout is unchanged; `exports/` inside stories is no longer used |
-| Conflicts | Works | a hidden `.storywheel-story` file in each folder holds `universe/story`. A folder owned by another story, or an existing folder with files and no marker, gets the universe name added ("Title (Universe)", then a number). A path equal to, inside or containing the library is refused or skipped, so nothing is written into the library. Same-day re-exports become "... -2", "... -3" (for odt/pdf too, including the .docx they are made from). Characters file systems refuse are dropped from titles |
 | Messages | Works | paths shown with `~`; warnings say "Settings (F4) > You". Writer: "Exported ~/Writing/..." |
 | Move existing exports | Works | `migrate.migrate_exports()` runs where the other migrations run (startup, `storywheel migrate`) and prints "Moved N exports out of your library to ~/Writing (one folder per story)." Files keep their own date |
 
@@ -697,7 +696,7 @@ _Tags `b3-autocorrect-words`, `b3-autocorrect-ie`, `b3-q-back`, `b3-footer-modes
 Full suite at the end of batch 3: **1311 passed** (1310 in the full run, plus the one menu test fixed after it started and re-run: tests/test_notepad.py 73 passed).
 
 
-# Batch 4: fixes from use, installing, updating and syncing
+# Batch 4: fixes from use, installing, updating (syncing was built, then removed: see N below)
 
 _Tags `b4-names-case`, `b4-name-completion`, `b4-spell-dictionary`, `b4-spell-lenient`, `b4-spell-marks`, `b4-dictionary-sources`, `b4-version`, `b4-install-script`, `b4-setup`, `b4-update`, `b4-sync-layout`, `b4-sync-conflicts`, `b4-final`. Version 0.4.0._
 
@@ -716,11 +715,8 @@ The full suite before starting (one run, not two partial ones): **1311 passed**.
 | Dictionary sources kept; offline rebuild | Works | `~/.storywheel/dictionary-sources/`; an older index is rebuilt from them with a one-line note; download only if missing |
 | `--version`, CHANGELOG.md | Works | 0.4.0, one place (`storywheel/__init__.py`); bump it every batch |
 | install.sh | Partial | tested as a dry run on pretend machines (bare, old Neovim, new distro Neovim, arm64, URL source); the real downloads (Neovim release, Neovide) weren't run here; the Neovim tarball names are those of recent releases |
-| storywheel setup | Works | author details, folders, terminal/Neovide, transparency, dictionary, sync, update remote; remembers answers (`setup_done` in settings.local.toml); `--again`, `--defaults` |
+| storywheel setup | Works | author details, folders, terminal/Neovide, transparency, dictionary, update remote; remembers answers (`setup_done` in settings.local.toml); `--again`, `--defaults` |
 | storywheel update | Works | git fetch + fast-forward only; reinstall with pipx only when the version changed; `post-update` migrations and rebuilds in a new process; shows commits and CHANGELOG entries; `--check`. Tested against local git repositories with a fake pipx |
-| Syncthing layout | Works | `sync link FOLDER` moves shared app files to `<folder>/.storywheel/` with links back; machine-only settings in `settings.local.toml`; `.stignore`; never overwrites (the other copy wins, yours is set aside) |
-| Conflicts | Works | `*.sync-conflict-*` found anywhere in the folder; compared (diff) and one kept (the other to `.trash`): CLI and Builder `Y` (and a message when the Builder opens) |
-| Sync question in setup | Works | explains the steps, checks whether Syncthing is installed (with the exact command), offers the library/manuscripts folders inside the sync folder; documented in the README |
 
 ## M2. Tests added in batch 4
 | Area | File | Tests |
@@ -730,7 +726,6 @@ The full suite before starting (one run, not two partial ones): **1311 passed**.
 | Spelling from the dictionary, lenient, marks | `test_spelldict.py` | 8 |
 | Kept sources, offline rebuild | `test_dictionary.py` | 3 new |
 | Setup and update, version | `test_setup_update.py` | 18 |
-| Sync (layout, settings split, conflicts, CLI, Builder) | `test_sync.py` | 15 |
 | install.sh | `test_install_script.py` | 8 |
 
 ## M3. Manual test script
@@ -740,12 +735,33 @@ The full suite before starting (one run, not two partial ones): **1311 passed**.
 4. In the Writer type `sta` (a lowercase start of a character's name): is it offered? Type a character's name in lowercase and a space: does it get its capital? Type "hope " (no change).
 5. Type "gunsmithing", "unlatching": no red line. Try Settings > Spelling > Spelling marks with a lowercase sentence start and a word like "colour".
 6. `storywheel dictionary install` on a second machine; move `~/.storywheel/dictionary-sources/` away and run Words after a version bump to see the message.
-7. Two machines: `storywheel sync link ~/Writing`, share it in Syncthing, `storywheel setup` on the other. Edit the same scene on both while offline, reconnect, open the Builder: press `Y`.
 8. `storywheel update --check` and `storywheel update` against your git remote.
 
 ## M4. Known issues / questions
 - See BACKLOG.md "Found in batch 4".
-- Syncthing is not run or checked by tests; the symlinked settings assume the tool that edits them writes through links (storywheel does).
 
 
 Full suite at the end of batch 4 (one run): **1378 passed**.
+
+
+# N. Sync code removed (0.4.1, tag `b4-remove-sync`)
+
+Syncing between machines is a separate tool outside storywheel, so everything about it was taken out.
+
+## N1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Remove `storywheel sync`, `.stignore`, the Syncthing steps and checks, the setup question, Settings > Sync items, the Builder's conflict notice and `Y` screen | Works | `sync.py`, its tests and the "syncthing" tool message are gone; the setup has 6 questions; Settings has an "Updates" tab with the update remote only; a test fails if the words appear in the code again |
+| One-time migration of links into a sync folder | Works | `migrate.migrate_sync_links()` (run at Builder start, by `storywheel migrate`, and after `update`) copies each linked item back into `~/.storywheel`, says so, leaves the sync folder as it was, notes links whose target is gone, and drops the old `sync_folder` setting |
+| Keep `settings.local.toml` split and `storywheel update` | Works | the remote is passed to git unchanged (after `--`); a test checks `xps:projects/storywheel` reaches `git fetch` exactly |
+| Full suite | Works | see below |
+
+## N2. Tests
+`test_sync.py` (15) removed. Added `test_settings_split_migration.py` (6: the settings split, link migration, `migrate` command, nothing left, old setting) and one remote-passed-unchanged test in `test_setup_update.py`; the two sync setup tests were removed.
+
+## N3. Manual test script
+1. If you ever ran `storywheel sync link`: `ls -l ~/.storywheel` before and after `storywheel migrate`; the links are real files, the other folder is unchanged.
+2. `storywheel sync` now reports an unknown command. Settings (F4) has no Sync tab; Updates holds the git remote.
+3. Set the remote to `xps:projects/storywheel` and run `storywheel update --check`.
+
+Full suite after the removal: **1367 passed**.

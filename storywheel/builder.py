@@ -48,7 +48,6 @@ HELP = f"""\
 
 [b]Universe and stories[/b]
   [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
-  [b]Y[/b]  sync conflicts (Syncthing): compare the two copies of a file and keep one
   [b]F[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
@@ -263,90 +262,6 @@ class BackupsScreen(ModalScreen):
         self.dismiss(None)
 
 
-class SyncConflictsScreen(ModalScreen):
-    """Files that changed on two computers (Syncthing's *.sync-conflict-* copies): what differs, and keep one. The other goes to the trash."""
-    BINDINGS = [Binding("escape,q", "close", "Close"), Binding("m", "keep('mine')", "Keep mine"), Binding("o", "keep('other')", "Keep other")]
-    DEFAULT_CSS = """
-    SyncConflictsScreen { align: center middle; }
-    SyncConflictsScreen #dlg { width: 120; max-width: 98%; height: 90%; border: round $accent; background: $surface; padding: 1 2; }
-    SyncConflictsScreen OptionList { height: 8; border: none; }
-    SyncConflictsScreen OptionList:focus { border: none; }
-    SyncConflictsScreen #diff { height: 1fr; border: round $primary-darken-2; padding: 0 1; }
-    SyncConflictsScreen #hint { height: auto; color: $text-muted; }
-    SyncConflictsScreen #msg { height: 1; color: $accent; }
-    SyncConflictsScreen Horizontal { height: 1; margin-top: 1; }
-    SyncConflictsScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 10; }
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.found = []
-        self.changed = False
-
-    def compose(self) -> ComposeResult:
-        with Vertical(id="dlg"):
-            yield Static("Sync conflicts", markup=False)
-            yield Static("The same file was changed on two computers before Syncthing could merge them. '-' lines are only in yours, '+' lines only "
-                         "in the other copy. Keep one; the other goes to the trash (.trash in the library), so nothing is lost.", id="hint", markup=False)
-            yield OptionList(id="list")
-            with VerticalScroll(id="diff"):
-                yield Static("", id="difftext", markup=False)
-            yield Static("", id="msg", markup=False)
-            with Horizontal():
-                yield _quiet(Button("Keep mine (m)", id="mine"))
-                yield _quiet(Button("Keep other copy (o)", id="other"))
-                yield _quiet(Button("Close (q)", id="close"))
-
-    def on_mount(self):
-        self.reload()
-        self.query_one("#list", OptionList).focus()
-
-    def reload(self, keep=0):
-        from . import sync
-        self.found = sync.find_conflicts()
-        lst = self.query_one("#list", OptionList)
-        lst.clear_options()
-        if not self.found:
-            lst.add_options([Option(Text("No sync conflicts.", style="dim"), id="none", disabled=True)])
-            self.query_one("#difftext", Static).update("")
-            for b in ("mine", "other"):
-                self.query_one("#" + b, Button).disabled = True
-            return
-        lst.add_options([Option(c.summary(), id=str(i)) for i, c in enumerate(self.found)])
-        lst.highlighted = min(keep, len(self.found) - 1)
-        self.show()
-
-    def current(self):
-        i = self.query_one("#list", OptionList).highlighted
-        return self.found[i] if i is not None and i < len(self.found) else None
-
-    def show(self):
-        from . import sync
-        c = self.current()
-        self.query_one("#difftext", Static).update("\n".join(sync.diff(c, limit=400)) if c else "")
-
-    def on_option_list_option_highlighted(self, event):
-        self.show()
-
-    def on_button_pressed(self, event):
-        event.stop()
-        i = event.button.id
-        self.dismiss(self.changed) if i == "close" else self.action_keep("mine" if i == "mine" else "other")
-
-    def action_keep(self, which):
-        from . import sync
-        c = self.current()
-        if not c:
-            return
-        message = sync.keep(c, which)
-        self.changed = True
-        self.reload()
-        self.query_one("#msg", Static).update(message)
-
-    def action_close(self):
-        self.dismiss(self.changed)
-
-
 class StoryOptions(OptionList):
     BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
                 Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups")]
@@ -379,7 +294,6 @@ class BuilderScreen(Screen):
         Binding("G", "global_settings", "Your details", show=False),
         Binding("o", "overview", "Universe overview"),
         Binding("F", "fix_names", "Fix names", show=False),
-        Binding("Y", "sync_conflicts", "Sync conflicts", show=False),
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
@@ -510,17 +424,6 @@ class BuilderScreen(Screen):
         self.refresh_all()
         self.outline.history_wheel = False
         self.query_one("#card", CardList).focus()
-        self.call_after_refresh(self.tell_conflicts)
-
-    def tell_conflicts(self):
-        """Syncthing leaves *.sync-conflict-* files when the same file changed on two machines: say so, plainly, right away."""
-        try:
-            from . import sync
-            n = len(sync.find_conflicts())
-        except Exception:
-            return
-        if n:
-            self.say(f"{n} sync conflict{'s' if n != 1 else ''}: the same file was changed on two computers. Press Y to compare and keep one.")
 
     # --- small accessors ---------------------------------------------------------------------------------------
 
@@ -1250,9 +1153,6 @@ class BuilderScreen(Screen):
 
     def action_tab(self, i):
         self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
-
-    def action_sync_conflicts(self):
-        self.app.push_screen(SyncConflictsScreen(), lambda changed: self.refresh_all() if changed else None)
 
     def action_fix_names(self):
         from . import names

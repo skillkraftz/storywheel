@@ -20,5 +20,4 @@ def missing(name, extra=""):
 TOOLS.update({
     "pipx": ("pipx", "installing and updating storywheel needs it", "sudo apt install pipx && pipx ensurepath"),
     "git": ("git", "updating storywheel needs it", "sudo apt install git"),
-    "syncthing": ("Syncthing", "syncing your writing between machines needs it", "sudo apt install syncthing"),
 })

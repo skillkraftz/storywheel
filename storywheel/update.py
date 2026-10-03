@@ -70,11 +70,11 @@ def source_dir(remote):
     if here:
         return here, True
     if not remote:
-        raise UpdateError("There is no git remote to update from. Set one in Settings (F4) > Sync, or run  storywheel setup.")
+        raise UpdateError("There is no git remote to update from. Set one in Settings (F4) > Updates, or run  storywheel setup.")
     clone = paths.home() / "source"
     if not (clone / ".git").exists():
         clone.parent.mkdir(parents=True, exist_ok=True)
-        r = subprocess.run(["git", "clone", remote, str(clone)], capture_output=True, text=True)
+        r = subprocess.run(["git", "clone", "--", remote, str(clone)], capture_output=True, text=True)
         if r.returncode != 0:
             raise UpdateError(f"Could not clone {remote}: {(r.stderr or r.stdout).strip()}")
     return clone, False
@@ -88,7 +88,7 @@ def update(say=print, check_only=False, runner=subprocess.run):
         raise UpdateError(f"{paths.tilde(repo)} has changes that are not committed, so it was left alone. Commit or stash them first.")
     branch = git(repo, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
     fetch_from = remote or "origin"
-    git(repo, "fetch", fetch_from, branch)
+    git(repo, "fetch", "--", fetch_from, branch)         # (the remote goes to git exactly as given: "xps:projects/storywheel" works)
     head = git(repo, "rev-parse", "HEAD").stdout.strip()
     theirs = git(repo, "rev-parse", "FETCH_HEAD").stdout.strip()
     installed = __version__
@@ -135,7 +135,7 @@ def update(say=print, check_only=False, runner=subprocess.run):
 def post_update(say=print):
     """What a new version may need: migrations, the dictionary index and the spelling lists."""
     from . import dictionary, migrate, spelldict, writer
-    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports()
+    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links()
     for line in lines:
         say("  " + line)
     if dictionary.installed():

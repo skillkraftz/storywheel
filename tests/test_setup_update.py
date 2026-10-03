@@ -52,7 +52,7 @@ def test_running_it_again_asks_nothing_and_a_new_question_only_asks_that_one(hom
     run_setup([], defaults=True)
     done, said, ask = run_setup([])
     assert done == [] and ask.asked == [] and any("already done" in s for s in said)
-    settings.save_global({"setup_done": ["author", "folders", "window", "transparent", "dictionary", "sync"]})      # (an older setup: "update" is new)
+    settings.save_global({"setup_done": ["author", "folders", "window", "transparent", "dictionary"]})      # (an older setup: "update" is new)
     done, said, ask = run_setup(["origin-url"])
     assert done == ["update"] and len(ask.asked) == 1
     assert settings.load_global()["update_remote"] == "origin-url"
@@ -70,29 +70,10 @@ def test_defaults_mode_asks_nothing(home):
     assert ask.asked == [] and done == list(setup_wizard.QUESTIONS)
 
 
-def test_the_sync_question_explains_the_steps_and_links_the_folder(home, tmp_path):
-    folder = tmp_path / "Writing"
-    (home / "home").mkdir(exist_ok=True)
-    (home / "home" / "ratings.json").write_text('{"ratings": []}')
-    settings.save_global({"setup_done": [q for q in setup_wizard.QUESTIONS if q != "sync"]})
-    done, said, ask = run_setup(["y", str(folder), "y"])
-    text = "\n".join(said)
-    assert done == ["sync"] and "Install Syncthing" in text and "Share the folder" in text and "isn't installed" in text
-    g = settings.load_global()
-    assert g["sync_folder"] == str(folder) and g["library"] == str(folder / "storywheel") and g["manuscripts_dir"] == str(folder)
-    assert (home / "home" / "ratings.json").is_symlink() and (folder / ".stignore").exists()
-
-
-def test_no_to_the_sync_question_changes_nothing(home):
-    settings.save_global({"setup_done": [q for q in setup_wizard.QUESTIONS if q != "sync"]})
-    run_setup(["n"])
-    assert not settings.load_global().get("sync_folder")
-
-
 def test_the_command(home, capsys):
     cli(["setup", "--defaults"])
     out = capsys.readouterr().out
-    assert "7 question(s)" in out and "Done." in out
+    assert "6 question(s)" in out and "Done." in out
     cli(["setup"])
     assert "already done" in capsys.readouterr().out
 
@@ -241,3 +222,17 @@ def test_version_flag_and_the_version_live_in_one_place():
     root = Path(__file__).resolve().parent.parent
     assert 'dynamic = ["version"]' in (root / "pyproject.toml").read_text()
     assert f"## {__version__}" in (root / "CHANGELOG.md").read_text()
+
+
+def test_a_remote_is_given_to_git_exactly_as_written(home, monkeypatch):
+    """Hostnames like xps:projects/storywheel (ssh style) must reach git untouched."""
+    calls = []
+    def fake_git(repo, *args, check=True):
+        calls.append(args)
+        return subprocess.CompletedProcess(args, 0, stdout="main\n" if "--abbrev-ref" in args else "", stderr="")
+    monkeypatch.setattr(update, "checkout_dir", lambda: Path(__file__).parent.parent)
+    monkeypatch.setattr(update, "git", fake_git)
+    settings.save_global({"update_remote": "xps:projects/storywheel"})
+    update.update(lambda m: None, check_only=True, runner=FakeRun())
+    fetch = next(c for c in calls if c[0] == "fetch")
+    assert fetch == ("fetch", "--", "xps:projects/storywheel", "main")

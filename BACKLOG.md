@@ -202,7 +202,6 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 - **The lenient spelling list** accepts any known word + ending, so a few non-words slip through ("unhouse"); turn it off in Settings > Spelling.
 - **Name case correction** needs the spellchecker on and skips names that are also ordinary words ("Hope", "Will").
 - **`storywheel update` of a plain install** needs a git remote that serves the repository (not a tarball); there is no signature check.
-- **Syncthing's `.stversions` and conflict files in `.backups`** are ignored/not searched; no check that Syncthing is actually running.
 - **`install.sh`** is tested only as a dry run on a pretend machine; the real downloads (Neovim, Neovide) are unchecked here.
 - **Neovide** has no ready-made build for arm64.
 
@@ -226,7 +225,12 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 
 ## Done
 
-### Batch 4: fixes from use, installing, updating, syncing
+### Sync code removed (`b4-remove-sync`)
+
+- Everything about syncing is gone from storywheel (command, setup question, Settings tab, Builder conflicts screen); old links are turned back into
+  real files by a one-time migration. Syncing is a separate tool outside this project.
+
+### Batch 4: fixes from use, installing, updating
 
 - **Names and capitals:** entities record proper or description; promotion/rolls keep descriptions as descriptions; `names fix` and Builder `F` with a
   preview — `b4-names-case`. Writer name completion on any word of 3+ letters, any case, and wrong-case correction — `b4-name-completion`.
@@ -235,8 +239,7 @@ unclear about it. Batch 3 applied these; the tables are kept as the record of wh
 - **Dictionary sources kept; older index rebuilt offline** — `b4-dictionary-sources`.
 - **Version and changelog** (`--version`, CHANGELOG.md) — `b4-version`. **install.sh** — `b4-install-script`. **storywheel setup** — `b4-setup`.
   **storywheel update** — `b4-update`.
-- **Sync:** one folder holds everything (settings split into machine-only `settings.local.toml`), `.stignore` — `b4-sync-layout`; conflicts found,
-  compared and resolved (CLI and Builder `Y`) — `b4-sync-conflicts`; setup explains the Syncthing steps and checks it; README — `b4-final`.
+- **Sync** was built here and then removed again (see above); the settings split stays.
 
 ### Batch 3: clarity and safety
 

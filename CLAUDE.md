@@ -756,10 +756,11 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Dictionary sources stay in `<home>/dictionary-sources/`; an index older than the schema is rebuilt from them offline when first opened (a note is queued
   in `dictionary.NOTES`), and only an absent source asks for a download.
 - Version lives in `storywheel/__init__.py` (`pyproject` reads it); CHANGELOG.md has one entry per batch. `install.sh` supports Debian-family on x86_64/arm64.
-- Machine-only settings (library, manuscripts_dir, sync_folder, update_remote, Neovide, fonts, line/paragraph spacing, setup_done) live in
-  `settings.local.toml`; `settings.toml` is the shareable part. Sync: `sync.link` moves shared app files into `<sync>/.storywheel/` and leaves symlinks
-  (never overwriting: the other machine's copy wins and this one is set aside in `~/.storywheel/.pre-sync/`). Conflicts are Syncthing's
-  `*.sync-conflict-*` files; keeping one trashes the other (never deletes).
-- `storywheel update` fast-forwards only (an unclean tree or diverged history stops it), reinstalls with pipx only when the version changed (an in-place checkout
+- Machine-only settings (library, manuscripts_dir, update_remote, Neovide, fonts, line/paragraph spacing, setup_done) live in `settings.local.toml`;
+  `settings.toml` is the part that can be copied between machines.
+- storywheel does NOT sync and must not know about syncing (removed in 0.4.1; a separate tool outside the project does it). `migrate.migrate_sync_links()`
+  turns any symlinks `sync link` left in `~/.storywheel` back into real files and drops the old `sync_folder` setting, once, saying so; the folder they
+  pointed into is never touched.
+- `storywheel update` passes the remote to git exactly as written (after `--`; `xps:projects/storywheel` works), fast-forwards only (an unclean tree or diverged history stops it), reinstalls with pipx only when the version changed (an in-place checkout
   needs none), and runs `post-update` in a new process so the new code does the migrations and rebuilds.
 

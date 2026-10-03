@@ -2,6 +2,7 @@
 import datetime
 import json
 import shutil
+from pathlib import Path
 
 from . import paths, schemas, vault
 
@@ -102,3 +103,47 @@ def migrate_universe_json():
     shutil.move(str(old), str(backup))
     return [f"Moved your old universe into the '{LOOSE}' universe: {made['character']} character(s), "
             f"{made['place']} place(s), {made['note']} note(s).", f"The old file is kept as {backup}."]
+
+
+# Items an earlier version could replace with symbolic links into a folder shared between machines (`storywheel sync link`, removed in 0.4.1).
+OLD_LINKED = ("settings.toml", "ratings.json", "vocabulary.json", "recent.json", "genres.json", "lists", "structures", "stories", "entities")
+
+
+def migrate_sync_links():
+    """Turn any of those links back into real files in the app storage. The folder they pointed into is left exactly as it was."""
+    import os
+    import shutil
+    home, lines = paths.home(), []
+    for name in OLD_LINKED:
+        link = home / name
+        if not link.is_symlink():
+            continue
+        target = Path(os.path.realpath(link))
+        link.unlink()
+        if target.is_dir():
+            shutil.copytree(target, link)
+        elif target.exists():
+            shutil.copy2(target, link)
+        else:
+            lines.append(f"{name} was a link to {target}, which is gone; nothing was copied back.")
+            continue
+        lines.append(f"{name} was a link into {paths.tilde(target.parent)}; it is a real file in {paths.tilde(home)} again "
+                     "(the copy it pointed to was left as it was).")
+    return lines + _forget_sync_folder()
+
+
+def _forget_sync_folder():
+    """Drop the `sync_folder` setting an earlier version kept."""
+    import re
+    lines = []
+    for name in ("settings.local.toml", "settings.toml"):
+        f = paths.home() / name
+        try:
+            text = f.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        new = re.sub(r"(?m)^sync_folder\s*=.*\n", "", text)
+        if new != text:
+            f.write_text(new, encoding="utf-8")
+            lines.append("The old sync_folder setting was removed (storywheel no longer syncs anything).")
+    return lines

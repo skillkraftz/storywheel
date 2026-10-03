@@ -3,10 +3,10 @@ only asks the questions that are new; `storywheel setup --again` asks everything
 import shutil
 from pathlib import Path
 
-from . import paths, settings, sync, tools
+from . import paths, settings, tools
 
 # Each question: (id, title). The asking is in ask_<id>; they receive the Setup object.
-QUESTIONS = ("author", "folders", "window", "transparent", "dictionary", "sync", "update")
+QUESTIONS = ("author", "folders", "window", "transparent", "dictionary", "update")
 
 
 class Setup:
@@ -88,20 +88,6 @@ class Setup:
                 self.say("The download did not finish. Run  storywheel dictionary install  to try again.")
         else:
             self.say("Skipped. Words and spellcheck will say what to run:  storywheel dictionary install")
-
-    def ask_sync(self):
-        if not self.yes("Do you write on more than one computer?", bool(self.g.get("sync_folder"))):
-            return
-        folder = Path(self.ask("The folder to keep in sync", self.g.get("sync_folder") or paths.tilde(Path.home() / "Writing"))).expanduser()
-        self.say(sync.steps_text(folder))
-        if not sync.syncthing_installed():
-            self.say(tools.missing("syncthing"))
-        if not (sync._inside(paths.library_root(), folder) and sync._inside(paths.manuscripts_root(), folder)):
-            if self.yes(f"Put your library in {paths.tilde(folder / 'storywheel')} and manuscripts in {paths.tilde(folder)}? "
-                        "(nothing is moved; use these folders on both computers)", True):
-                settings.save_global({"library": str(folder / "storywheel"), "manuscripts_dir": str(folder)})
-        for line in sync.link(folder):
-            self.say("  " + line)
 
     def ask_update(self):
         current = self.g.get("update_remote") or ""

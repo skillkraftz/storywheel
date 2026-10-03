@@ -88,10 +88,7 @@ SECTIONS = [
     ("Library", [
         ("library", "Library folder", "path", None, "Where universes, stories and manuscripts live. Changing it does not move anything."),
     ]),
-    ("Sync", [
-        ("sync_folder", "Sync folder (Syncthing)", "path", None,
-         "The one folder you share between computers with Syncthing. To start or change it, run:  storywheel sync link FOLDER  (or storywheel setup); this only shows it. "
-         "Settings, ratings, vocabulary and your lists live in its .storywheel folder; folders, Neovide and fonts stay on each machine."),
+    ("Updates", [
         ("update_remote", "Git remote to update from", "text", None,
          "Where  storywheel update  pulls from: a git URL, or user@computer:path. Blank = the checkout's own 'origin'."),
     ]),

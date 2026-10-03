@@ -37,27 +37,19 @@ To tinker with the word lists and see changes immediately, install it editable: 
 ### Setup, version and updates
 
 - `storywheel setup` is a short questionnaire: your details for the manuscript's first page, the library and manuscripts folders, terminal or
-  Neovide, transparency, fetching the dictionary, and syncing. It remembers what it asked; running it again asks only what is new
+  Neovide, transparency and fetching the dictionary, and the update remote. It remembers what it asked; running it again asks only what is new
   (`--again` asks everything, `--defaults` asks nothing). Every answer can be changed later in Settings (F4).
 - `storywheel --version` shows the version; CHANGELOG.md lists what each version added.
-- `storywheel update` pulls the newest storywheel from your git remote (Settings > Sync > *Git remote to update from*; a private GitHub
-  repository, or another computer as `user@host:path/storywheel`; blank = this checkout's `origin`). It shows what changed, reinstalls with pipx
+- `storywheel update` pulls the newest storywheel from your git remote (Settings > Updates > *Git remote to update from*; a private GitHub
+  repository, or another computer as `user@host:path/storywheel`; blank = this checkout's `origin`; it is passed to git exactly as written, so `xps:projects/storywheel` works). It shows what changed, reinstalls with pipx
   only if the version changed, runs migrations, and rebuilds the dictionary index and the spelling lists if needed. Local changes are never
   overwritten. `storywheel update --check` only says whether there is something new.
 
-### Two computers (Syncthing)
+### Two computers
 
-storywheel does not sync anything itself; use [Syncthing](https://syncthing.net) (one computer in use at a time).
-
-1. Install Syncthing on both computers (`sudo apt install syncthing`).
-2. On the first one run `storywheel setup` (or `storywheel sync link ~/Writing`). Everything worth keeping goes under that one folder:
-   the library (`storywheel/`), exported manuscripts, and `.storywheel/` with your settings, ratings, vocabulary, your own lists and structures
-   and your Wheel drafts. Folders, Neovide and fonts (`settings.local.toml`), Neovim's state, the dictionary index and the spelling lists
-   stay on each machine; `.stignore` lists what Syncthing leaves out.
-3. Share that folder in Syncthing to the other computer, wait for "Up to Date", then run `storywheel setup` there and give the same folder.
-4. If the same file was changed on both before they synced, Syncthing leaves a `*.sync-conflict-*` copy. The Builder says so when it opens;
-   **Y** shows what differs and lets you keep one (the other goes to the library's `.trash`). Also `storywheel sync conflicts | diff PATH |
-   keep PATH --mine|--other`, and `storywheel sync` for the status.
+storywheel does not sync anything and knows nothing about syncing: your library and manuscripts are plain files, so any tool outside this
+project can carry them. What is kept per machine is in `~/.storywheel/settings.local.toml` (folders, Neovide, fonts, the update remote, what
+setup asked); `settings.toml` holds the rest and can be copied between machines.
 
 ## Use
 

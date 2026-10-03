@@ -128,9 +128,9 @@ def _load(path, defaults):
     return out
 
 
-# What belongs to this machine and is NOT shared when the settings are synced: folders, the Neovide window, fonts, and what this
-# machine's setup has asked. They live in settings.local.toml (the rest in settings.toml, which a sync tool may carry between machines).
-LOCAL_KEYS = ("library", "manuscripts_dir", "sync_folder", "update_remote", "neovide", "writer_font", "writer_font_size", "line_spacing",
+# What belongs to this machine and belongs to this machine and is kept apart from the rest: folders, the Neovide window, fonts, and what this
+# machine's setup has asked. They live in settings.local.toml (the rest in settings.toml, which can be copied to another machine).
+LOCAL_KEYS = ("library", "manuscripts_dir", "update_remote", "neovide", "writer_font", "writer_font_size", "line_spacing",
               "paragraph_spacing", "neovide_opacity", "setup_done")
 
 
@@ -163,7 +163,7 @@ def save_global(values):
         merged.pop(key, None)
     path.write_text(dump_toml(merged, "storywheel settings: who you are, and defaults for new stories."), encoding="utf-8")
     if local:
-        local_path().write_text(dump_toml(local, "this machine only (folders, Neovide, fonts): not shared when your settings are synced."),
+        local_path().write_text(dump_toml(local, "this machine only (folders, Neovide, fonts): machine-specific; settings.toml can be copied to another machine without them."),
                                 encoding="utf-8")
     return path
 
