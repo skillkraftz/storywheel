@@ -35,6 +35,10 @@ M.HELP = {
   "  Names              type 3 letters of any word of a character's or place's name (any case) to complete it; a finished name in the wrong case is fixed",
   "  Spelling marks     red wavy = not a word.  Blue = lowercase where a capital belongs (SpellCap).  Pink = a rare word (SpellRare).",
   "                     Cyan = another region's spelling (SpellLocal).  Settings F4 > Spelling softens or hides the last three.",
+  "  Grammar (optional) Off by default. Install once:  storywheel grammar install   then turn it on in the F12 menu or Settings F4 > Grammar.",
+  "                     A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline.",
+  "                     Right-click one: the message, fixes to apply, Ignore this one, Turn off this rule.  F10 next problem, Shift+F10 the list.",
+  "                     This is LanguageTool's free rules, not the Premium rules of the Google Docs extension, and without its large n-gram data.",
   "  (every shortcut can be changed in Settings F4 > Keys)",
   "",
   "With Vim keys on (not notepad mode), in Normal mode, with Space first",
@@ -109,7 +113,8 @@ function M.leave(where, extra)
   end
   backup.snapshot(false)
   stats.save()
-  session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell })
+  session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell,
+                 grammar = require("sw.grammar").enabled })
   local rf = os.getenv("STORYWHEEL_RETURN_FILE")
   if rf and rf ~= "" then
     util.write(rf, where or "")
@@ -405,6 +410,7 @@ function M.start()
   backup.setup()
   world.setup()
   require("sw.typing").setup()
+  require("sw.grammar").setup(pick(saved.grammar, story.setting("grammar", false)))
   vim.api.nvim_create_autocmd({ "BufEnter", "BufReadPost" }, { group = vim.api.nvim_create_augroup("sw_spell", { clear = true }),
     callback = function(ev)
       local name = vim.api.nvim_buf_get_name(ev.buf)
@@ -425,7 +431,8 @@ function M.start()
   })
   vim.api.nvim_create_autocmd("VimLeavePre", { group = vim.api.nvim_create_augroup("sw_leave", { clear = true }),
     callback = function()
-      session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell })
+      session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell,
+                 grammar = require("sw.grammar").enabled })
       stats.save()
     end })
 end

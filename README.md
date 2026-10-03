@@ -293,6 +293,47 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
+### Writing in kitty (a typewriter-style setup)
+
+[kitty](https://sw.kovidgoyal.net/kitty/) is a good home for the Writer, especially on a Raspberry Pi where Neovide is not available (it has no arm64
+build; Settings and setup say so and the terminal is used).
+
+    storywheel kitty                                      a new kitty window with storywheel, using Settings > Writer's font and size
+    storywheel kitty --font "Courier Prime" --size 17 --line-height 160
+    storywheel kitty --print                              show the command (put it in a launcher or an alias)
+
+`--line-height` is a percent (kitty's `modify_font cell_height`; 140 by default) and gives the taller, typewriter-like lines. A desktop launcher:
+`~/.local/share/applications/storywheel.desktop` with `Exec=storywheel kitty --font "Courier Prime" --size 17`, `Terminal=false`.
+
+**Ctrl+I** reaches Neovim distinctly under kitty's keyboard protocol (kitty sends `CSI 105;5u`, Neovim reads it as `<C-i>`, not Tab). This was
+checked by sending those exact bytes to a real terminal-mode Neovim (`tests/test_kitty_keys.py`), so Ctrl+I toggles italics automatically when
+`KITTY_WINDOW_ID` or a kitty `TERM` is present; Alt+I always works, and `Space k` (`:SWKeyCheck`) tests your own terminal.
+
+### Grammar checking (optional, off by default)
+
+The Writer can check grammar with a **local LanguageTool** server. Nothing runs unless you turn it on.
+
+    storywheel grammar install                   download LanguageTool (about 200 MB), once
+    storywheel grammar install --from LT.zip     or unpack LanguageTool-stable.zip that you copied over (a typewriter rarely has internet)
+    storywheel grammar status                    Java, LanguageTool's version, memory it wants, whether the server runs
+
+It needs Java 11 or newer (`sudo apt install default-jre-headless`; the message says so when it is missing). Turn checking on in Settings > Grammar or
+the Writer's F12 menu: storywheel starts the server (on 127.0.0.1 only, with the memory limit you set, 512 MB by default; the first start can take a
+minute on a Raspberry Pi) and stops it when you turn checking off or leave the Writer.
+
+- **When:** a moment after you stop typing, only the paragraphs (lines) that changed since they were last checked. Answers are remembered per story
+  (`.grammar-cache.json`), so reopening a story does not check it all again. Markdown markup (`*`) is taken out before checking and the answers are
+  mapped back onto your text, so the underlines land on the right letters (also after emoji and quotes).
+- **Looks:** problems have an orange wavy underline, distinct from spelling's red/dotted marks; the status line says how many there are.
+- **Right-click a problem:** LanguageTool's message, the suggested fixes (click one to apply it), *Ignore this one* (remembered for this story only, in
+  `grammar-ignore.json`; list or forget them with `storywheel grammar ignored UNIVERSE/STORY [--clear]`), *Turn off this rule* (saved in Settings).
+  **F10** jumps to the next problem; **Shift+F10** lists every problem in the story (Enter jumps). Both keys are in Settings > Keys.
+- **Settings > Grammar:** on/off, which categories to check, turned-off rules, the pause, the memory limit. The picky categories (style, redundancy,
+  plain English, colloquialisms, repeated words) and LanguageTool's own spelling and typography start **off**: fiction and dialogue trip them
+  constantly, and Neovim's spellcheck already knows your universe's names.
+- **What this is not:** the local version has LanguageTool's free rules, not the Premium rules of the Google Docs extension, and the large n-gram
+  data is not used (some confused-word checks that need it are missing).
+
 ### Look and feel (Settings > Appearance)
 
 By default the background is your terminal's own, so a translucent terminal (kitty `background_opacity 0.85`...) shows through in every

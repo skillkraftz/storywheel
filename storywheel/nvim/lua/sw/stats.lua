@@ -104,8 +104,9 @@ function M.line()
   local goal = tonumber(story.setting("daily_goal", 0)) or 0
   local today = math.max(0, M.total_cached - M.start_total) + M.day_base
   local goal_text = goal > 0 and (" of " .. commas(goal)) or ""
-  return string.format("  words: in this scene %s · in the story %s · written today %s%s", commas(M.scene_cached), commas(M.total_cached),
-                       commas(today), goal_text)
+  local g = require("sw.grammar").status_text()
+  return string.format("  words: in this scene %s · in the story %s · written today %s%s%s", commas(M.scene_cached), commas(M.total_cached),
+                       commas(today), goal_text, g ~= "" and ("  ·  " .. g) or "")
 end
 
 function M.setup()

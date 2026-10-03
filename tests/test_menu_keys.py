@@ -73,7 +73,7 @@ def test_every_item_of_the_writer_menu_works_with_one_enter_by_every_route(home,
                 failures.append((label, how, "menu still open after one Enter"))
             elif R and not effect_ok(label, R, story):
                 failures.append((label, how, "no effect after one Enter", R))
-            elif label not in ("Help", "Scenes sidebar", "Find and replace…", "Restore from a backup…") and R and not R.get("in_main") and not label.startswith("This story's"):
+            elif not label.startswith("List of grammar problems") and label not in ("Help", "Scenes sidebar", "Find and replace…", "Restore from a backup…") and R and not R.get("in_main") and not label.startswith("This story's"):
                 failures.append((label, how, "not back in the writing window", R.get("in_main")))
             if errmsg or bad:
                 failures.append((label, how, errmsg, bad))

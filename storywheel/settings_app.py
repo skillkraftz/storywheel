@@ -9,6 +9,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.screen import ModalScreen, Screen
+from .grammar_categories import CATEGORIES as GRAMMAR_CATEGORIES
 from . import appearance, navigation
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
@@ -61,6 +62,16 @@ SECTIONS = [
          "Red wavy = not a word (always shown). Blue = a lowercase letter where a capital belongs (SpellCap); pink = a rare word (SpellRare); "
          "cyan = a word from another region's spelling (SpellLocal). 'subtle' shows those three as a faint dotted line; 'misspellings only' hides them."),
         ("autocorrect", "Autocorrect common slips", "bool", None, "When you finish a word: i → I, im → I'm, dont → don't, teh → the... (a short list; never inside other words)."),
+    ]),
+    ("Grammar", [
+        ("grammar", "Check grammar (LanguageTool)", "bool", None,
+         "Off by default. When on, the Writer starts a LanguageTool server on this computer and stops it when you turn this off or leave the Writer. "
+         "Install it once with:  storywheel grammar install   (or  --from FILE.zip). Needs Java."),
+        *[(key, label, "bool", None, hint) for key, _cid, label, _on, hint in GRAMMAR_CATEGORIES],
+        ("grammar_off_rules", "Turned-off rules", "text", None,
+         "Rule ids, separated by commas. Right-click a problem in the Writer > Turn off this rule adds one here."),
+        ("grammar_pause_ms", "Check after a pause of (ms)", "int", None, "How long you stop typing before changed paragraphs are checked."),
+        ("grammar_memory_mb", "Memory limit (MB)", "int", None, "The most memory LanguageTool's Java may use (this computer only). 512 is plenty for a short story; a Raspberry Pi 4 can spare it."),
     ]),
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
@@ -188,6 +199,15 @@ class SettingsScreen(Screen):
                             yield Static(f"Neovide: {'installed at ' + exe if exe else none}"
                                          f"      Neovim: {'.'.join(map(str, _writer.nvim_version() or ())) or 'not installed'}",
                                          id="writer-tools", markup=False)
+                        if title == "Grammar":
+                            from . import grammar as _grammar
+                            st = _grammar.status()
+                            lines = [_grammar.HELP_NOTE,
+                                     f"Java: {st['java_version'] or 'not found'}   LanguageTool: {st['version'] or 'not installed'}   "
+                                     f"Memory: wants about {st['memory_needed_mb']} MB" + (f", {st['memory_available_mb']} MB free" if st['memory_available_mb'] else ""),
+                                     "Ignored items are kept per story (grammar-ignore.json): list or forget them with  storywheel grammar ignored UNIVERSE/STORY [--clear]"]
+                            lines += st["problems"]
+                            yield Static("\n".join(lines), id="grammar-tools", markup=False)
                         if title == "Library":
                             yield Static(f"App storage: {paths.home()}\nSettings file: {settings.global_path()}", markup=False)
             with TabPane("Stats", id="t-stats"):

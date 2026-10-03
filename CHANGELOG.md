@@ -2,6 +2,16 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.5.0 — Batch 5: backlog cleanup, typewriter fixes, optional grammar checking
+- BACKLOG.md reconciled with what is done.
+- Neovide is not offered on arm64 (no ready-made build): Settings and setup say so; the terminal is used.
+- `storywheel kitty`: opens storywheel in its own kitty window with a chosen font and taller lines. Ctrl+I italic is confirmed to work under
+  kitty's keyboard protocol (and is on automatically there). README: "Writing in kitty".
+- Optional grammar checking with a local LanguageTool (off by default): `storywheel grammar install [--from FILE.zip] | status | start | stop`;
+  the Writer starts the server when you turn it on and stops it when you turn it off or leave. Changed paragraphs are checked after a pause;
+  problems are underlined in their own colour; right-click for the message, fixes, Ignore, Turn off this rule; F10 next, Shift+F10 the list;
+  Settings > Grammar.
+
 ## 0.4.1 — Sync code removed
 - `storywheel sync`, the sync question in setup, the Sync tab in Settings and the Builder's sync-conflict notice and screen are gone: syncing between
   machines is a separate tool outside storywheel. Links into a sync folder that `sync link` made in `~/.storywheel` are turned back into real files

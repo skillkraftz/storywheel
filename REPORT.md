@@ -765,3 +765,43 @@ Syncing between machines is a separate tool outside storywheel, so everything ab
 3. Set the remote to `xps:projects/storywheel` and run `storywheel update --check`.
 
 Full suite after the removal: **1367 passed**.
+
+
+# Batch 5: backlog cleanup, typewriter fixes, optional grammar checking
+
+_Tags `b5-backlog`, `b5-neovide-arm64`, `b5-kitty`, `b5-grammar-server`, `b5-grammar-check`, `b5-grammar-ui`, `b5-grammar-settings`, `b5-grammar-tests`, `b5-final`. Version 0.5.0._
+
+## P1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Reconcile BACKLOG.md | Works | finished items removed (Vocabulary start over, universe word list review, manual index rebuilds, overused words, restore from backups, the review "Everywhere" list); open ones kept; "Suggested batches" rewritten |
+| Neovide on arm64 | Works | Settings shows "not available on arm64" and refuses the switch, setup says so and doesn't ask, the Writer's launch note says so; a self-built Neovide on arm64 is still used |
+| kitty launcher | Works | `storywheel kitty [--font --size --line-height --print]`; not run here (kitty isn't installed); options are from kitty's docs |
+| Ctrl+I under kitty | Works | checked with the real `CSI 105;5u` bytes sent to a real Neovim: italics toggle, Tab does not; automatic when `KITTY_WINDOW_ID`/kitty TERM is set; a plain terminal keeps it off. Not checked in kitty itself |
+| Grammar: local server started/stopped by storywheel | Works | start when turned on, stop when turned off or the Writer closes (tested); nothing runs otherwise (tested). Real LanguageTool/Java not run here |
+| `grammar install` / `--from` / `status` | Works | download (fails with the `--from` hint when offline), unzip with checks; status shows Java, version, memory needs and every problem with its fix command; missing Java uses the usual message |
+| Check changed paragraphs after a pause; markup stripped, offsets right | Works | per-line, cached by hash (also between sessions); `*` removed; UTF-16 offsets mapped back (emoji, quotes, italics tested); distinct orange underline |
+| Right-click: message, fixes, ignore, turn off rule; next key; list | Works | tested in Lua and with a real right-click through a terminal emulator; F10 / Shift+F10 |
+| Settings > Grammar | Works | on/off, 13 category switches (picky ones off), turned-off rules, pause, memory limit; ignored items per story (CLI to list/forget) |
+| Help note (free rules, no n-gram data) | Works | Writer help, Settings > Grammar, README, `grammar status` |
+| Tests with a fake LanguageTool | Works | start/stop, offsets, applying a fix, ignoring, turning a rule off, missing/slow/broken server |
+
+## P2. Tests added in batch 5
+| Area | File | Tests |
+|---|---|---|
+| arm64 / Neovide | `test_arm64.py` | 4 |
+| kitty keys and launcher | `test_kitty_keys.py`, `test_kitty_launcher.py` | 2 + 3 |
+| Grammar server, install, status, settings | `test_grammar_server.py` | 17 |
+| Grammar in the Writer | `test_grammar_writer.py` | 19 |
+
+## P3. Manual test script
+1. On the typewriter: `sudo apt install default-jre-headless`, then `storywheel grammar install` (or `--from` a copied zip) and `storywheel grammar status`.
+2. Open a story, F12 > Grammar check: turn on. Wait for "grammar: ..." in the status line (up to a minute the first time).
+3. Type "He ate alot of pie." and pause: an orange wavy underline under the problem. Right-click it: the message and fixes; apply one. Try Ignore and Turn off this rule.
+4. F10 and Shift+F10. Turn it off in the menu: `ps` shows no java process. Leave the Writer with it on: no java process either.
+5. Settings > Grammar: switch Style on and see whether fiction trips it constantly.
+6. `storywheel kitty --print`, then `storywheel kitty` in kitty; try `--line-height 160`. Italic with Ctrl+I in kitty.
+7. On the Pi: Settings > Writer shows Neovide as not available; `storywheel setup --again` doesn't offer it.
+
+## P4. Known issues
+See BACKLOG.md "Found in batch 5".

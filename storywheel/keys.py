@@ -17,6 +17,8 @@ WRITER_KEYS = {
     "key_quit": ("Quit storywheel", "<A-q>"),
     "key_lookup": ("Dictionary and thesaurus card", "<F7>"),
     "key_lookup_word": ("Look up a typed word", "<F6>"),
+    "key_grammar_next": ("Next grammar problem", "<F10>"),
+    "key_grammar_list": ("List of grammar problems", "<S-F10>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 

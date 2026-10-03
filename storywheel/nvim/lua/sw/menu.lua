@@ -21,6 +21,9 @@ local function groups()
           local w = require("sw.lookup").word_at_cursor()
           if w then require("sw.spell").add_word(w) end
         end },
+      { require("sw.grammar").enabled and "Grammar check: turn off" or "Grammar check: turn on (needs LanguageTool)", function() require("sw.grammar").toggle() end },
+      { "Next grammar problem (" .. util.key_label(require("sw.story").setting("key_grammar_next", "<F10>")) .. ")", function() require("sw.grammar").next() end },
+      { "List of grammar problems (" .. util.key_label(require("sw.story").setting("key_grammar_list", "<S-F10>")) .. ")", function() require("sw.grammar").list() end },
       { "Show invisibles", function() prose.toggle("invisibles") end },
       { "Typewriter mode", function() prose.toggle("typewriter") end },
     } },

@@ -211,6 +211,25 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 ## Done
 
+### Batch 5: backlog cleanup, typewriter fixes, optional grammar checking
+
+- **BACKLOG.md reconciled** (finished items removed from 4b/4c, section 6, the review "Everywhere" list and "Suggested batches") — `b5-backlog`.
+- **Neovide not offered on arm64** (Settings, setup, the Writer's launch note) — `b5-neovide-arm64`.
+- **`storywheel kitty` launcher; Ctrl+I under kitty's protocol** verified with the real bytes, on automatically in kitty; README "Writing in kitty" — `b5-kitty`.
+- **Optional grammar checking with a local LanguageTool:** install/status/start/stop CLI — `b5-grammar-server`; checking changed paragraphs after a pause with
+  offsets kept across markup — `b5-grammar-check`; right-click menu, next/list keys — `b5-grammar-ui`; Settings > Grammar, help text — `b5-grammar-settings`;
+  tests with a fake server — `b5-grammar-tests`; README/CHANGELOG — `b5-final`.
+
+### Found in batch 5
+- **Grammar** checks the open manuscript buffer; a novel's other chapters are checked when they are opened. "List of problems" shows the open file only.
+- **Ignore this one** is keyed by rule and the flagged text, so it also hides the same wording elsewhere in that story.
+- **LanguageTool's first start** is slow on a Raspberry Pi (up to a minute); the status line says "starting…". Java is not installed for you.
+- **The real LanguageTool** was not run here (no Java/LanguageTool on this machine): the protocol is tested against a fake server written from its documented
+  `/v2/check` answer. Try it on the typewriter and report rule names that are noisy.
+- **kitty** is not installed here; the launcher's options (`modify_font cell_height N%`, `--class`, `remember_window_size`) are from kitty's documentation.
+  `modify_font` needs kitty 0.30 or newer.
+- **Grammar settings in the Settings screen** are one switch per category (13 of them); a compact picker would be neater.
+
 ### Sync code removed (`b4-remove-sync`)
 
 - Everything about syncing is gone from storywheel (command, setup question, Settings tab, Builder conflicts screen); old links are turned back into

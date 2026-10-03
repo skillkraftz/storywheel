@@ -149,6 +149,60 @@ def cmd_kitty(args):
     os.execvp(argv[0], argv)
 
 
+def cmd_grammar(args):
+    from . import grammar, paths
+    act = args.action
+    try:
+        if act == "install":
+            v = grammar.install(args.from_file, lambda m: print("  " + m))
+            print(f"  LanguageTool {v} is installed in {paths.tilde(grammar.install_dir())}.")
+            st = grammar.status()
+            for p in st["problems"]:
+                print("  " + p)
+            print("  Turn grammar checking on in Settings (F4) > Grammar, or from the Writer's menu.")
+        elif act == "status":
+            st = grammar.status()
+            if args.json:
+                emit(st)
+                return
+            print(f"  Java: {st['java'] or 'not found'}" + (f" (version {st['java_version']})" if st["java_version"] else ""))
+            print(f"  LanguageTool: {('version ' + st['version'] + ' in ' + paths.tilde(st['path'])) if st['installed'] else 'not installed'}")
+            print(f"  Server: {'running at ' + st['url'] if st['running'] else 'not running (the Writer starts it when grammar checking is on)'}")
+            mem = f"{st['memory_available_mb']} MB free of {st['memory_total_mb']} MB" if st["memory_total_mb"] else "unknown"
+            print(f"  Memory: wants about {st['memory_needed_mb']} MB ({st['memory_limit_mb']} MB heap + Java); this machine has {mem}")
+            print(f"  {grammar.HELP_NOTE}")
+            for p in st["problems"]:
+                print("  ! " + p)
+        elif act == "start":
+            url = grammar.start()
+            print(json.dumps({"ok": True, "url": url}) if args.json else f"  Running at {url}")
+        elif act == "stop":
+            stopped = grammar.stop()
+            print(json.dumps({"ok": True, "stopped": stopped}) if args.json else ("  Stopped." if stopped else "  It was not running."))
+        elif act == "config":
+            emit(grammar.config())
+        elif act == "rule-off":
+            if not args.target:
+                sys.exit("Give the rule id, e.g.  storywheel grammar rule-off COMMA_COMPOUND_SENTENCE")
+            rules = grammar.turn_off_rule(args.target)
+            print(json.dumps({"ok": True, "rules": rules}) if args.json else f"  Turned off {args.target}. Turned-off rules: {', '.join(rules)}")
+        elif act == "ignored":
+            if not args.target:
+                sys.exit("Give the story:  storywheel grammar ignored UNIVERSE/STORY [--clear]")
+            u, _, s = args.target.partition("/")
+            story = _universe(u).story(s)
+            if story is None:
+                sys.exit(f"No story {args.target}")
+            if args.clear:
+                print(f"  Forgot {grammar.forget_ignored(story.path)} ignored item(s).")
+            else:
+                items = grammar.ignored(story.path)
+                emit(items) if args.json else print("\n".join(f"  {i['rule']}: {i.get('text', '')}" for i in items) or "  Nothing is ignored in this story.")
+    except grammar.GrammarError as e:
+        print("  " + str(e))
+        raise SystemExit(1)
+
+
 def cmd_story(args):
     if args.action == "list":
         unis = [_universe(args.universe)] if args.universe else vault.list_universes()
@@ -369,6 +423,12 @@ def add_parsers(sub):
     p.add_argument("--size", type=float, default=0, help="font size (default: Settings > Writer)")
     p.add_argument("--line-height", type=int, default=140, help="line height as a percent of the font's (kitty modify_font cell_height); default 140")
     p.add_argument("--print", action="store_true", help="only show the command")
+    p = sub.add_parser("grammar", help="optional grammar checking with a local LanguageTool:  grammar install [--from FILE.zip] | status | start | stop | rule-off ID | ignored STORY [--clear]")
+    p.add_argument("action", choices=["install", "status", "start", "stop", "config", "rule-off", "ignored"])
+    p.add_argument("target", nargs="?")
+    p.add_argument("--from", dest="from_file", help="install: unpack this LanguageTool .zip instead of downloading")
+    p.add_argument("--clear", action="store_true")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
     p.add_argument("action", choices=["list", "show"])
     p.add_argument("target", nargs="?", help="for show: universe/story")
@@ -419,4 +479,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}

@@ -764,3 +764,14 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - `storywheel update` passes the remote to git exactly as written (after `--`; `xps:projects/storywheel` works), fast-forwards only (an unclean tree or diverged history stops it), reinstalls with pipx only when the version changed (an in-place checkout
   needs none), and runs `post-update` in a new process so the new code does the migrations and rebuilds.
 
+- Batch 5: Neovide is not offered on arm64 (`tools.is_arm64`, `STORYWHEEL_ARCH` overrides for tests); an installed (self-built) one is still used.
+  `storywheel kitty` builds a kitty command (font and size from Settings > Writer, `modify_font cell_height N%`); Ctrl+I needs no new code: the Writer
+  already turns it on under kitty, and `tests/test_kitty_keys.py` sends kitty's `CSI 105;5u` to a real Neovim to prove it is distinct from Tab.
+- Grammar (optional, off by default): `grammar.py` installs LanguageTool into `<home>/languagetool/` (download or `--from zip`, zip-slip checked), starts
+  `java -Xmx<N>m -cp languagetool-server.jar org.languagetool.server.HTTPServer --port P` detached (pid file, log), stops it by pid when grammar is turned
+  off or the Writer closes (`VimLeavePre`). `sw/grammar.lua` sends each changed line alone (curl POST /v2/check) after a pause, with `*` markup stripped and a
+  UTF-16 offset map back to byte columns; results are cached per story by line hash (`.grammar-cache.json`, invalidated when the language, disabled
+  categories or rules change). Categories are switches (`grammar_cat_*`; TYPOS, TYPOGRAPHY and the picky ones off by default); turned-off rules are the
+  `grammar_off_rules` setting; ignored items are per story (`grammar-ignore.json`, rule + flagged text). Memory limit and port are machine settings.
+  Keys: F10 next problem, Shift+F10 list (Settings > Keys). Tests use `tests/fake_lt.py`; `STORYWHEEL_LT_CMD` replaces the server command.
+
