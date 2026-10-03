@@ -1,0 +1,332 @@
+{
+ "_note": "Objects with a wrong feeling: things that were left, kept or should have stayed buried.",
+ "slot": "thing",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "a music box",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a locked cellar door",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a child's drawing",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a doll with closed eyes",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rusted bell",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a cracked mirror",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a scrawled warning",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a dead man's watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a wire recorder",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a jar of teeth",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a whispering tape",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stained quilt",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a black candle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rope of hair",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a wedding photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bone whistle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a crooked key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a medical ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bundle of letters",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a lantern without oil",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stuffed owl",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a static-filled radio",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a dollhouse",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a baby's shoe",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a clay figure",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a muddy trowel",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sack of salt",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a family bible",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a patient file",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a packet of seeds",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a rusted bear trap",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a weathervane",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a locked trunk",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a rocking chair",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a porcelain mask",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a ring of keys",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a broken clock",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a plain headstone",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a well bucket",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a burlap sack",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a flickering flashlight",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hand-sewn effigy",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a lock of hair",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a tin of film reels",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bottle of tonic",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a black umbrella",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

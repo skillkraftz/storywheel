@@ -1,0 +1,57 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "horror"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "checks",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "locks",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "salts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "tends",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "keeps close",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "winds",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

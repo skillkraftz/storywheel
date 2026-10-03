@@ -1,0 +1,35 @@
+{
+ "_note": "First half of a lonely place name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "Dead",
+  "Black",
+  "Lonely",
+  "Cold",
+  "Pale",
+  "Hollow",
+  "Silent",
+  "Grey",
+  "Bitter",
+  "Low",
+  "Sorrow",
+  "Salt",
+  "Gallows",
+  "Widow",
+  "Poor",
+  "Ash",
+  "Bone",
+  "Crow",
+  "Lost",
+  "Stillwater",
+  "Thin",
+  "Dry",
+  "Burnt",
+  "Wake",
+  "Mourning",
+  "Drowned"
+ ]
+}

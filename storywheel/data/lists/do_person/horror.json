@@ -1,0 +1,57 @@
+{
+ "_note": "Base-form verbs for horror that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  "find",
+  "warn",
+  "follow",
+  "outrun",
+  "save",
+  "hide from",
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stand by",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "mourn",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "let go of",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

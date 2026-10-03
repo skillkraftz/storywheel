@@ -1,0 +1,273 @@
+{
+ "_note": "People and things that are not quite right.",
+ "slot": "someone",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "a silent child",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lost hiker",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a stranger at the door",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "an old caretaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a pale nurse",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a drifter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a missing sister",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a widowed farmer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hollow-eyed preacher",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a sleepwalking neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a voice on the radio",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a thing in the cellar",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a scarecrow",
+   "features": [
+    "creature",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a smiling doctor",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "the last survivor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a twin brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a groundskeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a neighbor",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a gaunt dog",
+   "features": [
+    "creature"
+   ]
+  },
+  {
+   "text": "a flock of crows",
+   "features": [
+    "creature",
+    "plural"
+   ]
+  },
+  {
+   "text": "a taxidermist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hitchhiker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a dead man's widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a frightened schoolteacher",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a mute caretaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a visiting priest",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "an old midwife",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a night shift guard",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a boy at the window",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "two silent sisters",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a wounded deputy",
+   "features": [
+    "human",
+    "authority",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a man in the fog",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a woman in white",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a tall stranger",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "an elderly twin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a pale lodger",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a lonely widower",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a girl with no shadow",
+   "features": [
+    "creature",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hospital orderly",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a quiet farmhand",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

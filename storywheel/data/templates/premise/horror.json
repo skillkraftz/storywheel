@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "premise",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "When {DISASTER:strikes} cuts off {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or no one will leave.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and wishes it stayed buried.",
+  "After {DISASTER:strikes} in {place}, the {rival} accuses {SOMEONE:human,!plural}, and {first}, a {trait} {job}, knows who is lying.",
+  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though everything about {landmark:built} says to stay away.",
+  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and must reach {landmark:built} {DEADLINE}.",
+  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns the {rival} has done it before.",
+  "To save {SOMEONE:human,!plural} from {DISASTER:manmade}, {first}, a {trait} {job}, must go back to {landmark:built} {DEADLINE}.",
+  "Every night at {landmark:built} something moves, and {first}, a {trait} {job}, has a week to learn why.",
+  "A {trait} {job} named {first} inherits {THING} and a house in {place} that the {rival} wants gone.",
+  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural}, and hears knocking at {landmark:built}.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, uncovers {DISASTER:manmade} no one will name.",
+  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been dead for years."
+ ]
+}

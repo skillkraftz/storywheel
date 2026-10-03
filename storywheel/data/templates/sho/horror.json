@@ -1,0 +1,15 @@
+{
+ "_note": "",
+ "slot": "sho",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "Over the {season}, {first} came to know {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} began visiting {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} showed {SOMEONE:!threatening} {THING:!living}, and they spoke of {TOPIC} {MANNER}.",
+  "A quiet trouble came: {DISASTER:strikes} touched {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
+  "{first} kept meaning to {DO_THING} {THING}, and the {season} slipped by.",
+  "{CLOSE:human} asked about {TOPIC}, and {first} answered {MANNER}."
+ ]
+}

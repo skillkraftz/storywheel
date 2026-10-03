@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} in {place}",
+  "Something in the {TITLE_NOUN} at {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "A {TITLE_ADJ} {TITLE_NOUN} in {place}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN}, the {TITLE_ADJ} {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Do Not Open the {TITLE_NOUN} at {place}"
+ ]
+}

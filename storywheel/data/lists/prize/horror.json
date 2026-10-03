@@ -1,0 +1,93 @@
+{
+ "_note": "What people want in a remote, frightening place.",
+ "slot": "prize",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "one quiet night",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "an end to the dreams",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "peace of mind",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the truth about the lake",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a way out of town",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a train ticket",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a full tank of gas",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a working radio",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a loaded rifle",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a safe place to sleep",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the town's trust",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a signed statement",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a night's watch",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the farm deed",
+   "features": [
+    "material"
+   ]
+  }
+ ]
+}

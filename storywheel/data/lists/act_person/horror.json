@@ -1,0 +1,145 @@
+{
+ "_note": "Past-tense verbs for horror that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "followed",
+  "watched",
+  {
+   "text": "warned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "locked in",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "abandoned",
+  "dragged",
+  "called out to",
+  {
+   "text": "shielded",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "comforted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "dreamed of",
+  {
+   "text": "lured",
+   "subject": [
+    "threatening"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "fled from",
+  {
+   "text": "buried",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "hid",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "saw",
+  "trusted",
+  "doubted",
+  {
+   "text": "stayed beside",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "carried",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "cursed",
+   "subject": [
+    "magic"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "waved at",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "called on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "visited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "fed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

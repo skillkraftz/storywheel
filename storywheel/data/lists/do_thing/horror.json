@@ -1,0 +1,54 @@
+{
+ "_note": "Base-form verbs for horror that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "burn",
+   "object": [
+    "!living"
+   ]
+  },
+  "find",
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  "open",
+  {
+   "text": "carry",
+   "object": [
+    "portable"
+   ]
+  },
+  "unlock",
+  {
+   "text": "seal",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "salt",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

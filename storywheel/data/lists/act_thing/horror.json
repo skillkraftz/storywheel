@@ -1,0 +1,162 @@
+{
+ "_note": "Past-tense verbs for horror that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "buried",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  "found",
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "locked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "!living"
+   ]
+  },
+  "opened",
+  {
+   "text": "carried",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "wound up",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "smashed",
+   "object": [
+    "!living"
+   ]
+  },
+  "stole",
+  {
+   "text": "dug up",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "salted",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "mended",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "counted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "oiled",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wound",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "pawned",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold off",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "traded away",
+   "features": [
+    "trades"
+   ]
+  }
+ ]
+}

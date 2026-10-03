@@ -1,0 +1,22 @@
+{
+ "_note": "",
+ "slot": "escalation",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and lied about {TOPIC}",
+  "{the_thing} turned up {HIDING}, and {the_someone:human} denied everything",
+  "the {rival} {ACT_PERSON} {first} {MANNER} for asking about {the_thing}",
+  "{the_message} could not have been sent, and {first} doubted {CLOSE:human}",
+  "{the_disaster:strikes} struck again at {landmark}, and the {rival} blamed {first}",
+  "{first} found {the_thing:portable} {MANNER}, and it had moved since morning",
+  "{the_someone:human} offered {first} {PRIZE:!inner} to stay quiet {MANNER}",
+  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
+  "a second sign, {THING:portable}, matched {the_thing} {MANNER}",
+  "{CLOSE:human} was gone by morning, and {the_thing} lay where {CLOSE:human} slept",
+  "the lights failed at {landmark}, and {the_someone:human} was not alone",
+  "{SOMEONE:human,!plural} lied to {first} {MANNER}, and {THING:portable} went missing",
+  "{first} was warned off {TOPIC} by the {rival} {MANNER}"
+ ]
+}

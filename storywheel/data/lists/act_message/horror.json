@@ -1,0 +1,59 @@
+{
+ "_note": "Past-tense verbs for horror that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "played back",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "reread",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  "ignored",
+  {
+   "text": "tore up",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid away",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "kept",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

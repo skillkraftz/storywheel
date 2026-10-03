@@ -1,0 +1,128 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "sheriff",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "town doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "mayor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "preacher",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "caretaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "deputy",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "undertaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "farmer next door",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "matron",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "founder's heir",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "housekeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "old neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "stranger",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "nurse",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "school principal",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "hired man",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "coroner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

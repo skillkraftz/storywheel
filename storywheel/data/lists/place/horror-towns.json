@@ -1,0 +1,34 @@
+{
+ "_note": "Small, remote towns and settlements, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "{LAST_NAME}'s Crossing",
+  "Sorrow Bay",
+  "Harrow's End",
+  "Eden Falls",
+  "Mercy Hollow",
+  "Lantern Bend",
+  "Pale Harbor",
+  "Wickham Corners",
+  "Tolland",
+  "Greywater Mills",
+  "Elm Run",
+  "Cinder Ridge",
+  "Dunning",
+  "Hush",
+  "Marrow Creek"
+ ]
+}

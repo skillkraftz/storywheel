@@ -1,0 +1,43 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "horror"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "watches",
+  "checks on",
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  {
+   "text": "sits up with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "calls",
+  {
+   "text": "lights a candle for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  }
+ ]
+}

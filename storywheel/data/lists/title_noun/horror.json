@@ -1,0 +1,89 @@
+{
+ "_note": "Title nouns for horror. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "well",
+  "cellar",
+  "door",
+  "house",
+  "harvest",
+  "lullaby",
+  "hollow",
+  "doll",
+  "mirror",
+  "scarecrow",
+  "knock",
+  "lantern",
+  "orchard",
+  "fog",
+  {
+   "text": "crow",
+   "kind": "creature"
+  },
+  {
+   "text": "sleeper",
+   "kind": "person"
+  },
+  {
+   "text": "stranger",
+   "kind": "person"
+  },
+  {
+   "text": "nursery",
+   "kind": "place"
+  },
+  "grave",
+  {
+   "text": "lake",
+   "kind": "place"
+  },
+  {
+   "text": "hunger",
+   "kind": "idea"
+  },
+  {
+   "text": "dread",
+   "kind": "idea"
+  },
+  {
+   "text": "silence",
+   "kind": "idea"
+  },
+  {
+   "text": "visitor",
+   "kind": "person"
+  },
+  {
+   "text": "vigil",
+   "kind": "idea"
+  },
+  {
+   "text": "hush",
+   "kind": "idea"
+  },
+  {
+   "text": "wolf",
+   "kind": "creature"
+  },
+  {
+   "text": "moth",
+   "kind": "creature"
+  },
+  {
+   "text": "orphan",
+   "kind": "person"
+  },
+  "hearth",
+  {
+   "text": "attic",
+   "kind": "place"
+  },
+  {
+   "text": "whisper",
+   "kind": "idea"
+  }
+ ]
+}

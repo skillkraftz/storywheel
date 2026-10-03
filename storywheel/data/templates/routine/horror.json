@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "routine",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "locked up {landmark} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} {MANNER} and listened for {DISASTER}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
+  "walked past {landmark} {MANNER} and did not look in",
+  "{ACT_THING:mundane} {THING} {MANNER} and told no one about {TOPIC}",
+  "sat up {MANNER} at {landmark} and hoped for {PRIZE:!inner}",
+  "kept a candle by the window {MANNER} and avoided the {rival}",
+  "{ACT_PLACE:mundane} {landmark} every day and said nothing of {TOPIC}",
+  "counted the doors of {landmark} {MANNER} and feared {FEELING}"
+ ]
+}

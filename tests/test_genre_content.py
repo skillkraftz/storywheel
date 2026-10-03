@@ -12,8 +12,8 @@ from storywheel.sample import build_story
 from storywheel.engine import Engine
 
 FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing", "someone", "disaster"]
-GENRES = ["comedy", "fantasy", "mystery"]
-BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"]]
+GENRES = ["comedy", "fantasy", "mystery", "horror"]
+BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"], ["horror", "western"]]
 GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",

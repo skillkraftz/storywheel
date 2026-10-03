@@ -1,0 +1,19 @@
+{
+ "_note": "Past-tense verbs for horror that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "survived",
+  "feared",
+  "ignored",
+  "caused",
+  "predicted",
+  "blamed",
+  "slept through",
+  "outlived",
+  "denied",
+  "dreamed of"
+ ]
+}

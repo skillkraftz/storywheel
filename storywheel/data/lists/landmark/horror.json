@@ -1,0 +1,331 @@
+{
+ "_note": "Places where help is far away and something is wrong.",
+ "slot": "landmark",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "the root cellar",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the attic",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the old well",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the abandoned asylum",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lighthouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cornfield",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the empty church",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sanatorium",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the mine shaft",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the nursery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the drained lake",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the boarded farmhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bell tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the fog-bound road",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the radio station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the funeral home",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the crawlspace",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the greenhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the orchard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the school gym",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hunting cabin",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ice house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the roadside motel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cemetery gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the back stairwell",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lake dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the grain silo",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pump house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hospital wing",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the railway tunnel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the mill pond",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the scarecrow field",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the lonely gas station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ferry landing",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the basement",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the church bell loft",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pine barrens",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old schoolhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the abandoned mill",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sleeping ward",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the town cellar",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the empty playground",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the quarry lake",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the tool shed",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the family crypt",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  }
+ ]
+}

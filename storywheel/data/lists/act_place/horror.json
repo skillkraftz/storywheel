@@ -1,0 +1,116 @@
+{
+ "_note": "Past-tense verbs for horror that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "crept into",
+   "subject": [
+    "human"
+   ]
+  },
+  "fled",
+  {
+   "text": "boarded up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "searched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "watched over",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "broke into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "stayed in",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "explored",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "wandered into",
+   "subject": [
+    "human"
+   ]
+  },
+  "left"
+ ]
+}

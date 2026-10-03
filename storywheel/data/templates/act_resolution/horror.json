@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_resolution",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  "In the end, {first} had {PRIZE:!inner} but kept {VALUE}.",
+  "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
+  "{first} learned {need}, and {place} forgot {TOPIC}.",
+  "The knocking stopped, and {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "The {rival} was gone, and {first} {HABIT_PLACE} {landmark} every {season}.",
+  "{first} {HABIT_PERSON} {the_someone:human} and never speaks of {TOPIC}.",
+  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+ ]
+}

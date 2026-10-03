@@ -1,0 +1,283 @@
+{
+ "_note": "Troubles that come to a remote place. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "horror"
+ ],
+ "entries": [
+  {
+   "text": "a power failure",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a dead calm",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a spreading blight",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a storm without end",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a night of knocking",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing child",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "an outbreak of sleepwalking",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bank of black fog",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a plague of crows",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blackout",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a flood of dark water",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a swarm of flies",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a string of disappearances",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a death behind locked doors",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a town-wide silence",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a week without daylight",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lake returning bodies",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sickness in the cattle",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fire in the barn",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a night of mirrors",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a run of bad dreams",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a washed-out bridge",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an early frost",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blizzard",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stranger's arrival",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a wave of nosebleeds",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a barking in the night",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a poisoned well",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a mass disappearance",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a ritual gone wrong",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a burial in secret",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "an arson at the church",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a forged death certificate",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a cover-up at the clinic",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a body in the pond",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a murder at the inn",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a kidnapping",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a night of vandalism",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a drought",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rash of vandalism",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sudden epidemic",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  }
+ ]
+}

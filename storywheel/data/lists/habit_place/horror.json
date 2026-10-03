@@ -1,0 +1,29 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "horror"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "locks up",
+  "avoids",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  "stays away from",
+  "keeps watch over",
+  {
+   "text": "boards up",
+   "object": [
+    "built"
+   ]
+  },
+  "returns to"
+ ]
+}
