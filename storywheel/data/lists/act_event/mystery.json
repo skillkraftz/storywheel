@@ -1,0 +1,39 @@
+{
+ "_note": "Past-tense verbs for mystery that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "investigated",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "solved",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered up",
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "staged",
+   "object": [
+    "manmade"
+   ]
+  },
+  "reported",
+  "witnessed",
+  "ignored",
+  "traced",
+  "denied",
+  "predicted"
+ ]
+}

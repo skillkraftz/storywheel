@@ -1,0 +1,37 @@
+{
+ "_note": "Traits of investigators and suspects.",
+ "slot": "trait",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "observant",
+  "methodical",
+  "dry",
+  "shrewd",
+  "patient",
+  "nosy",
+  "reserved",
+  "polite",
+  "relentless",
+  "secretive",
+  "sharp-eyed",
+  "meticulous",
+  "skeptical",
+  "unflappable",
+  "stubborn",
+  "curious",
+  "guarded",
+  "wary",
+  "precise",
+  "gracious",
+  "canny",
+  "dogged",
+  "sardonic",
+  "tactful",
+  "probing",
+  "quiet",
+  "suspicious",
+  "tenacious"
+ ]
+}

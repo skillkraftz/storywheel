@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_climax",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{first} gathered the suspects at {landmark} and held up {the_thing:portable}.",
+  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof.",
+  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human}.",
+  "{the_someone:human} confessed to {the_disaster} when {first} showed {the_thing:portable}.",
+  "{first} laid a trap at {landmark} {MANNER}, baited with {the_thing:portable}.",
+  "{the_thing} proved the alibi false, and {the_someone:human} ran {MANNER}.",
+  "{first} unmasked the {rival} at {landmark}, and chose {VALUE}."
+ ]
+}

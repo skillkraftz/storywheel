@@ -147,7 +147,7 @@ def test_a_western_story_rarely_has_a_fairy_tale_rival_but_often_a_fairy_tale_di
         picks = [t for t in engine.trace if t[0] == slot]
         return sum("fairy tale" in t[2] for t in picks) / len(picks)
     assert share("rival") < 0.09
-    assert 0.05 < share("disaster") < 0.25
+    assert 0.02 < share("disaster") < 0.25            # (was 0.05: three more genres now share the wildcard floor)
 
 
 # --- markov filters -------------------------------------------------------------------------------------------
@@ -179,7 +179,7 @@ def test_invented_names_are_at_least_four_letters_and_never_dictionary_words():
 # --- profiles and the psychology lists -----------------------------------------------------------------------------
 
 # how much "modern" (Faker names, cities and jobs, everyday jobs) fits each genre; 0.1 unless the genre's content says otherwise
-MODERN = {"comedy": 0.2, "fantasy": 0}
+MODERN = {"comedy": 0.2, "fantasy": 0, "mystery": 0.2}
 GENERAL = {"fantasy": 0.15}
 
 

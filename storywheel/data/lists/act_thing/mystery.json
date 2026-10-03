@@ -1,0 +1,135 @@
+{
+ "_note": "Past-tense verbs for mystery that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "examined",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "pocketed",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "dusted for prints",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "planted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "destroyed",
+   "object": [
+    "!living"
+   ]
+  },
+  "stole",
+  "swapped",
+  {
+   "text": "traced",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "!living"
+   ]
+  },
+  "unlocked",
+  {
+   "text": "photographed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "tucked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "filed",
+   "object": [
+    "paper"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "catalogued",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "pawned",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  }
+ ]
+}

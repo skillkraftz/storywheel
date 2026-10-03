@@ -1,0 +1,97 @@
+{
+ "_note": "Where something is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "in a library book",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a portrait",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow candlestick",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under a loose floorboard",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the cellar wall",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a locked desk drawer",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "sewn into a coat",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a flowerpot",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a clock",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hatbox",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in the wine cellar",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "behind a bookcase",
+   "subject": [
+    "!living"
+   ]
+  }
+ ]
+}

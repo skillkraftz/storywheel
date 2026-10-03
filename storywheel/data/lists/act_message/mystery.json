@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for mystery that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "decoded",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "intercepted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "steamed open",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "traced",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "typed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "read twice",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered"
+ ]
+}

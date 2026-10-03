@@ -1,0 +1,345 @@
+{
+ "_note": "Clues and objects: things found, hidden, forged and stolen.",
+ "slot": "thing",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "a torn glove",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stopped watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a monogrammed handkerchief",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bloodstained letter opener",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a half-burned diary",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a plaster boot cast",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a missing page",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a silver cigarette case",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a vial of sedative",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a smudged fingerprint card",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a locked jewel case",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a coded telegram",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pocket diary",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a false-bottomed trunk",
+   "features": [
+    "bulky"
+   ]
+  },
+  {
+   "text": "a cracked teacup",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pearl earring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pair of spectacles",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a spare key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a will missing a codicil",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pawn ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a railway timetable",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a lipstick-stained glass",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hat with a feather",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a dead man's ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a photograph of three people",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stolen painting",
+   "features": [
+    "bulky",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a tin of rat poison",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "an unsigned cheque",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a hotel receipt",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a muddy bootprint",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a broken pocket watch",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a walking stick",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a silk scarf",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "an empty brandy bottle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a candlestick",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a locket with no photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a gardener's trowel",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pair of binoculars",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cipher book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a brass door key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bundle of old letters",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "an old service revolver",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a strand of red hair",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cufflink",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "an ink-stained blotter",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} at {place}",
+  "Death and the {TITLE_NOUN} at {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "A {TITLE_NOUN} in {place}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "The Case of the {TITLE_ADJ} {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Who Took the {TITLE_NOUN} in {place}"
+ ]
+}

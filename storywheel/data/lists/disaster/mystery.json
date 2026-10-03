@@ -1,0 +1,210 @@
+{
+ "_note": "Crimes and mysteries. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "a jewel theft",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a poisoned dinner",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing heirloom",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a disappearance",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a forged will",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a murder at the manor",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an arson at the mill",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stolen painting",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a locked-room death",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a kidnapping",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blackmail ring",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hit-and-run",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bank burglary",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a poisoned letter",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a fatal fall",
+   "features": [
+    "natural",
+    "manmade"
+   ]
+  },
+  {
+   "text": "a drowning at the lake",
+   "features": [
+    "natural",
+    "manmade"
+   ]
+  },
+  {
+   "text": "a series of thefts",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a faked suicide",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a false confession",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a vanished fortune",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a fire in the library",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bomb threat",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a death at the dinner",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a break-in at the vicarage",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a switched suitcase",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a theft from the church",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a gas leak",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a faked kidnapping",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a hush-money payment",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a vanished guest",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}

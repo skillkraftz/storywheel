@@ -1,0 +1,43 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "mystery"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "watches",
+  {
+   "text": "questions",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  {
+   "text": "corresponds with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "trusts a little less",
+  "visits"
+ ]
+}

@@ -1,0 +1,128 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "chief constable",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "local doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "coroner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival detective",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "suspicious solicitor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "meddling sister",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "heir",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "press baron",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "superintendent",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "jealous neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "lord of the manor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "gossip columnist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "magistrate",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "family lawyer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "estate manager",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "insurance investigator",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "village gossip",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "family doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

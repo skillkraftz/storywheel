@@ -1,0 +1,35 @@
+{
+ "_note": "Villages and market towns, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Mallow Cross",
+  "Hollowby",
+  "Thornfield Green",
+  "Blackmere",
+  "Kingsbridge St Mary",
+  "Wychwood",
+  "Ashcombe Parva",
+  "Foxgrove",
+  "Netherwick",
+  "Chalkpit",
+  "Harrowby",
+  "Larkhill",
+  "Oddington",
+  "Quillham",
+  "Tenby Magna"
+ ]
+}

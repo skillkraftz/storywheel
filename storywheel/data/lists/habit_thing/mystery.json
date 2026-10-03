@@ -1,0 +1,50 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "mystery"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "dusts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "studies",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps locked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "re-examines",
+   "object": [
+    "!living"
+   ]
+  },
+  "checks",
+  "guards"
+ ]
+}

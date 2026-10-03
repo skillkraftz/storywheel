@@ -1,0 +1,29 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "mystery"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "locks up",
+   "object": [
+    "built"
+   ]
+  },
+  "revisits",
+  "keeps watch over",
+  "inspects",
+  "stops at"
+ ]
+}

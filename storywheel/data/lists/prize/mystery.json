@@ -1,0 +1,81 @@
+{
+ "_note": "What people want in a mystery.",
+ "slot": "prize",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "the truth",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a clean name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the inheritance",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a confession",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "justice",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a medal from the Yard",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the reward",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the missing jewels",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a promotion",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a closed case",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the estate",
+   "features": [
+    "material"
+   ]
+  }
+ ]
+}

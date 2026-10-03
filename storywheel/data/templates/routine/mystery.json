@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "routine",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "kept a notebook on visitors to {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
+  "{ACT_THING:mundane} {THING} {MANNER} and noticed everything at {landmark}",
+  "walked past {landmark} {MANNER} and hoped for {PRIZE:!inner}",
+  "read the papers {MANNER} and avoided the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
+  "took tea at {landmark} and kept faith with {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} every day and said nothing of {TOPIC}",
+  "wrote down every oddity in {place} {MANNER} and told no one",
+  "locked up {landmark} {MANNER} and feared {DISASTER}"
+ ]
+}

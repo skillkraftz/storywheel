@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "want",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{PRIZE:!inner} {DEADLINE}",
+  "{PRIZE:!inner} for {CLOSE:human}",
+  "{PRIZE:inner} about {TOPIC}",
+  "{THING:valuable,!living} and {PRIZE:social}",
+  "{PRIZE:material} at {landmark}",
+  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
+  "{PRIZE:social} and peace for {place}",
+  "{PRIZE:inner} {DEADLINE}"
+ ]
+}

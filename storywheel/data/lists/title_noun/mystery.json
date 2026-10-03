@@ -1,0 +1,108 @@
+{
+ "_note": "Title nouns for mysteries. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "alibi",
+   "kind": "idea"
+  },
+  {
+   "text": "motive",
+   "kind": "idea"
+  },
+  {
+   "text": "clue",
+   "kind": "idea"
+  },
+  {
+   "text": "witness",
+   "kind": "person"
+  },
+  {
+   "text": "suspect",
+   "kind": "person"
+  },
+  {
+   "text": "detective",
+   "kind": "person"
+  },
+  {
+   "text": "butler",
+   "kind": "person"
+  },
+  {
+   "text": "widow",
+   "kind": "person"
+  },
+  {
+   "text": "heir",
+   "kind": "person"
+  },
+  "key",
+  "letter",
+  "ledger",
+  "candlestick",
+  "glove",
+  "will",
+  "telegram",
+  "portrait",
+  "decanter",
+  "cufflink",
+  "locket",
+  "watch",
+  "diary",
+  "teacup",
+  "trunk",
+  {
+   "text": "study",
+   "kind": "place"
+  },
+  {
+   "text": "manor",
+   "kind": "place"
+  },
+  {
+   "text": "library",
+   "kind": "place"
+  },
+  {
+   "text": "orchard",
+   "kind": "place"
+  },
+  {
+   "text": "boathouse",
+   "kind": "place"
+  },
+  {
+   "text": "cat",
+   "kind": "creature"
+  },
+  {
+   "text": "crow",
+   "kind": "creature"
+  },
+  {
+   "text": "hound",
+   "kind": "creature"
+  },
+  {
+   "text": "parrot",
+   "kind": "creature"
+  },
+  {
+   "text": "confession",
+   "kind": "idea"
+  },
+  {
+   "text": "verdict",
+   "kind": "idea"
+  },
+  {
+   "text": "inquest",
+   "kind": "idea"
+  }
+ ]
+}

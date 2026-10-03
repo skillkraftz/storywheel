@@ -1,0 +1,320 @@
+{
+ "_note": "Places in and around a village or a great house.",
+ "slot": "landmark",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "the manor library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the locked study",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the conservatory",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the village church",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the vicarage garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the wine cellar",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the railway station",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the boathouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the churchyard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old mill",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ballroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the servants' hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the greenhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the folly",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the post office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the market cross",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hotel bar",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the coroner's office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the police station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pub snug",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the tea shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lakeside path",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the secret passage",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the attic nursery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hunting lodge",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the walled garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the clock tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the village cinema",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the chemist's shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cellar steps",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dovecote",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the gun room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the music room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lych-gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the orchard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the estate office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the river bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the fog-bound moor",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the cricket pavilion",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bookshop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lighthouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the quarry",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the gatehouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the night train",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  }
+ ]
+}

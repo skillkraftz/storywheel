@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "premise",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "When {DISASTER:strikes} shakes {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or an innocent person will pay.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and seeks its owner {DEADLINE}.",
+  "After {DISASTER:strikes} in {place}, the {rival} accuses {SOMEONE:human,!plural}, and {first}, a {trait} {job}, thinks otherwise.",
+  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though every clue points elsewhere.",
+  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and has until midnight to solve {DISASTER}.",
+  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns that the {rival} lied about {TOPIC}.",
+  "To clear {SOMEONE:human,!plural} of {DISASTER:manmade}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
+  "Every guest at {landmark:built} has a motive for {DISASTER:manmade}, and {first}, a {trait} {job}, must name one {DEADLINE}.",
+  "A {trait} {job} named {first} inherits {THING} and a mystery in {place} that the {rival} wants buried.",
+  "{first}, a {trait} {job}, is the last person to see {SOMEONE:human,!plural}, and the first suspect in {DISASTER}.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, uncovers {DISASTER:manmade} no one remembers.",
+  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been lying about {TOPIC}."
+ ]
+}

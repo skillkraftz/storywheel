@@ -1,0 +1,49 @@
+{
+ "_note": "Base-form verbs for mystery that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "trace",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "examine",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "plant",
+   "object": [
+    "!living"
+   ]
+  },
+  "steal",
+  "find",
+  {
+   "text": "decode",
+   "object": [
+    "paper"
+   ]
+  },
+  "return",
+  "swap"
+ ]
+}

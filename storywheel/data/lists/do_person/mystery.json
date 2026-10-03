@@ -1,0 +1,97 @@
+{
+ "_note": "Base-form verbs for mystery that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "question",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "clear",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "expose",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "follow",
+  "shadow",
+  "confront",
+  "outwit",
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "confide in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "grieve for",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "believe in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

@@ -12,8 +12,8 @@ from storywheel.sample import build_story
 from storywheel.engine import Engine
 
 FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing", "someone", "disaster"]
-GENRES = ["comedy", "fantasy"]
-BLENDS = [["comedy", "fairy tale"]]
+GENRES = ["comedy", "fantasy", "mystery"]
+BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"]]
 GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",
@@ -159,3 +159,23 @@ def test_fantasy_uses_no_modern_names_or_jobs_beyond_the_floor():
     _, flavor, trace = run(["fantasy"], stories=150)
     names = [t for t in trace if t[0] in ("first_name", "last_name", "job")]
     assert sum(1 for t in names if "modern" in t[2]) / len(names) < 0.02
+
+
+def test_mystery_clues_come_back_in_later_beats():
+    """The threads system: a clue (thing), a suspect (someone) or the crime (disaster) introduced early is named again in a later beat."""
+    from storywheel.engine import Engine as E
+    reused = total = 0
+    for seed in range(40):
+        engine = E(seed=seed)
+        story = build_story(engine, ["mystery"])
+        threads = story.get("_threads") or story.get("threads") or {}
+        text = story.get("body") or story
+        flat = str(text)
+        for kind in ("thing", "someone", "disaster"):
+            t = threads.get(kind) if isinstance(threads, dict) else None
+            if not t:
+                continue
+            word = (t.get("text") if isinstance(t, dict) else str(t)) or ""
+            total += 1
+            reused += flat.count(word.split(" ", 1)[-1]) >= 2
+    assert total >= 40 and reused / total >= 0.6, (reused, total)

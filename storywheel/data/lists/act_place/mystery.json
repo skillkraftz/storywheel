@@ -1,0 +1,106 @@
+{
+ "_note": "Past-tense verbs for mystery that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "searched",
+  {
+   "text": "staked out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "broke into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "sealed off",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "revisited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "combed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "watched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "slipped out of",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "inspected",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "tidied",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

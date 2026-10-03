@@ -1,0 +1,266 @@
+{
+ "_note": "Suspects, witnesses and people who know more than they say.",
+ "slot": "someone",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "a nervous butler",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a grieving widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a charming nephew",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired colonel",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a jealous rival",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a silent gardener",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a visiting solicitor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a flighty actress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bitter heir",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a dishonest valet",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a quiet governess",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a drunken vicar",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stranger at the station",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an insurance assessor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a gossiping housekeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a missing witness",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a suspicious chauffeur",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a famous novelist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a blackmailed banker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a young curate",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an estranged brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lady with a veil",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a loyal maid",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a mysterious foreigner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a suspicious twin",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a crooked solicitor",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "two quarrelling sisters",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a detective from the Yard",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a one-eyed poacher",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a retired spy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a shy librarian",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an eccentric countess",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a sour land agent",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a cheerful undertaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hired nurse",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a pale stranger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a former convict",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a travelling salesman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a cat in the window",
+   "features": [
+    "creature",
+    "friendly"
+   ]
+  }
+ ]
+}

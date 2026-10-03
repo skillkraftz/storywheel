@@ -1,0 +1,150 @@
+{
+ "_note": "Past-tense verbs for mystery that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "questioned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "accused",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "shadowed",
+  {
+   "text": "cross-examined",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "trailed",
+  {
+   "text": "vouched for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "interrogated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "blackmailed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "cornered",
+  "confronted",
+  "tailed",
+  "eavesdropped on",
+  "tricked",
+  {
+   "text": "cleared",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "suspected",
+  {
+   "text": "unmasked",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "trapped",
+  {
+   "text": "framed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "visited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wrote to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "called on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "had tea with",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "consoled",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}
