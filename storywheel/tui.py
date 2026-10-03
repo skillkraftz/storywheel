@@ -119,16 +119,24 @@ Press esc to close.
 
 
 def _row(label, value, rating=0):
-    """One line of the card. It ends in clickable ▲ ▼ (the click is recognised by the meta on them)."""
-    text = Text()
+    """One line of the card in columns: the label, the value (a long one wraps under itself, not under the label) and the clickable ▲ ▼
+    (the click is recognised by the meta on them)."""
+    from rich.cells import cell_len
+    from rich.table import Table
+    grid = Table.grid(padding=(0, 1), expand=True)
+    cells = []
     if label:
-        text.append(label, style="bold cyan")
-        text.append("  ")
-    text.append(value)
-    text.append(" ")
-    text.append(" ▲ ", style=Style(color="green" if rating > 0 else "grey50", bold=rating > 0, meta={"rate": 1}))
-    text.append(" ▼ ", style=Style(color="red" if rating < 0 else "grey50", bold=rating < 0, meta={"rate": -1}))
-    return text
+        grid.add_column(width=cell_len(label), no_wrap=True)
+        cells.append(Text(label, style="bold cyan"))
+    grid.add_column(ratio=1)
+    cells.append(Text(value))
+    grid.add_column(width=7, no_wrap=True, justify="right")
+    stars = Text()
+    stars.append(" ▲ ", style=Style(color="green" if rating > 0 else "grey50", bold=rating > 0, meta={"rate": 1}))
+    stars.append(" ▼ ", style=Style(color="red" if rating < 0 else "grey50", bold=rating < 0, meta={"rate": -1}))
+    cells.append(stars)
+    grid.add_row(*cells)
+    return grid
 
 
 class CardList(OptionList):

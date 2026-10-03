@@ -34,14 +34,21 @@ async def wheel(pilot, event, offset):
 
 
 def rate_x(app, field, which):
-    """Where the ▲ (+1) or ▼ (-1) of a field's line is, as a card offset."""
-    fields = app.session.fields
-    if app.session.step.single:
-        n = len(next(iter(fields.values())))
-    else:
-        width = max(len(k) for k in fields)
-        n = len(f"{field.ljust(width)}  {fields[field]}")
-    return n + (3 if which > 0 else 6)
+    """Where the ▲ (+1) or ▼ (-1) of a field's line is, as a card offset: they sit in a column at the right edge of the card."""
+    return arrow_at(app, field, which)[0]
+
+
+def arrow_at(app, field, which):
+    """(x, y) of an arrow as a card offset, found on the screen (long values wrap, so a field's line is not its index)."""
+    card = app.screen.query_one("#card")
+    strips = app.screen._compositor.render_strips()                   # (column-true, unlike the flattened text)
+    lines = ["".join(seg.text for seg in strip) for strip in strips][card.region.y:card.region.y + card.region.height]
+    label = None if field is None else field.replace("_", " ")
+    for y, line in enumerate(lines):
+        inside = line[card.region.x:card.region.x + card.region.width]
+        if (label is None or inside.strip().startswith(label)) and "▲" in inside:
+            return inside.index("▲" if which > 0 else "▼"), y
+    raise AssertionError(f"no arrows for {field}")
 
 
 def row_of(app, field):
@@ -183,13 +190,12 @@ def test_clicking_the_arrows_rates_that_line(home):
     async def script(app, pilot):
         s = app.session
         await go_to(app, pilot, "setting")
-        row = row_of(app, "rumor")
         n = len(s.hist)
-        await click(pilot, (rate_x(app, "rumor", 1), row))
+        await click(pilot, arrow_at(app, "rumor", 1))
         up = s.rating("rumor")
-        await click(pilot, (rate_x(app, "rumor", -1), row))
+        await click(pilot, arrow_at(app, "rumor", -1))
         down = s.rating("rumor")
-        await click(pilot, (rate_x(app, "rumor", -1), row))
+        await click(pilot, arrow_at(app, "rumor", -1))
         cleared = s.rating("rumor")
         return up, down, cleared, len(s.hist) - n, s.rating("place"), s.fields["rumor"]
     up, down, cleared, rolled, other, rumor = run_tui(new_story(), make_engine(home), script)
@@ -204,7 +210,7 @@ def test_the_arrows_work_on_a_one_field_step(home):
         app.session.edit_field("premise", "A short one.")             # (a long premise would wrap)
         app.main.after()
         await pilot.pause()
-        await click(pilot, (rate_x(app, None, -1), 0))
+        await click(pilot, arrow_at(app, None, -1))
         return app.session.rating(), len(app.session.hist)
     assert run_tui(new_story(), make_engine(home), script) == (-1, 2)
 
