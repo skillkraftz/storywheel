@@ -864,3 +864,5 @@ gives the real numbers.
 
 ## Q5. Known issues
 See BACKLOG.md "Found in batch 6" (no git remote configured, so nothing was pushed; the Pi times are estimates; Switch widgets are still tall).
+
+Full suite at the end of batch 6 (one run): **1462 passed**.
