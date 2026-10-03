@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 5 (tag b5-final). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 5 (1414 tests, tag b5-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 

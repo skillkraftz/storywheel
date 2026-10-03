@@ -30,7 +30,7 @@ def missing(name, extra=""):
 
 TOOLS.update({
     "java": ("Java", "grammar checking (LanguageTool) needs it", "sudo apt install default-jre-headless"),
-    "kitty": ("kitty", "`storywheel kitty` needs it", "sudo apt install kitty"),
+    "kitty": ("kitty", "opening storywheel in its own kitty window needs it", "sudo apt install kitty"),
     "pipx": ("pipx", "installing and updating storywheel needs it", "sudo apt install pipx && pipx ensurepath"),
     "git": ("git", "updating storywheel needs it", "sudo apt install git"),
 })

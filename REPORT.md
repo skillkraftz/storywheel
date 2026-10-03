@@ -805,3 +805,5 @@ _Tags `b5-backlog`, `b5-neovide-arm64`, `b5-kitty`, `b5-grammar-server`, `b5-gra
 
 ## P4. Known issues
 See BACKLOG.md "Found in batch 5".
+
+Full suite at the end of batch 5 (one run): **1414 passed**.
