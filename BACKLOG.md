@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 8 part B (tag b8-b). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 8 (tag b8-final). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -107,12 +107,12 @@ Built in batches 1 and 2a (see Done). Still open:
 
 ## 5. Content and generator
 
-- **The other nine genres.** Write and annotate atom lists, templates and
-  name sets for romance, horror, sci-fi, heist, ghost story, coming-of-age,
-  noir, thriller and adventure, the way western, fairy tale, comedy, fantasy
-  and mystery were done (features on every atom, the fidelity and repetition
-  reports, `tests/test_genre_content.py`, which just needs the genre added to
-  `GENRES`). Raise "modern" where sci-fi and heist need it.
+- **The other six genres.** Write and annotate atom lists, templates and
+  name sets for heist, ghost story, coming-of-age, noir, thriller and
+  adventure, the way the first eight were done (features on every atom, the
+  fidelity and repetition reports, `tests/test_genre_content.py`, which just
+  needs the genre added to `GENRES`). Set `_neighbors` (ghost story should
+  become horror's neighbor, with horror's profile weight for it already 1.5).
 - **The world model.** See CLAUDE.md's roadmap: simulate a small cast with
   values, goals and relationships and pick events whose preconditions hold, so
   "because of that" is literally true. Universes are its natural input.
@@ -251,6 +251,19 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 - **My words tab removed** (★ Learning is a view of Vocabulary, with typed-word entry); **Genre words** tab; **Story words** tab replaces
   Universe words (generator-word review now a section of it); a plain sentence for each tab — `b8-b`.
+
+### Batch 8, part C: horror, sci-fi, romance
+
+- **Horror** — `b8-horror`; **sci-fi** — `b8-scifi`; **romance** — `b8-romance`.
+
+### Found in batch 8, part C
+
+- **The batch 7 genres now score higher** (comedy 94%, fantasy 97% own material) because the floor no longer leaks; the old figures in REPORT's
+  batch 7 section are historical.
+- **Horror's "ghost story" neighbor has no lists yet**; when ghost story is written, review horror's floor.
+- **Romance's love interest is a plain `someone`**: the frames follow whoever the thread picks, so a rival suitor can end up the love interest.
+  A dedicated love-interest slot would make the story steadier (idea for the world model).
+- **Sci-fi uses real body names** (Ceres, Titan...) in a few station names; a far-future setting may want invented ones only.
 
 ### Found in batch 8, part B
 

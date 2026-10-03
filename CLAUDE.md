@@ -134,9 +134,10 @@ Outline and Kishōtenketsu ship today. User structures go in
 
 **Ratings** gently down-weight frames and atom pairs that keep getting -.
 
-**Content status**: western, fairy tale, comedy, fantasy and mystery are fully
-written and annotated with features. The other nine genres run on general
-atoms until their lists are written. Expanding genre content is ongoing work outside this sweep.
+**Content status**: western, fairy tale, comedy, fantasy, mystery, horror,
+sci-fi and romance are fully written and annotated with features. The other
+six genres (heist, ghost story, coming-of-age, noir, thriller, adventure) run on
+general atoms until their lists are written. Expanding genre content is ongoing work outside this sweep.
 
 
 ## Core concepts
@@ -828,3 +829,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   look-alikes (a space/hyphen/apostrophe squeezes to the same letters, or a near-miss: same first letter, one slip, or two in words of 5+ letters with
   similarity 0.7) of an entity name or a more frequent unknown word; words already on `<universe>/spell/*.add` are left out; rename uses
   `rename.find_matches` with a stand-in object for a word that is not an entity.
+
+- Batch 8 (C): horror, sci-fi and romance are written like the batch 7 genres (profile weight 4; sci-fi modern 0.3 for near-future settings; horror's
+  neighbors are ghost story, mythological and rural, so until ghost story exists its floor shrinks to a tenth rather than leaking mystery lists in).
+  Romance's lists are deliberately portable (towns, bookshops, letters, keepsakes) because it is the commonest pairing; `test_romance_blends_with_every_other_written_genre`
+  checks it against every written genre. The repetition report only flags an entry that is also 4 standard deviations above chance, so a rare entry
+  (a mood) picked 5 times against 1 expected is not reported.

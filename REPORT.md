@@ -1494,3 +1494,542 @@ Tests added: `tests/test_genre_words.py` (14), 10 in `tests/test_words.py` (the 
 4. Story words on a real story: look at the ≈ rows; try `r` on a look-alike (the preview), `s` on a made-up word, `e` on another.
 
 Full suite after part B: **1699 passed**.
+
+## Part C: horror, sci-fi, romance
+
+### Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Same approach as batch 7, one genre at a time, each committed and tagged, neighbors in genres.json | Works | tags `b8-horror`, `b8-scifi`, `b8-romance`; `_neighbors` for all 14 genres |
+| Horror: dread, isolation, wrongness, things that shouldn't move; distinct from ghost story and fantasy | Works | no ghost-dead lists yet (ghost story comes later); its neighbors are ghost story, mythological and rural |
+| Sci-fi: raise "modern", ships, stations, colonies, AI, corporations, near and far future | Works | modern 0.3; real body names in some station names |
+| Romance: relationships, obstacles, longing, misunderstandings; blends with everything | Works | tested against all seven other written genres; the love interest is an ordinary `someone` thread |
+| Fidelity, repetition and lint for each | Works | see the table below |
+| Blends horror/western, sci-fi/mystery, romance/fantasy, romance/comedy | Works | see the table below |
+| Seeded `sample GENRE -n 5` pasted | Works | below |
+
+### Numbers (200 stories, seed 101)
+| Genre or blend | Own material | Lines repeated 5+ times | Entries over 3x fair share |
+|---|---|---|---|
+| horror | 93% | 0 | 0 |
+| sci-fi | 91% | 0 | 0 |
+| romance | 85% | 0 | 0 |
+| horror / western | 93% | - | - |
+| sci-fi / mystery | 86% | - | - |
+| romance / fantasy | 88% | - | - |
+| romance / comedy | 86% | - | - |
+| (batch 7, re-measured with neighbors) comedy 94%, fantasy 97%, mystery 86%; comedy/fairy tale 92%, fantasy/mystery 87%, mystery/western 93% | | | |
+
+Tests added: `tests/test_genre_content.py` now covers six genres and seven blends, plus `test_romance_blends_with_every_other_written_genre`.
+
+### Manual test for part C
+1. `storywheel sample horror -n 3`, `sample sci-fi -n 3`, `sample romance -n 3`: read for lines that sound wrong.
+2. In the Wheel pick Romance with each of Fantasy, Comedy, Mystery, Western and Horror and roll a few stories.
+3. Pick Comedy, then Fantasy, and see that nothing out of place (an insurance adjuster, dragon's blood) turns up.
+
+### Seeded samples (`storywheel sample GENRE -n 5 --seed 7`)
+
+#### Horror
+```
+1. THE DROWNED HEARTH   (motif: hearth)
+   horror · gritty · Story Spine
+
+  * Odett Thacke, 52, a practical hospice aide. Wants a night's watch and
+    peace for Bitter Fork. Needs to mourn their grandmother before it is too
+    late. Flaw: lets panic outweigh hope. Secret: owes a hospital orderly a
+    favor and hides it after dark. Rival: the town doctor.
+  * Bitter Fork · a snowbound February · winter. Landmark: the train station.
+    Rumor: a mute caretaker never left the train station at midnight.
+
+    To save an old enemy from a string of disappearances, Odett, a practical
+    hospice aide, must go back to the train station by the last bus.
+
+    Once upon a time, Bitter Fork had been quiet for years, and Odett, a
+    practical hospice aide, wanted a night's watch and peace for Bitter Fork.
+    Every day, Odett watched over the train station at the last minute and
+    oiled a wedding photograph.
+    One day, a hitchhiker vanished by candlelight, and Odett was the last to
+    see it.
+    Because of that, Odett trusted an elderly twin in a cold sweat and buried
+    a scrawled warning in a sealed jar.
+    Because of that, Odett's only customer was gone by morning, and the
+    wedding photograph lay where their oldest friend slept.
+    Until finally, Odett faced the hitchhiker at the train station and held up
+    the wedding photograph.
+    Ever since then, the lights of Bitter Fork stay on, and Odett sells the
+    wedding photograph under the lake.
+
+    Twist: The victim was never gone: the hitchhiker stayed inside the train
+    station all along.
+    Threads: thing: a wedding photograph (Every day) · someone: a hitchhiker
+    (One day)
+
+2. THE STILL MOTH OF HARROW'S END   (motif: moth)
+   horror · tense · Three-Act Outline
+
+  * Orson Crandt, 59, a brave paramedic. Wants the town's trust before the
+    tide comes in. Needs to forgive the hidden letter and keep family. Flaw:
+    hides homesickness behind denial. Secret: has heard knocking at the
+    hunting cabin and fears guilt. Rival: the coroner.
+  * Harrow's End · the winter of the fever · winter. Landmark: the hunting
+    cabin. Rumor: the hunting cabin was the scene of a fire in the barn.
+
+    In Harrow's End, Orson, a brave paramedic, is asked to hide a locked
+    trunk, and learns the coroner has done it before.
+
+    Act I: Setup — In Harrow's End, Orson, a brave paramedic, kept a blade of
+    cold iron in the crawlspace and wanted the town's trust before the tide
+    comes in.
+    Act I: Inciting incident — A scrawled map arrived from a woman in white,
+    asking Orson to come to the hunting cabin.
+    Act I: First turn — With Orson's landlady watching, Orson returned to the
+    hunting cabin and went in.
+    Act II: Rising action — The blade of cold iron pointed at a neighboring
+    sheriff, and Orson dreamed of the woman in white.
+    Act II: Midpoint — The blade of cold iron turned up inside the piano, and
+    the woman in white denied everything.
+    Act II: Crisis — Orson learned that their mother had lied about the blade
+    of cold iron in the cold.
+    Act III: Climax — Orson named the woman in white at the hunting cabin with
+    the lights off, with the blade of cold iron as proof.
+    Act III: Resolution — Orson avoids the woman in white and never speaks of
+    the false alibi.
+
+    Twist: The coroner had planted the blade of cold iron inside the wall to
+    keep the woman in white from leaving.
+    Threads: thing: a blade of cold iron (Act I: Setup) · someone: a woman in
+    white (Act I: Inciting incident)
+
+3. A ROTTING ORCHARD IN EDEN FALLS   (motif: orchard)
+   horror · wistful · Kishōtenketsu
+
+  * Boyd Brane, 17, a watchful locksmith. Wants a music box and a signed
+    statement. Needs to let go of curiosity and trust a promise. Flaw: ignores
+    warnings and calls it home over despair. Secret: once wound up a pistol
+    with one bullet for a tall stranger in the fog. Rival: the school
+    principal.
+  * Eden Falls · the long October dark · autumn. Landmark: the crawlspace.
+    Rumor: a missing child was hushed up by the school principal.
+
+    A watchful locksmith named Boyd must save an old caretaker before the
+    knocking starts, though everything about the crawlspace says to stay away.
+
+    Ki (introduction) — Boyd, a watchful locksmith, kept a bag of seeds and
+    feared longing.
+    Shō (development) — A wounded deputy began visiting the crawlspace, and
+    Boyd sold a birth certificate after dark.
+    Ten (twist) — Then Boyd saw that the orchard had stood for each other all
+    along.
+    Ketsu (reconciliation) — Boyd and a quiet farmhand found a rope of hair
+    together without a sound, and the autumn went on.
+
+    Twist: Everyone wanted to leave, but the quiet farmhand kept the bag of
+    seeds.
+    Threads: thing: a bag of seeds (Ki (introduction)) · someone: a quiet
+    farmhand (Ketsu (reconciliation))
+
+4. WARRIET'S ATTIC   (motif: attic)
+   horror · playful · Story Spine
+
+  * Warriet Under, 25, a stubborn house sitter. Wants the farm deed before the
+    lamp burns out. Needs to put trust before greed. Flaw: reaches for a way
+    out to avoid hope. Secret: once visited a hollow-eyed preacher against
+    orders and has never confessed. Rival: the nurse.
+  * Cinder Ridge · the week of the flood · autumn. Landmark: the sleeping
+    ward. Rumor: the nurse paid a stranger at the door to keep quiet at the
+    last minute.
+
+    When a black umbrella turns up beneath the floorboards, Warriet, a
+    stubborn house sitter of Cinder Ridge, uncovers a burial in secret no one
+    will name.
+
+    Once upon a time, everyone in Cinder Ridge knew Warriet, a stubborn house
+    sitter, and no one spoke of their past.
+    Every day, Warriet avoided their brother alone and kept the truth close.
+    One day, Warriet heard knocking at the sleeping ward in the dark, and a
+    drifter was there.
+    Because of that, Warriet sold off a locked box to a pale nurse for a full
+    tank of gas.
+    Because of that, the locked box pointed at a missing sister, and Warriet
+    abandoned the drifter.
+    Until finally, Warriet put the locked box on the table at midnight and let
+    the drifter speak.
+    Ever since then, Warriet watches the drifter and tends the locked box
+    buried at the sleeping ward.
+
+    Twist: The drifter was acting for a smiling doctor, out of fear.
+    Threads: someone: a drifter (One day) · thing: a locked box (Because of
+    that)
+
+5. SOMETHING IN THE DOOR AT GREYWATER MILLS   (motif: door)
+   horror · brooding · Three-Act Outline
+
+  * Winn Under, 79, a restless land surveyor. Wants a wire recorder back from
+    a pale lodger. Needs to trust their foster sibling with the truth about
+    the stranger's visit. Flaw: mistakes cowardice for courage. Secret: once
+    reread a final diary entry and still fears tenderness. Rival: the farmer
+    next door.
+  * Greywater Mills · the autumn of the fever · autumn. Landmark: the quarry
+    lake. Rumor: a patient file lies in a dead man's coat where no one looks.
+
+    After a flood of dark water in Greywater Mills, the farmer next door
+    accuses a twin brother, and Winn, a restless land surveyor, knows who is
+    lying.
+
+    Act I: Setup — In Greywater Mills, Winn was a restless land surveyor who
+    wanted a wire recorder back from a pale lodger and trusted no one.
+    Act I: Inciting incident — Winn found a burlap sack in the attic trunk,
+    and it was warm.
+    Act I: First turn — Winn fed a groundskeeper with the lights off and could
+    not turn back.
+    Act II: Rising action — Each time Winn neared a way out of town, pride
+    pulled the other way.
+    Act II: Midpoint — The groundskeeper offered Winn a train ticket to leave
+    it alone.
+    Act II: Crisis — The burlap sack was destroyed, and Winn had nothing left
+    but mercy.
+    Act III: Climax — Winn dragged the groundskeeper with the burlap sack in
+    hand.
+    Act III: Resolution — Winn learned to trust their foster sibling with the
+    truth about the stranger's visit, and Greywater Mills forgot the door.
+
+    Twist: Winn had held the burlap sack at the quarry lake all along, and the
+    farmer next door knew.
+    Threads: thing: a burlap sack (Act I: Inciting incident) · someone: a
+    groundskeeper (Act I: First turn)
+```
+
+#### Sci-fi
+```
+1. THE FINAL ALGORITHM   (motif: algorithm)
+   sci-fi · hopeful · Story Spine
+
+  * Hiro Jovak, 75, a sleepless vet. Wants a pardon before the next jump.
+    Needs to let go of ambition and trust freedom. Flaw: hides spite behind
+    greed. Secret: was with two quarrelling twins when a debris storm began.
+    Rival: the bounty hunter.
+  * Tycho Spindle · the long transit · summer. Landmark: the engine room.
+    Rumor: the bounty hunter decrypted a distress call on minimum power.
+
+    When a stolen reactor core turns up inside a spacesuit, Hiro, a sleepless
+    vet of Tycho Spindle, uncovers a data breach no one will name.
+
+    Once upon a time, everyone on Tycho Spindle knew Hiro, a sleepless vet,
+    and no one asked about their past.
+    Every day, Hiro visited their sister in zero gravity and kept home close.
+    One day, Hiro found a memory chip in a sealed crate, and it was on no
+    manifest.
+    Because of that, Hiro sealed off the engine room and recruited a deserter
+    under a false ID.
+    Because of that, the deserter greeted Hiro quietly, and lied about the
+    will.
+    Until finally, Hiro sealed the memory chip under the deck plating and
+    stood alone at the engine room.
+    Ever since then, Hiro recharges the memory chip and mentors the deserter.
+
+    Twist: Everyone wanted a way out, but the deserter kept the memory chip.
+    Threads: thing: a memory chip (One day) · someone: a deserter (Because of
+    that)
+
+2. BLIND SIGNAL FROM CALLISTO RING   (motif: signal)
+   sci-fi · uneasy · Kishōtenketsu
+
+  * Nika Castro, 74, a homesick dust-farm hand. Wants a captain's chair before
+    the blockade tightens. Needs to put a promise before isolation. Flaw:
+    would risk courage for a clean slate. Secret: keeps a navigation chart
+    inside a cryo pod and tells no one of the missing money. Rival: the fleet
+    admiral.
+  * Callisto Ring · wartime · spring. Landmark: the lake. Rumor: a debt
+    collector once fled the lake under cover of a blackout.
+
+    A homesick dust-farm hand named Nika inherits a fuel cell and a debt on
+    Callisto Ring that the fleet admiral wants collected.
+
+    Ki (introduction) — Nobody in Callisto Ring thought much of Nika, a
+    homesick dust-farm hand with a diagnostic wand.
+    Shō (development) — A library robot began visiting the lake, and Nika
+    cleaned a holo-recorder by the book.
+    Ten (twist) — Then Nika saw the diagnostic wand anew; it had never been
+    about a captain's chair before the blockade tightens.
+    Ketsu (reconciliation) — In the end, Nika understood the deal with the
+    fleet admiral, and duty mattered more than a seat on the board.
+
+    Twist: Nika had held the diagnostic wand buried at the lake all along, and
+    the fleet admiral knew.
+    Threads: thing: a diagnostic wand (Ki (introduction))
+
+3. A STOLEN ARRAY OVER COLD REACH   (motif: array)
+   sci-fi · tense · Kishōtenketsu
+
+  * Sione Oyelarah, 70, a meticulous baker. Wants a medical scanner at the
+    garden ring. Needs to stop hiding grief and forgive their landlady. Flaw:
+    cannot leave the array alone and calls it the truth. Secret: once swapped
+    a broken drone for a quiet technician on a stolen channel. Rival: the
+    mining boss.
+  * Cold Reach · a hundred years from now · winter. Landmark: the garden ring.
+    Rumor: the garden ring was built over a captain's ring.
+
+    When an old enemy arrives in Cold Reach with an alien artifact, a
+    meticulous baker named Sione must choose between enough credits and hope.
+
+    Ki (introduction) — On Cold Reach, Sione patrolled the garden ring off the
+    record, as always.
+    Shō (development) — Sione's cousin asked about the third key, and Sione
+    answered in disguise.
+    Ten (twist) — Then Sione understood that survival had kept Sione from a
+    medical scanner at the garden ring all along.
+    Ketsu (reconciliation) — Sione laid down recklessness at the garden ring,
+    and the alarms fell quiet.
+
+    Twist: A charming con artist had never left the garden ring, and everyone
+    knew it between shifts.
+
+4. ORBITING VOID, CRACKED CAPTAIN   (motif: captain)
+   sci-fi · hopeful · Three-Act Outline
+
+  * Talim Moreau, 25, a cynical colony teacher. Wants a forged manifest back
+    from a board director. Needs to trust their father before the next jump.
+    Flaw: mistakes cowardice for freedom. Secret: has been paid by a fleet
+    commander at the last minute to keep quiet. Rival: the station chief.
+  * Ceres Dock · the age of the tether · summer. Landmark: a forgotten statue.
+    Rumor: a corporate takeover was covered up by the station chief.
+
+    On Ceres Dock, Talim, a cynical colony teacher, is asked to seal a
+    suitcase full of cash, and learns the station chief has done it before.
+
+    Act I: Setup — On Ceres Dock, Talim, a cynical colony teacher, kept a
+    survival kit behind a bulkhead panel and wanted a forged manifest back
+    from a board director.
+    Act I: Inciting incident — Talim found a door open at a forgotten statue
+    in the dark, and nobody inside.
+    Act I: First turn — Talim set out on minimum power to lose a pocket
+    reactor before the oxygen runs out.
+    Act II: Rising action — Talim tracked a vial of nanites to a forgotten
+    statue and waited under cover of a blackout.
+    Act II: Midpoint — Halfway to a patent, Talim found a ship's log on a dead
+    drive, and the stakes changed.
+    Act II: Crisis — The survival kit was destroyed, and Talim had nothing
+    left but each other.
+    Act III: Climax — Talim laid a trap at a forgotten statue at full burn,
+    baited with the survival kit.
+    Act III: Resolution — Ceres Dock changed: Talim avoids a forgotten statue
+    and teaches their grandmother.
+
+    Twist: The station chief had planted a star map in the ventilation shaft
+    to frame the captain.
+    Threads: thing: a survival kit (Act I: Setup)
+
+5. LAST TETHER TO EUROPA DEEP   (motif: tether)
+   sci-fi · hopeful · Story Spine
+
+  * Nika Petrov, 77, a quiet pilot. Wants passage out of here for their
+    mother. Needs to value fairness above a clean record. Flaw: reaches for an
+    open channel to avoid loneliness. Secret: once sold off a lockless key and
+    blamed an unknown passenger. Rival: the rival captain.
+  * Europa Deep · the far future · autumn. Landmark: the comm array. Rumor:
+    the rival captain paid a nervous accountant to keep quiet by the book.
+
+    Nika, a quiet pilot, receives a ship's log entry from a security chief and
+    must reach the comm array before the window closes.
+
+    Once upon a time, Nika, a quiet pilot of Europa Deep, kept a tangle of
+    cables inside a spacesuit and feared pride.
+    Every day, Nika cleaned the comm array before the next jump and recharged
+    a sealed black box.
+    One day, Nika found a door open at the comm array quietly, from the
+    inside.
+    Because of that, Nika trained a weary medic off the record and hid an old
+    locket under the deck plating.
+    Because of that, the tangle of cables turned up taped under a table, and
+    the weary medic denied everything.
+    Until finally, the tangle of cables did its work, and the weary medic ran
+    in zero gravity.
+    Ever since then, the lights of Europa Deep stay on, and Nika calibrates
+    the tangle of cables in a sealed crate.
+
+    Twist: The weary medic was acting for a corporate auditor, out of
+    curiosity.
+    Threads: thing: a tangle of cables (Once upon a time) · someone: a weary
+    medic (Because of that)
+```
+
+#### Romance
+```
+1. THE SECRET SCANDAL   (motif: scandal)
+   romance · hopeful · Story Spine
+
+  * Lian Ingsley, 26, a guarded school janitor. Wants a good name before the
+    engagement is announced. Needs to stop hiding regret and make peace with
+    their brother. Flaw: stays silent and calls it honesty out of secrecy.
+    Secret: has loved a charming stranger for years, telling no one at the
+    greenhouse. Rival: the disapproving mother.
+  * South Scott · the week before the wedding · spring. Landmark: the
+    greenhouse. Rumor: a self-stirring spoon lies buried at the greenhouse
+    where lovers look.
+
+    When a cottage key turns up in the garden shed, Lian, a guarded school
+    janitor of South Scott, learns who wrote the letters.
+
+    Once upon a time, everyone in South Scott knew everyone, and Lian, a
+    guarded school janitor, wanted a good name before the engagement is
+    announced.
+    Every day, Lian walked past the greenhouse under the stars and told no one
+    about the inheritance.
+    One day, a stern chaperone arrived in South Scott with flowers and asked
+    for Lian.
+    Because of that, Lian arrived at the greenhouse by post and kept a pair of
+    clown shoes in the desk drawer.
+    Because of that, the stern chaperone hid from Lian by lamplight, and
+    neither said what they meant.
+    Until finally, Lian misplaced the pair of clown shoes in front of the
+    stern chaperone.
+    Ever since then, South Scott has stopped talking about the second family.
+
+    Twist: A visiting cousin had been Lian's biggest fan the whole time.
+    Threads: someone: a stern chaperone (One day) · thing: a pair of clown
+    shoes (Because of that)
+
+2. THE FORGOTTEN CACTUS OF HAZEL GLEN   (motif: cactus)
+   romance · melancholy · Three-Act Outline
+
+  * Therine Lowell, 46, a cheerful deputy. Wants an engagement ring back from
+    a tall stranger. Needs to trust their foster sibling with the truth about
+    the money. Flaw: turns every small problem into an unexpected inheritance
+    and blames doubt. Secret: told a new teacher a lie about the empty grave
+    long ago. Rival: the ex.
+  * Hazel Glen · the fair's last night · winter. Landmark: the hilltop. Rumor:
+    a first edition lies in a book of poems.
+
+    A selkie with no coat offers Therine, a cheerful deputy, a bookshop to run
+    in exchange for a picture postcard.
+
+    Act I: Setup — The lights of Hazel Glen came on early, and Therine, a
+    cheerful deputy, stayed in.
+    Act I: Inciting incident — Therine received a forged reference from a
+    meddling aunt, demanding the family blessing before the wedding.
+    Act I: First turn — Therine waited at the hilltop with a smile and tucked
+    away a red umbrella in the stagecoach's false bottom.
+    Act II: Rising action — The red umbrella reminded Therine of a nervous
+    groom, and Therine hid from the meddling aunt.
+    Act II: Midpoint — The truth about the stranger's visit came out: the
+    meddling aunt arranged the red umbrella all along.
+    Act II: Crisis — Therine traded away a pocket watch with a flourish, and a
+    cottage by the sea slipped away.
+    Act III: Climax — The meddling aunt confessed too, and Therine outbid the
+    ex in front of their sister.
+    Act III: Resolution — Therine kept the red umbrella behind the chimney
+    stones as a reminder of nosiness.
+
+    Twist: The red umbrella was never the gift: a theater ticket stub lay
+    under the pillow.
+    Threads: message: a forged reference (Act I: Inciting incident) · someone:
+    a meddling aunt (Act I: Inciting incident) · thing: a red umbrella (Act I:
+    First turn)
+
+3. LAST SECRET OF WISTERIA FALLS   (motif: secret)
+   romance · quiet · Three-Act Outline
+
+  * Graham Ellagher, 67, a wry music teacher. Wants a shared home for their
+    spouse. Needs to let their apprentice win a vineyard to run for once.
+    Flaw: trusts a job abroad over hope. Secret: once delivered a final demand
+    and still fears pride. Rival: the society hostess.
+  * Wisteria Falls · the season of the regatta · summer. Landmark: the
+    lakeside. Rumor: a returning soldier once returned to the lakeside on a
+    whim.
+
+    After a scandal in the papers hit Wisteria Falls, Graham squirreled away a
+    silver locket in a locked cabinet rather than admit what happened.
+
+    Act I: Setup — In Wisteria Falls, Graham, a wry music teacher, kept a pair
+    of dancing shoes in a hollow cottonwood and wanted a shared home for their
+    spouse.
+    Act I: Inciting incident — A traveling circus struck Wisteria Falls, and
+    Graham found a traveling musician at the lakeside.
+    Act I: First turn — With Graham's oldest friend watching, Graham got lost
+    in the lakeside and began.
+    Act II: Rising action — The traveling musician avoided the fire, and
+    Graham said nothing at the last minute.
+    Act II: Midpoint — The traveling musician offered Graham a diamond ring,
+    and Graham said no.
+    Act II: Crisis — The pair of dancing shoes was lost, and Graham had
+    nothing left but loyalty.
+    Act III: Climax — Graham told the traveling musician the truth about the
+    debt at the lakeside at midnight.
+    Act III: Resolution — Graham dances with the traveling musician and never
+    doubts family.
+
+    Twist: The pair of dancing shoes was worth a bookshop to run, and the
+    traveling musician sold it off for a song.
+    Threads: thing: a pair of dancing shoes (Act I: Setup) · someone: a
+    traveling musician (Act I: Inciting incident)
+
+4. A WEDDING FOR PETER   (motif: wedding)
+   romance · wry · Story Spine
+
+  * Peter Nightingale, 62, a dignified mule skinner. Wants a wedding ring and
+    a place at the table. Needs to give up possessiveness and choose a good
+    laugh. Flaw: lets impatience outweigh family. Secret: once rejected an
+    estranged father in secret and has never said sorry. Rival: the landlord.
+  * Cherry Bank · the winter of the snow · winter. Landmark: the bookshop.
+    Rumor: a travelling salesman never left the bookshop on the quiet.
+
+    A dignified mule skinner named Peter accidentally enters the contest for a
+    proper proposal and, worse, starts winning.
+
+    Once upon a time, in Cherry Bank, a dignified mule skinner named Peter
+    wanted a wedding ring and a place at the table.
+    Every day, Peter ate lunch at the bookshop and told their mother a small
+    fib at sunrise.
+    One day, Peter was asked to sell a lost mine map before the letter
+    arrives, and said yes without thinking.
+    Because of that, Peter wrote a tin of letters under the stars and told
+    their only customer about a village idiot's cousin.
+    Because of that, the landlord fell for Peter in the rain for being seen
+    with the village idiot's cousin.
+    Until finally, Peter ran to the bookshop with a smile with the lost mine
+    map and said it at last.
+    Ever since then, Peter strolls through the bookshop and waves at the
+    village idiot's cousin.
+
+    Twist: The village idiot's cousin was acting for a circuit judge, out of
+    love, and regretted it.
+    Threads: thing: a lost mine map (One day) · someone: a village idiot's
+    cousin (Because of that)
+
+5. BORROWED HEART, RUSTED PROPOSAL   (motif: proposal)
+   romance · whimsical · Three-Act Outline
+
+  * Theo Tate, 63, a hopeful bookbinder. Wants the family blessing to impress
+    their daughter. Needs to put love before self-doubt. Flaw: can't resist a
+    stolen kiss when guilt is high. Secret: never answered a mail-order
+    bride's letter by post. Rival: the rival suitor.
+  * Bunting · the week of the festival · spring. Landmark: the boathouse.
+    Rumor: a cut telegraph line was hushed up by the rival suitor.
+
+    To keep a fake priest from leaving Bunting, Theo, a hopeful bookbinder,
+    must find a brass compass before the raffle draw.
+
+    Act I: Setup — Theo, a hopeful bookbinder, came to Bunting over tea to
+    forget the proposal.
+    Act I: Inciting incident — A jilted fiancé arrived in Bunting on a whim
+    and asked for Theo.
+    Act I: First turn — Theo made a plan at the last dance to recover a sealed
+    envelope before the harvest.
+    Act II: Rising action — Theo begged an old Army cook, but the rival suitor
+    sweet-talked their one true ally first.
+    Act II: Midpoint — The old Army cook turned out to know Theo's ex, and
+    Theo forgave the rival suitor with flowers.
+    Act II: Crisis — Theo pawned a recipe card, and the village cup slipped
+    away.
+    Act III: Climax — Theo put the sealed envelope in the old Army cook's hand
+    on the quiet and waited.
+    Act III: Resolution — Bunting changed: Theo lingers at the boathouse and
+    smiles at the old Army cook.
+
+    Twist: The rival suitor had written the letters, and meant good manners.
+    Threads: thing: a sealed envelope (Act I: First turn) · someone: an old
+    Army cook (Act II: Rising action)
+```
+
+
+Full suite at the end of batch 8: **1886 passed, 1 failed** in the last full run (`test_engine::test_genre_steers_entry_picks`: romance had added an "observatory" landmark and sci-fi's own landmarks diluted the test's draw). Fixed afterwards (romance lost its "the observatory"; the test draws within the one list); that test and the genre tests were re-run and pass, the whole suite was not run again.

@@ -698,6 +698,19 @@ zero and the floor never brings it back. (One exception so rolls never come
 up empty: if *every* list for a slot is excluded, the exclusions are ignored
 for that slot.)
 
+**Neighbors:** the floor is not spread evenly over every other genre. `_neighbors` in `genres.json` names, for each genre, the
+tags of the genres next door (fantasy: mythological, adventure; romance: comedy, domestic, coming-of-age, historical...). The floor's
+share goes to untagged lists and lists of neighboring genres; genres that are not neighbors get a tenth of it between them, and where
+a slot has no neighbor lists at all the floor shrinks to that tenth. So a fantasy story gets no insurance adjuster, and a comedy no
+dragon's blood. A genre with no `_neighbors` entry keeps the even floor.
+
+**Moods** lean the same way: each mood in `lists/mood/general.json` is tagged with the genres it suits ("absurd" is comedy's, "eerie"
+is horror's), so "comedy · eerie" is rare. **Era and season agree**: an era that names a season ("the week before Christmas") sets it
+(`data/seasons.json` lists the words).
+
+**Written genres:** western, fairy tale, comedy, fantasy, mystery, horror, sci-fi and romance have their own names, jobs, places, things,
+people, troubles, title words and frames for every beat; the others run on general atoms until their lists are written.
+
 A genre name that has no profile still works: it becomes a tag with weight 3,
 so `steampunk` will favor lists tagged `steampunk`. You can add profiles in
 `~/.storywheel/genres.json`.

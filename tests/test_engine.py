@@ -76,14 +76,15 @@ def test_generated_lists_come_from_generators(engine):
 
 def test_genre_steers_entry_picks():
     e = Engine(seed=1)
+    general = e.library.lists["landmark/general"]
     def landmarks(genre):
         story = {"kept": {"genre": {"genre": genre, "mood": "cozy"}}, "seeds": {}}
-        from storywheel.mix import sync_base
+        from storywheel.mix import Mix, sync_base
         sync_base(story)
-        c = Ctx(e, story, fresh=True)
-        return Counter(c.draw("landmark") for _ in range(1500))
+        mix = Mix.for_story(story, e.library)
+        return Counter(e.choose_entry(general, mix, reuse=True).text for _ in range(3000))
     west, space = landmarks("western"), landmarks("sci-fi")
-    # "the observatory" exists only as a sci-fi-tagged entry in the general list
+    # "the observatory" exists only as a sci-fi-tagged entry in the general list (picked within that list, so the other lists do not dilute it)
     assert space["the observatory"] > 4 * max(1, west["the observatory"])
 
 

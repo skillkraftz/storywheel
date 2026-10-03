@@ -18,6 +18,13 @@ Part A: fixes from the batch 7 samples
   tongue", "with drawn steel", "in silent dread") carry the restricted features `speech`, `carrying`, `feeling` and are drawn only where a frame asks
   for them (`{MANNER:speech}`); lint also reports a restricted atom no frame asks for.
 
+Part C: horror, sci-fi, romance (each its own commit and tag, with neighbors set in genres.json)
+- Horror: dread, isolation, wrongness, things that moved when no one was looking; remote towns, cellars and wells; profile weight 4.
+- Sci-fi: ships, stations, colonies, AI, corporations; names from everywhere; profile weight 4 and modern 0.3 for near-future settings.
+- Romance: relationships, obstacles, longing and misunderstandings; portable towns, bookshops, letters and keepsakes so it blends with every other
+  genre; profile weight 4.
+- The repetition report no longer flags a rare entry picked a handful of times (it must also be 4 standard deviations above chance).
+
 Part B: Words mode tabs
 - The *My words* tab is gone: Vocabulary has a *New words / ★ Learning* box (the ★ words, flashcards, remove) and an entry for a word of your own.
 - New *Genre words* tab: browse the generator's lists by genre (default: the story's genres; tick more to borrow) and category, with a search box;
