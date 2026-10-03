@@ -1,0 +1,40 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "romance"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "waves at",
+  "calls",
+  {
+   "text": "dances with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "visits",
+  {
+   "text": "thinks of",
+   "features": [
+    "inner"
+   ]
+  },
+  "smiles at"
+ ]
+}

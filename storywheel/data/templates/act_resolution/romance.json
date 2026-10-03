@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_resolution",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "In the end, {first} had {PRIZE:!inner} and kept {VALUE}.",
+  "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {the_someone:human}.",
+  "{first} learned {need}, and {place} forgot {TOPIC}.",
+  "The quarrel ended, and {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "The {rival} gave their blessing, and {first} {HABIT_PLACE} {landmark} every {season}.",
+  "{first} {HABIT_PERSON} {the_someone:human} and never doubts {VALUE}.",
+  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+ ]
+}

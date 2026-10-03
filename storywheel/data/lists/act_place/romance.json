@@ -1,0 +1,89 @@
+{
+ "_note": "Past-tense verbs for romance that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "strolled through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "closed up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  "left",
+  "fled",
+  {
+   "text": "lingered at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "waited at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "wandered into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "arrived at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "sneaked into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  }
+ ]
+}

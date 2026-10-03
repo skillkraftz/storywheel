@@ -23,7 +23,7 @@
   "_default": {"general": 1, "modern": 0.5},
 
   "mystery":       {"mystery": 4, "noir": 1, "thriller": 1, "urban": 0.5, "general": 0.3, "modern": 0.2},
-  "romance":       {"romance": 3, "comedy": 0.5, "domestic": 1, "general": 0.3, "modern": 0.1},
+  "romance":       {"romance": 4, "comedy": 0.5, "domestic": 1, "general": 0.3, "modern": 0.1},
   "horror":        {"horror": 4, "ghost story": 1.5, "mythological": 0.5, "rural": 0.5, "general": 0.3, "modern": 0.1},
   "western":       {"western": 3, "historical": 2, "rural": 1, "adventure": 0.5, "general": 0.3, "modern": 0.1},
   "sci-fi":        {"sci-fi": 4, "modern": 0.3, "urban": 0.5, "general": 0.3},

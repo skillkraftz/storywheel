@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_trials",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered advice {MANNER}.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
+  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and wrote another letter.",
+  "{the_thing} reminded {first} of {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} waited for {THING:portable} at {landmark} and watched {MANNER}.",
+  "{the_someone:human} avoided {TOPIC}, and {first} said nothing {MANNER}."
+ ]
+}

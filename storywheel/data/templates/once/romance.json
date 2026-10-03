@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "once",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "in {place}, a {trait} {job} named {first} wanted {want}",
+  "everyone in {place} knew everyone, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and feared {FEELING}",
+  "the {rival} watched over {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
+  "{first}, a {trait} {job} in {place}, doubted love and wanted {want}",
+  "everyone in {place} had an opinion about {first}, a {trait} {job}, and {TOPIC}",
+  "{first}, a {trait} {job}, spent every {season} in {place} wanting {want}",
+  "the whole town of {place} was waiting for {first}, a {trait} {job}, to want {want}",
+  "{first}, a {trait} {job} of {place}, had stopped hoping for {PRIZE:!inner}"
+ ]
+}

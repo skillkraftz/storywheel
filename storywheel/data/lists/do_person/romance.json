@@ -1,0 +1,55 @@
+{
+ "_note": "Base-form verbs for romance that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "win over",
+  "meet",
+  "avoid",
+  "propose to",
+  "invite",
+  "surprise",
+  "forget",
+  {
+   "text": "confess to",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "apologize to",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "let go of",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

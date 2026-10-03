@@ -1,0 +1,99 @@
+{
+ "_note": "Who stands between two people. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "rival suitor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "jealous ex",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "disapproving mother",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "wealthy fiancé",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "scheming cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "business rival",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "meddling aunt",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "village gossip",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "stern father",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "competing baker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "ambitious editor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "society hostess",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "bitter heir",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

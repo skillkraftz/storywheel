@@ -1,0 +1,149 @@
+{
+ "_note": "Past-tense verbs for romance that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "wrote",
+  {
+   "text": "mailed",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "mended",
+   "object": [
+    "!living"
+   ]
+  },
+  "kept",
+  {
+   "text": "gave away",
+   "object": [
+    "!living"
+   ]
+  },
+  "returned",
+  "lost",
+  {
+   "text": "pressed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "framed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "wrapped",
+   "object": [
+    "!living"
+   ]
+  },
+  "delivered",
+  {
+   "text": "tucked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "pawned",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold off",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "traded away",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "arranged",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "baked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wound",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "folded",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

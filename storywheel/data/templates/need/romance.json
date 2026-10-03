@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "need",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "to {DO_PERSON:inner} {CLOSE:human} before it is too late",
+  "to put {VALUE} before {VICE}",
+  "to trust {CLOSE:human} with the truth about {TOPIC}",
+  "to give up {VICE} and choose {VALUE}",
+  "to forgive {TOPIC} and keep {VALUE}",
+  "to stop hiding {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
+  "to value {VALUE} above {PRIZE:social,!inner}",
+  "to let go of {VICE} and trust {VALUE}"
+ ]
+}

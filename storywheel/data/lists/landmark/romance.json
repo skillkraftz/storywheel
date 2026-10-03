@@ -1,0 +1,304 @@
+{
+ "_note": "Places where people meet, miss each other and finally speak.",
+ "slot": "landmark",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "the bookshop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bakery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the flower stall",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the old pier",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the garden gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the village green",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the ferry dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ballroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the orchard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the vineyard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the lighthouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the train platform",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the café terrace",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the clock tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the stone bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the rooftop",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the greenhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bandstand",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the chapel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the market square",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the lakeside",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the boathouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the conservatory",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cottage garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the theater",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the village inn",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hilltop",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the covered bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the seaside promenade",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hotel lobby",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the wedding tent",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the piano room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cliff path",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the observatory",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the post office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the corner pub",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airport gate",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the night train",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the town hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the harbor wall",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the rose arbor",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  }
+ ]
+}

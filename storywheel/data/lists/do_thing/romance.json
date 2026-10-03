@@ -1,0 +1,39 @@
+{
+ "_note": "Base-form verbs for romance that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "deliver",
+  "return",
+  "find",
+  "write",
+  "keep",
+  {
+   "text": "win back",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "mend",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sell",
+   "object": [
+    "!living"
+   ]
+  },
+  "recover"
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "reaction",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER} in search of {SOMEONE:human,!plural}",
+  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
+  "{ACT_THING} {THING} {MANNER} and told {CLOSE:human} about {SOMEONE:human,!plural}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
+  "asked {CLOSE:human} about {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
+  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and pretended not to care",
+  "made a plan {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+ ]
+}

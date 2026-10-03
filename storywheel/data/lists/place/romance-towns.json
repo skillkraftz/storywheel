@@ -1,0 +1,33 @@
+{
+ "_note": "Small, friendly towns and holiday places, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME}'s Landing",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "Larkspur Bay",
+  "Honeywell",
+  "Rosemere",
+  "Briar Cross",
+  "Wisteria Falls",
+  "Maple Cove",
+  "Port Amity",
+  "Peony Hill",
+  "Seabright",
+  "Bellhaven",
+  "Linden Row",
+  "Marigold",
+  "Cherry Bank",
+  "Clover Mills"
+ ]
+}

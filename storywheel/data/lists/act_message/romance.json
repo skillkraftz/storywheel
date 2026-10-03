@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for romance that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "wrote",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "sent",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "returned",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "misread",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "rewrote",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "kept",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

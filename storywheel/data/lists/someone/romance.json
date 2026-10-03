@@ -1,0 +1,267 @@
+{
+ "_note": "The people a heart meets, avoids and misreads.",
+ "slot": "someone",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "a charming stranger",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an old flame",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a shy neighbor",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a rival suitor",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a meddling aunt",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a best friend",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a visiting cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a famous author",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a widowed baker",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a returning sailor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a grumpy landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a traveling musician",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a matchmaking grandmother",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a jilted fiancé",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a mysterious benefactor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stern chaperone",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a childhood friend",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a handsome doctor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a visiting heiress",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a quiet gardener",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a dashing pilot",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lonely widower",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "two squabbling sisters",
+   "features": [
+    "human",
+    "plural"
+   ]
+  },
+  {
+   "text": "a gossiping postmistress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an estranged father",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a wealthy suitor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a new teacher",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stubborn farmer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a famous violinist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a clumsy florist",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "an exacting critic",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a returning soldier",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a quiet bookseller",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a tall stranger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lively widow",
+   "features": [
+    "human",
+    "friendly"
+   ]
+  },
+  {
+   "text": "a nervous groom",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a determined bride",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired actress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a travelling salesman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a talkative barber",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "romance"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "keeps",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "rereads",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "winds",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "carries",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "polishes",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "folds",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "tends",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

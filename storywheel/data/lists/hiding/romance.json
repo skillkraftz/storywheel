@@ -1,0 +1,91 @@
+{
+ "_note": "Where something is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "in a book of poems",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a hatbox",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the pillow",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the desk drawer",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind the clock",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a jar of buttons",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "sewn into a coat",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the piano bench",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "tucked in a hymnal",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the garden shed",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in a locked cabinet",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

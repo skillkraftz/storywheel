@@ -1,0 +1,201 @@
+{
+ "_note": "Obstacles and mix-ups. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "a missed train",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a jilted fiancé's return",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a family feud",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a misdelivered letter",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a double booking",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a postponed wedding",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a sudden storm",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stolen heirloom",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a public quarrel",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a business rivalry",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a forged love letter",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a scandal in the papers",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a flooded cellar",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lost engagement ring",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "an unexpected inheritance",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rival's proposal",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a long separation",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a broken promise",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a job offer abroad",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a case of mistaken identity",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a cancelled ferry",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a village scandal",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a heat wave",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failed harvest",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a wedding crasher",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a power cut",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rumor of an engagement",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fire at the inn",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing groom",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a snowed-in weekend",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  }
+ ]
+}

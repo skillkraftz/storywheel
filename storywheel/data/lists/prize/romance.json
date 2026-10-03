@@ -1,0 +1,93 @@
+{
+ "_note": "What people want from love.",
+ "slot": "prize",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "one more chance",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a declaration",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "an honest answer",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a first dance",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a lasting love",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the family blessing",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place at the table",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a proper proposal",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a cottage by the sea",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a vineyard to run",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a bookshop to run",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a good name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a shared home",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a diamond ring",
+   "features": [
+    "material"
+   ]
+  }
+ ]
+}

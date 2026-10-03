@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "escalation",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and neither said what they meant",
+  "{the_thing} turned up {HIDING}, and {the_someone:human} misunderstood",
+  "the {rival} {ACT_PERSON} {first} {MANNER} for being seen with {the_someone:human}",
+  "{the_message} was misread, and {first} doubted {the_someone:human}",
+  "{the_disaster:strikes} struck again at {landmark}, and {the_someone:human} stood alone",
+  "{first} found {the_thing:portable} {MANNER}, and could not say so",
+  "{the_someone:human} offered {first} {PRIZE:!inner}, and {first} said no {MANNER}",
+  "{the_thing} reminded {first} of {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
+  "{CLOSE:human} guessed the truth about {TOPIC}, and told the whole of {landmark}",
+  "{the_someone:human} learned of {TOPIC} {MANNER}, and left {landmark} without a word",
+  "{SOMEONE:human,!plural} flirted with {first} {MANNER}, and {the_someone:human} noticed",
+  "{first} was warned off {the_someone:human} by the {rival} {MANNER}"
+ ]
+}

@@ -1,0 +1,105 @@
+{
+ "_note": "Title nouns for romance. Concrete things, with a kind where it isn't an object.",
+ "slot": "title_noun",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "kiss",
+   "kind": "idea"
+  },
+  "letter",
+  {
+   "text": "promise",
+   "kind": "idea"
+  },
+  {
+   "text": "proposal",
+   "kind": "idea"
+  },
+  {
+   "text": "season",
+   "kind": "idea"
+  },
+  "heart",
+  "bouquet",
+  {
+   "text": "wedding",
+   "kind": "idea"
+  },
+  {
+   "text": "courtship",
+   "kind": "idea"
+  },
+  "rose",
+  {
+   "text": "garden",
+   "kind": "place"
+  },
+  {
+   "text": "match",
+   "kind": "idea"
+  },
+  {
+   "text": "secret",
+   "kind": "idea"
+  },
+  {
+   "text": "engagement",
+   "kind": "idea"
+  },
+  "ring",
+  {
+   "text": "dance",
+   "kind": "idea"
+  },
+  {
+   "text": "confession",
+   "kind": "idea"
+  },
+  {
+   "text": "bride",
+   "kind": "person"
+  },
+  {
+   "text": "suitor",
+   "kind": "person"
+  },
+  {
+   "text": "stranger",
+   "kind": "person"
+  },
+  {
+   "text": "neighbor",
+   "kind": "person"
+  },
+  {
+   "text": "cottage",
+   "kind": "place"
+  },
+  {
+   "text": "wish",
+   "kind": "idea"
+  },
+  "lantern",
+  "valentine",
+  "postcard",
+  {
+   "text": "chance",
+   "kind": "idea"
+  },
+  {
+   "text": "scandal",
+   "kind": "idea"
+  },
+  {
+   "text": "summer",
+   "kind": "idea"
+  },
+  {
+   "text": "harbor",
+   "kind": "place"
+  }
+ ]
+}

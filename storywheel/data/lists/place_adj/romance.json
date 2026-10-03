@@ -1,0 +1,29 @@
+{
+ "_note": "First half of a town name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "Little",
+  "Upper",
+  "Lower",
+  "Sweet",
+  "Willow",
+  "Rose",
+  "Honey",
+  "Lark",
+  "Summer",
+  "Old",
+  "Fair",
+  "Silver",
+  "Maple",
+  "Blue",
+  "Hazel",
+  "Golden",
+  "Apple",
+  "Lilac",
+  "Primrose",
+  "Ivy"
+ ]
+}

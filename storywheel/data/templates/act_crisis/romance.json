@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_crisis",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost heart.",
+  "{the_thing} was lost, and {first} had nothing left but {VALUE}.",
+  "{the_someone:human} left {landmark} {MANNER}, and the town stayed silent.",
+  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
+  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
+  "{the_disaster:strikes} struck again, and {first} was too late.",
+  "{first} learned that {CLOSE:human} had hidden {the_thing} {MANNER}."
+ ]
+}

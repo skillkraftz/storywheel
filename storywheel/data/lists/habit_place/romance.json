@@ -1,0 +1,44 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "romance"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "lingers at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "strolls through",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "tends",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "waits at",
+   "subject": [
+    "human"
+   ]
+  },
+  "stops at"
+ ]
+}

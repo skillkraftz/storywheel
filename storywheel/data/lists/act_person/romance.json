@@ -1,0 +1,177 @@
+{
+ "_note": "Past-tense verbs for romance that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "courted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "danced with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "kissed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "comforted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "waited for",
+   "subject": [
+    "human"
+   ]
+  },
+  "avoided",
+  {
+   "text": "confided in",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "teased",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "forgave",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "admired",
+  {
+   "text": "proposed to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "rejected",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "missed",
+  {
+   "text": "chased",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "invited",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "misjudged",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "fell for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "waved at",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "called on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "visited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wrote to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

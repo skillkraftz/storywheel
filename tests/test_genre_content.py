@@ -12,8 +12,8 @@ from storywheel.sample import build_story
 from storywheel.engine import Engine
 
 FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing", "someone", "disaster"]
-GENRES = ["comedy", "fantasy", "mystery", "horror", "sci-fi"]
-BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"], ["horror", "western"], ["sci-fi", "mystery"]]
+GENRES = ["comedy", "fantasy", "mystery", "horror", "sci-fi", "romance"]
+BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"], ["horror", "western"], ["sci-fi", "mystery"], ["romance", "fantasy"], ["romance", "comedy"]]
 GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",
@@ -179,3 +179,15 @@ def test_mystery_clues_come_back_in_later_beats():
             total += 1
             reused += flat.count(word.split(" ", 1)[-1]) >= 2
     assert total >= 40 and reused / total >= 0.6, (reused, total)
+
+
+def test_romance_blends_with_every_other_written_genre(lib):
+    """Romance is the most common pairing: with every genre that has its own material, both show up and nothing repeats."""
+    for other in ("comedy", "fantasy", "mystery", "horror", "sci-fi", "western", "fairy tale"):
+        seen, flavor, trace = shares(["romance", other])
+        picks = [t for t in trace if t[0] in FLAVORED_SLOTS]
+        mine = sum(1 for t in picks if "romance" in t[2]) / len(picks)
+        theirs = sum(1 for t in picks if other in t[2] or (other == "western" and "historical" in t[2])) / len(picks)
+        assert mine >= 0.2 and theirs >= 0.2, (other, mine, theirs)
+        total = sum(v[0] for k, v in seen.items() if k in FLAVORED_SLOTS) / sum(v[1] for k, v in seen.items() if k in FLAVORED_SLOTS)
+        assert total >= 0.8, (other, total)

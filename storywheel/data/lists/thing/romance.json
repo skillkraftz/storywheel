@@ -1,0 +1,310 @@
+{
+ "_note": "Keepsakes and tokens: things given, lost and kept.",
+ "slot": "thing",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  {
+   "text": "a love letter",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pressed flower",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a lost glove",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a wedding ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pocket watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a silver locket",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a dance card",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a music box",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bouquet of roses",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a first edition",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a tin of letters",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a wool scarf",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a red umbrella",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a train ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a framed photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a recipe card",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a cottage key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a lace handkerchief",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sealed envelope",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a mixtape",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hand-stitched quilt",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bottle of wine",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a battered violin",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bunch of lilacs",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "an engagement ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a picture postcard",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pocket diary",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a velvet ribbon",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sketchbook",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a brass compass",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a paper lantern",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a wedding invitation",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a cottage deed",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a theater ticket stub",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a borrowed coat",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a charm bracelet",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a handwritten poem",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a barn dance flyer",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pair of dancing shoes",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a jar of honey",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

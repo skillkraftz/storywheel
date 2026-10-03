@@ -1,0 +1,21 @@
+{
+ "_note": "",
+ "slot": "premise",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "When {SOMEONE:human,!plural} arrives in {place}, {first}, a {trait} {job}, must choose between {PRIZE:!inner} and {VALUE}.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and seeks {SOMEONE:human,!plural}.",
+  "After {DISASTER:strikes} in {place}, the {rival} blames {SOMEONE:human,!plural}, and {first}, a {trait} {job}, takes their side.",
+  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though everyone in {place} has an opinion.",
+  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and must answer {DEADLINE}.",
+  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and falls for {SOMEONE:human,!plural} on the way.",
+  "To keep {SOMEONE:human,!plural} from leaving {place}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
+  "Every evening at {landmark:built} {first}, a {trait} {job}, meets {SOMEONE:human,!plural}, and neither will say why.",
+  "A {trait} {job} named {first} inherits {THING} and a quarrel in {place} that the {rival} wants settled.",
+  "{first}, a {trait} {job}, is the last to learn that {SOMEONE:human,!plural} has loved them for years.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, learns who wrote the letters.",
+  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} is the one {first} was meant to meet."
+ ]
+}

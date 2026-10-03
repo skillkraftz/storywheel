@@ -1,0 +1,16 @@
+{
+ "_note": "",
+ "slot": "act_climax",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{first} ran to {landmark} {MANNER} with {the_thing:portable} and said it at last.",
+  "{first} put {the_thing} in {the_someone:human}'s hand {MANNER} and waited.",
+  "{the_someone:human} read {the_message} aloud at {landmark}, and {first} did not look away.",
+  "{first} gave up {THING:valuable,!living} at {landmark} to stay with {the_someone:human}.",
+  "{first} told {the_someone:human} the truth about {TOPIC} at {landmark} {MANNER}.",
+  "{the_disaster} could not keep them apart: {first} crossed {landmark} {MANNER}.",
+  "{first} stood before the whole town at {landmark} and chose {VALUE}."
+ ]
+}

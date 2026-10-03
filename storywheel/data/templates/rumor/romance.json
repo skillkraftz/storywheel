@@ -1,0 +1,17 @@
+{
+ "_note": "",
+ "slot": "rumor",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
+  "{DISASTER:manmade} {was} hushed up by the {rival}",
+  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
+  "{landmark:built} {was} the scene of {DISASTER:manmade}",
+  "the {rival} paid {SOMEONE:human,!plural} to keep away {MANNER}",
+  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
+  "{THING:portable} {lies|lie} {HIDING} where lovers look",
+  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "inciting",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "{SOMEONE:human,!plural} arrived in {place} {MANNER} and asked for {first}",
+  "{first} found {THING:!living,!bulky} {HIDING}, with someone else's name on it",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to meet at {landmark}",
+  "{DISASTER:strikes} struck {place}, and {first} found {SOMEONE:human,!plural} at {landmark}",
+  "the {rival} announced {DISASTER:manmade}, and {first} was the last to hear",
+  "{first} bumped into {SOMEONE:human,!plural} at {landmark} {MANNER}, and dropped {THING:portable}",
+  "{SOMEONE:human,!plural} moved into {landmark:built}, and {first} could not stop thinking of it",
+  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and {SOMEONE:human,!plural} was to help",
+  "{first} agreed to {DO_PERSON:!inner} {SOMEONE:human,!plural} {MANNER}, for the wrong reasons",
+  "an old friend, {SOMEONE:human,!plural}, came back to {place} {MANNER}"
+ ]
+}

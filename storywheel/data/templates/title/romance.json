@@ -1,0 +1,19 @@
+{
+ "_note": "",
+ "slot": "title",
+ "tags": [
+  "romance"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} in {place}",
+  "A {TITLE_NOUN} for {first}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "A {TITLE_ADJ} {TITLE_NOUN} in {place}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Love and the {TITLE_NOUN} at {place}",
+  "Last {TITLE_NOUN} of {place}"
+ ]
+}
