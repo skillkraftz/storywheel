@@ -51,6 +51,13 @@ SECTIONS = [
         ("typewriter", "Typewriter mode", "bool", None, "Keep the current line in the middle of the screen."),
         ("invisibles", "Show invisibles", "bool", None, ""),
         ("spellcheck", "Spellcheck", "bool", None, "Underlines words the dictionary doesn't know. Names from the universe are known; right-click > Add to Dictionary teaches it more."),
+        ("spell_dictionary", "Spellcheck knows the dictionary's words", "bool", None,
+         "Besides Neovim's English list, accept every word in the offline dictionary (and its plurals, -ing, -ed, -er, -est forms). Needs the dictionary: run storywheel dictionary install."),
+        ("spell_lenient", "Accept words built from known words", "bool", None,
+         "A known word plus -ing, -ed, -er, -ers, -ly, -ness, -less, -ful, or un-/re- in front passes (\"gunsmithing\", \"unlatch\"). Needs the dictionary."),
+        ("spell_marks", "Spelling marks", "choice", ["all", "subtle", "misspellings only"],
+         "Red wavy = not a word (always shown). Blue = a lowercase letter where a capital belongs (SpellCap); pink = a rare word (SpellRare); "
+         "cyan = a word from another region's spelling (SpellLocal). 'subtle' shows those three as a faint dotted line; 'misspellings only' hides them."),
         ("autocorrect", "Autocorrect common slips", "bool", None, "When you finish a word: i → I, im → I'm, dont → don't, teh → the... (a short list; never inside other words)."),
     ]),
     ("Export", [

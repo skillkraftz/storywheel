@@ -18,7 +18,7 @@ POS_ORDER = ["noun", "verb", "adjective", "adverb"]
 NOT_INSTALLED = tools.missing("dictionary", "(one download, about 40 MB)")
 
 
-OUT_OF_DATE = "The dictionary index is from an older version. To fix it, run:  storywheel dictionary install   (it rebuilds it)."
+OUT_OF_DATE = "The dictionary index is from an older version and the saved sources are missing. To fix it, run:  storywheel dictionary install   (it downloads them again and rebuilds)."
 
 
 class DictionaryMissing(Exception):
@@ -51,9 +51,30 @@ def connect(path=None):
             version = 0
         if version < SCHEMA_VERSION:
             conn.close()
-            raise DictionaryMissing(OUT_OF_DATE)
+            conn = _rebuild_offline(path)               # (from the kept sources; raises DictionaryMissing if they are not there)
         _CONN[key] = conn
     return _CONN[key]
+
+
+NOTES = []                       # one-line messages for the screen ("Rebuilt the dictionary index ..."); take them with take_notes()
+
+
+def take_notes():
+    out, NOTES[:] = list(NOTES), []
+    return out
+
+
+def _rebuild_offline(path):
+    """The index is from an older format: build it again from the sources kept by `dictionary install`, without the network."""
+    from . import dictionary_build
+    try:
+        counts = dictionary_build.rebuild_from_sources(path)
+    except (dictionary_build.DictionaryBuildError, OSError, Exception) as e:
+        raise DictionaryMissing(f"{OUT_OF_DATE} (Rebuilding it from the saved sources failed: {e})")
+    if counts is None:
+        raise DictionaryMissing(OUT_OF_DATE)
+    NOTES.append("The dictionary index was from an older version; rebuilt it from the saved sources (no download).")
+    return sqlite3.connect(f"file:{path}?mode=ro", uri=True, check_same_thread=False)
 
 
 def forget():

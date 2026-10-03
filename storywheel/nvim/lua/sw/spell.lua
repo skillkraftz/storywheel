@@ -5,7 +5,40 @@ local M = {}
 
 M.dir = nil
 
+-- The dictionary's words (and words built from them) are compiled lists in a folder on the runtimepath (see storywheel/spelldict.py).
+function M.languages()
+  local langs = { "en_us" }
+  local root = os.getenv("STORYWHEEL_SPELLLANG_DIR")
+  if root and root ~= "" then
+    local function has(name) return vim.uv.fs_stat(root .. "/spell/" .. name .. ".utf-8.spl") ~= nil end
+    if story.setting("spell_dictionary", true) ~= false and has("swdict") then
+      langs[#langs + 1] = "swdict"
+      if story.setting("spell_lenient", true) ~= false and has("swlenient") then langs[#langs + 1] = "swlenient" end
+    end
+  end
+  return table.concat(langs, ",")
+end
+
+-- Red wavy (SpellBad) always means "not a word". The other three marks can be softened or hidden (Settings > Writer > Spelling marks):
+-- SpellCap = lowercase where a capital belongs, SpellRare = rare word, SpellLocal = another region's spelling.
+function M.marks()
+  local mode = story.setting("spell_marks", "subtle")
+  for _, g in ipairs({ "SpellCap", "SpellRare", "SpellLocal" }) do
+    if mode == "all" then
+      vim.api.nvim_set_hl(0, g, { undercurl = true, sp = ({ SpellCap = "Blue", SpellRare = "Magenta", SpellLocal = "Cyan" })[g] })
+    elseif mode == "misspellings only" then
+      vim.api.nvim_set_hl(0, g, {})
+    else
+      vim.api.nvim_set_hl(0, g, { underdotted = true, sp = "Gray" })
+    end
+  end
+end
+
 function M.setup()
+  local root = os.getenv("STORYWHEEL_SPELLLANG_DIR")
+  if root and root ~= "" then vim.opt.rtp:append(root) end
+  M.marks()
+  vim.api.nvim_create_autocmd("ColorScheme", { group = vim.api.nvim_create_augroup("sw_spell_marks", { clear = true }), callback = M.marks })
   M.dir = os.getenv("STORYWHEEL_SPELL_DIR")
   if not M.dir or M.dir == "" then return end
   vim.fn.mkdir(M.dir, "p")
@@ -19,7 +52,8 @@ end
 -- Language and word lists for one buffer (spelllang and spellfile belong to the buffer, spell itself to the window).
 function M.apply(buf)
   if not (buf and vim.api.nvim_buf_is_valid(buf)) then return end
-  vim.bo[buf].spelllang = "en_us"
+  vim.bo[buf].spelllang = M.languages()
+  if story.setting("spell_marks", "subtle") == "misspellings only" then vim.bo[buf].spellcapcheck = "" end
   if M.mine then vim.bo[buf].spellfile = M.mine .. "," .. M.names end
 end
 

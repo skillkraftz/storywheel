@@ -260,13 +260,17 @@ def cmd_dictionary(args):
         if args.action == "install":
             print("  This downloads Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB,")
             print("  and builds the index. It is the only time storywheel uses the network.")
-            counts = dictionary_build.install(dest, dest.parent / ".dictionary-download", lambda m: print("  " + m))
+            counts = dictionary_build.install(dest, None, lambda m: print("  " + m))
         else:
             counts = dictionary_build.build(args.oewn, args.moby, dest, lambda m: print("  " + m))
     except dictionary_build.DictionaryBuildError as e:
         print("  " + str(e))
         raise SystemExit(1)
     dictionary.forget()
+    from . import spelldict, writer
+    note = spelldict.ensure(writer.nvim_exe(), lambda m: print("  " + m))
+    if note:
+        print("  " + note)
     print(f"  Dictionary ready at {paths.tilde(dest)}: {counts['words']:,} words, {counts['synsets']:,} meanings, "
           f"{counts['moby_roots']:,} thesaurus entries.")
 

@@ -225,11 +225,33 @@ def download(url, dest, progress=lambda msg: None):
     return dest
 
 
-def install(out_path, work_dir, progress=lambda msg: None):
-    """Download both sources and build the index. The only network use in storywheel, and only when you ask for it."""
-    work = Path(work_dir)
-    oewn = download(OEWN_URL, work / "oewn.xml.gz", progress)
-    moby = download(MOBY_URL, work / "mthesaur.txt", progress)
-    counts = build(oewn, moby, out_path, progress)
-    shutil.rmtree(work, ignore_errors=True)
-    return counts
+def sources_dir(out_path):
+    """Where the downloaded sources are kept, next to the index, so a newer index format can be built without the network."""
+    return Path(out_path).parent / "dictionary-sources"
+
+
+def kept_sources(out_path):
+    """(oewn path, moby path) if both are kept, else None."""
+    work = sources_dir(out_path)
+    oewn, moby = work / "oewn.xml.gz", work / "mthesaur.txt"
+    return (oewn, moby) if oewn.exists() and oewn.stat().st_size > 0 and moby.exists() and moby.stat().st_size > 0 else None
+
+
+def rebuild_from_sources(out_path, progress=lambda msg: None):
+    """Build the index again from the kept sources, offline. Returns the counts, or None when the sources are not there."""
+    kept = kept_sources(out_path)
+    if not kept:
+        return None
+    return build(kept[0], kept[1], out_path, progress)
+
+
+def install(out_path, work_dir=None, progress=lambda msg: None):
+    """Build the index from the sources, downloading only the ones that are missing (the only network use in storywheel, and only when
+    you ask for it). The sources are kept."""
+    work = Path(work_dir) if work_dir else sources_dir(out_path)
+    oewn, moby = work / "oewn.xml.gz", work / "mthesaur.txt"
+    if not (oewn.exists() and oewn.stat().st_size > 0):
+        download(OEWN_URL, oewn, progress)
+    if not (moby.exists() and moby.stat().st_size > 0):
+        download(MOBY_URL, moby, progress)
+    return build(oewn, moby, out_path, progress)

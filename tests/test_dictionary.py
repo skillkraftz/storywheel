@@ -226,3 +226,72 @@ def test_cli_inflect(index):
     out = json.loads(cli("inflect", "geese", "goose", "wolf", "--json", env_index=index).stdout)
     assert out == {"word": "wolves", "kind": "s"}
     assert cli("inflect", "ran", "run", "dash", "--pos", "verb", env_index=index).stdout.strip() == "dashed"
+
+
+# --- batch 4: the sources are kept, and an older index is rebuilt from them offline -------------------------------------------------------
+
+def _old_index_with_sources(tmp_path, monkeypatch, keep=True):
+    import gzip
+    import shutil
+    import sqlite3
+    from dictfixture import XML, MOBY
+    home = tmp_path / "h"
+    home.mkdir()
+    index = home / "dictionary.sqlite"
+    db = sqlite3.connect(str(index))
+    db.execute("create table meta (key text, value text)")
+    db.execute("insert into meta values ('schema', '1')")
+    db.commit(); db.close()
+    if keep:
+        src = home / "dictionary-sources"
+        src.mkdir()
+        with gzip.open(src / "oewn.xml.gz", "wb") as f:
+            f.write(XML.encode("utf-8"))
+        (src / "mthesaur.txt").write_text(MOBY, encoding="latin-1")
+    monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(index))
+    dictionary.forget()
+    return index
+
+
+def test_an_older_index_is_rebuilt_from_the_kept_sources_without_the_network(tmp_path, monkeypatch):
+    index = _old_index_with_sources(tmp_path, monkeypatch)
+    def no_network(*a, **k):
+        raise AssertionError("tried to download")
+    monkeypatch.setattr(dictionary_build, "download", no_network)
+    result = dictionary.lookup("dog")
+    assert result["found"] if isinstance(result, dict) and "found" in result else result
+    notes = dictionary.take_notes()
+    assert len(notes) == 1 and "rebuilt it from the saved sources" in notes[0] and "no download" in notes[0]
+    assert dictionary.take_notes() == []
+    assert dictionary.status()["schema"] == str(dictionary_build.SCHEMA_VERSION)
+
+
+def test_an_older_index_without_sources_says_what_to_run(tmp_path, monkeypatch):
+    _old_index_with_sources(tmp_path, monkeypatch, keep=False)
+    with pytest.raises(dictionary.DictionaryMissing, match="older version and the saved sources are missing") as e:
+        dictionary.lookup("dog")
+    assert "To fix it, run:  storywheel dictionary install" in str(e.value)
+
+
+def test_install_keeps_the_sources_and_downloads_only_what_is_missing(tmp_path, monkeypatch):
+    import gzip
+    from dictfixture import XML, MOBY
+    fetched = []
+    def fake(url, dest, progress=lambda m: None):
+        fetched.append(Path(dest).name)
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        if dest.suffix == ".gz":
+            with gzip.open(dest, "wb") as f:
+                f.write(XML.encode("utf-8"))
+        else:
+            Path(dest).write_text(MOBY, encoding="latin-1")
+        return dest
+    monkeypatch.setattr(dictionary_build, "download", fake)
+    out = tmp_path / "dictionary.sqlite"
+    dictionary_build.install(out)
+    assert fetched == ["oewn.xml.gz", "mthesaur.txt"] and dictionary_build.kept_sources(out)
+    fetched.clear()
+    (tmp_path / "dictionary-sources" / "mthesaur.txt").unlink()
+    dictionary_build.install(out)
+    assert fetched == ["mthesaur.txt"]                                          # (only the missing one)
+    assert dictionary_build.rebuild_from_sources(tmp_path / "nowhere" / "x.sqlite") is None

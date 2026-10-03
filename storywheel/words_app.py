@@ -390,6 +390,8 @@ class WordsScreen(Screen):
             self.say(str(e))
             return
         self.result = result
+        for note in dictionary.take_notes():
+            self.say(note)
         if origin and self.handover:
             self.origin = {"text": self.handover["word"], "base": result.get("base"), "kind": result.get("form_kind")}
         if push:
