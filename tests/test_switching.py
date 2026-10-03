@@ -281,7 +281,7 @@ def test_every_help_screen_lists_the_mode_keys(home, world):
 
 class Term:
     """A program in a pseudo-terminal, with a pyte screen to read."""
-    def __init__(self, argv, env, rows=40, cols=140):
+    def __init__(self, argv, env, rows=40, cols=170):
         import pty
         self.screen = pyte.Screen(cols, rows)
         self.stream = pyte.ByteStream(self.screen)
@@ -336,7 +336,7 @@ class Term:
 
 def cli_env(home):
     env = dict(os.environ, STORYWHEEL_HOME=str(home / "home"), STORYWHEEL_LIBRARY=str(home / "library"),
-               STORYWHEEL_OUT=str(home / "out"), PYTHONPATH=str(ROOT), TERM="xterm-256color", COLUMNS="140", LINES="40")
+               STORYWHEEL_OUT=str(home / "out"), PYTHONPATH=str(ROOT), TERM="xterm-256color", COLUMNS="170", LINES="40")
     env.pop("KITTY_WINDOW_ID", None)
     return env
 
