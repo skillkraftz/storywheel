@@ -1471,3 +1471,26 @@ Tests added: `tests/test_sentence_polish.py` (9), 3 in `test_kinds_floors.py` (n
 
 
 Full suite after part A: **1675 passed**.
+
+## Part B: Words mode tabs
+
+| Item | Status | What's missing |
+|---|---|---|
+| Remove "My words"; Vocabulary gets a ★ Learning filter and the typed-word entry | Works | the first box switches New words / ★ Learning; flashcards, Known, remove work in the Learning view |
+| Genre words tab: genre picker, category picker, search, tags on each row | Works | 21 categories (names, jobs, places, landmarks, things, people, troubles, title words, traits, flaws, wants, needs, secrets, rumors, messages, eras/moods, manners, motives, verbs, premises/twists) |
+| Genre words actions: look up, copy, use in Writer, add to universe, generator list | Works | frames (whole phrases) can be browsed but not looked up or used |
+| "More like these" for names | Works | first and last names only; uses the generator's Markov name maker trained on the chosen genres |
+| Story words replaces Universe words | Works | names, unknown words, look-alikes/near-misses with counts and places; needs the dictionary to find unknown words |
+| Story words actions: spelling list, make an entity, rename everywhere (with preview) | Works | |
+| Old generator-word review at the bottom of Story words | Works | |
+| One plain sentence of help per tab | Works | on each tab and in the help screen |
+
+Tests added: `tests/test_genre_words.py` (14), 10 in `tests/test_words.py` (the old tab tests were moved to the ★ view).
+
+### Manual test for part B
+1. F5, then Vocabulary: switch the first box to *★ Learning*; type a word and press Enter.
+2. Genre words: pick *Jobs*, press Genres… and tick a second genre; search "smith"; press `e` on a job (goes to the generator list) and on a first name (becomes a character in the Builder).
+3. Genre words, *First names*: press `m` for new names; add one with `e`.
+4. Story words on a real story: look at the ≈ rows; try `r` on a look-alike (the preview), `s` on a made-up word, `e` on another.
+
+Full suite after part B: **1699 passed**.

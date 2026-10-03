@@ -56,6 +56,13 @@ def options(app, ident):
     return [(plain(lst.get_option_at_index(i).id), str(lst.get_option_at_index(i).prompt)) for i in range(lst.option_count)]
 
 
+async def show_learning(app, pilot):
+    """Vocabulary, switched to the ★ Learning words (what the My words tab used to be)."""
+    await show_tab(app, pilot, "t-vocab")
+    app.screen.query_one("#vview", Select).value = "learning"
+    await pilot.pause()
+
+
 async def show_tab(app, pilot, tab):
     """Switch tabs the way a click does (with the focus out of the old pane)."""
     app.screen.set_focus(None)
@@ -387,7 +394,7 @@ def test_l_marks_a_word_learning_and_it_appears_in_my_words_with_its_meaning_k_m
         await pilot.press("k")
         await pilot.pause()
         marks = {row_word(t): t[1] for _i, t in learn_rows(app)}
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         mine = [t for _i, t in options(app, "mine") if _i]
         return marks, mine, learn.MyWords().known
     marks, mine, known = run(script, {})
@@ -400,7 +407,7 @@ def test_my_words_remove_known_and_look_up(index, world):
     my = learn.MyWords()
     my.mark_learning("puppy"); my.mark_learning("kennel", "noun", "a shelter for dogs"); my.mark_learning("wretch")
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         lst = app.screen.query_one("#mine", OptionList)
         lst.focus()
         rows = [t for i, t in options(app, "mine") if i]
@@ -428,7 +435,7 @@ def test_flashcards_show_the_word_then_the_meaning_and_k_takes_it_off_the_list(i
     my = learn.MyWords()
     my.mark_learning("puppy"); my.mark_learning("kennel")
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         app.screen.query_one("#mine", OptionList).focus()
         await pilot.press("f")
         await pilot.pause()
@@ -477,7 +484,7 @@ def test_add_to_this_universes_word_list_from_lookup_and_my_words(index, world):
         await pilot.click("#ok")
         await pilot.pause()
         status = str(app.screen.query_one("#status").content)
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         app.screen.query_one("#mine", OptionList).focus()
         app.screen.query_one("#mine", OptionList).highlighted = 0
         await pilot.pause()
@@ -508,7 +515,7 @@ def test_old_word_banks_are_in_my_words_when_words_opens(index, world):
     u, s = world
     (s.path / "wordbank.json").write_text(json.dumps({"words": [{"word": "saddle", "note": ""}]}))
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         return flat(screen_text(app))
     text = run(script, {"universe": "thornwood", "story": s.slug})
     assert "saddle" in text and "old word banks (1 words)" in text.replace("  ", " ") or "saddle" in text
@@ -518,7 +525,7 @@ def test_old_word_banks_are_in_my_words_when_words_opens(index, world):
 def test_the_old_tabs_are_gone(index, world):
     async def script(app, pilot):
         return [p.id for p in app.screen.query(TabPane)]
-    assert run(script, {}) == ["t-lookup", "t-vocab", "t-mine", "t-uwords", "t-over"]
+    assert run(script, {}) == ["t-lookup", "t-vocab", "t-genre", "t-story", "t-over"]
 
 
 # --- Overused ------------------------------------------------------------------------------------------------------------------------
@@ -595,7 +602,7 @@ def test_vocabulary_explains_its_markers_and_difficulty_with_examples(index, wor
         await show_tab(app, pilot, "t-vocab")
         return flat(screen_text(app))
     text = run(script, {})
-    assert "★ Learning (in My words)" in text and "✓ Known (never offered again)" in text
+    assert "★ Learning" in text and "✓ Known" in text and "Enter opens the full entry" in text
     assert "uncommon (like “lantern”)" in text and "rare (like “serendipity”)" in text and "very rare (like “gallivant”)" in text
 
 
@@ -615,19 +622,19 @@ def test_start_over_forgets_what_was_shown_but_keeps_known_and_learning(index, w
 
 def test_a_word_of_your_own_can_be_added_to_my_words_with_its_meaning(index, world):
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         await type_word(app, pilot, "puppy, zzzqx", box="myword")
         return [t for i, t in options(app, "mine") if i], flat(screen_text(app))
     rows, text = run(script, {})
     assert any("puppy" in r and "a young dog" in r and "noun" in r for r in rows) and any("zzzqx" in r for r in rows)
-    assert "Added “puppy”, “zzzqx” to My words" in text
+    assert "Added “puppy”, “zzzqx” to ★ Learning" in text
     assert learn.MyWords().learning_words() == {"puppy", "zzzqx"}
 
 
 def test_adding_a_word_that_was_marked_known_makes_it_learning_again(index, world):
     learn.MyWords().mark_known("puppy")
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-mine")
+        await show_learning(app, pilot)
         await type_word(app, pilot, "puppy", box="myword")
     run(script, {})
     again = learn.MyWords()
@@ -640,7 +647,7 @@ def test_universe_words_lists_what_was_added_and_removes_it(index, world):
     wordbank.add_to_universe_list(u, "gravedigger", "job")
     wordbank.add_to_universe_list(u, "kennel", "place")
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-uwords")
+        await show_tab(app, pilot, "t-story")
         rows = [t for i, t in options(app, "uwords") if i]
         lst = app.screen.query_one("#uwords", OptionList)
         lst.focus()
@@ -675,12 +682,210 @@ def test_a_new_word_added_from_lookup_shows_in_universe_words_at_once(index, wor
         app.screen.query_one("#slot", Select).value = "thing"
         await pilot.click("#ok")
         await pilot.pause()
-        await show_tab(app, pilot, "t-uwords")
+        await show_tab(app, pilot, "t-story")
         return [t for i, t in options(app, "uwords") if i]
     rows = run(script, {"universe": "thornwood", "story": s.slug})
     assert [r.split() for r in rows] == [["thing", "hound"]]
 
 
 def test_the_help_explains_the_new_words(index):
-    for needle in ("Start over", "Learn this word", "Use in this universe's stories", "Universe words", "lantern"):
+    for needle in ("Start over", "Learn this word", "Use in this universe's stories", "Genre words", "Story words", "lantern"):
         assert needle in words_app.HELP
+
+
+# --- batch 8: Vocabulary's ★ Learning view, Genre words, Story words ---------------------------------------------------------------------
+
+def test_there_is_no_my_words_tab_and_every_tab_says_in_one_sentence_what_it_is_for(index, world):
+    async def script(app, pilot):
+        panes = {p.id: str(p._title) if hasattr(p, "_title") else "" for p in app.screen.query(TabPane)}
+        texts = {}
+        for tab in ("t-lookup", "t-vocab", "t-genre", "t-story", "t-over"):
+            await show_tab(app, pilot, tab)
+            texts[tab] = flat(screen_text(app))
+        return panes, texts
+    panes, texts = run(script, {"universe": "thornwood"})
+    assert "t-mine" not in panes and "t-uwords" not in panes
+    for tab, sentence in words_app.TAB_HELP.items():
+        assert sentence.count(". ") == 0 and sentence.endswith(".")
+        key = {"lookup": "t-lookup", "vocab": "t-vocab", "genre": "t-genre", "story": "t-story", "over": "t-over"}[tab]
+        assert sentence[:60] in texts[key]
+        assert sentence.split(":")[0] in words_app.HELP or sentence[:25] in words_app.HELP
+
+
+def test_the_learning_filter_shows_the_star_words_and_typed_words_join_them(index, world):
+    my = learn.MyWords()
+    my.mark_learning("puppy")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        before = app.screen.query_one("#mine", OptionList).display
+        app.screen.query_one("#myword", Input).value = "kennel"
+        app.screen.query_one("#myword", Input).focus()
+        await pilot.press("enter")
+        await pilot.pause()
+        app.screen.query_one("#vview", Select).value = "learning"
+        await pilot.pause()
+        rows = [t for i, t in options(app, "mine") if i]
+        return before, app.screen.query_one("#mine", OptionList).display, app.screen.query_one("#learn", OptionList).display, rows
+    before, shown, learn_shown, rows = run(script, {})
+    assert before is False and shown is True and learn_shown is False
+    assert len(rows) == 2 and any("kennel" in r for r in rows) and any("puppy" in r for r in rows)
+
+
+def test_genre_words_start_with_the_storys_genres_and_show_each_rows_tags(index, world):
+    u, s = world
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-genre")
+        await pilot.pause()
+        return list(app.screen.gw_genres), flat(screen_text(app)), [t for i, t in options(app, "gwlist") if i]
+    genres, text, rows = run(script, {"universe": "thornwood", "story": s.slug})
+    assert genres == ["western"] and "Genres: western" in text
+    assert len(rows) >= 40 and all("western" in r for r in rows[:10])          # first names, tagged western (and historical)
+
+
+def test_genre_words_pick_a_category_search_and_borrow_another_genre(index, world):
+    u, s = world
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-genre")
+        scr = app.screen
+        scr.query_one("#gwcat", Select).value = "job"
+        await pilot.pause()
+        jobs = [t for i, t in options(app, "gwlist") if i]
+        scr.genres_picked(["western", "fantasy"])
+        await pilot.pause()
+        both = [t for i, t in options(app, "gwlist") if i]
+        scr.query_one("#gwsearch", Input).value = "sellsword"
+        await pilot.pause()
+        found = [t for i, t in options(app, "gwlist") if i]
+        return jobs, both, found
+    jobs, both, found = run(script, {"universe": "thornwood", "story": s.slug})
+    assert len(both) > len(jobs) and not any("sellsword" in j for j in jobs)
+    assert len(found) == 1 and "sellsword" in found[0] and "fantasy" in found[0]
+
+
+def test_genre_words_add_a_name_as_a_character_and_a_job_to_the_generator_list(index, world):
+    u, s = world
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-genre")
+        scr = app.screen
+        lst = scr.query_one("#gwlist", OptionList)
+        lst.focus()
+        lst.highlighted = 0
+        await pilot.pause()
+        first = scr.gw_row().text
+        await pilot.press("e")
+        await pilot.pause()
+        scr.query_one("#gwcat", Select).value = "job"
+        await pilot.pause()
+        lst.focus()
+        lst.highlighted = 0
+        await pilot.pause()
+        job = scr.gw_row()
+        await pilot.press("e")
+        await pilot.pause()
+        return first, job, flat(str(scr.query_one("#status").content))
+    first, job, status = run(script, {"universe": "thornwood", "story": s.slug})
+    assert u.find_by_name(first, "character")
+    assert json.loads((u.lists_dir / "job" / "words-added.json").read_text())["entries"] == [job.text]
+    assert "job" in status
+
+
+def test_more_like_these_invents_names_that_are_not_in_the_list(index, world):
+    u, s = world
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-genre")
+        scr = app.screen
+        scr.genres_picked(["western", "fantasy"])
+        await pilot.pause()
+        scr.query_one("#gwlist", OptionList).focus()
+        await pilot.press("m")
+        await pilot.pause()
+        return [t for i, t in options(app, "gwlist") if i and i.startswith("n:")], {r.text.lower() for r in scr.gw_rows}
+    new, have = run(script, {"universe": "thornwood", "story": s.slug})
+    assert len(new) >= 6 and all("new" in t for t in new) and not {t.split()[0].lower() for t in new} & have
+
+
+def test_genre_words_use_in_writer_replaces_the_word_in_its_case(index, world):
+    u, s = world
+    handover_payload = handover("running")
+    handover_payload.update({"universe": "thornwood", "story": s.slug})
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-genre")
+        scr = app.screen
+        scr.query_one("#gwcat", Select).value = "job"
+        await pilot.pause()
+        scr.query_one("#gwlist", OptionList).focus()
+        scr.query_one("#gwlist", OptionList).highlighted = 0
+        await pilot.pause()
+        await pilot.press("u")
+        await pilot.pause()
+        return app.next, scr.gw_row() if False else None
+    nxt, _ = run(script, handover_payload)
+    assert nxt[0] == "writer" and nxt[1]["replace"]["new"] and nxt[1]["replace"]["picked"]
+
+
+def test_story_words_are_read_when_the_tab_opens_and_flag_look_alikes(index, world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("Stacie rode to Glasswater. The Glass Water road was long. A zorbl hummed. Glasswater slept.\n", encoding="utf-8")
+    u.new_entity("character", "Stacie", {"role": "protagonist"})
+    u.new_entity("place", "Glasswater")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-story")
+        await pilot.pause()
+        rows = [t for i, t in options(app, "swlist") if i]
+        return rows, flat(screen_text(app))
+    rows, text = run(script, {"universe": "thornwood", "story": s.slug})
+    joined = " | ".join(rows)
+    assert "≈ Glass Water" in joined and "looks like Glasswater" in joined
+    assert "◆ Glasswater" in joined and "? zorbl" in joined and "not in the dictionary" in joined
+    assert "words read" in text
+
+
+def test_story_words_add_to_spelling_make_an_entity_and_rename_everywhere(index, world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("Stacie rode to Glasswater. The Glass Water road was long. A zorbl hummed. Glasswater slept.\n", encoding="utf-8")
+    u.new_entity("place", "Glasswater")
+    def pick(app, text):
+        lst = app.screen.query_one("#swlist", OptionList)
+        names = [str(lst.get_option_at_index(i).prompt) for i in range(lst.option_count)]
+        lst.focus()
+        lst.highlighted = next(i for i, n in enumerate(names) if text in n)
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-story")
+        await pilot.pause()
+        pick(app, "? zorbl")
+        await pilot.press("s")
+        await pilot.pause()
+        spelled = (u.path / "spell" / "en.utf-8.add").read_text()
+        pick(app, "Glass Water")
+        await pilot.press("r")
+        await pilot.pause()
+        app.screen.query_one("#in-new-name", Input).value = "Glasswater"
+        await pilot.press("enter")
+        await pilot.pause()
+        preview = type(app.screen).__name__
+        await pilot.press("a")
+        await pilot.press("p")
+        await pilot.pause()
+        return spelled, preview, flat(str(app.screen.query_one("#status").content))
+    spelled, preview, status = run(script, {"universe": "thornwood", "story": s.slug})
+    assert spelled.startswith("zorbl") or spelled.startswith("Zorbl")
+    assert preview == "RenamePreviewScreen"
+    text = (s.manuscript_dir / "manuscript.md").read_text()
+    assert "Glass Water" not in text and text.count("Glasswater") == 3 and "rewritten" in status
+
+
+def test_story_words_keep_the_generator_list_section_at_the_bottom(index, world):
+    u, s = world
+    wordbank.add_to_universe_list(u, "hound", "job")
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-story")
+        rows = [t for i, t in options(app, "uwords") if i]
+        lst = app.screen.query_one("#uwords", OptionList)
+        lst.focus()
+        lst.highlighted = 0
+        await pilot.pause()
+        await pilot.press("d")
+        await pilot.pause()
+        return rows, [t for i, t in options(app, "uwords") if i]
+    rows, after = run(script, {"universe": "thornwood", "story": s.slug})
+    assert any("hound" in r for r in rows) and not any("hound" in r for r in after)

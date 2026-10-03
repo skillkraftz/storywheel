@@ -18,6 +18,16 @@ Part A: fixes from the batch 7 samples
   tongue", "with drawn steel", "in silent dread") carry the restricted features `speech`, `carrying`, `feeling` and are drawn only where a frame asks
   for them (`{MANNER:speech}`); lint also reports a restricted atom no frame asks for.
 
+Part B: Words mode tabs
+- The *My words* tab is gone: Vocabulary has a *New words / ★ Learning* box (the ★ words, flashcards, remove) and an entry for a word of your own.
+- New *Genre words* tab: browse the generator's lists by genre (default: the story's genres; tick more to borrow) and category, with a search box;
+  each row shows its genre tags. Look up, copy, use in the Writer, add to the universe (name -> character, place -> place, thing -> thing, else the
+  universe's generator list), and *More like these* invents new names with the genre's Markov name maker.
+- New *Story words* tab replaces *Universe words*: names and odd words read from the manuscript with counts and places, look-alikes and near-misses
+  flagged ("Glasswater" / "Glass Water", "Stacy" / "Stacie"); add to the spelling list, make a character/place/thing, rename everywhere with the
+  existing preview. The old generator-word review is a section at the bottom of the tab.
+- Every tab starts with one plain sentence saying what it is for (also in the help screen).
+
 ## 0.7.0 — Batch 7: update by commit, and three genres written
 - `storywheel update` now remembers the commit it installed from (`~/.storywheel/installed-source.json`, written by the update and by install.sh) and
   reinstalls whenever the source folder's commit differs, not only when the version number does. A fix committed without a version bump reaches the

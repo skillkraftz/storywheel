@@ -820,3 +820,11 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   (`report.grammar_problems`) rejects a manner phrase after a preposition, a prize at a landmark, and a restricted atom no frame asks for.
   `text.fix_particles` moves a pronoun inside a particle verb the library knows ("traded away it" -> "traded it away").
 - The genre scripts used to write batch 7's JSON are not kept; the JSON files are the source, edit them directly.
+
+- Batch 8 (B): Words has five tabs: Lookup, Vocabulary, Genre words, Story words, Overused. The ★ Learning words are a view of Vocabulary (`vview`), not
+  a tab. `genrewords.py` lists the library's entries by genre tag (an entry's own tags, else its list's) and category (a category is a set of atom slots
+  plus frame slots such as flaw/want/need) and invents names with `markov.NameMaker`; `add_to_universe` makes a character/place/thing or writes
+  `words-added.json`. `storywords.py` reads the manuscript(s), counts entity names, finds words `dictionary.base_words` does not know, and flags
+  look-alikes (a space/hyphen/apostrophe squeezes to the same letters, or a near-miss: same first letter, one slip, or two in words of 5+ letters with
+  similarity 0.7) of an entity name or a more frequent unknown word; words already on `<universe>/spell/*.add` are left out; rename uses
+  `rename.find_matches` with a stand-in object for a word that is not an entity.

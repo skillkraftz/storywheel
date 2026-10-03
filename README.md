@@ -399,12 +399,24 @@ from them offline (with a one-line message); it only downloads again if they are
     the same form (running → sprinting, geese → swans, happier → gladder), keeping capital letters.
   - *Vocabulary*: words worth **learning** (not everyday, not obscure), a fresh batch of twenty at a time, each with its part of speech and
     a one-line meaning. Choose how rare (uncommon / rare / very rare), the part of speech and the subject. Enter opens the full entry in
-    Lookup; `l` marks a word *Learning* (it goes to My words), `k` marks it *Known* (never offered again). How common a word is comes from the
+    Lookup; `l` marks a word *Learning* (★), `k` marks it *Known* (never offered again). The first box switches between *New words* and
+    *★ Learning*: the words you are learning, with their meanings (Enter looks one up, `k` Known, `d` remove, `f` flashcards: the word
+    first, Space shows the meaning). Type a word of your own in the box and press Enter to learn it. How common a word is comes from the
     offline `wordfreq` package.
-  - *My words*: the words you are learning, with their meanings; Enter looks one up, `k` Known, `d` remove, `f` flashcards (the word first,
-    Space shows the meaning).
-  - *Add to this universe's word list* (`w` on any word in Lookup or My words): pick the slot (job, thing, place...) and the word goes on the
-    universe's own list, so the Wheel and the Builder roll with it.
+  - *Genre words*: the generator's own lists, to browse. **Genres…** picks the genres (the story's own to start with; tick more to borrow
+    from them), a box picks the category (first and last names, jobs, places, landmarks, things, people, troubles, title words, traits,
+    flaws, wants, needs, secrets, rumors, verbs, premises and twists...), and a search box narrows the list. Each row shows the genres it
+    belongs to. Enter looks a word up, `c` copies it, `u` uses it in the Writer (replacing the word you came with), `e` adds it to the
+    universe (a name becomes a character, a place a place, a thing a thing; anything else goes on the universe's generator list for its
+    slot), `w` always puts it on the generator list. `m` (*More like these*) invents new names in the style of the chosen genres with the
+    same Markov name maker the generator uses.
+  - *Story words*: built from the manuscript itself (one story, or the whole universe). ◆ is a name from your universe (with how many
+    times it is written), ? a word the dictionary does not know (made-up names, jargon, typos), ≈ a look-alike: "Glass Water" for
+    "Glasswater", "Stacy" for "Stacie". Enter shows where each one is (Enter on a place opens the Writer there). `s` adds the word to the
+    spelling list (the Writer stops marking it), `e` makes it a character, place or thing, `r` renames it everywhere with the usual
+    preview. Under the list: the words you put on this universe's generator lists (`d` removes one).
+  - *Add to this universe's word list* (`w` on any word in Lookup, Vocabulary or Genre words): pick the slot (job, thing, place...) and the
+    word goes on the universe's own list, so the Wheel and the Builder roll with it.
   - *Overused*: a story's most frequent words (everyday words left out) and words repeated close together, with where they are;
     Enter on a place opens the Writer there.
 - **Writer card:** **F7** on the word under the cursor (or a selection) opens a card grouped by meaning, then the full list of

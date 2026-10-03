@@ -1,6 +1,6 @@
 # storywheel backlog
 
-The pile of things still to build or finish, after batch 8 part A (tag b8-a). Work through it in batches; when an item is done, move it
+The pile of things still to build or finish, after batch 8 part B (tag b8-b). Work through it in batches; when an item is done, move it
 to the Done list at the bottom with the tag that finished it. Add new items as
 they come up. CLAUDE.md describes the design; this file tracks the work.
 
@@ -246,6 +246,18 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 - **Floor draws from neighbors** (`_neighbors` in genres.json), seasons follow eras, moods lean toward the genre, particle verbs and manner phrases
   fixed, with lint for their causes — `b8-a`.
+
+### Batch 8, part B: Words tabs
+
+- **My words tab removed** (★ Learning is a view of Vocabulary, with typed-word entry); **Genre words** tab; **Story words** tab replaces
+  Universe words (generator-word review now a section of it); a plain sentence for each tab — `b8-b`.
+
+### Found in batch 8, part B
+
+- **Story words needs the dictionary** to know which words are "unknown"; without it only names and look-alikes are shown (it says so).
+- **Look-alikes are guesses**: two real names that differ by a letter (Marek / Marik) will be flagged; nothing changes until you choose.
+- **Genre words rows for verbs and frames** are listed, but only single words can be looked up or used in the Writer.
+- **Story words does not yet find a name the dictionary knows** ("Mallow", "Rose") written in a different case or form than the entity.
 
 ### Found in batch 8, part A
 
