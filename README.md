@@ -340,6 +340,18 @@ By default the background is your terminal's own, so a translucent terminal (kit
 mode and in the Writer. Turn it off for solid colors. You can set a text color and an accent color (a name like `cream` or `amber`, or a
 hex color), and Neovide's window opacity.
 
+### Switching between modes
+
+The Wheel (F1), Builder (F2), Settings (F4) and Words (F5) are screens of **one** Textual app. Each is built the first time you open it and then kept,
+so switching back is instant and the mode is exactly as you left it (the selected entity, the open tab, the word you were looking up, the Wheel's step).
+Anything another mode changed (a promoted story, new settings, new words) is shown when you come back. The Writer (F3) is Neovim, started from the same
+app: the screen is cleared on the way in and out, so your shell prompt never shows between modes. `q` goes back along the modes you came through; `Q` quits.
+`STORYWHEEL_CLASSIC=1 storywheel` uses the older loop (one app per mode) if you ever need it. `python tools/measure_switch.py [hub]` times the switches on
+your machine; `python tools/screens.py 190x50` prints each mode as text at a given size, for checking layouts.
+
+On a narrow terminal (under 150 columns, such as a small kitty window on a Raspberry Pi) the side columns get thinner, the Wheel's buttons wrap into a
+grid, and in the Builder the right column (Outline, Scenes, Entity notes: keys 6 7 8, or backslash) takes turns with the cards; Esc or 1-5 bring the cards back.
+
 ### Spelling
 
 Spellcheck is on. The manuscript keeps straight quotes (`'` and `"`), because the spellchecker can't read `’` in "couldn’t"; typed or pasted

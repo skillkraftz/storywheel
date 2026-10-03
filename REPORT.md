@@ -807,3 +807,60 @@ _Tags `b5-backlog`, `b5-neovide-arm64`, `b5-kitty`, `b5-grammar-server`, `b5-gra
 See BACKLOG.md "Found in batch 5".
 
 Full suite at the end of batch 5 (one run): **1414 passed**.
+
+
+# Batch 6: smoother switching, tidier layouts, downloads
+
+_Tags `b6-downloads`, `b6-hub-wip`, `b6-hub`, `b6-layouts`, `b6-narrow`, `b6-layout-tests`, `b6-final`. Version 0.6.0._
+
+## Q1. Checklist
+| Item | Status | What's missing |
+|---|---|---|
+| Downloads: a normal User-Agent everywhere | Works | `download.fetch` sends `storywheel/0.6.0`; the grammar and dictionary downloads use it; tested against local servers that refuse Python's default agent. The real languagetool.org was not contacted from here |
+| Fallback to curl or wget when refused | Works | tried on 401/403/406/429/451 and TLS errors, curl first; the message names both tools or says neither is installed; `--from` kept |
+| One Textual app, kept screens | Works | Wheel, Builder, Settings, Words are modes of `Hub`; each built once, in place when you return (selection, tab, scroll, typed word, Wheel step) |
+| The Writer from the single app, no shell shown | Works | `quiet_suspend`; a real-terminal test counts the alternate-screen escape codes (two leaves in a Writer round trip: Neovim's and the final one). Not seen on a real screen here |
+| Lazy loading | Works | a subprocess test shows the Words screen, dictionary, wordfreq, grammar and Settings are not imported when the program starts in the Builder; the Wheel's engine is built when the Wheel is first opened |
+| Switch times before and after | Works | see Q2; `--plain` untouched |
+| Wheel left column: three boxes | Works | Steps; Universes to draw from (with the "whole characters/places" control on two rows); Past stories (list, then its buttons) |
+| Builder left column: Universes and Stories boxes | Works | rows are cut with an ellipsis, never wrapped; the Stories box is titled "Stories in <name>" cut to 30 characters; buttons underneath, as asked (Delete spelled out) |
+| Entity card: wider, columns, hanging indent | Works | card ~72 wide at 190 columns (was ~70, but the list column no longer grows with the terminal); labels, values and ▲▼ in columns; a long value wraps under itself. The Wheel's card does the same |
+| Card title just "Thing: name" | Works | the hints are in the footer (Roll, Write...) and the help |
+| ▲▼ / ✎ / Roll blanks explanation | Works | one line under the card (`▲ ▼ rate · ✎ write it yourself · space fills blanks · ? help`); the full sentence is in the Builder's help |
+| No empty row under the tab bar | Works | the tab bar is 2 rows high, and the boxes start right under it (tested) |
+| Footer fits | Works | `FitFooter` drops the least important keys (from the end of each screen's list) and keeps F1-F5, q, Q and ?; tested at 190, 150, 120 and 100 columns in every mode. Words opens with the cursor in a box, so Textual hides q/Q there (as before) |
+| Check every mode at ~190x50 and smaller | Works | `tools/screens.py`; fixes: Settings and Words boxes and buttons are one line; the Wheel's universe control no longer overflows its box; narrow layouts at 120x34 for the Builder and Wheel |
+
+## Q2. Switch times (milliseconds, this machine: i7-12700H, 190x50, 80 entities; in-process, so they leave out Python start-up)
+These include about 24 ms that the test harness itself spends waiting for idle.
+
+| Switch | Before (each mode its own app) | After: first visit | After: coming back |
+|---|---|---|---|
+| to the Builder | 285-340 | 126-157 | 103-116 |
+| to Settings | 360-495 | 460-600 | 84-105 |
+| to Words | 205-230 | 310-380 | 52-53 |
+| to the Wheel | 220-290 | 370-425 | 57-141 |
+
+Before, a switch also showed your shell between the two apps and rebuilt everything. Coming back is now about 30-90 ms net of the harness. First visits
+cost more than before for Settings, Words and the Wheel (they are built once, and the Words screen is imported then). Most of a repeat switch was
+Textual re-applying every style rule; that is now skipped unless the look changed (`KeptScreen`). **On a Raspberry Pi** (estimated, not measured: roughly
+3-5 times slower per core) coming back should take 0.15-0.4 s and a first visit up to 2 s for Settings; `python tools/measure_switch.py hub` on the Pi
+gives the real numbers.
+
+## Q3. Tests added in batch 6
+| Area | File | Tests |
+|---|---|---|
+| The hub (switching, kept place, trail, quit, Writer, lazy loading, speed, real terminal) | `test_hub.py` | 21 |
+| Layouts, narrow terminals, footer | `test_layout_batch6.py` | 18 |
+| Downloads | `test_download.py` | 9 |
+| Existing tests updated | switching, navigation, mouse (arrow clicks find the arrows on screen), layout stability, dictionary | - |
+
+## Q4. Manual test script
+1. `storywheel`, then F4, F5, F1, F2 repeatedly: instant, nothing flashes, each mode where you left it. Type a word in Words, leave, return.
+2. F3 from the Builder, write a line, F2 back: the screen should clear to the Writer and back without your shell appearing.
+3. Look at the Wheel and Builder at your full-screen size, then in a small kitty window (about 120x34): the Builder's right column should come with 6 7 8.
+4. `storywheel grammar install` (the 403 should be gone).
+5. `python tools/measure_switch.py hub` on the typewriter, and tell me the numbers.
+
+## Q5. Known issues
+See BACKLOG.md "Found in batch 6" (no git remote configured, so nothing was pushed; the Pi times are estimates; Switch widgets are still tall).

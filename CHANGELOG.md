@@ -2,6 +2,18 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.6.0 — Batch 6: smoother switching, tidier layouts, downloads
+- One Textual app now holds the Wheel, Builder, Settings and Words as kept screens (`hub.py`): F1, F2, F4 and F5 switch instantly, nothing is rebuilt, and
+  each mode keeps its place (selection, scroll, open tab, the word you typed). The Writer starts from the same app and the screen is cleared on the way in
+  and out; your shell prompt is never shown between modes. Heavy parts (the Words screen with the dictionary and wordfreq, Settings, grammar) load the
+  first time they are opened. `STORYWHEEL_CLASSIC=1` still runs the old one-app-per-mode loop. `tools/measure_switch.py` measures it.
+- Layouts: the Wheel's left column is three boxes (Steps; Universes to draw from; Past stories with its buttons underneath); the Builder's left column is
+  two boxes (Universes; Stories in <name>), the entity card has labels and values in columns with wrapped values hanging under the value, a card title of
+  just "Thing: name", a one-line legend, no blank row under the tab bar; Settings and Words use one-line boxes; the footer drops the least important
+  keys instead of cutting one in half; narrow terminals (under 150 columns) get thinner side columns, and the Builder's right column takes turns with the cards.
+- Downloads send a normal User-Agent (`storywheel/VERSION`): `storywheel grammar install` no longer fails with HTTP 403 at languagetool.org. If a server
+  still refuses, curl or wget is tried when installed. The dictionary download uses the same code. `--from FILE.zip` is unchanged.
+
 ## 0.5.0 — Batch 5: backlog cleanup, typewriter fixes, optional grammar checking
 - BACKLOG.md reconciled with what is done.
 - Neovide is not offered on arm64 (no ready-made build): Settings and setup say so; the terminal is used.

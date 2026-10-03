@@ -12,6 +12,7 @@ from textual.screen import ModalScreen, Screen
 from .grammar_categories import CATEGORIES as GRAMMAR_CATEGORIES
 from . import appearance, navigation
 from .footer import FitFooter
+from .keptscreen import KeptScreen
 from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
 
@@ -144,7 +145,7 @@ class HelpScreen(ModalScreen):
         self.dismiss(None)
 
 
-class SettingsScreen(Screen):
+class SettingsScreen(KeptScreen, Screen):
     BINDINGS = [
         *navigation.mode_bindings("settings"),
         Binding("question_mark", "help", "Help", key_display="?"),

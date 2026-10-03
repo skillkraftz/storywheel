@@ -382,3 +382,26 @@ def test_the_writer_round_trip_never_shows_the_shell_between(home, world):
     # leave the alternate screen one more time (the shell showing) before Neovim started.
     assert out.count(b"\x1b[?1049l") == 2, out.count(b"\x1b[?1049l")
     assert b"\x1b[?1049h\x1b[2J\x1b[H" in out
+
+
+def test_a_kept_screen_does_not_restyle_everything_when_it_returns_unless_the_look_changed(home, world):
+    async def script(app, pilot):
+        b = app.screens_built["builder"]
+        calls = []
+        real = b.update_node_styles
+        b.update_node_styles = lambda animate=False: (calls.append(1), real(animate=animate))[1]
+        await press(pilot, "f4")
+        await press(pilot, "f2")
+        quiet = len(calls)                                               # back with the look unchanged: no restyling
+        await press(pilot, "f4")
+        app.screen.save("transparent_background", False)                 # Settings > Appearance
+        await pilot.pause()
+        await press(pilot, "f2")
+        return quiet, len(calls), b._styled_version == app.style_version
+    quiet, after, current = run_hub(script)
+    assert quiet == 0 and after == 1 and current
+
+
+def test_the_switch_report_tool_runs(home):
+    out = subprocess.run([sys.executable, str(ROOT / "tools" / "measure_switch.py"), "hub"], capture_output=True, text=True, cwd=str(ROOT))
+    assert out.returncode == 0 and "repeat visit" in out.stdout and "settings (first visit)" in out.stdout, out.stderr

@@ -775,3 +775,20 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `grammar_off_rules` setting; ignored items are per story (`grammar-ignore.json`, rule + flagged text). Memory limit and port are machine settings.
   Keys: F10 next problem, Shift+F10 list (Settings > Keys). Tests use `tests/fake_lt.py`; `STORYWHEEL_LT_CMD` replaces the server command.
 
+- Batch 6: the Wheel, Builder, Settings and Words are screens of one Textual app (`hub.py`, `Hub`), registered with `add_mode` and built lazily by a factory
+  the first time `switch_mode` reaches them, then kept. The screens still talk to a small host object (`self.b`): for the hub it is a `Handle` (Settings,
+  Words) or `BuilderHandle(BuilderHooks)`; the standalone `BuilderApp`/`SettingsApp`/`WordsApp`/`StorywheelApp` stay (tests, `STORYWHEEL_CLASSIC=1`). The
+  Wheel talks to `self.app.go(where, payload, message)`; promotion carries its report to the Builder's status line. Coming back to a kept screen calls its
+  `enter(payload)` (Builder refreshes everything; Settings re-reads the saved values into its boxes; Words restarts only for a Writer handover or another
+  universe; the Wheel switches draft only when asked for a new/named one). Trail and `back` logic are `modes._arrive`/`modes.TRAIL`, shared with the old loop.
+- `hub.quiet_suspend` replaces `App.suspend` for the Writer: the driver's "leave the alternate screen" is swapped for "clear the screen", and after Neovim
+  exits (it leaves the alternate screen itself) we write enter-and-clear before Textual paints, so the shell never shows. A real-terminal test counts the
+  escape codes.
+- `KeptScreen` skips Textual's restyle-everything on `ScreenResume` unless `app.style_version` (bumped by `appearance.apply`) changed: most of a switch's cost.
+- Every download goes through `download.fetch` (User-Agent `storywheel/VERSION`; on 401/403/406/429/451 or a TLS problem it tries curl, then wget; the
+  half-written file is removed). The first request is still Python's, so a server that answers it is never bothered by an external tool.
+- Layout: cards are rich `Table.grid` rows (label | value | ▲▼ column), so a long value wraps under the value; list rows are a name column cut with an
+  ellipsis plus a dim count; the footer is `FitFooter` (drops optional keys from the end; F1-F5, q, Q, ? always stay). Under 150 columns a screen gets
+  the `-narrow` class (thinner side columns; the Builder shows its right column in place of the cards on demand). Settings and Words use Textual's
+  compact Input/Select/Button; a disabled button's border is removed by an inline style because the theme re-adds it.
+

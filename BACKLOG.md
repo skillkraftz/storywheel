@@ -211,6 +211,13 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 
 ## Done
 
+### Batch 6: smoother switching, tidier layouts, downloads
+
+- **Downloads:** a normal User-Agent on every download, curl/wget fallback when a server refuses (fixes `grammar install` HTTP 403) — `b6-downloads`.
+- **One app for the four screen modes**, kept screens, lazy loading, quiet Writer suspend, restyle skipped on return — `b6-hub`, `b6-hub-wip`.
+- **Layouts:** Wheel left column in three boxes; Builder boxes, card columns, card title, one-line legend, tab-bar gap, fitting footer — `b6-layouts`;
+  narrow-terminal layouts, compact Settings and Words — `b6-narrow`; layout tests — `b6-layout-tests`; full check of every mode at 190x50 and 120x34 — `b6-final`.
+
 ### Batch 5: backlog cleanup, typewriter fixes, optional grammar checking
 
 - **BACKLOG.md reconciled** (finished items removed from 4b/4c, section 6, the review "Everywhere" list and "Suggested batches") — `b5-backlog`.
@@ -219,6 +226,16 @@ backups restore, half-done items (b3); names, spelling lists, install/update (b4
 - **Optional grammar checking with a local LanguageTool:** install/status/start/stop CLI — `b5-grammar-server`; checking changed paragraphs after a pause with
   offsets kept across markup — `b5-grammar-check`; right-click menu, next/list keys — `b5-grammar-ui`; Settings > Grammar, help text — `b5-grammar-settings`;
   tests with a fake server — `b5-grammar-tests`; README/CHANGELOG — `b5-final`.
+
+### Found in batch 6
+- **No git remote is configured** in this checkout, so "push" could not be done; add one (`git remote add origin URL`) and `git push --follow-tags`.
+- **Switch times on a Pi** are an estimate, not a measurement (see REPORT.md). `tools/measure_switch.py hub` on the Pi gives the real figures.
+- **Settings switches** (on/off) are still three lines tall: Textual's Switch has no compact form and the transparent theme leaves its small version
+  unreadable, so they were left alone. A plain "[x] on" widget would save about 40 lines on the Writer tab.
+- **A word typed in Words' Lookup box** is kept when you leave and come back, by design; the Writer's handover replaces it.
+- **The Wheel's `Send to Builder` message** shows only its first line in the Builder's status line (the full report was printed after quitting before).
+- **The old per-mode apps** (`BuilderApp`, `WordsApp`, `SettingsApp`, `StorywheelApp`) remain for tests and `STORYWHEEL_CLASSIC=1`; they could be removed
+  once nothing needs them.
 
 ### Found in batch 5
 - **Grammar** checks the open manuscript buffer; a novel's other chapters are checked when they are opened. "List of problems" shows the open file only.

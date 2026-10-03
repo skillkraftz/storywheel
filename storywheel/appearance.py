@@ -64,4 +64,5 @@ def apply(app, g=None):
     theme = make_theme(*values(g))
     app.register_theme(theme)
     app.theme = theme.name
+    app.style_version = getattr(app, "style_version", 0) + 1            # (kept screens re-apply their styles when this changes)
     return theme

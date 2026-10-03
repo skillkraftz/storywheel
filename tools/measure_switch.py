@@ -74,6 +74,9 @@ def hub():
                          get_ratings=lambda: Ratings())
         async with app.run_test(size=SIZE) as pilot:
             await pilot.pause()
+            t = time.perf_counter()
+            await pilot.pause()
+            results.append(("(the test harness's own idle wait)", (time.perf_counter() - t) * 1000))
             for round_ in ("first visit", "repeat visit", "repeat visit"):
                 for mode in ("settings", "words", "wheel", "builder"):
                     t = time.perf_counter()

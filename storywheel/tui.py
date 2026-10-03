@@ -27,6 +27,7 @@ from textual.message import Message
 from textual.screen import ModalScreen, Screen
 from . import appearance, navigation, tools
 from .footer import FitFooter
+from .keptscreen import KeptScreen
 from .header import QuietHeader
 from textual.widgets import Button, DataTable, Footer, Header, Input, Label, OptionList, Static, Tree
 from textual.widgets.option_list import Option
@@ -738,7 +739,7 @@ class MixScreen(Screen):
 
 # --- the main screen ----------------------------------------------------------------------------------
 
-class MainScreen(Screen):
+class MainScreen(KeptScreen, Screen):
     # Footer order matters: the keys you can't live without come first (the footer clips on narrow terminals).
     BINDINGS = [
         Binding("space", "roll", "Roll"),

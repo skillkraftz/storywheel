@@ -21,6 +21,7 @@ from textual.screen import ModalScreen, Screen
 from . import appearance, fieldhistory, navigation, tools
 from . import ratings as R
 from .footer import FitFooter
+from .keptscreen import KeptScreen
 from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
@@ -276,7 +277,7 @@ class StoryOptions(OptionList):
         self.screen.story_act(what)
 
 
-class BuilderScreen(Screen):
+class BuilderScreen(KeptScreen, Screen):
     BINDINGS = [
         *navigation.mode_bindings("builder", writer_action="writer"),
         Binding("space", "roll_blank", "Roll blanks"),

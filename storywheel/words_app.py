@@ -21,6 +21,7 @@ from textual.widgets.option_list import Option
 from . import dictionary, inflect, learn, overused, vault, wordbank
 from . import appearance, navigation, tools
 from .footer import FitFooter
+from .keptscreen import KeptScreen
 from .header import QuietHeader
 
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
@@ -227,7 +228,7 @@ class FlashcardScreen(ModalScreen):
         self.dismiss(self.known)
 
 
-class WordsScreen(Screen):
+class WordsScreen(KeptScreen, Screen):
     BINDINGS = [
         *navigation.mode_bindings("words"),
         Binding("question_mark", "help", "Help", key_display="?"),
