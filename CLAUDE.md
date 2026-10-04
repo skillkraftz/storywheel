@@ -907,3 +907,6 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `storywheel help writer --width N`. Footers (`navigation.footer`) show the five modes, ? Help, q Back and at most three keys.
 - Mode switching (batch 11): `Hub.show` records the wanted mode and `_drain` switches the screen first, then refreshes the mode (`_enter`); requests are
   serialized, so a burst of F-keys ends on the last one.
+- Menus (batch 11): the Writer's right-click menu (`notepad.popup_menu`, rebuilt on every `MenuPopup` by the `sw_popup` autocmd group) holds only Undo, Redo,
+  Cut, Copy, Paste, Fix Spelling… (when `spell.bad_word()`), Look Up, Add to Dictionary and More… (the full menu, `sw.menu`, whose height follows the window). Do
+  not add a broad `OptionList { height: ... }` rule to a screen's CSS without checking dropdowns: `Select`'s list is an OptionList (`tests/test_dropdowns.py`).

@@ -407,25 +407,27 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, story.setting("key_overview", "<C-o>"), function() require("sw.overview").toggle() end)
 end
 
--- The right-click menu.
-function M.popup_menu()
+-- The right-click menu: only the everyday items, so it fits when lines are tall and the window is short. Everything else is in the Writer
+-- menu ("More…"). "Fix Spelling…" is there only when the click is on a word marked as misspelled (grammar problems have their own menu).
+function M.popup_menu(spell_word)
   pcall(vim.cmd, "aunmenu PopUp")           -- (removing Neovim's own items leaves "E31: No such mapping" in v:errmsg; harmless)
   vim.v.errmsg = ""
   -- Neovim 0.11 installs a MenuPopup handler that enables/disables its own items ("Go to definition"...) and raises
   -- E329 once they are gone. Drop every MenuPopup autocmd that is not ours (the group name varies by version).
   for _, a in ipairs(vim.api.nvim_get_autocmds({ event = "MenuPopup" })) do
-    if a.group then pcall(vim.api.nvim_del_autocmd, a.id) end
+    if a.group and a.group_name ~= "sw_popup" then pcall(vim.api.nvim_del_autocmd, a.id) end
   end
   pcall(vim.api.nvim_del_augroup_by_name, "nvim.popupmenu")
   -- { name, action, the key shown beside it: text, or { setting, default } for a key you can change }
   local items = {
     { "Undo", "undo", "Ctrl+Z" }, { "Redo", "redo", "Ctrl+Y" }, { "-" },
-    { "Cut", "cut", "Ctrl+X" }, { "Copy", "copy", "Ctrl+C" }, { "Paste", "paste", "Ctrl+V" }, { "Select All", "select_all", "Ctrl+A" }, { "-" },
-    { "Italic", "italic", { "key_italic", "<A-i>" } }, { "Bold", "bold", { "key_bold", "<A-b>" } },
-    { "Scene Break", "scene_break", { "key_scene_break", "<A-s>" } }, { "-" },
-    { "Find", "find", "Ctrl+F" }, { "Replace", "replace", { "key_replace", "<C-r>" } }, { "Add to Dictionary", "spell_add" },
-    { "Look Up", "lookup", { "key_lookup", "<F7>" } }, { "Join Lines", "join", "Alt+J" }, { "Writer Menu", "menu", { "key_menu", "<F12>" } },
+    { "Cut", "cut", "Ctrl+X" }, { "Copy", "copy", "Ctrl+C" }, { "Paste", "paste", "Ctrl+V" }, { "-" },
   }
+  if spell_word then items[#items + 1] = { "Fix Spelling…", "spell_fix" } end
+  items[#items + 1] = { "Look Up", "lookup", { "key_lookup", "<F7>" } }
+  items[#items + 1] = { "Add to Dictionary", "spell_add" }
+  items[#items + 1] = { "-" }
+  items[#items + 1] = { "More…", "menu", { "key_menu", "<F12>" } }
   for i, it in ipairs(items) do
     if it[1] == "-" then
       vim.cmd(string.format("amenu 10.%d PopUp.-sep%d- :", 100 + i, i))
@@ -437,6 +439,15 @@ function M.popup_menu()
     end
   end
   M.popup_items = items
+end
+
+-- Rebuilt each time the menu is about to open, so it knows whether the click is on a misspelled word.
+function M.popup_watch()
+  vim.api.nvim_create_autocmd("MenuPopup", { group = vim.api.nvim_create_augroup("sw_popup", { clear = true }), callback = function()
+    local layout = require("sw.layout")
+    local word = (layout.main and vim.api.nvim_get_current_win() == layout.main) and require("sw.spell").bad_word() or nil
+    M.popup_menu(word)
+  end })
 end
 
 function M.run_menu_item(name)
@@ -458,6 +469,7 @@ function M.run_menu_item(name)
     join = function() M.join_lines() end,
     lookup = function() require("sw.lookup").word() end,
     menu = function() require("sw.menu").open() end,
+    spell_fix = function() require("sw.spell").suggest() end,
   }
   if actions[name] then actions[name]() end
   M.insert(true)
@@ -475,6 +487,7 @@ function M.setup()
   o.virtualedit = "onemore"
   o.undolevels = 10000
   M.popup_menu()
+  M.popup_watch()
   M.wrap_paste()
   local group = vim.api.nvim_create_augroup("sw_notepad", { clear = true })
   -- never rest in Normal mode inside the writing window

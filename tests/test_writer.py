@@ -721,7 +721,7 @@ def test_f1_and_the_commands_ask_for_the_wheel_and_builder(home, story):
 def test_the_help_lists_the_mode_keys_and_the_writing_keys(home, story):
     r = run_lua(story, 'local win = require("sw").help(); R.lines = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(win), 0, -1, false)')
     text = "\n".join(r["lines"])
-    for needle in ("F1 Wheel", "F2 Builder", "F3 Writer", "Alt+I", "Alt+S", "scene sidebar", "Ctrl+I", "typewriter"):
+    for needle in ("Go to the Wheel", "Go to the Builder", "Open this help", "Alt+I", "Alt+S", "scene sidebar", "Ctrl+I", "Vim keys"):
         assert needle in text, needle
 
 

@@ -2241,3 +2241,65 @@ Full suite after the rhymes fix: 2,026 passed, 0 failed (this includes the run t
 An export made with `--out` elsewhere writes its record beside that file, and `exports status` looks only in the story's own export folder.
 
 Full suite for this change: 2,034 passed, 0 failed, in one run; `stable` moved to the commit that records this.
+
+
+# Batch 11 (0.11.0): help and polish
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| A. Each mode its own clickable footer entry (F1 Wheel ... F5 Words) | **Works** | a pilot test clicks the Settings entry |
+| A. Footers trimmed: five modes, ? Help, q Back, at most three keys | **Works** | Q Quit is no longer shown (it still works; it is in help) |
+| A. Switch first, refresh after; a burst of F-keys ends on the last | **Works** | tested: F2 then F4 quickly ends on Settings; five keys end on the last |
+| A. Switch times before and after | **Works** | below: about the same in the harness; the lag you saw is in a real terminal and I could not measure that here |
+| B. One set of help files (one per mode, eight topics) | **Works** | `storywheel/data/help/` |
+| B. Key tables generated from the bindings; a test fails for a missing description | **Works** | Textual bindings of each screen and its lists, the Writer's shortcuts and fixed keys. The Writer's Vim-mode Space keys are described in prose, not generated |
+| B. Mode key or ? opens that mode's help (About, keys, mouse, scroll, search) | **Works** | replaces "You are in ..." |
+| B. Writer: F3 and the menu's Help open it in a scrollable float (/ searches, Esc or q closes) | **Works** | tested headlessly; how it looks is for you |
+| B. Settings > Help tab (search all, open the section) | **Works** | |
+| B. `storywheel help [TOPIC]` | **Works** | also `-s WORDS`, `--json`, `--width` |
+| C. Dropdowns open showing their options | **Works** | the cause was Words' own CSS clipping the list to the row's height; pilot test opens every dropdown at three sizes |
+| C. Right-click menu shortened, with More… | **Works** | Fix Spelling… appears only on a misspelled word (tested with a stub for the spellchecker: the English word list is not available offline here) |
+| C. Full menu scrolls and fits a short window | **Works** | tested at 12, 16 and 24 lines; a real kitty at 180% line height is for you to check |
+
+## Switch times (tools/measure_switch.py hub, milliseconds, a pilot harness, not a real terminal)
+
+Before (batch 10):
+  (the test harness's own idle wait)      24 ms
+  settings (first visit)           525 ms
+  words (first visit)              461 ms
+  wheel (first visit)              441 ms
+  builder (first visit)            144 ms
+  settings (repeat visit)          108 ms
+     of which our code               7 ms
+  words (repeat visit)              91 ms
+     of which our code               6 ms
+  wheel (repeat visit)             121 ms
+     of which our code              37 ms
+  builder (repeat visit)           148 ms
+     of which our code              13 ms
+  settings (repeat visit)          125 ms
+
+After:
+  (the test harness's own idle wait)      25 ms
+  settings (first visit)           488 ms
+  words (first visit)              512 ms
+  wheel (first visit)              405 ms
+  builder (first visit)            109 ms
+  settings (repeat visit)           54 ms
+     of which our code               4 ms
+  words (repeat visit)             101 ms
+     of which our code               6 ms
+  wheel (repeat visit)             153 ms
+     of which our code              42 ms
+  builder (repeat visit)           129 ms
+     of which our code              16 ms
+  settings (repeat visit)           55 ms
+
+
+## Known issues
+
+- Help pages for the Wheel's, Builder's and Words' dialogs (modal screens) are not separate pages; their keys are on screen in each dialog.
+- The key tables list a binding once per class; a key used differently in two lists of the same mode appears in each list's group.
+- The old per-mode `HELP` constants are gone; `tui.HELP` etc. are computed from the help files.

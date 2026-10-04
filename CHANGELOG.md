@@ -9,6 +9,12 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
 - Footers are the five modes, ? Help, q Back and at most three keys that matter on that screen; the rest is in help (Q Quit still works; it is no longer in the footer).
 - `hub.show()` switches the screen first and refreshes the mode after it is showing; switches are serialized, so a burst of F-keys ends on the last one pressed.
 
+### Part C: menus that fit
+- Dropdowns in Words showed only their first option: a broad `OptionList { height: 1fr }` rule also hit the dropdown's own list, which a one-line row then clipped.
+  Every dropdown now opens showing its options (`tests/test_dropdowns.py` opens each one in Settings and Words at three window sizes).
+- The Writer's right-click menu is the everyday items only: Undo, Redo, Cut, Copy, Paste, Fix Spelling… (only on a word marked as misspelled), Look Up, Add to Dictionary,
+  and More… (the full Writer menu). The full menu fits a short window (rows follow the window height) and scrolls to its last item.
+
 ### Part B: help everywhere, from one source
 - One set of help files in the package (`storywheel/data/help/`): wheel, builder, writer, settings, words, and topics (universes, structures, genres-and-flavor,
   exports, backups, dictionary, grammar, keys). Every help surface reads them (`helpdoc.py`).

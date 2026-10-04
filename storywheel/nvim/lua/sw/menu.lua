@@ -100,8 +100,8 @@ function M.open()
     if not row_item[r] and l ~= "" then vim.api.nvim_buf_add_highlight(buf, -1, "Comment", r - 1, 0, -1) end
   end
   local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2), width = width + 2,
-    height = math.min(#lines, vim.o.lines - 6), style = "minimal", border = "rounded", title = " Writer ", title_pos = "center",
+    relative = "editor", row = 1, col = math.floor((vim.o.columns - width) / 2), width = width + 2,
+    height = math.max(3, math.min(#lines, vim.o.lines - 5)), style = "minimal", border = "rounded", title = " Writer ", title_pos = "center",
   })
   vim.wo[win].cursorline = true
   vim.api.nvim_win_set_cursor(win, { item_row[1], 0 })

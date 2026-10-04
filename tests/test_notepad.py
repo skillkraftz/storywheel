@@ -194,14 +194,14 @@ def test_right_click_menu_has_the_edit_entries(home, story):
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
-    assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Italic", "Bold", "Scene Break", "Find", "Replace", "Add to Dictionary", "Look Up", "Join Lines", "Writer Menu"]
+    assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Look Up", "Add to Dictionary", "More…"]
     assert r["mousemodel"] == "popup_setpos"
 
 
 def test_popup_entries_do_what_they_say(home, story):
     r = run(story, "", "", """
         local np = require("sw.notepad")
-        vim.cmd("emenu PopUp.Select\\\\ All")
+        require("sw.notepad").run_menu_item("select_all")
         R.mode = vim.fn.mode()
     """)
     assert r["mode"] in ("s", "v", "i")
@@ -425,8 +425,8 @@ def test_the_right_click_menu_shows_the_key_beside_each_entry_and_undo_redo_work
         for _, m in ipairs(vim.fn.menu_get("PopUp")[1].submenus) do R.hints[m.name] = m.actext end
     """)
     h = r["hints"]
-    assert h["Undo"] == "Ctrl+Z" and h["Redo"] == "Ctrl+Y" and h["Cut"] == "Ctrl+X" and h["Find"] == "Ctrl+F"
-    assert h["Replace"] == "Ctrl+R" and h["Italic"] == "Alt+U" and h["Writer Menu"] == "F12" and h["Look Up"] == "F7"
+    assert h["Undo"] == "Ctrl+Z" and h["Redo"] == "Ctrl+Y" and h["Cut"] == "Ctrl+X" and h["Copy"] == "Ctrl+C" and h["Paste"] == "Ctrl+V"
+    assert h["More…"] == "F12" and h["Look Up"] == "F7"
     # Undo and Redo through the menu do what Ctrl+Z / Ctrl+Y do
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'abc' })\nvim.cmd('let &undolevels = &undolevels')\nvim.api.nvim_win_set_cursor(0, { 1, 3 })",
             "def<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Undo<CR>", LINES + "; R.mode = vim.fn.mode()")

@@ -1,4 +1,4 @@
-"""The menus driven by real key sequences, the way a person uses them: right-click > Writer Menu > Down > Enter, F12 > a number.
+"""The menus driven by real key sequences, the way a person uses them: right-click > More… > Down > Enter, F12 > a number.
 Each item must work after exactly the keys a person presses (no extra Enter), without any error message."""
 import os
 from pathlib import Path
@@ -11,7 +11,7 @@ from test_notepad import run, story, ROOT  # noqa: F401
 
 pytestmark = pytest.mark.skipif(writer.check() is not None, reason="Neovim 0.10+ is not installed")
 
-POPUP_THEN_MENU = "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Writer\\ Menu<CR>"
+POPUP_THEN_MENU = "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.More…<CR>"
 SETUP = ("vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\n"
          "local p = require('sw.prose'); p.set_invisibles(false); p.set_typewriter(false); p.set_spell(false)\n")     # (the last run's toggles are remembered)
 STATE = """
@@ -32,7 +32,7 @@ def route_keys(how, i):
         return "<F12>" + "<Down>" * i + "<CR>"
     if how == "number":
         return "<F12>" + str(i + 1)
-    return POPUP_THEN_MENU + "<Down>" * i + "<CR>"         # right-click, Writer Menu, then Down and one Enter
+    return POPUP_THEN_MENU + "<Down>" * i + "<CR>"         # right-click, More…, then Down and one Enter
 
 
 def routes(i):
@@ -100,7 +100,7 @@ def test_after_right_click_writer_menu_enter_you_can_keep_typing_at_once(home, s
 
 
 def test_the_menu_never_puts_insert_mode_into_a_read_only_window(home, story):
-    # right-click > Writer Menu: the menu is open, and we are NOT in Insert mode there
+    # right-click > More…: the menu is open, and we are NOT in Insert mode there
     errmsg, bad = problems(story, SETUP, POPUP_THEN_MENU, STATE)
     R = problems.last["R"]
     assert R["menu_open"] is True and R["mode"] != "i" and R["in_main"] is False and errmsg == "" and bad == []

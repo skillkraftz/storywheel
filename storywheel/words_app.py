@@ -323,6 +323,7 @@ class WordsScreen(KeptScreen, Screen):
     WordsScreen #panes { height: 1fr; }
     WordsScreen .pane { width: 1fr; height: 1fr; border: round $primary-darken-2; }
     WordsScreen .pane OptionList { height: 1fr; border: none; scrollbar-gutter: stable; }
+    WordsScreen Select > SelectOverlay, WordsScreen Select > SelectOverlay:focus { height: auto; max-height: 24; border: tall $border-blurred; }
     WordsScreen #rhsyl, WordsScreen #rhrare { width: 100%; }
     WordsScreen #pane-tabs { display: none; height: 2; }
     WordsScreen.-narrow #pane-tabs { display: block; }

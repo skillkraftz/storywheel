@@ -75,4 +75,61 @@ function M.add_word(word)
   return true
 end
 
+-- The misspelled word under the cursor and its suggestions: nil when the word is fine (or spelling is off).
+function M.bad_word()
+  if not vim.wo.spell then return nil end
+  local bad = vim.fn.spellbadword()
+  if (bad[1] or "") == "" then return nil end
+  return bad[1]
+end
+
+-- "Fix spelling…": a small list of suggestions at the cursor; Enter or a click replaces the word, Esc closes.
+function M.suggest()
+  local word = M.bad_word()
+  if not word then
+    vim.api.nvim_echo({ { "Put the cursor on a word marked as misspelled first.", "Normal" } }, true, {})
+    return
+  end
+  local sugg = vim.fn.spellsuggest(word, 8)
+  local lines = {}
+  for i, w in ipairs(sugg) do lines[#lines + 1] = string.format(" %d  %s", i, w) end
+  if #lines == 0 then lines[1] = " (no suggestions)" end
+  local width = 20
+  for _, l in ipairs(lines) do width = math.max(width, vim.fn.strdisplaywidth(l) + 2) end
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].modifiable = false
+  local origin = vim.api.nvim_get_current_win()
+  local cursor = vim.api.nvim_win_get_cursor(origin)
+  local win = vim.api.nvim_open_win(buf, true, { relative = "cursor", row = 1, col = 0, width = width, height = #lines, style = "minimal",
+    border = "rounded", title = " " .. word .. " ", title_pos = "center" })
+  vim.wo[win].cursorline = true
+  vim.cmd("stopinsert")
+  local function close()
+    if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
+    if vim.api.nvim_win_is_valid(origin) then vim.api.nvim_set_current_win(origin) end
+    require("sw.notepad").insert(true)
+  end
+  local function pick(i)
+    local w = sugg[i]
+    close()
+    if not w then return end
+    local row = cursor[1] - 1
+    local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] or ""
+    local a = line:find(word, math.max(1, cursor[2] - #word + 1), true) or line:find(word, 1, true)
+    if a then vim.api.nvim_buf_set_text(0, row, a - 1, row, a - 1 + #word, { w }) end
+  end
+  local function map(lhs, fn) vim.keymap.set("n", lhs, fn, { buffer = buf, nowait = true, silent = true }) end
+  map("<CR>", function() pick(vim.api.nvim_win_get_cursor(win)[1]) end)
+  map("<Esc>", close)
+  map("q", close)
+  for i = 1, math.min(9, #sugg) do map(tostring(i), function() pick(i) end) end
+  map("<LeftMouse>", function()
+    local pos = vim.fn.getmousepos()
+    if pos.winid ~= win then close() return end
+    pick(pos.line)
+  end)
+  return win
+end
+
 return M
