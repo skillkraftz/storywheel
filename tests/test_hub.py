@@ -169,9 +169,10 @@ def test_a_quit_ends_the_app_with_the_wheels_message(home, world):
 
 
 def test_promoting_from_the_wheel_lands_in_the_builder_with_a_message(home):
-    async def script(app, pilot):
-        await press(pilot, "f1")
-        while app.session.step.key != "premise":
+    async def script(app, pilot):                                          # (it starts in the Wheel: F1 here would open the Wheel's help)
+        for _ in range(12):
+            if app.session.step.key == "premise":
+                break
             await press(pilot, "k")
         await press(pilot, "Q", "n", "enter", "p")
         await pilot.pause()
