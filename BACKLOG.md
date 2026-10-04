@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 9 (tag `b9-final`).
+Last updated after batch 10.
 
 
 ## Now
@@ -14,6 +14,7 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
   (`font_size`, `modify_font cell_height N%`, `window_padding_width`, `background_opacity`, `--start-as=maximized`) is tested only against fakes.
   Needs kitty 0.30+. Try Settings > Writer, then `storywheel kitty --probe` to see whether in-place restyling via remote control is on offer.
 - **Check Ctrl+R (find and replace) and Ctrl+O (story outline) in your terminal.** *Verify.*
+- **Install rhymes for real** (`storywheel dictionary install`) and compare the CMU license header with SOURCES.md. *Verify.* Only a hand-made file in cmudict's format was tested.
 - **Run `install.sh` for real** on a clean machine. *Verify.* Tested only as a dry run on a pretend machine; the Neovim download and `apt`
   steps are unchecked here.
 - **Try LanguageTool for real** (Settings > Grammar). *Verify.* Tested against a fake server only; report noisy rules.
@@ -86,6 +87,7 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - **Batch 7:** update by commit, comedy, fantasy and mystery content — `b7-*`.
 - **Batch 8:** neighbors, seasons, moods and sentence breaks; horror, sci-fi, romance; Words tabs reworked; Genre words as long ranked lists —
   `b8-a`, `b8-b`, `b8-horror`, `b8-scifi`, `b8-romance`, `b8-genre-words`.
+- **Batch 10:** extra files in a manuscript folder are never merged (`b10-a`); Lookup in five boxes with rhymes from CMU (`b10-b`).
 - **Batch 9:** Story words counts whole names as phrases (`b9-a`); Words tabs reordered, Suggestions, Overused folded into Story words, used words
   auto-Known (`b9-b`); repeatable beats and Ctrl+O story outline, goal in the status line (`b9-c`); Builder with a large Story panel, +Story,
   a draft's home universe (`b9-d`); the Writer in its own kitty window, Neovide removed (`b9-e`); this roadmap (`b9-f`).

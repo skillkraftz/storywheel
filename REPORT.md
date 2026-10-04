@@ -2162,3 +2162,45 @@ overview in the Writer (7), Wheel buttons and promotion into the home universe (
 assertions in `test_appearance.py`); both are fixed and those files, plus `test_hub.py` and `test_layout_batch6.py`, pass in a re-run. The other 2
 (`tests/test_grammar_server.py`: `test_the_command_line_installs_and_reports`, `test_starting_without_java_or_the_program_says_what_to_do`) fail the same way
 at the batch 8 tag on this machine, so they are not from this batch; I have not found the cause (java is installed here).
+
+
+# Batch 10 (0.10.0)
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| Full suite first; investigate the two `test_grammar_server` failures | **Works** | Batch 9's full run after the fixes: 1,981 passed. The two failures came from a real LanguageTool server on port 18081 answering the tests; each test now has its own port (`STORYWHEEL_GRAMMAR_PORT`, used unless a port was chosen in Settings). Reproduced by starting a fake server on 18081, then fixed |
+| A. One-file migration runs once per story (`.one-file-manuscript`) and only on files storywheel makes | **Works** | known names: `manuscript.md`, `NN-name.md`. Tested with exactly `01-opening.md` + `01-opening (xps copy 2026-10-04).md` |
+| A. Other files are never merged, counted, exported or opened by the Writer | **Works** | Python (`vault.scenes`) and Lua (`story.scenes`) agree |
+| A. Builder shows "Extra file in the manuscript folder: ... looks like a copy from another tool" with Open / Delete / Ignore | **Works** | Scenes tab and the status line; Open is a read-only view (not the Writer); Delete asks, then moves to `.trash`; Ignore is remembered per story |
+| B. Lookup in five boxes (Meanings, Similar, Opposites, Rhymes, Related); side by side wide, tabs narrow; each scrolls | **Works** | the switch is at 150 columns |
+| B. Enter/click on a word in any box looks it up; copy, learn, use, universe list work from every box | **Works** | |
+| B. Rhymes from CMU: perfect first, then near, syllable counts, syllable filter | **Partial** | built and tested on a small hand-made file in cmudict's format; the real file could not be downloaded here, so the first real install is yours to check |
+| B. License checked and recorded in SOURCES.md | **Partial** | recorded as BSD-style from the cmusphinx/cmudict repository, marked "not checked against the file"; the file's own header is saved in the index (read it once and correct the row if needed) |
+
+## 2. Tests added
+
+`tests/test_extra_files.py` (12: the exact pair, once-only migration, known names, Builder notice/ignore/delete/open, Writer ignores the copy),
+`tests/test_rhymes.py` (19: analysis, perfect/near, syllables, same-sound rule, offline build and license, install download logic, the five boxes,
+wide/narrow layout, lookup from any box, copy/learn from the Rhymes box, syllable filter, missing file), grammar port test (1), `test_words.py` helpers
+reworked for the boxes.
+
+## 3. Manual test script
+
+1. Put a copy next to a scene (`01-opening (xps copy).md` in a story's manuscript folder), open the story in the Builder: the warning appears in the
+   status line and at the top of the Scenes tab. Open shows it, Ignore hides it, Delete asks and moves it to `.trash`. Start the Writer: only the real
+   manuscript is there.
+2. `storywheel dictionary install` (needs the network, about 40 MB): it should also say "Rhymes ready: N pronunciations." Then `storywheel dictionary status`.
+   Read the license text at the top of `~/.storywheel/dictionary-sources/cmudict-0.7b` and compare it with the SOURCES.md row.
+3. Words (F5) > Lookup "light": five boxes; Rhymes lists "Perfect rhymes" then "Near rhymes" with "1 syllable", "2 syllables"; use the syllable box.
+   Resize the terminal below 150 columns: tabs. Click a rhyme: it is looked up. Press `c`, `a`, `w` on a rhyme.
+4. Judge the near rhymes (they are a guess, like the genre fit): tell me which pairs read wrong.
+
+## 4. Known issues
+
+- Near rhymes are limited to the 300 commonest; perfect rhymes are never cut off. Only words wordfreq knows are listed when any exist (names and
+  oddities in cmudict are otherwise noise); without wordfreq everything is listed alphabetically.
+- cmudict is North American English: some rhymes will not rhyme to British ears. Variant pronunciations all count.
+- Rhymes need the word to be in cmudict (an inflected form as typed, else its base word); a made-up name has none and the box says so.
+- Open on an extra file is a read-only view, not the Writer.

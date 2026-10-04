@@ -290,7 +290,7 @@ def test_install_keeps_the_sources_and_downloads_only_what_is_missing(tmp_path, 
     monkeypatch.setattr(dictionary_build, "download", fake)
     out = tmp_path / "dictionary.sqlite"
     dictionary_build.install(out)
-    assert fetched == ["oewn.xml.gz", "mthesaur.txt"] and dictionary_build.kept_sources(out)
+    assert fetched == ["oewn.xml.gz", "mthesaur.txt", "cmudict-0.7b"] and dictionary_build.kept_sources(out)     # (the last is for rhymes)
     fetched.clear()
     (tmp_path / "dictionary-sources" / "mthesaur.txt").unlink()
     dictionary_build.install(out)

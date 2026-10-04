@@ -16,6 +16,13 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
 - The Builder's Scenes tab shows "Extra file in the manuscript folder: ... looks like a copy from another tool" with Open (read-only view), Delete
   (asks; moves it to `.trash`) and Ignore (`.ignored-manuscript-files.json`); the status line says it once when the story opens.
 
+### Part B: Lookup in boxes, and rhymes
+- Lookup is five boxes — Meanings, Similar, Opposites, Rhymes, Related — side by side at 150 columns or more, tabs below that, each scrolling on its own.
+  Enter or a click on a word in any box looks it up; copy, learn, "use in this universe's stories" and Use in Writer work from any box.
+- Rhymes from the CMU Pronouncing Dictionary (cmudict-0.7b), installed with `storywheel dictionary install` (a failure there leaves the dictionary alone;
+  run it again to retry) into `rhymes.sqlite`: perfect rhymes first, then near rhymes (at most 300, the commonest), grouped by syllables, with a syllable filter.
+  License noted in SOURCES.md (not checked against the downloaded file: no network in development; the file's own header is saved with the index).
+
 ## 0.9.0 — Batch 9
 Part A: Story words counts names correctly
 - An entity's whole name is counted as a phrase, in any case, with or without its leading article and with a possessive ("a wolf in a waistcoat",

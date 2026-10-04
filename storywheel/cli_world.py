@@ -384,18 +384,24 @@ def cmd_backups(args):
                                          + (f" The version it replaced is in {result['kept']}." if result["kept"] else ""))
 
 
+def _rhymes_line():
+    from . import rhymes
+    st = rhymes.status()
+    return (f"{st['name']} (rhymes)" if st["installed"] else "Rhymes: not installed (run  storywheel dictionary install)")
+
+
 def cmd_dictionary(args):
     from . import dictionary, dictionary_build, paths
     if args.action == "status":
         st = dictionary.status()
         emit(st) if args.json else print(
-            f"  Installed: {paths.tilde(st['path'])}  ({st['size'] // 1048576} MB)\n  {st.get('wordnet', '')}\n  {st.get('moby', '')}" if st["installed"]
+            f"  Installed: {paths.tilde(st['path'])}  ({st['size'] // 1048576} MB)\n  {st.get('wordnet', '')}\n  {st.get('moby', '')}\n  {_rhymes_line()}" if st["installed"]
             else f"  {dictionary.NOT_INSTALLED}")
         return
     dest = dictionary.index_path()
     try:
         if args.action == "install":
-            print("  This downloads Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 36 MB,")
+            print("  This downloads Open English WordNet (CC BY 4.0), the Moby Thesaurus (public domain) and the CMU Pronouncing Dictionary (for rhymes), about 40 MB,")
             print("  and builds the index. It is the only time storywheel uses the network.")
             counts = dictionary_build.install(dest, None, lambda m: print("  " + m))
         else:

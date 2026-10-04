@@ -871,3 +871,15 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `writer_line_height` (modify_font cell_height %), `writer_padding`, `writer_opacity`; outside kitty it runs in the same terminal and a start note
   says how to install kitty. `storywheel kitty` opens storywheel itself with kitty's normal spacing; `--probe` reports remote-control abilities. Old
   Neovide settings are converted once by `migrate.migrate_settings()`. Switching in place by remote control is NOT used (see REPORT.md).
+
+- Batch 10: only `manuscript.md` and `NN-name.md` are manuscript files (`vault.KNOWN_FILE`, mirrored in `sw/story.lua`); a short story with
+  `manuscript.md` is that one file. Anything else in the folder is an "extra file": never merged, counted, exported or opened by the Writer; the Builder
+  offers Open (read-only), Delete (to `.trash`) and Ignore (`.ignored-manuscript-files.json`). The one-file migration runs once per story
+  (`.one-file-manuscript`). Never merge or read files storywheel did not make.
+- Tests never use a real LanguageTool server: `grammar.config()` takes its port from `STORYWHEEL_GRAMMAR_PORT` when the setting is the default;
+  `tests/conftest.py` sets a free port for every test.
+- Lookup is five boxes (`words_app.PANES`, `lookup_panes`): Meanings, Similar, Opposites, Rhymes, Related; side by side from 150 columns, a tab bar
+  below. Rhymes (`rhymes.py`) come from the CMU Pronouncing Dictionary into `rhymes.sqlite` beside the dictionary index, built offline from the kept
+  `dictionary-sources/cmudict-0.7b` and downloaded by `dictionary install` (a failed download does not undo the dictionary). A perfect rhyme shares the
+  sound from the last stressed vowel and differs before it; a near rhyme shares the vowel with an ending of the same consonant classes, or the ending
+  after a vowel of the same family. Words are grouped by syllables, commonest first (wordfreq); near rhymes are capped at 300.

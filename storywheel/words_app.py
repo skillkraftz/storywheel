@@ -20,10 +20,10 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import ModalScreen, Screen
-from textual.widgets import Button, Footer, Input, Label, OptionList, Select, Static, TabbedContent, TabPane
+from textual.widgets import Button, Footer, Input, Label, OptionList, Select, Static, TabbedContent, TabPane, Tabs, Tab
 from textual.widgets.option_list import Option
 
-from . import dictionary, genrefit, genrewords, inflect, learn, overused, storywords, suggest, vault, wordbank, wordlists, wordsused
+from . import rhymes, dictionary, genrefit, genrewords, inflect, learn, overused, storywords, suggest, vault, wordbank, wordlists, wordsused
 from . import appearance, navigation, tools
 from .footer import FitFooter
 from .keptscreen import KeptScreen
@@ -33,7 +33,7 @@ from .virtuallist import VirtualList
 MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
 
 TAB_HELP = {
-    "lookup": "Look any word up: meanings, similar and opposite words, and use one in the Writer.",
+    "lookup": "Look any word up: meanings, similar and opposite words, rhymes and related words, each in its own box, and use one in the Writer.",
     "vocab": "Words worth learning, a fresh batch at a time: mark them ★ Learning or ✓ Known, practise the ★ ones with flashcards, or type a word of your own.",
     "genre": "Long lists of nouns, verbs, adjectives and adverbs, ranked by how well they fit a genre, to find the word you want (and a few of the Wheel's own lists, to borrow from).",
     "story": "The names and odd words your story really uses, with counts and where, look-alikes flagged, and its most often used words, so you can fix a spelling, teach the spellchecker, make a name an entity, or vary a word.",
@@ -44,7 +44,11 @@ HELP = f"""\
 [b]Words[/b]        {MODE_KEYS}
 
 [b]Lookup[/b]  {TAB_HELP["lookup"]}
-  Type a word and press [b]Enter[/b]. Plurals, past tenses and misspellings work. A click on a word looks it up too.
+  Type a word and press [b]Enter[/b]. Plurals, past tenses and misspellings work. The answer is in five boxes: [b]Meanings[/b] (by part of
+  speech), [b]Similar[/b], [b]Opposites[/b], [b]Rhymes[/b] (perfect rhymes first, then near rhymes, grouped by syllables; the box at its top limits
+  the syllables) and [b]Related[/b] (wider, narrower, parts, forms). Each scrolls on its own; on a narrow screen they are tabs. [b]Tab[/b] moves
+  between them. [b]Enter[/b] or a click on a word in any box looks it up, and c, a, w and the buttons work on the word you are on, in any box.
+  Rhymes come from the CMU Pronouncing Dictionary, fetched by [b]storywheel dictionary install[/b].
   [b]b[/b] / [b]n[/b]  back / forward through the words you looked up       [b]/[/b]  filter the lists       [b]c[/b]  copy the word
   [b]a[/b]  Learn this word (it becomes ★ in Vocabulary)
   [b]w[/b]  Use in this universe's stories: pick the slot (job, thing, place...) and the Wheel and Builder will use the word
@@ -115,65 +119,122 @@ def _opt(text, id_=None, disabled=False, style=""):
     return Option(Text(text, style=style), id=id_, disabled=disabled or id_ is None)
 
 
-def lookup_rows(result, filter_text=""):
-    """[(text, id or None, style)] for a lookup result. A row with an id is a word you can look up (id = 'w:<word>|<pos>')."""
+PANES = (("meanings", "Meanings"), ("similar", "Similar"), ("opposites", "Opposites"), ("rhymes", "Rhymes"), ("related", "Related"))
+
+
+class _Rows:
+    """Builds the rows of the Lookup boxes. A row with an id is a word you can look up (id = 'w:<word>|<pos>' plus a counter, because the
+    same word can be in several lists and ids must differ)."""
+
+    def __init__(self, filter_text="", counter=None):
+        self.f = filter_text.strip().lower()
+        self.rows = []
+        self.count = counter if counter is not None else [0]
+
+    def heading(self, text):
+        self.rows.append((text, None, "bold"))
+
+    def info(self, text):
+        self.rows.append((text, None, "dim"))
+
+    def word(self, w, pos="", note=""):
+        if self.f and self.f not in w.lower():
+            return False
+        self.count[0] += 1
+        self.rows.append((f"    {w}" + (f"   ({note})" if note else ""), f"w:{w}|{pos}\x1f{self.count[0]}", ""))
+        return True
+
+
+def lookup_panes(result, filter_text="", rhyme=None):
+    """{pane: [(text, id or None, style)]} for a lookup result: meanings, similar, opposites, rhymes and related words, each its own box.
+    `rhyme` is rhymes.find()'s answer, or {"missing": message}, or None."""
     f = filter_text.strip().lower()
-    rows = []
-
-    def heading(text):
-        rows.append((text, None, "bold"))
-
-    def info(text):
-        rows.append((text, None, "dim"))
-
-    def word(w, pos="", note=""):
-        if not f or f in w.lower():
-            rows.append((f"    {w}" + (f"   ({note})" if note else ""), f"w:{w}|{pos}\x1f{len(rows)}", ""))      # (the same word can be in several lists: ids must differ)
-            return True
-        return False
-
+    shared = [0]
+    boxes = {name: _Rows(f, shared) for name, _t in PANES}
     if not result["found"]:
-        heading(f"No entry for '{result['word'] or result['query']}'.")
+        m = boxes["meanings"]
+        m.heading(f"No entry for '{result['word'] or result['query']}'.")
         if result["suggestions"]:
-            info("Did you mean (Enter looks it up):")
+            m.info("Did you mean (Enter looks it up):")
             for s in result["suggestions"]:
-                word(s)
-        return rows
-    for e in result["entries"]:
-        heading(e["word"] + (f"   (form of “{e['form_of']}”)" if e["form_of"] else ""))
-        for part in e["parts"]:
-            heading(f"  {part['pos']}")
-            for i, s in enumerate(part["senses"], 1):
-                info(f"  {i}. {s['definition']}")
-                if s["examples"]:
-                    info(f"       “{s['examples'][0]}”")
-                if s["synonyms"]:
-                    info("     similar words:")
-                    for w in s["synonyms"]:
-                        word(w, part["pos"])
-                for label, key in (("a kind of (wider)", "kind_of"), ("types of it (narrower)", "types_of"), ("parts of it", "parts"),
-                                   ("it is part of", "part_of")):
-                    if s[key]:
-                        info(f"     {label}:")
-                        for w in s[key]:
-                            word(w)
-        if e["wide_synonyms"]:
-            heading(f"  More similar words ({len(e['wide_synonyms'])})")
-            for w in e["wide_synonyms"]:
-                word(w)
-        if e["antonyms"]:
-            heading("  Opposite words")
-            for w in e["antonyms"]:
-                word(w)
-        if e["indirect_antonyms"]:
-            heading("  Opposite words, indirect (opposites of similar words)")
-            for a in e["indirect_antonyms"]:
-                word(a["word"], "", a["via"])
-        for kind, words in e["related_forms"].items():
-            heading(f"  Related forms ({kind})")
-            for w in words:
-                word(w)
-    return rows
+                m.word(s)
+    else:
+        many = len(result["entries"]) > 1
+        for e in result["entries"]:
+            title = e["word"] + (f"   (form of “{e['form_of']}”)" if e["form_of"] else "")
+            m = boxes["meanings"]
+            m.heading(title)
+            for part in e["parts"]:
+                m.heading(f"  {part['pos']}")
+                for n, sense in enumerate(part["senses"], 1):
+                    m.info(f"  {n}. {sense['definition']}")
+                    if sense["examples"]:
+                        m.info(f"       “{sense['examples'][0]}”")
+            sim, opp, rel = boxes["similar"], boxes["opposites"], boxes["related"]
+            if many:
+                for box in (sim, opp, rel):
+                    box.heading(title)
+            for part in e["parts"]:
+                for n, sense in enumerate(part["senses"], 1):
+                    short = sense["definition"] if len(sense["definition"]) <= 48 else sense["definition"][:47] + "…"
+                    if sense["synonyms"]:
+                        sim.info(f"  {part['pos']} {n}. {short}")
+                        for w in sense["synonyms"]:
+                            sim.word(w, part["pos"])
+                    for label, key in (("a kind of (wider)", "kind_of"), ("types of it (narrower)", "types_of"), ("parts of it", "parts"),
+                                       ("it is part of", "part_of")):
+                        if sense[key]:
+                            rel.info(f"  {part['pos']} {n}. {short}: {label}")
+                            for w in sense[key]:
+                                rel.word(w)
+            if e["wide_synonyms"]:
+                sim.heading(f"  More similar words ({len(e['wide_synonyms'])})")
+                for w in e["wide_synonyms"]:
+                    sim.word(w)
+            if e["antonyms"]:
+                opp.heading("  Opposite words")
+                for w in e["antonyms"]:
+                    opp.word(w)
+            if e["indirect_antonyms"]:
+                opp.heading("  Opposite words, indirect (opposites of similar words)")
+                for a in e["indirect_antonyms"]:
+                    opp.word(a["word"], "", a["via"])
+            for kind, words in e["related_forms"].items():
+                rel.heading(f"  Related forms ({kind})")
+                for w in words:
+                    rel.word(w)
+    rh = boxes["rhymes"]
+    if rhyme is None:
+        pass
+    elif rhyme.get("missing"):
+        rh.info(rhyme["missing"])
+    elif not rhyme["found"]:
+        rh.info(f"No pronunciation for “{rhyme['word']}” in the CMU Pronouncing Dictionary.")
+    else:
+        n = rhyme["syllables"]
+        rh.info(f"{rhyme['word']}: {rhyme['pronunciation']}  ({n} syllable{'s' if n != 1 else ''})")
+        for title, groups in (("Perfect rhymes", rhyme["perfect"]), ("Near rhymes", rhyme["near"])):
+            total = sum(len(ws) for _s, ws in groups)
+            rh.heading(f"{title} ({total})")
+            if not total:
+                rh.info("    none found" + (" with that many syllables" if rhyme.get("limit") else ""))
+            for syl, words in groups:
+                rh.info(f"  {syl} syllable{'s' if syl != 1 else ''}")
+                for w in words:
+                    rh.word(w, "", f"{syl}")
+        if rhyme["near_more"]:
+            rh.info(f"    ({rhyme['near_more']:,} less common near rhymes are not shown; the syllable box narrows the list)")
+    for name, _t in PANES:
+        if not boxes[name].rows:
+            boxes[name].info({"meanings": "No meanings.", "similar": "No similar words.", "opposites": "No opposites in the dictionary.",
+                              "rhymes": "Type a word to see what rhymes with it.", "related": "No wider, narrower or related words."}[name])
+    return {name: boxes[name].rows for name, _t in PANES}
+
+
+def lookup_rows(result, filter_text=""):
+    """All the rows of a lookup (without rhymes) in one list, for plain use and tests."""
+    panes = lookup_panes(result, filter_text)
+    return [row for name, _t in PANES if name != "rhymes" for row in panes[name]]
 
 
 # --- the screen -------------------------------------------------------------------------------------------------------------------
@@ -313,6 +374,14 @@ class WordsScreen(KeptScreen, Screen):
     WordsScreen #gwgenrelist { width: 1fr; padding: 0 1; }
     WordsScreen #swlist, WordsScreen #swwhere { height: 1fr; }
     WordsScreen #uwords { height: 6; }
+    WordsScreen #panes { height: 1fr; }
+    WordsScreen .pane { width: 1fr; height: 1fr; border: round $primary-darken-2; }
+    WordsScreen .pane OptionList { height: 1fr; border: none; scrollbar-gutter: stable; }
+    WordsScreen #rhsyl { width: 100%; }
+    WordsScreen #pane-tabs { display: none; height: 2; }
+    WordsScreen.-narrow #pane-tabs { display: block; }
+    WordsScreen.-narrow .pane { display: none; }
+    WordsScreen.-narrow .pane.-shown { display: block; }
     WordsScreen #tools Button { min-width: 14; margin-right: 1; }
     """
 
@@ -323,6 +392,7 @@ class WordsScreen(KeptScreen, Screen):
         self.history, self.pos = [], -1
         self.result = None
         self.rows = []
+        self.rhyme = None
         self.filter = ""
         self.origin = None
         self.my = learn.MyWords()
@@ -357,7 +427,15 @@ class WordsScreen(KeptScreen, Screen):
                     yield Button("Forward ▶", id="forward")
                 with Horizontal(classes="bar"):
                     yield Input(placeholder="filter the words below", id="filter")
-                yield OptionList(id="results")
+                yield Tabs(*[Tab(t, id=f"pt-{n}") for n, t in PANES], id="pane-tabs")
+                with Horizontal(id="panes"):
+                    for name, title in PANES:
+                        with Vertical(id=f"pane-{name}", classes="pane") as box:
+                            box.border_title = title
+                            if name == "rhymes":
+                                yield Select([("Any number of syllables", 0), ("1 syllable", 1), ("2 syllables", 2), ("3 syllables", 3),
+                                              ("4 or more", 4)], value=0, id="rhsyl", allow_blank=False)
+                            yield OptionList(id=f"res-{name}", classes="results")
                 with Horizontal(id="tools", classes="bar"):
                     yield Button("Use in Writer", id="use")
                     yield Button("Learn this word", id="add")
@@ -501,9 +579,10 @@ class WordsScreen(KeptScreen, Screen):
             self.query_one(TabbedContent).active = "t-lookup"
             self.query_one("#word", Input).value = self.handover["word"]
             self.lookup(self.handover["word"], origin=True)
-            self.query_one("#results", OptionList).focus()
+            self.first_word_list().focus()
         else:
             self.query_one("#word", Input).focus()
+        self.show_pane("meanings")
         self.refresh_buttons()
         self.b.remember()
 
@@ -543,37 +622,68 @@ class WordsScreen(KeptScreen, Screen):
         self.query_one("#word", Input).value = word
         self.filter = ""
         self.query_one("#filter", Input).value = ""
+        self.load_rhymes()
         self.show_results()
         self.refresh_buttons()
         self.say(f"{word}: " + ("found." if result["found"] else "no entry."))
 
+    def result_lists(self):
+        return [self.query_one(f"#res-{name}", OptionList) for name, _t in PANES]
+
     def show_results(self, keep=False):
-        lst = self.query_one("#results", OptionList)
-        previous = lst.highlighted
-        self.rows = lookup_rows(self.result, self.filter) if self.result else []
-        lst.clear_options()
-        lst.add_options([_opt(t, i, style=st) for t, i, st in self.rows])
-        if keep and previous is not None:
-            lst.highlighted = min(previous, max(0, len(self.rows) - 1))
-        else:
-            first = next((n for n, r in enumerate(self.rows) if r[1]), None)
-            lst.highlighted = first
+        """Fill the five boxes (Meanings, Similar, Opposites, Rhymes, Related) from the last lookup; each keeps its own place."""
+        panes = lookup_panes(self.result, self.filter, self.rhyme) if self.result else {name: [] for name, _t in PANES}
+        self.rows = [row for name, _t in PANES for row in panes[name]]
+        for (name, _t), lst in zip(PANES, self.result_lists()):
+            previous = lst.highlighted
+            lst.clear_options()
+            lst.add_options([_opt(t, i, style=st) for t, i, st in panes[name]])
+            if keep and previous is not None:
+                lst.highlighted = min(previous, max(0, len(panes[name]) - 1))
+            else:
+                lst.highlighted = next((n for n, r in enumerate(panes[name]) if r[1]), None)
+
+    def load_rhymes(self):
+        """The rhymes of the word just looked up (the word as typed if it has a pronunciation, else its base word)."""
+        self.rhyme = None
+        if not self.result:
+            return
+        syl = self.query_one("#rhsyl", Select).value or 0
+        try:
+            for w in (self.result.get("query"), self.result.get("word")):
+                if w:
+                    found = rhymes.find(w, syl or None)
+                    if found["found"]:
+                        found["limit"] = syl
+                        self.rhyme = found
+                        return
+            self.rhyme = found if w else None
+        except rhymes.RhymesMissing as e:
+            self.rhyme = {"missing": str(e)}
+
+    def first_word_list(self):
+        for lst in self.result_lists():
+            if any(lst.get_option_at_index(i).id for i in range(lst.option_count)):
+                return lst
+        return self.result_lists()[0]
 
     def current_word(self):
-        """(word, pos) of the highlighted word row in whichever list has the focus, or (None, None)."""
-        lst = self.query_one("#results", OptionList)
-        if lst.highlighted is not None:
-            oid = lst.get_option_at_index(lst.highlighted).id
-            if oid and oid.startswith("w:"):
-                _k, w, pos = parse_id(oid)
-                return w, pos
+        """(word, pos) of the highlighted word row in whichever Lookup box has the focus (else the first box with a word), or (None, None)."""
+        lists = self.result_lists()
+        focused = [l for l in lists if l.has_focus]
+        for lst in focused + [l for l in lists if l not in focused]:
+            if lst.highlighted is not None:
+                oid = lst.get_option_at_index(lst.highlighted).id
+                if oid and oid.startswith("w:"):
+                    _k, w, pos = parse_id(oid)
+                    return w, pos
         return None, None
 
     def on_input_submitted(self, event):
         i = event.input.id
         if i == "word":
             self.lookup(event.value)
-            self.query_one("#results", OptionList).focus()
+            self.first_word_list().focus()
         elif i == "myword":
             self.add_by_hand(event.value)
 
@@ -586,7 +696,7 @@ class WordsScreen(KeptScreen, Screen):
 
     def on_option_list_option_selected(self, event):
         lst, oid = event.option_list.id, event.option.id
-        if lst == "results" and oid and oid.startswith("w:"):
+        if lst.startswith("res-") and oid and oid.startswith("w:"):
             self.lookup(parse_id(oid)[1])
         elif lst == "learn" and oid:
             self.open_in_lookup(self.batch[int(oid[2:])]["word"])
@@ -619,6 +729,18 @@ class WordsScreen(KeptScreen, Screen):
          "gwentity": self.action_entity, "gwlist-add": self.gw_generator_list, "gwmore": self.action_more,
          "swread": lambda: self.sw_read(force=True), "swspell": self.action_spell, "swentity": self.action_entity,
          "swrename": self.action_rename, "swcopy": self.action_copy}.get(event.button.id or "", lambda: None)()
+
+    def on_tabs_tab_activated(self, event):
+        if event.tabs.id == "pane-tabs" and event.tab is not None:
+            self.show_pane((event.tab.id or "pt-meanings")[3:])
+
+    def show_pane(self, name):
+        """On a narrow terminal the five boxes take turns (the tab bar over them); wide, all are shown."""
+        for n, _t in PANES:
+            self.query_one(f"#pane-{n}").set_class(n == name, "-shown")
+
+    def on_resize(self, event):
+        self.set_class(event.size.width < 150, "-narrow")
 
     def on_tabbed_content_tab_activated(self, event):
         if event.pane.id == "t-story":
@@ -693,7 +815,7 @@ class WordsScreen(KeptScreen, Screen):
     def open_in_lookup(self, word):
         self.query_one(TabbedContent).active = "t-lookup"
         self.lookup(word)
-        self.query_one("#results", OptionList).focus()
+        self.first_word_list().focus()
 
     # --- Use in Writer -------------------------------------------------------------------------------------------------------------
 
@@ -1027,7 +1149,11 @@ class WordsScreen(KeptScreen, Screen):
                      + ("…" if len(found) > 4 else ""))
 
     def on_select_changed(self, event):
-        if event.select.id == "vview":
+        if event.select.id == "rhsyl":
+            if self.result:
+                self.load_rhymes()
+                self.show_results(keep=True)
+        elif event.select.id == "vview":
             self.set_view(event.value)
         elif event.select.id in ("gwcat", "gwband", "gwsort"):
             if self.gw_started:

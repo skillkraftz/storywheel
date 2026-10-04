@@ -250,4 +250,23 @@ def install(out_path, work_dir=None, progress=lambda msg: None):
         download(OEWN_URL, oewn, progress)
     if not (moby.exists() and moby.stat().st_size > 0):
         download(MOBY_URL, moby, progress)
-    return build(oewn, moby, out_path, progress)
+    counts = build(oewn, moby, out_path, progress)
+    install_rhymes(out_path, progress)
+    return counts
+
+
+def install_rhymes(out_path, progress=lambda msg: None):
+    """The CMU Pronouncing Dictionary for rhymes: download it if it is not kept, then read it into rhymes.sqlite. A failure here is reported
+    and does not undo the dictionary (run `dictionary install` again to retry). Returns the number of pronunciations, or None."""
+    from . import rhymes
+    src = sources_dir(out_path) / "cmudict-0.7b"
+    try:
+        if not (src.exists() and src.stat().st_size > 0):
+            download(rhymes.CMU_URL, src, progress)
+        progress("Reading the CMU Pronouncing Dictionary (rhymes)…")
+        n = rhymes.build(src, Path(out_path).with_name("rhymes.sqlite"))
+        progress(f"Rhymes ready: {n:,} pronunciations.")
+        return n
+    except (DictionaryBuildError, OSError, UnicodeError) as e:
+        progress(f"Rhymes were not installed ({e}). The dictionary itself is fine; run  storywheel dictionary install  again to retry.")
+        return None

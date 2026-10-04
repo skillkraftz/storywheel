@@ -408,8 +408,13 @@ Open English WordNet (CC BY 4.0) and the Moby Thesaurus (public domain), about 3
 from them offline (with a one-line message); it only downloads again if they are missing. Sources and licenses are in SOURCES.md.
 
 - **Words (F5)** is a mode of its own, reachable from every mode, including the Writer (which hands over the word under the cursor):
-  - *Lookup*: meanings, every similar and opposite word (and the opposites of similar words, labelled as indirect), wider and narrower
-    words ("a kind of" / "types of it"), parts, related forms. Enter or a click on a word looks it up; back and forward remember your
+  - *Lookup*: the answer is in five boxes side by side (tabs on a narrow screen), each scrolling on its own: *Meanings* (by part of speech),
+    *Similar* (every similar word), *Opposites* (and the opposites of similar words, labelled as indirect), *Rhymes* and *Related* (wider and
+    narrower words, parts, related forms). *Rhymes*: perfect rhymes first (same sound from the last stressed vowel, different before it), then
+    near rhymes (same vowel and a similar ending, or the same ending after a close vowel), grouped by syllables and commonest first; the box at the
+    top limits the syllables. They come from the CMU Pronouncing Dictionary (BSD-style license, see SOURCES.md), downloaded by
+    `storywheel dictionary install` with the rest. Enter or a click on a word in any box looks it up; copy, learn, use in the Writer work from any
+    box; back and forward remember your
     path; `/` filters. **Use in Writer** (`u`) goes back to the Writer and replaces the word you were on with the one you picked, in
     the same form (running → sprinting, geese → swans, happier → gladder), keeping capital letters.
   - *Suggestions* (the tab after Lookup): three lists of words to try, with the same actions as Genre words (Enter looks a word up, `l`

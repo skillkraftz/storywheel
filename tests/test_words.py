@@ -47,12 +47,25 @@ def run(script, payload=None, back="builder", size=(180, 50)):
     return asyncio.run(go())
 
 
+def select_word(app, wid):
+    """Highlight (and focus) the row of a word in whichever Lookup box holds it."""
+    for lst in app.screen.result_lists():
+        ids = [plain(lst.get_option_at_index(i).id) for i in range(lst.option_count)]
+        if wid in ids:
+            lst.highlighted = ids.index(wid)
+            lst.focus()
+            return lst
+    raise AssertionError(f"{wid} is in no box")
+
+
 def plain(oid):
     """A row id without the number that keeps it unique."""
     return oid.split("\x1f")[0] if oid else oid
 
 
 def options(app, ident):
+    if ident == "results":                                  # (the Lookup boxes: every row of every box)
+        return [row for name, _t in words_app.PANES for row in options(app, f"res-{name}")]
     lst = app.screen.query_one(f"#{ident}", OptionList)
     return [(plain(lst.get_option_at_index(i).id), str(lst.get_option_at_index(i).prompt)) for i in range(lst.option_count)]
 
@@ -84,7 +97,7 @@ async def type_word(app, pilot, word, box="word"):
 def test_lookup_rows_hold_every_kind_of_word(index):
     rows = words_app.lookup_rows(dictionary.lookup("dog"))
     text = "\n".join(t for t, _i, _s in rows)
-    for needle in ("1. a domesticated canine", "similar words:", "a kind of (wider)", "types of it (narrower)", "parts of it", "More similar words (4)",
+    for needle in ("1. a domesticated canine", "More similar words (4)", "a kind of (wider)", "types of it (narrower)", "parts of it", "More similar words (4)",
                    "Related forms (derivation)"):
         assert needle in text
     ids = [plain(i) for _t, i, _s in rows if i]
@@ -108,9 +121,7 @@ def test_look_up_a_word_then_follow_a_word_and_go_back_and_forward(index, world)
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
         first = flat(screen_text(app))
-        lst = app.screen.query_one("#results", OptionList)
-        ids = [o[0] for o in options(app, "results")]
-        lst.highlighted = ids.index("w:puppy|")
+        select_word(app, "w:puppy|")
         await pilot.press("enter")
         await pilot.pause()
         second = flat(screen_text(app))
@@ -130,7 +141,9 @@ def test_a_click_on_a_word_looks_it_up(index, world):
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
         ids = [o[0] for o in options(app, "results")]
-        await pilot.click("#results", offset=(8, ids.index("w:hound|") + 1 - app.screen.query_one("#results", OptionList).scroll_y))
+        lst = select_word(app, "w:hound|")
+        lids = [plain(lst.get_option_at_index(i).id) for i in range(lst.option_count)]
+        await pilot.click(f"#{lst.id}", offset=(8, lids.index("w:hound|") + 1 - lst.scroll_y))
         await pilot.pause()
         return app.screen.history
     # (the click selects the row under the pointer; the row index depends on scrolling, so just check something was looked up)
@@ -213,7 +226,7 @@ def test_use_in_writer_keeps_capitals_and_handles_plurals(index, world):
 def test_use_in_writer_uses_the_word_you_moved_to(index, world):
     async def script(app, pilot):
         ids = [o[0] for o in options(app, "results")]
-        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:dash|v") if "w:dash|v" in ids else ids.index("w:dash|verb")
+        select_word(app, "w:dash|v" if "w:dash|v" in ids else "w:dash|verb")
         await pilot.press("u")
         await pilot.pause()
         return app.next[1]["replace"]
@@ -254,7 +267,7 @@ def test_the_mode_keys_leave_words(index, world, key, where):
 
 def test_q_goes_back_to_where_you_were(index, world):
     async def script(app, pilot):
-        app.screen.query_one("#results", OptionList).focus()
+        app.screen.first_word_list().focus()
         await pilot.pause()
         await pilot.press("q")
         await pilot.pause()
@@ -462,7 +475,7 @@ def test_lookup_a_adds_the_word_to_my_words_with_its_meaning(index, world):
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
         ids = [i for i, _t in options(app, "results")]
-        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:puppy|")
+        select_word(app, "w:puppy|")
         await pilot.press("a")
         await pilot.pause()
         return learn.MyWords().learning
@@ -476,8 +489,8 @@ def test_add_to_this_universes_word_list_from_lookup_and_my_words(index, world):
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
         ids = [i for i, _t in options(app, "results")]
-        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:hound|")
-        app.screen.query_one("#results", OptionList).focus()
+        select_word(app, "w:hound|")
+        app.screen.first_word_list().focus()
         await pilot.press("w")
         await pilot.pause()
         picker = type(app.screen).__name__
@@ -504,7 +517,7 @@ def test_add_to_this_universes_word_list_from_lookup_and_my_words(index, world):
 def test_adding_to_a_universe_list_without_a_universe_says_so(index, home):
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
-        app.screen.query_one("#results", OptionList).focus()
+        app.screen.first_word_list().focus()
         await pilot.press("w")
         await pilot.pause()
         return type(app.screen).__name__, flat(screen_text(app))
@@ -562,8 +575,7 @@ def test_a_word_in_several_lists_does_not_break_the_screen(index, world):
     """Regression: 'whispering' was a similar word of two meanings, so two rows had the same id (DuplicateID)."""
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
-        ids = [o.id for o in (app.screen.query_one("#results", OptionList).get_option_at_index(i)
-                              for i in range(app.screen.query_one("#results", OptionList).option_count)) if o.id]
+        ids = [o.id for lst in app.screen.result_lists() for o in (lst.get_option_at_index(i) for i in range(lst.option_count)) if o.id]
         assert len(ids) == len(set(ids))
         words = [plain(i) for i in ids]
         return len(words) != len(set(words))
@@ -678,8 +690,8 @@ def test_a_new_word_added_from_lookup_shows_in_universe_words_at_once(index, wor
     async def script(app, pilot):
         await type_word(app, pilot, "dog")
         ids = [i for i, _t in options(app, "results")]
-        app.screen.query_one("#results", OptionList).highlighted = ids.index("w:hound|")
-        app.screen.query_one("#results", OptionList).focus()
+        select_word(app, "w:hound|")
+        app.screen.first_word_list().focus()
         await pilot.press("w")
         await pilot.pause()
         app.screen.query_one("#slot", Select).value = "thing"
