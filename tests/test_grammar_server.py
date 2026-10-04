@@ -217,3 +217,10 @@ def test_the_settings_screen_has_a_grammar_tab(home):
     ids, text = asyncio.run(go())
     assert {"f-grammar", "f-grammar_cat_style", "f-grammar_cat_grammar", "f-grammar_cat_typos"} <= ids
     assert "free rules, not the Premium rules" in text and "grammar-ignore.json" in text
+
+
+def test_a_real_server_on_the_usual_port_is_never_used_by_tests(home):
+    """The owner may run LanguageTool on port 18081; tests got "already running" from it. Each test has a port of its own."""
+    assert grammar.config()["port"] != grammar.DEFAULT_PORT
+    settings.save_global({"grammar_port": 12345})
+    assert grammar.config()["port"] == 12345                                   # (a port the writer chose still wins)

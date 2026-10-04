@@ -7,6 +7,16 @@ from storywheel.engine import Engine
 from storywheel.library import Library, WordList, Entry
 from storywheel.mix import Mix, new_mix
 
+@pytest.fixture(autouse=True)
+def _own_grammar_port(monkeypatch):
+    """Never talk to a real LanguageTool server on the usual port (the owner may be running one): every test gets a free port of its own."""
+    import socket
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        port = s.getsockname()[1]
+    monkeypatch.setenv("STORYWHEEL_GRAMMAR_PORT", str(port))
+
+
 PROFILES = {
     "western": {"western": 3, "historical": 2, "general": 1},
     "fantasy": {"fantasy": 3, "mythological": 2, "general": 1},

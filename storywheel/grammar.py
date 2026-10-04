@@ -76,6 +76,8 @@ def config(g=None):
     off_cats = [cid for key, cid, _l, on, _h in CATEGORIES if not bool(g.get(key, on))]
     off_rules = [r.strip() for r in re.split(r"[,\s]+", str(g.get("grammar_off_rules") or "")) if r.strip()]
     port = int(g.get("grammar_port") or DEFAULT_PORT)
+    if port == DEFAULT_PORT and os.environ.get("STORYWHEEL_GRAMMAR_PORT"):         # (tests: a real server of yours on the usual port must not be used)
+        port = int(os.environ["STORYWHEEL_GRAMMAR_PORT"])
     return {"url": f"http://127.0.0.1:{port}", "port": port, "disabledCategories": ",".join(off_cats), "disabledRules": ",".join(off_rules),
             "language": g.get("grammar_language") or "en-US", "pause_ms": int(g.get("grammar_pause_ms") or 1500),
             "memory_mb": int(g.get("grammar_memory_mb") or 512)}
