@@ -2303,3 +2303,8 @@ After:
 - Help pages for the Wheel's, Builder's and Words' dialogs (modal screens) are not separate pages; their keys are on screen in each dialog.
 - The key tables list a binding once per class; a key used differently in two lists of the same mode appears in each list's group.
 - The old per-mode `HELP` constants are gone; `tui.HELP` etc. are computed from the help files.
+
+## Full suite (batch 11)
+
+2,053 passed, 0 failed, in one run. Two earlier runs found real problems and are why the count of commits is higher: one test hung because F1 in the Wheel now opens the Wheel's
+help (the test pressed it expecting nothing), and three help tests read only what was on screen instead of the whole help page. `stable` was moved to the commit that records this.
