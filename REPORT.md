@@ -2224,3 +2224,5 @@ the suite was not re-run after that comment change.
 
 Manual: run `storywheel dictionary install`, then look up "bell" in Words: chell, clell, delle, dwelle, ehle and, among near rhymes, aer, al., baehr should be
 gone, and appear when "Names and rare words too" is chosen. Tell me what still reads wrong.
+
+Full suite after the rhymes fix: 2,026 passed, 0 failed (this includes the run that b10's last comment change had missed).
