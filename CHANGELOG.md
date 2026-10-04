@@ -2,6 +2,11 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.12.0 — Batch 12: help toggle, three genres
+
+### Part A: help toggle
+- In a mode's help the key of that mode (or ?) closes it again; the key of another mode closes the help and goes there. In the Writer, F3 toggles the help float.
+
 ## 0.11.0 — Batch 11: help and polish
 
 ### Part A: footer and switching

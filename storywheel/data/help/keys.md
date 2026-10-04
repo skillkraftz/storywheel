@@ -1,7 +1,7 @@
 # Keys and mouse, everywhere
 The same keys mean the same thing in every mode wherever they apply.
 ## Modes
-F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words, in every mode (also clickable in the footer). The key of the mode you are in opens that mode's help. ? opens it too. q goes back to the mode you came from, or closes the panel or dialog you are in. Q quits storywheel (always asks).
+F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words, in every mode (also clickable in the footer). The key of the mode you are in opens that mode's help, and the same key (or ?, Esc, q) closes it again; the key of another mode closes the help and goes there. ? opens it too. q goes back to the mode you came from, or closes the panel or dialog you are in. Q quits storywheel (always asks).
 ## Fields
 f rolls the highlighted field, e writes it by hand, space rolls what is blank (or the step), k keeps, + and - like and dislike a value, ? help. Left-click a field rolls it, right-click writes it, the scroll wheel steps through its earlier values.
 ## Footers

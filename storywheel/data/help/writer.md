@@ -56,4 +56,4 @@ Space n or the sidebar key: Enter jumps, a adds a scene, r renames, J and K move
 ## Leaving
 F2 or the Builder key saves everything and goes back to the Builder; F1 the Wheel; F4 Settings; :q works too.
 ## This help
-Scroll with the arrow keys or PgUp/PgDn, search with / (n for the next match), close with Esc or q.
+Scroll with the arrow keys or PgUp/PgDn, search with / (n for the next match), close with F3 again, Esc or q. The other mode keys (F1, F2, F4, F5) close it and switch as usual.

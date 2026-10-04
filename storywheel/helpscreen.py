@@ -7,7 +7,7 @@ from textual.containers import Vertical, VerticalScroll
 from textual.screen import ModalScreen
 from textual.widgets import Input, Static
 
-from . import helpdoc
+from . import helpdoc, navigation
 
 
 def page_text(name, query=""):
@@ -37,7 +37,8 @@ def line_of(name, heading):
 
 class HelpScreen(ModalScreen):
     BINDINGS = [Binding("escape", "escape", "Close"), Binding("question_mark,q", "close", "Close", show=False),
-                Binding("slash", "search", "Search")]
+                Binding("slash", "search", "Search"),
+                *[Binding(key, f"mode_key('{key}')", name, show=False) for key, _m, name in navigation.MODES]]
     DEFAULT_CSS = """
     HelpScreen { align: center middle; }
     HelpScreen > Vertical { width: 104; max-width: 100%; height: 90%; border: round $accent; background: $surface; padding: 0 2; }
@@ -52,7 +53,7 @@ class HelpScreen(ModalScreen):
 
     def compose(self) -> ComposeResult:
         with Vertical():
-            yield Static("Search this page with /   ·   ↑ ↓ PgUp PgDn scroll   ·   Esc or q closes", id="help-head", markup=False)
+            yield Static("Search with /   ·   ↑ ↓ PgUp PgDn scroll   ·   Esc, q, ? or this mode's key closes", id="help-head", markup=False)
             yield Input(placeholder="search this page", id="help-search")
             with VerticalScroll(id="help-scroll"):
                 yield Static("", id="help-text", markup=False)
@@ -69,7 +70,7 @@ class HelpScreen(ModalScreen):
         self.query_one("#help-text", Static).update(Text(text))
         self.query_one("#help-head", Static).update(
             f"{found} section{'s' if found != 1 else ''} match “{query}”" if query.strip() else
-            "Search this page with /   ·   ↑ ↓ PgUp PgDn scroll   ·   Esc or q closes")
+            "Search with /   ·   ↑ ↓ PgUp PgDn scroll   ·   Esc, q, ? or this mode's key closes")
         self.query_one("#help-scroll").scroll_home(animate=False)
 
     def on_input_changed(self, event):
@@ -91,3 +92,14 @@ class HelpScreen(ModalScreen):
 
     def action_close(self):
         self.dismiss(None)
+
+    def action_mode_key(self, key):
+        """The key of the mode this help is about closes it (a toggle); the key of another mode closes it and goes there."""
+        parent = self.app.screen_stack[-2] if len(self.app.screen_stack) > 1 else None
+        mine = next((k for k, m, _n in navigation.MODES if m == self.name_), None)
+        self.dismiss(None)
+        if key == mine or parent is None:
+            return
+        action = next((b.action for b in type(parent).BINDINGS if hasattr(b, "key") and key in b.key.split(",")), None)
+        if action:
+            self.app.call_later(parent.run_action, action)

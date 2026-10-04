@@ -190,6 +190,10 @@ function M.show_stats()
 end
 
 function M.help()
+  if M.help_win and vim.api.nvim_win_is_valid(M.help_win) then          -- F3 again (or the menu's Help again) closes it
+    M.help_close()
+    return
+  end
   local width = math.max(40, math.min(100, vim.o.columns - 6))
   local lines = M.help_lines(width - 2)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -202,14 +206,16 @@ function M.help()
   vim.wo[win].linebreak = true
   vim.wo[win].cursorline = true
   vim.cmd("stopinsert")
-  local function close()
+  M.help_win = win
+  M.help_close = function()
     if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
+    M.help_win = nil
     vim.cmd("nohlsearch")
     local layout = require("sw.layout")
     if layout.main and vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
     require("sw.notepad").insert(true)
   end
-  for _, k in ipairs({ "q", "<Esc>", "<F3>" }) do vim.keymap.set("n", k, close, { buffer = buf, nowait = true }) end
+  for _, k in ipairs({ "q", "<Esc>", "<F3>" }) do vim.keymap.set("n", k, M.help_close, { buffer = buf, nowait = true }) end
   vim.keymap.set("n", "<Space>", "<PageDown>", { buffer = buf, nowait = true })
   vim.keymap.set("n", "<BS>", "<PageUp>", { buffer = buf, nowait = true })
   return win
