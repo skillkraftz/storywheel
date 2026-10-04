@@ -156,3 +156,40 @@ def test_rename_everywhere_works_for_a_word_that_is_not_an_entity(world):
     assert len(matches) == 1 and matches[0].kind == "manuscript"
     n = rename.apply_matches(u, stub, "Glass Water", "Glasswater", matches)
     assert n == 1 and "Glass Water" not in (s.manuscript_dir / "manuscript.md").read_text()
+
+
+# --- names are counted as phrases (batch 9) ----------------------------------------------------------------------------------------
+
+def test_a_descriptions_words_are_not_counted_one_by_one(world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("The sheriff was in town. He walked in. Nothing was in the jar, and in the end a wolf in a waistcoat came in.\n", encoding="utf-8")
+    u.new_entity("character", "a wolf in a waistcoat", {"role": "supporting"})
+    names = by_text(storywords.analyze(u, s), "name")
+    assert names["a wolf in a waistcoat"].count == 1                                    # the phrase, once; not every "in" (there are five)
+    assert names["a wolf in a waistcoat"].where[0]["line"] == 1
+
+
+def test_a_lowercase_multi_word_name_is_found_in_any_case_with_or_without_its_article(world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text(
+        "They crossed the silver birch grove at dawn. Silver Birch Grove was quiet. A silver birch grove's edge. The birch was bare, and silver too.\n",
+        encoding="utf-8")
+    u.new_entity("place", "the silver birch grove")
+    names = by_text(storywords.analyze(u, s), "name")
+    assert names["the silver birch grove"].count == 3                                   # the, the (any case), and the possessive; "birch" and "silver" alone are not
+
+
+def test_a_personal_name_is_also_found_by_its_first_or_last_name_but_once_per_place(world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("Stacie Anderson rode out. Stacie smiled. Anderson's horse knew the way. Stacie Anderson waved.\n", encoding="utf-8")
+    u.new_entity("character", "Stacie Anderson", {"role": "protagonist"})
+    names = by_text(storywords.analyze(u, s), "name")
+    assert names["stacie anderson"].count == 4                                          # two whole names + Stacie + Anderson's, none twice
+
+
+def test_a_description_character_is_not_found_by_a_word_of_it(world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("The old sheriff came. The sheriff sat. Old news.\n", encoding="utf-8")
+    u.new_entity("character", "the old sheriff", {"role": "supporting"})
+    names = by_text(storywords.analyze(u, s), "name")
+    assert names["the old sheriff"].count == 1                                          # "the sheriff" and "old" are other things

@@ -88,8 +88,9 @@ def _stories(universe, story):
 
 
 def scan(universe, story=None):
-    """({lowercase word: Form}, {lowercase 'word word': Form} for neighbouring capitalized words, total words)."""
-    forms, pairs, total = {}, {}, 0
+    """({lowercase word: Form}, {lowercase 'word word': Form} for neighbouring capitalized words, total words, [line records]).
+    A line record is (path, line number, scene title, text): what names are counted in as whole phrases."""
+    forms, pairs, total, lines = {}, {}, 0, []
     for st in _stories(universe, story):
         for path in st.files():
             text = vault.Story._read(st, path)
@@ -99,6 +100,7 @@ def scan(universe, story=None):
                     continue
                 scene = next((sc for sc in scenes if sc["start"] <= n <= sc["end"]), None)
                 title = (scene["label"] or f"Scene {scenes.index(scene) + 1}") if scene else ""
+                lines.append((path, n, title, line))
                 prev = None
                 for m in WORD.finditer(line):
                     word = strip_possessive(m.group(0))
@@ -110,11 +112,67 @@ def scan(universe, story=None):
                         pk = f"{prev[0].lower()} {key}"
                         pairs.setdefault(pk, Form(pk)).add(f"{prev[0]} {word}", here)
                     prev = (word, m.end())
-    return forms, pairs, total
+    return forms, pairs, total, lines
 
 
 def _compact(text):
     return re.sub(r"[\s'’-]+", "", text.lower())
+
+
+ARTICLES = ("the", "a", "an")
+
+
+def core_name(name):
+    """A name without its leading article: 'the silver birch grove' -> 'silver birch grove'."""
+    words = (name or "").strip().split()
+    if len(words) > 1 and words[0].lower() in ARTICLES:
+        words = words[1:]
+    return " ".join(words)
+
+
+def phrase_regex(name):
+    """The whole name as a phrase, any length and case, with or without its article, with a possessive: wolf in a waistcoat's."""
+    words = [re.escape(w) for w in core_name(name).replace("’", "'").split()]
+    if not words:
+        return None
+    body = r"\s+".join(words)
+    return rf"(?:(?:the|a|an)\s+)?{body}(?:'s)?"
+
+
+def is_personal(entity):
+    """A character with a proper name ('Stacie Anderson'): only these are also found by first or last name alone."""
+    if entity.type != "character":
+        return False
+    from . import promote
+    proper = entity.proper if entity.proper is not None else promote.is_proper(entity.name)
+    return bool(proper)
+
+
+def name_hits(entity, lines):
+    """(count, [where]) for one entity over the manuscript lines. The whole name is a phrase, matched in any case; for a personal name the
+    first and last word count on their own too (but a word inside a whole-name match is counted once). Descriptions are never counted by
+    their single words: 'wolf in a waistcoat' is not every 'in'."""
+    phrase = phrase_regex(entity.name)
+    if not phrase:
+        return 0, []
+    parts = [phrase]
+    if is_personal(entity):
+        words = [w for w in re.findall(r"[A-Za-z][A-Za-z'’-]*[A-Za-z]|[A-Za-z]", core_name(entity.name))]
+        if len(words) > 1:
+            singles = []
+            for w in (words[0], words[-1]):
+                w = w.replace("’", "'")
+                if w.lower() not in ARTICLES and w not in singles:
+                    singles.append(w)
+            parts += [rf"{re.escape(w)}(?:'s)?" for w in sorted(singles, key=len, reverse=True)]
+    pattern = re.compile(r"(?<![\w'’])(?:" + "|".join(parts) + r")(?![\w])", re.IGNORECASE)
+    count, where = 0, []
+    for path, n, scene, text in lines:
+        for m in pattern.finditer(text.replace("’", "'")):
+            count += 1
+            if len(where) < MAX_WHERE:
+                where.append(_where(path, n, m.start(), text, scene))
+    return count, where
 
 
 def distance(a, b):
@@ -142,7 +200,7 @@ def analyze(universe, story=None, db=None):
         db = db or dictionary.connect()
     except dictionary.DictionaryMissing:
         db = None
-    forms, pairs, total = scan(universe, story)
+    forms, pairs, total, lines = scan(universe, story)
     listed = listed_words(universe)
     entities = universe.entities()
     name_to_entity = {}
@@ -155,20 +213,12 @@ def analyze(universe, story=None, db=None):
         entity_words |= {w.lower() for w in WORD.findall(name)}
     items = []
 
-    # --- names: every entity, with how often it appears (whole name, or any of its words for a person) -----------------------
+    # --- names: every entity, counted as a whole phrase; a personal name also by its first or last name -------------------------
     counted = {}
     for lname, e in name_to_entity.items():
-        full = pairs.get(lname) if " " in lname else forms.get(lname)
-        count = full.count if full else 0
-        where = list(full.where) if full else []
-        if e.type == "character":
-            for w in WORD.findall(e.name):
-                f = forms.get(w.lower())
-                if f and w.lower() not in ("the", "of", "a", "an"):
-                    count += f.count if f is not full else 0
-                    where += f.where if f is not full else []
-        counted[lname] = (count, where[:MAX_WHERE])
-        items.append(Item("name", e.name, count, where[:MAX_WHERE], note=e.type, entity=e))
+        count, where = name_hits(e, lines)
+        counted[lname] = (count, where)
+        items.append(Item("name", e.name, count, where, note=e.type, entity=e))
 
     # --- unknown words: not in the dictionary, not a name, not already on the spelling list ------------------------------------
     unknown = []

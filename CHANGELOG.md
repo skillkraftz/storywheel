@@ -2,6 +2,12 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.9.0 — Batch 9
+Part A: Story words counts names correctly
+- An entity's whole name is counted as a phrase, in any case, with or without its leading article and with a possessive ("a wolf in a waistcoat",
+  "the silver birch grove's edge"). Single words are counted only for personal names (a character with a proper name: its first or last name), never for
+  descriptions, so "wolf in a waistcoat" no longer shows 33 uses for every "in", and "silver birch grove" is found though it is lowercase.
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,
