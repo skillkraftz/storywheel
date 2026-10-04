@@ -355,7 +355,7 @@ class QuitScreen(ModalScreen):
     promotion into a universe."""
     BINDINGS = [Binding("k,enter", "choose('keep')", "Not now / keep"), Binding("d", "choose('delete')", "Delete"),
                 Binding("n", "choose('new')", "New universe"), Binding("e", "choose('existing')", "Existing universe"),
-                Binding("escape,c", "choose(None)", "Cancel")]
+                Binding("p", "choose('home')", "Into its universe", show=False), Binding("escape,c", "choose(None)", "Cancel")]
     DEFAULT_CSS = """
     QuitScreen { align: center middle; }
     QuitScreen > Vertical { width: 64; height: auto; border: round $accent; background: $surface; padding: 1 2; }
@@ -363,18 +363,21 @@ class QuitScreen(ModalScreen):
     QuitScreen #dlg Button { height: 1 !important; border: none !important; margin-right: 2; min-width: 8; }
     """
 
-    def __init__(self, title, promotable=False):
+    def __init__(self, title, promotable=False, home=None):
         super().__init__()
-        self.title_text, self.promotable = title, promotable
+        self.title_text, self.promotable, self.home = title, promotable, home       # (home: the name of the universe it belongs to, if chosen)
 
     def compose(self) -> ComposeResult:
         with Vertical(id="dlg"):
             if self.promotable:
                 yield Static(f"Bringing this story into the Universe Builder\n\n{self.title_text}\n\n"
                              f"{PROMOTE_MESSAGE}", markup=False)
+                if self.home:
+                    with Horizontal():
+                        yield _quiet(Button(f"Into {self.home} (p)", id="home", variant="success"))
                 with Horizontal():
-                    yield _quiet(Button("New universe (n)", id="new", variant="success"))
-                    yield _quiet(Button("Existing universe (e)", id="existing", variant="primary"))
+                    yield _quiet(Button("New universe (n)", id="new", variant="success" if not self.home else "default"))
+                    yield _quiet(Button("Existing universe (e)", id="existing", variant="primary" if not self.home else "default"))
                     yield _quiet(Button("Not now (k)", id="keep"))
                 with Horizontal():
                     yield _quiet(Button("Delete the draft (d)", id="delete", variant="error"))
@@ -390,7 +393,9 @@ class QuitScreen(ModalScreen):
         self.dismiss(None if event.button.id == "cancel" else event.button.id)
 
     def action_choose(self, what):
-        if what in ("new", "existing") and not self.promotable:
+        if what in ("new", "existing", "home") and not self.promotable:
+            return
+        if what == "home" and not self.home:
             return
         self.dismiss(what)
 
@@ -792,7 +797,9 @@ class MainScreen(KeptScreen, Screen):
     MainScreen #story-buttons, MainScreen #story-buttons2 { height: 1; }
     MainScreen #story-buttons Button, MainScreen #story-buttons2 Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     MainScreen #steps { height: auto; max-height: 10; }
-    MainScreen #uni-buttons, MainScreen #uni-buttons2 { height: 1; }
+    MainScreen #uni-buttons, MainScreen #uni-buttons2, MainScreen #uni-home-row { height: 1; }
+    MainScreen #uni-home-label { width: auto; height: 1; }
+    MainScreen #uni-home-row Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
     MainScreen #uni-buttons { layout: vertical; height: auto; }
     MainScreen #uni-mode-label { width: 100%; height: auto; }
     MainScreen #uni-buttons Button, MainScreen #uni-buttons2 Button { height: 1 !important; border: none !important; min-width: 6; margin-right: 1; padding: 0; }
@@ -836,6 +843,9 @@ class MainScreen(KeptScreen, Screen):
                     with Horizontal(id="uni-buttons"):
                         yield Static("Whole characters/places from these: ", id="uni-mode-label", markup=False)
                         yield _quiet(Button("no       ", id="uni-mode"))
+                    with Horizontal(id="uni-home-row"):
+                        yield Static("Belongs to: ", id="uni-home-label", markup=False)
+                        yield _quiet(Button("(not chosen)       ", id="uni-home"))
                     with Horizontal(id="uni-buttons2"):
                         yield _quiet(Button("Open in the Builder", id="uni-builder"))
                     yield UniverseTree("Universe", id="universe")
@@ -1053,7 +1063,7 @@ class MainScreen(KeptScreen, Screen):
                 if here:
                     self.session.save()
                     story = self.session.story
-                self.promote_flow(story, None, "ask")
+                self.promote_flow(story, "home" if self._home_of(story) else None, "ask")
         elif action == "delete":
             if here:
                 self.say("That is the story you are in: quit (q) and choose Delete to remove it.")
@@ -1192,6 +1202,10 @@ class MainScreen(KeptScreen, Screen):
         button = self.query_one("#uni-mode", Button)
         button.label = f"{self.MODE_WORDS[s.universe_mode]:<9}"          # same width every time
         button.refresh(layout=True)
+        home = self.query_one("#uni-home", Button)
+        home_universe = next((u for u in unis if u.slug == s.home), None)
+        home.label = f"{(home_universe.name if home_universe else '(not chosen)')[:18]:<18}"      # same width every time
+        home.tooltip = "Promoting this story puts it into this universe's Stories. Not chosen: you are asked."
         tree = self.query_one("#universe", UniverseTree)
         if not hasattr(self, "_open_groups"):
             self._open_groups = set()
@@ -1343,6 +1357,8 @@ class MainScreen(KeptScreen, Screen):
             self.app.go("builder", dict(story["promoted"]))
             return
         s.save()
+        if s.home:
+            return self.promote_flow(story, "home", "exit")                # it belongs to a universe already: no question, just the preview
         self.app.push_screen(ChoiceScreen("Send this story to the Universe Builder: into…",
                                           [("a new universe", "new"), ("an existing universe", "existing")]),
                              lambda c: self.promote_flow(story, c, "exit") if c else None)
@@ -1371,6 +1387,9 @@ class MainScreen(KeptScreen, Screen):
             return
         if name == "uni-mode":
             self.universe_mode()
+            return
+        if name == "uni-home":
+            self.choose_home()
             return
         if name == "uni-builder":
             self.action_mode("builder")
@@ -1619,13 +1638,14 @@ class MainScreen(KeptScreen, Screen):
         kept = bool(s.story["kept"])
         promotable = kept and not s.story.get("promoted")
         title = store.title_of(s.story) if kept else "this story"
-        self.app.push_screen(QuitScreen(title, promotable), self._quit_chosen)
+        home = self._home_of(s.story)
+        self.app.push_screen(QuitScreen(title, promotable, home.name if home else None), self._quit_chosen)
 
     def _quit_chosen(self, choice):
         s = self.session
         if choice == "keep":
             self._finish()
-        elif choice in ("new", "existing"):
+        elif choice in ("new", "existing", "home"):
             self.promote_flow(s.story, choice, "exit")
         elif choice == "delete":
             store.delete(s.story)
@@ -1650,9 +1670,35 @@ class MainScreen(KeptScreen, Screen):
 
     # --- promotion: bringing a draft into a universe -------------------------------------------------------
 
+    def _home_of(self, draft):
+        from . import vault
+        return vault.get_universe(draft.get("home")) if draft.get("home") else None
+
+    def choose_home(self):
+        """Pick the universe this draft belongs to: promoting puts the story in that universe's Stories."""
+        from . import vault
+        s = self.session
+        if s.story.get("promoted"):
+            return self.say("This draft was promoted already; it lives in its universe now.")
+        unis = vault.list_universes()
+        options = [("Not decided: ask me when I promote it", "")] + [(u.name, u.slug) for u in unis]
+        self.app.push_screen(ChoiceScreen("This draft belongs to the universe…", options), self._home_chosen)
+
+    def _home_chosen(self, slug):
+        if slug is None:
+            return
+        s = self.session
+        s.set_home(slug or None)
+        s.save()
+        self.after("The story will go into that universe's Stories when you promote it (the generator draws from it too)." if slug
+                   else "No universe chosen: promotion will ask.")
+
     def promote_flow(self, draft, choice, then):
         """choice: 'new', 'existing' or None (ask). then: 'exit' to leave after, 'ask'/'stay' to remain."""
         from . import vault
+        home = vault.get_universe(draft.get("home")) if draft.get("home") else None
+        if choice == "home" and home is not None:
+            return self._preview(draft, home, None, then)             # the draft belongs to a universe: straight to the preview
         if choice is None or choice == "ask":
             self.app.push_screen(QuitScreen(store.title_of(draft), True), lambda c: self._promote_choice(draft, c, then)
                                  if c in ("new", "existing") else None)

@@ -241,6 +241,22 @@ class Story:
         meta.update(changes)
         self.save_outline(meta, sections)
 
+    @property
+    def notes_path(self):
+        return self.path / "notes.md"
+
+    @property
+    def notes(self):
+        """The story's own free-form notes (notes.md beside story.md); empty when there are none."""
+        try:
+            return self.notes_path.read_text(encoding="utf-8")
+        except OSError:
+            return ""
+
+    def save_notes(self, text):
+        if text.strip() or self.notes_path.exists():
+            _write(self.notes_path, text)
+
     # other files
     @property
     def settings_path(self):

@@ -156,7 +156,7 @@ def test_the_outline_tab_shows_the_story_or_the_universe(world):
     assert "Universe: Thornwood" in uni_text and "Genre leanings" in uni_text
 
 
-def test_links_and_appearances_are_under_the_entity_card_and_notes_have_their_own_tab(world):
+def test_links_appearances_and_entity_notes_are_under_the_card_and_the_story_has_its_own_notes_tab(world):
     u, s, s2 = world
     async def script(app, pilot):
         before = flat(screen_text(app))
@@ -164,8 +164,8 @@ def test_links_and_appearances_are_under_the_entity_card_and_notes_have_their_ow
         await pilot.pause()
         return before, flat(screen_text(app))
     before, after = run(script)
-    assert "Appears in" in before and "Links" in before            # (they describe the selected entity, so they sit under its card)
-    assert "Free-form notes about the selected entity" in after
+    assert "Appears in" in before and "Links" in before and "Notes about this entity" in before          # (they describe the selected entity, so they sit under its card)
+    assert "Free-form notes about this story" in after
 
 
 def test_the_scenes_tab_lists_the_scenes_with_first_lines_and_words(world):
@@ -253,4 +253,85 @@ def test_the_help_mentions_the_new_keys(world):
         await pilot.pause()
         return flat(screen_text(app))
     text = run(script, size=(220, 90))
-    assert "Outline, Scenes" in text and "Enter opens the Writer at that scene" in text
+    assert "the Story panel under the story list: Outline, Scenes (a click or Enter opens the" in text and "Notes (the story's own)" in text
+
+
+# --- batch 9: the Story panel, +Story, no right column ---------------------------------------------------------------------------------
+
+def test_there_is_no_right_column_and_the_story_panel_sits_under_the_story_list(world):
+    async def script(app, pilot):
+        s = app.screen_ref
+        stories, panel, mid = s.query_one("#stories-box"), s.query_one("#story-box"), s.query_one("#mid")
+        return (len(s.query("#right")), panel.region.y >= stories.region.bottom, panel.region.x == stories.region.x, panel.region.height > stories.region.height,
+                mid.region.x >= panel.region.right, [t.id for t in s.query_one("#rtabs").query("TabPane")], panel.border_title)
+    rights, below, same_column, bigger, mid_beside, tabs, title = run(script)
+    assert rights == 0 and below and same_column and bigger and mid_beside and tabs == ["r-outline", "r-scenes", "r-notes"]
+    assert title.startswith("Story:") and "The Last Clause" in title
+
+
+def test_the_story_list_shows_titles_only(world):
+    async def script(app, pilot):
+        lst = app.screen_ref.query_one("#stories")
+        return [lst.get_option_at_index(i).prompt for i in range(lst.option_count)], flat(screen_text(app))
+    prompts, text = run(script)
+    assert len(prompts) == 2 and "The Last Clause" in text and "Other Tale" in text and "8w" not in text
+
+
+def test_plus_story_makes_a_blank_story_with_no_wheel_draft(world):
+    u, s, s2 = world
+    async def script(app, pilot):
+        await pilot.click("#s-new")
+        await pilot.pause()
+        scr = app.screen
+        scr.query_one(Input).value = "A Brand New Tale"
+        await pilot.press("enter")
+        await pilot.pause()
+        return type(scr).__name__, app.screen_ref.story.title, flat(screen_text(app)), app.next
+    kind, title, text, nxt = run(script)
+    assert title == "A Brand New Tale" and nxt is None
+    made = vault.get_universe("thornwood").story("a-brand-new-tale")
+    assert made is not None and made.title == "A Brand New Tale" and made.word_count() == 0
+    assert "Started 'A Brand New Tale'" in text and not (made.path / "seed.json").exists()
+
+
+def test_the_builder_no_longer_starts_wheel_drafts(world):
+    async def script(app, pilot):
+        s = app.screen_ref
+        return len(s.query("#s-draft")), hasattr(s, "action_new_draft"), "+Wheel draft" in flat(screen_text(app))
+    assert run(script) == (0, False, False)
+
+
+def test_story_notes_are_saved_as_you_type_and_come_back(world):
+    u, s, s2 = world
+    async def script(app, pilot):
+        await pilot.press("8")
+        await pilot.pause()
+        box = app.screen_ref.query_one("#story-notes")
+        box.focus()
+        await pilot.pause()
+        await pilot.press("h", "i")
+        await pilot.pause()
+        return box.text, (s.path / "notes.md").read_text()
+    text, saved = run(script)
+    assert text == "hi" and saved == "hi" and s.notes == "hi"
+    assert s2.notes == ""
+
+
+def test_entity_notes_are_under_the_card_and_still_save(world):
+    u, s, s2 = world
+    async def script(app, pilot):
+        scr = app.screen_ref
+        scr.entity = u.entities("character")[0]
+        scr.refresh_all()
+        await pilot.pause()
+        box = scr.query_one("#notes")
+        inside = scr.query_one("#card-box").region.contains_region(box.region)
+        await pilot.press("E")
+        await pilot.pause()
+        focused = app.focused.id
+        await pilot.press("o", "k")
+        await pilot.pause()
+        return inside, focused, u.entities("character")[0].body
+    inside, focused, body = run(script)
+    assert inside and focused == "notes" and body == "ok"
+

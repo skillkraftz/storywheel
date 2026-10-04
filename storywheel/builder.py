@@ -43,9 +43,10 @@ HELP = f"""\
   [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
   [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
   [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
-  Outline (right column, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
-  [b]6[/b] [b]7[/b] [b]8[/b]  right column: Outline, Scenes (Enter opens the Writer at that scene), Entity notes (the selected entity's own notes)
-  [b]backslash[/b]  on a narrow terminal (under 150 columns) the right column takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back
+  Outline (the Story panel, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
+  [b]6[/b] [b]7[/b] [b]8[/b]  the Story panel under the story list: Outline, Scenes (a click or Enter opens the Writer at that scene), Notes (the story's own).
+  [b]E[/b]  the selected entity's own notes, under its card
+  [b]backslash[/b]  on a narrow terminal (under 150 columns) the Story panel takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back
   [b]+[/b] [b]-[/b]      like / dislike the line
   Under the card: ▲ ▼ like or dislike a value (liked wording is used more, disliked less in later rolls); ✎ the generator can't fill this
   field, so write it yourself; [b]space[/b] (Roll blanks) fills only empty fields and never changes what you wrote.
@@ -58,7 +59,8 @@ HELP = f"""\
   [b]F[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
-  [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
+  [b]C[/b]  copy the manuscript as plain text   [b]T[/b]  a new blank story (+Story): no Wheel draft behind it
+  New Wheel drafts are started in the Wheel (F1), where you choose which universe a draft belongs to.
   [b]A[/b] [b]X[/b]  on the outline: add / remove another of the beat under the cursor, when the structure lets it repeat
   [b]q[/b]  back to the mode you came from   [b]Q[/b]  Quit storywheel (asks first)   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
 
@@ -295,7 +297,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("3", "tab(2)", "Things", show=False), Binding("4", "tab(3)", "Groups", show=False),
         Binding("5", "tab(4)", "Notes (entity type)", show=False),
         Binding("6", "rtab('outline')", "Outline", show=False), Binding("7", "rtab('scenes')", "Scenes", show=False),
-        Binding("8", "rtab('notes')", "Entity notes", show=False),
+        Binding("8", "rtab('notes')", "Story notes", show=False),
         Binding("N", "new_universe", "New universe", show=False),
         Binding("s", "universe_settings", "Universe settings", show=False),
         Binding("S", "story_settings", "Story settings", show=False),
@@ -305,36 +307,37 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("w", "writer", "Write story", show=False),
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
-        Binding("W", "new_draft", "New Wheel draft", show=False),
+        Binding("T", "new_story", "New (blank) story", show=False),
+        Binding("E", "entity_notes", "Entity notes", show=False),
         Binding("A", "add_beat", "Add a beat", show=False),
         Binding("X", "remove_beat", "Remove a beat", show=False),
         navigation.back_binding(),
         navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("escape", "focus_card", "", show=False),
-        Binding("backslash", "toggle_right", "Side panel", show=False),
+        Binding("backslash", "toggle_story", "Story panel", show=False),
     ]
     DEFAULT_CSS = """
     BuilderScreen #body { height: 1fr; }
-    BuilderScreen #left { width: 21%; min-width: 38; max-width: 40; }
+    BuilderScreen #left { width: 26%; min-width: 40; max-width: 58; }
     BuilderScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
-    BuilderScreen #universes-box { height: auto; max-height: 40%; }
-    BuilderScreen #stories-box { height: 1fr; }
-    /* a narrow terminal (under 150 columns): the right column is shown instead of the middle one when you ask for it (keys 6 7 8, backslash) */
+    BuilderScreen #universes-box { height: auto; max-height: 30%; }
+    BuilderScreen #stories-box { height: 10; min-height: 6; }
+    BuilderScreen #story-box { height: 1fr; min-height: 8; }
+    /* a narrow terminal (under 150 columns): the left column stays thin; the Story panel takes the whole width, in place of the middle
+       column, when you ask for it (keys 6 7 8, backslash) */
     BuilderScreen.-narrow #left { width: 34; min-width: 34; max-width: 34; }
-    BuilderScreen.-narrow #right { display: none; width: 1fr; max-width: 100%; }
-    BuilderScreen.-narrow.-show-right #right { display: block; }
-    BuilderScreen.-narrow.-show-right #mid { display: none; }
+    BuilderScreen.-narrow.-show-story #left { width: 1fr; max-width: 100%; }
+    BuilderScreen.-narrow.-show-story #mid { display: none; }
     BuilderScreen #legend { height: 1; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis; }
     BuilderScreen #mid { width: 1fr; }
-    BuilderScreen #right { width: 22%; min-width: 40; max-width: 46; border: round $primary-darken-2; }
     BuilderScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
-    BuilderScreen #universes { height: auto; max-height: 12; }
+    BuilderScreen #universes { height: auto; max-height: 8; }
     BuilderScreen #stories { height: 1fr; }
     BuilderScreen .btns { height: 1; }
     BuilderScreen .btns Button { height: 1 !important; border: none !important; min-width: 4; padding: 0; margin-right: 1; }
     BuilderScreen #mid { overflow: hidden; }
-    BuilderScreen #left, BuilderScreen #right { overflow: hidden; }
+    BuilderScreen #left { overflow: hidden; }
     BuilderScreen #top-box { height: 8; border: round $primary-darken-2; }
     BuilderScreen #stats { padding: 0 1; height: 1fr; }
     BuilderScreen #rtabs { height: 1fr; }
@@ -350,7 +353,8 @@ class BuilderScreen(KeptScreen, Screen):
     BuilderScreen OptionList, BuilderScreen TextArea { border: none; scrollbar-gutter: stable; }
     BuilderScreen OptionList:focus, BuilderScreen TextArea:focus { border: none; background: $boost; }
     BuilderScreen #card { height: 1fr; border: none; }
-    BuilderScreen #notes { height: 1fr; min-height: 8; }
+    BuilderScreen #notes { height: 8; min-height: 4; }
+    BuilderScreen #story-notes { height: 1fr; min-height: 6; }
     BuilderScreen #links, BuilderScreen #appears { padding: 0 1; height: auto; max-height: 6; }
     BuilderScreen #card-box .title { margin-top: 0; }
     BuilderScreen .title { height: auto; min-height: 1; }
@@ -389,12 +393,25 @@ class BuilderScreen(KeptScreen, Screen):
                     box.border_title = "Stories"
                     yield StoryOptions(id="stories")
                     with Horizontal(classes="btns"):
-                        yield _quiet(Button("Outline", id="s-open"))
+                        yield _quiet(Button("+Story", id="s-new"))
                         yield _quiet(Button("Write", id="s-write"))
                         yield _quiet(Button("Export", id="s-export"))
                     with Horizontal(classes="btns"):
-                        yield _quiet(Button("+Wheel draft", id="s-draft"))
                         yield _quiet(Button("Backups…", id="s-backups"))
+                with Vertical(id="story-box", classes="box") as box:
+                    box.border_title = "Story"
+                    with TabbedContent(id="rtabs", initial=self.start_rtab):
+                        with TabPane("Outline", id="r-outline"):
+                            yield Static("", id="outline-title", markup=False)
+                            yield CardList(id="outline")
+                        with TabPane("Scenes", id="r-scenes"):
+                            yield OptionList(id="scenes")
+                            with Horizontal(classes="btns"):
+                                yield _quiet(Button("Write here", id="sc-write"))
+                                yield _quiet(Button("+Scene", id="sc-add"))
+                        with TabPane("Notes", id="r-notes"):
+                            yield Static("Free-form notes about this story (saved as you type)", classes="title", markup=False)
+                            yield TextArea("", id="story-notes")
             with Vertical(id="mid"):
                 with Vertical(id="top-box"):
                     yield Static("Writing", id="top-title", classes="title", markup=False)
@@ -413,23 +430,12 @@ class BuilderScreen(KeptScreen, Screen):
                         yield Static("", id="card-title", classes="title", markup=False)
                         yield CardList(id="card")
                         yield Static(LEGEND, id="legend", markup=False)
+                        yield Static("Notes about this entity (saved as you type)", classes="title", markup=False)
+                        yield TextArea("", id="notes")
                         yield Static("Links", classes="title", markup=False)
                         yield Static("", id="links", markup=False)
                         yield Static("Appears in", classes="title", markup=False)
                         yield Static("", id="appears", markup=False)
-            with Vertical(id="right"):
-                with TabbedContent(id="rtabs", initial=self.start_rtab):
-                    with TabPane("Outline", id="r-outline"):
-                        yield Static("", id="outline-title", markup=False)
-                        yield CardList(id="outline")
-                    with TabPane("Scenes", id="r-scenes"):
-                        yield OptionList(id="scenes")
-                        with Horizontal(classes="btns"):
-                            yield _quiet(Button("Write here", id="sc-write"))
-                            yield _quiet(Button("+Scene", id="sc-add"))
-                    with TabPane("Entity notes", id="r-notes"):
-                        yield Static("Free-form notes about the selected entity (saved as you type)", classes="title", markup=False)
-                        yield TextArea("", id="notes")
         yield Static("", id="status", markup=False)
         yield FitFooter()
 
@@ -576,9 +582,9 @@ class BuilderScreen(KeptScreen, Screen):
         rows = []
         if self.universe:
             for s in self.universe.stories():
-                rows.append(Option(_name_and_count(s.title, f"{s.word_count()}w", bool(self.story and s.slug == self.story.slug)), id=s.slug))
+                rows.append(Option(_name_and_count(s.title, "", bool(self.story and s.slug == self.story.slug)), id=s.slug))
         if not rows:
-            rows.append(Option(Text("(no stories in this universe)", style="dim"), id="", disabled=True))
+            rows.append(Option(Text("(none yet: +Story, or promote one from the Wheel)", style="dim"), id="", disabled=True))
         lst.add_options(rows)
         self.query_one("#stories-box").border_title = _fit_title("Stories in" if self.universe else "Stories", self.universe.name if self.universe else "", 30)
 
@@ -605,7 +611,19 @@ class BuilderScreen(KeptScreen, Screen):
             rows.append(("u:counts", "Contents", counts))
         return rows
 
+    def refresh_story_notes(self):
+        box = self.query_one("#story-notes", TextArea)
+        text = self.story.notes if self.story is not None else ""
+        if box.text != text:
+            self._busy = True
+            try:
+                box.load_text(text)
+            finally:
+                self._busy = False
+        box.read_only = self.story is None
+
     def refresh_top(self):
+        self.refresh_story_notes()
         self.refresh_stats()
         self._keep_view(self.outline, self._build_top)
         self.refresh_scenes()
@@ -653,6 +671,7 @@ class BuilderScreen(KeptScreen, Screen):
 
     def _build_top(self):
         rows = self.top_rows()
+        self.query_one("#story-box").border_title = _fit_title("Story:", self.story.title if self.story else "universe overview", 40)
         self.query_one("#outline-title", Static).update(
             f"Story outline: {self.story.title}   (o: universe overview)" if self.story
             else (f"Universe: {self.universe.name}" if self.universe else "No universe"))
@@ -763,7 +782,11 @@ class BuilderScreen(KeptScreen, Screen):
     # --- events -----------------------------------------------------------------------------------------------------
 
     def on_text_area_changed(self, event):
-        """Notes are saved as you type."""
+        """Notes are saved as you type: the open story's, or the selected entity's."""
+        if event.text_area.id == "story-notes":
+            if not self._busy and self.story is not None and event.text_area.text != self.story.notes:
+                self.story.save_notes(event.text_area.text)
+            return
         e = self.entity
         if self._busy or e is None or event.text_area.id != "notes":
             return
@@ -845,8 +868,8 @@ class BuilderScreen(KeptScreen, Screen):
         event.stop()
         name = event.button.id or ""
         {"u-new": self.action_new_universe, "u-rename": lambda: self.universe_act("rename"),
-         "u-delete": lambda: self.universe_act("delete"), "s-open": lambda: self.story_act("open"),
-         "s-write": self.action_writer, "s-export": self.action_export, "s-draft": self.action_new_draft,
+         "u-delete": lambda: self.universe_act("delete"), "s-new": self.action_new_story,
+         "s-write": self.action_writer, "s-export": self.action_export,
          "s-backups": lambda: self.story_act("backups"),
          "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
          "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
@@ -1189,7 +1212,7 @@ class BuilderScreen(KeptScreen, Screen):
             self.refresh_card()
 
     def action_tab(self, i):
-        self.remove_class("-show-right")
+        self.remove_class("-show-story")
         self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
 
     def action_fix_names(self):
@@ -1217,7 +1240,7 @@ class BuilderScreen(KeptScreen, Screen):
         self.refresh_all()
 
     def action_focus_card(self):
-        self.remove_class("-show-right")
+        self.remove_class("-show-story")
         self.card.focus()
 
     def action_help(self):
@@ -1453,24 +1476,32 @@ class BuilderScreen(KeptScreen, Screen):
         entry = self.scene_entries[index] if index is not None and index < len(self.scene_entries) else None
         self.b.open_writer(self, scene=entry)
 
+    def focus_story_panel(self):
+        """Focus the list or text box of the Story panel's open tab (when the cards are hidden, nothing hidden may keep the keys)."""
+        tab = self.query_one("#rtabs", TabbedContent).active
+        self.query_one({"r-outline": "#outline", "r-scenes": "#scenes", "r-notes": "#story-notes"}.get(tab, "#outline")).focus()
+
     def action_rtab(self, name):
         self.query_one("#rtabs", TabbedContent).active = f"r-{name}"
         if self.has_class("-narrow"):
-            self.add_class("-show-right")
+            self.add_class("-show-story")
+            self.call_after_refresh(self.focus_story_panel)
         self.b.remember(self)
 
-    def action_toggle_right(self):
-        """On a narrow terminal the outline, scenes and entity notes take turns with the cards; elsewhere both are always shown."""
+    def action_toggle_story(self):
+        """On a narrow terminal the Story panel (outline, scenes, notes) takes turns with the entity cards; elsewhere both are always shown."""
         if self.has_class("-narrow"):
-            self.set_class(not self.has_class("-show-right"), "-show-right")
+            showing = not self.has_class("-show-story")
+            self.set_class(showing, "-show-story")
+            self.call_after_refresh(self.focus_story_panel if showing else self.card.focus)
         else:
-            self.say("Both columns are showing: this terminal is wide enough.")
+            self.say("The Story panel and the cards are both showing: this terminal is wide enough.")
 
     def on_resize(self, event):
         narrow = event.size.width < 150
         self.set_class(narrow, "-narrow")
         if not narrow:
-            self.remove_class("-show-right")
+            self.remove_class("-show-story")
 
     def on_tabbed_content_tab_activated(self, event):
         if event.control.id == "rtabs":
@@ -1530,8 +1561,25 @@ class BuilderScreen(KeptScreen, Screen):
         self.outline.highlighted = max(0, min(at, len(self.top_rows()) - 1))
         self.b.changed = True
 
-    def action_new_draft(self):
-        self.b.go("wheel", {"universe": self.universe.slug if self.universe else None, "new": True})
+    def action_new_story(self):
+        """A blank story in the open universe, with no Wheel draft behind it: a title, an empty manuscript to write in."""
+        if not self.universe:
+            return self.say("Open or create a universe first.")
+        self.app.push_screen(EditScreen("A new story in " + self.universe.name, {"title": ""}), self._story_named)
+
+    def _story_named(self, out):
+        title = (out or {}).get("title", "").strip()
+        if not title:
+            return
+        story = self.universe.new_story(title, {"genre": " / ".join(self.universe.settings().get("genres", []))})
+        self.story = story
+        self.refresh_all()
+        self.say(f"Started '{story.title}': a blank story, with no outline. Press w to write it, or edit its outline rows (right-click or e).")
+        self.b.changed = True
+
+    def action_entity_notes(self):
+        self.remove_class("-show-story")
+        self.query_one("#notes", TextArea).focus()
 
 
 LEGEND = "▲ ▼ rate · ✎ write it yourself · space fills blanks · ? help"

@@ -112,7 +112,7 @@ def copy_as_new(story):
     while (STORIES / f"{new['id']}.json").exists():            # (two copies in one second)
         new["id"] = f"{new['id'][:15]}-{n}"
         n += 1
-    for key in ("kept", "history", "seeds", "threads", "atoms", "inputs", "mix", "universes", "universe_mode", "step"):
+    for key in ("kept", "history", "seeds", "threads", "atoms", "inputs", "mix", "universes", "home", "universe_mode", "step"):
         if key in story:
             new[key] = copy.deepcopy(story[key])
     new["copied_from"] = story["id"]

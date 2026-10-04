@@ -575,6 +575,21 @@ class Session:
         self.story["universes"] = [s for s in slugs if vault.get_universe(s)]
         self._sync_engine()
 
+    @property
+    def home(self):
+        """The universe this draft belongs to (its slug), if it was chosen and still exists: promoting puts the story into that universe."""
+        slug = self.story.get("home")
+        return slug if slug and vault.get_universe(slug) else None
+
+    def set_home(self, slug):
+        """Choose the universe this draft belongs to (None: not decided; promotion asks). A home universe is also ticked, so the generator draws from it."""
+        if slug and not vault.get_universe(slug):
+            return False
+        self.story["home"] = slug or None
+        if slug and slug not in self.story.get("universes", []):
+            self.set_universes(list(self.story.get("universes", [])) + [slug])
+        return True
+
     def toggle_universe(self, slug):
         """Tick or untick a universe for this draft. Returns True if it is selected now."""
         chosen = list(self.story.get("universes", []))

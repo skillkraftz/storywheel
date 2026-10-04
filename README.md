@@ -249,9 +249,13 @@ the story's outline. Same-name entities are offered as merges (blank fields fill
 
 ### The Universe Builder (F2)
 
-Left: universes (create, rename, delete after a confirm) and their stories. Middle: the universe overview or a story's
-outline, then tabs for Characters, Places, Things, Groups and Notes with the selected entity as a card. Right: its notes
-(edit as you type), its links both ways, and the stories it appears in. The keys are listed with `?`.
+Left, top to bottom: **Universes** (create, rename, delete after a confirm), **Stories** (titles only; `+Story` makes a blank story
+with no Wheel draft behind it, then Write, Export, Backups…) and a large **Story** panel for the selected story with tabs
+**Outline** (the beats, editable one row at a time; `A` / `X` add or remove a repeatable beat), **Scenes** (a click or Enter opens
+the Writer at that scene) and **Notes** (the story's own, saved as you type in `notes.md`). Middle: the writing-stats box, then
+tabs for Characters, Places, Things, Groups and Notes with the selected entity as a card; under the card are that entity's own
+notes (`E` focuses them, saved as you type), its links both ways and the stories it appears in. There is no right column. The keys
+are listed with `?`. New Wheel drafts are started in the Wheel (F1), where you also choose which universe a draft belongs to.
 
 A new entity starts blank. **Click a field (or `f`) to roll it, right-click (or `e`) to write it, `space` rolls every
 blank field**, the wheel steps through a field's history. Rolls use the universe's genre leanings, the entity's other
@@ -265,7 +269,8 @@ universe's genre leanings, exclusions, boosts and its own `lists/` folder; `S` t
 ### Universes in the Wheel
 
 The Wheel's universe panel is a checklist: tick the universes the generator may draw from for this draft (saved with
-it). Their characters, places and things become atoms in the matching slots, boosted (`atom_boost` in the universe's
+it). Under it, **Belongs to** chooses the universe the draft will live in: promoting it (Send to Builder, B, or Q on leaving) then goes
+straight to that universe's preview and into its Stories, with no "new or existing" question (choosing a home also ticks it). Their characters, places and things become atoms in the matching slots, boosted (`atom_boost` in the universe's
 settings), and their genre leanings join the mix. `Use: no / mix / only` decides whether whole protagonist and setting
 candidates can come from them. `u` saves a piece into a universe.
 
@@ -354,7 +359,7 @@ app: the screen is cleared on the way in and out, so your shell prompt never sho
 your machine; `python tools/screens.py 190x50` prints each mode as text at a given size, for checking layouts.
 
 On a narrow terminal (under 150 columns, such as a small kitty window on a Raspberry Pi) the side columns get thinner, the Wheel's buttons wrap into a
-grid, and in the Builder the right column (Outline, Scenes, Entity notes: keys 6 7 8, or backslash) takes turns with the cards; Esc or 1-5 bring the cards back.
+grid, and in the Builder the Story panel (Outline, Scenes, Notes: keys 6 7 8, or backslash) takes the whole width in place of the cards; Esc or 1-5 bring the cards back.
 
 ### Spelling
 

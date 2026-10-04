@@ -49,6 +49,7 @@ def run_wheel(st, payload, get_engine, plain=False):
         story = store.new_story()
         if payload.get("universe"):
             story["universes"] = [payload["universe"]]
+            story["home"] = payload["universe"]
     elif payload.get("story_id"):
         story = store.load(payload["story_id"])
     elif st.get("draft"):
@@ -60,6 +61,7 @@ def run_wheel(st, payload, get_engine, plain=False):
         story = store.new_story()
         if payload.get("universe"):
             story["universes"] = [payload["universe"]]
+            story["home"] = payload["universe"]
     st.update(mode="wheel", draft=story["id"])
     return run_app(story, get_engine(), st, notice)
 

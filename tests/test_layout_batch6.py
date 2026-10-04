@@ -69,19 +69,20 @@ def test_a_narrow_wheel_keeps_every_button_whole(home):
 
 # --- the Builder -----------------------------------------------------------------------------------------------------------------------
 
-def test_the_builders_left_column_is_two_boxes_with_their_buttons_underneath(home):
+def test_the_builders_left_column_is_three_boxes_with_their_buttons_underneath(home):
     world(home)
     async def script(app, pilot):
         s = app.screen_ref
         ub, sb = s.query_one("#universes-box"), s.query_one("#stories-box")
         return (ub.border_title, sb.border_title, [str(s.query_one(i).label) for i in ("#u-new", "#u-rename", "#u-delete")],
                 s.query_one("#u-new").region.y > s.query_one("#universes").region.y, ub.region.contains_region(s.query_one("#u-delete").region),
-                s.query_one("#s-open").region.y > s.query_one("#stories").region.y, sb.region.contains_region(s.query_one("#s-backups").region),
-                [str(s.query_one(i).label) for i in ("#s-open", "#s-write", "#s-export", "#s-draft", "#s-backups")])
-    ut, st, ulabels, below_u, in_u, below_s, in_s, slabels = run_builder(script, universe="the-unbelievably-long-named-universe-of-dry-country")
+                s.query_one("#s-new").region.y > s.query_one("#stories").region.y, sb.region.contains_region(s.query_one("#s-backups").region),
+                [str(s.query_one(i).label) for i in ("#s-new", "#s-write", "#s-export", "#s-backups")],
+                s.query_one("#story-box").region.y >= sb.region.bottom, s.query_one("#story-box").region.height > sb.region.height, len(s.query("#right")))
+    ut, st, ulabels, below_u, in_u, below_s, in_s, slabels, story_below, story_big, rights = run_builder(script, universe="the-unbelievably-long-named-universe-of-dry-country")
     assert ut == "Universes" and st.startswith("Stories in The Unbelievably") and st.endswith("…") and len(st) <= 30
-    assert ulabels == ["+Universe", "Rename", "Delete"] and slabels == ["Outline", "Write", "Export", "+Wheel draft", "Backups…"]
-    assert below_u and in_u and below_s and in_s
+    assert ulabels == ["+Universe", "Rename", "Delete"] and slabels == ["+Story", "Write", "Export", "Backups…"]
+    assert below_u and in_u and below_s and in_s and story_below and story_big and rights == 0          # (no right column; the Story panel is under the story list)
 
 
 def test_list_rows_are_cut_with_an_ellipsis_never_wrapped(home):
@@ -158,24 +159,25 @@ def test_the_entity_card_gets_more_width_than_before(home):
     assert list_w <= 36 and card_w >= 70
 
 
-def test_a_narrow_builder_shows_the_side_column_in_turns(home):
+def test_a_narrow_builder_shows_the_story_panel_in_turns(home):
     u, hero, t = world(home)
     async def script(app, pilot):
         s = app.screen_ref
-        a = (s.has_class("-narrow"), s.query_one("#right").display, s.query_one("#card-box").region.width)
-        await pilot.press("7")
-        b = (s.query_one("#right").display, s.query_one("#mid").display, s.query_one("#rtabs").active)
-        await pilot.press("escape")
-        c = (s.query_one("#right").display, s.query_one("#mid").display)
-        await pilot.press("backslash")
-        d = s.query_one("#right").display
-        await pilot.press("3")
-        e = s.query_one("#right").display
         left = s.query_one("#left").region.width
+        a = (s.has_class("-narrow"), s.query_one("#mid").display, s.query_one("#card-box").region.width)
+        await pilot.press("7")
+        b = (s.query_one("#mid").display, s.query_one("#rtabs").active, s.query_one("#left").region.width)
+        await pilot.press("escape")
+        c = (s.query_one("#mid").display, s.query_one("#left").region.width)
+        await pilot.press("backslash")
+        d = s.query_one("#mid").display
+        await pilot.press("3")
+        await pilot.pause()
+        e = s.query_one("#mid").display
         return a, b, c, d, e, left
     a, b, c, d, e, left = run_builder(script, universe=u.slug, size=(120, 34))
-    assert a[0] and not a[1] and a[2] >= 40 and left == 34
-    assert b == (True, False, "r-scenes") and c == (False, True) and d is True and e is False
+    assert a[0] and a[1] and a[2] >= 40 and left == 34                                    # thin left column, the cards beside it
+    assert b[0] is False and b[1] == "r-scenes" and b[2] >= 110 and c == (True, 34) and d is False and e is True       # 7 gives the Story panel the whole width
 
 
 def test_buttons_stay_whole_in_every_builder_box_at_a_narrow_size(home):

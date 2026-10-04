@@ -28,6 +28,15 @@ Part C: structures and the Writer
   structure beats, twist, protagonist, setting and rumor; scrollable; Escape closes it.
 - The status line shows the goal as `today 312 / 1,000 words · 31%` (without a goal: `today 312 words`).
 
+Part D: Builder layout
+- The right column is gone. The left column is Universes (small), **Stories** (titles only; **+Story** makes a blank story with no Wheel draft) and a large
+  **Story** panel with tabs Outline / Scenes / Notes for the selected story (a click on a scene opens the Writer there; Notes are the story's own, in
+  `notes.md`). The middle stays the entity area, and an entity's own notes moved under its card (`E`). On a narrow window the Story panel takes the whole
+  width in turns with the cards (keys 6 7 8 or backslash; focus follows, so no key ever lands in a hidden box).
+- "+Wheel draft" and `W` are gone from the Builder. In the Wheel, **Belongs to** (universe panel) chooses the universe a draft lives in; promoting it
+  (Send to Builder, B, or Q on leaving) skips the "new or existing universe" question, shows the preview and puts the story in that universe's Stories.
+  A draft started for a universe belongs to it.
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,

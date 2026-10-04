@@ -179,3 +179,66 @@ def test_a_draft_with_nothing_kept_cannot_be_promoted_from_past_stories(home):
         await press(pilot, "P")
         return flat(screen_text(app))
     assert "nothing kept yet, so there is nothing to promote" in run_tui(store.new_story(), make_engine(home), script)
+
+
+# --- a draft belongs to a universe (batch 9) -----------------------------------------------------------------------------------------
+
+def test_choosing_which_universe_a_draft_belongs_to_ticks_it_and_saves_it(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    story = store.new_story()
+    async def script(app, pilot):
+        before = str(app.screen.query_one("#uni-home").label).strip()
+        await keep_to(app, pilot, "title")
+        app.screen.choose_home()
+        await pilot.pause()
+        assert type(app.screen).__name__ == "ChoiceScreen"
+        options = [str(app.screen.options[i][0]) for i in range(len(app.screen.options))]
+        app.screen.dismiss("thornwood")
+        await pilot.pause()
+        return before, options, str(app.screen.query_one("#uni-home").label).strip(), app.session.story["universes"]
+    before, options, after, ticked = run_tui(story, make_engine(home), script)
+    assert before == "(not chosen)" and options == ["Not decided: ask me when I promote it", "Thornwood"] and after == "Thornwood" and ticked == ["thornwood"]
+    assert store.load(story["id"])["home"] == "thornwood"
+
+
+def test_a_draft_that_belongs_to_a_universe_goes_straight_to_its_preview_and_into_its_stories(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    story = store.new_story()
+    story["home"] = "thornwood"
+    async def script(app, pilot):
+        await keep_to(app, pilot, "premise")
+        await press(pilot, "B")
+        screen = type(app.screen).__name__
+        text = flat(screen_text(app))
+        await press(pilot, "p")
+        return screen, text, app.return_value, app.next
+    screen, text, message, nxt = run_tui(story, make_engine(home), script)
+    assert screen == "PromotePreviewScreen" and "Thornwood" in text
+    assert nxt[0] == "builder" and nxt[1]["universe"] == "thornwood" and nxt[1]["story"]
+    assert len(vault.get_universe("thornwood").stories()) == 1 and len(vault.list_universes()) == 1
+
+
+def test_the_quit_screen_offers_the_home_universe_first(home):
+    vault.create_universe("Thornwood", ["western"])
+    story = store.new_story()
+    story["home"] = "thornwood"
+    async def script(app, pilot):
+        await keep_to(app, pilot, "premise")
+        await press(pilot, "Q")
+        text = flat(screen_text(app))
+        await press(pilot, "p")
+        return text, type(app.screen).__name__
+    text, screen = run_tui(story, make_engine(home), script)
+    assert "Into Thornwood (p)" in text and "Not now" in text and screen == "PromotePreviewScreen"
+
+
+def test_without_a_home_the_choices_are_as_before(home):
+    vault.create_universe("Thornwood", ["western"])
+    async def script(app, pilot):
+        await keep_to(app, pilot, "premise")
+        await press(pilot, "Q")
+        text = flat(screen_text(app))
+        await press(pilot, "p")                                          # (p does nothing: there is no home)
+        return text, type(app.screen).__name__
+    text, screen = run_tui(store.new_story(), make_engine(home), script)
+    assert "Into " not in text and screen == "QuitScreen"

@@ -177,6 +177,7 @@ class Hub(App):
             new = bool(payload.get("new"))
         if new and payload.get("universe"):
             story["universes"] = [payload["universe"]]
+            story["home"] = payload["universe"]
         return story
 
     def _build_builder(self, payload):

@@ -23,19 +23,11 @@ def test_a_universes_own_lists_are_merged_and_used_when_rolling_in_it(home):
     assert "thornwood bell-ringer" in seen                     # drawn, like any list of the universe's genre
 
 
-def test_new_wheel_draft_from_inside_a_universe_starts_with_it_ticked(home):
+def test_new_wheel_draft_for_a_universe_starts_with_it_ticked_and_as_its_home(home):
     u = vault.create_universe("Thornwood", ["western"])
     u.new_entity("character", "Ada Voss")
     u.new_story("Tale")
-    async def go():
-        app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="thornwood", story="tale")
-        async with app.run_test(size=(200, 50)) as pilot:
-            await pilot.pause()
-            app.screen_ref.action_new_draft()
-            await pilot.pause()
-            return app.next
-    nxt = asyncio.run(go())
-    assert nxt == ("wheel", {"universe": "thornwood", "new": True})
+    nxt = ("wheel", {"universe": "thornwood", "new": True})          # (the Builder no longer starts drafts; the Wheel is asked for one for a universe)
     story = None
 
     class State(dict):
@@ -49,4 +41,4 @@ def test_new_wheel_draft_from_inside_a_universe_starts_with_it_ticked(home):
         modes.run_wheel(State(), nxt[1], lambda: fill.make_engine(u, seed=1))
     finally:
         tui.run_app = real
-    assert seen["story"]["universes"] == ["thornwood"] and not seen["story"]["kept"]
+    assert seen["story"]["universes"] == ["thornwood"] and seen["story"]["home"] == "thornwood" and not seen["story"]["kept"]
