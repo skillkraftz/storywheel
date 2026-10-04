@@ -22,7 +22,7 @@ Everything you keep is plain files: markdown with YAML frontmatter, so the libra
     ./install.sh              (from this folder; add --dry-run to see what it would do, --yes to accept the defaults)
 
 It checks for, and installs when missing, Python 3.9+, pipx, git and **Neovim 0.10 or newer** (the distribution's package is often older: it then
-fetches the official release into `~/.local`), offers LibreOffice (only for .odt and .pdf export) and Neovide (a window of its own for the
+fetches the official release into `~/.local`), offers LibreOffice (only for .odt and .pdf export) and kitty (a window of its own for the
 Writer), installs storywheel, and runs `storywheel setup`.
 
 ### By hand
@@ -36,8 +36,7 @@ To tinker with the word lists and see changes immediately, install it editable: 
 
 ### Setup, version and updates
 
-- `storywheel setup` is a short questionnaire: your details for the manuscript's first page, the library and manuscripts folders, terminal or
-  Neovide, transparency and fetching the dictionary, and the update remote. It remembers what it asked; running it again asks only what is new
+- `storywheel setup` is a short questionnaire: your details for the manuscript's first page, the library and manuscripts folders, the Writer's kitty window, transparency and fetching the dictionary, and the update remote. It remembers what it asked; running it again asks only what is new
   (`--again` asks everything, `--defaults` asks nothing). Every answer can be changed later in Settings (F4).
 - `storywheel --version` shows the version; CHANGELOG.md lists what each version added.
 - `storywheel update` compares the **installed** version with the version in the folder it was installed from (pip records that folder; an editable
@@ -50,7 +49,7 @@ To tinker with the word lists and see changes immediately, install it editable: 
 ### Two computers
 
 storywheel does not sync anything and knows nothing about syncing: your library and manuscripts are plain files, so any tool outside this
-project can carry them. What is kept per machine is in `~/.storywheel/settings.local.toml` (folders, Neovide, fonts, the update remote, what
+project can carry them. What is kept per machine is in `~/.storywheel/settings.local.toml` (folders, the Writer's kitty window, fonts, the update remote, what
 setup asked); `settings.toml` holds the rest and can be copied between machines.
 
 ## Use
@@ -302,17 +301,26 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
-### Writing in kitty (a typewriter-style setup)
+### Writing in kitty (the Writer's own window)
 
-[kitty](https://sw.kovidgoyal.net/kitty/) is a good home for the Writer, especially on a Raspberry Pi where Neovide is not available (it has no arm64
-build; Settings and setup say so and the terminal is used).
+Run storywheel inside [kitty](https://sw.kovidgoyal.net/kitty/) and the Writer opens in a **kitty window of its own** with the writing settings
+(Settings > Writer): font, font size, **line height** (kitty's `modify_font cell_height`, in percent: 100 normal, 140 typewriter-like, 200 double
+spaced), padding and opacity. The window closes when you come back, and storywheel itself keeps your normal kitty spacing. Outside kitty the
+Writer runs in the same terminal, and storywheel shows a one-line note at start saying kitty gives a better Writer and how to install it
+(`sudo apt install kitty`). Turn the window off with Settings > Writer > "Open the Writer in its own kitty window".
 
-    storywheel kitty                                      a new kitty window with storywheel, using Settings > Writer's font and size
-    storywheel kitty --font "Courier Prime" --size 17 --line-height 160
-    storywheel kitty --print                              show the command (put it in a launcher or an alias)
+    storywheel kitty                      a new kitty window running storywheel (kitty's own spacing)
+    storywheel kitty --font "Courier Prime" --size 17   a font and size for storywheel's own window, if you want them
+    storywheel kitty --print              show the command (put it in a launcher or an alias)
+    storywheel kitty --probe              report what your kitty could do via remote control (changes nothing)
 
-`--line-height` is a percent (kitty's `modify_font cell_height`; 140 by default) and gives the taller, typewriter-like lines. A desktop launcher:
-`~/.local/share/applications/storywheel.desktop` with `Exec=storywheel kitty --font "Courier Prime" --size 17`, `Terminal=false`.
+A desktop launcher: `~/.local/share/applications/storywheel.desktop` with `Exec=storywheel kitty`, `Terminal=false`. Older Neovide settings are
+converted once (`neovide` becomes the kitty window, `neovide_opacity` becomes `writer_opacity`, `line_spacing` becomes `writer_line_height`).
+
+**Switching in place:** kitty's remote control (`kitten @ set-font-size`, `set-spacing`, `set-background-opacity`) could in principle restyle
+one window instead of opening a second, but it needs `allow_remote_control` switched on in `kitty.conf`, cannot change `modify_font` on a
+running window in the versions we know of, and was not testable on the development machine (kitty is not installed there). storywheel does not
+depend on it; `storywheel kitty --probe` tells you what your kitty offers.
 
 **Ctrl+I** reaches Neovim distinctly under kitty's keyboard protocol (kitty sends `CSI 105;5u`, Neovim reads it as `<C-i>`, not Tab). This was
 checked by sending those exact bytes to a real terminal-mode Neovim (`tests/test_kitty_keys.py`), so Ctrl+I toggles italics automatically when
@@ -347,7 +355,7 @@ minute on a Raspberry Pi) and stops it when you turn checking off or leave the W
 
 By default the background is your terminal's own, so a translucent terminal (kitty `background_opacity 0.85`...) shows through in every
 mode and in the Writer. Turn it off for solid colors. You can set a text color and an accent color (a name like `cream` or `amber`, or a
-hex color), and Neovide's window opacity.
+hex color), and the Writer window's opacity.
 
 ### Switching between modes
 

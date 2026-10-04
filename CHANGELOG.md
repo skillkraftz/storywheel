@@ -37,6 +37,17 @@ Part D: Builder layout
   (Send to Builder, B, or Q on leaving) skips the "new or existing universe" question, shows the preview and puts the story in that universe's Stories.
   A draft started for a universe belongs to it.
 
+### Part E: kitty replaces Neovide
+
+- Inside kitty, the Writer opens in **its own kitty window** with the writing settings (font, size, line height via `modify_font cell_height`,
+  padding, opacity) and the window closes when Neovim does. storywheel keeps normal spacing. Outside kitty the Writer runs in the same terminal,
+  and a one-line note at start says kitty gives a better Writer and how to install it (`sudo apt install kitty`).
+- Neovide is removed everywhere (settings, setup, install.sh, tools, arm64 special cases). New settings: `writer_kitty`, `writer_line_height`,
+  `writer_padding`, `writer_opacity` (with `writer_font`, `writer_font_size`). Old `neovide`, `neovide_opacity`, `line_spacing` are converted once
+  (`migrate.migrate_settings`) in the global, local and story settings files.
+- `storywheel kitty` no longer applies tall lines (the `--line-height` option is gone); `--probe` reports what the installed kitty's remote
+  control offers (not depended on).
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,

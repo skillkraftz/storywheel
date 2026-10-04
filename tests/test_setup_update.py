@@ -42,9 +42,9 @@ def test_setup_asks_everything_once_and_stores_the_answers(home, tmp_path):
     assert (g["author_name"], g["legal_name"], g["email"], g["phone"]) == ("Andy W", "Andrew Writer", "a@b.c", "555")
     assert g["address"] == "1 Main St\nTown ST"
     assert g["library"] == str(lib) and g["manuscripts_dir"] == str(man) and lib.is_dir() and man.is_dir()
-    assert g["neovide"] is False and g["transparent_background"] is True
+    assert g["writer_kitty"] is True and g["transparent_background"] is True
     assert set(g["setup_done"]) == set(setup_wizard.QUESTIONS)
-    assert any("Neovide" in s and "To fix it" in s for s in said)                       # (not installed: said plainly, optional)
+    assert any("kitty gives the Writer a better window" in s and "sudo apt install kitty" in s for s in said)       # (not installed: said plainly, optional)
     assert any("Skipped" in s and "storywheel dictionary install" in s for s in said)
 
 

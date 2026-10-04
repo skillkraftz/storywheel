@@ -1,6 +1,7 @@
 """Commands for the library: universes, entities and stories (all with --json for other programs)."""
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -127,23 +128,56 @@ def cmd_post_update(args):
     update.post_update()
 
 
-def kitty_command(font="", size=0, line_height=140, extra=()):
-    """The kitty command line that opens storywheel in its own window: a chosen font and taller lines (modify_font cell_height).
-    Font and size default to the Writer's own settings (Settings > Writer)."""
-    g = settings.load_global()
-    font = font or g.get("writer_font") or ""
-    size = size or g.get("writer_font_size") or 15
-    argv = ["kitty", "--class", "storywheel", "--title", "storywheel", "-o", f"font_size={size}",
-            "-o", f"modify_font=cell_height {int(line_height)}%", "-o", "remember_window_size=no", "--start-as=maximized"]
+def kitty_command(font="", size=0, extra=()):
+    """The kitty command line that opens storywheel in its own window, with kitty's normal spacing (the Writer's tall lines belong to the
+    Writer's own window, see writer.kitty_command). A font and size are only used if you give them."""
+    argv = ["kitty", "--class", "storywheel", "--title", "storywheel", "-o", "remember_window_size=no", "--start-as=maximized"]
+    if size:
+        argv += ["-o", f"font_size={size}"]
     if font:
         argv += ["-o", f"font_family={font}"]
     return argv + list(extra) + ["storywheel"]
 
 
+def kitty_probe(run=None):
+    """What this kitty can do for switching in place, from the installed kitty: its version and, if remote control is switched on for this
+    window, which remote commands it knows. Returns lines of text. (Nothing here is needed by storywheel.)"""
+    import shutil
+    import subprocess
+    run = run or (lambda argv: subprocess.run(argv, capture_output=True, text=True, timeout=10))
+    exe = shutil.which("kitty")
+    if not exe:
+        return [tools.missing("kitty")]
+    lines = []
+    try:
+        lines.append(run([exe, "--version"]).stdout.strip() or "kitty (version unknown)")
+    except (OSError, subprocess.SubprocessError) as e:
+        return [f"Could not run kitty: {e}"]
+    kitten = shutil.which("kitten")
+    if not kitten:
+        lines.append("kitten (kitty's helper) was not found, so remote control cannot be tried.")
+        return lines
+    if not os.environ.get("KITTY_LISTEN_ON"):
+        lines.append("Remote control is not switched on for this window (no KITTY_LISTEN_ON). To try it, start kitty with:")
+        lines.append("  kitty -o allow_remote_control=socket-only --listen-on unix:/tmp/storywheel-kitty")
+        return lines
+    try:
+        out = run([kitten, "@", "--help"]).stdout
+    except (OSError, subprocess.SubprocessError) as e:
+        lines.append(f"kitten @ failed: {e}")
+        return lines
+    for cmd in ("set-font-size", "set-spacing", "set-background-opacity", "resize-os-window", "load-config", "launch"):
+        lines.append(f"  kitten @ {cmd}: {'yes' if cmd in out else 'no'}")
+    return lines
+
+
 def cmd_kitty(args):
     import os
     import shutil
-    argv = kitty_command(args.font, args.size, args.line_height)
+    if args.probe:
+        print("\n".join("  " + l if not l.startswith("  ") else l for l in kitty_probe()))
+        return
+    argv = kitty_command(args.font, args.size)
     if args.print:
         print(" ".join(f'"{a}"' if " " in a else a for a in argv))
         return
@@ -382,7 +416,7 @@ def cmd_dictionary(args):
 
 
 def cmd_migrate(args):
-    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links()
+    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links() + migrate.migrate_settings()
     print("\n".join("  " + l for l in lines) if lines else "  Nothing to migrate.")
 
 
@@ -395,7 +429,7 @@ def cmd_settings(args):
 def cmd_builder(args):
     from . import builder, state
     from .cli import get_ratings
-    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links():
+    for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links() + migrate.migrate_settings():
         print("  " + line)
     from . import modes
     from .cli import get_engine
@@ -425,10 +459,10 @@ def add_parsers(sub):
     p.add_argument("--check", action="store_true", help="only say whether there is something new")
     p.add_argument("--record", action="store_true", help="after installing by hand: remember which source commit is installed")
     sub.add_parser("post-update", help=argparse.SUPPRESS)
-    p = sub.add_parser("kitty", help="open storywheel in its own kitty window with a chosen font and taller lines")
-    p.add_argument("--font", default="", help="font family (default: Settings > Writer > font)")
-    p.add_argument("--size", type=float, default=0, help="font size (default: Settings > Writer)")
-    p.add_argument("--line-height", type=int, default=140, help="line height as a percent of the font's (kitty modify_font cell_height); default 140")
+    p = sub.add_parser("kitty", help="open storywheel in its own kitty window (normal spacing; the Writer opens its own tall-lined window from there)")
+    p.add_argument("--font", default="", help="font family for storywheel's own window (default: your kitty font)")
+    p.add_argument("--size", type=float, default=0, help="font size for storywheel's own window (default: your kitty size)")
+    p.add_argument("--probe", action="store_true", help="say what the installed kitty could do for switching windows in place (kitty remote control); changes nothing")
     p.add_argument("--print", action="store_true", help="only show the command")
     p = sub.add_parser("grammar", help="optional grammar checking with a local LanguageTool:  grammar install [--from FILE.zip] | status | start | stop | rule-off ID | ignored STORY [--clear]")
     p.add_argument("action", choices=["install", "status", "start", "stop", "config", "rule-off", "ignored"])

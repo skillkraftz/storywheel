@@ -9,21 +9,21 @@ from storywheel.cli import main as cli
 def test_machine_settings_live_in_their_own_file(home):
     h = home / "home"
     h.mkdir(exist_ok=True)
-    settings.save_global({"legal_name": "Ada Voss", "neovide": True, "writer_font": "Iosevka", "update_remote": "xps:projects/storywheel"})
+    settings.save_global({"legal_name": "Ada Voss", "writer_kitty": False, "writer_font": "Iosevka", "update_remote": "xps:projects/storywheel"})
     shared, local = (h / "settings.toml").read_text(), (h / "settings.local.toml").read_text()
-    assert "legal_name" in shared and "neovide" not in shared and "writer_font" not in shared and "update_remote" not in shared
-    assert "neovide = true" in local and "update_remote" in local and "legal_name" not in local
+    assert "legal_name" in shared and "writer_kitty" not in shared and "writer_font" not in shared and "update_remote" not in shared
+    assert "writer_kitty = false" in local and "update_remote" in local and "legal_name" not in local
     g = settings.load_global()
-    assert g["legal_name"] == "Ada Voss" and g["neovide"] is True and g["update_remote"] == "xps:projects/storywheel"
+    assert g["legal_name"] == "Ada Voss" and g["writer_kitty"] is False and g["update_remote"] == "xps:projects/storywheel"
 
 
 def test_an_older_settings_file_with_machine_keys_is_split_when_saved(home):
     h = home / "home"
     h.mkdir(exist_ok=True)
-    (h / "settings.toml").write_text('library = "/old/place"\nlegal_name = "X"\nneovide = true\n')
+    (h / "settings.toml").write_text('library = "/old/place"\nlegal_name = "X"\nwriter_kitty = false\n')
     settings.save_global({"email": "a@b.c"})
     assert "library" not in (h / "settings.toml").read_text() and 'library = "/old/place"' in (h / "settings.local.toml").read_text()
-    assert settings.load_global()["neovide"] is True
+    assert settings.load_global()["writer_kitty"] is False
 
 
 def make_links(home, tmp_path):
@@ -77,3 +77,27 @@ def test_the_old_sync_folder_setting_is_dropped(home):
     (h / "settings.local.toml").write_text('sync_folder = "/x"\nneovide = true\n')
     assert any("sync_folder" in l for l in migrate.migrate_sync_links())
     assert "sync_folder" not in (h / "settings.local.toml").read_text() and settings.load_global()["neovide"] is True
+
+
+def test_old_neovide_settings_become_kitty_writer_settings(home):
+    h = home / "home"
+    h.mkdir(exist_ok=True)
+    (h / "settings.toml").write_text('# storywheel settings\nlegal_name = "X"\nline_spacing = 12\n')
+    (h / "settings.local.toml").write_text('# this machine\nneovide = true\nneovide_opacity = 0.7\nwriter_font_size = 15\n')
+    lines = migrate.migrate_settings()
+    shared, local = (h / "settings.toml").read_text(), (h / "settings.local.toml").read_text()
+    assert len(lines) == 2 and all("kitty Writer settings" in l for l in lines)
+    assert "neovide" not in shared + local and "line_spacing" not in shared
+    assert "writer_line_height = 153" in shared and "writer_kitty = true" in local and "writer_opacity = 0.7" in local
+    assert shared.startswith("# storywheel settings") and 'legal_name = "X"' in shared
+    g = settings.load_global()
+    assert g["writer_kitty"] is True and g["writer_opacity"] == 0.7 and g["writer_line_height"] == 153
+    assert migrate.migrate_settings() == []                                      # once
+
+
+def test_a_story_with_neovide_settings_is_migrated_too(home):
+    from storywheel import vault
+    s = vault.create_universe("U").new_story("S")
+    (s.path / "settings.toml").write_text("# story\nneovide = false\nformat = \"short-story\"\n")
+    assert len(migrate.migrate_settings()) == 1
+    assert "neovide" not in (s.path / "settings.toml").read_text() and "format" in (s.path / "settings.toml").read_text()

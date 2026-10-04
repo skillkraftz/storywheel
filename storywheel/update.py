@@ -293,7 +293,7 @@ def _post(runner, say):
 def post_update(say=print):
     """What a new version may need: migrations, the dictionary index and the spelling lists."""
     from . import dictionary, genrefit, migrate, spelldict, writer
-    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links()
+    lines = migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links() + migrate.migrate_settings()
     for line in lines:
         say("  " + line)
     if dictionary.installed():

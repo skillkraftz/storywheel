@@ -38,15 +38,16 @@ SECTIONS = [
          "Use your terminal's own background, so a translucent terminal (kitty background_opacity...) shows through. Applies to every mode and to the Writer."),
         ("text_color", "Text color", "color", None, "Blank: your terminal's own text color. A name (white, cream, amber...) or a hex color like #e8e1d0."),
         ("accent_color", "Accent color", "color", None, "Titles, borders, scene breaks, the chosen item. Blank: the usual blue. A name or a hex color like #5fafd7."),
-        ("neovide_opacity", "Neovide window opacity", "float", None, "Only for Neovide (it makes its own window): 0.85 is a little see-through, 1 is solid. Used when the background is transparent."),
     ]),
     ("Writer", [
         ("notepad_mode", "Notepad mode", "bool", None, "On: type like in an ordinary editor (Escape does not change modes). Off: Vim behavior."),
-        ("neovide", "Use Neovide", "bool", None, "A window with real fonts, if Neovide is installed (otherwise the terminal is used and you are told). Not available on arm64 (a Raspberry Pi): there is no ready-made build."),
-        ("writer_font", "Font in Neovide", "text", None, "Blank: Neovide's default monospace font."),
-        ("writer_font_size", "Font size in Neovide", "int", None, "Points."),
-        ("line_spacing", "Extra line spacing in Neovide", "int", None, "Pixels; about the font size looks double spaced."),
-        ("paragraph_spacing", "Space between paragraphs (terminal)", "int", None, "Blank lines shown between paragraphs when the Writer runs in a terminal (shown, not typed). Neovide has real line spacing instead."),
+        ("writer_kitty", "Open the Writer in its own kitty window", "bool", None, "When storywheel runs inside kitty, the Writer opens in a window of its own with the font, size, line height, padding and opacity below, and the window closes when you come back. storywheel itself keeps your normal spacing. Outside kitty the Writer runs in this terminal."),
+        ("writer_font", "Writer font", "text", None, "Only in the kitty Writer window. Blank: your kitty font."),
+        ("writer_font_size", "Writer font size", "int", None, "Points (kitty font_size)."),
+        ("writer_line_height", "Writer line height", "int", None, "Percent of the font's own height (kitty modify_font cell_height): 100 is normal, 140 reads like a typewriter, 200 is double spaced."),
+        ("writer_padding", "Writer padding", "int", None, "Space around the text in the kitty Writer window (kitty window_padding_width, in points)."),
+        ("writer_opacity", "Writer window opacity", "float", None, "Only in the kitty Writer window: 0.85 is a little see-through, 1 is solid. Used when the background is transparent."),
+        ("paragraph_spacing", "Space between paragraphs", "int", None, "Extra blank lines shown between paragraphs (shown, not typed). With a kitty line height you may not need any."),
         ("scene_marker", "Scene break in the file", "choice", ["***", "* * *", "#"],
          "What the scene-break key inserts: a line holding only this. (*** or * * * or # lines are all recognized when you type them.)"),
         ("column_width", "Column width", "int", None, "Characters."),
@@ -194,11 +195,10 @@ class SettingsScreen(KeptScreen, Screen):
                                          "Changes apply the next time the Writer starts.", markup=False)
                         if title == "Writer":
                             from . import writer as _writer
-                            exe = _writer.neovide_exe()
-                            from . import tools as _tools
-                            none = "not available on arm64 (no ready-made build): the Writer uses the terminal" if _tools.is_arm64() else \
-                                "not installed (the Writer then uses the terminal)"
-                            yield Static(f"Neovide: {'installed at ' + exe if exe else none}"
+                            exe = _writer.kitty_exe()
+                            where = ("storywheel is running in kitty" if _writer.in_kitty() else
+                                     "storywheel is not running in kitty, so the Writer uses this terminal (start storywheel inside kitty)")
+                            yield Static(f"kitty: {'installed at ' + exe + '; ' + where if exe else 'not installed (sudo apt install kitty); the Writer uses this terminal'}"
                                          f"      Neovim: {'.'.join(map(str, _writer.nvim_version() or ())) or 'not installed'}",
                                          id="writer-tools", markup=False)
                         if title == "Grammar":
@@ -287,11 +287,6 @@ class SettingsScreen(KeptScreen, Screen):
             return self.save_library(value)
         if key == "manuscripts_dir":
             return self.save_manuscripts(value)
-        if key == "neovide" and value:
-            from . import tools as _tools, writer as _writer
-            if _tools.is_arm64() and not _writer.neovide_exe():
-                self.say(_tools.NEOVIDE_ARM64)
-                return False
         g = settings.load_global()
         g[key] = value
         settings.save_global(g)
@@ -406,7 +401,7 @@ class SettingsScreen(KeptScreen, Screen):
         key = (event.switch.id or "")[2:]
         if self.values.get(key) != event.value:
             self.values[key] = event.value
-            if self.save(key, bool(event.value)) is False:         # refused (Neovide on arm64): put the switch back
+            if self.save(key, bool(event.value)) is False:         # refused: put the switch back
                 self.values[key] = not event.value
                 event.switch.value = not event.value
 

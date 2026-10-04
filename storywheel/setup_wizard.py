@@ -3,7 +3,7 @@ only asks the questions that are new; `storywheel setup --again` asks everything
 import shutil
 from pathlib import Path
 
-from . import paths, settings, tools
+from . import paths, settings
 
 # Each question: (id, title). The asking is in ask_<id>; they receive the Setup object.
 QUESTIONS = ("author", "folders", "window", "transparent", "dictionary", "update")
@@ -62,16 +62,15 @@ class Setup:
             settings.save_global({key: str(path)})
 
     def ask_window(self):
-        if not shutil.which("neovide") and tools.is_arm64():
-            self.say(tools.NEOVIDE_ARM64)
-            settings.save_global({"neovide": False})
-        elif shutil.which("neovide"):
-            use = self.yes("Neovide is installed. Write in its own window rather than in this terminal?", bool(self.g.get("neovide")))
-            settings.save_global({"neovide": use})
+        from . import writer
+        if writer.kitty_exe():
+            use = self.yes("kitty is installed. Open the Writer in its own kitty window (when storywheel runs inside kitty)?", bool(self.g.get("writer_kitty", True)))
+            settings.save_global({"writer_kitty": use})
+            if use and not writer.in_kitty():
+                self.say("Start storywheel inside kitty to get it (for example:  storywheel kitty ).")
         else:
-            self.say("The Writer will open in this terminal. (Neovide is an optional window with real line spacing; "
-                     + tools.missing("neovide").split(". ", 1)[1] + ")")
-            settings.save_global({"neovide": False})
+            self.say("The Writer will open in this terminal. " + writer.KITTY_NOTE)
+            settings.save_global({"writer_kitty": True})
 
     def ask_transparent(self):
         settings.save_global({"transparent_background": self.yes(

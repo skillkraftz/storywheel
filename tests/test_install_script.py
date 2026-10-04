@@ -50,7 +50,7 @@ def test_the_script_is_valid_bash_and_executable():
     assert subprocess.run(["bash", "-n", str(SCRIPT)]).returncode == 0
     assert os.access(SCRIPT, os.X_OK)
     text = SCRIPT.read_text()
-    for needle in ("--dry-run", "--yes", "pipx", "libreoffice-writer", "neovide", "storywheel setup", "nvim-linux-", "x86_64", "aarch64"):
+    for needle in ("--dry-run", "--yes", "pipx", "libreoffice-writer", "kitty", "storywheel setup", "nvim-linux-", "x86_64", "aarch64"):
         assert needle in text
 
 
@@ -65,9 +65,9 @@ def test_a_bare_machine_gets_everything_it_needs(tmp_path):
     assert "[dry run]" in out and "dry run: nothing will be changed" in out
 
 
-def test_arm64_gets_the_arm_build_and_no_neovide_download(tmp_path):
+def test_arm64_gets_the_arm_build_and_kitty_from_apt(tmp_path):
     r = run(machine(tmp_path, apt_candidate="0.7.2", arch="aarch64"))
-    assert "nvim-linux-arm64.tar.gz" in r.stdout and "cargo install neovide" in r.stdout and r.returncode == 0
+    assert "nvim-linux-arm64.tar.gz" in r.stdout and "apt-get install -y kitty" in r.stdout and "neovide" not in r.stdout.lower() and r.returncode == 0
 
 
 def test_a_new_enough_distribution_neovim_is_installed_with_apt(tmp_path):
@@ -81,13 +81,13 @@ def test_an_old_neovim_is_replaced_and_a_good_one_is_kept(tmp_path):
     old = run(machine(tmp_path / "a", tools=("python3", "pipx", "git"), nvim_version="0.9.5", apt_candidate="0.7"))
     assert "which is too old" in old.stdout and "official release" in old.stdout
     (tmp_path / "b").mkdir()
-    good = run(machine(tmp_path / "b", tools=("python3", "pipx", "git", "soffice", "neovide"), nvim_version="0.11.1"))
+    good = run(machine(tmp_path / "b", tools=("python3", "pipx", "git", "soffice", "kitty"), nvim_version="0.11.1"))
     assert "found NVIM v0.11.1" in good.stdout and "too old" not in good.stdout and "official release" not in good.stdout
     assert good.stdout.count("found") >= 5 and good.returncode == 0
 
 
 def test_a_url_can_be_installed_from(tmp_path):
-    r = run(machine(tmp_path, tools=("python3", "pipx", "git", "soffice", "neovide"), nvim_version="0.11.1"), "git+https://example.org/me/storywheel.git")
+    r = run(machine(tmp_path, tools=("python3", "pipx", "git", "soffice", "kitty"), nvim_version="0.11.1"), "git+https://example.org/me/storywheel.git")
     assert "pipx install --force git+https://example.org/me/storywheel.git" in r.stdout
 
 

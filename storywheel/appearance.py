@@ -1,6 +1,6 @@
 """How storywheel looks: a transparent background (the terminal's own background shows through: kitty applies background_opacity only to
 cells that use the terminal's DEFAULT background), your text color and your accent color. One set of choices (Settings > Appearance)
-for the Textual modes and, through the story settings, for the Writer and Neovide.
+for the Textual modes and, through the story settings, for the Writer (and its kitty window).
 
     apply(app)   set the app's theme from the settings
 """

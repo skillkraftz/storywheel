@@ -75,13 +75,13 @@ def test_switches_and_choices_save_at_once(home):
     async def script(app, pilot):
         s = app.screen
         s.query_one("#f-notepad_mode", Switch).value = False
-        s.query_one("#f-neovide", Switch).value = True
+        s.query_one("#f-writer_kitty", Switch).value = False
         s.query_one("#f-font", Select).value = "Courier New"
         s.query_one("#f-format", Select).value = "novel"
         await pilot.pause()
     run(script)
     g = settings.load_global()
-    assert g["notepad_mode"] is False and g["neovide"] is True and g["font"] == "Courier New" and g["format"] == "novel"
+    assert g["notepad_mode"] is False and g["writer_kitty"] is False and g["font"] == "Courier New" and g["format"] == "novel"
 
 
 def test_the_address_keeps_its_lines(home):
@@ -140,15 +140,15 @@ def test_a_library_folder_that_cannot_be_made_is_reported(home):
 def test_your_writer_preferences_are_the_default_for_every_story(home):
     u = vault.create_universe("U")
     s = u.new_story("Tale")
-    assert settings.load_story(s.path)["notepad_mode"] is True and settings.load_story(s.path)["neovide"] is False
-    settings.save_global({"notepad_mode": False, "neovide": True, "writer_font": "Iosevka", "writer_font_size": 17,
-                          "line_spacing": 20, "paragraph_spacing": 1, "column_width": 66})
+    assert settings.load_story(s.path)["notepad_mode"] is True and settings.load_story(s.path)["writer_kitty"] is True
+    settings.save_global({"notepad_mode": False, "writer_kitty": False, "writer_font": "Iosevka", "writer_font_size": 17,
+                          "writer_line_height": 160, "paragraph_spacing": 1, "column_width": 66})
     st = settings.load_story(s.path)
-    assert (st["notepad_mode"], st["neovide"], st["writer_font"], st["writer_font_size"], st["line_spacing"],
-            st["paragraph_spacing"], st["column_width"]) == (False, True, "Iosevka", 17, 20, 1, 66)
-    settings.save_story(s.path, {"neovide": False, "column_width": 80})
+    assert (st["notepad_mode"], st["writer_kitty"], st["writer_font"], st["writer_font_size"], st["writer_line_height"],
+            st["paragraph_spacing"], st["column_width"]) == (False, False, "Iosevka", 17, 160, 1, 66)
+    settings.save_story(s.path, {"writer_kitty": True, "column_width": 80})
     st = settings.load_story(s.path)
-    assert st["neovide"] is False and st["column_width"] == 80 and st["writer_font"] == "Iosevka"
+    assert st["writer_kitty"] is True and st["column_width"] == 80 and st["writer_font"] == "Iosevka"
 
 
 def test_the_universe_boost_default_comes_from_settings_unless_the_universe_pins_its_own(home):

@@ -85,7 +85,7 @@ def test_the_python_side_passes_the_replacement_and_collects_the_handover(home, 
     fake_run.handover = None
     monkeypatch.setattr(writer, "run", fake_run)
     monkeypatch.setattr(writer, "check", lambda: None)
-    monkeypatch.setattr(writer, "neovide_note", lambda s: None)
+    monkeypatch.setattr(writer, "kitty_note", lambda s: None)
     from storywheel import state
     st = state.State()
     nxt = modes.run_writer(st, {"universe": "thornwood", "story": "the-last-clause", "replace": {"new": "x"}, "scene": {"path": "p", "line": 3}})

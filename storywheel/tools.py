@@ -5,21 +5,9 @@ TOOLS = {
     "wordfreq": ("The wordfreq package", "Words > Vocabulary needs it to tell everyday words from rare ones", "pipx inject storywheel wordfreq"),
     "neovim": ("Neovim (0.10 or newer)", "the Writer needs it", "sudo apt install neovim"),
     "libreoffice": ("LibreOffice", "making .odt and .pdf files needs it", "sudo apt install libreoffice-writer"),
-    "neovide": ("Neovide", "the Writer's own window (Settings > Writer > Use Neovide) needs it; the terminal is used instead", "cargo install neovide"),
     "clipboard": ("A clipboard tool", "copying to the system clipboard needs one", "sudo apt install xclip"),
     "python-docx": ("The python-docx package", "Word (.docx) export needs it", "pipx inject storywheel python-docx"),
 }
-
-
-def is_arm64():
-    """True on a 64-bit ARM machine (a Raspberry Pi). STORYWHEEL_ARCH overrides it, for tests."""
-    import os
-    import platform
-    return (os.environ.get("STORYWHEEL_ARCH") or platform.machine()).lower() in ("aarch64", "arm64")
-
-
-NEOVIDE_ARM64 = ("Neovide has no ready-made build for arm64 (this machine), so the Writer uses the terminal. "
-                 "To build it yourself (optional, slow):  cargo install neovide")
 
 
 def missing(name, extra=""):
@@ -30,7 +18,7 @@ def missing(name, extra=""):
 
 TOOLS.update({
     "java": ("Java", "grammar checking (LanguageTool) needs it", "sudo apt install default-jre-headless"),
-    "kitty": ("kitty", "opening storywheel in its own kitty window needs it", "sudo apt install kitty"),
+    "kitty": ("kitty", "the Writer's own window (Settings > Writer) and `storywheel kitty` need it", "sudo apt install kitty"),
     "pipx": ("pipx", "installing and updating storywheel needs it", "sudo apt install pipx && pipx ensurepath"),
     "git": ("git", "updating storywheel needs it", "sudo apt install git"),
 })

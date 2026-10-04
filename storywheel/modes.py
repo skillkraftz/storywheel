@@ -84,7 +84,7 @@ def run_writer(st, payload):
         print("  " + problem)
         return ("builder", {"universe": u.slug})
     st.update(mode="writer", universe=u.slug, story=story.slug)
-    note = writer.neovide_note(story)
+    note = writer.kitty_note(story)
     if note:
         print("  " + note)
     where = writer.run(story, payload.get("scene"), payload.get("replace"))

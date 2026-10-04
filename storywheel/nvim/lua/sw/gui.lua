@@ -1,40 +1,20 @@
--- Neovide (an optional window with real fonts): the same config, plus a font and extra line spacing from the settings.
--- storywheel starts Neovide with STORYWHEEL_GUI=neovide; vim.g.neovide says the same once the window is up.
+-- The Writer's window. The font, size, line height, padding and opacity belong to the kitty window storywheel opens for the Writer
+-- (see writer.py: kitty_command); inside Neovim there is nothing to set. What is left here is the extra space between paragraphs.
 local story = require("sw.story")
 local M = {}
 
-M.active = false
+M.active = os.getenv("STORYWHEEL_GUI") == "kitty"      -- true in the Writer's own kitty window
 
 function M.detected()
-  return os.getenv("STORYWHEEL_GUI") == "neovide" or vim.g.neovide ~= nil
+  return os.getenv("STORYWHEEL_GUI") == "kitty"
 end
 
 function M.setup()
-  M.active = M.detected()
-  if not M.active then return end
-  local font = story.setting("writer_font", "")
-  local size = tonumber(story.setting("writer_font_size", 15)) or 15
-  if font and font ~= "" then
-    vim.o.guifont = font:gsub(" ", "\\ ") .. ":h" .. size
-  else
-    vim.o.guifont = "monospace:h" .. size
-  end
-  -- extra pixels between lines: about the font size looks double spaced
-  vim.o.linespace = tonumber(story.setting("line_spacing", 12)) or 12
-  -- the window's opacity (its own setting; 1 when the background is not meant to be transparent)
-  local opacity = story.setting("transparent_background", true) ~= false and tonumber(story.setting("neovide_opacity", 0.85)) or 1.0
-  opacity = math.max(0.1, math.min(1.0, opacity or 1.0))
-  vim.g.neovide_opacity = opacity
-  vim.g.neovide_normal_opacity = opacity
-  vim.g.neovide_scroll_animation_length = 0.12
-  vim.g.neovide_cursor_animation_length = 0.04
-  vim.g.neovide_cursor_vfx_mode = ""
-  vim.g.neovide_hide_mouse_when_typing = true
+  M.active = os.getenv("STORYWHEEL_GUI") == "kitty"
 end
 
--- Extra blank space between paragraphs, for the terminal (Neovide has real line spacing instead).
+-- Extra blank space between paragraphs, shown (not typed). A kitty window's line height usually makes this unnecessary (the setting is 0).
 function M.paragraph_spacing()
-  if M.active then return 0 end
   local n = tonumber(story.setting("paragraph_spacing", 0)) or 0
   return math.max(0, math.min(n, 3))
 end

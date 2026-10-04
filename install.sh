@@ -2,12 +2,12 @@
 # storywheel: set up a fresh Debian, Ubuntu or Raspberry Pi OS machine (x86_64 or arm64).
 #
 #   ./install.sh               install what is missing, then storywheel, then run `storywheel setup`
-#   ./install.sh --yes         answer yes to every question (installs LibreOffice, skips Neovide)
+#   ./install.sh --yes         answer yes to every question (installs LibreOffice and kitty)
 #   ./install.sh --dry-run     show what it would do and change nothing
 #   ./install.sh URL           install storywheel from a git URL instead of this folder
 #
 # It needs: python3 (3.9+), pipx, Neovim 0.10+ (the distribution's package is often older: the official release is put in ~/.local),
-# git (for `storywheel update`). Optional, and asked about: LibreOffice (.odt and .pdf export), Neovide (a window for the Writer).
+# git (for `storywheel update`). Optional, and asked about: LibreOffice (.odt and .pdf export), kitty (a window for the Writer).
 set -u
 
 YES=0
@@ -46,8 +46,8 @@ step "Checking this machine"
 OS_ID="unknown"; [ -r /etc/os-release ] && . /etc/os-release && OS_ID="${ID:-unknown}"
 ARCH="$(uname -m)"
 case "$ARCH" in
-  x86_64|amd64) NVIM_ARCH="x86_64"; NEOVIDE_ARCH="x86_64" ;;
-  aarch64|arm64) NVIM_ARCH="arm64"; NEOVIDE_ARCH="" ;;
+  x86_64|amd64) NVIM_ARCH="x86_64" ;;
+  aarch64|arm64) NVIM_ARCH="arm64" ;;
   *) say "   This script knows x86_64 and arm64; this is $ARCH. Install Neovim 0.10+ and pipx yourself, then: pipx install $SOURCE"; exit 1 ;;
 esac
 case "$OS_ID" in
@@ -127,25 +127,13 @@ else
   say "   skipped. Later:  sudo apt install libreoffice-writer"
 fi
 
-step "Neovide (optional: a window of its own for the Writer, with real line spacing)"
-if have neovide; then
+step "kitty (optional: gives the Writer a window of its own, with the font, line height and margins you choose)"
+if have kitty; then
   say "   found"
-elif [ -z "$NEOVIDE_ARCH" ]; then
-  say "   no ready-made build for $ARCH. Optional, from source:  cargo install neovide"
-elif ask "Download Neovide into $BIN now?" n; then
-  URL="https://github.com/neovide/neovide/releases/latest/download/neovide-linux-${NEOVIDE_ARCH}.tar.gz"
-  run mkdir -p "$BIN"
-  if [ "$DRY" = 1 ]; then say "   [dry run] $URL"; else
-    TMP="$(mktemp -d)"
-    if curl -fL --progress-bar -o "$TMP/n.tgz" "$URL" && tar -xzf "$TMP/n.tgz" -C "$TMP" && find "$TMP" -name neovide -type f | head -1 | xargs -I{} install -m 755 {} "$BIN/neovide"; then
-      say "   installed $BIN/neovide (it needs a graphical session)"
-    else
-      say "   could not fetch Neovide; skipped (optional)."
-    fi
-    rm -rf "$TMP"
-  fi
+elif ask "Install kitty now?" y; then
+  apt_install kitty
 else
-  say "   skipped (optional)"
+  say "   skipped. Later:  sudo apt install kitty   (then start storywheel inside it:  storywheel kitty)"
 fi
 
 # --- storywheel ----------------------------------------------------------------------------------------------------------------------------

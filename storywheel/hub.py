@@ -112,6 +112,7 @@ class Hub(App):
         self.start_at = start or (self.st.get("mode") or "wheel", {})
         self.mode_name = None
         self.notice = ""
+        self.start_message = self.start_note()               # one line at start when the Writer could be nicer (not in kitty)
         self.session = None
         self.exit_message = None
         self.screens_built = {}                                # mode -> screen, once built
@@ -120,6 +121,14 @@ class Hub(App):
         self._handles = {}
         for name in MODE_NAMES:
             self.add_mode(name, self._factory(name))
+
+    def start_note(self):
+        from . import writer
+        return writer.kitty_start_note() or ""
+
+    def take_start_message(self):
+        message, self.start_message = self.start_message, ""
+        return message
 
     # --- things the screens ask the app for ------------------------------------------------------------------------------------------
 
@@ -149,7 +158,7 @@ class Hub(App):
         from .tui import MainScreen
         from .session import Session
         story = self._wheel_story(payload)
-        self.notice = self.notice or self._tidy_notice()
+        self.notice = self.notice or self._tidy_notice() or self.take_start_message()
         self.session = Session(story, self.engine, ratings=self.engine.ratings)
         self.st.update(mode="wheel", draft=story["id"])
         return MainScreen(self.session)
@@ -217,6 +226,8 @@ class Hub(App):
             self.call_after_refresh(self.open_writer, payload)
         else:
             self.show(mode if mode in MODE_NAMES else "wheel", payload)
+            if mode not in ("wheel", None) and mode in MODE_NAMES:
+                self.say(self.take_start_message())
 
     def say(self, message):
         screen = self.screen
@@ -302,7 +313,7 @@ class Hub(App):
             self.say(problem)
             return
         story.manuscript_dir.mkdir(parents=True, exist_ok=True)
-        note = payload.get("note") or writer.neovide_note(story)
+        note = payload.get("note") or writer.kitty_note(story)
         self.st.update(mode="writer", universe=u.slug, story=story.slug)
         self.mode_name = "writer"
         with quiet_suspend(self):

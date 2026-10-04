@@ -33,11 +33,10 @@ def test_the_places_that_say_it_use_that_shape(home, monkeypatch, tmp_path):
     with pytest.raises(export.ExportError) as e:
         export.convert(tmp_path / "x.docx", "pdf")
     assert PATTERN.match(str(e.value)) and "The .docx was written." in str(e.value)
-    monkeypatch.setenv("STORYWHEEL_NEOVIDE", "no-such-neovide")
-    from storywheel import settings
-    settings.save_story(s.path, {"neovide": True})
-    note = writer.neovide_note(s)
-    assert PATTERN.match(note.split("   Or ")[0]) and "Settings (F4)" in note
+    monkeypatch.setenv("STORYWHEEL_KITTY", "no-such-kitty")
+    monkeypatch.setenv("KITTY_WINDOW_ID", "1")
+    note = writer.kitty_note(s)
+    assert PATTERN.match(note.split("   The Writer")[0])
 
 
 def test_the_writers_clipboard_messages_use_the_shape(home):

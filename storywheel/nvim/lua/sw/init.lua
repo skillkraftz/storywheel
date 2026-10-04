@@ -377,7 +377,7 @@ function M.start()
   M.started = true
   story.ensure_first_scene()
   local saved = session.load()
-  gui.setup()                                       -- (fonts and line spacing, when this is Neovide)
+  gui.setup()                                       -- (is this the Writer's own kitty window?)
   require("sw.appearance").setup()                  -- (transparent background, text and accent colors)
   local main = vim.api.nvim_get_current_win()
   layout.setup(main)

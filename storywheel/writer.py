@@ -121,30 +121,63 @@ def environment(story, return_file):
     return env
 
 
-def neovide_exe():
-    return shutil.which(os.environ.get("STORYWHEEL_NEOVIDE", "neovide"))
+def kitty_exe():
+    return shutil.which(os.environ.get("STORYWHEEL_KITTY", "kitty"))
+
+
+def in_kitty():
+    """Is storywheel running inside a kitty window? (kitty sets KITTY_WINDOW_ID in every window it makes and TERM=xterm-kitty.)"""
+    return bool(os.environ.get("KITTY_WINDOW_ID")) or "kitty" in os.environ.get("TERM", "")
+
+
+def kitty_command(exe, settings_, argv, title="storywheel: writing"):
+    """The kitty command line that opens the Writer in its own window with the writing settings: font, size, line height
+    (modify_font cell_height), padding and opacity. The window closes when Neovim does, and it leaves storywheel's own window alone."""
+    size = settings_.get("writer_font_size") or 15
+    height = max(100, min(300, int(settings_.get("writer_line_height") or 140)))
+    padding = max(0, min(200, int(settings_.get("writer_padding") or 0)))
+    opacity = float(settings_.get("writer_opacity") or 1.0) if settings_.get("transparent_background", True) else 1.0
+    out = [exe, "--class", "storywheel-writer", "--title", title, "-o", f"font_size={size}", "-o", f"modify_font=cell_height {height}%",
+           "-o", f"window_padding_width={padding}", "-o", f"background_opacity={max(0.1, min(1.0, opacity))}",
+           "-o", "remember_window_size=no", "-o", "confirm_os_window_close=0", "--start-as=maximized"]
+    if settings_.get("writer_font"):
+        out += ["-o", f"font_family={settings_['writer_font']}"]
+    return out + list(argv)
 
 
 def launch(story, return_file=None):
-    """(argv, env, note): how to start the Writer, honoring the neovide setting. `note` is a plain message when
-    Neovide was asked for but isn't installed (the terminal is used instead), else None."""
+    """(argv, env, note): how to start the Writer. Inside kitty (and with `writer_kitty` on) it opens in its own kitty window with the
+    writing settings; anywhere else it runs in this terminal as it always did. `note` is a plain message when something asked for
+    could not be done, else None."""
     from . import settings
     argv, env = command(story, return_file)
     note = None
-    if settings.load_story(story.path).get("neovide"):
-        exe = neovide_exe()
+    st = settings.load_story(story.path)
+    if st.get("writer_kitty", True) and in_kitty():
+        exe = kitty_exe()
         if exe:
-            argv = [exe, "--no-fork"]                 # wait for the window to close, like the terminal Neovim does
-            env["STORYWHEEL_GUI"] = "neovide"
-        elif tools.is_arm64():
-            note = tools.NEOVIDE_ARM64
+            argv = kitty_command(exe, st, argv, f"storywheel: {story.title}")
+            env["STORYWHEEL_GUI"] = "kitty"
         else:
-            note = tools.missing("neovide", "Or turn 'Use Neovide' off in Settings (F4).")
+            note = tools.missing("kitty", "The Writer is using this window.")
     return argv, env, note
 
 
-def neovide_note(story):
-    """The message to show if Neovide is wanted but not installed, else None."""
+def kitty_start_note():
+    """One line for the start of the program when it is not running in kitty (and the Writer's kitty window is not switched off):
+    kitty gives a better Writer, and how to get it. None inside kitty."""
+    from . import settings
+    if in_kitty() or not settings.load_global().get("writer_kitty", True):
+        return None
+    return KITTY_NOTE
+
+
+KITTY_NOTE = ("kitty gives the Writer a better window: its own font, line height and margins (Settings > Writer). "
+              "Install it with  sudo apt install kitty  and start storywheel inside it.")
+
+
+def kitty_note(story):
+    """The message to show if the Writer wanted a kitty window but kitty is not installed, else None."""
     return launch(story)[2]
 
 

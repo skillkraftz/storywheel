@@ -19,13 +19,13 @@ GLOBAL_DEFAULTS = {
     "font": "Times New Roman", "format": "short-story", "export_format": "docx",
     "daily_goal": 500, "column_width": 72,
     "indent_display": True, "typewriter": False, "invisibles": False, "spellcheck": True,
-    "notepad_mode": True, "neovide": False, "writer_font": "", "writer_font_size": 15, "line_spacing": 12,
+    "notepad_mode": True, "writer_kitty": True, "writer_font": "", "writer_font_size": 15, "writer_line_height": 140, "writer_padding": 24, "writer_opacity": 0.85,
     "paragraph_spacing": 0,
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False, "export_curly_quotes": True,
     "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle",
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
-    "transparent_background": True, "text_color": "", "accent_color": "", "neovide_opacity": 0.85,
+    "transparent_background": True, "text_color": "", "accent_color": "",
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
     "key_peek": "<F8>", "key_overview": "<C-o>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
     "atom_boost": 1.5,
@@ -34,13 +34,13 @@ STORY_DEFAULTS = {
     "format": "short-story", "font": "Times New Roman", "column_width": 72, "daily_goal": 500,
     "title_keyword": "", "indent_display": True, "typewriter": False, "invisibles": False,
     "spellcheck": True, "scene_goal": 0,
-    "notepad_mode": True, "neovide": False, "writer_font": "", "writer_font_size": 15, "line_spacing": 12,
+    "notepad_mode": True, "writer_kitty": True, "writer_font": "", "writer_font_size": 15, "writer_line_height": 140, "writer_padding": 24, "writer_opacity": 0.85,
     "paragraph_spacing": 0,
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False, "export_curly_quotes": True,
     "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle",
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
-    "transparent_background": True, "text_color": "", "accent_color": "", "neovide_opacity": 0.85,
+    "transparent_background": True, "text_color": "", "accent_color": "",
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
     "key_peek": "<F8>", "key_overview": "<C-o>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
 }
@@ -48,8 +48,8 @@ GLOBAL_DEFAULTS.update(CATEGORY_DEFAULTS)
 STORY_DEFAULTS.update(CATEGORY_DEFAULTS)
 # story settings that fall back to your global settings
 INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
-             "notepad_mode", "neovide", "writer_font", "writer_font_size", "line_spacing", "paragraph_spacing",
-             "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color", "neovide_opacity",
+             "notepad_mode", "writer_kitty", "writer_font", "writer_font_size", "writer_line_height", "writer_padding", "writer_opacity", "paragraph_spacing",
+             "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color",
              "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_overview", "key_builder", "key_replace", "key_quit", "key_lookup", "key_lookup_word", "key_grammar_next", "key_grammar_list")
 
 
@@ -133,10 +133,10 @@ def _load(path, defaults):
     return out
 
 
-# What belongs to this machine and belongs to this machine and is kept apart from the rest: folders, the Neovide window, fonts, and what this
+# What belongs to this machine and belongs to this machine and is kept apart from the rest: folders, the kitty Writer window, fonts, and what this
 # machine's setup has asked. They live in settings.local.toml (the rest in settings.toml, which can be copied to another machine).
-LOCAL_KEYS = ("library", "manuscripts_dir", "update_remote", "neovide", "writer_font", "writer_font_size", "line_spacing",
-              "paragraph_spacing", "neovide_opacity", "setup_done", "grammar_memory_mb", "grammar_port")
+LOCAL_KEYS = ("library", "manuscripts_dir", "update_remote", "writer_kitty", "writer_font", "writer_font_size", "writer_line_height", "writer_padding",
+              "paragraph_spacing", "writer_opacity", "setup_done", "grammar_memory_mb", "grammar_port")
 
 
 def global_path():
@@ -168,7 +168,7 @@ def save_global(values):
         merged.pop(key, None)
     path.write_text(dump_toml(merged, "storywheel settings: who you are, and defaults for new stories."), encoding="utf-8")
     if local:
-        local_path().write_text(dump_toml(local, "this machine only (folders, Neovide, fonts): machine-specific; settings.toml can be copied to another machine without them."),
+        local_path().write_text(dump_toml(local, "this machine only (folders, the kitty Writer window, fonts): machine-specific; settings.toml can be copied to another machine without them."),
                                 encoding="utf-8")
     return path
 

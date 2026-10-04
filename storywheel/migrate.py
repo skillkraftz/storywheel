@@ -147,3 +147,48 @@ def _forget_sync_folder():
             f.write_text(new, encoding="utf-8")
             lines.append("The old sync_folder setting was removed (storywheel no longer syncs anything).")
     return lines
+
+
+NEOVIDE_KEYS = ("neovide", "neovide_opacity", "line_spacing")
+
+
+def migrate_settings():
+    """Neovide is gone: its settings become the kitty Writer's. `neovide = true` turns writer_kitty on, `neovide_opacity` becomes
+    `writer_opacity`, and the old pixel `line_spacing` becomes a `writer_line_height` percent. Done once per settings file."""
+    import re
+    lines = []
+    files = [paths.home() / "settings.toml", paths.home() / "settings.local.toml"]
+    try:
+        for u in vault.list_universes():
+            files += [s.path / "settings.toml" for s in u.stories()]
+    except OSError:
+        pass
+    for f in files:
+        try:
+            text = f.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if not re.search(r"(?m)^(neovide|neovide_opacity|line_spacing)\s*=", text):
+            continue
+        values = {k: v.strip() for k, v in re.findall(r"(?m)^(neovide|neovide_opacity|line_spacing)\s*=\s*(.+)$", text)}
+        size = re.search(r"(?m)^writer_font_size\s*=\s*([\d.]+)", text)
+        new = re.sub(r"(?m)^(neovide|neovide_opacity|line_spacing)\s*=.*\n", "", text)
+        add = []
+        if values.get("neovide") == "true" and not re.search(r"(?m)^writer_kitty\s*=", new):
+            add.append("writer_kitty = true")
+        if "neovide_opacity" in values and not re.search(r"(?m)^writer_opacity\s*=", new):
+            add.append(f"writer_opacity = {values['neovide_opacity']}")
+        if "line_spacing" in values and not re.search(r"(?m)^writer_line_height\s*=", new):
+            try:
+                px, pt = float(values["line_spacing"]), float(size.group(1)) if size else 15.0
+                add.append(f"writer_line_height = {int(max(100, min(300, round(100 + 100 * px / (pt * 1.5)))))}")
+            except ValueError:
+                pass
+        body = new.split("\n")
+        at = 0
+        while at < len(body) and (body[at].startswith("#") or not body[at].strip()):
+            at += 1                                              # (after the file's leading comment)
+        body[at:at] = add
+        f.write_text("\n".join(body), encoding="utf-8")
+        lines.append(f"Neovide settings in {paths.tilde(f)} became kitty Writer settings" + (f" ({', '.join(a.split(' =')[0] for a in add)})." if add else "."))
+    return lines
