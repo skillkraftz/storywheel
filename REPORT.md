@@ -2155,3 +2155,10 @@ overview in the Writer (7), Wheel buttons and promotion into the home universe (
 - The kitty window flag set (`--start-as=maximized`, `confirm_os_window_close=0`) is from documentation, not run here.
 - `line_spacing` pixels from old settings are converted to a percent by a rough formula (px / 1.5 × font size); check the line height once.
 - Suggestions ranking and the "Fresh alternatives" list are guesses; tell me which read wrong.
+
+### Full-suite result (end of batch 9)
+
+1,956 passed at the full run; 25 failed. 23 were mine (the start-up kitty note spoke to a Builder status line that was not mounted yet, and old Neovide
+assertions in `test_appearance.py`); both are fixed and those files, plus `test_hub.py` and `test_layout_batch6.py`, pass in a re-run. The other 2
+(`tests/test_grammar_server.py`: `test_the_command_line_installs_and_reports`, `test_starting_without_java_or_the_program_says_what_to_do`) fail the same way
+at the batch 8 tag on this machine, so they are not from this batch; I have not found the cause (java is installed here).

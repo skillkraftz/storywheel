@@ -226,8 +226,14 @@ class Hub(App):
             self.call_after_refresh(self.open_writer, payload)
         else:
             self.show(mode if mode in MODE_NAMES else "wheel", payload)
-            if mode not in ("wheel", None) and mode in MODE_NAMES:
-                self.say(self.take_start_message())
+            if mode not in ("wheel", None) and mode in MODE_NAMES and self.start_message:
+                self.call_after_refresh(self._say_start_message)
+
+    def _say_start_message(self):
+        try:
+            self.say(self.take_start_message())
+        except Exception:                                    # (the screen has no status line yet: the note is simply not shown)
+            pass
 
     def say(self, message):
         screen = self.screen

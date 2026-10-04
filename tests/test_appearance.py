@@ -117,7 +117,7 @@ def test_settings_has_an_appearance_tab(home):
         async with app.run_test(size=(180, 60)) as pilot:
             await pilot.pause()
             return [p.id for p in app.screen.query("TabPane")], [bool(app.screen.query(f"#f-{k}")) for k in
-                    ("transparent_background", "text_color", "accent_color", "neovide_opacity")]
+                    ("transparent_background", "text_color", "accent_color")]
     tabs, fields = asyncio.run(go())
     assert "t-appearance" in tabs and all(fields)
 
@@ -176,20 +176,20 @@ def test_the_sidebar_and_pad_windows_use_the_clear_background(home, story):
     assert r["pad"] is False and "SwPad" in r["left_hl"]
 
 
-def test_neovide_gets_its_own_opacity(home, story):
-    settings.save_story(story.path, {"neovide_opacity": 0.7})
-    r = run(story, "", "", "R.o = vim.g.neovide_opacity; R.n = vim.g.neovide_normal_opacity", env_extra={"STORYWHEEL_GUI": "neovide"})
-    assert r["o"] == 0.7 and r["n"] == 0.7
-    settings.save_story(story.path, {"neovide_opacity": 0.7, "transparent_background": False})
-    r = run(story, "", "", "R.o = vim.g.neovide_opacity", env_extra={"STORYWHEEL_GUI": "neovide"})
-    assert r["o"] == 1.0
-    settings.save_story(story.path, {"neovide_opacity": 5})
-    assert run(story, "", "", "R.o = vim.g.neovide_opacity", env_extra={"STORYWHEEL_GUI": "neovide"})["o"] == 1.0
+def test_the_kitty_writer_window_has_its_own_opacity_setting(home, story):
+    from storywheel import writer
+    settings.save_story(story.path, {"writer_opacity": 0.7})
+    kit = lambda: writer.kitty_command("/usr/bin/kitty", settings.load_story(story.path), ["nvim"])
+    assert "background_opacity=0.7" in kit()
+    settings.save_story(story.path, {"writer_opacity": 0.7, "transparent_background": False})
+    assert "background_opacity=1.0" in kit()
+    settings.save_story(story.path, {"writer_opacity": 5})
+    assert "background_opacity=1.0" in kit()
 
 
 def test_the_new_settings_reach_the_writer(home):
     u = vault.create_universe("U")
     s = u.new_story("S")
-    settings.save_global(dict(settings.load_global(), text_color="#fff", accent_color="amber", neovide_opacity=0.6))
+    settings.save_global(dict(settings.load_global(), text_color="#fff", accent_color="amber", writer_opacity=0.6))
     st = settings.load_story(s.path)
-    assert st["transparent_background"] is True and st["text_color"] == "#fff" and st["neovide_opacity"] == 0.6
+    assert st["transparent_background"] is True and st["text_color"] == "#fff" and st["writer_opacity"] == 0.6
