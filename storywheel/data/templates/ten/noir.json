@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "ten",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "Then {first} saw {the_thing} anew; it had never been about {want}.",
+  "Then {first} understood that {the_someone} had acted out of {MOTIVE} all along.",
+  "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.",
+  "Then {first} saw that the {rival:human} had wanted {want} too, and had hidden {FEELING} behind {VICE}.",
+  "Then {first} saw that {need} mattered more than {want}.",
+  "Then {first} understood that {MOTIVE} had kept {first} from {want} all along."
+ ]
+}

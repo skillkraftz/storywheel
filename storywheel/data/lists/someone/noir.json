@@ -1,0 +1,261 @@
+{
+ "_note": "The people of a city that always wins: fixers, mourners, hangers-on.",
+ "slot": "someone",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "a tired bartender",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nervous bookkeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a torch singer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a crooked sergeant",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a sleepless widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smiling banker",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bruised boxer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hungover reporter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hired gun",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a trench-coated stranger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nightclub owner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "an honest patrolman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a city alderman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a poor typist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a former lover",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a street informant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a well-suited fixer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a society wife",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a one-eyed dealer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a night clerk",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a worried cabbie",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired safecracker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a jittery bagman",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hat-check girl",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a union steward",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a grieving brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a defrocked doctor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smooth lawyer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bail bondsman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sharp-eyed waitress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a washed-up actress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nervous witness",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a loan shark",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a well-dressed stranger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a courthouse clerk",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a street-corner preacher",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a jazz pianist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a scared kid",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an old newspaperman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a dame with a secret",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

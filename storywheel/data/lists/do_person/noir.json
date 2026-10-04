@@ -1,0 +1,90 @@
+{
+ "_note": "Base-form verbs for noir that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "tail",
+  {
+   "text": "lean on",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "clear",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "hire",
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "level with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stand by",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "buy off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "find",
+  {
+   "text": "warn",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "_note": "Crimes and scandals. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "a bank job gone wrong",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a nightclub shooting",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a payroll robbery",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a warehouse fire",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a union beating",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing witness",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a bribed verdict",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a body in the harbor",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rigged election",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a numbers racket",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hit and run",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a forged ledger",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a blackmail scheme",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a dockside killing",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a city hall scandal",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a poisoned deal",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "an arson for insurance",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a vanishing partner",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a jewel heist",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a kidnapping",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a gambling raid",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a Blue Room murder",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fixed fight",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a stolen payroll",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a double cross",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a dockworkers' strike",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rent-hike riot",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a drowned informant",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a smuggling ring",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an unsolved shooting",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}

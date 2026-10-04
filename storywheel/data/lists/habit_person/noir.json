@@ -1,0 +1,53 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "noir"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "buys a drink for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  "watches",
+  "owes",
+  {
+   "text": "phones",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "visits",
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "drinks with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "distrusts"
+ ]
+}

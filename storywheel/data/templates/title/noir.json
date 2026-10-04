@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "title",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} in {place}",
+  "A {TITLE_NOUN} for {first}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "Last Call in {place}, {first}",
+  "{place} After Midnight, {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Nobody Pays for the {TITLE_NOUN} in {place}"
+ ]
+}

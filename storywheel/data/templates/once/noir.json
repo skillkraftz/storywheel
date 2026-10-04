@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "once",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "in {place}, a {trait} {job} named {first} wanted {want}",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and feared {FEELING}",
+  "{place} never slept, and {first}, a {trait} {job}, wanted {want}",
+  "{first} was the {trait} {job} of {place}, and saw what others sold",
+  "the {rival} ran {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
+  "{first}, a {trait} {job} in {place}, guarded {THING} and a debt",
+  "{place} had seen {DISASTER} before, and {first}, a {trait} {job}, never asked",
+  "{first}, a {trait} {job} of {place}, wanted {want} and trusted no one",
+  "everyone in {place} knew {first}, a {trait} {job}, and no one knew {TOPIC}"
+ ]
+}

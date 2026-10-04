@@ -1,0 +1,321 @@
+{
+ "_note": "What changes hands in the dark: cash, keys, proof, and a gun.",
+ "slot": "thing",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "a snub-nosed revolver",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a leather ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a blackmail photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a Blue Room matchbook",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a thick envelope",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bottle of rye",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cigarette case",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pawn ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stolen necklace",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a locker key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a payroll satchel",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a torn ticket stub",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bullet-holed hat",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a dead man's watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a red lipstick",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a safe-deposit key",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a duffel of cash",
+   "features": [
+    "portable",
+    "valuable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a gold lighter",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a racing form",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a broken wristwatch",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bloodied handkerchief",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a roll of film",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stack of marked bills",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a coded address book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bus locker receipt",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a diamond stickpin",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a cracked compact",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a union ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a trunk of old files",
+   "features": [
+    "portable",
+    "bulky",
+    "paper"
+   ]
+  },
+  {
+   "text": "a forged passport",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a slip of notepaper",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a silver flask",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pair of dice",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a signed confession",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a spare set of keys",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rolled-up newspaper",
+   "features": [
+    "portable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a cheap wedding ring",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pocket revolver",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a tin of film reels",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a brass knuckle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a coat check tag",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,317 @@
+{
+ "_note": "Rooms and corners of a city at night.",
+ "slot": "landmark",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "the Blue Room nightclub",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the rain-slick alley",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the all-night diner",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pawn shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the harbor pier",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the precinct house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the rooftop",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cheap hotel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the train depot",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pool hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the newsroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cathedral steps",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the waterfront warehouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the courthouse stairs",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the burlesque theater",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the river bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the parking garage",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the funeral parlor",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the corner phone booth",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the boxing gym",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the rail yard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the bus terminal",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the walk-up office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the empty lot",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the dockside bar",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the Chinese laundry",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lakeshore drive",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the racetrack",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cheap rooming house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the penthouse suite",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the morgue",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cigar shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the fire escape",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hospital corridor",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dime store",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ferry slip",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the city hall steps",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the oyster bar",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back booth",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the foundry yard",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the subway platform",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the roadhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cemetery gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  }
+ ]
+}

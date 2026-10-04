@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "premise",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or take the fall.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and learns who wants it {DEADLINE}.",
+  "After {DISASTER:strikes} in {place}, the {rival} pins it on {SOMEONE:human,!plural}, and {first}, a {trait} {job}, knows better.",
+  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though the city says leave it.",
+  "{first}, a {trait} {job}, gets {MESSAGE:physical} from {SOMEONE:human,!plural} and must learn {DEADLINE} why.",
+  "In {place}, {first}, a {trait} {job}, is hired to {DO_THING} {THING}, and learns that the {rival} lied about {TOPIC}.",
+  "To keep {SOMEONE:human,!plural} out of {DISASTER:manmade}, {first}, a {trait} {job}, must bury {THING:portable} {DEADLINE}.",
+  "Every guest at {landmark:built} owes the {rival} something, and {first}, a {trait} {job}, has been paid to forget it.",
+  "A {trait} {job} named {first} inherits {THING} and a debt in {place} that the {rival} wants collected.",
+  "{first}, a {trait} {job}, was the last to see {SOMEONE:human,!plural}, and is first on the {rival}'s list.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, sees how deep {DISASTER:manmade} goes.",
+  "At {landmark:built}, {first}, a {trait} {job}, finds out that {SOMEONE:human,!plural} sold {TOPIC} for cash."
+ ]
+}

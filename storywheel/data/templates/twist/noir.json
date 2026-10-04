@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "twist",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
+  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
+  "{the_message:physical} was written by {CLOSE:human}, who wanted {first} off the case.",
+  "{the_disaster:manmade} was staged {MANNER} to cover {TOPIC}.",
+  "{the_thing:!living} was a decoy; {THING:portable} lay {HIDING}, and the {rival} owned it.",
+  "The alibi {the_someone:human} gave was bought, and {the_thing} was the receipt.",
+  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
+  "The truth came out, and {the_someone:human} walked free {MANNER} anyway.",
+  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
+  "{the_someone:human} was working for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
+  "The {rival} had paid {SOMEONE:human,!plural} {MANNER} to take the fall.",
+  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone paid to forget it.",
+  "It was never about {the_disaster:manmade}; it was about {MOTIVE}.",
+  "Everyone had an angle, but only {the_someone:human} had {the_thing:portable}."
+ ]
+}

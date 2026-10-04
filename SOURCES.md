@@ -47,6 +47,7 @@ general, unowned descriptions of story shape.
 - `act_climax/ghost-story`
 - `act_climax/horror`
 - `act_climax/mystery`
+- `act_climax/noir`
 - `act_climax/romance`
 - `act_climax/sci-fi`
 - `act_crisis/comedy`
@@ -55,6 +56,7 @@ general, unowned descriptions of story shape.
 - `act_crisis/ghost-story`
 - `act_crisis/horror`
 - `act_crisis/mystery`
+- `act_crisis/noir`
 - `act_crisis/romance`
 - `act_crisis/sci-fi`
 - `act_event/comedy`
@@ -63,6 +65,7 @@ general, unowned descriptions of story shape.
 - `act_event/ghost-story`
 - `act_event/horror`
 - `act_event/mystery`
+- `act_event/noir`
 - `act_event/romance`
 - `act_event/sci-fi`
 - `act_incident/comedy`
@@ -71,6 +74,7 @@ general, unowned descriptions of story shape.
 - `act_incident/ghost-story`
 - `act_incident/horror`
 - `act_incident/mystery`
+- `act_incident/noir`
 - `act_incident/romance`
 - `act_incident/sci-fi`
 - `act_message/comedy`
@@ -79,6 +83,7 @@ general, unowned descriptions of story shape.
 - `act_message/ghost-story`
 - `act_message/horror`
 - `act_message/mystery`
+- `act_message/noir`
 - `act_message/romance`
 - `act_message/sci-fi`
 - `act_midpoint/comedy`
@@ -87,6 +92,7 @@ general, unowned descriptions of story shape.
 - `act_midpoint/ghost-story`
 - `act_midpoint/horror`
 - `act_midpoint/mystery`
+- `act_midpoint/noir`
 - `act_midpoint/romance`
 - `act_midpoint/sci-fi`
 - `act_person/comedy`
@@ -95,6 +101,7 @@ general, unowned descriptions of story shape.
 - `act_person/ghost-story`
 - `act_person/horror`
 - `act_person/mystery`
+- `act_person/noir`
 - `act_person/romance`
 - `act_person/sci-fi`
 - `act_place/comedy`
@@ -103,6 +110,7 @@ general, unowned descriptions of story shape.
 - `act_place/ghost-story`
 - `act_place/horror`
 - `act_place/mystery`
+- `act_place/noir`
 - `act_place/romance`
 - `act_place/sci-fi`
 - `act_resolution/comedy`
@@ -111,6 +119,7 @@ general, unowned descriptions of story shape.
 - `act_resolution/ghost-story`
 - `act_resolution/horror`
 - `act_resolution/mystery`
+- `act_resolution/noir`
 - `act_resolution/romance`
 - `act_resolution/sci-fi`
 - `act_setup/comedy`
@@ -119,6 +128,7 @@ general, unowned descriptions of story shape.
 - `act_setup/ghost-story`
 - `act_setup/horror`
 - `act_setup/mystery`
+- `act_setup/noir`
 - `act_setup/romance`
 - `act_setup/sci-fi`
 - `act_thing/comedy`
@@ -127,6 +137,7 @@ general, unowned descriptions of story shape.
 - `act_thing/ghost-story`
 - `act_thing/horror`
 - `act_thing/mystery`
+- `act_thing/noir`
 - `act_thing/romance`
 - `act_thing/sci-fi`
 - `act_trials/comedy`
@@ -135,6 +146,7 @@ general, unowned descriptions of story shape.
 - `act_trials/ghost-story`
 - `act_trials/horror`
 - `act_trials/mystery`
+- `act_trials/noir`
 - `act_trials/romance`
 - `act_trials/sci-fi`
 - `act_turn/comedy`
@@ -143,6 +155,7 @@ general, unowned descriptions of story shape.
 - `act_turn/ghost-story`
 - `act_turn/horror`
 - `act_turn/mystery`
+- `act_turn/noir`
 - `act_turn/romance`
 - `act_turn/sci-fi`
 - `climax/comedy`
@@ -150,6 +163,7 @@ general, unowned descriptions of story shape.
 - `climax/ghost-story`
 - `climax/horror`
 - `climax/mystery`
+- `climax/noir`
 - `climax/romance`
 - `climax/sci-fi`
 - `deadline/comedy`
@@ -158,6 +172,7 @@ general, unowned descriptions of story shape.
 - `deadline/ghost-story`
 - `deadline/horror`
 - `deadline/mystery`
+- `deadline/noir`
 - `deadline/romance`
 - `deadline/sci-fi`
 - `disaster/comedy`
@@ -166,6 +181,7 @@ general, unowned descriptions of story shape.
 - `disaster/ghost-story`
 - `disaster/horror`
 - `disaster/mystery`
+- `disaster/noir`
 - `disaster/romance`
 - `disaster/sci-fi`
 - `disaster/western`
@@ -175,6 +191,7 @@ general, unowned descriptions of story shape.
 - `do_person/ghost-story`
 - `do_person/horror`
 - `do_person/mystery`
+- `do_person/noir`
 - `do_person/romance`
 - `do_person/sci-fi`
 - `do_thing/comedy`
@@ -183,6 +200,7 @@ general, unowned descriptions of story shape.
 - `do_thing/ghost-story`
 - `do_thing/horror`
 - `do_thing/mystery`
+- `do_thing/noir`
 - `do_thing/romance`
 - `do_thing/sci-fi`
 - `era/comedy`
@@ -194,6 +212,7 @@ general, unowned descriptions of story shape.
 - `era/horror`
 - `era/modern`
 - `era/mystery`
+- `era/noir`
 - `era/romance`
 - `era/sci-fi`
 - `era/western`
@@ -202,6 +221,7 @@ general, unowned descriptions of story shape.
 - `escalation/ghost-story`
 - `escalation/horror`
 - `escalation/mystery`
+- `escalation/noir`
 - `escalation/romance`
 - `escalation/sci-fi`
 - `feeling/general`
@@ -211,6 +231,7 @@ general, unowned descriptions of story shape.
 - `first_name/ghost-story`
 - `first_name/horror`
 - `first_name/mystery`
+- `first_name/noir`
 - `first_name/romance`
 - `first_name/sci-fi`
 - `first_name/western`
@@ -219,6 +240,7 @@ general, unowned descriptions of story shape.
 - `flaw/ghost-story`
 - `flaw/horror`
 - `flaw/mystery`
+- `flaw/noir`
 - `flaw/romance`
 - `flaw/sci-fi`
 - `habit_person/comedy`
@@ -227,6 +249,7 @@ general, unowned descriptions of story shape.
 - `habit_person/ghost-story`
 - `habit_person/horror`
 - `habit_person/mystery`
+- `habit_person/noir`
 - `habit_person/romance`
 - `habit_person/sci-fi`
 - `habit_place/comedy`
@@ -235,6 +258,7 @@ general, unowned descriptions of story shape.
 - `habit_place/ghost-story`
 - `habit_place/horror`
 - `habit_place/mystery`
+- `habit_place/noir`
 - `habit_place/romance`
 - `habit_place/sci-fi`
 - `habit_thing/comedy`
@@ -243,6 +267,7 @@ general, unowned descriptions of story shape.
 - `habit_thing/ghost-story`
 - `habit_thing/horror`
 - `habit_thing/mystery`
+- `habit_thing/noir`
 - `habit_thing/romance`
 - `habit_thing/sci-fi`
 - `hiding/comedy`
@@ -251,6 +276,7 @@ general, unowned descriptions of story shape.
 - `hiding/ghost-story`
 - `hiding/horror`
 - `hiding/mystery`
+- `hiding/noir`
 - `hiding/romance`
 - `hiding/sci-fi`
 - `hiding/western`
@@ -259,6 +285,7 @@ general, unowned descriptions of story shape.
 - `inciting/ghost-story`
 - `inciting/horror`
 - `inciting/mystery`
+- `inciting/noir`
 - `inciting/romance`
 - `inciting/sci-fi`
 - `job/comic-trades`
@@ -268,6 +295,7 @@ general, unowned descriptions of story shape.
 - `job/ghost-story-trades`
 - `job/horror-trades`
 - `job/mystery-trades`
+- `job/noir-trades`
 - `job/romance-trades`
 - `job/sci-fi-trades`
 - `ketsu/comedy`
@@ -276,6 +304,7 @@ general, unowned descriptions of story shape.
 - `ketsu/ghost-story`
 - `ketsu/horror`
 - `ketsu/mystery`
+- `ketsu/noir`
 - `ketsu/romance`
 - `ketsu/sci-fi`
 - `ki/comedy`
@@ -284,6 +313,7 @@ general, unowned descriptions of story shape.
 - `ki/ghost-story`
 - `ki/horror`
 - `ki/mystery`
+- `ki/noir`
 - `ki/romance`
 - `ki/sci-fi`
 - `landmark/comedy`
@@ -292,6 +322,7 @@ general, unowned descriptions of story shape.
 - `landmark/ghost-story`
 - `landmark/horror`
 - `landmark/mystery`
+- `landmark/noir`
 - `landmark/romance`
 - `landmark/sci-fi`
 - `landmark/western`
@@ -301,6 +332,7 @@ general, unowned descriptions of story shape.
 - `last_name/ghost-story`
 - `last_name/horror`
 - `last_name/mystery`
+- `last_name/noir`
 - `last_name/romance`
 - `last_name/sci-fi`
 - `last_name/western`
@@ -311,6 +343,7 @@ general, unowned descriptions of story shape.
 - `manner/ghost-story`
 - `manner/horror`
 - `manner/mystery`
+- `manner/noir`
 - `manner/romance`
 - `manner/sci-fi`
 - `message/comedy`
@@ -319,6 +352,7 @@ general, unowned descriptions of story shape.
 - `message/ghost-story`
 - `message/horror`
 - `message/mystery`
+- `message/noir`
 - `message/romance`
 - `message/sci-fi`
 - `message/western`
@@ -328,6 +362,7 @@ general, unowned descriptions of story shape.
 - `motive/ghost-story`
 - `motive/horror`
 - `motive/mystery`
+- `motive/noir`
 - `motive/romance`
 - `motive/sci-fi`
 - `need/comedy`
@@ -335,6 +370,7 @@ general, unowned descriptions of story shape.
 - `need/ghost-story`
 - `need/horror`
 - `need/mystery`
+- `need/noir`
 - `need/romance`
 - `need/sci-fi`
 - `once/comedy`
@@ -342,6 +378,7 @@ general, unowned descriptions of story shape.
 - `once/ghost-story`
 - `once/horror`
 - `once/mystery`
+- `once/noir`
 - `once/romance`
 - `once/sci-fi`
 - `place/comic-towns`
@@ -350,6 +387,7 @@ general, unowned descriptions of story shape.
 - `place/ghost-story-villages`
 - `place/horror-towns`
 - `place/mystery-villages`
+- `place/noir-cities`
 - `place/romance-towns`
 - `place/sci-fi-stations`
 - `place/western-towns`
@@ -358,6 +396,7 @@ general, unowned descriptions of story shape.
 - `place_adj/ghost-story`
 - `place_adj/horror`
 - `place_adj/mystery`
+- `place_adj/noir`
 - `place_adj/romance`
 - `place_adj/sci-fi`
 - `place_adj/western`
@@ -368,6 +407,7 @@ general, unowned descriptions of story shape.
 - `place_feature/ghost-story`
 - `place_feature/horror`
 - `place_feature/mystery`
+- `place_feature/noir`
 - `place_feature/romance`
 - `place_feature/sci-fi`
 - `place_feature/western`
@@ -378,6 +418,7 @@ general, unowned descriptions of story shape.
 - `premise/ghost-story`
 - `premise/horror`
 - `premise/mystery`
+- `premise/noir`
 - `premise/romance`
 - `premise/sci-fi`
 - `prize/comedy`
@@ -386,6 +427,7 @@ general, unowned descriptions of story shape.
 - `prize/ghost-story`
 - `prize/horror`
 - `prize/mystery`
+- `prize/noir`
 - `prize/romance`
 - `prize/sci-fi`
 - `reaction/comedy`
@@ -393,6 +435,7 @@ general, unowned descriptions of story shape.
 - `reaction/ghost-story`
 - `reaction/horror`
 - `reaction/mystery`
+- `reaction/noir`
 - `reaction/romance`
 - `reaction/sci-fi`
 - `resolution/comedy`
@@ -400,6 +443,7 @@ general, unowned descriptions of story shape.
 - `resolution/ghost-story`
 - `resolution/horror`
 - `resolution/mystery`
+- `resolution/noir`
 - `resolution/romance`
 - `resolution/sci-fi`
 - `rival/comedy`
@@ -408,6 +452,7 @@ general, unowned descriptions of story shape.
 - `rival/ghost-story`
 - `rival/horror`
 - `rival/mystery`
+- `rival/noir`
 - `rival/romance`
 - `rival/sci-fi`
 - `rival/western`
@@ -416,6 +461,7 @@ general, unowned descriptions of story shape.
 - `routine/ghost-story`
 - `routine/horror`
 - `routine/mystery`
+- `routine/noir`
 - `routine/romance`
 - `routine/sci-fi`
 - `rumor/comedy`
@@ -423,6 +469,7 @@ general, unowned descriptions of story shape.
 - `rumor/ghost-story`
 - `rumor/horror`
 - `rumor/mystery`
+- `rumor/noir`
 - `rumor/romance`
 - `rumor/sci-fi`
 - `secret/comedy`
@@ -430,6 +477,7 @@ general, unowned descriptions of story shape.
 - `secret/ghost-story`
 - `secret/horror`
 - `secret/mystery`
+- `secret/noir`
 - `secret/romance`
 - `secret/sci-fi`
 - `sho/comedy`
@@ -438,6 +486,7 @@ general, unowned descriptions of story shape.
 - `sho/ghost-story`
 - `sho/horror`
 - `sho/mystery`
+- `sho/noir`
 - `sho/romance`
 - `sho/sci-fi`
 - `someone/comedy`
@@ -446,6 +495,7 @@ general, unowned descriptions of story shape.
 - `someone/ghost-story`
 - `someone/horror`
 - `someone/mystery`
+- `someone/noir`
 - `someone/romance`
 - `someone/sci-fi`
 - `someone/western`
@@ -455,6 +505,7 @@ general, unowned descriptions of story shape.
 - `temptation/ghost-story`
 - `temptation/horror`
 - `temptation/mystery`
+- `temptation/noir`
 - `temptation/romance`
 - `temptation/sci-fi`
 - `ten/comedy`
@@ -463,6 +514,7 @@ general, unowned descriptions of story shape.
 - `ten/ghost-story`
 - `ten/horror`
 - `ten/mystery`
+- `ten/noir`
 - `ten/romance`
 - `ten/sci-fi`
 - `thing/comedy`
@@ -471,6 +523,7 @@ general, unowned descriptions of story shape.
 - `thing/ghost-story`
 - `thing/horror`
 - `thing/mystery`
+- `thing/noir`
 - `thing/romance`
 - `thing/sci-fi`
 - `thing/western`
@@ -479,6 +532,7 @@ general, unowned descriptions of story shape.
 - `title/ghost-story`
 - `title/horror`
 - `title/mystery`
+- `title/noir`
 - `title/oddity`
 - `title/romance`
 - `title/sci-fi`
@@ -489,6 +543,7 @@ general, unowned descriptions of story shape.
 - `title_adj/ghost-story`
 - `title_adj/horror`
 - `title_adj/mystery`
+- `title_adj/noir`
 - `title_adj/romance`
 - `title_adj/sci-fi`
 - `title_adj/western`
@@ -499,6 +554,7 @@ general, unowned descriptions of story shape.
 - `title_noun/ghost-story`
 - `title_noun/horror`
 - `title_noun/mystery`
+- `title_noun/noir`
 - `title_noun/romance`
 - `title_noun/sci-fi`
 - `title_noun/western`
@@ -507,6 +563,7 @@ general, unowned descriptions of story shape.
 - `trait/ghost-story-traits`
 - `trait/horror-traits`
 - `trait/mystery-traits`
+- `trait/noir-traits`
 - `trait/romance-traits`
 - `trait/sci-fi-traits`
 - `twist/comedy`
@@ -514,6 +571,7 @@ general, unowned descriptions of story shape.
 - `twist/ghost-story`
 - `twist/horror`
 - `twist/mystery`
+- `twist/noir`
 - `twist/romance`
 - `twist/sci-fi`
 - `value/comedy`
@@ -522,6 +580,7 @@ general, unowned descriptions of story shape.
 - `value/ghost-story`
 - `value/horror`
 - `value/mystery`
+- `value/noir`
 - `value/romance`
 - `value/sci-fi`
 - `vice/comedy`
@@ -530,6 +589,7 @@ general, unowned descriptions of story shape.
 - `vice/ghost-story`
 - `vice/horror`
 - `vice/mystery`
+- `vice/noir`
 - `vice/romance`
 - `vice/sci-fi`
 - `want/comedy`
@@ -537,6 +597,7 @@ general, unowned descriptions of story shape.
 - `want/ghost-story`
 - `want/horror`
 - `want/mystery`
+- `want/noir`
 - `want/romance`
 - `want/sci-fi`
 

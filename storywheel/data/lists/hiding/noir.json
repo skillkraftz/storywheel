@@ -1,0 +1,110 @@
+{
+ "_note": "Where something is stashed.",
+ "slot": "hiding",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "in a bus locker",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the barroom floor",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "inside a hat lining",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a loose brick",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a safe-deposit box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "taped under a drawer",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a bottle of rye",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "sewn into a coat",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a cigar box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a gym locker",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "behind the radiator",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a piano bench",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in a Packard trunk",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "under a hotel mattress",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

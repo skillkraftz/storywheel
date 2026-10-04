@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "act_incident",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}.",
+  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was trouble.",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}.",
+  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it.",
+  "The {rival} pinned {DISASTER} on {SOMEONE:human,!plural}, and {first} doubted it.",
+  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} for help.",
+  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind."
+ ]
+}

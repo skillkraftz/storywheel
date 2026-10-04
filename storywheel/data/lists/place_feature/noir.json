@@ -1,0 +1,35 @@
+{
+ "_note": "Second half of a district name.",
+ "slot": "place_feature",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "Heights",
+  "Flats",
+  "Quarter",
+  "Row",
+  "Bottoms",
+  "Wharf",
+  "Terrace",
+  "Yards",
+  "Junction",
+  "Avenue",
+  "Square",
+  "Basin",
+  "Landing",
+  "Gardens",
+  "Park",
+  "Street",
+  "Crossing",
+  "Point",
+  "Slip",
+  "Hollow",
+  "Circle",
+  "Docks",
+  "Alley",
+  "Towers",
+  "Works",
+  "Bluff"
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "_note": "Past-tense verbs for noir that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "covered up",
+   "object": [
+    "manmade"
+   ]
+  },
+  "witnessed",
+  {
+   "text": "fixed",
+   "object": [
+    "manmade"
+   ]
+  },
+  "paid for",
+  {
+   "text": "staged",
+   "object": [
+    "manmade"
+   ]
+  },
+  "reported",
+  "ignored",
+  "predicted",
+  "blamed",
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

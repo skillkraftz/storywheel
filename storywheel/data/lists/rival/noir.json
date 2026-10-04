@@ -1,0 +1,117 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "district attorney",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "police captain",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "crime boss",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "newspaper publisher",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "alderman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "crooked sergeant",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "union boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "insurance man",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "club owner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "judge",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "mob accountant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "police commissioner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival private eye",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "councilman's son",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "dockside kingpin",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "big-city fixer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

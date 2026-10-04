@@ -1,0 +1,34 @@
+{
+ "_note": "Cities and districts, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Port Calloway",
+  "San Lorca",
+  "Mercy Bay",
+  "Lakeshore City",
+  "Ashgate",
+  "Bell Harbor",
+  "Cobalt City",
+  "Halcyon Bay",
+  "Stonebridge",
+  "Port Mercer",
+  "Vance City",
+  "Cinder Harbor",
+  "Marlow Heights",
+  "Dry Dock"
+ ]
+}

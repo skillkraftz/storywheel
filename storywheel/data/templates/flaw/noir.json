@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "flaw",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "lets {VICE} outweigh {VALUE}",
+  "would sell {VALUE} for {TEMPTATION}",
+  "hides {FEELING} behind {VICE}",
+  "cannot let {TOPIC} lie and calls it {VALUE}",
+  "trusts {TEMPTATION} over {VALUE}",
+  "mistakes {VICE} for {VALUE}",
+  "reaches for {TEMPTATION} to avoid {FEELING}",
+  "keeps tabs on all and trusts {VICE} over {VALUE}"
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "noir"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "carries",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "counts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "polishes",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps locked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "checks",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "turns over",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

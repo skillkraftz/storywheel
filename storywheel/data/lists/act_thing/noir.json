@@ -1,0 +1,154 @@
+{
+ "_note": "Past-tense verbs for noir that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "pocketed",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "pawned",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "planted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "traded",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "lifted",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "wiped clean",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "opened",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "counted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  "swapped",
+  {
+   "text": "turned over",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hocked",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "studied",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "kept",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "traced",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

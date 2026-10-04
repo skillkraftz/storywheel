@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a district name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "Lower",
+  "Upper",
+  "Old",
+  "Bay",
+  "Harbor",
+  "Pike",
+  "Mercer",
+  "Canal",
+  "Union",
+  "Fulton",
+  "Dock",
+  "Rail",
+  "Neon",
+  "South",
+  "North",
+  "West",
+  "East",
+  "Cold",
+  "Grand",
+  "Water",
+  "Market",
+  "Church",
+  "Front",
+  "Back"
+ ]
+}

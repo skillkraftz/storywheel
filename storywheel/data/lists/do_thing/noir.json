@@ -1,0 +1,61 @@
+{
+ "_note": "Base-form verbs for noir that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "trace",
+   "object": [
+    "!living"
+   ]
+  },
+  "find",
+  "return",
+  {
+   "text": "sell",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "hock",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "burn",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  },
+  "steal",
+  {
+   "text": "deliver",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  "swap",
+  {
+   "text": "keep",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

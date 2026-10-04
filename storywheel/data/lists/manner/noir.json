@@ -1,0 +1,44 @@
+{
+ "_note": "How things get done after dark.",
+ "slot": "manner",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "under a streetlamp",
+  "through cigarette smoke",
+  "in the rain",
+  "over a stiff drink",
+  "after midnight",
+  "without a license",
+  "in a borrowed car",
+  "on a hunch",
+  "for cash",
+  "behind the bar",
+  {
+   "text": "in a low voice",
+   "features": [
+    "speech"
+   ]
+  },
+  {
+   "text": "with a cigarette lit",
+   "features": [
+    "carrying"
+   ]
+  },
+  "at closing time",
+  "in a back booth",
+  {
+   "text": "off the record",
+   "features": [
+    "speech"
+   ]
+  },
+  "through the fog",
+  "with a wry smile",
+  "on the cheap",
+  "in a hurry",
+  "from a pay phone"
+ ]
+}

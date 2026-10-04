@@ -1,0 +1,34 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "noir"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "drinks at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "locks up",
+   "object": [
+    "built"
+   ]
+  },
+  "stops at",
+  "avoids",
+  "keeps an eye on"
+ ]
+}

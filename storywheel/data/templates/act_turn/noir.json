@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for noir.",
+ "slot": "act_turn",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
+  "{first} questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
+  "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
+  "{first} kept the lead {HIDING} and took the job {MANNER}.",
+  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and began."
+ ]
+}

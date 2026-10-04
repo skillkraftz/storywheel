@@ -1,0 +1,194 @@
+{
+ "_note": "Past-tense verbs for noir that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  "tailed",
+  {
+   "text": "leaned on",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "bribed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "shook down",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "lied to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "double-crossed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "cornered",
+  {
+   "text": "tipped off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "sweet-talked",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "framed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "trusted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "bought a drink for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "called on",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "bailed out",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "paid off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "stood up",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "warned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "confronted",
+  {
+   "text": "forgave",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "shadowed",
+  {
+   "text": "buttonholed",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "_note": "Title nouns for noir.",
+ "slot": "title_noun",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "goodbye",
+   "kind": "idea"
+  },
+  "alibi",
+  "payoff",
+  {
+   "text": "dame",
+   "kind": "person"
+  },
+  {
+   "text": "fall",
+   "kind": "idea"
+  },
+  "dollar",
+  {
+   "text": "city",
+   "kind": "place"
+  },
+  {
+   "text": "corner",
+   "kind": "place"
+  },
+  {
+   "text": "witness",
+   "kind": "person"
+  },
+  "scam",
+  "ledger",
+  "rain",
+  "kiss",
+  {
+   "text": "night",
+   "kind": "idea"
+  },
+  "deal",
+  "shadow",
+  {
+   "text": "mark",
+   "kind": "person"
+  },
+  {
+   "text": "lie",
+   "kind": "idea"
+  },
+  {
+   "text": "price",
+   "kind": "idea"
+  },
+  "streetcar",
+  "gun",
+  {
+   "text": "hotel",
+   "kind": "place"
+  },
+  {
+   "text": "blonde",
+   "kind": "person"
+  },
+  "heist",
+  "wire"
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for noir that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "intercepted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "typed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "read twice",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "mailed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "traced",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "tore up",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

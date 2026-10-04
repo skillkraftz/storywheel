@@ -1,0 +1,138 @@
+{
+ "_note": "Past-tense verbs for noir that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "noir"
+ ],
+ "entries": [
+  {
+   "text": "cased",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "staked out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "broke into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "torched",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "tossed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "slipped out of",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "hung around",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "walked into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "drank at",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "left",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "watched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "stopped at",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}
