@@ -2239,3 +2239,5 @@ Full suite after the rhymes fix: 2,026 passed, 0 failed (this includes the run t
 | Tests | **Works** | `tests/test_exports_cli.py` (8): never exported, one-word change, anonymous docx, formats, errors, ambiguous slug |
 
 An export made with `--out` elsewhere writes its record beside that file, and `exports status` looks only in the story's own export folder.
+
+Full suite for this change: 2,034 passed, 0 failed, in one run; `stable` moved to the commit that records this.
