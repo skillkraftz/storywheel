@@ -301,6 +301,12 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
+### Help
+
+Press `?` (or the key of the mode you are in: F1 in the Wheel, F2 in the Builder...) for that mode's help: what it is for, every key and mouse action, with a
+search box. In the Writer, F3 or the menu's Help opens it in a float (`/` searches). Settings > Help searches every page, and `storywheel help [TOPIC]` prints
+one (`storywheel help` lists them; `-s WORDS` searches). The pages are in `storywheel/data/help/`; the key tables are made from the real bindings.
+
 ### Exports from scripts
 
 Each export is recorded in `.storywheel-exports.json` in the story's export folder (file, format, date, word count, a hash of the manuscript).

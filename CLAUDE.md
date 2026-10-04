@@ -898,3 +898,12 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   export" is decided by that hash, not the word count. `storywheel exports status [--json]` lists every story in the library (state: never exported / up to
   date / changed); `storywheel exports make UNIVERSE/STORY [--format F] [--json]` exports non-interactively in the story's own export format (else yours,
   else docx) with the story's export settings and prints the path. Looking at status never creates an export folder (`export_folder(create=False)`).
+
+- Help (batch 11): one source, `storywheel/data/help/*.md` (`helpdoc.py`). A page has an introduction, `## Keys` groups (`### ClassName | title` then
+  `action: one-line description`), and free sections. Key tables are generated from the real bindings (the mode screen's and its list widgets' Textual
+  `BINDINGS`; the Writer's `keys.WRITER_KEYS` and `keys.RESERVED`), F1-F5 shown as one row; `helpdoc.missing_descriptions()` must be empty (a test).
+  Adding a binding or a Writer shortcut means adding its description. `tui.HELP`, `builder.HELP` etc. are lazy module attributes (the page text) for
+  tests. The key of the mode you are in and `?` open the shared `helpscreen.HelpScreen`; the Writer's F3 and menu Help open a float filled by
+  `storywheel help writer --width N`. Footers (`navigation.footer`) show the five modes, ? Help, q Back and at most three keys.
+- Mode switching (batch 11): `Hub.show` records the wanted mode and `_drain` switches the screen first, then refreshes the mode (`_enter`); requests are
+  serialized, so a burst of F-keys ends on the last one.

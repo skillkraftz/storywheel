@@ -22,7 +22,7 @@ packages = ["storywheel"]
 version = {attr = "storywheel.__version__"}
 
 [tool.setuptools.package-data]
-storywheel = ["data/*.json", "data/*/*.json", "data/*/*/*.json", "nvim/*.lua", "nvim/*/*.lua", "nvim/*/*/*.lua", "nvim/*/*.vim"]
+storywheel = ["data/*.json", "data/*/*.json", "data/*/*/*.json", "data/help/*.md", "nvim/*.lua", "nvim/*/*.lua", "nvim/*/*/*.lua", "nvim/*/*.vim"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

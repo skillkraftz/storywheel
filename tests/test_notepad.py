@@ -281,8 +281,8 @@ def test_a_selection_is_italicised_with_alt_i(home, story):
 
 
 def test_help_describes_notepad_mode(home, story):
-    r = run(story, "", "", "R.help = table.concat(require('sw').HELP, '\\n')")
-    for needle in ("Notepad mode", "Escape does nothing", "Ctrl+C / X / V", "F12 or Alt+M", "Right-click"):
+    r = run(story, "", "", "R.help = table.concat(require('sw').help_lines(100), '\\n')")
+    for needle in ("notepad mode", "Escape does nothing", "Ctrl+C", "Ctrl+X", "Ctrl+V", "F12", "Alt+M", "Right-click"):
         assert needle in r["help"], needle
 
 

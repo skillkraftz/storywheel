@@ -271,10 +271,10 @@ def test_every_help_screen_lists_the_mode_keys(home, world):
         await pilot.press("question_mark")
         await pilot.pause()
         return flat(screen_text(app))
-    assert "Wheel (this), Universe Builder, Writer, Settings" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))
-    assert "F1 Wheel   F2 Builder   F3 Writer" in builder.HELP
+    assert "F1 F2 F3 F4 F5" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))
+    assert "F1 F2 F3 F4 F5" in builder.HELP
     lua = (ROOT / "storywheel" / "nvim" / "lua" / "sw" / "init.lua").read_text()
-    assert "F1 Wheel   F2 Builder   F3 Writer" in lua
+    assert "F3 this help" in lua
 
 
 # --- in a real terminal -----------------------------------------------------------------------------------------------------

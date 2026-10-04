@@ -9,6 +9,15 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
 - Footers are the five modes, ? Help, q Back and at most three keys that matter on that screen; the rest is in help (Q Quit still works; it is no longer in the footer).
 - `hub.show()` switches the screen first and refreshes the mode after it is showing; switches are serialized, so a burst of F-keys ends on the last one pressed.
 
+### Part B: help everywhere, from one source
+- One set of help files in the package (`storywheel/data/help/`): wheel, builder, writer, settings, words, and topics (universes, structures, genres-and-flavor,
+  exports, backups, dictionary, grammar, keys). Every help surface reads them (`helpdoc.py`).
+- Key tables are generated from the real bindings (Textual `BINDINGS` of each mode's screen and list widgets; the Writer's shortcuts as you set them, plus its
+  fixed keys) and merged with one-line descriptions in the files. A test fails for any binding without a description.
+- ? or the key of the mode you are in (F1 in the Wheel...) opens that mode's help: an About paragraph, keys, mouse, scrollable, with a search box (replaces
+  "You are in ..."). F3 in the Writer and the Writer menu's Help open the same help in a scrollable Neovim float (/ searches, Esc or q closes).
+- Settings has a Help tab that searches every page; `storywheel help [TOPIC]` prints a page (`-s WORDS` searches, `--json`, `--width`).
+
 ## 0.10.2 — Export records and `exports` commands
 - Every export is recorded in `.storywheel-exports.json` beside it: file, format, date, the manuscript's word count and a content hash.
 - `storywheel exports status [--json]` and `storywheel exports make STORY [--format F] [--json]` (see README).

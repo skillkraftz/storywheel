@@ -161,5 +161,4 @@ def test_back_with_an_empty_trail_uses_the_fallback(home, monkeypatch):
 
 def test_every_help_screen_says_what_q_and_Q_do():
     for text in (tui.HELP, builder.HELP, settings_app.HELP, words_app.HELP):
-        assert "[b]q[/b]" in text and "[b]Q[/b]" in text and "uit storywheel" in text.replace("Quit storywheel", "Quit storywheel")
-    assert "F1-F5" in tui.HELP and "F1-F5" in settings_app.HELP and "F1 Wheel" in builder.HELP and "F5 Words" in builder.HELP
+        assert "Back to the mode you came from" in text and "Quit storywheel" in text and "F1 F2 F3 F4 F5" in text

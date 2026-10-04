@@ -41,84 +41,11 @@ BOOST_LADDER = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0]
 MARKS = {"kept": ("✓", "green"), "skipped": ("–", "yellow"), "current": ("▶", "bold cyan"), "pending": ("·", "dim"),
          "changed": ("●", "bold yellow"), "broken": ("✗", "bold red")}
 
-HELP = """\
-[b]Keys[/b]
-
-  [b]space[/b]   roll again
-  [b]k[/b]       keep this and move on
-  [b]f[/b]       reroll the selected field (so does enter)
-  [b]e[/b]       edit the selected field
-  [b]E[/b]       edit it all in $EDITOR
-  [b]w[/b]       write your own
-  [b]+[/b] [b]-[/b]     like / dislike the selected line. Disliked frames
-          and atom pairs come up a little less. Again clears it.
-  [b]u[/b] [b]U[/b]     save to / remove from your universe
-  [b]h[/b]       history: every roll  or  the selected field's values
-  [b]A[/b] [b]X[/b]     on the story body: add / remove another of the beat under the cursor, when it can repeat (the Story Spine's
-          "Because of that", the rising action...). The button row has +Beat and -Beat. Threads follow the text.
-  [b]B[/b]       send this story to the Universe Builder (the button under the card; F2 offers it too)
-  [b]F1[/b] [b]F2[/b] [b]F3[/b] [b]F4[/b]   Wheel (this), Universe Builder, Writer, Settings
-  [b]v[/b]       the universe panel (see below)
-  [b]c[/b]       copy the story so far to the clipboard (plain text)
-  [b]i[/b]       ignore a stale warning
-  [b]a[/b]       update a stale candidate (see below)
-  [b]m[/b]       flavor: which kinds of material this story leans toward or avoids (the mix editor)
-  [b]b[/b]       go back a step
-  [b]x[/b]       skip this step
-  [b]q[/b]       back to the mode you came from (the draft is saved)
-  [b]Q[/b]       Quit storywheel: asks to keep this story or delete it (and offers to send it to the Builder)
-  [b]F1-F5[/b]   the modes: Wheel, Builder, Writer, Settings, Words (the footer says so)
-  [b]?[/b]       this help
-
-[b]Moving around[/b]
-
-  [b]up down[/b]  move within a list
-  [b]tab[/b]      next list: steps, card, history
-  [b]enter[/b]    card: reroll the field.  history: pick that one.
-          steps: jump there.  universe: preview an entry.
-  [b]esc[/b]      back to the card
-
-[b]Stand-ins and stale candidates[/b]
-
-  If you roll a step before the ones it builds on are kept (say the story body before the
-  protagonist), it invents [b]stand-ins[/b] and the card says so. When you later keep those
-  steps, a candidate built on a stand-in shows a banner, "Built for Mark; your protagonist is
-  now Stacie Anderson", with [b]Update[/b] (swap the kept values into a copy), [b]Reroll[/b] and
-  [b]Ignore[/b] (dismiss the banner; the candidate stays as it is). Stale rows in the history are marked. Rerolling one field always uses
-  what you have kept.
-
-[b]Mouse[/b]
-
-  [b]click[/b] a field       reroll just that field (like f)
-  [b]right-click[/b] a field edit it (like e)
-  [b]scroll[/b] over a field step through its earlier values
-  [b]▲ ▼[/b] at the end of a line rate it (like + and -)
-  buttons under the card: Roll, Keep, Back, Skip, Flavor, +Beat, -Beat
-  click a step to jump to it, a history row to pick it
-
-  To select text with the mouse while this app has it,
-  hold [b]Shift[/b] and drag (some terminals: Alt, or Option on a Mac).
-
-[b]Markers on the steps[/b]
-
-  ✓ kept   – skipped   ▶ current   · to do
-  [b]yellow ●[/b]  kept, but built on a stand-in or on something that changed
-  [b]red ✗[/b]     refers to something that no longer exists
-  The right-hand column says what is wrong. Click the step to go there.
-
-[b]Past stories[/b] (bottom left): enter opens one, d deletes it (asks first),
-  p / s send its protagonist / setting to your universe.
-
-[b]Universe panel[/b] (bottom left; press v)
-
-  Entries are grouped by kind; enter opens or closes a group.
-  [b]enter[/b]  preview an entry: then enter or u uses it in this story
-          (as a new candidate; nothing is kept until you press k),
-          e edits it, d deletes it (with a confirm)
-  [b]n[/b]      add a new entry from scratch    [b]t[/b]  whole characters/places from these universes: no / sometimes / only, for this story
-
-Press esc to close.
-"""
+def __getattr__(name):
+    if name == "HELP":                                   # (the Wheel's help page, from storywheel/data/help/wheel.md)
+        from . import helpdoc
+        return helpdoc.text("wheel")
+    raise AttributeError(name)
 
 
 def _row(label, value, rating=0):
@@ -234,22 +161,6 @@ class EditScreen(ModalScreen):
             self.dismiss({name: self.query_one("#" + self.ids[name], Input).value for name in self.fields})
 
     def action_cancel(self):
-        self.dismiss(None)
-
-
-class HelpScreen(ModalScreen):
-    BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
-    DEFAULT_CSS = """
-    HelpScreen { align: center middle; }
-    HelpScreen > VerticalScroll { width: 78; max-width: 100%; height: auto; max-height: 100%;
-                                  border: round $accent; background: $surface; padding: 1 2; }
-    """
-
-    def compose(self) -> ComposeResult:
-        with VerticalScroll():
-            yield Static(HELP)
-
-    def action_close(self):
         self.dismiss(None)
 
 
@@ -1614,13 +1525,14 @@ class MainScreen(KeptScreen, Screen):
 
 
     def action_help(self):
-        self.app.push_screen(HelpScreen())
+        from .helpscreen import HelpScreen as SharedHelp
+        self.app.push_screen(SharedHelp("wheel"))
 
     def action_focus_card(self):
         self.card.focus()
 
     def action_noop_mode(self):
-        self.say("You are in the Wheel.")
+        self.action_help()                                 # (the key of the mode you are in opens its help)
 
     def action_back_mode(self):
         """q: back to the mode you came from (the draft is saved)."""

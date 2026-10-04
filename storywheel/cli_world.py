@@ -308,6 +308,39 @@ def cmd_manuscript(args):
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
+def cmd_help(args):
+    """storywheel help [TOPIC]: the same pages the help screens show. No topic lists them; -s WORDS searches all of them."""
+    from . import helpdoc
+    if args.search:
+        hits = helpdoc.search(" ".join(args.search))
+        if args.json:
+            emit([{"page": n, "section": h, "line": snip} for n, h, snip in hits])
+        elif not hits:
+            print("  Nothing in the help matches that.")
+        for n, h, snip in ([] if args.json else hits):
+            print(f"  {n}: {h}\n      {snip}")
+        return
+    if not args.topic:
+        if args.json:
+            emit([{"name": n, "title": t, "kind": k} for n, t, k in helpdoc.titles()])
+            return
+        print("  Help pages (storywheel help NAME):\n")
+        for kind in ("mode", "topic"):
+            for n, t, k in helpdoc.titles():
+                if k == kind:
+                    print(f"    {n:<20} {t}")
+            print()
+        print("  storywheel help -s WORDS  searches all of them.")
+        return
+    name = helpdoc.resolve(args.topic)
+    if not name:
+        sys.exit(f"No help page called '{args.topic}'. Try:  storywheel help   (lists them)  or  storywheel help -s {args.topic}")
+    if args.json:
+        emit({"name": name, "title": helpdoc.load(name).title, "sections": [{"heading": h, "text": b} for h, b in helpdoc.sections(name)]})
+    else:
+        print(helpdoc.text(name, args.width or None), end="")
+
+
 def find_story(target):
     """A story from "universe/story" (its id), or from a story slug that is unique across the universes. Exits with a plain message otherwise."""
     uni, sep, slug = (target or "").partition("/")
@@ -590,6 +623,11 @@ def add_parsers(sub):
     p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
     p.add_argument("--anonymous", action="store_true", help="no name, contact block, byline or surname (header: Title / page)")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("help", help="print a help page:  help [TOPIC] | help -s WORDS (search)")
+    p.add_argument("topic", nargs="?", help="a mode (wheel, builder, writer, settings, words) or a topic (universes, structures, exports...)")
+    p.add_argument("-s", "--search", nargs="+", metavar="WORD", help="search every help page")
+    p.add_argument("--width", type=int, default=88, help="wrap lines at this width (0: no wrapping)")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("exports", help="exports:  exports status [--json] | exports make UNIVERSE/STORY [--format F] [--json]")
     p.add_argument("action", choices=["status", "make"])
     p.add_argument("target", nargs="?", help="universe/story (or a story slug that is in one universe only)")
@@ -626,4 +664,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}

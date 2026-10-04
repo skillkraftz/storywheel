@@ -42,7 +42,7 @@ def test_every_tab_is_there_with_your_current_values(home):
         return (tabs, s.query_one("#f-legal_name", Input).value, s.query_one("#f-daily_goal", Input).value,
                 s.query_one("#f-notepad_mode", Switch).value, s.query_one("#f-library", Input).value)
     tabs, name, goal, notepad, lib = run(script)
-    assert tabs == ["t-you", "t-goals", "t-appearance", "t-writer", "t-spelling", "t-grammar", "t-export", "t-keys", "t-universes", "t-library", "t-updates", "t-stats"]
+    assert tabs == ["t-you", "t-goals", "t-appearance", "t-writer", "t-spelling", "t-grammar", "t-export", "t-keys", "t-universes", "t-library", "t-updates", "t-stats", "t-help"]
     assert (name, goal, notepad) == ("Andrew Writer", "750", False) and lib == str(paths.library_root())
 
 
@@ -248,8 +248,8 @@ def test_f4_is_in_every_help_screen_and_every_mode_has_the_key(home):
         await pilot.press("question_mark")
         await pilot.pause()
         return flat(screen_text(app))
-    assert "Wheel (this), Universe Builder, Writer, Settings" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))
-    assert "F4 Settings" in builder.HELP and "F4 Settings" in settings_app.HELP
+    assert "F1 F2 F3 F4 F5" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))
+    assert "Settings (F4)" in builder.HELP and "Settings (F4)" in settings_app.HELP
     from pathlib import Path
     lua = (Path(__file__).resolve().parent.parent / "storywheel" / "nvim" / "lua" / "sw" / "init.lua").read_text()
     assert "F4 Settings" in lua and '"<F4>"' in lua

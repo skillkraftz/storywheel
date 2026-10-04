@@ -30,43 +30,13 @@ from . import fill, outline, paths, promote, rename, schemas, settings, state, v
 from .text import motif_from, plural_n
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
-MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
 TYPE_ORDER = ["character", "place", "thing", "group", "note"]
 
-HELP = f"""\
-[b]Universe Builder[/b]        {MODE_KEYS}
-
-[b]F5[/b]  Words: look up a word, words to learn, My words, overused words (offline)
-
-[b]Entities[/b] (the tabs: 1-5 switch)
-  [b]n[/b]        new entity (starts blank)         [b]d[/b]  delete (asks first)
-  [b]space[/b]    roll every blank field            [b]R[/b]  roll the whole entity again (asks)
-  [b]f[/b]        roll the highlighted field        [b]e[/b]  write it by hand
-  [b]r[/b]        rename (shows every match first)  [b]c[/b]  add your own field (write-only)
-  Outline (the Story panel, tab 6): click selects and the wheel scrolls; [b]right-click[/b] or [b]e[/b] edits the selected row.
-  [b]6[/b] [b]7[/b] [b]8[/b]  the Story panel under the story list: Outline, Scenes (a click or Enter opens the Writer at that scene), Notes (the story's own).
-  [b]E[/b]  the selected entity's own notes, under its card
-  [b]backslash[/b]  on a narrow terminal (under 150 columns) the Story panel takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back
-  [b]+[/b] [b]-[/b]      like / dislike the line
-  Under the card: ▲ ▼ like or dislike a value (liked wording is used more, disliked less in later rolls); ✎ the generator can't fill this
-  field, so write it yourself; [b]space[/b] (Roll blanks) fills only empty fields and never changes what you wrote.
-
-[b]Mouse[/b]   click a field: roll it.  right-click: write it.  wheel over a field: its history.
-         [b]▲ ▼[/b] rate.  Fields marked ✎ are write-only (the generator can't fill them).
-
-[b]Universe and stories[/b]
-  [b]N[/b]  new universe   [b]s[/b]  universe settings (genre leanings, exclusions, boosts, own lists)
-  [b]F[/b]  fix names written in the wrong capitals ("Locked box" -> "a locked box"), with a preview
-  [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
-  [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
-  [b]C[/b]  copy the manuscript as plain text   [b]T[/b]  a new blank story (+Story): no Wheel draft behind it
-  New Wheel drafts are started in the Wheel (F1), where you choose which universe a draft belongs to.
-  [b]A[/b] [b]X[/b]  on the outline: add / remove another of the beat under the cursor, when the structure lets it repeat
-  [b]q[/b]  back to the mode you came from   [b]Q[/b]  Quit storywheel (asks first)   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
-
-Roll results use the universe's genre leanings, the entity's other fields, and existing entities
-(a rival, owner, parent place or leader can be a real entity).
-"""
+def __getattr__(name):
+    if name == "HELP":                                   # (the Builder's help page, from storywheel/data/help/builder.md)
+        from . import helpdoc
+        return helpdoc.text("builder")
+    raise AttributeError(name)
 
 SETTINGS_FIELDS = [("format", "format (short-story / novel / screenplay)"), ("font", "font"),
                    ("column_width", "column width (characters)"), ("daily_goal", "daily word goal"),
@@ -163,22 +133,6 @@ class RenamePreviewScreen(ModalScreen):
 
     def action_cancel(self):
         self.dismiss(False)
-
-
-class BuilderHelp(ModalScreen):
-    BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
-    DEFAULT_CSS = """
-    BuilderHelp { align: center middle; }
-    BuilderHelp > VerticalScroll { width: 100; max-width: 100%; height: auto; max-height: 100%;
-                                   border: round $accent; background: $surface; padding: 1 2; }
-    """
-
-    def compose(self) -> ComposeResult:
-        with VerticalScroll():
-            yield Static(HELP)
-
-    def action_close(self):
-        self.dismiss(None)
 
 
 class FileViewScreen(ModalScreen):
@@ -1321,14 +1275,15 @@ class BuilderScreen(KeptScreen, Screen):
         self.card.focus()
 
     def action_help(self):
-        self.app.push_screen(BuilderHelp())
+        from .helpscreen import HelpScreen
+        self.app.push_screen(HelpScreen("builder"))
 
 
     def action_mode(self, which):
         self.b.go(which)
 
     def action_noop_mode(self):
-        self.say("You are in the Builder.")
+        self.action_help()
 
     def action_back_mode(self):
         """q: back to the mode you came from."""

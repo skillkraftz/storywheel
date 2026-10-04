@@ -13,46 +13,20 @@ local session = require("sw.session")
 
 local M = {}
 
-M.HELP = {
-  "storywheel Writer                         F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words",
+-- The help comes from the same files as every other help surface (storywheel/data/help/writer.md, through `storywheel help writer`).
+-- This short text is only for when the command line cannot be run.
+M.HELP_FALLBACK = {
+  "storywheel Writer",
   "",
-  "Notepad mode (the default; a setting turns Vim keys back on)",
-  "  You are always typing: Escape does nothing.  The mouse and Shift+arrows select; typing replaces the selection.",
-  "  Ctrl+C / X / V  copy / cut / paste (system clipboard)    Ctrl+Z / Ctrl+Y  undo / redo    Ctrl+S  save",
-  "  Ctrl+A  select all    Ctrl+F  find, Ctrl+G next, Alt+G previous    Ctrl+R  find and replace    Ctrl+Q  back to the Builder    Alt+Q  Quit storywheel (asks first)",
-  "  Ctrl+Backspace (Ctrl+H)  delete the previous word    Ctrl+Delete  delete the next word    Other Ctrl keys: nothing happens",
-  "  F5  Words mode, carrying the word under the cursor (Use in Writer there brings a chosen word back, in the same form)",
-  "  F7  dictionary and thesaurus card for the word under the cursor (Enter on a similar word replaces it)    F6  look up a typed word",
-  "  F12 or Alt+M  a menu of everything below (export, sidebar, toggles, settings...)    Right-click  edit menu",
-  "  F9  scene sidebar    F8  peek at the name under the cursor    Ctrl+O  the story outline (title, premise, beats, twist, protagonist, setting, rumor)",
-  "",
-  "Writing",
-  "  Alt+I / Alt+B      italic / bold (Ctrl+B too; Ctrl+I only if your terminal can send it)",
-  "  Enter              starts a new paragraph on the next line: one line is one paragraph, each shown with an indent",
-  "  Alt+S              scene break  (*** on a line of its own, centered on screen; typing *** and Enter works too)",
-  "  Alt+J              join the selected lines (or the lines around the cursor) into one paragraph",
-  "  Tab                next name in the completion list; at the start of a paragraph it does nothing (indents are automatic)",
-  "  Names              type 3 letters of any word of a character's or place's name (any case) to complete it; a finished name in the wrong case is fixed",
-  "  Spelling marks     red wavy = not a word.  Blue = lowercase where a capital belongs (SpellCap).  Pink = a rare word (SpellRare).",
-  "                     Cyan = another region's spelling (SpellLocal).  Settings F4 > Spelling softens or hides the last three.",
-  "  Grammar (optional) Off by default. Install once:  storywheel grammar install   then turn it on in the F12 menu or Settings F4 > Grammar.",
-  "                     A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline.",
-  "                     Right-click one: the message, fixes to apply, Ignore this one, Turn off this rule.  F10 next problem, Shift+F10 the list.",
-  "                     This is LanguageTool's free rules, not the Premium rules of the Google Docs extension, and without its large n-gram data.",
-  "  (every shortcut can be changed in Settings F4 > Keys)",
-  "",
-  "With Vim keys on (not notepad mode), in Normal mode, with Space first",
-  "  n  scene sidebar      p  peek at the name under the cursor (also F8)    a  new scene",
-  "  i  show invisibles    t  typewriter mode    s  spellcheck",
-  "  w  word counts        c  copy the manuscript as plain text",
-  "  e  export (docx)      S  this story's settings.toml      k  check which keys your terminal sends",
-  "  ]] / [[  next / previous scene                          ?  this help",
-  "",
-  "Sidebar (Space n, or F9):  Enter jump   a add   r rename   J / K move down / up   q close",
-  "",
-  "Leaving:  F2 saves everything and goes back to the Builder.  F1 the Wheel.  F4 Settings.  :q works too.",
-  "Everything is saved as you go; backups are in the story's .backups folder.",
+  "The help could not be loaded. Run  storywheel help writer  in a terminal to read it.",
+  "F1 Wheel   F2 Builder   F3 this help   F4 Settings   F5 Words   F12 or Alt+M the Writer menu",
 }
+
+function M.help_lines(width)
+  local out = vim.fn.system(util.cli({ "help", "writer", "--width", tostring(width or 88) }))
+  if vim.v.shell_error ~= 0 or out == "" then return M.HELP_FALLBACK end
+  return vim.split(out, "\n", { plain = true })
+end
 
 -- --- scenes ---------------------------------------------------------------------------------------------
 
@@ -216,22 +190,28 @@ function M.show_stats()
 end
 
 function M.help()
+  local width = math.max(40, math.min(100, vim.o.columns - 6))
+  local lines = M.help_lines(width - 2)
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, M.HELP)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.bo[buf].modifiable = false
-  local width = 0
-  for _, l in ipairs(M.HELP) do width = math.max(width, vim.fn.strdisplaywidth(l)) end
-  width = math.min(width + 2, vim.o.columns - 4)
+  local height = math.max(5, math.min(#lines, vim.o.lines - 6))
   local win = vim.api.nvim_open_win(buf, true, { relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2),
-    width = width, height = math.min(#M.HELP, vim.o.lines - 6), style = "minimal", border = "rounded" })
+    width = width, height = height, style = "minimal", border = "rounded", title = " Help: / searches, n next, Esc or q closes ", title_pos = "center" })
+  vim.wo[win].wrap = true
+  vim.wo[win].linebreak = true
+  vim.wo[win].cursorline = true
   vim.cmd("stopinsert")
   local function close()
     if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
+    vim.cmd("nohlsearch")
     local layout = require("sw.layout")
     if layout.main and vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
     require("sw.notepad").insert(true)
   end
-  for _, k in ipairs({ "q", "<Esc>", "<CR>", "?" }) do vim.keymap.set("n", k, close, { buffer = buf, nowait = true }) end
+  for _, k in ipairs({ "q", "<Esc>", "<F3>" }) do vim.keymap.set("n", k, close, { buffer = buf, nowait = true }) end
+  vim.keymap.set("n", "<Space>", "<PageDown>", { buffer = buf, nowait = true })
+  vim.keymap.set("n", "<BS>", "<PageUp>", { buffer = buf, nowait = true })
   return win
 end
 
@@ -317,7 +297,7 @@ function M.map_global()
   end
   map({ "n", "i", "x", "s" }, "<F1>", function() M.leave("wheel") end, "to the Wheel")
   map({ "n", "i", "x", "s" }, "<F2>", function() M.leave("builder") end, "to the Builder")
-  map({ "n", "i", "x", "s" }, "<F3>", function() vim.api.nvim_echo({ { "You are in the Writer.", "Normal" } }, false, {}) end, "Writer")
+  map({ "n", "i", "x", "s" }, "<F3>", function() M.help() end, "help (you are in the Writer)")
   map({ "n", "i", "x", "s" }, "<F4>", function() M.leave("settings") end, "to Settings")
   map({ "n", "i", "x", "s" }, "<F5>", function() M.words() end, "to Words")
   map({ "n", "i" }, story.setting("key_sidebar", "<F9>"), function() sidebar.toggle() end, "scene sidebar")

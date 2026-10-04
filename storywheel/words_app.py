@@ -30,7 +30,6 @@ from .keptscreen import KeptScreen
 from .header import QuietHeader
 from .virtuallist import VirtualList
 
-MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
 
 TAB_HELP = {
     "lookup": "Look any word up: meanings, similar and opposite words, rhymes and related words, each in its own box, and use one in the Writer.",
@@ -40,70 +39,11 @@ TAB_HELP = {
     "suggest": "Words to try in your story: ones that fit its genres and are not used yet, ones the dictionary relates to your characters and places, and fresh alternatives for what you overuse.",
 }
 
-HELP = f"""\
-[b]Words[/b]        {MODE_KEYS}
-
-[b]Lookup[/b]  {TAB_HELP["lookup"]}
-  Type a word and press [b]Enter[/b]. Plurals, past tenses and misspellings work. The answer is in five boxes: [b]Meanings[/b] (by part of
-  speech), [b]Similar[/b], [b]Opposites[/b], [b]Rhymes[/b] (perfect rhymes first, then near rhymes, grouped by syllables; the box at its top limits
-  the syllables) and [b]Related[/b] (wider, narrower, parts, forms). Each scrolls on its own; on a narrow screen they are tabs. [b]Tab[/b] moves
-  between them. [b]Enter[/b] or a click on a word in any box looks it up, and c, a, w and the buttons work on the word you are on, in any box.
-  Rhymes come from the CMU Pronouncing Dictionary, fetched by [b]storywheel dictionary install[/b].
-  [b]b[/b] / [b]n[/b]  back / forward through the words you looked up       [b]/[/b]  filter the lists       [b]c[/b]  copy the word
-  [b]a[/b]  Learn this word (it becomes ★ in Vocabulary)
-  [b]w[/b]  Use in this universe's stories: pick the slot (job, thing, place...) and the Wheel and Builder will use the word
-  [b]u[/b]  Use in Writer: go back to the Writer and replace the word you were on (only when you came from the Writer)
-
-[b]Suggestions[/b]  {TAB_HELP["suggest"]}
-  The first box picks the list. [b]For this story[/b]: words that fit the story's genres (ranked as in Genre words) and its manuscript does not use
-  yet, in the part of speech of the second box. [b]For your characters and places[/b]: words the dictionary relates (synonyms, broader and
-  narrower words, parts, related forms) to your characters' jobs and the things, places and groups of the universe. [b]Fresh alternatives[/b]:
-  your story's most overused words, each followed by replacements, the ones that fit the genres first. The actions are Genre words':
-  [b]Enter[/b] looks a word up, [b]l[/b] marks it ★ Learning, [b]c[/b] copies, [b]u[/b] uses it in the Writer, [b]w[/b] puts it on a generator list.
-
-[b]Vocabulary[/b]  {TAB_HELP["vocab"]}
-  Pick how rare, the part of speech and the subject, then [b]New batch[/b] ([b]Start over[/b] forgets what you have seen). The first box
-  switches between [b]New words[/b] and [b]★ Learning[/b] (the words you are learning). [b]Enter[/b] opens the full entry in Lookup;
-  [b]l[/b] marks ★ Learning, [b]k[/b] ✓ Known (never offered again), [b]d[/b] removes a ★ word, [b]f[/b] flashcards (the word first;
-  space shows the meaning), [b]w[/b] Use in this universe's stories. Type a word in the box and press Enter to learn it.
-  Difficulty: uncommon (like "lantern"), rare (like "serendipity"), very rare (like "gallivant"). A word that appears in any manuscript
-  of any universe is a word you know: it is marked ✓ Known automatically, leaves the lists, and the first place it was used is noted
-  (the [b]✓ Known[/b] view of the first box shows them).
-
-[b]Genre words[/b]  {TAB_HELP["genre"]}
-  The first box picks [b]Nouns, Verbs, Adjectives or Adverbs[/b] (every word of that kind in the dictionary, with a one-line meaning) or one
-  of the short lists From the Wheel (first and last names, jobs, places, things). [b]Genres…[/b] ranks the words by how well they fit
-  one or more genres (the story's own to start with; Any genre means the whole list): the best fits come first, ●●● ●●○ ●○○ show the fit,
-  and nothing is hidden. The other boxes pick how common a word is (everyday, uncommon, rare, very rare, as in Vocabulary), the order
-  (genre fit, commonness, A to Z) and a search that filters as you type. [b]Enter[/b] opens the full entry in Lookup, [b]l[/b] marks the
-  word ★ Learning (Vocabulary > ★ Learning), [b]c[/b] copies it, [b]u[/b] uses it in the Writer, [b]w[/b] puts it on a generator list.
-  From the Wheel: [b]e[/b] adds a name, place or thing to the universe, [b]m[/b] (More like these) invents new names in the genres' style.
-  The fit is worked out once from the generator's own lists and WordNet, and again when those lists change.
-
-[b]Story words[/b]  {TAB_HELP["story"]}
-  Pick a story (or the whole universe) and it is read at once. ◆ is a name from your universe, ? a word the dictionary does not know,
-  ≈ a look-alike ("Glasswater" / "Glass Water", "Stacy" / "Stacie"). [b]Enter[/b] shows where each is; Enter on a place opens the Writer
-  there. [b]s[/b] adds the word to the spelling list, [b]e[/b] makes it a character, place or thing, [b]r[/b] renames it everywhere (with a
-  preview), [b]c[/b] copies it. The second box switches to [b]Often used[/b]: the story's most frequent words (everyday words left out) and words
-  repeated close together, with where they are; Enter on a place opens the Writer there. The list at the bottom holds the words you put on this universe's generator lists ([b]d[/b] removes one).
-
-[b]q[/b] goes back to where you were; [b]Q[/b] Quit storywheel (asks first); F1-F5 are the modes. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus;
-word frequencies: wordfreq (data CC BY-SA 4.0).
-"""
-
-
-class HelpScreen(ModalScreen):
-    BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
-    DEFAULT_CSS = """
-    HelpScreen { align: center middle; }
-    HelpScreen > Static { width: 100; height: auto; border: round $accent; background: $surface; padding: 1 2; }
-    """
-
-    def compose(self) -> ComposeResult:
-        yield Static(HELP)
-
-    def action_close(self):
-        self.dismiss(None)
+def __getattr__(name):
+    if name == "HELP":                                   # (Words' help page, from storywheel/data/help/words.md)
+        from . import helpdoc
+        return helpdoc.text("words")
+    raise AttributeError(name)
 
 
 # --- the rows (pure: used by the screen and the tests) -------------------------------------------------------------------------
@@ -780,10 +720,11 @@ class WordsScreen(KeptScreen, Screen):
         self.query_one("#filter", Input).focus()
 
     def action_noop(self):
-        self.say("You are in Words.")
+        self.action_help()
 
     def action_help(self):
-        self.app.push_screen(HelpScreen())
+        from .helpscreen import HelpScreen as SharedHelp
+        self.app.push_screen(SharedHelp("words"))
 
     def active_tab(self):
         return self.query_one(TabbedContent).active
@@ -1732,7 +1673,7 @@ class WordsScreen(KeptScreen, Screen):
                 "story": self.story.slug if self.story else self.payload.get("story")}
 
     def action_noop_mode(self):
-        self.say("You are in Words.")
+        self.action_help()
 
     def action_back_mode(self):
         self.b.go("back", dict(self.context(), fallback=self.b.back))

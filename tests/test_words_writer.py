@@ -47,8 +47,8 @@ def test_f5_is_in_the_writer_menu_and_help(home, story):
     assert any(l.startswith("Words (F5)") for l in labels)
     run(story, text("A dog.") + AT % (1, 3), "<F12>" + "<Down>" * next(i for i, l in enumerate(labels) if l.startswith("Words (F5)")) + "<CR>", "", quits=True)
     assert files(story)[0].read_text() == "words"
-    r = run(story, "", "", "R.help = table.concat(require('sw').HELP, '\\n')")
-    assert "F5 Words" in r["help"] and "F5  Words mode" in r["help"]
+    r = run(story, "", "", "R.help = table.concat(require('sw').help_lines(100), '\\n')")
+    assert "F5" in r["help"] and "Go to Words, carrying the word under the cursor" in r["help"]
 
 
 def replace_env(story, new, text_, row=0, start=0):

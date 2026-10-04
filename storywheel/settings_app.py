@@ -14,11 +14,11 @@ from . import appearance, navigation
 from .footer import FitFooter
 from .keptscreen import KeptScreen
 from .header import QuietHeader
-from textual.widgets import DataTable, Footer, Header, Input, Label, Select, Static, Switch, TabbedContent, TabPane, TextArea
+from textual.widgets import DataTable, Footer, Header, Input, Label, OptionList, Select, Static, Switch, TabbedContent, TabPane, TextArea
+from textual.widgets.option_list import Option
 
 from . import keys, paths, settings, vault, writing_stats
 
-MODE_KEYS = "F1 Wheel   F2 Builder   F3 Writer   F4 Settings   F5 Words"
 
 # (tab title, [(key, label, kind, extra, hint)])   kinds: text, multiline, int, float, bool, choice, path
 SECTIONS = [
@@ -108,14 +108,11 @@ SECTIONS = [
     ]),
 ]
 
-HELP = f"""\
-[b]Settings[/b]        {MODE_KEYS}
-
-  Everything is saved as you change it, to ~/.storywheel/settings.toml.
-  [b]tab[/b] / [b]shift+tab[/b]  next / previous box        [b]left right[/b] on the tabs  switch tab
-  [b]q[/b]  back to where you were    [b]Q[/b]  Quit storywheel (asks first)    [b]F1-F5[/b]  the modes (Wheel, Builder, Writer, Settings, Words)
-  The Stats tab shows words per day, your streaks, and per-story totals (what the Writer recorded).
-"""
+def __getattr__(name):
+    if name == "HELP":                                   # (Settings' help page, from storywheel/data/help/settings.md)
+        from . import helpdoc
+        return helpdoc.text("settings")
+    raise AttributeError(name)
 
 
 def parse(kind, text):
@@ -132,20 +129,6 @@ def parse(kind, text):
     return True, text
 
 
-class HelpScreen(ModalScreen):
-    BINDINGS = [Binding("escape,question_mark,q", "close", "Close")]
-    DEFAULT_CSS = """
-    HelpScreen { align: center middle; }
-    HelpScreen > Static { width: 90; height: auto; border: round $accent; background: $surface; padding: 1 2; }
-    """
-
-    def compose(self) -> ComposeResult:
-        yield Static(HELP)
-
-    def action_close(self):
-        self.dismiss(None)
-
-
 class SettingsScreen(KeptScreen, Screen):
     BINDINGS = navigation.footer([
         *navigation.mode_bindings("settings"),
@@ -155,6 +138,9 @@ class SettingsScreen(KeptScreen, Screen):
     ], keep=())
     DEFAULT_CSS = """
     SettingsScreen VerticalScroll { padding: 1 2; }
+    SettingsScreen #helpresults { height: 10; }
+    SettingsScreen #helpscroll { height: 1fr; }
+    SettingsScreen #helpsearch { width: 70; }
     SettingsScreen .row { height: auto; margin-bottom: 1; }
     SettingsScreen .label { text-style: bold; }
     SettingsScreen .hint { color: $text-muted; }
@@ -179,6 +165,7 @@ class SettingsScreen(KeptScreen, Screen):
         g["library"] = str(paths.library_root())
         g["manuscripts_dir"] = str(paths.manuscripts_root())
         self.values = g
+        self.help_hits = []
         with TabbedContent(id="tabs"):
             for title, fields in SECTIONS:
                 with TabPane(title, id=f"t-{title.lower()}"):
@@ -218,6 +205,12 @@ class SettingsScreen(KeptScreen, Screen):
                 yield DataTable(id="days")
                 yield Static("Per story", classes="title")
                 yield DataTable(id="stories")
+            with TabPane("Help", id="t-help"):
+                yield Static("Search every help page: modes, keys, exports, backups, the dictionary, grammar... Pick a result to read it.", classes="hint", markup=False)
+                yield Input(placeholder="search the help (empty lists the pages)", id="helpsearch")
+                yield OptionList(id="helpresults")
+                with VerticalScroll(id="helpscroll"):
+                    yield Static("", id="helptext", markup=False)
         yield Static("", id="status", markup=False)
         yield FitFooter()
 
@@ -373,7 +366,49 @@ class SettingsScreen(KeptScreen, Screen):
             message += "  (STORYWHEEL_LIBRARY is set in your environment and wins.)"
         self.say(message)
 
+    # --- the Help tab ------------------------------------------------------------------------------------------------------------------
+
+    def help_search(self, query):
+        """Fill the results: the pages (no query) or the sections that match every word."""
+        from . import helpdoc
+        lst = self.query_one("#helpresults", OptionList)
+        lst.clear_options()
+        self.help_hits = []
+        if query.strip():
+            self.help_hits = [(n, h) for n, h, _snip in helpdoc.search(query)]
+            rows = [Option(Text(f"{helpdoc.load(n).title} › {h}   {snip}"), id=str(i)) for i, (n, h, snip) in enumerate(helpdoc.search(query))]
+        else:
+            self.help_hits = [(n, None) for n, _t, _k in helpdoc.titles()]
+            rows = [Option(Text(f"{t}   ({k})"), id=str(i)) for i, (n, t, k) in enumerate(helpdoc.titles())]
+        if not rows:
+            rows = [Option(Text("Nothing in the help matches that.", style="dim"), id="none", disabled=True)]
+        lst.add_options(rows)
+        lst.highlighted = 0 if self.help_hits else None
+        if self.help_hits:
+            self.show_help(0)
+        else:
+            self.query_one("#helptext", Static).update("")
+
+    def show_help(self, index):
+        from . import helpdoc
+        if index is None or index >= len(self.help_hits):
+            return
+        name, heading = self.help_hits[index]
+        if heading is None:
+            body = helpdoc.text(name, 90)
+        else:
+            body = f"{helpdoc.load(name).title} › {heading}\n\n" + dict(helpdoc.sections(name))[heading]
+        self.query_one("#helptext", Static).update(Text(body))
+        self.query_one("#helpscroll").scroll_home(animate=False)
+
+    def on_option_list_option_highlighted(self, event):
+        if event.option_list.id == "helpresults" and event.option_id not in (None, "none"):
+            self.show_help(int(event.option_id))
+
     def on_input_changed(self, event):
+        if event.input.id == "helpsearch":
+            self.help_search(event.value)
+            return
         key = (event.input.id or "")[2:]
         kind = self.kind_of(key)
         if kind in ("path", "key", "color"):
@@ -388,6 +423,9 @@ class SettingsScreen(KeptScreen, Screen):
         self.save(key, value)
 
     def on_input_submitted(self, event):
+        if event.input.id == "helpsearch":
+            self.query_one("#helpresults").focus()
+            return
         key = (event.input.id or "")[2:]
         kind = self.kind_of(key)
         if kind == "path":
@@ -420,6 +458,8 @@ class SettingsScreen(KeptScreen, Screen):
     def on_tabbed_content_tab_activated(self, event):
         if event.pane.id == "t-stats":
             self.refresh_stats()
+        elif event.pane.id == "t-help" and not self.help_hits:
+            self.help_search("")
 
     # --- the Stats tab ----------------------------------------------------------------------------------------
 
@@ -454,17 +494,18 @@ class SettingsScreen(KeptScreen, Screen):
     # --- actions ----------------------------------------------------------------------------------------------
 
     def action_noop(self):
-        self.say("You are in Settings.")
+        self.action_help()
 
     def action_help(self):
-        self.app.push_screen(HelpScreen())
+        from .helpscreen import HelpScreen as SharedHelp
+        self.app.push_screen(SharedHelp("settings"))
 
     def action_mode(self, which):
         self.b.go(which)
 
 
     def action_noop_mode(self):
-        self.say("You are in Settings.")
+        self.action_help()
 
     def action_back_mode(self):
         self.b.go("back", {"fallback": self.b.back})

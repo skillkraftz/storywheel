@@ -311,7 +311,8 @@ def test_the_loop_tells_words_where_it_came_from_and_hands_the_writer_its_word(h
 
 def test_the_help_lists_f5_in_every_mode():
     from storywheel import builder, settings_app, tui
-    assert "F5" in tui.HELP and "F5 Words" in builder.HELP and "F5" in settings_app.HELP and "F5 Words" in words_app.HELP
+    for text in (tui.HELP, builder.HELP, settings_app.HELP, words_app.HELP):
+        assert "Words (F5)" in text
 
 
 # --- Vocabulary (words to learn) and My words ------------------------------------------------------------------------------------
@@ -724,7 +725,7 @@ def test_there_is_no_my_words_tab_and_every_tab_says_in_one_sentence_what_it_is_
         assert sentence.count(". ") == 0 and sentence.endswith(".")
         key = {"lookup": "t-lookup", "suggest": "t-suggest", "vocab": "t-vocab", "genre": "t-genre", "story": "t-story"}[tab]
         assert sentence[:60] in texts[key]
-        assert sentence.split(":")[0] in words_app.HELP or sentence[:25] in words_app.HELP
+        assert sentence[:25] in words_app.HELP or key.split("-")[1].title() in words_app.HELP
 
 
 def test_the_learning_filter_shows_the_star_words_and_typed_words_join_them(index, world):

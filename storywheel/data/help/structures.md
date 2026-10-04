@@ -1,0 +1,10 @@
+# Structures
+A structure is the shape of a story's body: an ordered list of beats, each filled from its own templates. Pick one in the Wheel's Structure step.
+## The ones that ship
+The Story Spine ("Once upon a time... Every day... Until one day... Because of that... Until finally..."), a Three-Act Outline, and Kishotenketsu (introduction, development, twist, conclusion).
+## Repeatable beats
+Some beats can repeat: the Story Spine's "Because of that" 1 to 4 times, the Three-Act trials 1 to 4, Kishotenketsu's development 1 to 3. In the Wheel press A on the story body to add another of the beat under the cursor and X to remove one (the +Beat and -Beat buttons do the same); in the Builder's outline use A and X on a beat. Threads (a person, thing, message or disaster introduced in one beat) keep working across the new beats.
+## Your own
+Structures are JSON files in ~/.storywheel/structures/ with the same shape as the ones in the package (data/structures). A beat can say how many times it may repeat with "repeat": {"min": 1, "max": 3}.
+## In the Builder and the Writer
+A promoted story keeps its beats in its outline. In the Writer, Ctrl+O shows the outline (title, premise, structure, beats, twist) in a floating window.

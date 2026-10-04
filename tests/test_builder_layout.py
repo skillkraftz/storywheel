@@ -253,7 +253,7 @@ def test_the_help_mentions_the_new_keys(world):
         await pilot.pause()
         return flat(screen_text(app))
     text = run(script, size=(220, 90))
-    assert "the Story panel under the story list: Outline, Scenes (a click or Enter opens the" in text and "Notes (the story's own)" in text
+    assert "Story panel: the Scenes tab (Enter on a scene opens the Writer there)" in text and "Story panel: the story's own notes" in text
 
 
 # --- batch 9: the Story panel, +Story, no right column ---------------------------------------------------------------------------------
