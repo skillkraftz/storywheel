@@ -27,7 +27,7 @@ GLOBAL_DEFAULTS = {
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
     "transparent_background": True, "text_color": "", "accent_color": "", "neovide_opacity": 0.85,
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
-    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
+    "key_peek": "<F8>", "key_overview": "<C-o>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
     "atom_boost": 1.5,
 }
 STORY_DEFAULTS = {
@@ -42,7 +42,7 @@ STORY_DEFAULTS = {
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
     "transparent_background": True, "text_color": "", "accent_color": "", "neovide_opacity": 0.85,
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
-    "key_peek": "<F8>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
+    "key_peek": "<F8>", "key_overview": "<C-o>", "key_builder": "<C-q>", "key_replace": "<C-r>", "key_quit": "<A-q>", "key_lookup": "<F7>", "key_lookup_word": "<F6>", "key_grammar_next": "<F10>", "key_grammar_list": "<S-F10>",
 }
 GLOBAL_DEFAULTS.update(CATEGORY_DEFAULTS)
 STORY_DEFAULTS.update(CATEGORY_DEFAULTS)
@@ -50,7 +50,7 @@ STORY_DEFAULTS.update(CATEGORY_DEFAULTS)
 INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
              "notepad_mode", "neovide", "writer_font", "writer_font_size", "line_spacing", "paragraph_spacing",
              "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color", "neovide_opacity",
-             "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_builder", "key_replace", "key_quit", "key_lookup", "key_lookup_word", "key_grammar_next", "key_grammar_list")
+             "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_overview", "key_builder", "key_replace", "key_quit", "key_lookup", "key_lookup_word", "key_grammar_next", "key_grammar_list")
 
 
 def _mini_parse(text):

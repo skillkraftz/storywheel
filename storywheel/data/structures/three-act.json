@@ -1,18 +1,54 @@
 {
-  "_note": "A three-act outline: setup, inciting incident and first turn; rising action, midpoint and crisis; climax and resolution. Beats carry their labels (show_labels) instead of fixed openers.",
-  "name": "three-act",
-  "label": "Three-Act Outline",
-  "blurb": "Setup, a disruption, a choice; trials, a midpoint reversal, a low point; then climax and resolution. The classic shape of plotted stories.",
-  "order": 2,
-  "show_labels": true,
-  "beats": [
-    {"key": "setup",      "slot": "act_setup",      "label": "Act I: Setup"},
-    {"key": "incident",   "slot": "act_incident",   "label": "Act I: Inciting incident"},
-    {"key": "turn",       "slot": "act_turn",       "label": "Act I: First turn"},
-    {"key": "trials",     "slot": "act_trials",     "label": "Act II: Rising action"},
-    {"key": "midpoint",   "slot": "act_midpoint",   "label": "Act II: Midpoint"},
-    {"key": "crisis",     "slot": "act_crisis",     "label": "Act II: Crisis"},
-    {"key": "climax",     "slot": "act_climax",     "label": "Act III: Climax"},
-    {"key": "resolution", "slot": "act_resolution", "label": "Act III: Resolution"}
-  ]
+ "_note": "A three-act outline: setup, inciting incident and first turn; rising action, midpoint and crisis; climax and resolution. Beats carry their labels (show_labels) instead of fixed openers.",
+ "name": "three-act",
+ "label": "Three-Act Outline",
+ "blurb": "Setup, a disruption, a choice; trials, a midpoint reversal, a low point; then climax and resolution. The classic shape of plotted stories.",
+ "order": 2,
+ "show_labels": true,
+ "beats": [
+  {
+   "key": "setup",
+   "slot": "act_setup",
+   "label": "Act I: Setup"
+  },
+  {
+   "key": "incident",
+   "slot": "act_incident",
+   "label": "Act I: Inciting incident"
+  },
+  {
+   "key": "turn",
+   "slot": "act_turn",
+   "label": "Act I: First turn"
+  },
+  {
+   "key": "trials",
+   "slot": "act_trials",
+   "label": "Act II: Rising action",
+   "repeat": {
+    "min": 1,
+    "max": 4
+   }
+  },
+  {
+   "key": "midpoint",
+   "slot": "act_midpoint",
+   "label": "Act II: Midpoint"
+  },
+  {
+   "key": "crisis",
+   "slot": "act_crisis",
+   "label": "Act II: Crisis"
+  },
+  {
+   "key": "climax",
+   "slot": "act_climax",
+   "label": "Act III: Climax"
+  },
+  {
+   "key": "resolution",
+   "slot": "act_resolution",
+   "label": "Act III: Resolution"
+  }
+ ]
 }

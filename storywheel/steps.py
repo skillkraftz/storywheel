@@ -509,9 +509,9 @@ STORY_SPINE_HINT = ("Each 'Because of that' should be caused by the beat before 
                     "just come after it. Use [f] to reroll a single beat.")
 
 
-def spine_step(structure):
-    """The story body, with its beats taken from a structure."""
-    fields = {b.key: beat(b.opening, b.slot, b.closing) for b in structure.beats}
+def spine_step(structure, repeats=None):
+    """The story body, with its beats taken from a structure (a repeatable beat as many times as `repeats` says)."""
+    fields = {b.key: beat(b.opening, b.slot, b.closing) for b in structure.expand(repeats)}
     hint = STORY_SPINE_HINT if structure.name == structures.DEFAULT else structure.blurb + " Use [f] to reroll a single beat."
     return Step("spine", structure.label, hint, fields, threads=True)
 
@@ -521,9 +521,11 @@ def structure_hint():
             " ".join(f"{st.label}: {st.blurb}" for st in structures.registry().values()))
 
 
-def steps_for(story):
-    """The steps for one story: the same seven, with the body shaped by its structure."""
+def steps_for(story, repeats=None):
+    """The steps for one story: the same seven, with the body shaped by its structure and, for the beats that can repeat, by how many
+    times the story has them (`repeats`, else the story's own `repeats`)."""
     chosen = structures.get(((story.get("kept") or {}).get("structure") or {}).get("structure"))
+    repeats = repeats if repeats is not None else story.get("repeats")
     return [
         Step("genre", "Genre & mood",
              "Two genres rubbing together is a shortcut to something fresh. "
@@ -554,7 +556,7 @@ def steps_for(story):
              "One sentence: who, what they're up against, and what's at stake.",
              {"premise": beat("", "premise", "")}),
 
-        spine_step(chosen),
+        spine_step(chosen, repeats),
 
         Step("twist", "Twist",
              "Optional. Skip it with [x] if the story doesn't need one.",

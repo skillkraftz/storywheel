@@ -66,7 +66,7 @@ def render(story, number=None, width=78):
            "",
            wrap(k["premise"]["premise"]),
            ""]
-    labels = {b.key: b.label for b in shape.beats}
+    labels = shape.labels
     out += [wrap((f"{labels[key]} — " if shape.show_labels else "") + text, "    ")
             for key, text in k["spine"].items()]
     out += ["", wrap("Twist: " + k["twist"]["twist"])]

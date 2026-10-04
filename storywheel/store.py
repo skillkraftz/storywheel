@@ -220,7 +220,7 @@ def to_markdown(story):
         if not fields or step.key in ("genre", "title", "structure"):
             continue
         if step.key == "spine":
-            labels = {b.key: b.label for b in shape.beats}
+            labels = shape.labels
             body = "\n\n".join((f"**{labels[f]}.** " if shape.show_labels else "") + fields[f]
                                 for f in step.fields if f in fields)
         elif step.single:
@@ -263,7 +263,7 @@ def to_plain(story, width=72):
             continue
         heading = (shape.label if step.key == "spine" else step.label).upper()
         if step.key == "spine":
-            labels = {b.key: b.label for b in shape.beats}
+            labels = shape.labels
             body = "\n\n".join(wrap((f"{labels[f]}. " if shape.show_labels else "") + fields[f])
                                 for f in step.fields if f in fields)
         elif step.single:

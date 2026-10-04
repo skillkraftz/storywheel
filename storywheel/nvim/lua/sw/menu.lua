@@ -35,6 +35,7 @@ local function groups()
     } },
     { "Story", {
       { "Scenes sidebar", function() require("sw.sidebar").toggle() end },
+      { "Story outline (" .. util.key_label(require("sw.story").setting("key_overview", "<C-o>")) .. ")", function() require("sw.overview").toggle() end },
       { "New scene", function() sw.new_scene() end },
       { "Word counts", function() sw.show_stats() end },
       { "Export manuscript (.docx)", function() sw.export("docx") end },

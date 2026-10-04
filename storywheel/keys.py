@@ -12,6 +12,7 @@ WRITER_KEYS = {
     "key_menu": ("Writer menu", "<F12>"),
     "key_sidebar": ("Scenes sidebar", "<F9>"),
     "key_peek": ("Peek at a name", "<F8>"),
+    "key_overview": ("Story outline overlay", "<C-o>"),
     "key_builder": ("Back to the Builder", "<C-q>"),
     "key_replace": ("Find and replace", "<C-r>"),
     "key_quit": ("Quit storywheel", "<A-q>"),

@@ -1,17 +1,56 @@
 {
-  "_note": "The Story Spine: Once upon a time... Every day... One day... Because of that (twice)... Until finally... Ever since then... The openers are the only fixed text; everything after them is assembled from templates and atoms.",
-  "name": "story-spine",
-  "label": "Story Spine",
-  "blurb": "Seven fixed openers (Once upon a time, Every day, One day, Because of that, Until finally, Ever since then): a chain where each beat causes the next.",
-  "order": 1,
-  "show_labels": false,
-  "beats": [
-    {"key": "once",          "slot": "once",       "label": "Once upon a time", "opening": "Once upon a time, "},
-    {"key": "every_day",     "slot": "routine",    "label": "Every day",        "opening": "Every day, {first} "},
-    {"key": "one_day",       "slot": "inciting",   "label": "One day",          "opening": "One day, "},
-    {"key": "because_1",     "slot": "reaction",   "label": "Because of that",  "opening": "Because of that, {first} "},
-    {"key": "because_2",     "slot": "escalation", "label": "Because of that",  "opening": "Because of that, "},
-    {"key": "until_finally", "slot": "climax",     "label": "Until finally",    "opening": "Until finally, "},
-    {"key": "ever_since",    "slot": "resolution", "label": "Ever since then",  "opening": "Ever since then, "}
-  ]
+ "_note": "The Story Spine: Once upon a time... Every day... One day... Because of that (twice)... Until finally... Ever since then... The openers are the only fixed text; everything after them is assembled from templates and atoms.",
+ "name": "story-spine",
+ "label": "Story Spine",
+ "blurb": "Seven fixed openers (Once upon a time, Every day, One day, Because of that, Until finally, Ever since then): a chain where each beat causes the next.",
+ "order": 1,
+ "show_labels": false,
+ "beats": [
+  {
+   "key": "once",
+   "slot": "once",
+   "label": "Once upon a time",
+   "opening": "Once upon a time, "
+  },
+  {
+   "key": "every_day",
+   "slot": "routine",
+   "label": "Every day",
+   "opening": "Every day, {first} "
+  },
+  {
+   "key": "one_day",
+   "slot": "inciting",
+   "label": "One day",
+   "opening": "One day, "
+  },
+  {
+   "key": "because_1",
+   "slot": "reaction",
+   "label": "Because of that",
+   "opening": "Because of that, {first} "
+  },
+  {
+   "key": "because_2",
+   "slot": "escalation",
+   "label": "Because of that",
+   "opening": "Because of that, ",
+   "repeat": {
+    "min": 1,
+    "max": 4
+   }
+  },
+  {
+   "key": "until_finally",
+   "slot": "climax",
+   "label": "Until finally",
+   "opening": "Until finally, "
+  },
+  {
+   "key": "ever_since",
+   "slot": "resolution",
+   "label": "Ever since then",
+   "opening": "Ever since then, "
+  }
+ ]
 }

@@ -54,6 +54,8 @@ HELP = """\
           and atom pairs come up a little less. Again clears it.
   [b]u[/b] [b]U[/b]     save to / remove from your universe
   [b]h[/b]       history: every roll  or  the selected field's values
+  [b]A[/b] [b]X[/b]     on the story body: add / remove another of the beat under the cursor, when it can repeat (the Story Spine's
+          "Because of that", the rising action...). The button row has +Beat and -Beat. Threads follow the text.
   [b]B[/b]       send this story to the Universe Builder (the button under the card; F2 offers it too)
   [b]F1[/b] [b]F2[/b] [b]F3[/b] [b]F4[/b]   Wheel (this), Universe Builder, Writer, Settings
   [b]v[/b]       the universe panel (see below)
@@ -91,7 +93,7 @@ HELP = """\
   [b]right-click[/b] a field edit it (like e)
   [b]scroll[/b] over a field step through its earlier values
   [b]▲ ▼[/b] at the end of a line rate it (like + and -)
-  buttons under the card: Roll, Keep, Back, Skip, Flavor
+  buttons under the card: Roll, Keep, Back, Skip, Flavor, +Beat, -Beat
   click a step to jump to it, a history row to pick it
 
   To select text with the mouse while this app has it,
@@ -757,6 +759,8 @@ class MainScreen(KeptScreen, Screen):
         Binding("m", "mix", "Flavor"),
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
+        Binding("A", "add_beat", "+Beat", show=False),
+        Binding("X", "remove_beat", "-Beat", show=False),
         Binding("c", "copy_story", "Copy story"),
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
@@ -859,7 +863,8 @@ class MainScreen(KeptScreen, Screen):
                     yield Static("▲ ▼ like or dislike a line: liked wording is used more, disliked less in later rolls.", id="legend", markup=False)
                     with Horizontal(id="buttons"):
                         for label, name in (("Roll", "roll"), ("Keep", "keep"), ("Back", "back"),
-                                            ("Skip", "skip"), ("Flavor", "mix"), ("Send to Builder", "send")):
+                                            ("Skip", "skip"), ("Flavor", "mix"), ("+Beat", "add_beat"), ("-Beat", "remove_beat"),
+                                            ("Send to Builder", "send")):
                             yield _quiet(Button(label, id=f"btn-{name}"))
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
@@ -948,6 +953,7 @@ class MainScreen(KeptScreen, Screen):
             self.say("  ".join(notes))
         title = self.session.story["kept"].get("title", {}).get("title")
         self.refresh_send_button()
+        self.refresh_beat_buttons()
         self.app.remember(self.session)
         self.app.title = f"storywheel · {title}" if title else "storywheel"
         self.app.sub_title = f"{self.session.step.label}  ({self.session.i + 1}/{len(self.session.steps)})"
@@ -1277,6 +1283,44 @@ class MainScreen(KeptScreen, Screen):
     def action_focus_universe(self):
         self.query_one("#uni-check", OptionList).focus()
 
+    def refresh_beat_buttons(self):
+        """+Beat / -Beat are there on the story body when the structure has a beat that can repeat (the Story Spine's "Because of that")."""
+        s = self.session
+        shown = s.step.key == "spine" and bool(s._structure().repeatable)
+        field = self.card_field() if shown else None
+        for name, ok, label in (("add_beat", s.can_add_beat(field), "+Beat"), ("remove_beat", s.can_remove_beat(field), "-Beat")):
+            b = self.query_one(f"#btn-{name}", Button)
+            b.display = shown
+            b.disabled = not ok
+            b.tooltip = ("Add another of the beat under the cursor." if name == "add_beat" else "Take out the beat under the cursor.") if ok else \
+                "Move to a beat that can repeat (one marked + in the structure) and stay inside its minimum and maximum."
+
+    def action_add_beat(self):
+        if self.locked():
+            return
+        s = self.session
+        field = self.card_field()
+        if s.step.key != "spine" or not s.beat_group(field):
+            return self.say("Move to a beat that can repeat on the story body (the Story Spine's 'Because of that', the rising action...).")
+        new = s.add_beat(field)
+        self.after()
+        if new:
+            self.card.highlighted = s.field_names.index(new)
+
+    def action_remove_beat(self):
+        if self.locked():
+            return
+        s = self.session
+        field = self.card_field()
+        if s.step.key != "spine" or not s.beat_group(field):
+            return self.say("Move to a beat that can repeat on the story body (the Story Spine's 'Because of that', the rising action...).")
+        keep_at = s.field_names.index(field)
+        if s.remove_beat(field):
+            self.after()
+            self.card.highlighted = min(keep_at, len(s.field_names) - 1)
+        else:
+            self.after()
+
     def refresh_send_button(self):
         """'Send to Builder' is there from the first kept step; once sent it becomes 'Open in Builder'."""
         story = self.session.story
@@ -1378,8 +1422,10 @@ class MainScreen(KeptScreen, Screen):
     def on_option_list_option_highlighted(self, event):
         if self._busy:
             return
-        if event.option_list.id == "card" and self.hist_mode == "field":
-            self.refresh_history()
+        if event.option_list.id == "card":
+            self.refresh_beat_buttons()
+            if self.hist_mode == "field":
+                self.refresh_history()
 
     def on_option_list_option_selected(self, event):
         lst = event.option_list.id

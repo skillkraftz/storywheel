@@ -404,6 +404,7 @@ function M.map_buffer(buf)
   -- the shortcuts that normal mode's leader keys give a Vim user
   map({ "i", "s", "x", "n" }, story.setting("key_sidebar", "<F9>"), function() require("sw.sidebar").toggle() end)
   map({ "i", "s", "x", "n" }, story.setting("key_peek", "<F8>"), function() require("sw.world").peek() end)
+  map({ "i", "s", "x", "n" }, story.setting("key_overview", "<C-o>"), function() require("sw.overview").toggle() end)
 end
 
 -- The right-click menu.

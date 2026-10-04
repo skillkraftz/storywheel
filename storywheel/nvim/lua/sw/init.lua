@@ -24,7 +24,7 @@ M.HELP = {
   "  F5  Words mode, carrying the word under the cursor (Use in Writer there brings a chosen word back, in the same form)",
   "  F7  dictionary and thesaurus card for the word under the cursor (Enter on a similar word replaces it)    F6  look up a typed word",
   "  F12 or Alt+M  a menu of everything below (export, sidebar, toggles, settings...)    Right-click  edit menu",
-  "  F9  scene sidebar    F8  peek at the name under the cursor",
+  "  F9  scene sidebar    F8  peek at the name under the cursor    Ctrl+O  the story outline (title, premise, beats, twist, protagonist, setting, rumor)",
   "",
   "Writing",
   "  Alt+I / Alt+B      italic / bold (Ctrl+B too; Ctrl+I only if your terminal can send it)",
@@ -322,6 +322,7 @@ function M.map_global()
   map({ "n", "i", "x", "s" }, "<F5>", function() M.words() end, "to Words")
   map({ "n", "i" }, story.setting("key_sidebar", "<F9>"), function() sidebar.toggle() end, "scene sidebar")
   map({ "n", "i" }, story.setting("key_peek", "<F8>"), function() world.peek() end, "peek")
+  map({ "n", "i" }, story.setting("key_overview", "<C-o>"), function() require("sw.overview").toggle() end, "story outline")
   local leader = {
     n = function() sidebar.toggle() end, p = function() world.peek() end, a = function() M.new_scene() end,
     i = function() prose.toggle("invisibles") end, t = function() prose.toggle("typewriter") end,
@@ -340,6 +341,7 @@ function M.commands()
   c("SWWheel", function() M.leave("wheel") end)
   c("SWSidebar", function() sidebar.toggle() end)
   c("SWPeek", function() world.peek() end)
+  c("SWOutline", function() require("sw.overview").toggle() end)
   c("SWExport", function(a) M.export(a.args ~= "" and a.args or "docx") end, { nargs = "?" })
   c("SWCopy", function() M.copy_manuscript() end)
   c("SWStats", function() M.show_stats() end)

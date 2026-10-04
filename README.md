@@ -279,12 +279,14 @@ nothing else on screen. Keys, with `Space ?` in the Writer for the full list:
     Alt+S           scene break (* * * in the file, centered on screen)
     Space n         scene sidebar (Enter jump, a add, r rename, J/K move)       ]] / [[  next / previous scene
     Space p / F8    peek at the character or place under the cursor            Tab  complete names from the universe
+    Ctrl+O          the story outline in a floating, read-only window: title, premise, the beats of its structure, twist,
+                    protagonist, setting and rumor; scroll it, Esc closes (the key is a setting: Settings > Keys)
     Space i t s     show invisibles / typewriter mode / spellcheck             Space w  word counts
     Space e         export .docx          Space c  copy manuscript as plain text
     F2              save everything and go back to the Builder       F1  to the Wheel
 
 Everything is saved as you go, with rolling backups in the story's `.backups/` folder. The status line shows words in
-the scene, in the manuscript, and today against your goal (`stats.json` keeps a record).
+the scene, in the manuscript, and today against your goal as `today 312 / 1,000 words · 31%` (`stats.json` keeps a record).
 
 ### Export
 
@@ -657,6 +659,15 @@ A structure is a small file, so you can add your own:
 
 Each beat's `slot` names a template list (`templates/five_hook/*.json`). A beat may also
 have an `"opening"` ("Once upon a time, ") and a `"closing"` (default `"."`).
+
+**Repeatable beats.** A beat can say it may occur several times in a row, with a minimum (at least 1) and a maximum:
+`{"key": "because_2", "slot": "escalation", "label": "Because of that", "repeat": {"min": 1, "max": 4}}`. The Story Spine's
+second "Because of that" (up to 4), the Three-Act's rising action (up to 4) and Kishōtenketsu's development (up to 3) do. In the Wheel,
+on the story body, `A` (or the +Beat button) adds another of the beat under the cursor, rolled to follow the others and free to reuse the
+threads in play, and `X` (-Beat) takes one out; later ones move up, a thread nobody mentions any more retires, and the step's history starts
+again because its shape changed. Keeping stores how many there are (`repeats` in the draft); promotion writes it to `story.md`
+(`repeats: because_2=2`). In the Builder, on the outline, `A` and `X` do the same to the beat under the cursor (the new one is rolled
+with the generator for the universe and its protagonist). The extra beats are keyed `because_2__2`, `because_2__3`...
 
 ### Threads
 

@@ -18,6 +18,16 @@ Part B: Words mode
 - Vocabulary: a word that appears in any manuscript (any form: ran for run) is marked **Known** automatically, leaves the lists and keeps a note of where
   it was used (`wordsused.py`); a new view *✓ Known* lists those words with the place.
 
+Part C: structures and the Writer
+- **Repeatable beats.** A structure marks beats that can occur several times, with a minimum and a maximum (`"repeat": {"min": 1, "max": 4}`): the Story
+  Spine's second "Because of that", the Three-Act's rising action, Kishōtenketsu's development. In the Wheel, `A` / `X` (or the +Beat / -Beat buttons) add
+  or remove one on the story body (a new beat is rolled to follow the others and can reuse the threads in play; threads that nobody mentions retire;
+  the step's history starts again); in the Builder's outline, `A` / `X` do the same in `story.md`, the count kept in its front matter. Occurrence keys are
+  `because_2__2`...; stories without extra beats are unchanged.
+- **Ctrl+O** in the Writer (a setting, `key_overview`, in Settings > Keys and the Writer menu): a floating read-only overlay with the title, premise,
+  structure beats, twist, protagonist, setting and rumor; scrollable; Escape closes it.
+- The status line shows the goal as `today 312 / 1,000 words · 31%` (without a goal: `today 312 words`).
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,

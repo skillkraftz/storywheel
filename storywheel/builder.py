@@ -59,6 +59,7 @@ HELP = f"""\
   [b]o[/b]  universe overview   [b]S[/b]  story settings   [b]G[/b]  your details (author, address...)
   [b]w[/b] or F3  write the open story in the Writer   [b]x[/b]  export it (docx, odt, pdf, md, txt)
   [b]C[/b]  copy the manuscript as plain text   [b]W[/b]  new Wheel draft
+  [b]A[/b] [b]X[/b]  on the outline: add / remove another of the beat under the cursor, when the structure lets it repeat
   [b]q[/b]  back to the mode you came from   [b]Q[/b]  Quit storywheel (asks first)   [b]?[/b]  this help   [b]tab[/b]  next list   [b]esc[/b]  back to the card
 
 Roll results use the universe's genre leanings, the entity's other fields, and existing entities
@@ -305,6 +306,8 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
         Binding("W", "new_draft", "New Wheel draft", show=False),
+        Binding("A", "add_beat", "Add a beat", show=False),
+        Binding("X", "remove_beat", "Remove a beat", show=False),
         navigation.back_binding(),
         navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
@@ -1481,6 +1484,51 @@ class BuilderScreen(KeptScreen, Screen):
 
     def action_copy_manuscript(self):
         self.b.copy_manuscript(self)
+
+    def _beat_key(self):
+        """The outline row under the cursor, if it is a beat of the open story (else says why not)."""
+        if self.story is None:
+            self.say("Open a story's outline first.")
+            return None
+        rows = self.top_rows()
+        i = self.outline.highlighted
+        key = rows[min(i, len(rows) - 1)][0] if rows and i is not None else ""
+        if not key.startswith("beat:"):
+            self.say("Move to one of the story's beats first (the lines of the Story Spine, the acts...).")
+            return None
+        return key
+
+    def action_add_beat(self):
+        """Another of the repeatable beat under the cursor (the Story Spine's 'Because of that', the rising action...), rolled with the generator."""
+        key = self._beat_key()
+        if key is None:
+            return
+        if not outline.can_add(self.story, key):
+            got = outline.beat_at(self.story, key)
+            return self.say("This story's beats don't match its structure, so they can't be added to here." if got is None
+                            else "That beat can't repeat, or it is already at its maximum.")
+        filler = self.get_filler()
+        new = outline.add_beat(self.story, key, lambda beat, texts: outline.roll_beat(self.story, self.universe, filler, beat, texts))
+        self.refresh_all()
+        self.say("Added a beat after the others of its kind. Edit it, or press A again for another.")
+        rows = self.top_rows()
+        for n, row in enumerate(rows):
+            if row[0] == new:
+                self.outline.highlighted = n
+        self.b.changed = True
+
+    def action_remove_beat(self):
+        key = self._beat_key()
+        if key is None:
+            return
+        if not outline.can_remove(self.story, key):
+            return self.say("That beat can't be removed: it is the only one of its kind, or it can't repeat.")
+        at = self.outline.highlighted
+        outline.remove_beat(self.story, key)
+        self.refresh_all()
+        self.say("Removed the beat. Later ones of its kind moved up.")
+        self.outline.highlighted = max(0, min(at, len(self.top_rows()) - 1))
+        self.b.changed = True
 
     def action_new_draft(self):
         self.b.go("wheel", {"universe": self.universe.slug if self.universe else None, "new": True})

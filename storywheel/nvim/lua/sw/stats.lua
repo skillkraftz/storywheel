@@ -99,20 +99,30 @@ function M.refresh()
   vim.cmd("redrawstatus")
 end
 
--- The status line: words in the scene, in the story, and written today against the goal (each number says what it is).
+-- The status line: words in the scene, in the story, and written today against the goal as "312 / 1,000 words · 31%" (each number says what it is).
 function M.line()
   local goal = tonumber(story.setting("daily_goal", 0)) or 0
   local today = math.max(0, M.total_cached - M.start_total) + M.day_base
-  local goal_text = goal > 0 and (" of " .. commas(goal)) or ""
+  local today_text
+  if goal > 0 then
+    today_text = string.format("today %s / %s words · %d%%", commas(today), commas(goal), math.floor(100 * today / goal + 0.5))
+  else
+    today_text = string.format("today %s words", commas(today))
+  end
   local g = require("sw.grammar").status_text()
-  return string.format("  words: in this scene %s · in the story %s · written today %s%s%s", commas(M.scene_cached), commas(M.total_cached),
-                       commas(today), goal_text, g ~= "" and ("  ·  " .. g) or "")
+  return string.format("  words: in this scene %s · in the story %s · %s%s", commas(M.scene_cached), commas(M.total_cached),
+                       today_text, g ~= "" and ("  ·  " .. g) or "")
+end
+
+-- (a statusline expression is read as a statusline: its % signs must be doubled)
+function M.statusline()
+  return (M.line():gsub("%%", "%%%%"))
 end
 
 function M.setup()
   M.begin()
   M.refresh()
-  vim.o.statusline = "%{%v:lua.require'sw.stats'.line()%}"
+  vim.o.statusline = "%{%v:lua.require'sw.stats'.statusline()%}"
   vim.api.nvim_set_hl(0, "StatusLine", { link = "Comment" })
   vim.api.nvim_set_hl(0, "StatusLineNC", { link = "Comment" })
   local group = vim.api.nvim_create_augroup("sw_stats", { clear = true })

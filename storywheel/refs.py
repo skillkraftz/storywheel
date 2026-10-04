@@ -66,7 +66,7 @@ def with_field(cand, field, value, src=None, settle=True, atoms=None):
         new["_made"] = {k: v for k, v in cand["_made"].items()
                         if (made_by.get(k) or PRODUCER_GUESS.get(k)) != field}
         new["_made_by"] = {k: made_by.get(k) for k in new["_made"] if made_by.get(k)}
-    for key in ("_inputs", "_ack"):
+    for key in ("_inputs", "_ack", "_repeats"):
         if key in cand:
             new[key] = copy.deepcopy(cand[key])
     if "_atoms" in cand:                        # the field changed, so its atoms are now `atoms`
@@ -82,7 +82,7 @@ def inherit(new, old):
         T.settle(new)
     if "_atoms" in old:
         new["_atoms"] = copy.deepcopy(old["_atoms"])
-    for key in ("_made", "_made_by", "_inputs", "_ack"):
+    for key in ("_made", "_made_by", "_inputs", "_ack", "_repeats"):
         if key in old:
             new[key] = copy.deepcopy(old[key])
     return new

@@ -37,9 +37,15 @@ class Session:
 
     # --- what is showing ---------------------------------------------------------------------
 
+    def _repeats_now(self):
+        """How many times the repeatable beats occur in the candidate showing (None: as the story has them)."""
+        if self.hist and 0 <= self.cur < len(self.hist):
+            return self.hist[self.cur].get("_repeats")
+        return None
+
     @property
     def steps(self):
-        return steps_for(self.story)
+        return steps_for(self.story, self._repeats_now())
 
     @property
     def step(self):
@@ -82,7 +88,10 @@ class Session:
         self.hist = self.story["history"].setdefault(step.key, [])
         kept = self.story["kept"].get(step.key)
         if kept and (not self.hist or public(self.hist[-1]) != public(kept)):
-            self.hist.append(dict(public(kept), _src="kept"))
+            shown = dict(public(kept), _src="kept")
+            if step.key == "spine":
+                shown["_repeats"] = self._spine_counts(self.story.get("repeats"))
+            self.hist.append(shown)
         if not self.hist:
             self.hist.append(self._roll(fresh=False))          # the first roll may reuse seeds
         self.cur = len(self.hist) - 1
@@ -130,7 +139,10 @@ class Session:
         if entries and (mode == "o" or (mode == "m" and self.rng.random() < UNIVERSE_CHANCE)):
             _u, _e, fields = self.rng.choice(entries)
             return self._complete(step, dict(fields, _src="universe"))
-        return step.roll(self.engine, self.story, fresh=fresh)
+        cand = step.roll(self.engine, self.story, fresh=fresh)
+        if step.key == "spine":
+            cand["_repeats"] = self._spine_counts(self._repeats_now() or self.story.get("repeats"))
+        return cand
 
     def _complete(self, step, cand):
         """An entry written by hand may leave fields blank: fill them from an ordinary roll."""
@@ -161,6 +173,98 @@ class Session:
     def reroll_field(self, field):
         step, cand = self.step, self.cand
         self._add(self._fresh(lambda: reroll_field(step, self.engine, self.story, cand, field)))
+
+    # --- repeatable beats (a Story Spine's "Because of that", the Three-Act's rising action) --------------------------------------------------
+
+    def _structure(self):
+        return structures.get(((self.story.get("kept") or {}).get("structure") or {}).get("structure"))
+
+    def _spine_counts(self, repeats=None):
+        return self._structure().counts(repeats)
+
+    def beat_group(self, field):
+        """(beat, how many times it occurs now) for a field of the story body that can repeat, else None."""
+        if self.step.key != "spine" or field is None:
+            return None
+        b = self._structure().beat(field)
+        if b is None or not b.repeat or b.max <= b.min:
+            return None
+        return b, self._spine_counts(self._repeats_now() or self.story.get("repeats")).get(b.key, b.min)
+
+    def can_add_beat(self, field):
+        g = self.beat_group(field)
+        return bool(g and g[1] < g[0].max)
+
+    def can_remove_beat(self, field):
+        g = self.beat_group(field)
+        return bool(g and g[1] > g[0].min)
+
+    def _reshaped(self, counts, mapping):
+        """The candidate with the repeatable beats occurring as `counts` says: {new key: the old key its text comes from, or None for a new beat}."""
+        cand = self.cand
+        new_step = steps_for(self.story, counts)[self.i]
+        out = {k: (cand.get(mapping.get(k)) if mapping.get(k) else "") or "" for k in new_step.fields}
+        for k, v in cand.items():
+            if k.startswith("_") and k not in ("_atoms", "_browse"):
+                out[k] = copy.deepcopy(v)
+        out["_repeats"] = dict(counts)
+        out["_src"] = "edited"
+        if "_atoms" in cand:
+            old_for = {new: old for new, old in mapping.items() if old}
+            out["_atoms"] = {new: copy.deepcopy(cand["_atoms"].get(old, [])) for new, old in old_for.items()}
+        if "_made_by" in cand:
+            moved = {old: new for new, old in mapping.items() if old}
+            out["_made_by"] = {k: moved.get(v, v) for k, v in cand["_made_by"].items() if v not in mapping.values() or v in moved}
+        return new_step, out
+
+    def add_beat(self, field):
+        """One more of the repeatable beat `field` belongs to, rolled to follow the others (it can use the threads already in play).
+        The step's history starts again, because the shape changed."""
+        g = self.beat_group(field)
+        if g is None:
+            self.note("That beat can't be repeated.")
+            return False
+        b, n = g
+        if n >= b.max:
+            self.note(f"'{b.label}' can occur at most {b.max} times.")
+            return False
+        counts = self._spine_counts(self._repeats_now() or self.story.get("repeats"))
+        counts[b.key] = n + 1
+        mapping = {k: k for k in self.cand if not k.startswith("_")}
+        mapping[structures.instance_key(b.key, n + 1)] = None
+        step, shaped = self._reshaped(counts, mapping)
+        new_key = structures.instance_key(b.key, n + 1)
+        shaped["_threads"] = copy.deepcopy(self.cand.get("_threads", {}))
+        done = reroll_field(step, self.engine, self.story, shaped, new_key)
+        done["_repeats"] = dict(counts)
+        self.hist[:] = [done]
+        self.cur = 0
+        self.note(f"Added a '{b.label}' beat ({n + 1} now). This step's history starts again.")
+        return new_key
+
+    def remove_beat(self, field):
+        """Take out the beat `field` (one occurrence of a repeatable beat); later ones move up. Threads follow the text: one that no beat
+        mentions any more retires, and a thread whose first mention was removed is introduced by the next beat that has it."""
+        g = self.beat_group(field)
+        if g is None:
+            self.note("That beat can't be removed.")
+            return False
+        b, n = g
+        if n <= b.min:
+            self.note(f"'{b.label}' needs at least {b.min}.")
+            return False
+        at = structures.instance_number(field) if structures.base_key(field) == b.key else n
+        counts = self._spine_counts(self._repeats_now() or self.story.get("repeats"))
+        counts[b.key] = n - 1
+        mapping = {k: k for k in self.cand if not k.startswith("_") and not (structures.base_key(k) == b.key and structures.instance_number(k) >= at)}
+        for i in range(at, n):                                   # occurrence i+1 moves up into i
+            mapping[structures.instance_key(b.key, i)] = structures.instance_key(b.key, i + 1)
+        step, shaped = self._reshaped(counts, mapping)
+        T.settle(shaped)
+        self.hist[:] = [shaped]
+        self.cur = 0
+        self.note(f"Removed a '{b.label}' beat ({n - 1} now). This step's history starts again.")
+        return True
 
     def _follow_title(self, cand, old_title):
         """A hand-written title says what the story is about: the motif follows it (unless you also wrote the motif)."""
@@ -267,6 +371,7 @@ class Session:
             story["seeds"].setdefault(k, v)
         story["kept"][step.key] = new
         if step.key == "structure" and old and structures.get(old["structure"]) is not structures.get(new["structure"]):
+            story.pop("repeats", None)
             for gone in ("spine",):                 # the old body doesn't fit the new shape
                 story["kept"].pop(gone, None)
                 story["history"].pop(gone, None)
@@ -281,6 +386,8 @@ class Session:
                 self.note(f"Updated {n} mention(s) in later steps.")
         if step.threads:
             story["threads"] = cand.get("_threads", {})
+        if step.key == "spine":
+            story["repeats"] = {k: n for k, n in (cand.get("_repeats") or {}).items() if n > 1}
         story["atoms"][step.key] = [a for lst in cand.get("_atoms", {}).values() for a in lst]
         story.setdefault("inputs", {})[step.key] = copy.deepcopy(cand.get("_inputs", {}))
         self._swap_standins(i, new)

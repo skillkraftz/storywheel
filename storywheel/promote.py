@@ -99,7 +99,7 @@ class Plan:
 def _beat_lines(structure, spine):
     """One paragraph per beat. A structure that shows its labels in the story (Kishotenketsu) keeps them as `**Label.**`;
     one whose beats already open with the label's words (the Story Spine's 'Once upon a time, ...') does not repeat them."""
-    labels = {b.key: b.label for b in structure.beats}
+    labels = structure.labels
     return "\n\n".join((f"**{labels.get(k, k)}.** {v}" if structure.show_labels else v) for k, v in spine.items() if v)
 
 
@@ -185,6 +185,8 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
     plan.meta = {"genre": genre.get("genre", ""), "mood": genre.get("mood", ""),
                  "structure": shape.label if kept.get("structure") else "", "motif": motif or "",
                  "promoted_from": draft.get("id", "")}
+    if draft.get("repeats"):                                    # repeatable beats the story has more than once (see structures.py)
+        plan.meta["repeats"] = ",".join(f"{k}={n}" for k, n in sorted(draft["repeats"].items()))
     sections = {}
     if kept.get("premise"):
         sections["Premise"] = kept["premise"].get("premise", "")

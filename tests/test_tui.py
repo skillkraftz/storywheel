@@ -571,3 +571,40 @@ def test_the_card_names_stand_ins_and_offers_update_when_they_go_stale(home):
     assert f"Built for {stand_in}; your protagonist is now Stacie Anderson" in banner
     assert "Update" in banner and "Reroll" in banner and "Ignore" in banner and "Keep as is" not in banner
     assert not stale and "Stacie" in text and stand_in not in text
+
+
+# --- repeatable beats (batch 9) ------------------------------------------------------------------------------------------------------
+
+def test_the_beat_buttons_and_keys_add_and_remove_a_repeatable_beat(home):
+    async def script(app, pilot):
+        await go_to(app, pilot, "spine")
+        s = app.session
+        shown = app.screen.query_one("#btn-add_beat").display
+        app.screen.card.highlighted = s.field_names.index("because_2")
+        await press(pilot)
+        add_ok = not app.screen.query_one("#btn-add_beat").disabled
+        remove_ok = not app.screen.query_one("#btn-remove_beat").disabled
+        await press(pilot, "A")                                    # add one after the cursor's beat
+        after_add = list(s.field_names)
+        status = screen_text(app)
+        await press(pilot, "X")                                    # the cursor is on the new beat
+        after_remove = list(s.field_names)
+        app.screen.card.highlighted = 0
+        await press(pilot)
+        on_once = app.screen.query_one("#btn-add_beat").disabled
+        await press(pilot, "A")
+        return shown, add_ok, remove_ok, after_add, after_remove, on_once, screen_text(app)
+    st = new_story()
+    st["kept"]["genre"] = {"genre": "western", "mood": "cozy"}
+    st["kept"]["structure"] = {"structure": "Story Spine"}
+    st["step"] = 2
+    shown, add_ok, remove_ok, after_add, after_remove, on_once, text = run_tui(st, make_engine(home), script)
+    assert shown and add_ok and not remove_ok
+    assert "because_2__2" in after_add and "because_2__2" not in after_remove
+    assert on_once and "Move to a beat that can repeat" in text
+
+
+def test_the_beat_buttons_are_hidden_off_the_story_body(home):
+    async def script(app, pilot):
+        return app.screen.query_one("#btn-add_beat").display
+    assert run_tui(new_story(), make_engine(home), script) is False
