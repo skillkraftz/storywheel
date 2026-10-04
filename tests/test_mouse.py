@@ -270,6 +270,6 @@ def test_clicking_a_history_row_picks_it(home):
 def test_the_help_screen_explains_the_mouse_and_shift_drag(home):
     async def script(app, pilot):
         await press(pilot, "question_mark")
-        return " ".join(screen_text(app).split())
+        return " ".join(str(app.screen.query_one("#help-text").content).split())
     text = run_tui(new_story(), make_engine(home), script, size=(200, 120))
-    assert "Shift" in text and "drag" in text and "right-click" in text and "scroll" in text and "Universe panel" in text
+    assert "Shift" in text and "drag" in text and "Right-click" in text and "Scroll" in text and "universe panel" in text

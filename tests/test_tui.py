@@ -302,7 +302,7 @@ def test_the_help_screen_opens_and_the_keys_underneath_do_nothing(home):
     async def script(app, pilot):
         s = app.session
         await press(pilot, "question_mark")
-        text = screen_text(app)
+        text = str(app.screen.query_one("#help-text").content)
         n, step = len(s.hist), s.step.key
         await press(pilot, "k", "space", "x")                   # none of these may act on the story
         unchanged = (len(s.hist), s.step.key) == (n, step)
@@ -310,7 +310,7 @@ def test_the_help_screen_opens_and_the_keys_underneath_do_nothing(home):
         await press(pilot, "k")
         return text, unchanged, s.step.key
     text, unchanged, step = run_tui(new_story(), make_engine(home), script)
-    assert "Keys" in text and "mix editor" in text and unchanged and step == "structure"
+    assert "Keys" in text and "Flavor" in text and unchanged and step == "structure"
 
 
 def test_typing_in_the_edit_box_does_not_trigger_keys(home):
