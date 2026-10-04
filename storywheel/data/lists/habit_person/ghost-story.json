@@ -1,0 +1,47 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "ghost story"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "visits",
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "remembers",
+  {
+   "text": "sits with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "speaks of",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "sets a place for",
+   "subject": [
+    "human"
+   ]
+  },
+  "waits for",
+  "avoids",
+  "thinks of"
+ ]
+}

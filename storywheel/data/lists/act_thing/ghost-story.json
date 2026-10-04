@@ -1,0 +1,181 @@
+{
+ "_note": "Past-tense verbs for ghost story that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "kept",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "tucked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "dusted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wound",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "opened",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "wept over",
+   "subject": [
+    "human"
+   ]
+  },
+  "unlocked",
+  {
+   "text": "traced",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "held",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "cleaned",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "mended",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "carried",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "pawned",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "buried",
+   "object": [
+    "buryable"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "studied",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "stowed away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "gave up",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "traded away",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "unwrapped",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "turned over",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

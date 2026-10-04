@@ -1,0 +1,32 @@
+{
+ "_note": "Villages, coast towns and parishes, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Greywater",
+  "Saltmere",
+  "Ravensend",
+  "Marsh End",
+  "Hollowby",
+  "Candlemere",
+  "Thornwick Parva",
+  "Drownwick",
+  "Lowmoor",
+  "Sunken Ash",
+  "Whitlow Staithe",
+  "Fenwick Hythe"
+ ]
+}

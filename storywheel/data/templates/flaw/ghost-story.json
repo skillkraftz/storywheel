@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "flaw",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "lets {VICE} outweigh {VALUE}",
+  "would hold on to {TEMPTATION} before {VALUE}",
+  "hides {FEELING} behind {VICE}",
+  "cannot let {TOPIC} rest and calls it {VALUE}",
+  "trusts {TEMPTATION} over {VALUE}",
+  "mistakes {VICE} for {VALUE}",
+  "reaches for {TEMPTATION} to avoid {FEELING}",
+  "keeps every letter and trusts {VICE} over {VALUE}"
+ ]
+}

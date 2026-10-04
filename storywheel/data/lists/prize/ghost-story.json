@@ -1,0 +1,93 @@
+{
+ "_note": "What people want in a ghost story.",
+ "slot": "prize",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "forgiveness",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a clear conscience",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the family house",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a last goodbye",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "rest for the dead",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the missing locket",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the truth about the fire",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "inner peace",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a proper burial",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the deed",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a name on the stone",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a quiet house",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a seat by the fire",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the old piano",
+   "features": [
+    "material"
+   ]
+  }
+ ]
+}

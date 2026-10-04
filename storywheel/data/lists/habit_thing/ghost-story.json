@@ -1,0 +1,69 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "ghost story"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "dusts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "winds",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps close",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "holds",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "polishes",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "takes out",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps wrapped",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  }
+ ]
+}

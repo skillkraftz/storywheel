@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for ghost story that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "read twice",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "kept",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "sealed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "folded",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "wept over",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forwarded",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

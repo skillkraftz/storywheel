@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "title",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} at {place}",
+  "A {TITLE_NOUN} in {place}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "What the {TITLE_NOUN} Remembered at {place}",
+  "The {TITLE_NOUN} Who Stayed in {place}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Waiting for the {TITLE_NOUN} at {place}"
+ ]
+}

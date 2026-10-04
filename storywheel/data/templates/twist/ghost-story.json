@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "twist",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "The one who haunted {landmark:built} was {the_someone:human}, who only wanted {the_thing:portable} returned.",
+  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} was the proof.",
+  "{the_message:physical} was written by {CLOSE:human}, long before {the_disaster}.",
+  "{the_disaster} had never ended: {the_someone:human} kept living it {MANNER} to avoid {FEELING}.",
+  "{the_thing:!living} was a keepsake; {THING:portable} lay {HIDING}, the one that mattered.",
+  "The house was not haunted: {first} was, and {the_someone:human} knew.",
+  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
+  "{the_someone:human} had only wanted to bid {first} farewell {MANNER}.",
+  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
+  "The visitor on the stairs was {SOMEONE:human,!plural}, who had come for {PRIZE:!inner}.",
+  "The {rival} had been listening at {landmark:built} for years, out of {MOTIVE}.",
+  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone felt it {MANNER}.",
+  "It was never about {the_disaster}; it was about {MOTIVE}.",
+  "Everyone had grieved, but only {the_someone:human} had kept {the_thing:portable}."
+ ]
+}

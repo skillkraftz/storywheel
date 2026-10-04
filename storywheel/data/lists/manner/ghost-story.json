@@ -1,0 +1,44 @@
+{
+ "_note": "How things get done, softly.",
+ "slot": "manner",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "in the grey light",
+  "by lamplight",
+  "without a sound",
+  "after the clock struck",
+  "at the tide's turn",
+  "in the cold hour",
+  "at the edge of sleep",
+  "on the anniversary",
+  "at dusk",
+  "through the keyhole",
+  {
+   "text": "in a low voice",
+   "features": [
+    "speech"
+   ]
+  },
+  {
+   "text": "with a trembling hand",
+   "features": [
+    "carrying"
+   ]
+  },
+  "in slow steps",
+  "in the quiet",
+  "by moonlight",
+  "before the candle guttered",
+  "in the empty hours",
+  "with great gentleness",
+  "beside the window",
+  {
+   "text": "in whispers",
+   "features": [
+    "speech"
+   ]
+  }
+ ]
+}

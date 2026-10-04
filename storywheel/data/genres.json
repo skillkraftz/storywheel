@@ -47,7 +47,7 @@
   "comedy":        {"comedy": 4, "romance": 0.5, "domestic": 1, "general": 0.3, "modern": 0.2},
   "fairy tale":    {"fairy tale": 3, "mythological": 1, "medieval": 1.5, "rural": 1, "general": 0.3, "modern": 0.1},
   "heist":         {"heist": 3, "thriller": 1, "urban": 1, "general": 0.3, "modern": 0.1},
-  "ghost story":   {"ghost story": 3, "horror": 1.5, "mystery": 0.5, "historical": 0.5, "rural": 0.5, "general": 0.3, "modern": 0.1},
+  "ghost story":   {"ghost story": 4, "horror": 1.5, "mystery": 0.5, "historical": 0.5, "rural": 0.5, "general": 0.3, "modern": 0.1},
   "coming-of-age": {"coming-of-age": 3, "domestic": 1, "rural": 0.5, "adventure": 0.5, "general": 0.3, "modern": 0.1},
   "noir":          {"noir": 3, "mystery": 1.5, "thriller": 1, "urban": 1, "historical": 0.5, "general": 0.3, "modern": 0.1},
   "thriller":      {"thriller": 3, "mystery": 1, "noir": 0.5, "urban": 0.5, "general": 0.3, "modern": 0.1},

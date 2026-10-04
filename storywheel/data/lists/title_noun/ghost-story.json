@@ -1,0 +1,78 @@
+{
+ "_note": "Title nouns for ghost stories.",
+ "slot": "title_noun",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "house",
+   "kind": "place"
+  },
+  "bell",
+  "lamp",
+  {
+   "text": "widow",
+   "kind": "person"
+  },
+  {
+   "text": "visitor",
+   "kind": "person"
+  },
+  {
+   "text": "ferryman",
+   "kind": "person"
+  },
+  {
+   "text": "nursery",
+   "kind": "place"
+  },
+  "clock",
+  {
+   "text": "tide",
+   "kind": "idea"
+  },
+  {
+   "text": "guest",
+   "kind": "person"
+  },
+  {
+   "text": "stair",
+   "kind": "place"
+  },
+  {
+   "text": "promise",
+   "kind": "idea"
+  },
+  "mirror",
+  "letter",
+  {
+   "text": "garden",
+   "kind": "place"
+  },
+  {
+   "text": "bride",
+   "kind": "person"
+  },
+  "violin",
+  "window",
+  {
+   "text": "silence",
+   "kind": "idea"
+  },
+  "lantern",
+  {
+   "text": "vigil",
+   "kind": "idea"
+  },
+  {
+   "text": "tenant",
+   "kind": "person"
+  },
+  "locket",
+  {
+   "text": "hour",
+   "kind": "idea"
+  }
+ ]
+}

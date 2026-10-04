@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a village name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "Grey",
+  "Low",
+  "Old",
+  "Still",
+  "Cold",
+  "Sunken",
+  "Salt",
+  "Marsh",
+  "Dim",
+  "Pale",
+  "Hollow",
+  "Lonely",
+  "Far",
+  "Lost",
+  "Bell",
+  "Mist",
+  "Moor",
+  "Reed",
+  "Silent",
+  "Winter",
+  "Dusk",
+  "Fallow",
+  "Ash",
+  "Saint"
+ ]
+}

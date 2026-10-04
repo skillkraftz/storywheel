@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "act_incident",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "{DISASTER:strikes} was remembered in {place}, and {first} heard it first at {landmark}.",
+  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was not forgotten.",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}.",
+  "{SOMEONE:human,!plural} appeared {MANNER}, and {first} was the only one to see.",
+  "The {rival} wanted {landmark} sold, and {first} heard {SOMEONE:human,!plural} refuse.",
+  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} to stay.",
+  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind."
+ ]
+}

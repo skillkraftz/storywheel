@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "act_trials",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "At {landmark}, {first} met {SOMEONE:!threatening}, who sat with {first} {MANNER}.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
+  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and found another memory.",
+  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} followed {THING:portable} to {landmark} and waited {MANNER}.",
+  "{the_someone:human} spoke of {TOPIC}, and {first} said nothing {MANNER}."
+ ]
+}

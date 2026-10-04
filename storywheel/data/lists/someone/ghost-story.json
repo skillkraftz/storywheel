@@ -1,0 +1,256 @@
+{
+ "_note": "The living and the lingering: mourners, keepers, and the ones who stay.",
+ "slot": "someone",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "a grieving widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a quiet caretaker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a faded child",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a woman in grey",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an old nurse",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a patient housekeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a young curate",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lonely organist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired schoolmaster",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a veiled stranger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a widowed neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sleepless piano tuner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a soldier in a doorway",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a drowned sailor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lost bride",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a silent ferryman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a returning daughter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an absent brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a tired sexton",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a visiting solicitor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bereaved father",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a girl with a lantern",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an estranged sister",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a parish clerk",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a gentle medium",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stooped gardener",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a boy at the window",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nurse in white",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a skeptical doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "an east wing tenant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a fading actress",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a fisherman's widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lamplighter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an unnamed guest",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a watchful dog",
+   "features": [
+    "friendly",
+    "living"
+   ]
+  },
+  {
+   "text": "a pale cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a mourning lodger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an old governess",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stern vicar",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a ghost of the stairs",
+   "features": [
+    "human",
+    "creature"
+   ]
+  }
+ ]
+}

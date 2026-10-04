@@ -1,0 +1,43 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "ghost story"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "locks up",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "lights a lamp in",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  "keeps watch over",
+  "stops at",
+  {
+   "text": "sweeps",
+   "object": [
+    "built"
+   ]
+  },
+  "avoids"
+ ]
+}

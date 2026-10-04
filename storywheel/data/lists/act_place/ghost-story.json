@@ -1,0 +1,132 @@
+{
+ "_note": "Past-tense verbs for ghost story that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "walked through",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "lingered in",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swept",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "revisited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "stayed in",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "avoided",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "entered",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "sealed off",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "crossed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "listened at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "wandered through",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "inspected",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "aired",
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "haunted",
+   "subject": [
+    "!human"
+   ]
+  },
+  {
+   "text": "stood in",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "slipped out of",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

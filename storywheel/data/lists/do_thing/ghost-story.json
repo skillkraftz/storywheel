@@ -1,0 +1,59 @@
+{
+ "_note": "Base-form verbs for ghost story that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "return",
+  "find",
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "restore",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "burn",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keep",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "open",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "deliver",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "mend",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "put back",
+   "object": [
+    "portable"
+   ]
+  }
+ ]
+}

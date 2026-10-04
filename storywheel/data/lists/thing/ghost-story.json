@@ -1,0 +1,329 @@
+{
+ "_note": "Objects that hold a memory: kept, hidden, wound and never thrown out.",
+ "slot": "thing",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "a stopped clock",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a child's shoe",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a music box",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a locked trunk",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a pressed flower book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a wedding ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a cracked mirror",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a faded photograph",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a lace handkerchief",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a brass key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a silver locket",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a rocking horse",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a cold teacup",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bundle of letters",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a mourning brooch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a burnt hymnal",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a wax doll",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pocket watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a tarnished thimble",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a lantern without oil",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a velvet ribbon",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bedside candle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a wooden whistle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a war medal",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a christening gown",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a ship's log",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a worn prayer book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "an unfinished quilt",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a nursery rhyme book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a velvet glove",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a dried bouquet",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a gramophone record",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a mantel clock",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a rusted bell",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a childhood diary",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a hand-drawn map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "an empty cradle",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a spool of black thread",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a folded flag",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sealed will",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a walking stick",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a cameo ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a looking glass",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a spinning top",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

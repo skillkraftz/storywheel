@@ -1,0 +1,128 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "estate agent",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "land developer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival heir",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "skeptical doctor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "new vicar",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "stern housekeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "village councilman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "grieving brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "local historian",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "bank manager",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "insurance assessor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "demolition foreman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "cousin from the city",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "coroner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "mother superior",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "family solicitor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "sensible aunt",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

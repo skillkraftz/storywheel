@@ -215,7 +215,7 @@ def test_wants_needs_flaws_and_secrets_never_name_the_character():
         cand = step_by_key("protagonist").roll(engine, story)
         first = cand["name"].split()[0]
         for key in ("want", "need", "flaw", "secret"):
-            assert first not in cand[key], cand[key]
+            assert not __import__("re").search(rf"\b{__import__('re').escape(first)}\b", cand[key]), cand[key]       # (whole words: "John" is not in "Johnsonville")
 
 
 def test_every_sentence_starts_with_a_capital():

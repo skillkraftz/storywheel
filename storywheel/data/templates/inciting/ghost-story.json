@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for ghost story.",
+ "slot": "inciting",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "{DISASTER:strikes} was remembered in {place}, and {first} heard it first at {landmark}",
+  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was not forgotten",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}",
+  "the {rival} wanted {landmark} sold, and {first} heard {SOMEONE:human,!plural} refuse",
+  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} to stay",
+  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind",
+  "{SOMEONE:human,!plural} appeared {MANNER}, and {first} was the only one to see",
+  "{first} found {SOMEONE:human,!plural} at {landmark} {MANNER}, and {THING:portable} nearby",
+  "{DISASTER:manmade} came back to mind {MANNER}, and the {rival} wanted it left {DEADLINE}",
+  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and wondered why"
+ ]
+}

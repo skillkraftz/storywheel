@@ -1,0 +1,193 @@
+{
+ "_note": "Past-tense verbs for ghost story that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "comforted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "mourned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "watched over",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "followed",
+  {
+   "text": "forgave",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "avoided",
+  {
+   "text": "spoke to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "sat with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "waited for",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "remembered",
+   "subject": [
+    "human"
+   ]
+  },
+  "called to",
+  {
+   "text": "sought out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "kept company with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "looked for",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wept for",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  "ignored",
+  {
+   "text": "shielded",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "visited",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "wrote to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "haunted",
+   "subject": [
+    "!human"
+   ]
+  },
+  {
+   "text": "consoled",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "recognized",
+   "subject": [
+    "human"
+   ]
+  },
+  "pursued"
+ ]
+}

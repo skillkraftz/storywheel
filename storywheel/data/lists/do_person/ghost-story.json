@@ -1,0 +1,82 @@
+{
+ "_note": "Base-form verbs for ghost story that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "comfort",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "free",
+  {
+   "text": "say goodbye to",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "grieve for",
+   "features": [
+    "inner"
+   ]
+  },
+  "lay to rest",
+  "find",
+  "follow",
+  {
+   "text": "help",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "listen to",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "remember",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

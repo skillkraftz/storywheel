@@ -1,0 +1,118 @@
+{
+ "_note": "Where something is kept out of sight.",
+ "slot": "hiding",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "behind the nursery wallpaper",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the attic floorboards",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a music box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "beneath the hearthstone",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a dry well",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside the piano",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "between hymnal pages",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow bedpost",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind the hall mirror",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in the linen press",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sewn into a pillow",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a locked sewing box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "under the garden stone",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "behind a drawer panel",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a church wall",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

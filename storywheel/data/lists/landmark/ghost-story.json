@@ -1,0 +1,320 @@
+{
+ "_note": "Rooms and places that remember.",
+ "slot": "landmark",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  {
+   "text": "the nursery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the attic stair",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the drawing room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the empty chapel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lych-gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the drowned lane",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old ferry landing",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the servants' stair",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the walled garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the boathouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lighthouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the schoolroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cellar steps",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the widow's walk",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the churchyard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the east bedroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the music room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back pantry",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the village green",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the station platform",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the shuttered library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the orchard wall",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the long gallery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hall mirror",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the mill pond",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the apple loft",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the vestry",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the marsh path",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the bell tower",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cemetery gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cold larder",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sea wall",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sitting room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the stable yard",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the sunken garden",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the landing window",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the empty ballroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the river steps",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the rectory porch",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the gatehouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dressing room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cliff path",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the boarded conservatory",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the front step",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "_note": "Past-tense verbs for ghost story that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "ghost story"
+ ],
+ "entries": [
+  "mourned",
+  "remembered",
+  "predicted",
+  "witnessed",
+  "blamed",
+  {
+   "text": "forgave",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "survived",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "recalled",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "dreaded",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "grieved for",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}
