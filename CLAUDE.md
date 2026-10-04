@@ -559,6 +559,10 @@ what each piece added.
 - Docs and code with backticks go through quoted heredocs (`<<'EOF'`), never unquoted ones: the shell would run the backticked text.
 
 
+- The `stable` branch is what typewriter installs. At the end of every batch, and only after the FULL suite has passed in one run, move it to that
+  commit (`git branch -f stable HEAD`). Never move it any other time (not after a partial test run, not mid-batch). Never push.
+
+
 ## Decisions log
 
 Decisions made so far that aren't obvious from the code. Add to this as you go.
@@ -888,3 +892,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   strips ` # comment`, reads both layouts and skips non-pronunciations. A failed rhymes install is recorded in `rhymes-error.txt` and said plainly by
   `dictionary install`, `dictionary status` and the Rhymes box (never an empty list). By default only words `dictionary.knows` (an entry in WordNet/Moby or
   a form of one) are listed; the box has a "Names and rare words too" switch. Order: wordfreq commonness, else A to Z, and the box says which.
+
+- Exports record what they were made from: `.storywheel-exports.json` in the story's export folder (hidden, like `.storywheel-story`) lists every export with
+  file, format, ISO date, the manuscript's word count, a SHA-256 of the compiled manuscript text and whether it was anonymous. "Changed since the last
+  export" is decided by that hash, not the word count. `storywheel exports status [--json]` lists every story in the library (state: never exported / up to
+  date / changed); `storywheel exports make UNIVERSE/STORY [--format F] [--json]` exports non-interactively in the story's own export format (else yours,
+  else docx) with the story's export settings and prints the path. Looking at status never creates an export folder (`export_folder(create=False)`).

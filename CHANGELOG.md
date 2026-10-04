@@ -2,6 +2,11 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.10.2 — Export records and `exports` commands
+- Every export is recorded in `.storywheel-exports.json` beside it: file, format, date, the manuscript's word count and a content hash.
+- `storywheel exports status [--json]` and `storywheel exports make STORY [--format F] [--json]` (see README).
+- A `stable` branch for releases (rule in CLAUDE.md).
+
 ## 0.10.1 — Rhymes fixed
 
 - The download works: `cmudict.dict` (the old `cmudict-0.7b` path was a 404), with the repository's LICENSE saved beside it and shown by `storywheel dictionary status`.

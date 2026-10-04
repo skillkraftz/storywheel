@@ -2226,3 +2226,16 @@ Manual: run `storywheel dictionary install`, then look up "bell" in Words: chell
 gone, and appear when "Names and rare words too" is chosen. Tell me what still reads wrong.
 
 Full suite after the rhymes fix: 2,026 passed, 0 failed (this includes the run that b10's last comment change had missed).
+
+
+# Export records and `exports` commands (0.10.2)
+
+| Item | Status | Note |
+|---|---|---|
+| `stable` branch, rule in CLAUDE.md, moved to `b10-rhymes-final` | **Works** | moved again to this batch's last commit after the full suite passed (see below) |
+| Manifest beside the exports (words, content hash, date, format, file) | **Works** | hidden file `.storywheel-exports.json`; rename if homesync prefers a visible one |
+| `exports status [--json]` | **Works** | all stories in the library; "changed" is by hash (a one-word swap with the same count is caught) |
+| `exports make STORY [--format F] [--json]` | **Works** | accepts `universe/story` or a story slug that is unique; prints only the path (notes go to stderr) |
+| Tests | **Works** | `tests/test_exports_cli.py` (8): never exported, one-word change, anonymous docx, formats, errors, ambiguous slug |
+
+An export made with `--out` elsewhere writes its record beside that file, and `exports status` looks only in the story's own export folder.

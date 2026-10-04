@@ -308,6 +308,91 @@ def cmd_manuscript(args):
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
+def find_story(target):
+    """A story from "universe/story" (its id), or from a story slug that is unique across the universes. Exits with a plain message otherwise."""
+    uni, sep, slug = (target or "").partition("/")
+    if sep:
+        story = _universe(uni).story(slug)
+        if not story:
+            sys.exit(f"No story '{slug}' in {uni}")
+        return story
+    found = [st for u in vault.list_universes() for st in u.stories() if st.slug == uni]
+    if len(found) == 1:
+        return found[0]
+    if not found:
+        sys.exit(f"No story '{uni}'. Use universe/story. Known: " + ", ".join(f"{u.slug}/{st.slug}" for u in vault.list_universes() for st in u.stories()))
+    sys.exit(f"'{uni}' is a story in several universes ({', '.join(f'{st.universe.slug}/{st.slug}' for st in found)}): use universe/story")
+
+
+def default_format(story):
+    from . import settings
+    st = settings.load_story(story.path)
+    fmt = str(st.get("export_format") or settings.load_global().get("export_format") or "docx").lower()      # (the story's own, else yours)
+    return "fountain" if str(st.get("format", "")).lower() == "screenplay" and fmt in ("docx", "odt", "pdf") else fmt
+
+
+def exports_status():
+    """One dict per story: its words now, what its last export was made from, whether the manuscript changed since, the default format, the folder."""
+    from . import export, settings
+    out = []
+    for u in vault.list_universes():
+        for story in u.stories():
+            text = export.compile_text(story)
+            words, digest = vault.count_words(text), export.content_hash(story)
+            last = export.last_export(story)
+            if last is None:
+                state = "never exported"
+            else:
+                state = "up to date" if last["hash"] == digest else "changed"
+            out.append({"story": export.story_id(story), "title": story.title, "words": words, "hash": digest,
+                        "last_export": ({"file": last["file"], "format": last["format"], "date": last["date"], "words": last["words"],
+                                         "hash": last["hash"]} if last else None),
+                        "state": state, "changed": None if last is None else last["hash"] != digest,
+                        "default_format": default_format(story), "anonymous": bool(settings.load_story(story.path).get("export_anonymous")),
+                        "folder": last["folder"] if last else (str(export.export_folder(story, create=False) or ""))})
+    return out
+
+
+def cmd_exports(args):
+    from . import export, paths
+    if args.action == "status":
+        rows = exports_status()
+        if args.json:
+            emit(rows)
+            return
+        if not rows:
+            print("  No stories yet.")
+            return
+        for r in rows:
+            last = r["last_export"]
+            print(f"  {r['story']}  \"{r['title']}\"\n    words now: {r['words']:,}   state: {r['state']}   default format: {r['default_format']}"
+                  + (" (anonymous)" if r["anonymous"] else ""))
+            if last:
+                print(f"    last export: {last['words']:,} words on {last['date']} as {last['file']}")
+            print(f"    export folder: {paths.tilde(r['folder']) if r['folder'] else '(none yet)'}")
+        return
+    if not args.target:
+        sys.exit("exports make needs a story:  exports make UNIVERSE/STORY [--format F]")
+    story = find_story(args.target)
+    fmt = args.format or default_format(story)
+    try:
+        result = export.export(story, fmt)
+    except export.ExportError as e:
+        if args.json:
+            emit({"error": str(e)})
+        else:
+            print("  " + str(e))
+        raise SystemExit(1)
+    result["story"] = export.story_id(story)
+    result["hash"] = export.content_hash(story)
+    if args.json:
+        emit(result)
+    else:
+        print(result["path"])
+        for w in result["warnings"]:
+            print(f"  Note: {w}", file=sys.stderr)
+
+
 def cmd_lookup(args):
     """define / thesaurus / lookup WORD [--json]: meanings, similar words and opposite words, from the offline dictionary."""
     from . import dictionary
@@ -505,6 +590,11 @@ def add_parsers(sub):
     p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
     p.add_argument("--anonymous", action="store_true", help="no name, contact block, byline or surname (header: Title / page)")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("exports", help="exports:  exports status [--json] | exports make UNIVERSE/STORY [--format F] [--json]")
+    p.add_argument("action", choices=["status", "make"])
+    p.add_argument("target", nargs="?", help="universe/story (or a story slug that is in one universe only)")
+    p.add_argument("--format", help="docx, odt, pdf, md, txt or fountain (default: the story's own export format)")
+    p.add_argument("--json", action="store_true")
     for name, text in (("define", "meanings of a word (offline dictionary)"), ("thesaurus", "similar and opposite words"),
                        ("lookup", "meanings, similar and opposite words")):
         p = sub.add_parser(name, help=text)
@@ -536,4 +626,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}

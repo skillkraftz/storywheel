@@ -301,6 +301,13 @@ at the right, the title halfway down, a header "Surname / Keyword / page" from p
 a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
 screenplay is a marked stub (a `.fountain` file).
 
+### Exports from scripts
+
+Each export is recorded in `.storywheel-exports.json` in the story's export folder (file, format, date, word count, a hash of the manuscript).
+
+    storywheel exports status [--json]          every story: words now, its last export, up to date / changed (by content hash) / never exported
+    storywheel exports make UNIVERSE/STORY [--format F] [--json]    export one story in its default format (its export settings, anonymous if set); prints the path
+
 ### Writing in kitty (the Writer's own window)
 
 Run storywheel inside [kitty](https://sw.kovidgoyal.net/kitty/) and the Writer opens in a **kitty window of its own** with the writing settings

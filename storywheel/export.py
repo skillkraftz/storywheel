@@ -19,6 +19,8 @@ clearly marked stub: the manuscript is written out as a .fountain file, unformat
 .odt and .pdf are made from the .docx with LibreOffice (`soffice`) if it is installed; without it you get a message.
 """
 import datetime
+import hashlib
+import json
 import re
 import shutil
 import subprocess
@@ -349,8 +351,8 @@ def story_id(story):
     return f"{story.universe.slug}/{story.slug}"
 
 
-def export_folder(story):
-    """<manuscripts>/<Story Title>/ for this story. A hidden marker in the folder says which story owns it; if another
+def export_folder(story, create=True):
+    """<manuscripts>/<Story Title>/ for this story (with create=False: the folder it already owns, or None; nothing is made). A hidden marker in the folder says which story owns it; if another
     story (or nobody we know) owns the folder, the universe's name is added. Never inside or equal to the library."""
     root = paths.manuscripts_root()
     lib = paths.library_root()
@@ -369,11 +371,57 @@ def export_folder(story):
             if marker.read_text(encoding="utf-8").strip() == me:
                 return folder
             continue
+        if not create:
+            continue
         if not folder.exists() or not any(folder.iterdir()):
             folder.mkdir(parents=True, exist_ok=True)
             marker.write_text(me + "\n", encoding="utf-8")
             return folder
+    if not create:
+        return None
     raise ExportError("Couldn't find a free folder name for this story under " + paths.tilde(root))
+
+
+# --- what each export was made from ------------------------------------------------------------------------------------------------
+# A small manifest beside the exports (`.storywheel-exports.json` in the story's export folder) records, for every export, the manuscript's word
+# count and a hash of its content, with the date, format and file name, so a tool can tell whether the manuscript changed since the last export.
+
+MANIFEST = ".storywheel-exports.json"
+
+
+def content_hash(story):
+    """SHA-256 of the compiled manuscript text (what an export is made from); changes with any edit, even one word."""
+    return hashlib.sha256(compile_text(story).encode("utf-8")).hexdigest()
+
+
+def manifest_path(folder):
+    return Path(folder) / MANIFEST
+
+
+def read_manifest(folder):
+    """{"story": id, "exports": [{file, format, date, words, hash, anonymous}]} (oldest first); empty when there is none."""
+    try:
+        doc = json.loads(manifest_path(folder).read_text(encoding="utf-8"))
+        return doc if isinstance(doc.get("exports"), list) else {"story": "", "exports": []}
+    except (OSError, ValueError, AttributeError):
+        return {"story": "", "exports": []}
+
+
+def record_export(story, folder, path, fmt, words, anonymous):
+    doc = read_manifest(folder)
+    doc["story"] = story_id(story)
+    doc["exports"].append({"file": Path(path).name, "format": fmt, "date": datetime.datetime.now().isoformat(timespec="seconds"),
+                           "words": words, "hash": content_hash(story), "anonymous": bool(anonymous)})
+    manifest_path(folder).write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
+
+
+def last_export(story):
+    """The newest manifest entry of this story's export folder (plus "folder"), or None if it was never exported."""
+    folder = export_folder(story, create=False)
+    if folder is None:
+        return None
+    entries = read_manifest(folder)["exports"]
+    return dict(entries[-1], folder=str(folder)) if entries else None
 
 
 def file_stem(story):
@@ -442,4 +490,9 @@ def export(story, fmt="docx", out_dir=None, anonymous=None):
     else:
         path = base.with_suffix(".fountain")
         warnings += build_fountain(story, path)
+    anon = bool(settings.load_story(story.path).get("export_anonymous")) if anonymous is None else bool(anonymous)
+    try:
+        record_export(story, out, path, fmt, vault.count_words(compile_text(story)), anon)
+    except OSError as e:
+        warnings.append(f"The export was written, but its record ({MANIFEST}) could not be: {e}")
     return {"path": str(path), "shown": paths.tilde(path), "format": fmt, "words": words, "warnings": warnings}
