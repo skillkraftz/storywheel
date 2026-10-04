@@ -310,7 +310,7 @@ class StoryOptions(OptionList):
 
 
 class BuilderScreen(KeptScreen, Screen):
-    BINDINGS = [
+    BINDINGS = navigation.footer([
         *navigation.mode_bindings("builder", writer_action="writer"),
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
@@ -345,7 +345,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("question_mark", "help", "Help", key_display="?"),
         Binding("escape", "focus_card", "", show=False),
         Binding("backslash", "toggle_story", "Story panel", show=False),
-    ]
+    ], keep=('roll_blank', 'roll_field', 'write_field'))
     DEFAULT_CSS = """
     BuilderScreen #body { height: 1fr; }
     BuilderScreen #left { width: 26%; min-width: 40; max-width: 58; }

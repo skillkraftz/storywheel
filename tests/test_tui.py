@@ -41,7 +41,7 @@ def test_the_screen_has_steps_a_card_a_history_and_a_footer_with_the_keys(home):
         assert step in text
     assert "▶ 1 Genre & mood" in text and "· 2 Structure" in text
     assert "History: every roll" in text and "#1 of 1" in text
-    for needle in ("space Roll", "k Keep", "q Back", "Q Quit storywheel", "F1-F5", "? Help", "f Field", "e Edit"):
+    for needle in ("space Roll", "k Keep", "q Back", "F1 Wheel", "F2 Builder", "F3 Writer", "F4 Settings", "F5 Words", "? Help", "e Edit"):
         assert needle in text, needle
 
 

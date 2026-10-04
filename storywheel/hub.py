@@ -116,6 +116,7 @@ class Hub(App):
         self.session = None
         self.exit_message = None
         self.screens_built = {}                                # mode -> screen, once built
+        self._wanted, self._switching = None, False            # the mode to show next, and whether a switch is under way
         self._payload = {}
         self.timings = []                                      # (mode, milliseconds) for each switch: tools/measure_switch.py reads this
         self._handles = {}
@@ -259,25 +260,40 @@ class Hub(App):
             self.show(where, payload, message)
 
     def show(self, name, payload, message=None):
-        """Switch to a mode: build it the first time, otherwise tell the screen it is back (with anything it was handed)."""
+        """Switch to a mode. The screen is switched FIRST; the mode's refresh (`_enter`) runs after it is showing. Requests are serialized: a burst
+        of F-key presses collapses to the last one pressed (the modes in between are never drawn)."""
         import time
-        t = time.perf_counter()
-        screen = self.screens_built.get(name)
-        if screen is None:
-            self._payload[name] = payload
-        else:
-            self._enter(name, screen, payload)
-        self.mode_name = name
+        fresh = name not in self.screens_built
+        if fresh:
+            self._payload[name] = payload                       # (the factory builds the screen from this when switch_mode reaches it)
+        self.mode_name = name                                   # (the mode we are going to: the next press compares with this)
         if name not in ("wheel",):
             try:
                 self.st.update(mode=name)
             except OSError:
                 pass
-        self.switch_mode(name)
-        if message:
-            first = message.strip().splitlines()[0] if message.strip() else ""
-            self.call_after_refresh(lambda: self.say(first))
-        self.timings.append((name, (time.perf_counter() - t) * 1000))
+        self._wanted = (name, payload, message, fresh, time.perf_counter())
+        if not self._switching:
+            self._switching = True
+            self.call_later(self._drain)
+
+    async def _drain(self):
+        import time
+        try:
+            while self._wanted is not None:
+                name, payload, message, fresh, t = self._wanted
+                self._wanted = None
+                await self.switch_mode(name)
+                if self._wanted is not None:                    # a newer press arrived while switching: skip the refresh of this one
+                    continue
+                if not fresh:
+                    self._enter(name, self.screens_built[name], payload)
+                if message:
+                    first = message.strip().splitlines()[0] if message.strip() else ""
+                    self.call_after_refresh(lambda first=first: self.say(first))
+                self.timings.append((name, (time.perf_counter() - t) * 1000))
+        finally:
+            self._switching = False
 
     def _enter(self, name, screen, payload):
         if name == "wheel":

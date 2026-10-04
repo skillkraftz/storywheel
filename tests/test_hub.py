@@ -405,3 +405,61 @@ def test_a_kept_screen_does_not_restyle_everything_when_it_returns_unless_the_lo
 def test_the_switch_report_tool_runs(home):
     out = subprocess.run([sys.executable, str(ROOT / "tools" / "measure_switch.py"), "hub"], capture_output=True, text=True, cwd=str(ROOT))
     assert out.returncode == 0 and "repeat visit" in out.stdout and "settings (first visit)" in out.stdout, out.stderr
+
+
+# --- batch 11: clickable mode entries, and a burst of F-keys ends on the last --------------------------------------------------------
+
+def test_a_burst_of_function_keys_ends_on_the_last_one_pressed(home, world):
+    async def script(app, pilot):
+        await press(pilot, "f5")                                            # (build a second mode first)
+        await pilot.press("f2", "f4")                                       # quickly, with no pause between
+        await pilot.pause()
+        await pilot.pause()
+        first = (app.mode_name, type(app.screen).__name__)
+        await pilot.press("f1", "f5", "f2", "f4", "f1")
+        await pilot.pause()
+        await pilot.pause()
+        return first, (app.mode_name, type(app.screen).__name__), app.st.get("mode")
+    first, second, saved = run_hub(script)
+    assert first == ("settings", "SettingsScreen") and second == ("wheel", "MainScreen")
+
+
+def test_the_screen_is_switched_before_the_mode_refreshes(home, world):
+    async def script(app, pilot):
+        await press(pilot, "f4")
+        order = []
+        screen = app.screens_built["builder"]
+        real = screen.enter
+        screen.enter = lambda payload: order.append(("enter", type(app.screen).__name__)) or real(payload)
+        await press(pilot, "f2")
+        return order
+    assert run_hub(script) == [("enter", "BuilderScreen")]                 # (the Builder was already showing when it refreshed)
+
+
+def test_each_mode_is_its_own_clickable_footer_entry(home, world):
+    async def script(app, pilot):
+        from textual.widgets._footer import FooterKey
+        keys = {k.action: k.description for k in app.screen.query(FooterKey)}
+        await pilot.click("FooterKey#" + "") if False else None
+        target = next(k for k in app.screen.query(FooterKey) if k.description == "Settings")
+        await pilot.click(target)
+        await pilot.pause()
+        await pilot.pause()
+        return keys, type(app.screen).__name__
+    keys, now = run_hub(script)
+    assert [d for d in keys.values()][:7] == ["Wheel", "Builder", "Writer", "Settings", "Words", "Help", "Back"]
+    assert now == "SettingsScreen"
+
+
+def test_footers_hold_the_modes_help_back_and_at_most_three_keys(home, world):
+    async def script(app, pilot):
+        from textual.widgets._footer import FooterKey
+        out = {}
+        for key in ("f1", "f2", "f4", "f5"):
+            await press(pilot, key)
+            out[key] = [k.description for k in app.screen.query(FooterKey)]
+        return out
+    for key, names in run_hub(script).items():
+        assert names[:5] == ["Wheel", "Builder", "Writer", "Settings", "Words"] and len(names) <= 10, (key, names)
+        if key != "f5":                                                      # (in Words a text box has the focus and takes ? and q as letters)
+            assert names[5:7] == ["Help", "Back"], (key, names)

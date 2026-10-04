@@ -50,7 +50,7 @@ def test_every_footer_says_q_is_back_and_Q_quits_storywheel_and_labels_the_modes
                 await pilot.pause()
             return flat(screen_text(app))
     text = asyncio.run(go())
-    assert "q Back" in text and "Q Quit storywheel" in text and "F1-F5 Modes: Wheel · Builder · Writer · Settings · Words" in text
+    assert "q Back" in text and "? Help" in text and "F1 Wheel F2 Builder F3 Writer F4 Settings F5 Words" in text
 
 
 @pytest.mark.parametrize("kind", KINDS)

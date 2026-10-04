@@ -2,6 +2,13 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.11.0 — Batch 11: help and polish
+
+### Part A: footer and switching
+- Each mode is its own footer entry (F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words) and a click goes to that mode (the one entry on F1 sent every click to the Wheel).
+- Footers are the five modes, ? Help, q Back and at most three keys that matter on that screen; the rest is in help (Q Quit still works; it is no longer in the footer).
+- `hub.show()` switches the screen first and refreshes the mode after it is showing; switches are serialized, so a burst of F-keys ends on the last one pressed.
+
 ## 0.10.2 — Export records and `exports` commands
 - Every export is recorded in `.storywheel-exports.json` beside it: file, format, date, the manuscript's word count and a content hash.
 - `storywheel exports status [--json]` and `storywheel exports make STORY [--format F] [--json]` (see README).

@@ -236,7 +236,7 @@ def test_no_footer_entry_is_cut_off_in_any_mode(home, width):
         actions = [a for a, *_ in out[name]]
         assert any(a.startswith(("noop_mode", "mode")) for a in actions)
         if name != "words":                                  # (a box with the cursor in it hides the keys that would type; Words opens in one)
-            assert "back_mode" in actions and "quit_program" in actions
+            assert "back_mode" in actions and "help" in actions and sum(a.startswith(("noop_mode", "mode", "writer")) for a in actions) == 5
 
 
 def test_the_help_still_lists_the_keys_the_footer_left_out():

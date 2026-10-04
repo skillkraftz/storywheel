@@ -332,7 +332,7 @@ class FlashcardScreen(ModalScreen):
 
 
 class WordsScreen(KeptScreen, Screen):
-    BINDINGS = [
+    BINDINGS = navigation.footer([
         *navigation.mode_bindings("words"),
         Binding("question_mark", "help", "Help", key_display="?"),
         navigation.back_binding(),
@@ -352,7 +352,7 @@ class WordsScreen(KeptScreen, Screen):
         Binding("s", "spell", "Add to the spelling list", show=False),
         Binding("r", "rename", "Rename everywhere", show=False),
         Binding("m", "more", "More like these", show=False),
-    ]
+    ], keep=('filter', 'add', 'use'))
     DEFAULT_CSS = """
     WordsScreen TabbedContent { height: 1fr; }
     WordsScreen TabPane { height: 1fr; }

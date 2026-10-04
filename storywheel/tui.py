@@ -748,7 +748,7 @@ class MixScreen(Screen):
 
 class MainScreen(KeptScreen, Screen):
     # Footer order matters: the keys you can't live without come first (the footer clips on narrow terminals).
-    BINDINGS = [
+    BINDINGS = navigation.footer([
         Binding("space", "roll", "Roll"),
         Binding("k", "keep", "Keep"),
         navigation.back_binding(),
@@ -776,7 +776,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("U", "universe_remove", "Remove", show=False),
         Binding("E", "editor", "$EDITOR"),
         Binding("escape", "focus_card", "", show=False),
-    ]
+    ], keep=('roll', 'keep', 'edit'))
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
     MainScreen #left { width: 46; }

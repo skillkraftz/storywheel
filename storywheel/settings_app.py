@@ -147,12 +147,12 @@ class HelpScreen(ModalScreen):
 
 
 class SettingsScreen(KeptScreen, Screen):
-    BINDINGS = [
+    BINDINGS = navigation.footer([
         *navigation.mode_bindings("settings"),
         Binding("question_mark", "help", "Help", key_display="?"),
         navigation.back_binding(),
         navigation.quit_binding(),
-    ]
+    ], keep=())
     DEFAULT_CSS = """
     SettingsScreen VerticalScroll { padding: 1 2; }
     SettingsScreen .row { height: auto; margin-bottom: 1; }
