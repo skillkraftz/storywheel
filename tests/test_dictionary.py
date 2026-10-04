@@ -284,13 +284,17 @@ def test_install_keeps_the_sources_and_downloads_only_what_is_missing(tmp_path, 
         if dest.suffix == ".gz":
             with gzip.open(dest, "wb") as f:
                 f.write(XML.encode("utf-8"))
+        elif dest.name == "cmudict.dict":
+            Path(dest).write_text("dog D AO1 G\nfog F AO1 G\n", encoding="utf-8")
+        elif dest.name == "cmudict.LICENSE":
+            Path(dest).write_text("BSD-style\n", encoding="utf-8")
         else:
             Path(dest).write_text(MOBY, encoding="latin-1")
         return dest
     monkeypatch.setattr(dictionary_build, "download", fake)
     out = tmp_path / "dictionary.sqlite"
     dictionary_build.install(out)
-    assert fetched == ["oewn.xml.gz", "mthesaur.txt", "cmudict-0.7b"] and dictionary_build.kept_sources(out)     # (the last is for rhymes)
+    assert fetched == ["oewn.xml.gz", "mthesaur.txt", "cmudict.dict", "cmudict.LICENSE"] and dictionary_build.kept_sources(out)     # (the last is for rhymes)
     fetched.clear()
     (tmp_path / "dictionary-sources" / "mthesaur.txt").unlink()
     dictionary_build.install(out)

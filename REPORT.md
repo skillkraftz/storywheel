@@ -2210,3 +2210,17 @@ reworked for the boxes.
 The first run, at the start of the batch (before any change but the grammar fix), passed all 1,981 tests. The final run: 2,012 passed, 1 failed
 (`test_no_sync_code_is_left`: a code comment of mine mentioned a sync tool's conflict-file name); reworded, and that file re-run green. The rest of
 the suite was not re-run after that comment change.
+
+
+# Rhymes fixed (0.10.1)
+
+| Item | Status | Note |
+|---|---|---|
+| Download from cmudict.dict (and LICENSE), old 0.7b file still accepted | **Works** | tested with a faked download; the real one is yours to run (`storywheel dictionary install`) |
+| License shown in `dictionary status`; SOURCES.md updated | **Works** | |
+| parse(): comments stripped, both layouts | **Works** | tests use lines in cmudict.dict's layout (`aalborg ... # place, danish`, `read(2)`) written from your description, not copied from the real file |
+| A failed download is said plainly (install, status, Rhymes box) | **Works** | |
+| Only words the main dictionary knows, with a names/rare switch; commonness order or A to Z | **Works** | the filter uses WordNet/Moby entries and their forms |
+
+Manual: run `storywheel dictionary install`, then look up "bell" in Words: chell, clell, delle, dwelle, ehle and, among near rhymes, aer, al., baehr should be
+gone, and appear when "Names and rare words too" is chosen. Tell me what still reads wrong.

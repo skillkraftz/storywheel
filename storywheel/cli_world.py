@@ -387,7 +387,10 @@ def cmd_backups(args):
 def _rhymes_line():
     from . import rhymes
     st = rhymes.status()
-    return (f"{st['name']} (rhymes)" if st["installed"] else "Rhymes: not installed (run  storywheel dictionary install)")
+    if not st["installed"]:
+        return "Rhymes: " + rhymes.not_installed_message()
+    lic = st["license"].strip()
+    return f"{st['name']} (rhymes)" + (("\n  License of the CMU Pronouncing Dictionary:\n    " + lic.replace("\n", "\n    ")) if lic else "\n  (no license text was saved with it)")
 
 
 def cmd_dictionary(args):
@@ -419,6 +422,13 @@ def cmd_dictionary(args):
         print("  " + note)
     print(f"  Dictionary ready at {paths.tilde(dest)}: {counts['words']:,} words, {counts['synsets']:,} meanings, "
           f"{counts['moby_roots']:,} thesaurus entries.")
+    if args.action == "install":
+        from . import rhymes
+        if rhymes.status()["installed"]:
+            print("  Rhymes are installed.")
+        else:
+            print("  Rhymes were NOT installed. " + (rhymes.failure() or "The CMU Pronouncing Dictionary is missing.")
+                  + "\n  Everything else works. Run  storywheel dictionary install  again to retry the rhymes.")
 
 
 def cmd_migrate(args):

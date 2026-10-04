@@ -224,6 +224,12 @@ def lookup_panes(result, filter_text="", rhyme=None):
                     rh.word(w, "", f"{syl}")
         if rhyme["near_more"]:
             rh.info(f"    ({rhyme['near_more']:,} less common near rhymes are not shown; the syllable box narrows the list)")
+        if rhyme.get("hidden"):
+            rh.info(f"{rhyme['hidden']:,} names and rare words are left out (the second box shows them).")
+        elif rhyme.get("filtered") is False and not rhyme.get("rare"):
+            rh.info("The main dictionary isn't installed, so names and rare words could not be left out.")
+        if rhyme.get("order"):
+            rh.info(rhyme["order"])
     for name, _t in PANES:
         if not boxes[name].rows:
             boxes[name].info({"meanings": "No meanings.", "similar": "No similar words.", "opposites": "No opposites in the dictionary.",
@@ -377,7 +383,7 @@ class WordsScreen(KeptScreen, Screen):
     WordsScreen #panes { height: 1fr; }
     WordsScreen .pane { width: 1fr; height: 1fr; border: round $primary-darken-2; }
     WordsScreen .pane OptionList { height: 1fr; border: none; scrollbar-gutter: stable; }
-    WordsScreen #rhsyl { width: 100%; }
+    WordsScreen #rhsyl, WordsScreen #rhrare { width: 100%; }
     WordsScreen #pane-tabs { display: none; height: 2; }
     WordsScreen.-narrow #pane-tabs { display: block; }
     WordsScreen.-narrow .pane { display: none; }
@@ -435,6 +441,7 @@ class WordsScreen(KeptScreen, Screen):
                             if name == "rhymes":
                                 yield Select([("Any number of syllables", 0), ("1 syllable", 1), ("2 syllables", 2), ("3 syllables", 3),
                                               ("4 or more", 4)], value=0, id="rhsyl", allow_blank=False)
+                                yield Select([("Common words only", 0), ("Names and rare words too", 1)], value=0, id="rhrare", allow_blank=False)
                             yield OptionList(id=f"res-{name}", classes="results")
                 with Horizontal(id="tools", classes="bar"):
                     yield Button("Use in Writer", id="use")
@@ -649,12 +656,14 @@ class WordsScreen(KeptScreen, Screen):
         if not self.result:
             return
         syl = self.query_one("#rhsyl", Select).value or 0
+        rare = bool(self.query_one("#rhrare", Select).value)
         try:
             for w in (self.result.get("query"), self.result.get("word")):
                 if w:
-                    found = rhymes.find(w, syl or None)
+                    found = rhymes.find(w, syl or None, rare)
                     if found["found"]:
                         found["limit"] = syl
+                        found["rare"] = rare
                         self.rhyme = found
                         return
             self.rhyme = found if w else None
@@ -1149,7 +1158,7 @@ class WordsScreen(KeptScreen, Screen):
                      + ("…" if len(found) > 4 else ""))
 
     def on_select_changed(self, event):
-        if event.select.id == "rhsyl":
+        if event.select.id in ("rhsyl", "rhrare"):
             if self.result:
                 self.load_rhymes()
                 self.show_results(keep=True)

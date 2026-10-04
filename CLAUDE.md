@@ -883,3 +883,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `dictionary-sources/cmudict-0.7b` and downloaded by `dictionary install` (a failed download does not undo the dictionary). A perfect rhyme shares the
   sound from the last stressed vowel and differs before it; a near rhyme shares the vowel with an ending of the same consonant classes, or the ending
   after a vowel of the same family. Words are grouped by syllables, commonest first (wordfreq); near rhymes are capped at 300.
+
+- Rhymes (0.10.1): the source is `cmudict.dict` (cmusphinx/cmudict master) plus its LICENSE (`cmudict.LICENSE`); `cmudict-0.7b` is still accepted. `rhymes.parse`
+  strips ` # comment`, reads both layouts and skips non-pronunciations. A failed rhymes install is recorded in `rhymes-error.txt` and said plainly by
+  `dictionary install`, `dictionary status` and the Rhymes box (never an empty list). By default only words `dictionary.knows` (an entry in WordNet/Moby or
+  a form of one) are listed; the box has a "Names and rare words too" switch. Order: wordfreq commonness, else A to Z, and the box says which.

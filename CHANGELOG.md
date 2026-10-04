@@ -2,6 +2,16 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.10.1 — Rhymes fixed
+
+- The download works: `cmudict.dict` (the old `cmudict-0.7b` path was a 404), with the repository's LICENSE saved beside it and shown by `storywheel dictionary status`.
+  An existing `cmudict-0.7b` in the sources folder is still read.
+- The parser reads both layouts (lowercase with `(2)` variants and trailing `# comment` annotations; the old uppercase `;;;` style) and skips lines that are not pronunciations.
+- A failed rhymes download is no longer silent: `dictionary install` ends with "Rhymes were NOT installed" and the reason, `dictionary status` says it,
+  and the Rhymes box shows the same instead of an empty list.
+- Rhymes list only words the main dictionary (WordNet or Moby, with their forms) knows; the "Names and rare words too" box shows the rest. Ordered by
+  commonness when wordfreq is installed, else A to Z, and the box says which.
+
 ## 0.10.0 — Batch 10
 
 ### Tests no longer meet your real LanguageTool

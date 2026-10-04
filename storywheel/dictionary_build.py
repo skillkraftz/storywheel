@@ -256,17 +256,32 @@ def install(out_path, work_dir=None, progress=lambda msg: None):
 
 
 def install_rhymes(out_path, progress=lambda msg: None):
-    """The CMU Pronouncing Dictionary for rhymes: download it if it is not kept, then read it into rhymes.sqlite. A failure here is reported
-    and does not undo the dictionary (run `dictionary install` again to retry). Returns the number of pronunciations, or None."""
+    """The CMU Pronouncing Dictionary for rhymes: download cmudict.dict (and the repository's LICENSE) if they are not kept, then read it into
+    rhymes.sqlite. A failure is reported plainly, remembered (the Rhymes box says it too) and does not undo the dictionary. Returns the number
+    of pronunciations, or None when rhymes were NOT installed."""
     from . import rhymes
-    src = sources_dir(out_path) / "cmudict-0.7b"
+    folder = sources_dir(out_path)
+    src = rhymes.source_in(folder)
     try:
         if not (src.exists() and src.stat().st_size > 0):
+            src = folder / rhymes.SOURCE_NAMES[0]
             download(rhymes.CMU_URL, src, progress)
+        lic = folder / "cmudict.LICENSE"
+        if not (lic.exists() and lic.stat().st_size > 0):
+            try:
+                download(rhymes.CMU_LICENSE_URL, lic, progress)
+            except DictionaryBuildError as e:
+                progress(f"The CMU license text could not be fetched ({e}); the file's own header is used if it has one.")
         progress("Reading the CMU Pronouncing Dictionary (rhymes)…")
         n = rhymes.build(src, Path(out_path).with_name("rhymes.sqlite"))
+        if not n:
+            src.unlink(missing_ok=True)                                  # (a bad file must not be kept: the next install fetches it again)
+            raise DictionaryBuildError(f"{src.name} had no pronunciations in it.")
+        rhymes.record_failure("")
         progress(f"Rhymes ready: {n:,} pronunciations.")
         return n
     except (DictionaryBuildError, OSError, UnicodeError) as e:
-        progress(f"Rhymes were not installed ({e}). The dictionary itself is fine; run  storywheel dictionary install  again to retry.")
+        reason = str(e).strip().rstrip(".") + "."
+        rhymes.record_failure(reason)
+        progress(f"Rhymes were NOT installed: {reason} The dictionary itself is fine; run  storywheel dictionary install  again to retry.")
         return None

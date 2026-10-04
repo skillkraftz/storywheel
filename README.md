@@ -412,7 +412,8 @@ from them offline (with a one-line message); it only downloads again if they are
     *Similar* (every similar word), *Opposites* (and the opposites of similar words, labelled as indirect), *Rhymes* and *Related* (wider and
     narrower words, parts, related forms). *Rhymes*: perfect rhymes first (same sound from the last stressed vowel, different before it), then
     near rhymes (same vowel and a similar ending, or the same ending after a close vowel), grouped by syllables and commonest first; the box at the
-    top limits the syllables. They come from the CMU Pronouncing Dictionary (BSD-style license, see SOURCES.md), downloaded by
+    top limits the syllables, and the second box adds names and rare words (hidden by default: only words WordNet or Moby know are listed; ordered by
+    commonness when wordfreq is installed). They come from the CMU Pronouncing Dictionary (BSD-style license, see SOURCES.md), downloaded by
     `storywheel dictionary install` with the rest. Enter or a click on a word in any box looks it up; copy, learn, use in the Writer work from any
     box; back and forward remember your
     path; `/` filters. **Use in Writer** (`u`) goes back to the Writer and replaces the word you were on with the one you picked, in

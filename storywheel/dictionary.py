@@ -341,6 +341,21 @@ def card_lines(result, width=78, **_ignored):
     return out
 
 
+def knows(words):
+    """The words (of those given) that the main dictionary has something to say about: an entry in WordNet or Moby, or a form of one
+    (plurals, past tenses...). Raises DictionaryMissing when there is no index."""
+    db = connect()
+    wanted = sorted({w for w in words if w})
+    known = set()
+    for i in range(0, len(wanted), 400):
+        chunk = wanted[i:i + 400]
+        marks = ",".join("?" * len(chunk))
+        known.update(r[0] for r in db.execute(
+            f"select w from words where w in ({marks}) and (id in (select word_id from senses) or id in (select word_id from moby))", chunk))
+        known.update(r[0] for r in db.execute(f"select distinct form from forms where form in ({marks})", chunk))
+    return known
+
+
 def status():
     p = index_path()
     if not p.exists():
