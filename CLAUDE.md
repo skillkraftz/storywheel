@@ -551,6 +551,14 @@ what each piece added.
 - Show problems plainly; don't fix things silently behind the writer's back.
 
 
+## Development rules (firm)
+
+- Any shell command that runs storywheel while developing (the CLI, a script that imports it, a sample, a screenshot, a report tool) sets
+  `STORYWHEEL_HOME` and `STORYWHEEL_LIBRARY` (and `STORYWHEEL_MANUSCRIPTS`, and `STORYWHEEL_DICTIONARY` when a dictionary is needed, pointing at a
+  copy) to a temporary folder first. Never touch the owner's real `~/.storywheel` or `~/Writing`, and never use the network outside tests.
+- Docs and code with backticks go through quoted heredocs (`<<'EOF'`), never unquoted ones: the shell would run the backticked text.
+
+
 ## Decisions log
 
 Decisions made so far that aren't obvious from the code. Add to this as you go.
