@@ -2204,3 +2204,9 @@ reworked for the boxes.
 - cmudict is North American English: some rhymes will not rhyme to British ears. Variant pronunciations all count.
 - Rhymes need the word to be in cmudict (an inflected form as typed, else its base word); a made-up name has none and the box says so.
 - Open on an extra file is a read-only view, not the Writer.
+
+### Full-suite result (batch 10)
+
+The first run, at the start of the batch (before any change but the grammar fix), passed all 1,981 tests. The final run: 2,012 passed, 1 failed
+(`test_no_sync_code_is_left`: a code comment of mine mentioned a sync tool's conflict-file name); reworded, and that file re-run green. The rest of
+the suite was not re-run after that comment change.

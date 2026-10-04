@@ -25,7 +25,7 @@ PLACEHOLDER = re.compile(r"^(character|place|thing|group|note)-\d+$")
 # --- small helpers ---------------------------------------------------------------------------------
 
 # The manuscript files storywheel makes: manuscript.md, and NN-name.md (a novel's chapters; the older one-file-per-scene stories).
-# Names with spaces, brackets or dots ("01-opening (xps copy 2026-10-04).md", "x.sync-conflict-1.md") were made by something else.
+# Names with spaces, brackets or dots ("01-opening (xps copy 2026-10-04).md", "x.conflict-1.md") were made by something else.
 KNOWN_FILE = re.compile(r"^(manuscript|\d+-[a-z0-9-]+)\.md$")
 
 
