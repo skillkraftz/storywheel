@@ -1,0 +1,81 @@
+{
+ "_note": "Title nouns for thrillers.",
+ "slot": "title_noun",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "protocol",
+   "kind": "idea"
+  },
+  {
+   "text": "witness",
+   "kind": "person"
+  },
+  {
+   "text": "countdown",
+   "kind": "idea"
+  },
+  {
+   "text": "asset",
+   "kind": "person"
+  },
+  {
+   "text": "deadline",
+   "kind": "idea"
+  },
+  "signal",
+  {
+   "text": "pursuit",
+   "kind": "idea"
+  },
+  {
+   "text": "target",
+   "kind": "person"
+  },
+  "cipher",
+  {
+   "text": "ultimatum",
+   "kind": "idea"
+  },
+  {
+   "text": "courier",
+   "kind": "person"
+  },
+  "trigger",
+  {
+   "text": "fallout",
+   "kind": "idea"
+  },
+  "decoy",
+  {
+   "text": "agent",
+   "kind": "person"
+  },
+  {
+   "text": "border",
+   "kind": "place"
+  },
+  {
+   "text": "exit",
+   "kind": "place"
+  },
+  "handoff",
+  "dossier",
+  {
+   "text": "contact",
+   "kind": "person"
+  },
+  "network",
+  {
+   "text": "dead drop",
+   "kind": "place"
+  },
+  "relay",
+  {
+   "text": "runner",
+   "kind": "person"
+  }
+ ]
+}

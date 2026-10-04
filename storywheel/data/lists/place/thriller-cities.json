@@ -1,0 +1,32 @@
+{
+ "_note": "Cities, ports and border towns, built from parts plus a few hand-picked names.",
+ "slot": "place",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Vantage City",
+  "Port Argent",
+  "Redmark",
+  "Kestrel Bay",
+  "Dunmore",
+  "Fort Larkin",
+  "Ironhaven",
+  "Ashford Station",
+  "Silverlake",
+  "Meridian",
+  "Calder Falls",
+  "Northgate"
+ ]
+}

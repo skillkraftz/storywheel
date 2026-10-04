@@ -2308,3 +2308,522 @@ After:
 
 2,053 passed, 0 failed, in one run. Two earlier runs found real problems and are why the count of commits is higher: one test hung because F1 in the Wheel now opens the Wheel's
 help (the test pressed it expecting nothing), and three help tests read only what was on screen instead of the whole help page. `stable` was moved to the commit that records this.
+
+
+# Batch 12 (0.12.0): help toggle, three genres
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| A. A mode's own key (or ?) closes its help; another mode's key closes it and goes there | **Works** | tested for the four Textual modes, every pair |
+| A. Writer: F3 toggles the help float; other mode keys switch as usual | **Works** | tested headlessly |
+| B. Ghost story | **Works** | passes fidelity, repetition and lint; blends with romance and comedy tested |
+| B. Noir | **Works** | blend with western tested |
+| B. Thriller | **Works** | blend with sci-fi tested |
+| B. Shared rural and mythological floor lists; western/fairy tale threshold restored | **Works** | `tests/test_fidelity.py` uses the exact 0.80 again |
+| B. Genre fit rebuilt from the new lists | **Works** | below; built into a COPY of the installed index |
+| B. Wording quality | **Partial** | the frames are adapted from mystery's shape; read the samples and tell me which lines are off |
+
+## 2. The genre fit (top 30 adjectives and verbs, `tools/genre_fit_report.py --build`, on a copy of the installed index)
+
+```
+### ghost story
+adjectives: trembling, shivering, fallow, fifty-four, liv, shaky, redeemed, fundamentalist, universalist, ransomed, unsaved, catechetical, venial, unredeemed, universalistic, fond, affectionate, lovesome, heard, sensitive, damned, mortal, cursed, doomed, catechetic, fundamentalistic, solitary, waiting, ready and waiting, reserved
+verbs: hallow, sanctify, sorrow, stitch, sew, sew together, mourn, grieve, unwrap, go to, attend, disestablish, transubstantiate, explain, explicate, restore, weep, revisit, run up, listen, let on, disclose, tailor-make, dusk, tremble, divulge, compound, bless, deepen, disown
+
+### noir
+adjectives: bored, rainy, world-weary, showery, stubbly, stubbled, bestubbled, unlucky, luckless, hard-boiled, hard-bitten, pugnacious, fingered, void, null, incompetent, underage, ancestral, appellate, consensual, moot, halal, appellant, evidentiary, intestate, fungible, ultra vires, intra vires, patrimonial, residuary
+verbs: buy off, drive, drive up, take the stand, black market, test drive, traffic, pull up, double-park, file, stick up, kick back, pull up short, jail, sentence, motor, tool around, put behind bars, take exception, angle-park, bear witness, cruise, palm off, parallel-park, re-examine, shanghai, bail out, pirate, brake, automobile
+
+### thriller
+adjectives: calculating, scheming, calculative, forty, paranoid, xl, disciplined, twoscore, shrewd, conniving, played out, dog-tired, worn out, coastal, washed-out, exhausted, fatigued, fagged, famous, noted, celebrated, notable, renowned, famed, far-famed, silenced, illustrious, fighting, armed, combat-ready
+verbs: win over, convince, protect, prevent, preclude, forestall, foreclose, threaten, menace, peril, endanger, disarm, jeopardize, jeopardise, imperil, buy off, drive, drive up, black market, test drive, traffic, pull up, double-park, stick up, quarter, kick back, pull up short, mess, motor, tool around
+
+```
+
+The ranking is the algorithm's, not hand-picked: it picks up a few odd words (numbers, "liv"), which the lists cannot fix; the dials are in `genrefit.py`.
+
+## 3. Seeded samples (`storywheel sample GENRE -n 5 --seed 12`)
+
+```
+=== sample ghost story -n 5 --seed 12
+1. JOSIAH AND THE PATIENT BRIDE   (motif: bride)
+   ghost story · quiet · Kishōtenketsu
+
+  * Josiah Myers, 73, a dutiful locksmith. Wants a music box at the cellar
+    steps. Needs to value peace above a promotion. Flaw: mistakes jealousy for
+    mercy. Secret: once folded an unsigned confession and still fears fear.
+    Rival: the bank manager.
+  * Marsh End · the year of the flood · winter. Landmark: the cellar steps.
+    Rumor: the bank manager answered a hotel receipt at the tide's turn.
+
+    Josiah, a dutiful locksmith, is the last to see the bride, and the first
+    to feel dread at the cellar steps.
+
+    Ki (introduction) — Josiah was a dutiful locksmith in Marsh End, where
+    each winter meant a loyal friend for someone else.
+    Shō (development) — A hollow-eyed preacher began visiting the cellar
+    steps, and Josiah oiled a cold teacup at dusk to make room.
+    Ten (twist) — Then Josiah saw the cold teacup anew; it had never been
+    about a music box at the cellar steps.
+    Ketsu (reconciliation) — Josiah and a grumpy landlord opened a mule
+    together without a sound, and the winter went on.
+
+    Twist: Everyone had grieved, but only the grumpy landlord had kept the
+    cold teacup.
+    Threads: thing: a cold teacup (Shō (development)) · someone: a grumpy
+    landlord (Ketsu (reconciliation))
+
+2. DROWNED TIDE, GREY WANTED POSTER   (motif: wanted poster)
+   ghost story · dreadful · Three-Act Outline
+
+  * Marl Loway, 28, a solitary bus driver. Wants a music box and the town's
+    trust. Needs to forgive the hidden letter and keep courage. Flaw: keeps
+    every letter and trusts coldness over home. Secret: never said goodbye to
+    a shy schoolteacher on the anniversary. Rival: the cousin from the city.
+  * Drownwick · the jazz age · summer. Landmark: the church bell loft. Rumor:
+    the church bell loft was the scene of a vanished bride.
+
+    A solitary bus driver named Marl must say goodbye to a silent child before
+    the storm breaks, though the house resists.
+
+    Act I: Setup — Marl, a solitary bus driver, came to Drownwick in slow
+    steps to forget the old feud.
+    Act I: Inciting incident — A postcard from the dead arrived from a retired
+    spy, asking Marl to come to the church bell loft.
+    Act I: First turn — Marl spoke to their mother in a whisper about an
+    insurance assessor.
+    Act II: Rising action — The retired spy spoke of the deal with the cousin
+    from the city, and Marl said nothing after dark.
+    Act II: Midpoint — The retired spy offered Marl a seat by the fire to drop
+    the case.
+    Act II: Crisis — The cousin from the city checked on Marl's father, and
+    Marl lost the trail.
+    Act III: Climax — Marl forgave the cousin from the city at the church bell
+    loft, and chose faith.
+    Act III: Resolution — Marl avoids the retired spy and never speaks of the
+    empty grave.
+
+    Twist: The retired spy was acting for a retired schoolmaster, out of
+    grief.
+    Threads: someone: a retired spy (Act I: Inciting incident)
+
+3. WHO TOOK THE NURSERY IN WHITLOW STAITHE   (motif: nursery)
+   ghost story · bittersweet · Three-Act Outline
+
+  * Elia Moorchmont, 71, a patient linen keeper. Wants a pair of binoculars
+    from the village green. Needs to remember their godmother before it is too
+    late. Flaw: mistakes despair for acceptance. Secret: owes a drowned sailor
+    a favor and hides it by candlelight. Rival: the undertaker.
+  * Whitlow Staithe · the drought year · spring. Landmark: the village green.
+    Rumor: a sleepless piano tuner once avoided the village green by
+    lamplight.
+
+    Elia, a patient linen keeper, receives a mourning notice from an old
+    midwife and must learn by first light who wrote it.
+
+    Act I: Setup — The undertaker ran Whitlow Staithe, and Elia, a patient
+    linen keeper, listened at the edge of sleep.
+    Act I: Inciting incident — The undertaker wanted the village green sold,
+    and Elia heard a mysterious foreigner refuse.
+    Act I: First turn — Elia set out beside the window to open a worn prayer
+    book by the next tide.
+    Act II: Rising action — Elia hid a walking stick before breakfast and
+    found another memory.
+    Act II: Midpoint — The truth about the third key came out: the mysterious
+    foreigner carried the worn prayer book all along.
+    Act II: Crisis — The worn prayer book was destroyed, and Elia had nothing
+    left but mercy.
+    Act III: Climax — Elia sat with the mysterious foreigner at the village
+    green and held out the worn prayer book.
+    Act III: Resolution — The house was quiet, and Elia tends the worn prayer
+    book in a hollow candlestick.
+
+    Twist: Elia had held the worn prayer book under the attic floorboards all
+    along, and the undertaker knew.
+    Threads: someone: a mysterious foreigner (Act I: Inciting incident) ·
+    thing: a worn prayer book (Act I: First turn)
+
+4. WHAT THE LAKE REMEMBERED AT FENWICK HYTHE   (motif: lake)
+   ghost story · wistful · Story Spine
+
+  * Una Overslake, 83, a quiet schoolteacher. Wants the missing locket before
+    the house is sold. Needs to give up secrecy and choose justice. Flaw:
+    reaches for a lit window to avoid regret. Secret: once looked for a
+    retired horseman in the empty hours and has never said so. Rival: the
+    local doctor.
+  * Fenwick Hythe · the winter after the funeral · winter. Landmark: the fog-
+    bound moor. Rumor: the local doctor paid a nervous accountant to keep
+    quiet through the keyhole.
+
+    To free a hired nurse of a fatal crossing, Una, a quiet schoolteacher,
+    must find a pair of spectacles before the sun sets.
+
+    Once upon a time, Fenwick Hythe did not welcome visitors, and Una, a quiet
+    schoolteacher, kept to the fog-bound moor.
+    Every day, Una locked up the fog-bound moor in the cold hour and dreaded a
+    death at the dinner.
+    One day, Una found an elderly twin at the fog-bound moor in the cold, and
+    a pressed flower book nearby.
+    Because of that, Una watched the fog-bound moor by candlelight in search
+    of a dead man's watch.
+    Because of that, Una's twin spoke of the unsigned letter, but not of the
+    death at the dinner.
+    Until finally, Una laid out the pressed flower book at the fog-bound moor
+    before dawn and waited.
+    Ever since then, Fenwick Hythe forgave the death at the dinner, and Una
+    keeps watch over the fog-bound moor.
+
+    Twist: The alibi the elderly twin offered was false, and the pressed
+    flower book was the proof.
+    Threads: disaster: a death at the dinner (Every day) · someone: an elderly
+    twin (One day) · thing: a pressed flower book (One day)
+
+5. BARNABEL AND THE HOLLOW CLOCK   (motif: clock)
+   ghost story · bittersweet · Story Spine
+
+  * Barnabel Cobb, 23, a tender tide watcher. Wants a mourning brooch at the
+    old schoolhouse. Needs to put rest before pride. Flaw: lets greed outweigh
+    trust. Secret: once read twice a love letter in pencil and still fears
+    love. Rival: the family solicitor.
+  * Wake Barrow · the week of the anniversary · winter. Landmark: the old
+    schoolhouse. Rumor: a visiting priest never left the old schoolhouse in
+    the dead of night.
+
+    When a wire recorder turns up inside a church wall, Barnabel, a tender
+    tide watcher of Wake Barrow, understands why an infested crop was never
+    mourned.
+
+    Once upon a time, Wake Barrow was a quiet parish, and Barnabel, a tender
+    tide watcher, wanted a mourning brooch at the old schoolhouse.
+    Every day, Barnabel locked up the old schoolhouse at midnight and feared a
+    drought summer.
+    One day, a voice on the radio came to Wake Barrow in the quiet and asked
+    Barnabel to stay.
+    Because of that, Barnabel slipped out of the old schoolhouse in the grey
+    light and kept a bedside candle in the attic trunk.
+    Because of that, Barnabel found the bedside candle at dusk, and the cold
+    deepened.
+    Until finally, Barnabel forgave the family solicitor at the old
+    schoolhouse with the bedside candle and hope.
+    Ever since then, the lights of Wake Barrow stay on, and Barnabel checks
+    the bedside candle between hymnal pages.
+
+    Twist: The family solicitor had planted a suitcase full of cash in the
+    linen press to frame a runaway.
+    Threads: disaster: a drought summer (Every day) · someone: a voice on the
+    radio (One day) · thing: a bedside candle (Because of that)
+
+=== sample noir -n 5 --seed 12
+1. NICK AND THE BITTER MARK   (motif: mark)
+   noir · quiet · Kishōtenketsu
+
+  * Nick Myers, 73, a guarded switchboard operator. Wants a cigarette case at
+    the loading bay. Needs to value self-respect above a pardon. Flaw:
+    mistakes greed for mercy. Secret: once read twice a forged check and still
+    fears fear. Rival: the judge.
+  * Bell Harbor · the 1920s · winter. Landmark: the loading bay. Rumor: the
+    judge typed an anonymous tip card after midnight.
+
+    Nick, a guarded switchboard operator, was the last to see the mark, and is
+    first on the judge's list.
+
+    Ki (introduction) — In Bell Harbor, Nick catalogued a locked box under a
+    streetlamp while the city slept.
+    Shō (development) — The mark began drinking at the loading bay, and Nick
+    counted a racing form in a back booth.
+    Ten (twist) — Then Nick saw the locked box anew; it had never been about a
+    cigarette case at the loading bay.
+    Ketsu (reconciliation) — Bell Harbor did not mend, but Nick visits their
+    only customer in the evenings.
+
+    Twist: Nick had held the locked box in a hatbox all along, and the judge
+    knew.
+    Threads: thing: a locked box (Ki (introduction))
+
+2. THE LAST WITNESS IN HIGH DIGGINGS   (motif: witness)
+   noir · melancholy · Kishōtenketsu
+
+  * Vera Underhill, 30, a loyal data engineer. Wants a clean slate and a way
+    out of High Diggings. Needs to confide in their oldest friend before it is
+    too late. Flaw: lets cowardice outweigh conscience. Secret: once burned an
+    eviction notice and still fears pride. Rival: the union boss.
+  * High Diggings · the winter of the strike · winter. Landmark: the village
+    church. Rumor: the union boss tore up a newspaper clipping on a stolen
+    phone.
+
+    Every guest at the village church owes the union boss something, and Vera,
+    a loyal data engineer, has been paid to forget it.
+
+    Ki (introduction) — In High Diggings, Vera walked past the village church
+    with a wry smile, as Vera did every winter.
+    Shō (development) — Vera showed a starving boy a hotel receipt, and they
+    talked of the last promise over a stiff drink.
+    Ten (twist) — Then Vera understood that the starving boy had acted out of
+    blackmail all along.
+    Ketsu (reconciliation) — High Diggings mended slowly, and Vera buys a
+    drink for their father in the evenings.
+
+    Twist: The truth came out, and the starving boy walked free in the fog
+    anyway.
+    Threads: someone: a starving boy (Shō (development)) · thing: a hotel
+    receipt (Shō (development))
+
+3. THE PAID-FOR RELAY OF RATLIFF'S CROSSING   (motif: relay)
+   noir · wry · Kishōtenketsu
+
+  * Cole Crowley, 38, a resourceful jazz pianist. Wants a clean name for their
+    best customer. Needs to give up curiosity and choose loyalty. Flaw: cannot
+    let what really happened at the morgue lie and calls it a little decency.
+    Secret: was there when a fatal fall began, and said nothing to their twin.
+    Rival: the police captain.
+  * Ratliff's Crossing · the night of the blackout · summer. Landmark: the
+    morgue. Rumor: the police captain paid a pale stranger to keep quiet at
+    the last second.
+
+    When a diamond stickpin turns up taped under a drawer, Cole, a resourceful
+    jazz pianist of Ratliff's Crossing, learns that a jewel heist is only the
+    start.
+
+    Ki (introduction) — Cole kept a tab on Ratliff's Crossing and told their
+    brother nothing of the broken engagement.
+    Shō (development) — Cole and a worried cabbie locked up the morgue
+    together, and courage grew between them.
+    Ten (twist) — Then Cole understood that grief had kept Cole from a clean
+    name for their best customer all along.
+    Ketsu (reconciliation) — Cole and a crooked sergeant polished a forged
+    passport together on the cheap, and the summer went on.
+
+    Twist: The worried cabbie had never left the morgue, and the forged
+    passport proved it.
+    Threads: someone: a worried cabbie (Shō (development)) · thing: a forged
+    passport (Ketsu (reconciliation))
+
+4. THE SILENT SCAM   (motif: scam)
+   noir · gritty · Three-Act Outline
+
+  * Bernickey Hartman, 75, a tired night clerk. Wants a deed to nowhere at the
+    secret passage. Needs to let go of nostalgia and trust friendship. Flaw:
+    trusts a quiet word over kindness. Secret: keeps a tin of film reels
+    inside a hat lining and tells no one of the inheritance. Rival: the
+    crooked sergeant.
+  * North Fields · the 1930s · spring. Landmark: the secret passage. Rumor: a
+    retired spy never left the secret passage on a hunch.
+
+    In North Fields, Bernickey, a tired night clerk, is hired to find a coded
+    address book, and learns that the crooked sergeant lied about the missing
+    money.
+
+    Act I: Setup — The crooked sergeant ran North Fields, and Bernickey, a
+    tired night clerk, watched in a hurry.
+    Act I: Inciting incident — Bernickey found a red lipstick under the
+    barroom floor, and knew it was trouble.
+    Act I: First turn — Bernickey struck a bargain with an old enemy: a medal
+    from the Yard in return for a bloody glove.
+    Act II: Rising action — The old enemy lied about the family curse, and
+    Bernickey said nothing through cigarette smoke.
+    Act II: Midpoint — The old enemy offered Bernickey a seat at the table to
+    drop it.
+    Act II: Crisis — Bernickey learned that their foster sibling had lied
+    about the red lipstick without a license.
+    Act III: Climax — Bernickey faced the crooked sergeant at the secret
+    passage, and chose loyalty.
+    Act III: Resolution — Bernickey distrusts the old enemy and never speaks
+    of the deal with the crooked sergeant.
+
+    Twist: Everyone had a motive, but only the old enemy had the red lipstick.
+    Threads: thing: a red lipstick (Act I: Inciting incident) · someone: an
+    old enemy (Act I: First turn)
+
+5. THE COLD ULTIMATUM   (motif: ultimatum)
+   noir · wry · Kishōtenketsu
+
+  * Trixie Merriweather, 41, a hard-boiled night watchman. Wants a corner
+    office before the fog lifts. Needs to forgive their real name and keep
+    pride. Flaw: would sell a clear conscience for a friendly judge. Secret:
+    once recruited a border guard by candlelight and has never confessed.
+    Rival: the family lawyer.
+  * Netherwick · the jazz age · winter. Landmark: the Chinese laundry. Rumor:
+    a street informant once swept the Chinese laundry at closing time.
+
+    When a surveillance photo turns up in a bottle of rye, Trixie, a hard-
+    boiled night watchman of Netherwick, sees how deep a blackmail scheme
+    goes.
+
+    Ki (introduction) — In Netherwick, Trixie checked the Chinese laundry by
+    night train, as always.
+    Shō (development) — Over the winter, Trixie came to know a society wife
+    and thanked their spouse in the rain.
+    Ten (twist) — Then Trixie saw that the family lawyer had wanted a corner
+    office before the fog lifts too, and had hidden homesickness behind drink.
+    Ketsu (reconciliation) — Trixie laid down obsession at the Chinese
+    laundry, and the case was closed.
+
+    Twist: The society wife was working for a smiling banker, out of
+    inheritance.
+    Threads: someone: a society wife (Shō (development))
+
+=== sample thriller -n 5 --seed 12
+1. KIRA AND THE BORROWED BORDER   (motif: border)
+   thriller · quiet · Kishōtenketsu
+
+  * Kira Myers, 73, a guarded truck driver. Wants a passport in another name
+    at the loading bay. Needs to value duty above a pardon. Flaw: mistakes
+    greed for courage. Secret: once answered a boarding pass note and still
+    fears fear. Rival: the press baron.
+  * Kestrel Bay · the 1920s · winter. Landmark: the loading bay. Rumor: the
+    press baron burned an anonymous tip card off the record.
+
+    Kira, a guarded truck driver, is the last to see an insurance assessor
+    alive, and the first the press baron comes for.
+
+    Ki (introduction) — Kira was a guarded truck driver in Kestrel Bay, where
+    each winter meant a fair trial for someone else.
+    Shō (development) — A customs officer began visiting the loading bay, and
+    Kira packed a bloodstained letter opener on a hunch to make room.
+    Ten (twist) — Then Kira saw the bloodstained letter opener anew; it had
+    never been about a passport in another name at the loading bay.
+    Ketsu (reconciliation) — Kira and a silent passenger hid a pocket recorder
+    together in a rented car, and the winter went on.
+
+    Twist: The silent passenger had never left the loading bay, and the
+    bloodstained letter opener proved it.
+    Threads: thing: a bloodstained letter opener (Shō (development)) ·
+    someone: a silent passenger (Ketsu (reconciliation))
+
+2. SECOND SIGNAL, MISSING ASSET   (motif: asset)
+   thriller · bleak · Three-Act Outline
+
+  * Anton Garrett, 28, a reckless air traffic controller. Wants a burner phone
+    back from a nervous pharmacist. Needs to let go of fear and trust the
+    truth. Flaw: hides pride behind secrecy. Secret: once pocketed a case of
+    vials for a well-suited fixer through a crowd. Rival: the bounty hunter.
+  * Dunmore · the storm season · spring. Landmark: the customs hall. Rumor: a
+    city alderman never left the customs hall under surveillance.
+
+    A reckless air traffic controller named Anton must outrun the asset by
+    midnight, with the bounty hunter one step behind.
+
+    Act I: Setup — Anton, a reckless air traffic controller of Dunmore,
+    noticed the hidden letter and wanted a burner phone back from a nervous
+    pharmacist.
+    Act I: Inciting incident — The asset came to Dunmore in a stolen van and
+    asked Anton for help.
+    Act I: First turn — Anton questioned their one true ally in a whisper
+    about a federal marshal.
+    Act II: Rising action — The federal marshal lied about the secret meeting,
+    and Anton said nothing with the lights off.
+    Act II: Midpoint — The federal marshal offered Anton the flash drive to
+    walk away.
+    Act II: Crisis — The federal marshal accused Anton at the customs hall,
+    and the village turned.
+    Act III: Climax — Anton named a twin at the customs hall in a hurry, and
+    chose honor.
+    Act III: Resolution — Anton corresponds with the federal marshal and never
+    speaks of the deal with the bounty hunter.
+
+    Twist: The witness was never gone: the federal marshal had staged the
+    hiding on a stolen phone.
+    Threads: someone: a federal marshal (Act I: First turn)
+
+3. LAKESIDE MALLOW PROTOCOL, RELAY   (motif: relay)
+   thriller · bleak · Three-Act Outline
+
+  * Talia Hartmann, 56, a broke taxi driver. Wants the evidence before the
+    summit opens. Needs to value conscience above a witness's testimony. Flaw:
+    can't resist a sealed file when love is high. Secret: once pawned a will
+    missing a codicil for a border guard on a cold trail. Rival: the new boss.
+  * Lakeside Mallow · the 1930s · autumn. Landmark: the hotel lobby. Rumor: a
+    pager lies inside a hollow book where no one looks.
+
+    Talia, a broke taxi driver, receives a newspaper clipping from a girl with
+    a camera and has until midnight to stop a bridge bombing.
+
+    Act I: Setup — Talia, a broke taxi driver, worked the hotel lobby in
+    Lakeside Mallow and dreaded a bank collapse.
+    Act I: Inciting incident — Talia was called to the hotel lobby, where a
+    witness murder had left a trail of receipts behind.
+    Act I: First turn — Talia followed a contractor with debts to the hotel
+    lobby at the last second.
+    Act II: Rising action — The trail of receipts pointed at a retired spy,
+    and Talia sheltered the contractor with debts.
+    Act II: Midpoint — The trail of receipts turned up sewn into a coat, and
+    the contractor with debts ran.
+    Act II: Crisis — The trail of receipts was destroyed, and Talia had
+    nothing left but justice.
+    Act III: Climax — Talia named the contractor with debts at the hotel lobby
+    by back roads, with the trail of receipts as proof.
+    Act III: Resolution — Lakeside Mallow forgot the bank collapse, but Talia
+    walks past the hotel lobby.
+
+    Twist: Everyone wanted it, but only the contractor with debts had the
+    trail of receipts.
+    Threads: disaster: a bank collapse (Act I: Setup) · thing: a trail of
+    receipts (Act I: Inciting incident) · someone: a contractor with debts
+    (Act I: First turn)
+
+4. THE AGENT IN BLACKMERE   (motif: agent)
+   thriller · bleak · Kishōtenketsu
+
+  * Dmitri Hartman, 30, a disciplined surgeon. Wants a cipher book back from a
+    wounded informant. Needs to give up ambition for the sake of a promise.
+    Flaw: trusts a bribe over mercy. Secret: keeps a flash drive under a motel
+    mattress and tells no one of the lost heirloom. Rival: the rogue agent.
+  * Blackmere · the jazz age · winter. Landmark: the ski lodge. Rumor: the
+    rogue agent decoded a proof-of-life photo through cigarette smoke.
+
+    Dmitri, a disciplined surgeon of Blackmere, finds a bag of cash in the
+    wine cellar and must trace its owner before the vote.
+
+    Ki (introduction) — In Blackmere, Dmitri inspected a spare key without a
+    trace while the city slept.
+    Shō (development) — Dmitri kept meaning to recover a vial of sedative, and
+    the winter slipped by.
+    Ten (twist) — Then Dmitri saw the spare key anew; it had never been about
+    a cipher book back from a wounded informant.
+    Ketsu (reconciliation) — In the end, Dmitri understood the money, and duty
+    mattered more than a badge.
+
+    Twist: Dmitri had held the spare key behind the fuse box all along, and
+    the rogue agent knew.
+    Threads: thing: a spare key (Ki (introduction))
+
+5. THE BASKETBALL FROM GIFT   (motif: basketball)
+   thriller · gritty · Kishōtenketsu
+
+  * Wanda Okoye, 25, a restless hotel manager. Wants a good name for their
+    spouse. Needs to give up pride and choose a promise. Flaw: reaches for a
+    stolen identity to avoid relief. Secret: lied in a report about the will
+    with the engine running. Rival: the defense contractor.
+  * Oddington · wartime · summer. Landmark: the garden terrace. Rumor: the
+    defense contractor paid a dishonest valet to keep quiet over tea.
+
+    To clear a suspicious twin of a hostage standoff, Wanda, a restless hotel
+    manager, must find a prototype chip by midnight.
+
+    Ki (introduction) — Wanda kept notes on Oddington and told their old
+    teacher nothing of the stolen goods.
+    Shō (development) — Over the summer, Wanda came to know a bank examiner
+    and met their godmother after dark.
+    Ten (twist) — Then Wanda understood that the bank examiner had acted out
+    of need all along.
+    Ketsu (reconciliation) — Wanda forgave the defense contractor at the
+    garden terrace, and the quiet returned against the clock.
+
+    Twist: The bank examiner was working for a cold handler, out of jealousy.
+    Threads: someone: a bank examiner (Shō (development))
+
+```
+
+## 4. Manual test script
+
+1. In each mode press its key twice: help opens, then closes; press another mode's key in the help: you go there. In the Writer, F3 twice.
+2. Roll stories in ghost story, noir and thriller (Wheel, Flavor, or `storywheel sample`) and read them; note lines that sound wrong.
+3. Western / fairy tale stories now meet rural and mythological floor material: look for odd mixes.
+
+## 5. Known issues
+
+- Frames share mystery's skeleton, so the three genres have mystery's rhythm ("{first} named ... at {landmark}") in places; real use will show where it grates.
+- The floor still lets other genres' atoms in about one pick in eight, by design ("a retired spy" in a ghost story).
+- Two tests were seed-fragile and are now more robust (see CHANGELOG).

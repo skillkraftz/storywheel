@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "title",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} in {place}",
+  "A {TITLE_NOUN} for {first}",
+  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
+  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "Run, {first}, Run from {place}",
+  "{place} Protocol, {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "No Exit from {place}, {TITLE_NOUN}"
+ ]
+}

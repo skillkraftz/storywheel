@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a city name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "North",
+  "Harbor",
+  "Kestrel",
+  "Iron",
+  "Glass",
+  "Border",
+  "Black",
+  "Grand",
+  "Vale",
+  "Summit",
+  "Bridge",
+  "Steel",
+  "Crown",
+  "Fort",
+  "Red",
+  "Silver",
+  "Delta",
+  "Ridge",
+  "Granite",
+  "Cobalt",
+  "Lakeside",
+  "Eastern",
+  "Coastal",
+  "Port"
+ ]
+}

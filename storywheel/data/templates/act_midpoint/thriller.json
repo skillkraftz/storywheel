@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "act_midpoint",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{the_thing} turned up {HIDING}, and {the_someone:human} ran.",
+  "{first} learned that {SOMEONE:human,!plural} was working for the {rival}.",
+  "{the_message} proved a trap, and {first} doubted {CLOSE:human}.",
+  "At {landmark}, {first} found {THING:portable}, and a cover story fell apart.",
+  "{the_someone:human} offered {first} {PRIZE:!inner} to walk away.",
+  "{the_disaster:strikes} hit again, and the {rival} blamed {first}.",
+  "The truth about {TOPIC} came out: {the_someone:human} {ACT_THING} {the_thing:!living} all along."
+ ]
+}

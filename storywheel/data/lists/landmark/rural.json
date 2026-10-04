@@ -1,0 +1,135 @@
+{
+ "_note": "Places on and around a farm.",
+ "slot": "landmark",
+ "tags": [
+  "rural"
+ ],
+ "entries": [
+  {
+   "text": "the red barn",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the grain silo",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hay loft",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the creek bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the apple orchard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the farm gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the feed store",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the church supper hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the county fairground",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old well",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the milking shed",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back pasture",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the windbreak",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the crossroads store",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the dirt road",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the schoolhouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the stock pond",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the root cellar",
+   "features": [
+    "built",
+    "indoor",
+    "diggable"
+   ]
+  }
+ ]
+}

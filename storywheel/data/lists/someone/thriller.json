@@ -1,0 +1,266 @@
+{
+ "_note": "People under pressure: witnesses, handlers, hunters and the hunted.",
+ "slot": "someone",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "a nervous analyst",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired spy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a frightened witness",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an ambitious senator",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a hired killer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a double agent",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a tired detective",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a hacker in hiding",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a doctor with a secret",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a driver for hire",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a border guard",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a private security chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a young whistleblower",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hostile courier",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a stranger at the gate",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a wounded informant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an aging diplomat",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a missing scientist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sleeper agent",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a famous journalist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a loyal bodyguard",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a cold handler",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a hospital orderly",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a contractor with debts",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a federal marshal",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a panicked intern",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a silent passenger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a rogue colonel",
+   "features": [
+    "human",
+    "authority",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a grieving husband",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an anonymous caller",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a customs officer",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a pilot with debts",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nervous pharmacist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a shadow in the doorway",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a girl with a camera",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a chauffeur",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bank examiner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a wounded agent",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smiling lobbyist",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a shaken translator",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

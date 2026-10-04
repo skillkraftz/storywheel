@@ -135,8 +135,8 @@ Outline and Kishōtenketsu ship today. User structures go in
 **Ratings** gently down-weight frames and atom pairs that keep getting -.
 
 **Content status**: western, fairy tale, comedy, fantasy, mystery, horror,
-sci-fi and romance are fully written and annotated with features. The other
-six genres (heist, ghost story, coming-of-age, noir, thriller, adventure) run on
+sci-fi, romance, ghost story, noir and thriller are fully written and annotated with features. The other
+three genres (heist, coming-of-age, adventure) run on
 general atoms until their lists are written. Expanding genre content is ongoing work outside this sweep.
 
 
@@ -910,3 +910,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Menus (batch 11): the Writer's right-click menu (`notepad.popup_menu`, rebuilt on every `MenuPopup` by the `sw_popup` autocmd group) holds only Undo, Redo,
   Cut, Copy, Paste, Fix Spelling… (when `spell.bad_word()`), Look Up, Add to Dictionary and More… (the full menu, `sw.menu`, whose height follows the window). Do
   not add a broad `OptionList { height: ... }` rule to a screen's CSS without checking dropdowns: `Select`'s list is an OptionList (`tests/test_dropdowns.py`).
+
+- Batch 12 genres: ghost story (melancholy, grief, memory, a house that remembers; horror's neighbor), noir (money, cynicism, a city that always wins; mystery's and
+  thriller's neighbor) and thriller (pressure, a clock, pursuit; neighbor of mystery, noir and heist) are written like the batch 7/8 genres (profile weight 4, lists for every
+  slot, frames for every beat, names with Markov training sets). Shared floor lists tagged `rural` and `mythological` (eight slots each) are the real neighbors of western,
+  fairy tale, horror and fantasy; `tests/test_fidelity.py` has its exact threshold again. Lessons: an inner prize or verb whose text also exists in another list WITHOUT the
+  `inner` feature makes `tests/test_coherence.py` fail (it compares by text), so give such atoms their own wording; a new neighbor list lowers a genre's own share a little
+  (sci-fi has a 2-point allowance per slot in `test_genre_content.py`).

@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "resolution",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "{place} keeps the memory of {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {CLOSE}",
+  "the file is closed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and never speaks of {TOPIC}",
+  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_THING} {the_thing:!living} and {HABIT_PERSON} {the_someone:human}"
+ ]
+}

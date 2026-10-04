@@ -1,0 +1,169 @@
+{
+ "_note": "Past-tense verbs for thriller that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "chased",
+  "tailed",
+  "tracked",
+  {
+   "text": "threatened",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "warned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "interrogated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "ambushed",
+  {
+   "text": "rescued",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "double-crossed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "blackmailed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "trusted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "hid from",
+  "outran",
+  {
+   "text": "called",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "met",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "sheltered",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "pursued",
+  "followed",
+  {
+   "text": "recruited",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "dropped off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "protected",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "cornered",
+  {
+   "text": "spared",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  }
+ ]
+}

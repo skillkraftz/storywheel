@@ -50,6 +50,7 @@ general, unowned descriptions of story shape.
 - `act_climax/noir`
 - `act_climax/romance`
 - `act_climax/sci-fi`
+- `act_climax/thriller`
 - `act_crisis/comedy`
 - `act_crisis/fantasy`
 - `act_crisis/general`
@@ -59,6 +60,7 @@ general, unowned descriptions of story shape.
 - `act_crisis/noir`
 - `act_crisis/romance`
 - `act_crisis/sci-fi`
+- `act_crisis/thriller`
 - `act_event/comedy`
 - `act_event/fantasy`
 - `act_event/general`
@@ -68,6 +70,7 @@ general, unowned descriptions of story shape.
 - `act_event/noir`
 - `act_event/romance`
 - `act_event/sci-fi`
+- `act_event/thriller`
 - `act_incident/comedy`
 - `act_incident/fantasy`
 - `act_incident/general`
@@ -77,6 +80,7 @@ general, unowned descriptions of story shape.
 - `act_incident/noir`
 - `act_incident/romance`
 - `act_incident/sci-fi`
+- `act_incident/thriller`
 - `act_message/comedy`
 - `act_message/fantasy`
 - `act_message/general`
@@ -86,6 +90,7 @@ general, unowned descriptions of story shape.
 - `act_message/noir`
 - `act_message/romance`
 - `act_message/sci-fi`
+- `act_message/thriller`
 - `act_midpoint/comedy`
 - `act_midpoint/fantasy`
 - `act_midpoint/general`
@@ -95,6 +100,7 @@ general, unowned descriptions of story shape.
 - `act_midpoint/noir`
 - `act_midpoint/romance`
 - `act_midpoint/sci-fi`
+- `act_midpoint/thriller`
 - `act_person/comedy`
 - `act_person/fantasy`
 - `act_person/general`
@@ -104,6 +110,7 @@ general, unowned descriptions of story shape.
 - `act_person/noir`
 - `act_person/romance`
 - `act_person/sci-fi`
+- `act_person/thriller`
 - `act_place/comedy`
 - `act_place/fantasy`
 - `act_place/general`
@@ -113,6 +120,7 @@ general, unowned descriptions of story shape.
 - `act_place/noir`
 - `act_place/romance`
 - `act_place/sci-fi`
+- `act_place/thriller`
 - `act_resolution/comedy`
 - `act_resolution/fantasy`
 - `act_resolution/general`
@@ -122,6 +130,7 @@ general, unowned descriptions of story shape.
 - `act_resolution/noir`
 - `act_resolution/romance`
 - `act_resolution/sci-fi`
+- `act_resolution/thriller`
 - `act_setup/comedy`
 - `act_setup/fantasy`
 - `act_setup/general`
@@ -131,6 +140,7 @@ general, unowned descriptions of story shape.
 - `act_setup/noir`
 - `act_setup/romance`
 - `act_setup/sci-fi`
+- `act_setup/thriller`
 - `act_thing/comedy`
 - `act_thing/fantasy`
 - `act_thing/general`
@@ -140,6 +150,7 @@ general, unowned descriptions of story shape.
 - `act_thing/noir`
 - `act_thing/romance`
 - `act_thing/sci-fi`
+- `act_thing/thriller`
 - `act_trials/comedy`
 - `act_trials/fantasy`
 - `act_trials/general`
@@ -149,6 +160,7 @@ general, unowned descriptions of story shape.
 - `act_trials/noir`
 - `act_trials/romance`
 - `act_trials/sci-fi`
+- `act_trials/thriller`
 - `act_turn/comedy`
 - `act_turn/fantasy`
 - `act_turn/general`
@@ -158,6 +170,7 @@ general, unowned descriptions of story shape.
 - `act_turn/noir`
 - `act_turn/romance`
 - `act_turn/sci-fi`
+- `act_turn/thriller`
 - `climax/comedy`
 - `climax/fantasy`
 - `climax/ghost-story`
@@ -166,6 +179,7 @@ general, unowned descriptions of story shape.
 - `climax/noir`
 - `climax/romance`
 - `climax/sci-fi`
+- `climax/thriller`
 - `deadline/comedy`
 - `deadline/fantasy`
 - `deadline/general`
@@ -175,15 +189,19 @@ general, unowned descriptions of story shape.
 - `deadline/noir`
 - `deadline/romance`
 - `deadline/sci-fi`
+- `deadline/thriller`
 - `disaster/comedy`
 - `disaster/fairy-tale`
 - `disaster/fantasy`
 - `disaster/ghost-story`
 - `disaster/horror`
 - `disaster/mystery`
+- `disaster/mythological`
 - `disaster/noir`
 - `disaster/romance`
+- `disaster/rural`
 - `disaster/sci-fi`
+- `disaster/thriller`
 - `disaster/western`
 - `do_person/comedy`
 - `do_person/fantasy`
@@ -194,6 +212,7 @@ general, unowned descriptions of story shape.
 - `do_person/noir`
 - `do_person/romance`
 - `do_person/sci-fi`
+- `do_person/thriller`
 - `do_thing/comedy`
 - `do_thing/fantasy`
 - `do_thing/general`
@@ -203,6 +222,7 @@ general, unowned descriptions of story shape.
 - `do_thing/noir`
 - `do_thing/romance`
 - `do_thing/sci-fi`
+- `do_thing/thriller`
 - `era/comedy`
 - `era/early-century`
 - `era/fairy-tale`
@@ -215,6 +235,7 @@ general, unowned descriptions of story shape.
 - `era/noir`
 - `era/romance`
 - `era/sci-fi`
+- `era/thriller`
 - `era/western`
 - `escalation/comedy`
 - `escalation/fantasy`
@@ -224,6 +245,7 @@ general, unowned descriptions of story shape.
 - `escalation/noir`
 - `escalation/romance`
 - `escalation/sci-fi`
+- `escalation/thriller`
 - `feeling/general`
 - `first_name/comedy`
 - `first_name/fairy-tale`
@@ -231,9 +253,12 @@ general, unowned descriptions of story shape.
 - `first_name/ghost-story`
 - `first_name/horror`
 - `first_name/mystery`
+- `first_name/mythological`
 - `first_name/noir`
 - `first_name/romance`
+- `first_name/rural`
 - `first_name/sci-fi`
+- `first_name/thriller`
 - `first_name/western`
 - `flaw/comedy`
 - `flaw/fantasy`
@@ -243,6 +268,7 @@ general, unowned descriptions of story shape.
 - `flaw/noir`
 - `flaw/romance`
 - `flaw/sci-fi`
+- `flaw/thriller`
 - `habit_person/comedy`
 - `habit_person/fantasy`
 - `habit_person/general`
@@ -252,6 +278,7 @@ general, unowned descriptions of story shape.
 - `habit_person/noir`
 - `habit_person/romance`
 - `habit_person/sci-fi`
+- `habit_person/thriller`
 - `habit_place/comedy`
 - `habit_place/fantasy`
 - `habit_place/general`
@@ -261,6 +288,7 @@ general, unowned descriptions of story shape.
 - `habit_place/noir`
 - `habit_place/romance`
 - `habit_place/sci-fi`
+- `habit_place/thriller`
 - `habit_thing/comedy`
 - `habit_thing/fantasy`
 - `habit_thing/general`
@@ -270,6 +298,7 @@ general, unowned descriptions of story shape.
 - `habit_thing/noir`
 - `habit_thing/romance`
 - `habit_thing/sci-fi`
+- `habit_thing/thriller`
 - `hiding/comedy`
 - `hiding/fairy-tale`
 - `hiding/fantasy`
@@ -279,6 +308,7 @@ general, unowned descriptions of story shape.
 - `hiding/noir`
 - `hiding/romance`
 - `hiding/sci-fi`
+- `hiding/thriller`
 - `hiding/western`
 - `inciting/comedy`
 - `inciting/fantasy`
@@ -288,6 +318,7 @@ general, unowned descriptions of story shape.
 - `inciting/noir`
 - `inciting/romance`
 - `inciting/sci-fi`
+- `inciting/thriller`
 - `job/comic-trades`
 - `job/fairy-tale-trades`
 - `job/fantasy-trades`
@@ -295,9 +326,12 @@ general, unowned descriptions of story shape.
 - `job/ghost-story-trades`
 - `job/horror-trades`
 - `job/mystery-trades`
+- `job/mythological`
 - `job/noir-trades`
 - `job/romance-trades`
+- `job/rural`
 - `job/sci-fi-trades`
+- `job/thriller-trades`
 - `ketsu/comedy`
 - `ketsu/fantasy`
 - `ketsu/general`
@@ -307,6 +341,7 @@ general, unowned descriptions of story shape.
 - `ketsu/noir`
 - `ketsu/romance`
 - `ketsu/sci-fi`
+- `ketsu/thriller`
 - `ki/comedy`
 - `ki/fantasy`
 - `ki/general`
@@ -316,15 +351,19 @@ general, unowned descriptions of story shape.
 - `ki/noir`
 - `ki/romance`
 - `ki/sci-fi`
+- `ki/thriller`
 - `landmark/comedy`
 - `landmark/fairy-tale`
 - `landmark/fantasy`
 - `landmark/ghost-story`
 - `landmark/horror`
 - `landmark/mystery`
+- `landmark/mythological`
 - `landmark/noir`
 - `landmark/romance`
+- `landmark/rural`
 - `landmark/sci-fi`
+- `landmark/thriller`
 - `landmark/western`
 - `last_name/comedy`
 - `last_name/fairy-tale`
@@ -332,9 +371,12 @@ general, unowned descriptions of story shape.
 - `last_name/ghost-story`
 - `last_name/horror`
 - `last_name/mystery`
+- `last_name/mythological`
 - `last_name/noir`
 - `last_name/romance`
+- `last_name/rural`
 - `last_name/sci-fi`
+- `last_name/thriller`
 - `last_name/western`
 - `loss/fantasy`
 - `manner/comedy`
@@ -346,6 +388,7 @@ general, unowned descriptions of story shape.
 - `manner/noir`
 - `manner/romance`
 - `manner/sci-fi`
+- `manner/thriller`
 - `message/comedy`
 - `message/fairy-tale`
 - `message/fantasy`
@@ -355,6 +398,7 @@ general, unowned descriptions of story shape.
 - `message/noir`
 - `message/romance`
 - `message/sci-fi`
+- `message/thriller`
 - `message/western`
 - `motive/comedy`
 - `motive/fantasy`
@@ -365,6 +409,7 @@ general, unowned descriptions of story shape.
 - `motive/noir`
 - `motive/romance`
 - `motive/sci-fi`
+- `motive/thriller`
 - `need/comedy`
 - `need/fantasy`
 - `need/ghost-story`
@@ -373,6 +418,7 @@ general, unowned descriptions of story shape.
 - `need/noir`
 - `need/romance`
 - `need/sci-fi`
+- `need/thriller`
 - `once/comedy`
 - `once/fantasy`
 - `once/ghost-story`
@@ -381,15 +427,19 @@ general, unowned descriptions of story shape.
 - `once/noir`
 - `once/romance`
 - `once/sci-fi`
+- `once/thriller`
 - `place/comic-towns`
 - `place/fairy-tale-realms`
 - `place/fantasy-realms`
 - `place/ghost-story-villages`
 - `place/horror-towns`
 - `place/mystery-villages`
+- `place/mythological`
 - `place/noir-cities`
 - `place/romance-towns`
+- `place/rural`
 - `place/sci-fi-stations`
+- `place/thriller-cities`
 - `place/western-towns`
 - `place_adj/comedy`
 - `place_adj/fantasy`
@@ -399,6 +449,7 @@ general, unowned descriptions of story shape.
 - `place_adj/noir`
 - `place_adj/romance`
 - `place_adj/sci-fi`
+- `place_adj/thriller`
 - `place_adj/western`
 - `place_end/fairy-tale`
 - `place_end/fantasy`
@@ -410,6 +461,7 @@ general, unowned descriptions of story shape.
 - `place_feature/noir`
 - `place_feature/romance`
 - `place_feature/sci-fi`
+- `place_feature/thriller`
 - `place_feature/western`
 - `place_stem/fairy-tale`
 - `place_stem/fantasy`
@@ -421,6 +473,7 @@ general, unowned descriptions of story shape.
 - `premise/noir`
 - `premise/romance`
 - `premise/sci-fi`
+- `premise/thriller`
 - `prize/comedy`
 - `prize/fantasy`
 - `prize/general`
@@ -430,6 +483,7 @@ general, unowned descriptions of story shape.
 - `prize/noir`
 - `prize/romance`
 - `prize/sci-fi`
+- `prize/thriller`
 - `reaction/comedy`
 - `reaction/fantasy`
 - `reaction/ghost-story`
@@ -438,6 +492,7 @@ general, unowned descriptions of story shape.
 - `reaction/noir`
 - `reaction/romance`
 - `reaction/sci-fi`
+- `reaction/thriller`
 - `resolution/comedy`
 - `resolution/fantasy`
 - `resolution/ghost-story`
@@ -446,6 +501,7 @@ general, unowned descriptions of story shape.
 - `resolution/noir`
 - `resolution/romance`
 - `resolution/sci-fi`
+- `resolution/thriller`
 - `rival/comedy`
 - `rival/fairy-tale`
 - `rival/fantasy`
@@ -455,6 +511,7 @@ general, unowned descriptions of story shape.
 - `rival/noir`
 - `rival/romance`
 - `rival/sci-fi`
+- `rival/thriller`
 - `rival/western`
 - `routine/comedy`
 - `routine/fantasy`
@@ -464,6 +521,7 @@ general, unowned descriptions of story shape.
 - `routine/noir`
 - `routine/romance`
 - `routine/sci-fi`
+- `routine/thriller`
 - `rumor/comedy`
 - `rumor/fantasy`
 - `rumor/ghost-story`
@@ -472,6 +530,7 @@ general, unowned descriptions of story shape.
 - `rumor/noir`
 - `rumor/romance`
 - `rumor/sci-fi`
+- `rumor/thriller`
 - `secret/comedy`
 - `secret/fantasy`
 - `secret/ghost-story`
@@ -480,6 +539,7 @@ general, unowned descriptions of story shape.
 - `secret/noir`
 - `secret/romance`
 - `secret/sci-fi`
+- `secret/thriller`
 - `sho/comedy`
 - `sho/fantasy`
 - `sho/general`
@@ -489,15 +549,19 @@ general, unowned descriptions of story shape.
 - `sho/noir`
 - `sho/romance`
 - `sho/sci-fi`
+- `sho/thriller`
 - `someone/comedy`
 - `someone/fairy-tale`
 - `someone/fantasy`
 - `someone/ghost-story`
 - `someone/horror`
 - `someone/mystery`
+- `someone/mythological`
 - `someone/noir`
 - `someone/romance`
+- `someone/rural`
 - `someone/sci-fi`
+- `someone/thriller`
 - `someone/western`
 - `temptation/comedy`
 - `temptation/fantasy`
@@ -508,6 +572,7 @@ general, unowned descriptions of story shape.
 - `temptation/noir`
 - `temptation/romance`
 - `temptation/sci-fi`
+- `temptation/thriller`
 - `ten/comedy`
 - `ten/fantasy`
 - `ten/general`
@@ -517,15 +582,19 @@ general, unowned descriptions of story shape.
 - `ten/noir`
 - `ten/romance`
 - `ten/sci-fi`
+- `ten/thriller`
 - `thing/comedy`
 - `thing/fairy-tale`
 - `thing/fantasy`
 - `thing/ghost-story`
 - `thing/horror`
 - `thing/mystery`
+- `thing/mythological`
 - `thing/noir`
 - `thing/romance`
+- `thing/rural`
 - `thing/sci-fi`
+- `thing/thriller`
 - `thing/western`
 - `title/comedy`
 - `title/fantasy`
@@ -536,6 +605,7 @@ general, unowned descriptions of story shape.
 - `title/oddity`
 - `title/romance`
 - `title/sci-fi`
+- `title/thriller`
 - `title_adj/comedy`
 - `title_adj/fairy-tale`
 - `title_adj/fantasy`
@@ -546,6 +616,7 @@ general, unowned descriptions of story shape.
 - `title_adj/noir`
 - `title_adj/romance`
 - `title_adj/sci-fi`
+- `title_adj/thriller`
 - `title_adj/western`
 - `title_noun/comedy`
 - `title_noun/fairy-tale`
@@ -557,6 +628,7 @@ general, unowned descriptions of story shape.
 - `title_noun/noir`
 - `title_noun/romance`
 - `title_noun/sci-fi`
+- `title_noun/thriller`
 - `title_noun/western`
 - `trait/comedy-traits`
 - `trait/fantasy-traits`
@@ -566,6 +638,7 @@ general, unowned descriptions of story shape.
 - `trait/noir-traits`
 - `trait/romance-traits`
 - `trait/sci-fi-traits`
+- `trait/thriller-traits`
 - `twist/comedy`
 - `twist/fantasy`
 - `twist/ghost-story`
@@ -574,6 +647,7 @@ general, unowned descriptions of story shape.
 - `twist/noir`
 - `twist/romance`
 - `twist/sci-fi`
+- `twist/thriller`
 - `value/comedy`
 - `value/fantasy`
 - `value/general`
@@ -583,6 +657,7 @@ general, unowned descriptions of story shape.
 - `value/noir`
 - `value/romance`
 - `value/sci-fi`
+- `value/thriller`
 - `vice/comedy`
 - `vice/fantasy`
 - `vice/general`
@@ -592,6 +667,7 @@ general, unowned descriptions of story shape.
 - `vice/noir`
 - `vice/romance`
 - `vice/sci-fi`
+- `vice/thriller`
 - `want/comedy`
 - `want/fantasy`
 - `want/ghost-story`
@@ -600,6 +676,7 @@ general, unowned descriptions of story shape.
 - `want/noir`
 - `want/romance`
 - `want/sci-fi`
+- `want/thriller`
 
 Of these, `job/fairy-tale-trades` includes nine jobs picked from corpora's
 obsolete-occupations list (charcoal burner, town crier, chapman, lamplighter, water

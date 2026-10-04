@@ -1,0 +1,149 @@
+{
+ "_note": "Past-tense verbs for thriller that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "stole",
+  {
+   "text": "copied",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "encrypted",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "destroyed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "traded",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "checked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "charged",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "dropped",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "intercepted",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "cracked",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "buried",
+   "object": [
+    "buryable"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "handed over",
+   "object": [
+    "portable"
+   ]
+  },
+  "swapped",
+  {
+   "text": "packed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "pawned",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "inspected",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

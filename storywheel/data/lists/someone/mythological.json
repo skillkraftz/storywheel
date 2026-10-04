@@ -1,0 +1,100 @@
+{
+ "_note": "Seers, rulers and creatures of the old stories.",
+ "slot": "someone",
+ "tags": [
+  "mythological"
+ ],
+ "entries": [
+  {
+   "text": "a blind oracle",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bronze giant",
+   "features": [
+    "creature",
+    "magic",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a river nymph",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a wandering bard",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sea captain",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a temple priestess",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a proud king",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a shepherd boy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a masked herald",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hooded ferryman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a weaver of fate",
+   "features": [
+    "human",
+    "magic"
+   ]
+  },
+  {
+   "text": "a wounded hero",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a mourning queen",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a one-eyed smith",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

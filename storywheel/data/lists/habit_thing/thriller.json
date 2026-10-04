@@ -1,0 +1,63 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "thriller"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "checks",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps close",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "carries",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "locks away",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "counts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "wipes clean",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

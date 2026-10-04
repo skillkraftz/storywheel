@@ -1,0 +1,106 @@
+{
+ "_note": "People of the country.",
+ "slot": "someone",
+ "tags": [
+  "rural"
+ ],
+ "entries": [
+  {
+   "text": "a weathered farmer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a church deacon",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a quiet widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a cattle buyer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a county sheriff",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a shy schoolteacher",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stubborn neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a traveling peddler",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a field hand",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a granary clerk",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hired girl",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired horseman",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a feed merchant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an old midwife",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a young orphan",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stern grandmother",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

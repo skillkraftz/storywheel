@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "ketsu",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
+  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
+  "{first} laid down {VICE} at {landmark}, and the file was closed.",
+  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
+  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+ ]
+}

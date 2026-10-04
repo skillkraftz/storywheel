@@ -1,0 +1,307 @@
+{
+ "_note": "What people chase, carry and hide: proof, keys and weapons.",
+ "slot": "thing",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "a burner phone",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a flash drive",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a leather briefcase",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a passport in another name",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a hotel key card",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a black notebook",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pistol with no serial",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bag of cash",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a stolen laptop",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a roll of microfilm",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pocket recorder",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bus ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a coded memo",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a fake ID",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a vial of sedative",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a GPS tracker",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a flight manifest",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a surveillance photo",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bank statement",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a security badge",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a folded map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a car key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sealed dossier",
+   "features": [
+    "portable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a prototype chip",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a satellite phone",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a code book",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stack of passports",
+   "features": [
+    "portable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a bulletproof vest",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a case of vials",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a hard drive",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a signed order",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a stolen badge",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a trail of receipts",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a locked suitcase",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a pair of binoculars",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a spare magazine",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a dead man's phone",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a wire recorder",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pager",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a ledger of payments",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  }
+ ]
+}

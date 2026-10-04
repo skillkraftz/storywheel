@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "premise",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or more will die.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and must trace its owner {DEADLINE}.",
+  "After {DISASTER:strikes} in {place}, the {rival} blames {SOMEONE:human,!plural}, and {first}, a {trait} {job}, alone doubts it.",
+  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, with the {rival} one step behind.",
+  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and has until midnight to stop {DISASTER}.",
+  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns that the {rival} wants {TOPIC} silenced.",
+  "To clear {SOMEONE:human,!plural} of {DISASTER:manmade}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
+  "Every exit at {landmark:built} is watched, and {first}, a {trait} {job}, must get {THING:portable} out {DEADLINE}.",
+  "A {trait} {job} named {first} inherits {THING} and a target in {place} that the {rival} wants erased.",
+  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural} alive, and the first the {rival} comes for.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, learns that {DISASTER:manmade} is only the start.",
+  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} knows too much about {TOPIC}."
+ ]
+}

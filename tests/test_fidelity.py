@@ -37,7 +37,7 @@ def test_western_fairy_tale_draws_from_matching_tags():
     for slot in FLAVORED_SLOTS:
         hits, total = seen[slot]
         assert total >= 30, f"{slot}: only {total} picks, test is not measuring much"
-        assert hits / total >= THRESHOLD - 0.02, f"{slot}: {hits / total:.0%} of {total} match"      # (western and fairy tale have no neighbor lists, so the whole floor still spreads over the genres written since; was exact before batch 7)
+        assert hits / total >= THRESHOLD, f"{slot}: {hits / total:.0%} of {total} match"
 
     hits = sum(seen[s][0] for s in FLAVORED_SLOTS)
     total = sum(seen[s][1] for s in FLAVORED_SLOTS)

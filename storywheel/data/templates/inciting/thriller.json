@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "inciting",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}",
+  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was bait",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}",
+  "the {rival} blamed {SOMEONE:human,!plural} for {DISASTER}, and {first} doubted it",
+  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} for help",
+  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind",
+  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it",
+  "{first} found {SOMEONE:human,!plural} at {landmark} {MANNER}, and {THING:portable} nearby",
+  "{DISASTER:manmade} came to light {MANNER}, and the {rival} wanted it buried {DEADLINE}",
+  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and wondered why"
+ ]
+}

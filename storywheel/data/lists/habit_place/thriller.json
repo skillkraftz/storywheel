@@ -1,0 +1,37 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "thriller"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "checks",
+   "subject": [
+    "human"
+   ]
+  },
+  "avoids",
+  "keeps watch over",
+  {
+   "text": "locks up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  "stops at"
+ ]
+}

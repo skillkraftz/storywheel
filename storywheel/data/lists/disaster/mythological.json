@@ -1,0 +1,89 @@
+{
+ "_note": "Wrath of the gods and the sea. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "mythological"
+ ],
+ "entries": [
+  {
+   "text": "a plague from the gods",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a great flood",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failed sacrifice",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a cursed harvest",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a storm at sea",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stolen flame",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fallen star",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a broken oath",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a monster at the gate",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a divine quarrel",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a drought from above",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a shipwreck on the rocks",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  }
+ ]
+}

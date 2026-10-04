@@ -1,13 +1,22 @@
 {
- "_note": "Base-form verbs for noir that take a person.",
+ "_note": "Base-form verbs for thriller that take a person.",
  "slot": "do_person",
  "tags": [
-  "noir"
+  "thriller"
  ],
  "entries": [
-  "tail",
+  "find",
   {
-   "text": "lean hard on",
+   "text": "rescue",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "warn",
    "subject": [
     "human"
    ],
@@ -15,16 +24,6 @@
     "human"
    ]
   },
-  {
-   "text": "clear",
-   "subject": [
-    "human"
-   ],
-   "object": [
-    "human"
-   ]
-  },
-  "hire",
   {
    "text": "protect",
    "object": [
@@ -46,6 +45,35 @@
     "inner"
    ]
   },
+  "outrun",
+  {
+   "text": "expose",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "escort",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  },
+  "confront",
+  {
+   "text": "convince",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
   {
    "text": "level with",
    "subject": [
@@ -54,6 +82,12 @@
    "object": [
     "human"
    ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
    "features": [
     "inner"
    ]
@@ -68,22 +102,18 @@
    ]
   },
   {
-   "text": "buy off",
-   "subject": [
-    "human"
-   ],
+   "text": "confide in",
    "object": [
-    "human"
+    "!threatening"
+   ],
+   "features": [
+    "inner"
    ]
   },
-  "find",
   {
-   "text": "warn",
-   "subject": [
-    "human"
-   ],
-   "object": [
-    "human"
+   "text": "reconcile with",
+   "features": [
+    "inner"
    ]
   }
  ]

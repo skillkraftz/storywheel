@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "want",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{PRIZE:!inner} {DEADLINE}",
+  "{PRIZE:!inner} for {CLOSE:human}",
+  "{THING:portable,!living} from {landmark}",
+  "{THING:valuable,!living} and {PRIZE:social,!inner}",
+  "{THING:valuable,!living} at {landmark}",
+  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
+  "{PRIZE:social,!inner} and a way out of {place}",
+  "{PRIZE:material,!inner} {DEADLINE}"
+ ]
+}

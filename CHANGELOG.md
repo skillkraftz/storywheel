@@ -7,6 +7,16 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
 ### Part A: help toggle
 - In a mode's help the key of that mode (or ?) closes it again; the key of another mode closes the help and goes there. In the Writer, F3 toggles the help float.
 
+### Part B: ghost story, noir, thriller
+- Three genres written like mystery and horror (30 atom lists and 27 frame sets each, names that train the Markov maker): **ghost story** (grief, memory, unfinished business, a
+  house that remembers; melancholy more than dread), **noir** (cynicism, money, moral compromise, a city that always wins) and **thriller** (pressure, a clock, pursuit,
+  someone who knows too much). Profile weight 4; neighbors in `genres.json` (ghost story: horror, mystery, historical, rural; noir: mystery, thriller, urban, historical;
+  thriller: mystery, noir, heist, urban). The genre fit for them is now worked out from their own lists, not only their subject domains.
+- Shared `rural` and `mythological` floor lists (first and last names, jobs, places, landmarks, things, someone, disasters) give western, fairy tale, horror and fantasy real
+  neighbors; the western / fairy tale fidelity test has its exact threshold back.
+- Tests: the three genres are in `GENRES`, with blends ghost story / romance, ghost story / comedy, noir / western and thriller / sci-fi. Two seed-fragile tests were made
+  robust (a first name inside a place name; one slot that runs dry about once in 1,600 stories) and sci-fi has a 2-point per-slot allowance.
+
 ## 0.11.0 — Batch 11: help and polish
 
 ### Part A: footer and switching

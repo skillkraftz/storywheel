@@ -1,0 +1,34 @@
+{
+ "_note": "Second half of a city name.",
+ "slot": "place_feature",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "Station",
+  "Heights",
+  "Crossing",
+  "City",
+  "Junction",
+  "Harbor",
+  "Falls",
+  "Point",
+  "Bay",
+  "Park",
+  "Gate",
+  "Valley",
+  "Port",
+  "Bridge",
+  "Terminal",
+  "Springs",
+  "Square",
+  "Ridge",
+  "Heath",
+  "Ferry",
+  "Landing",
+  "Hills",
+  "Basin",
+  "Mills",
+  "Fields"
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "_note": "How things get done under pressure.",
+ "slot": "manner",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "under surveillance",
+  "at full speed",
+  "in the dark",
+  "by back roads",
+  "without a trace",
+  "on a stolen phone",
+  "before dawn",
+  "in a rented car",
+  "with the engine running",
+  "by night train",
+  "with the lights off",
+  {
+   "text": "in a whisper",
+   "features": [
+    "speech"
+   ]
+  },
+  "through a crowd",
+  {
+   "text": "with a gun drawn",
+   "features": [
+    "carrying"
+   ]
+  },
+  "at the last second",
+  "on a cold trail",
+  "in a stolen van",
+  "against the clock"
+ ]
+}

@@ -1,0 +1,206 @@
+{
+ "_note": "Attacks and crises with a clock. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "a bridge bombing",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a poisoned water supply",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a data leak",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "an assassination",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hijacked train",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hostage standoff",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lab explosion",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a power grid failure",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an embassy breach",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a kidnapped scientist",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a sabotaged flight",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blackmailed senator",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a stolen prototype",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a witness murder",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hacked election",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a chemical spill",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hotel siege",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a vanished agent",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a car bomb",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an airport shutdown",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a leaked dossier",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a coup in the ministry",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a bank collapse",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a train derailment",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a missing shipment",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a staged accident",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a dockside ambush",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a quiet purge",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a stolen identity",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rigged auction",
+   "features": [
+    "manmade"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "_note": "Work on a farm or in a farm town. Singular, no article.",
+ "slot": "job",
+ "tags": [
+  "rural"
+ ],
+ "entries": [
+  "farmhand",
+  "dairy farmer",
+  "shepherd",
+  "blacksmith",
+  "beekeeper",
+  "miller",
+  "orchard keeper",
+  "hay baler",
+  "country veterinarian",
+  "feed store clerk",
+  "wheelwright",
+  "fence builder",
+  "grain buyer",
+  "sheep shearer",
+  "country doctor",
+  "tractor mechanic",
+  "egg seller",
+  "postmistress",
+  "cheesemaker",
+  "county agent",
+  "hop picker",
+  "horse trainer",
+  "well digger",
+  "barn builder",
+  "thresher"
+ ]
+}

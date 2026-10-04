@@ -1,0 +1,60 @@
+{
+ "_note": "Past-tense verbs for thriller that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "witnessed",
+  "predicted",
+  {
+   "text": "investigated",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered up",
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "survived",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "caused",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "prevented",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "exposed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "manmade"
+   ]
+  },
+  "ignored",
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

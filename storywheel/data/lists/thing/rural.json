@@ -1,0 +1,111 @@
+{
+ "_note": "Tools and keepsakes of country life.",
+ "slot": "thing",
+ "tags": [
+  "rural"
+ ],
+ "entries": [
+  {
+   "text": "a pitchfork",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a milk pail",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bag of seed",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rusty plow blade",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a bundle of hay",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a cowbell",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a jar of preserves",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a hand scythe",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a barn lantern",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a barn key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a patchwork quilt",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a crop ledger",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a horseshoe",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a basket of eggs",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a fence post",
+   "features": [
+    "portable"
+   ]
+  }
+ ]
+}

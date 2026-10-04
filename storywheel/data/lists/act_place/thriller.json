@@ -1,0 +1,118 @@
+{
+ "_note": "Past-tense verbs for thriller that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "scouted",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "infiltrated",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "staked out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "fled",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "raided",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "sealed off",
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "slipped into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "crossed",
+   "subject": [
+    "human"
+   ]
+  },
+  "searched",
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "escaped from",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "watched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "stopped at",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

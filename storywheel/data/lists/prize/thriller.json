@@ -1,0 +1,93 @@
+{
+ "_note": "What people want in a thriller.",
+ "slot": "prize",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "the evidence",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "safe passage",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the proof",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the flash drive",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a new identity",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the ransom",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "justice",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the prototype",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a witness's testimony",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "freedom",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a clean record",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the case file",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "an end to running",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

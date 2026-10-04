@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "twist",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
+  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
+  "{the_message:physical} was sent by {CLOSE:human}, who wanted {first} off the trail.",
+  "{the_disaster:manmade} was staged {MANNER} to bury {TOPIC}.",
+  "{the_thing:!living} was a decoy; {THING:portable} lay {HIDING}, and the {rival} knew.",
+  "The safe house at {landmark:built} was the trap, and {the_someone:human} had built it.",
+  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
+  "The witness was never gone: {the_someone:human,!plural} had staged the hiding {MANNER}.",
+  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
+  "{the_someone:human} was working for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
+  "The {rival} had been {first}'s handler all along, out of {MOTIVE}.",
+  "{SOMEONE:human,!plural} had been watching from {landmark:built} {MANNER}.",
+  "It was never about {the_disaster:manmade}; it was about {MOTIVE}.",
+  "Everyone wanted it, but only {the_someone:human} had {the_thing:portable}."
+ ]
+}

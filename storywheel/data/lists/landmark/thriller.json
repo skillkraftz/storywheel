@@ -1,0 +1,312 @@
+{
+ "_note": "Places where things go wrong: transit, safe houses, glass and concrete.",
+ "slot": "landmark",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "the safe house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airport terminal",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the parking structure",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the border checkpoint",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hotel lobby",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the rooftop helipad",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the freight yard",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the embassy annex",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the data center",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ferry terminal",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the mountain pass",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the motorway bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cargo dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the abandoned hospital",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the observation deck",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the subway tunnel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the power station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bank vault",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the customs hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lakeside cabin",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the radio tower",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the back stairwell",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the control room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the highway diner",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the harbor crane",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the conference hall",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the train platform",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sealed lab",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the empty stadium",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the loading bay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the forest road",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the motel parking lot",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ministry basement",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the night bus station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ski lodge",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the car ferry",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the quarry",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old lighthouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the courthouse corridor",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pharmacy back room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the river tunnel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airfield hangar",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the garden terrace",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  }
+ ]
+}

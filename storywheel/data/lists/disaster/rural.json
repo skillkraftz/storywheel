@@ -1,0 +1,90 @@
+{
+ "_note": "Trouble that comes to farms. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "rural"
+ ],
+ "entries": [
+  {
+   "text": "a failed harvest",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a barn fire",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hard frost",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a flash flood",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a locust plague",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a drought summer",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a fever in the stable",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bank foreclosure",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lightning strike",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blizzard",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an infested crop",
+   "features": [
+    "natural"
+   ]
+  },
+  {
+   "text": "a well gone dry",
+   "features": [
+    "natural"
+   ]
+  }
+ ]
+}

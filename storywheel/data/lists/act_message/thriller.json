@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for thriller that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "decrypted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "intercepted",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "traced",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "sent",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "faxed",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

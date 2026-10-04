@@ -1,0 +1,119 @@
+{
+ "_note": "Relics and offerings.",
+ "slot": "thing",
+ "tags": [
+  "mythological"
+ ],
+ "entries": [
+  {
+   "text": "a bronze shield",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a laurel crown",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a clay amphora",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a golden apple",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a ball of red thread",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a winged sandal",
+   "features": [
+    "portable",
+    "buryable",
+    "magic"
+   ]
+  },
+  {
+   "text": "a lyre string",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a sacred flame",
+   "features": [
+    "portable",
+    "magic"
+   ]
+  },
+  {
+   "text": "an olive branch",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a marble bust",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a silver bow",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a woven shroud",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a prophecy scroll",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "magic"
+   ]
+  },
+  {
+   "text": "a seashell horn",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a cup of wine",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

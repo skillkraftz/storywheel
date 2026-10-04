@@ -1,0 +1,66 @@
+{
+ "_note": "Base-form verbs for thriller that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "find",
+  {
+   "text": "deliver",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  "steal",
+  {
+   "text": "decode",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "copy",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "recover",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "disarm",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "hide",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "trace",
+   "object": [
+    "!living"
+   ]
+  },
+  "return",
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  }
+ ]
+}

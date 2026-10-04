@@ -1,0 +1,118 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  {
+   "text": "intelligence chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "senator",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "private security boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rogue agent",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "federal prosecutor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "defense contractor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "corrupt colonel",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "hired killer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "ambitious deputy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "press baron",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "minister of defense",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "station chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "cartel lawyer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "campaign manager",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "bank president",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "hunter in the dark",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  }
+ ]
+}

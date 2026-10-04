@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for thriller.",
+ "slot": "reaction",
+ "tags": [
+  "thriller"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
+  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
+  "{ACT_THING} {THING} {MANNER} and wrote down {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
+  "questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}",
+  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
+  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
+  "kept the lead {HIDING} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+ ]
+}

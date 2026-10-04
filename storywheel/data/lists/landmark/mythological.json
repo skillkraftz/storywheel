@@ -1,0 +1,113 @@
+{
+ "_note": "Sacred and storied places.",
+ "slot": "landmark",
+ "tags": [
+  "mythological"
+ ],
+ "entries": [
+  {
+   "text": "the marble temple",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the oracle's cave",
+   "features": [
+    "natural",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the olive grove",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the standing stones",
+   "features": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sacred spring",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the harbor of ships",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the amphitheater",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the labyrinth gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the river ford",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the laurel grove",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the altar stone",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sea cliff",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the mountain shrine",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the vineyard terrace",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the bronze gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  }
+ ]
+}
