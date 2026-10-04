@@ -119,6 +119,7 @@ class MyWords:
         for key in ("seen", "known"):
             self.data.setdefault(key, [])
         self.data.setdefault("learning", [])
+        self.data.setdefault("used", {})                 # word -> where a manuscript used it (marked Known automatically)
 
     def save(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -152,15 +153,29 @@ class MyWords:
                 have.add(w.lower())
         self.save()
 
-    def mark_known(self, word):
+    def mark_known(self, word, where=None):
+        """Known: never offered again and off the Learning list. `where` notes the manuscript that used it (set when it was marked
+        automatically): {universe, story, scene, line, text}."""
         self.data["learning"] = [e for e in self.data["learning"] if e["word"].lower() != word.lower()]
         if word.lower() not in self.known:
             self.data["known"].append(word.lower())
+        if where:
+            self.data["used"][word.lower()] = where
         self.save()
+
+    def used_where(self, word):
+        return self.data["used"].get(word.lower())
+
+    def known_entries(self):
+        """[{word, where}] for every Known word, those a manuscript used first, then the rest A to Z."""
+        used = self.data["used"]
+        words = sorted(self.known, key=lambda w: (w not in used, w))
+        return [{"word": w, "where": used.get(w)} for w in words]
 
     def mark_learning(self, word, pos="", definition="", note=""):
         """Add to your list (a word already there is left as it is). Returns True if it was new."""
         self.data["known"] = [w for w in self.data["known"] if w.lower() != word.lower()]
+        self.data["used"].pop(word.lower(), None)
         if word.lower() in self.learning_words():
             self.save()
             return False

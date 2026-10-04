@@ -8,6 +8,16 @@ Part A: Story words counts names correctly
   "the silver birch grove's edge"). Single words are counted only for personal names (a character with a proper name: its first or last name), never for
   descriptions, so "wolf in a waistcoat" no longer shows 33 uses for every "in", and "silver birch grove" is found though it is lowercase.
 
+Part B: Words mode
+- Tab order: Lookup, **Suggestions**, Vocabulary, Story words, Genre words. The Overused tab is gone: its frequent words and close repeats are the
+  **Often used** view of Story words (the second box), with where each is and Enter to open the Writer there.
+- New **Suggestions** tab with three lists and Genre words' row actions: *For this story* (high genre-fit words not yet in the manuscript, by part of
+  speech), *For your characters and places* (words the dictionary relates to characters' jobs and things, places and groups: synonyms, broader and
+  narrower words, parts, related forms) and *Fresh alternatives* (the most overused words, each with genre-fitting replacements). Worked out in the
+  background (`suggest.py`).
+- Vocabulary: a word that appears in any manuscript (any form: ran for run) is marked **Known** automatically, leaves the lists and keeps a note of where
+  it was used (`wordsused.py`); a new view *✓ Known* lists those words with the place.
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,

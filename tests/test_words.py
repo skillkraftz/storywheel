@@ -526,32 +526,34 @@ def test_old_word_banks_are_in_my_words_when_words_opens(index, world):
 def test_the_old_tabs_are_gone(index, world):
     async def script(app, pilot):
         return [p.id for p in app.screen.query(TabPane)]
-    assert run(script, {}) == ["t-lookup", "t-vocab", "t-genre", "t-story", "t-over"]
+    assert run(script, {}) == ["t-lookup", "t-suggest", "t-vocab", "t-story", "t-genre"]
 
 
 # --- Overused ------------------------------------------------------------------------------------------------------------------------
 
-def test_overused_lists_words_and_places_and_opens_the_writer_there(index, world):
+def test_often_used_words_are_a_section_of_story_words_and_open_the_writer_there(index, world):
     u, s = world
     async def script(app, pilot):
-        await show_tab(app, pilot, "t-over")
-        await pilot.click("#analyze")
+        await show_tab(app, pilot, "t-story")
         await pilot.pause()
-        over = options(app, "over")
+        app.screen.query_one("#swview", Select).value = "often"
+        await pilot.pause()
+        over = options(app, "swoften")
         text = flat(screen_text(app))
         ids = [i for i, _t in over]
-        lst = app.screen.query_one("#over", OptionList)
+        lst = app.screen.query_one("#swoften", OptionList)
+        lst.focus()
         lst.highlighted = ids.index("f:0")
         await pilot.press("enter")
         await pilot.pause()
-        occ = options(app, "occ")
-        app.screen.query_one("#occ", OptionList).focus()
-        app.screen.query_one("#occ", OptionList).highlighted = len(occ) - 1
+        occ = options(app, "swwhere")
+        app.screen.query_one("#swwhere", OptionList).focus()
+        app.screen.query_one("#swwhere", OptionList).highlighted = len(occ) - 1
         await pilot.press("enter")
         await pilot.pause()
-        return text, occ, app.next
-    text, occ, nxt = run(script, {"universe": "thornwood", "story": s.slug})
-    assert "Most frequent words" in text and "lantern" in text and "×4" in text and "Repeated close together" in text
+        return text, occ, app.next, app.screen.query_one("#swlist").display
+    text, occ, nxt, names_shown = run(script, {"universe": "thornwood", "story": s.slug})
+    assert "Most frequent words" in text and "lantern" in text and "×4" in text and "Repeated close together" in text and not names_shown
     assert len(occ) == 4 and "line 1" in occ[0][1] and "line 4" in occ[-1][1]
     assert nxt[0] == "writer" and nxt[1]["scene"]["line"] == 4 and nxt[1]["scene"]["path"].endswith("manuscript.md")
 
@@ -700,7 +702,7 @@ def test_there_is_no_my_words_tab_and_every_tab_says_in_one_sentence_what_it_is_
     async def script(app, pilot):
         panes = {p.id: str(p._title) if hasattr(p, "_title") else "" for p in app.screen.query(TabPane)}
         texts = {}
-        for tab in ("t-lookup", "t-vocab", "t-genre", "t-story", "t-over"):
+        for tab in ("t-lookup", "t-suggest", "t-vocab", "t-story", "t-genre"):
             await show_tab(app, pilot, tab)
             texts[tab] = flat(screen_text(app))
         return panes, texts
@@ -708,7 +710,7 @@ def test_there_is_no_my_words_tab_and_every_tab_says_in_one_sentence_what_it_is_
     assert "t-mine" not in panes and "t-uwords" not in panes
     for tab, sentence in words_app.TAB_HELP.items():
         assert sentence.count(". ") == 0 and sentence.endswith(".")
-        key = {"lookup": "t-lookup", "vocab": "t-vocab", "genre": "t-genre", "story": "t-story", "over": "t-over"}[tab]
+        key = {"lookup": "t-lookup", "suggest": "t-suggest", "vocab": "t-vocab", "genre": "t-genre", "story": "t-story"}[tab]
         assert sentence[:60] in texts[key]
         assert sentence.split(":")[0] in words_app.HELP or sentence[:25] in words_app.HELP
 
@@ -1030,3 +1032,121 @@ def test_story_words_keep_the_generator_list_section_at_the_bottom(index, world)
         return rows, [t for i, t in options(app, "uwords") if i]
     rows, after = run(script, {"universe": "thornwood", "story": s.slug})
     assert any("hound" in r for r in rows) and not any("hound" in r for r in after)
+
+
+# --- batch 9: Suggestions, Known words, tab order ----------------------------------------------------------------------------------------
+
+async def open_suggest(app, pilot):
+    await show_tab(app, pilot, "t-suggest")
+    await app.workers.wait_for_complete()
+    await pilot.pause()
+    await app.workers.wait_for_complete()
+    await pilot.pause()
+    await pilot.pause()
+
+
+def srows(app):
+    v = app.screen.query_one("#sgvlist", VirtualList)
+    return v._fetch(0, 200)
+
+
+def test_tabs_are_in_the_new_order(index, world):
+    async def script(app, pilot):
+        return [p.id for p in app.screen.query(TabPane)]
+    assert run(script, {}) == ["t-lookup", "t-suggest", "t-vocab", "t-story", "t-genre"]
+
+
+def test_suggestions_for_this_story_fit_the_genres_and_skip_words_already_written(index, fit, world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("The wolf ran home. A goose honked.\n", encoding="utf-8")
+    async def script(app, pilot):
+        await open_suggest(app, pilot)
+        scr = app.screen
+        verbs = None
+        scr.query_one("#sgpos", Select).value = "v"
+        await pilot.pause()
+        await app.workers.wait_for_complete()
+        await pilot.pause()
+        verbs = [r["word"] for r in srows(app)]
+        scr.query_one("#sgpos", Select).value = "n"
+        await pilot.pause()
+        await app.workers.wait_for_complete()
+        await pilot.pause()
+        return verbs, [r["word"] for r in srows(app)], flat(str(scr.query_one("#sgnote").content))
+    verbs, nouns, note = run(script, {"universe": "thornwood", "story": s.slug})
+    assert "run" not in verbs                                                  # "ran" is in the manuscript
+    assert "wolf" not in nouns and "goose" not in nouns                          # both are in the manuscript
+    assert "western" in note and "The Last Clause" in note
+
+
+def test_suggestions_list_words_related_to_characters_and_places_and_the_same_row_actions_work(index, fit, world):
+    u, s = world
+    u.new_entity("thing", "the dog")
+    async def script(app, pilot):
+        await open_suggest(app, pilot)
+        scr = app.screen
+        scr.query_one("#sgkind", Select).value = "entities"
+        await pilot.pause()
+        await app.workers.wait_for_complete()
+        await pilot.pause()
+        rows = srows(app)
+        v = scr.query_one("#sgvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("l")
+        await pilot.pause()
+        learning = learn.MyWords().learning_words()
+        await pilot.press("enter")
+        await pilot.pause()
+        return rows, word, learning, scr.query_one(TabbedContent).active, scr.history
+    rows, word, learning, tab, history = run(script, {"universe": "thornwood", "story": s.slug})
+    assert rows and all(r["note"] for r in rows) and word in learning and tab == "t-lookup" and history == [word]
+
+
+def test_fresh_alternatives_follow_the_overused_words(index, fit, world):
+    u, s = world
+    (s.manuscript_dir / "manuscript.md").write_text("The man ran. He ran far. He ran and ran, and ran home.\n", encoding="utf-8")
+    async def script(app, pilot):
+        await open_suggest(app, pilot)
+        scr = app.screen
+        scr.query_one("#sgkind", Select).value = "fresh"
+        await pilot.pause()
+        await app.workers.wait_for_complete()
+        await pilot.pause()
+        return srows(app)
+    rows = run(script, {"universe": "thornwood", "story": s.slug})
+    assert rows[0]["head"] and rows[0]["word"] in ("ran", "run") and {"sprint", "dash"} & {r["word"] for r in rows[1:]}
+
+
+def test_a_new_batch_skips_words_the_manuscripts_use_and_marks_them_known_with_where(index, world, monkeypatch):
+    u, s = world
+    monkeypatch.setattr(learn, "batch", lambda n, *a, exclude=(), **k: [
+        {"word": w, "pos": "noun", "definition": "d", "zipf": 3, "subject": ""} for w in ["lantern", "w1", "w2"] if w not in {x.lower() for x in exclude}][:n])
+    async def script(app, pilot):
+        await show_tab(app, pilot, "t-vocab")
+        await pilot.click("#newbatch")
+        await pilot.pause()
+        shown = [row_word(t) for _i, t in learn_rows(app)]
+        status = flat(str(app.screen.query_one("#status").content))
+        app.screen.query_one("#vview", Select).value = "known"
+        await pilot.pause()
+        known = [t for i, t in options(app, "knownlist") if i]
+        return shown, status, known
+    shown, status, known = run(script, {"universe": "thornwood", "story": s.slug})
+    assert shown == ["w1", "w2"] and "lantern" in status and "The Last Clause" in status and "marked ✓ Known" in status
+    assert any("lantern" in k and "used in The Last Clause (Thornwood)" in k and "line 1" in k for k in known)
+    assert learn.MyWords().used_where("lantern")["line"] == 1
+
+
+def test_a_learning_word_that_a_manuscript_uses_becomes_known_when_words_opens(index, world):
+    u, s = world
+    my = learn.MyWords()
+    my.mark_learning("wind", "noun", "moving air")
+    my.mark_learning("kennel", "noun", "a shelter")
+    async def script(app, pilot):
+        await show_learning(app, pilot)
+        return [t for i, t in options(app, "mine") if i], flat(str(app.screen.query_one("#status").content))
+    rows, status = run(script, {"universe": "thornwood", "story": s.slug})
+    assert len(rows) == 1 and "kennel" in rows[0] and "wind" in status and "Known" in status
+    assert "wind" in learn.MyWords().known and "wind" not in learn.MyWords().learning_words()

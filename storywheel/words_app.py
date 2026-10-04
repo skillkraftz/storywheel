@@ -2,13 +2,15 @@
 
     Lookup       meanings, every similar word, every opposite, wider and narrower words, parts, related forms; Enter or a click on a
                  word looks it up; back and forward remember where you were
+    Suggestions  words that fit the story's genres and are not used yet; words the dictionary relates to your characters and places; fresh
+                 alternatives for the most overused words
     Vocabulary   words worth learning (not everyday, not obscure), a fresh batch at a time; mark them Known or Learning (★); the ★ words
                  are a filter of the same tab, with flashcards; type a word of your own to learn
     Genre words  every noun, verb, adjective and adverb of the dictionary, ranked by fit to a genre (nothing hidden), filtered by commonness
                  and search; look up, copy, use in the Writer, mark to learn; below them the Wheel's own short lists (names, jobs, places, things)
     Story words  the names and odd words your story really uses, with counts and where; look-alikes flagged; add to the spelling list,
-                 make an entity, rename everywhere; below it, the words you put on this universe's generator lists
-    Overused     a story's most frequent words and words repeated close together, and where they are
+                 make an entity, rename everywhere; its often-used words and close repeats; below it, the words you put on this universe's
+                 generator lists
 
 Opened from the Writer (F5), Words carries the word under the cursor; "Use in Writer" goes back and replaces it with the one you picked,
 in the same form (running -> sprinting).
@@ -21,7 +23,7 @@ from textual.screen import ModalScreen, Screen
 from textual.widgets import Button, Footer, Input, Label, OptionList, Select, Static, TabbedContent, TabPane
 from textual.widgets.option_list import Option
 
-from . import dictionary, genrefit, genrewords, inflect, learn, overused, storywords, vault, wordbank, wordlists
+from . import dictionary, genrefit, genrewords, inflect, learn, overused, storywords, suggest, vault, wordbank, wordlists, wordsused
 from . import appearance, navigation, tools
 from .footer import FitFooter
 from .keptscreen import KeptScreen
@@ -34,8 +36,8 @@ TAB_HELP = {
     "lookup": "Look any word up: meanings, similar and opposite words, and use one in the Writer.",
     "vocab": "Words worth learning, a fresh batch at a time: mark them ★ Learning or ✓ Known, practise the ★ ones with flashcards, or type a word of your own.",
     "genre": "Long lists of nouns, verbs, adjectives and adverbs, ranked by how well they fit a genre, to find the word you want (and a few of the Wheel's own lists, to borrow from).",
-    "story": "The names and odd words your story really uses, with counts and where, and look-alikes flagged, so you can fix a spelling, teach the spellchecker, or make a name an entity.",
-    "over": "Your story's most frequent words and words repeated close together, and where they are.",
+    "story": "The names and odd words your story really uses, with counts and where, look-alikes flagged, and its most often used words, so you can fix a spelling, teach the spellchecker, make a name an entity, or vary a word.",
+    "suggest": "Words to try in your story: ones that fit its genres and are not used yet, ones the dictionary relates to your characters and places, and fresh alternatives for what you overuse.",
 }
 
 HELP = f"""\
@@ -48,12 +50,21 @@ HELP = f"""\
   [b]w[/b]  Use in this universe's stories: pick the slot (job, thing, place...) and the Wheel and Builder will use the word
   [b]u[/b]  Use in Writer: go back to the Writer and replace the word you were on (only when you came from the Writer)
 
+[b]Suggestions[/b]  {TAB_HELP["suggest"]}
+  The first box picks the list. [b]For this story[/b]: words that fit the story's genres (ranked as in Genre words) and its manuscript does not use
+  yet, in the part of speech of the second box. [b]For your characters and places[/b]: words the dictionary relates (synonyms, broader and
+  narrower words, parts, related forms) to your characters' jobs and the things, places and groups of the universe. [b]Fresh alternatives[/b]:
+  your story's most overused words, each followed by replacements, the ones that fit the genres first. The actions are Genre words':
+  [b]Enter[/b] looks a word up, [b]l[/b] marks it ★ Learning, [b]c[/b] copies, [b]u[/b] uses it in the Writer, [b]w[/b] puts it on a generator list.
+
 [b]Vocabulary[/b]  {TAB_HELP["vocab"]}
   Pick how rare, the part of speech and the subject, then [b]New batch[/b] ([b]Start over[/b] forgets what you have seen). The first box
   switches between [b]New words[/b] and [b]★ Learning[/b] (the words you are learning). [b]Enter[/b] opens the full entry in Lookup;
   [b]l[/b] marks ★ Learning, [b]k[/b] ✓ Known (never offered again), [b]d[/b] removes a ★ word, [b]f[/b] flashcards (the word first;
   space shows the meaning), [b]w[/b] Use in this universe's stories. Type a word in the box and press Enter to learn it.
-  Difficulty: uncommon (like "lantern"), rare (like "serendipity"), very rare (like "gallivant").
+  Difficulty: uncommon (like "lantern"), rare (like "serendipity"), very rare (like "gallivant"). A word that appears in any manuscript
+  of any universe is a word you know: it is marked ✓ Known automatically, leaves the lists, and the first place it was used is noted
+  (the [b]✓ Known[/b] view of the first box shows them).
 
 [b]Genre words[/b]  {TAB_HELP["genre"]}
   The first box picks [b]Nouns, Verbs, Adjectives or Adverbs[/b] (every word of that kind in the dictionary, with a one-line meaning) or one
@@ -69,9 +80,8 @@ HELP = f"""\
   Pick a story (or the whole universe) and it is read at once. ◆ is a name from your universe, ? a word the dictionary does not know,
   ≈ a look-alike ("Glasswater" / "Glass Water", "Stacy" / "Stacie"). [b]Enter[/b] shows where each is; Enter on a place opens the Writer
   there. [b]s[/b] adds the word to the spelling list, [b]e[/b] makes it a character, place or thing, [b]r[/b] renames it everywhere (with a
-  preview), [b]c[/b] copies it. The list at the bottom holds the words you put on this universe's generator lists ([b]d[/b] removes one).
-
-[b]Overused[/b]  {TAB_HELP["over"]}  Enter on a place opens the Writer there.
+  preview), [b]c[/b] copies it. The second box switches to [b]Often used[/b]: the story's most frequent words (everyday words left out) and words
+  repeated close together, with where they are; Enter on a place opens the Writer there. The list at the bottom holds the words you put on this universe's generator lists ([b]d[/b] removes one).
 
 [b]q[/b] goes back to where you were; [b]Q[/b] Quit storywheel (asks first); F1-F5 are the modes. Meanings: Open English WordNet (CC BY 4.0); similar words also the Moby Thesaurus;
 word frequencies: wordfreq (data CC BY-SA 4.0).
@@ -293,7 +303,12 @@ class WordsScreen(KeptScreen, Screen):
     WordsScreen #vview { width: 18; }
     WordsScreen #gwcat { width: 40; }
     WordsScreen #gwband, WordsScreen #gwsort { width: 22; }
-    WordsScreen #gwvlist { height: 1fr; }
+    WordsScreen #gwvlist, WordsScreen #sgvlist { height: 1fr; }
+    WordsScreen #sgkind { width: 36; }
+    WordsScreen #sgpos { width: 18; }
+    WordsScreen #swview { width: 24; }
+    WordsScreen #swoften { height: 1fr; }
+    WordsScreen #knownlist { height: 1fr; border: none; scrollbar-gutter: stable; }
     WordsScreen #gwlist { height: 1fr; }
     WordsScreen #gwgenrelist { width: 1fr; padding: 0 1; }
     WordsScreen #swlist, WordsScreen #swwhere { height: 1fr; }
@@ -313,7 +328,9 @@ class WordsScreen(KeptScreen, Screen):
         self.my = learn.MyWords()
         self.batch = []
         self.subject_options = [("Any subject", "any")]
-        self.over = None
+        self.often = None                                        # overused.report of the story read in Story words
+        self.sg_rows, self.sg_token, self.sg_started = [], 0, False
+        self.known_rows = []
         self.vview = "new"                                       # Vocabulary shows new words or the ★ Learning ones
         self.mine = []
         self.gw_genres = None                                    # genres Genre words ranks by (None: not set yet; [] means any genre)
@@ -347,10 +364,25 @@ class WordsScreen(KeptScreen, Screen):
                     yield Button("Use in this universe's stories", id="lookuplist")
                     yield Button("Copy", id="copy")
                 yield Static("", id="usenote", classes="note", markup=False)
+            with TabPane("Suggestions", id="t-suggest"):
+                yield Static(TAB_HELP["suggest"], classes="note", markup=False)
+                with Horizontal(classes="bar"):
+                    yield Select([("For this story", "story"), ("For your characters and places", "entities"), ("Fresh alternatives", "fresh")],
+                                 value="story", id="sgkind", allow_blank=False)
+                    yield Select([(l, v) for l, v in wordlists.POS_LABELS], value="a", id="sgpos", allow_blank=False)
+                    yield Button("Refresh", id="sgrefresh")
+                yield Static("", id="sgnote", classes="note", markup=False)
+                yield VirtualList(id="sgvlist")
+                with Horizontal(id="sgtools", classes="bar"):
+                    yield Button("Look up", id="sglookup")
+                    yield Button("★ Learn", id="sglearn")
+                    yield Button("Copy", id="sgcopy")
+                    yield Button("Use in Writer", id="sguse")
+                    yield Button("Add to generator list", id="sglist-add")
             with TabPane("Vocabulary", id="t-vocab"):
                 yield Static(TAB_HELP["vocab"], classes="note", markup=False)
                 with Horizontal(classes="bar"):
-                    yield Select([("New words", "new"), ("★ Learning", "learning")], value="new", id="vview", allow_blank=False)
+                    yield Select([("New words", "new"), ("★ Learning", "learning"), ("✓ Known", "known")], value="new", id="vview", allow_blank=False)
                     yield Select([(d, d) for d in learn.DIFFICULTY], value="any", id="difficulty", allow_blank=False)
                     yield Select([("Any part of speech", "any")] + [(p, p) for p in learn.POS], value="any", id="vpos", allow_blank=False)
                     yield Select([("Any subject", "any")], value="any", id="subject", allow_blank=False)
@@ -362,6 +394,7 @@ class WordsScreen(KeptScreen, Screen):
                 yield Static("How rare: uncommon (like “lantern”)   rare (like “serendipity”)   very rare (like “gallivant”)", id="minenote", classes="note", markup=False)
                 yield OptionList(id="learn")
                 yield OptionList(id="mine")
+                yield OptionList(id="knownlist")
                 with Horizontal(id="learntools", classes="bar"):
                     yield Button("★ Learning", id="learning")
                     yield Button("✓ Known", id="known")
@@ -369,6 +402,25 @@ class WordsScreen(KeptScreen, Screen):
                     yield Button("Flashcards", id="flash")
                     yield Button("Remove", id="remove")
                     yield Button("Use in this universe's stories", id="minelist")
+            with TabPane("Story words", id="t-story"):
+                yield Static(TAB_HELP["story"], classes="note", markup=False)
+                with Horizontal(classes="bar"):
+                    yield Select([("(no story yet)", "none")], id="swscope", allow_blank=False)
+                    yield Select([("Names and odd words", "words"), ("Often used", "often")], value="words", id="swview", allow_blank=False)
+                    yield Button("Read again", id="swread")
+                yield Static("", id="swnote", classes="note", markup=False)
+                yield OptionList(id="swlist")
+                yield OptionList(id="swoften")
+                yield OptionList(id="swwhere")
+                with Horizontal(id="swtools", classes="bar"):
+                    yield Button("Add to spelling list", id="swspell")
+                    yield Button("Make an entity", id="swentity")
+                    yield Button("Rename everywhere", id="swrename")
+                    yield Button("Copy", id="swcopy")
+                yield Static("", id="uwnote", classes="note")
+                yield OptionList(id="uwords")
+                with Horizontal(classes="bar"):
+                    yield Button("Remove from the generator list", id="uwremove")
             with TabPane("Genre words", id="t-genre"):
                 yield Static(TAB_HELP["genre"], classes="note", markup=False)
                 with Horizontal(classes="bar"):
@@ -390,31 +442,6 @@ class WordsScreen(KeptScreen, Screen):
                     yield Button("Add to universe", id="gwentity")
                     yield Button("Add to generator list", id="gwlist-add")
                     yield Button("More like these", id="gwmore")
-            with TabPane("Story words", id="t-story"):
-                yield Static(TAB_HELP["story"], classes="note", markup=False)
-                with Horizontal(classes="bar"):
-                    yield Select([("(no story yet)", "none")], id="swscope", allow_blank=False)
-                    yield Button("Read again", id="swread")
-                yield Static("", id="swnote", classes="note", markup=False)
-                yield OptionList(id="swlist")
-                yield OptionList(id="swwhere")
-                with Horizontal(id="swtools", classes="bar"):
-                    yield Button("Add to spelling list", id="swspell")
-                    yield Button("Make an entity", id="swentity")
-                    yield Button("Rename everywhere", id="swrename")
-                    yield Button("Copy", id="swcopy")
-                yield Static("", id="uwnote", classes="note")
-                yield OptionList(id="uwords")
-                with Horizontal(classes="bar"):
-                    yield Button("Remove from the generator list", id="uwremove")
-            with TabPane("Overused", id="t-over"):
-                yield Static(TAB_HELP["over"], classes="note", markup=False)
-                with Horizontal(classes="bar"):
-                    yield Select([("(no story yet)", "none")], id="overstory", allow_blank=False)
-                    yield Button("Analyze", id="analyze")
-                yield Static("", id="oversummary", classes="note")
-                yield OptionList(id="over")
-                yield OptionList(id="occ")
         yield Static("", id="status", markup=False)
         yield FitFooter()
 
@@ -440,6 +467,7 @@ class WordsScreen(KeptScreen, Screen):
             self.handover = handed
             self.start(keep_view=not handed)
         else:
+            self.auto_known_check()
             self.refresh_mine()
             self.refresh_uwords()
             self.refresh_buttons()
@@ -456,9 +484,9 @@ class WordsScreen(KeptScreen, Screen):
             self.story = self.universe.story(slug) if slug else None
             if self.story is None and self.universe.stories():
                 self.story = self.universe.stories()[0]
-        self.setup_stories()
         self.setup_subjects()
         migrated = wordbank.migrate_banks(self.my)
+        self.auto_known_check()
         self.refresh_mine()
         self.set_view(self.vview)
         self.refresh_uwords()
@@ -564,16 +592,16 @@ class WordsScreen(KeptScreen, Screen):
             self.open_in_lookup(self.batch[int(oid[2:])]["word"])
         elif lst == "mine" and oid:
             self.open_in_lookup(self.mine[int(oid[2:])]["word"])
+        elif lst == "knownlist" and oid:
+            self.open_in_lookup(self.known_rows[int(oid[2:])]["word"])
         elif lst == "gwlist" and oid:
             self.gw_lookup()
         elif lst == "swlist" and oid:
             self.sw_show_where()
         elif lst == "swwhere" and oid:
             self.sw_open_in_writer(oid)
-        elif lst == "over" and oid:
-            self.show_occurrences(oid)
-        elif lst == "occ" and oid:
-            self.open_in_writer(oid)
+        elif lst == "swoften" and oid:
+            self.sw_show_often_where()
 
     def on_button_pressed(self, event):
         event.stop()
@@ -584,7 +612,9 @@ class WordsScreen(KeptScreen, Screen):
          "flash": self.action_flashcards, "remove": self.action_remove,
          "startover": self.start_over, "myadd": lambda: self.add_by_hand(self.query_one("#myword", Input).value),
          "uwremove": self.remove_added_word,
-         "minelist": self.action_wordlist, "analyze": self.analyze,
+         "minelist": self.action_wordlist,
+         "sgrefresh": self.sg_refresh, "sglookup": self.gw_lookup, "sglearn": self.gw_learn, "sgcopy": self.action_copy, "sguse": self.action_use,
+         "sglist-add": self.gw_generator_list,
          "gwgenres": self.pick_genres, "gwlookup": self.gw_lookup, "gwlearn": self.gw_learn, "gwcopy": self.action_copy, "gwuse": self.action_use,
          "gwentity": self.action_entity, "gwlist-add": self.gw_generator_list, "gwmore": self.action_more,
          "swread": lambda: self.sw_read(force=True), "swspell": self.action_spell, "swentity": self.action_entity,
@@ -596,6 +626,9 @@ class WordsScreen(KeptScreen, Screen):
         elif event.pane.id == "t-genre" and not self.gw_started:
             self.gw_started = True
             self.setup_genre()
+        elif event.pane.id == "t-suggest" and not self.sg_started:
+            self.sg_started = True
+            self.sg_refresh()
 
     def action_back(self):
         if self.pos > 0:
@@ -626,11 +659,14 @@ class WordsScreen(KeptScreen, Screen):
 
     def action_copy(self):
         tab = self.active_tab()
-        if tab == "t-genre":
+        if tab in ("t-genre", "t-suggest"):
             w = self.gw_word()
         elif tab == "t-story":
-            item = self.sw_item()
-            w = item.text if item else None
+            if self.query_one("#swview", Select).value == "often":
+                w = self.sw_often_word()
+            else:
+                item = self.sw_item()
+                w = item.text if item else None
         elif tab == "t-vocab":
             e = self.vocab_entry()
             w = e["word"] if e else None
@@ -679,7 +715,7 @@ class WordsScreen(KeptScreen, Screen):
         if not (self.handover and self.handover.get("replace")):
             self.say("Press F5 in the Writer, on a word, to use a word from here (it comes back and replaces that word).")
             return
-        if self.active_tab() == "t-genre":
+        if self.active_tab() in ("t-genre", "t-suggest"):
             word = self.gw_word()
             if not word:
                 self.say("Move to a word first.")
@@ -707,21 +743,40 @@ class WordsScreen(KeptScreen, Screen):
         sel.value = "any"
 
     def new_batch(self):
+        batch, auto = [], []
         try:
-            self.batch = learn.batch(20, self.query_one("#difficulty", Select).value,
-                                     None if self.query_one("#vpos", Select).value == "any" else self.query_one("#vpos", Select).value,
-                                     None if self.query_one("#subject", Select).value == "any" else self.query_one("#subject", Select).value,
-                                     exclude=self.my.excluded())
+            for _ in range(6):                                                # words a manuscript uses are skipped (and marked Known): fetch more
+                got = learn.batch(20 - len(batch), self.query_one("#difficulty", Select).value,
+                                  None if self.query_one("#vpos", Select).value == "any" else self.query_one("#vpos", Select).value,
+                                  None if self.query_one("#subject", Select).value == "any" else self.query_one("#subject", Select).value,
+                                  exclude=self.my.excluded() | {w["word"].lower() for w in batch})
+                if not got:
+                    break
+                used = wordsused.find([w["word"].lower() for w in got])
+                dropped = 0
+                for w in got:
+                    where = used.get(w["word"].lower())
+                    if where:
+                        self.my.mark_known(w["word"], where)
+                        auto.append((w["word"], where))
+                        dropped += 1
+                    else:
+                        batch.append(w)
+                if len(batch) >= 20 or not dropped:                         # (only when some were dropped is there a reason to look for more)
+                    break
         except dictionary.DictionaryMissing as e:
             self.say(str(e))
             return
         except learn.WordfreqMissing as e:
             self.say(str(e))
             return
+        self.batch = batch
         self.my.mark_seen([w["word"] for w in self.batch])
         self.render_batch()
         left = "" if len(self.batch) >= 20 else " (that is all this filter has left: widen it, or forget what you have seen)"
-        self.say(f"{len(self.batch)} new words{left}." if self.batch else "No new words with these filters: widen them.")
+        known = (f" {len(auto)} more {'was' if len(auto) == 1 else 'were'} already in your stories and marked ✓ Known: "
+                 + "; ".join(f"{w} ({wordsused.describe(wh)})" for w, wh in auto[:3]) + ("…" if len(auto) > 3 else "")) if auto else ""
+        self.say((f"{len(self.batch)} new words{left}." if self.batch else "No new words with these filters: widen them.") + known)
         self.query_one("#learn", OptionList).focus()
 
     def batch_marker(self, word):
@@ -771,7 +826,7 @@ class WordsScreen(KeptScreen, Screen):
                 self.say(f"“{w['word']}” is marked Known: it won't be offered again.")
             self.render_batch()
             self.refresh_mine()
-        elif tab == "t-genre" and status == "learning":
+        elif tab in ("t-genre", "t-suggest") and status == "learning":
             self.gw_learn()
         elif tab == "t-lookup" and status == "learning":
             self.action_add()
@@ -889,7 +944,7 @@ class WordsScreen(KeptScreen, Screen):
 
     def action_wordlist(self):
         tab = self.active_tab()
-        if tab == "t-genre":
+        if tab in ("t-genre", "t-suggest"):
             return self.gw_generator_list()
         if tab == "t-vocab":
             e = self.vocab_entry()
@@ -917,66 +972,20 @@ class WordsScreen(KeptScreen, Screen):
         self.say((f"Added “{word}” to {self.universe.name}'s '{slot}' list" if new else f"“{word}” was already on the '{slot}' list")
                  + f" ({paths.tilde(path)}). The Wheel and Builder use it for this universe.")
 
-    # --- Overused ---------------------------------------------------------------------------------------------------------------------
-
-    def setup_stories(self):
-        sel = self.query_one("#overstory", Select)
-        stories = self.universe.stories() if self.universe is not None else []
-        options = [(f"{s.title}  ({self.universe.name})", s.slug) for s in stories] or [("(no story yet)", "none")]
-        sel.set_options(options)
-        sel.value = (self.story.slug if self.story is not None else options[0][1])
-
-    def analyze(self):
-        slug = self.query_one("#overstory", Select).value
-        story = self.universe.story(slug) if self.universe is not None and slug != "none" else None
-        if story is None:
-            self.say("There is no story to look at: open one in the Builder first.")
-            return
-        self.over = overused.report(story)
-        self.over_story = story
-        lst = self.query_one("#over", OptionList)
-        lst.clear_options()
-        options = [_opt(f"Most frequent words (everyday words left out)  ·  {self.over['words']:,} words in all", None, style="bold")]
-        for i, r in enumerate(self.over["frequent"]):
-            forms = f"   ({', '.join(r['forms'])})" if len(r["forms"]) > 1 else ""
-            options.append(_opt(f"  {r['word']}  ×{r['count']}{forms}", f"f:{i}"))
-        options.append(_opt("Repeated close together (within about 50 words)", None, style="bold"))
-        for i, r in enumerate(self.over["repeats"][:60]):
-            options.append(_opt(f"  {r['word']}  ×{r['count']}  in {len(r['clusters'])} place{'s' if len(r['clusters']) != 1 else ''}", f"r:{i}"))
-        lst.add_options(options)
-        self.query_one("#oversummary", Static).update("Pick a word to see where it is; Enter on a place opens the Writer there.")
-        self.query_one("#occ", OptionList).clear_options()
-        lst.focus()
-        lst.highlighted = 1 if len(options) > 1 else None
-        self.say(f"Looked at {self.over['words']:,} words.")
-
-    def show_occurrences(self, oid):
-        kind, _, i = oid.partition(":")
-        r = (self.over["frequent"] if kind == "f" else self.over["repeats"])[int(i)]
-        occ = self.query_one("#occ", OptionList)
-        occ.clear_options()
-        places = r["where"] if kind == "f" else [o for cluster in r["clusters"] for o in cluster]
-        options = []
-        for n, o in enumerate(places):
-            options.append(_opt(f"  {o['scene'] or '-':<14} line {o['line']:<5} {o['text']}", f"o:{n}:{o['file']}|{o['line']}"))
-        occ.add_options(options)
-
-    def open_in_writer(self, oid):
-        file, _, line = oid.split(":", 2)[2].rpartition("|")
-        story = getattr(self, "over_story", None) or self.story
-        if story is None or self.universe is None:
-            return
-        self.b.go("writer", {"universe": self.universe.slug, "story": story.slug, "scene": {"path": file, "line": int(line)}})
-
     # --- Vocabulary: new words or the ★ Learning ones -----------------------------------------------------------------------------------
 
     def set_view(self, view):
-        self.vview = view if view in ("new", "learning") else "new"
+        self.vview = view if view in ("new", "learning", "known") else "new"
         self.query_one("#learn", OptionList).display = self.vview == "new"
         self.query_one("#mine", OptionList).display = self.vview == "learning"
+        self.query_one("#knownlist", OptionList).display = self.vview == "known"
         for bid in ("difficulty", "vpos", "subject", "newbatch", "startover"):
             self.query_one("#" + bid).display = self.vview == "new"
         self.query_one("#remove", Button).display = self.vview == "learning"
+        for bid in ("learning", "known", "flash", "minelist"):
+            self.query_one("#" + bid).display = self.vview != "known"
+        if self.vview == "known":
+            self.refresh_known()
         self.note_for_view()
 
     def note_for_view(self):
@@ -984,9 +993,38 @@ class WordsScreen(KeptScreen, Screen):
         if self.vview == "learning":
             n = len(getattr(self, "mine", []) or [])
             note.update(f"{n} word{'s' if n != 1 else ''} you are learning. Enter looks one up; f = flashcards; k = Known; d = remove." if n else "")
+        elif self.vview == "known":
+            n = len(self.my.known_entries())
+            used = sum(1 for e in self.my.known_entries() if e["where"])
+            note.update(f"{n} word{'s' if n != 1 else ''} you know; {used} marked automatically because a manuscript uses them (first place shown). Enter looks one up.")
         else:
             note.update("How rare: uncommon (like “lantern”)   rare (like “serendipity”)   very rare (like “gallivant”)   ★ Learning   ✓ Known   "
                         "Enter opens the full entry; l = Learning, k = Known.")
+
+    def refresh_known(self):
+        lst = self.query_one("#knownlist", OptionList)
+        previous = lst.highlighted
+        lst.clear_options()
+        self.known_rows = self.my.known_entries()
+        if not self.known_rows:
+            lst.add_options([_opt("No known words yet: mark a word ✓ Known, or write it in a story.", None, style="dim")])
+            return
+        width = max(len(e["word"]) for e in self.known_rows)
+        lst.add_options([_opt(f"  ✓ {e['word']:<{width}}  " + (f"used in {wordsused.describe(e['where'])}" if e["where"] else "marked Known by you"), f"k:{i}")
+                         for i, e in enumerate(self.known_rows)])
+        if previous is not None:
+            lst.highlighted = min(previous, len(self.known_rows) - 1)
+
+    def auto_known_check(self):
+        """Learning words that a manuscript already uses are words you know: mark them Known (noting where) and say so."""
+        try:
+            found = wordsused.auto_known(self.my, [e["word"] for e in self.my.learning])
+        except Exception:                                                    # never let a bad manuscript stop the tab
+            return
+        if found:
+            self.refresh_mine()
+            self.say("Already in your stories, so marked ✓ Known: " + "; ".join(f"{w} ({wordsused.describe(wh)})" for w, wh in sorted(found.items())[:4])
+                     + ("…" if len(found) > 4 else ""))
 
     def on_select_changed(self, event):
         if event.select.id == "vview":
@@ -997,11 +1035,20 @@ class WordsScreen(KeptScreen, Screen):
                 self.gw_refresh()
         elif event.select.id == "swscope":
             self.sw_scope_changed(event.value)
+        elif event.select.id == "swview":
+            self.sw_set_view()
+        elif event.select.id in ("sgkind", "sgpos"):
+            if self.sg_started:
+                self.sg_refresh()
 
     def vocab_entry(self):
         """{"word", ...} for the highlighted row of whichever Vocabulary list is showing."""
         if self.vview == "learning":
             return self.mine_entry()
+        if self.vview == "known":
+            lst = self.query_one("#knownlist", OptionList)
+            rows = getattr(self, "known_rows", [])
+            return rows[lst.highlighted] if lst.highlighted is not None and lst.highlighted < len(rows) else None
         return self.batch_word()
 
     def open_vocab_word(self):
@@ -1010,6 +1057,79 @@ class WordsScreen(KeptScreen, Screen):
             self.open_in_lookup(e["word"])
         else:
             self.say("Move to a word first.")
+
+    # --- Suggestions ------------------------------------------------------------------------------------------------------------------------
+
+    def sg_refresh(self):
+        """Work out the chosen suggestion list in the background (the genre fit comes first, once, if it is not there yet)."""
+        lst = self.query_one("#sgvlist", VirtualList)
+        note = self.query_one("#sgnote", Static)
+        kind = self.query_one("#sgkind", Select).value
+        self.query_one("#sgpos").display = kind == "story"
+        if not dictionary.installed():
+            lst.set_source(0, lambda a, b: [], lambda r, sel, w: Text(""))
+            return note.update(dictionary.NOT_INSTALLED)
+        if self.gw_building:
+            return note.update("Working out which words fit each genre (done once)…")
+        if not wordlists.ready():
+            self.gw_check_fit()
+            return note.update("Working out which words fit each genre (done once)…")
+        if self.universe is None:
+            lst.set_source(0, lambda a, b: [], lambda r, sel, w: Text(""))
+            return note.update("Open a universe in the Builder (F2) to get suggestions for its stories.")
+        if kind in ("story", "fresh") and self.story is None:
+            lst.set_source(0, lambda a, b: [], lambda r, sel, w: Text(""))
+            return note.update("There is no story to suggest for yet: write something in the Writer first.")
+        self.sg_token += 1
+        token = self.sg_token
+        pos = self.query_one("#sgpos", Select).value
+        universe, story = self.universe, self.story
+        note.update("Looking for words…")
+        self.run_worker(lambda: self._sg_work(kind, pos, token, universe, story), thread=True, name="suggest")
+
+    def _sg_work(self, kind, pos, token, universe, story):
+        import sqlite3
+        db = sqlite3.connect(f"file:{dictionary.index_path()}?mode=ro", uri=True)
+        try:
+            if kind == "story":
+                genres = suggest.story_genres(universe, story)
+                rows = suggest.for_story(universe, story, pos, db=db, genres=genres)
+                label = {v: l.lower() for l, v in wordlists.POS_LABELS}[pos]
+                text = (f"{len(rows)} {label} that fit {', '.join(genres)} and are not in “{story.title}” yet." if genres
+                        else "The story has no genre yet: pick one in the Wheel or give the universe genre leanings in the Builder.")
+            elif kind == "entities":
+                rows = suggest.for_entities(universe, story, db=db)
+                text = f"{len(rows)} words the dictionary relates to the jobs, things, places and groups of {universe.name}, not used in the story yet."
+            else:
+                rows = suggest.fresh_alternatives(universe, story, db=db)
+                text = (f"Alternatives for the {sum(1 for r in rows if r['head'])} most overused words of “{story.title}”, the ones that fit the genres first."
+                        if rows else "No word is used often enough yet to need an alternative.")
+        except Exception as e:                                                  # a bad manuscript must not break the tab
+            rows, text = [], f"Could not work out suggestions: {e}"
+        finally:
+            db.close()
+        self.app.call_from_thread(self._sg_done, token, rows, text)
+
+    def _sg_done(self, token, rows, text):
+        if token != self.sg_token:
+            return                                                              # an older request that finished late
+        self.sg_rows = rows
+        self.query_one("#sgvlist", VirtualList).set_source(len(rows), lambda start, n: self.sg_rows[start:start + n], self.sg_render_row)
+        self.query_one("#sgnote", Static).update(text + ("  ●●● strong fit  ●●○  ●○○." if any(r["mark"] for r in rows) else ""))
+
+    def sg_render_row(self, row, selected, width):
+        text = Text()
+        if row.get("head"):
+            text.append(f" {row['word']}", style="bold underline")
+            text.append(f"   {row['definition']}", style="dim")
+            return text
+        learning = row["word"] in self.my.learning_words()
+        text.append(f" {row['mark'] or '   '} " if row["mark"] else "     ", style="bold" if row["fit"] >= 35 else "dim")
+        text.append(("★ " if learning else "  ") + f"{row['word'][:22]:<22}", style="bold")
+        text.append(f"  {row['definition'][:60]:<60}", style="" if selected else "dim")
+        if row.get("note"):
+            text.append(f"  {row['note']}", style="italic dim")
+        return text
 
     # --- Genre words: the dictionary's words by part of speech, ranked by genre; the generator's own short lists below ---------------------
 
@@ -1077,7 +1197,10 @@ class WordsScreen(KeptScreen, Screen):
         self.gw_building = False
         if note:
             self.say(note)
-        self.gw_refresh()
+        if self.gw_started:
+            self.gw_refresh()
+        if self.sg_started:
+            self.sg_refresh()
 
     def gw_is_wheel(self):
         value = self.gw_value()
@@ -1168,7 +1291,7 @@ class WordsScreen(KeptScreen, Screen):
         self.query_one("#gwmore", Button).disabled = key not in genrewords.NAME_CATEGORIES
 
     def on_virtual_list_selected(self, event):
-        if event.list.id == "gwvlist":
+        if event.list.id in ("gwvlist", "sgvlist"):
             self.gw_lookup()
 
     def gw_search_changed(self):
@@ -1178,6 +1301,8 @@ class WordsScreen(KeptScreen, Screen):
 
     def gw_row(self):
         """The Wheel row, or the dictionary row (a dict), under the cursor."""
+        if self.active_tab() == "t-suggest":
+            return self.query_one("#sgvlist", VirtualList).current()
         if self.gw_is_wheel():
             lst = self.query_one("#gwlist", OptionList)
             if lst.highlighted is None:
@@ -1206,11 +1331,12 @@ class WordsScreen(KeptScreen, Screen):
 
     def gw_learn(self):
         row = self.gw_row()
-        if not isinstance(row, dict):
+        if not isinstance(row, dict) or row.get("head"):
             return self.say("Only dictionary words can be marked to learn (pick Nouns, Verbs, Adjectives or Adverbs).")
         new = self.my.mark_learning(row["word"], row["pos"], row["definition"])
         self.refresh_mine()
         self.query_one("#gwvlist", VirtualList).refresh()
+        self.query_one("#sgvlist", VirtualList).refresh()
         self.say(f"“{row['word']}” is ★ Learning (Vocabulary > ★ Learning)." if new else f"“{row['word']}” is already ★ Learning.")
 
     def gw_generator_list(self):
@@ -1267,6 +1393,7 @@ class WordsScreen(KeptScreen, Screen):
         sel.set_options(options)
         sel.value = self.story.slug if (self.story is not None and any(v == self.story.slug for _, v in options)) else options[0][1]
         self.sw_report = None
+        self.sw_set_view()
 
     def sw_scope_changed(self, value):
         self.sw_report = None
@@ -1293,6 +1420,12 @@ class WordsScreen(KeptScreen, Screen):
             self.sw_report = storywords.analyze(self.universe, self.sw_story())
         except OSError as e:
             return self.say(f"Could not read the manuscript: {e}")
+        story = self.sw_story()
+        try:
+            self.often = overused.report(story) if story is not None else None
+        except OSError:
+            self.often = None
+        self.sw_fill_often()
         items = self.sw_report["items"]
         self.sw_items = items
         lst = self.query_one("#swlist", OptionList)
@@ -1309,6 +1442,56 @@ class WordsScreen(KeptScreen, Screen):
         if items:
             lst.highlighted = 0
             self.sw_show_where()
+
+    def sw_set_view(self):
+        often = self.query_one("#swview", Select).value == "often"
+        self.query_one("#swlist").display = not often
+        self.query_one("#swoften").display = often
+        for bid in ("swspell", "swentity", "swrename"):
+            self.query_one("#" + bid).display = not often
+        self.query_one("#swwhere", OptionList).clear_options()
+        if often and self.often is None and self.sw_story() is None:
+            self.query_one("#swnote", Static).update("Often used words are counted for one story: pick a story in the first box.")
+
+    def sw_fill_often(self):
+        """The 'Often used' list: the story's most frequent words (everyday words left out), then words repeated close together."""
+        lst = self.query_one("#swoften", OptionList)
+        lst.clear_options()
+        if not self.often:
+            lst.add_options([_opt("Pick a story (not the whole universe) to see its often used words.", None, style="dim")])
+            return
+        options = [_opt(f"Most frequent words (everyday words left out)  ·  {self.often['words']:,} words in all", None, style="bold")]
+        for i, r in enumerate(self.often["frequent"]):
+            forms = f"   ({', '.join(r['forms'])})" if len(r["forms"]) > 1 else ""
+            options.append(_opt(f"  {r['word']}  ×{r['count']}{forms}", f"f:{i}"))
+        options.append(_opt("Repeated close together (within about 50 words)", None, style="bold"))
+        for i, r in enumerate(self.often["repeats"][:60]):
+            options.append(_opt(f"  {r['word']}  ×{r['count']}  in {len(r['clusters'])} place{'s' if len(r['clusters']) != 1 else ''}", f"r:{i}"))
+        lst.add_options(options)
+
+    def sw_show_often_where(self):
+        lst = self.query_one("#swoften", OptionList)
+        if lst.highlighted is None or not self.often:
+            return
+        oid = lst.get_option_at_index(lst.highlighted).id
+        if not oid:
+            return
+        kind, _, i = oid.partition(":")
+        r = (self.often["frequent"] if kind == "f" else self.often["repeats"])[int(i)]
+        places = r["where"] if kind == "f" else [o for cluster in r["clusters"] for o in cluster]
+        occ = self.query_one("#swwhere", OptionList)
+        occ.clear_options()
+        occ.add_options([_opt(f"  {o['scene'] or '-':<14} line {o['line']:<5} {o['text']}", f"o:{n}:{o['file']}|{o['line']}") for n, o in enumerate(places)])
+
+    def sw_often_word(self):
+        lst = self.query_one("#swoften", OptionList)
+        if lst.highlighted is None or not self.often:
+            return None
+        oid = lst.get_option_at_index(lst.highlighted).id
+        if not oid:
+            return None
+        kind, _, i = oid.partition(":")
+        return (self.often["frequent"] if kind == "f" else self.often["repeats"])[int(i)]["word"]
 
     def sw_item(self):
         lst = self.query_one("#swlist", OptionList)

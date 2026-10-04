@@ -397,12 +397,19 @@ from them offline (with a one-line message); it only downloads again if they are
     words ("a kind of" / "types of it"), parts, related forms. Enter or a click on a word looks it up; back and forward remember your
     path; `/` filters. **Use in Writer** (`u`) goes back to the Writer and replaces the word you were on with the one you picked, in
     the same form (running → sprinting, geese → swans, happier → gladder), keeping capital letters.
+  - *Suggestions* (the tab after Lookup): three lists of words to try, with the same actions as Genre words (Enter looks a word up, `l`
+    marks it ★ Learning, `c` copies, `u` uses it in the Writer, `w` puts it on a generator list). **For this story**: words that fit the
+    story's genres (ranked by the genre fit, in the part of speech you pick) and are not in its manuscript yet. **For your characters and
+    places**: words the dictionary relates (synonyms, broader and narrower words, parts, related forms) to your characters' jobs and the
+    things, places and groups of the universe. **Fresh alternatives**: the story's most overused words, each followed by replacements, the
+    ones that fit the genres first.
   - *Vocabulary*: words worth **learning** (not everyday, not obscure), a fresh batch of twenty at a time, each with its part of speech and
     a one-line meaning. Choose how rare (uncommon / rare / very rare), the part of speech and the subject. Enter opens the full entry in
     Lookup; `l` marks a word *Learning* (★), `k` marks it *Known* (never offered again). The first box switches between *New words* and
     *★ Learning*: the words you are learning, with their meanings (Enter looks one up, `k` Known, `d` remove, `f` flashcards: the word
     first, Space shows the meaning). Type a word of your own in the box and press Enter to learn it. How common a word is comes from the
-    offline `wordfreq` package.
+    offline `wordfreq` package. A word that appears in any manuscript of any universe (in any form: ran for run) is a word you know: it
+    is marked ✓ Known automatically, leaves the lists, and the first place it was used is noted (the *✓ Known* view of the first box shows them).
   - *Genre words*: long lists of **words**, not the generator's slot lists. The first box picks **Nouns, Verbs, Adjectives or Adverbs**: every
     lemma of that part of speech in the dictionary, each with a one-line meaning like Vocabulary's. **Genres…** picks *Any genre* (the
     whole list, most common words first) or one or more genres, which **rank** the words by how well they fit; nothing is hidden, and a
@@ -424,11 +431,12 @@ from them offline (with a one-line message); it only downloads again if they are
     times it is written), ? a word the dictionary does not know (made-up names, jargon, typos), ≈ a look-alike: "Glass Water" for
     "Glasswater", "Stacy" for "Stacie". Enter shows where each one is (Enter on a place opens the Writer there). `s` adds the word to the
     spelling list (the Writer stops marking it), `e` makes it a character, place or thing, `r` renames it everywhere with the usual
-    preview. Under the list: the words you put on this universe's generator lists (`d` removes one).
+    preview. Names are counted as whole phrases in any case, with or without their article ("the silver birch grove", "a wolf in a
+    waistcoat's"); only a personal name is also counted by its first or last name. The second box switches to *Often used*: the story's most
+    frequent words (everyday words left out) and words repeated close together, with where they are; Enter on a place opens the Writer
+    there. Under the list: the words you put on this universe's generator lists (`d` removes one).
   - *Add to this universe's word list* (`w` on any word in Lookup, Vocabulary or Genre words): pick the slot (job, thing, place...) and the
     word goes on the universe's own list, so the Wheel and the Builder roll with it.
-  - *Overused*: a story's most frequent words (everyday words left out) and words repeated close together, with where they are;
-    Enter on a place opens the Writer there.
 - **Writer card:** **F7** on the word under the cursor (or a selection) opens a card grouped by meaning, then the full list of
   similar words, scrollable, with a filter (`/`). Enter looks a word up (`b` back, `n` forward); **`r` replaces** the word you were
   on (same form, capitals kept), **`i` inserts** the word at the cursor, **`c` copies** it. **F6** looks up a typed word and works
