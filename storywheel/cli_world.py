@@ -34,7 +34,7 @@ def entity_json(e, universe=None):
 def story_json(s):
     meta, sections = s.load_outline()
     return {"id": s.slug, "universe": s.universe.slug, "universe_name": s.universe.name, "title": s.title,
-            "meta": meta, "outline": sections, "scenes": [e["title"] for e in s.scene_list()], "files": [p.name for p in s.files()], "words": s.word_count(),
+            "meta": meta, "outline": sections, "scenes": [e["title"] for e in s.scene_list()], "files": [p.name for p in s.files()], "extra_files": [p.name for p in s.extra_files()], "words": s.word_count(),
             "path": str(s.path), "manuscript": str(s.manuscript_dir), "settings": settings.load_story(s.path),
             "author": {k: v for k, v in settings.load_global().items()
                        if k in ("author_name", "legal_name", "address", "email", "phone")}}

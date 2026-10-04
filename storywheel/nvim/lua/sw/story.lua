@@ -32,14 +32,24 @@ function M.setting(key, default)
   return v
 end
 
--- Manuscript files in order: { { path=, name= }, ... } (one for a short story, one per chapter for a novel)
+-- Manuscript files in order: { { path=, name= }, ... } (one for a short story, one per chapter for a novel). Only files storywheel makes
+-- count: manuscript.md and NN-name.md. Anything else in the folder (a copy another tool made) is not part of the manuscript.
+local function known(name)
+  return name:match("^manuscript%.md$") ~= nil or name:match("^%d+%-[a-z0-9%-]+%.md$") ~= nil
+end
+
 function M.scenes()
   local out = {}
   if not M.manuscript then return out end
   for _, name in ipairs(vim.fn.readdir(M.manuscript)) do
-    if name:match("%.md$") then out[#out + 1] = { path = M.manuscript .. "/" .. name, name = name } end
+    if known(name) then out[#out + 1] = { path = M.manuscript .. "/" .. name, name = name } end
   end
   table.sort(out, function(a, b) return a.name < b.name end)
+  if M.settings().format ~= "novel" then                           -- a short story with manuscript.md is that one file
+    for _, f in ipairs(out) do
+      if f.name == "manuscript.md" then return { f } end
+    end
+  end
   return out
 end
 

@@ -181,6 +181,35 @@ class BuilderHelp(ModalScreen):
         self.dismiss(None)
 
 
+class FileViewScreen(ModalScreen):
+    """A file in the manuscript folder that is not part of the manuscript, shown read-only."""
+    BINDINGS = [Binding("escape,q", "close", "Close")]
+    DEFAULT_CSS = """
+    FileViewScreen { align: center middle; }
+    FileViewScreen > Vertical { width: 100; max-width: 100%; height: 90%; border: round $accent; background: $surface; padding: 1 2; }
+    FileViewScreen #fv-title { height: auto; }
+    FileViewScreen #fv-text { height: 1fr; }
+    """
+
+    def __init__(self, path):
+        super().__init__()
+        self.path = path
+
+    def compose(self) -> ComposeResult:
+        try:
+            text = self.path.read_text(encoding="utf-8")
+            words = vault.count_words(text)
+            head = f"{self.path.name}   {words:,} words   (read-only; not part of the manuscript; Escape closes)"
+        except (OSError, UnicodeDecodeError) as e:
+            text, head = "", f"{self.path.name}: could not be read as text ({e})"
+        with Vertical():
+            yield Static(head, id="fv-title", markup=False)
+            yield TextArea(text, id="fv-text", read_only=True)
+
+    def action_close(self):
+        self.dismiss(None)
+
+
 class UniverseList(OptionList):
     BINDINGS = [Binding("n", "act('new')", "New"), Binding("r", "act('rename')", "Rename"),
                 Binding("d", "act('delete')", "Delete")]
@@ -342,6 +371,8 @@ class BuilderScreen(KeptScreen, Screen):
     BuilderScreen #stats { padding: 0 1; height: 1fr; }
     BuilderScreen #rtabs { height: 1fr; }
     BuilderScreen #outline, BuilderScreen #scenes { height: 1fr; }
+    BuilderScreen #extras { display: none; height: auto; padding: 0 1; color: $warning; }
+    BuilderScreen #extras-btns { display: none; height: 1; }
     BuilderScreen #outline-title { padding: 0 1; color: $text-muted; height: auto; }
     BuilderScreen #notes-pane { height: 1fr; }
     BuilderScreen #tabs { height: 2; }
@@ -373,6 +404,8 @@ class BuilderScreen(KeptScreen, Screen):
         self.start_entity = None
         self.filler = None
         self.scene_entries = []
+        self.extra_file = None
+        self._told_extra = None
         self.start_rtab = "r-outline"
         self._busy = False
 
@@ -405,6 +438,11 @@ class BuilderScreen(KeptScreen, Screen):
                             yield Static("", id="outline-title", markup=False)
                             yield CardList(id="outline")
                         with TabPane("Scenes", id="r-scenes"):
+                            yield Static("", id="extras", markup=False)
+                            with Horizontal(id="extras-btns", classes="btns"):
+                                yield _quiet(Button("Open", id="ex-open"))
+                                yield _quiet(Button("Delete", id="ex-delete"))
+                                yield _quiet(Button("Ignore", id="ex-ignore"))
                             yield OptionList(id="scenes")
                             with Horizontal(classes="btns"):
                                 yield _quiet(Button("Write here", id="sc-write"))
@@ -645,8 +683,46 @@ class BuilderScreen(KeptScreen, Screen):
         self.query_one("#stats", Static).update("\n".join(lines))
         self.query_one("#top-title", Static).update("Writing")
 
+    def refresh_extras(self):
+        """Files in the manuscript folder that storywheel did not make (a copy another tool left there): shown above the scenes with Open, Delete
+        and Ignore. They are never read as part of the manuscript."""
+        extras = self.story.extra_files() if self.story else []
+        self.extra_file = extras[0] if extras else None
+        note, btns = self.query_one("#extras", Static), self.query_one("#extras-btns")
+        note.display = btns.display = bool(extras)
+        if not extras:
+            self._told_extra = None
+            return
+        more = f" (and {len(extras) - 1} more)" if len(extras) > 1 else ""
+        text = (f"Extra file in the manuscript folder: {extras[0].name}{more} looks like a copy from another tool. "
+                "It is not part of the manuscript: not counted, not exported.")
+        note.update(text)
+        if self._told_extra != (self.story.path, extras[0].name):          # (say it once, in the status line too)
+            self._told_extra = (self.story.path, extras[0].name)
+            self.say(text + " Scenes tab: Open, Delete or Ignore.")
+
+    def extra_act(self, what):
+        p, story = self.extra_file, self.story
+        if p is None or story is None:
+            return
+        if what == "open":
+            self.app.push_screen(FileViewScreen(p))
+        elif what == "ignore":
+            story.ignore_file(p.name)
+            self.say(f"Ignoring {p.name}. It stays where it is and is not part of the manuscript.")
+            self.refresh_scenes()
+        elif what == "delete":
+            def done(yes):
+                if yes:
+                    where = story.delete_extra_file(p.name)
+                    self.say(f"{p.name} moved to {paths.tilde(where) if where else 'the .trash folder'}.")
+                    self.refresh_scenes()
+            self.app.push_screen(ConfirmScreen(f"Delete {p.name}?\n\nIt is not part of the manuscript. It moves to the library's .trash folder, "
+                                               "where you can still get it back."), done)
+
     def refresh_scenes(self):
         """The Scenes tab: the open story's scenes with their first lines; Enter opens the Writer there."""
+        self.refresh_extras()
         lst = self.query_one("#scenes", OptionList)
         keep = lst.highlighted
         lst.clear_options()
@@ -872,6 +948,7 @@ class BuilderScreen(KeptScreen, Screen):
          "s-write": self.action_writer, "s-export": self.action_export,
          "s-backups": lambda: self.story_act("backups"),
          "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
+         "ex-open": lambda: self.extra_act("open"), "ex-delete": lambda: self.extra_act("delete"), "ex-ignore": lambda: self.extra_act("ignore"),
          "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
          "e-delete": self.action_delete_entity}.get(name, lambda: None)()
 

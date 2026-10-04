@@ -2,6 +2,20 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.10.0 — Batch 10
+
+### Tests no longer meet your real LanguageTool
+- The two `test_grammar_server.py` failures were not about Java: a real LanguageTool server on the usual port (18081) answered "already running" and
+  "running". Every test now gets a free port of its own (`STORYWHEEL_GRAMMAR_PORT`, used unless you chose a port in Settings); no test depends on Java.
+
+### Part A: never merge files you didn't make
+- Only `manuscript.md` and `NN-name.md` (what storywheel makes) are manuscript files. Anything else in a manuscript folder (a sync tool's
+  "01-opening (xps copy 2026-10-04).md", `notes.md`...) is never merged, counted, exported, searched or opened by the Writer.
+- The one-file migration runs once per story (`.one-file-manuscript`); files that turn up later are left alone. A short story that has `manuscript.md`
+  is that one file; an old-style `01-name.md` beside it is an extra file.
+- The Builder's Scenes tab shows "Extra file in the manuscript folder: ... looks like a copy from another tool" with Open (read-only view), Delete
+  (asks; moves it to `.trash`) and Ignore (`.ignored-manuscript-files.json`); the status line says it once when the story opens.
+
 ## 0.9.0 — Batch 9
 Part A: Story words counts names correctly
 - An entity's whole name is counted as a phrase, in any case, with or without its leading article and with a possessive ("a wolf in a waistcoat",

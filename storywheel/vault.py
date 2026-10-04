@@ -24,6 +24,11 @@ PLACEHOLDER = re.compile(r"^(character|place|thing|group|note)-\d+$")
 
 # --- small helpers ---------------------------------------------------------------------------------
 
+# The manuscript files storywheel makes: manuscript.md, and NN-name.md (a novel's chapters; the older one-file-per-scene stories).
+# Names with spaces, brackets or dots ("01-opening (xps copy 2026-10-04).md", "x.sync-conflict-1.md") were made by something else.
+KNOWN_FILE = re.compile(r"^(manuscript|\d+-[a-z0-9-]+)\.md$")
+
+
 def slugify(text, fallback="untitled"):
     text = re.sub(r"[^a-z0-9]+", "-", (text or "").lower().replace("'", "")).strip("-")
     return text[:60].strip("-") or fallback
@@ -274,11 +279,53 @@ class Story:
     def stats_path(self):
         return self.path / "stats.json"
 
+    def _is_novel(self):
+        from . import settings
+        return str(settings.load_story(self.path).get("format", "short-story")).lower() == "novel"
+
     def scenes(self):
-        """Scene files in order: [Path]."""
+        """The manuscript's files in order: [Path]. Only files storywheel itself makes count: `manuscript.md` and `NN-name.md` (the old
+        one-file-per-scene names, and a novel's chapters). Anything else in the folder (a copy another tool made, say) is NOT part of the
+        manuscript: see extra_files(). A short story that has `manuscript.md` is that one file."""
         if not self.manuscript_dir.is_dir():
             return []
-        return sorted(self.manuscript_dir.glob("*.md"))
+        known = sorted(p for p in self.manuscript_dir.glob("*.md") if KNOWN_FILE.match(p.name))
+        one = self.manuscript_dir / "manuscript.md"
+        if one in known and not self._is_novel():
+            return [one]
+        return known
+
+    def extra_files(self):
+        """Files in the manuscript folder that are not part of the manuscript and that you have not told us to ignore: [Path]."""
+        if not self.manuscript_dir.is_dir():
+            return []
+        mine = set(self.scenes())
+        ignored = set(self.ignored_files())
+        return sorted(p for p in self.manuscript_dir.iterdir()
+                      if p.is_file() and p not in mine and not p.name.startswith(".") and p.name not in ignored)
+
+    @property
+    def ignored_path(self):
+        return self.path / ".ignored-manuscript-files.json"
+
+    def ignored_files(self):
+        try:
+            return list(json.loads(self.ignored_path.read_text(encoding="utf-8")))
+        except (OSError, ValueError):
+            return []
+
+    def ignore_file(self, name):
+        names = self.ignored_files()
+        if name not in names:
+            names.append(name)
+            _write(self.ignored_path, json.dumps(names, indent=1) + "\n")
+
+    def delete_extra_file(self, name):
+        """Move an extra file out of the manuscript folder into the library's .trash (never a real delete)."""
+        p = self.manuscript_dir / name
+        if p not in self.extra_files() and p.name not in self.ignored_files():
+            raise ValueError(f"{name} is not an extra file of this manuscript.")
+        return trash(p)
 
     def files(self):
         """The manuscript's files in order (one for a short story; one per chapter for a novel)."""
@@ -324,11 +371,14 @@ class Story:
         """Older stories kept one file per scene. A short story now has ONE file (manuscript.md) with a marker line at
         the start of each scene, so the whole thing reads in order. The scene files are moved into a backup folder
         (<story>/.backups/migrated-DATE/) first; a novel keeps one file per chapter. Returns a message, or None."""
+        flag = self.path / ".one-file-manuscript"
+        if flag.exists() or not self.path.is_dir():
+            return None                                       # (done once per story: files that turn up later are never merged)
         files = self.files()
-        from . import settings
-        if len(files) <= 1 or str(settings.load_story(self.path).get("format", "short-story")).lower() == "novel":
+        if self._is_novel():
             return None
-        if files == [self.manuscript_dir / "manuscript.md"]:
+        if len(files) <= 1:
+            self._mark_one_file()
             return None
         stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         backup = self.path / ".backups" / f"migrated-{stamp}"
@@ -353,7 +403,12 @@ class Story:
         for p in files:
             if p != target:
                 p.unlink()
+        self._mark_one_file()
         return f"Merged {len(files)} scene files into manuscript.md (the originals are in {backup})."
+
+    def _mark_one_file(self):
+        if self.path.is_dir():
+            _write(self.path / ".one-file-manuscript", "the manuscript is one file; this is done once per story\n")
 
     def migrate_paragraphs(self):
         """Older manuscripts kept a paragraph as lines joined until a blank line. A paragraph is now one line. Once per story
