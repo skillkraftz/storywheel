@@ -2098,3 +2098,60 @@ verbs: outdraw, deputize, deputise, further, step in, ride, till, garden, stable
 ```
 
 Full suite after the rework: **1916 passed** in one run (before the rework, from a clean start: 1887 passed in one run).
+
+
+# Batch 9 (0.9.0)
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| A. Story words counts each entity's whole name as a phrase (any length/case, with or without article, possessives) | **Works** | "wolf in a waistcoat" and "silver birch grove" tests; single words only for personal names (first/last of a proper character name), never for descriptions |
+| B. Words tabs: Lookup, Suggestions, Vocabulary, Story words, Genre words | **Works** | Overused is gone; frequent words and close repeats are "Often used" in Story words |
+| B. Suggestions tab (For this story / For your characters and places / Fresh alternatives) | **Works** | same row actions as Genre words; ranking is a guess (like the genre fit) |
+| B. Vocabulary: a word used in any manuscript is auto-Known, leaves the list, says where | **Works** | |
+| C. Repeatable beats (min/max) in structures, Wheel (A/X, +Beat/−Beat) and Builder outline | **Works** | Story Spine, Three-Act and Kishotenketsu each have one repeatable beat; threads follow |
+| C. Ctrl+O story overview in the Writer (configurable `key_overview`) | **Works** | floating, read-only, scrollable, Esc closes; how it looks needs your eyes |
+| C. Status line goal as "312 / 1,000 words · 31%" | **Works** | |
+| D. Builder: no right column; Stories (titles only) + large Story panel (Outline / Scenes / Notes) | **Works** | works in a narrow window; clicking a scene opens the Writer there |
+| D. +Story makes a blank story; "+Wheel draft" removed; a Wheel draft belongs to a universe ("Belongs to") and promotes into it | **Works** | |
+| E. The Writer opens in its own kitty window with font, size, line height, padding, opacity; closes on return | **Partial** | tested with fakes and real Neovim; kitty is not installed on the dev machine, so the real window is for you to try |
+| E. Outside kitty: same terminal as before and a one-line note at start | **Works** | |
+| E. Neovide removed; its settings converted (`migrate_settings`) | **Works** | settings, setup, install.sh, tools, tests |
+| E. `storywheel kitty` no longer applies tall lines; `--probe` reports remote-control abilities | **Works** | |
+| E. Switching in place via kitty remote control | **Not started (reported)** | see below; not depended on |
+| F. BACKLOG.md rewritten (Now / Next / Later / Ideas / Done) | **Works** | |
+
+### Switching in place with kitty remote control (report)
+
+Not testable here (no kitty installed), so this is from kitty's documentation, not from running it. `kitten @ set-font-size`,
+`set-background-opacity` and `set-spacing` (padding/margin) exist and could restyle the current window, but they need
+`allow_remote_control` (or a `--listen-on` socket) switched on in kitty.conf, there is no remote command for `modify_font cell_height` on a
+running window that I know of, and the font would have to be restored on return. A second window is simpler and always works, so that is what
+storywheel does. `storywheel kitty --probe` prints your kitty's version and which remote commands it lists, so you can see for yourself.
+
+## 2. Tests added
+
+About 60 new tests: Story words phrases (4), Suggestions (9), Words tabs/auto-Known (many, old Overused tests moved), repeatable beats (15 + 9 outline),
+overview in the Writer (7), Wheel buttons and promotion into the home universe (6), Builder layout (5 + updates), kitty Writer launch and start note
+(17 in `test_kitty_writer.py`, 7 in `test_kitty_launcher.py`), settings migration from Neovide (2). The full suite is run at the end of the batch
+(see the result at the bottom of this section).
+
+## 3. Manual test script
+
+1. Start storywheel in kitty (`storywheel kitty`). Open a story in the Writer (F3 or `w`): a second kitty window should appear, maximized, with the
+   font, size and line height from Settings > Writer. Change Writer line height to 200 and return: the next visit is double spaced; storywheel's
+   own window keeps normal spacing. Leaving the Writer (Alt+Q / F2) closes that window.
+2. Start storywheel in another terminal: a one-line note about kitty shows at the start; the Writer opens in that terminal.
+3. Settings > Writer: the line "kitty: installed at ..." is right; turn "Open the Writer in its own kitty window" off and check the terminal is used.
+4. In the Writer press Ctrl+O: the story overview floats; scroll; Esc closes. Check the status line "N / M words · P%".
+5. Words: tabs in order; type a word used in your manuscript in Vocabulary: it is Known. Story words shows "wolf in a waistcoat"-style names with real counts.
+6. Wheel: A / X add and remove a repeatable beat; "Belongs to" then Send to Builder puts the story in that universe's Stories.
+7. Builder: resize narrow; Stories + Story panel; +Story; click a scene.
+8. `storywheel kitty --probe`.
+
+## 4. Known issues
+
+- The kitty window flag set (`--start-as=maximized`, `confirm_os_window_close=0`) is from documentation, not run here.
+- `line_spacing` pixels from old settings are converted to a percent by a rough formula (px / 1.5 × font size); check the line height once.
+- Suggestions ranking and the "Fresh alternatives" list are guesses; tell me which read wrong.

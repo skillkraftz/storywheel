@@ -48,6 +48,10 @@ Part D: Builder layout
 - `storywheel kitty` no longer applies tall lines (the `--line-height` option is gone); `--probe` reports what the installed kitty's remote
   control offers (not depended on).
 
+### Part F: roadmap
+
+- BACKLOG.md is a short roadmap (Now, Next, Later, Ideas) with finished work collapsed into one list with its tags; stale items removed.
+
 ## 0.8.1 — Genre words reworked: long lists of words, ranked by genre
 - **Genre words** is now what it was meant to be: long lists of words by part of speech, from the dictionary, not the generator's slot lists. A
   main box picks Nouns, Verbs, Adjectives or Adverbs (every lemma, each with a one-line meaning); *Genres…* picks Any genre or one or more genres,

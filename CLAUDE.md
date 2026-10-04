@@ -859,3 +859,15 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   (places and landmarks) and things as the "From the Wheel" group.
 - Pitfall met twice: markdown backticks in an UNQUOTED shell heredoc make the shell run them. Always `<<'EOF'`.
 
+
+- Batch 9: Story words counts each entity's name as a whole phrase (case-insensitive, article optional, possessives); single words are counted only
+  for the first/last name of a proper character name. A word found in any manuscript is marked Known automatically (`wordsused.py`) with where it is used.
+  Overused is folded into Story words ("Often used"); Suggestions (`suggest.py`) is a tab.
+- Structure beats can repeat (`repeat: {min,max}`); occurrences are keys `base__N`, the count is stored in the draft (`repeats`) and promotion writes it
+  into the outline. The Writer's story overview is Ctrl+O (`key_overview`); the status line goal reads "N / M words · P%".
+- Builder: no right column. Left: Universes, Stories (titles only), then a large Story panel (Outline / Scenes / Notes, `notes.md`). A Wheel draft belongs
+  to a universe (`home`) and promotes into it without asking; the Builder no longer starts Wheel drafts.
+- kitty replaces Neovide: inside kitty (and `writer_kitty` on) the Writer opens in its own kitty window using `writer_font`, `writer_font_size`,
+  `writer_line_height` (modify_font cell_height %), `writer_padding`, `writer_opacity`; outside kitty it runs in the same terminal and a start note
+  says how to install kitty. `storywheel kitty` opens storywheel itself with kitty's normal spacing; `--probe` reports remote-control abilities. Old
+  Neovide settings are converted once by `migrate.migrate_settings()`. Switching in place by remote control is NOT used (see REPORT.md).
