@@ -2827,3 +2827,8 @@ The ranking is the algorithm's, not hand-picked: it picks up a few odd words (nu
 - Frames share mystery's skeleton, so the three genres have mystery's rhythm ("{first} named ... at {landmark}") in places; real use will show where it grates.
 - The floor still lets other genres' atoms in about one pick in eight, by design ("a retired spy" in a ghost story).
 - Two tests were seed-fragile and are now more robust (see CHANGELOG).
+
+## Full suite (batch 12)
+
+2,266 passed, 4 skipped, 0 failed, in one run. An earlier full run found one failure of mine (the noir title noun "alibi" does not singularize back from "alibis"); fixed and the whole suite re-run.
+The samples above were rolled before that one-word change. `stable` was moved to the commit that records this.
