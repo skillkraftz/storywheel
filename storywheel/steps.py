@@ -433,7 +433,7 @@ class Ctx(dict):
         if key == "genre":
             return " / ".join(e.rng.sample(e.library.genre_names, 2))
         if key == "structure":
-            return e.rng.choice([st.label for st in structures.registry().values()])
+            return e.rng.choice([st.label for st in structures.prose()])        # (a screen structure is chosen on purpose)
         if key in PLURALS:
             return plural(fill(self, self.draw(PLURALS[key])))
         if key == "title":

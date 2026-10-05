@@ -16,6 +16,10 @@ A beat with `"repeat": {"min": 1, "max": 4}` can occur that many times in a row 
 action): the writer adds or removes one in the Wheel and in the Builder's outline. The first one keeps the beat's key, later ones are
 `key__2`, `key__3`...; min is at least 1.
 
+A screen structure (`"screen": true`, with `"pages"`: its usual length) is for a screenplay: each beat may name its `"act"`, which becomes a
+section (`# Act One`) when the script is started from the outline. A story on a screen structure is a screenplay. Screen structures are never
+picked at random; you choose one.
+
 A beat with `"reframe": true` (kishotenketsu's *ten*) may only reinterpret something already
 established in the story: its templates may use threads and the story's own fields, never a fresh
 person, object or event.
@@ -51,8 +55,9 @@ def instance_number(key):
 
 
 class Beat:
-    def __init__(self, key, slot, label, opening="", closing=".", reframe=False, repeat=None):
+    def __init__(self, key, slot, label, opening="", closing=".", reframe=False, repeat=None, act=""):
         self.key, self.slot, self.label = key, slot, label
+        self.act = act                # a screen structure's act ("Act One"): the script's top-level section
         self.opening, self.closing = opening, closing
         self.reframe = reframe        # may only reinterpret what is already established (see report.lint)
         self.repeat = repeat          # (min, max) when the beat can occur several times in a row, else None
@@ -70,7 +75,7 @@ class Beat:
         if n <= 1:
             return self
         label = f"{self.label} ({n})" if numbered else self.label
-        return Beat(instance_key(self.key, n), self.slot, label, self.opening, self.closing, self.reframe, None)
+        return Beat(instance_key(self.key, n), self.slot, label, self.opening, self.closing, self.reframe, None, self.act)
 
 
 class BeatLabels(dict):
@@ -90,9 +95,11 @@ class BeatLabels(dict):
 
 
 class Structure:
-    def __init__(self, name, label, blurb, beats, show_labels=False, order=100):
+    def __init__(self, name, label, blurb, beats, show_labels=False, order=100, screen=False, pages=0):
         self.name, self.label, self.blurb = name, label, blurb
         self.beats, self.show_labels, self.order = beats, show_labels, order
+        self.screen = screen          # a screen structure: a story built on it is a screenplay (and it is never picked at random)
+        self.pages = pages            # a screen structure's usual length in pages (the target a new script starts with)
 
     @property
     def keys(self):
@@ -140,13 +147,13 @@ def _read(path):
             if repeat and repeat[1] < repeat[0]:
                 raise StructureError(f"{path}: beat {b['key']} has a repeat maximum below its minimum")
             beats.append(Beat(b["key"], b.get("slot", b["key"]), b.get("label", b["key"]),
-                              b.get("opening", ""), b.get("closing", "."), bool(b.get("reframe")), repeat))
+                              b.get("opening", ""), b.get("closing", "."), bool(b.get("reframe")), repeat, b.get("act", "")))
         keys = [b.key for b in beats]
         if not beats or len(set(keys)) != len(keys):
             raise StructureError(f"{path}: needs at least one beat, and beat keys must be unique")
         name = doc.get("name") or path.stem
         return Structure(name, doc.get("label", name), doc.get("blurb", ""), beats, bool(doc.get("show_labels")),
-                         doc.get("order", 100))
+                         doc.get("order", 100), bool(doc.get("screen")), int(doc.get("pages", 0) or 0))
     except (ValueError, KeyError, TypeError) as e:
         raise StructureError(f"{path}: {e!r} (see structures.py for the format)")
 
@@ -182,6 +189,11 @@ def find(text):
         if t in (s.name.lower(), s.label.lower()):
             return s
     return None
+
+
+def prose():
+    """The structures a story can be rolled into at random (screen structures are chosen on purpose)."""
+    return [s for s in registry().values() if not s.screen]
 
 
 def get(text):

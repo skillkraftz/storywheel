@@ -27,6 +27,7 @@ PLACEHOLDER = re.compile(r"^(character|place|thing|group|note)-\d+$")
 # The manuscript files storywheel makes: manuscript.md, and NN-name.md (a novel's chapters; the older one-file-per-scene stories).
 # Names with spaces, brackets or dots ("01-opening (xps copy 2026-10-04).md", "x.conflict-1.md") were made by something else.
 KNOWN_FILE = re.compile(r"^(manuscript|\d+-[a-z0-9-]+)\.md$")
+SCRIPT_FILE = "script.fountain"       # a screenplay's manuscript: one Fountain file (prose rules never apply to it)
 
 
 def slugify(text, fallback="untitled"):
@@ -283,12 +284,22 @@ class Story:
         from . import settings
         return str(settings.load_story(self.path).get("format", "short-story")).lower() == "novel"
 
+    def is_screenplay(self):
+        from . import settings
+        return str(settings.load_story(self.path).get("format", "short-story")).lower() == "screenplay"
+
+    @property
+    def script_path(self):
+        return self.manuscript_dir / SCRIPT_FILE
+
     def scenes(self):
         """The manuscript's files in order: [Path]. Only files storywheel itself makes count: `manuscript.md` and `NN-name.md` (the old
         one-file-per-scene names, and a novel's chapters). Anything else in the folder (a copy another tool made, say) is NOT part of the
         manuscript: see extra_files(). A short story that has `manuscript.md` is that one file."""
         if not self.manuscript_dir.is_dir():
             return []
+        if self.is_screenplay():
+            return [self.script_path] if self.script_path.exists() else []
         known = sorted(p for p in self.manuscript_dir.glob("*.md") if KNOWN_FILE.match(p.name))
         one = self.manuscript_dir / "manuscript.md"
         if one in known and not self._is_novel():
@@ -336,6 +347,17 @@ class Story:
         [{n, title, label, first_line, words, path, line, file}]. `line` is the marker's line (1 for an unmarked first scene)."""
         def build():
             out = []
+            if self.is_screenplay():
+                from . import fountain
+                for p in self.files():
+                    text = self._read(p)
+                    found = fountain.scenes(text)
+                    for k, sc in enumerate(found):
+                        end = found[k + 1]["line"] - 1 if k + 1 < len(found) else text.count("\n") + 1
+                        out.append({"n": sc["n"], "title": sc["title"], "label": sc["title"], "first_line": sc["first_line"],
+                                    "words": 0, "path": str(p), "line": sc["line"], "end": end, "file": p.name, "marked": True,
+                                    "section": sc["section"]})
+                return out
             for p in self.files():
                 for sc in parse_scenes(self._read(p)):
                     n = len(out) + 1
@@ -354,6 +376,9 @@ class Story:
     def append_scene(self, title="", text=""):
         """A new scene at the end of the manuscript, marked `* * * Title` (in the last file; a first file is made if there is none)."""
         files = self.files()
+        if self.is_screenplay():
+            from . import screenplay
+            return screenplay.append_scene(self, title)
         if not files:
             self.manuscript_dir.mkdir(parents=True, exist_ok=True)
             target = self.manuscript_dir / "manuscript.md"
@@ -372,8 +397,8 @@ class Story:
         the start of each scene, so the whole thing reads in order. The scene files are moved into a backup folder
         (<story>/.backups/migrated-DATE/) first; a novel keeps one file per chapter. Returns a message, or None."""
         flag = self.path / ".one-file-manuscript"
-        if flag.exists() or not self.path.is_dir():
-            return None                                       # (done once per story: files that turn up later are never merged)
+        if flag.exists() or not self.path.is_dir() or self.is_screenplay():
+            return None                                       # (done once per story: files that turn up later are never merged; never a script)
         files = self.files()
         if self._is_novel():
             return None
@@ -415,8 +440,8 @@ class Story:
         (a `.one-line-paragraphs` file says it is done), hard-wrapped paragraphs are joined and blank lines dropped, with the
         old files copied to <story>/.backups/paragraphs-DATE/ first. Returns a message when something changed, else None."""
         flag = self.path / ".one-line-paragraphs"
-        if flag.exists() or not self.path.is_dir():
-            return None
+        if flag.exists() or not self.path.is_dir() or self.is_screenplay():
+            return None                                       # (a screenplay is Fountain: its blank lines mean something)
         changed, total_joined, dropped = [], 0, 0
         files = self.files()
         stamp_ = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -478,6 +503,9 @@ class Story:
                     lambda: "\n\n".join(self._read(p).strip("\n") for p in self.files()))
 
     def word_count(self):
+        if self.is_screenplay():
+            from . import fountain
+            return memo((str(self.path), "words"), self._stamp(), lambda: sum(fountain.word_count(self._read(p)) for p in self.scenes()))
         return memo((str(self.path), "words"), self._stamp(), lambda: sum(count_words(self._read(p)) for p in self.scenes()))
 
     def add_scene(self, title="", text=""):
@@ -826,9 +854,15 @@ class Universe:
         s.path.mkdir(parents=True, exist_ok=True)
         m = {"id": slug, "title": title, "universe": self.slug, "created": datetime.date.today().isoformat()}
         m.update(meta or {})
+        fmt = str(m.pop("format", "") or "")                   # (the format is a setting, not part of the outline)
         s.save_outline(m, sections or {})
         _write(s.path / ".one-line-paragraphs", "one line = one paragraph\n")      # (new stories already follow the rule)
         _write(s.path / ".straight-quotes", "straight quotes in the manuscript; the export makes them curly\n")
+        from . import structures
+        shape = structures.find(m.get("structure", ""))
+        if (shape is not None and shape.screen) or fmt.lower() == "screenplay":
+            from . import screenplay
+            screenplay.make_screenplay(s, shape)                                  # (a story on a screen structure is a screenplay)
         if seed is not None:
             _write(s.path / "seed.json", json.dumps(seed, indent=2))
         return s

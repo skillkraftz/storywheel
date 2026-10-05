@@ -19,6 +19,8 @@ from conftest import write_json
 
 ROOT = Path(__file__).resolve().parent.parent
 NAMES = ["story-spine", "three-act", "kishotenketsu"]      # the order they are offered in
+SCREEN = ["feature-film", "short-film"]                 # (batch 17: screen structures, offered after the prose ones, never rolled at random)
+ALL = NAMES + SCREEN
 
 
 def run_cli(args, stdin, home, out):
@@ -31,7 +33,7 @@ def run_cli(args, stdin, home, out):
 
 def test_three_structures_ship_with_the_story_spine_first():
     reg = structures.registry()
-    assert list(reg) == NAMES
+    assert list(reg) == ALL and all(reg[n].screen for n in SCREEN) and not any(reg[n].screen for n in NAMES)
     assert reg["story-spine"].label == "Story Spine" and not reg["story-spine"].show_labels
     assert len(reg["story-spine"].beats) == 7 and len(reg["three-act"].beats) == 8 and len(reg["kishotenketsu"].beats) == 4
     assert reg["three-act"].show_labels and reg["kishotenketsu"].show_labels
@@ -55,8 +57,10 @@ def test_every_beat_has_templates_and_they_pass_the_lint():
 
 
 def test_beats_have_their_own_templates_and_share_no_slots():
-    slots = [b.slot for s in structures.registry().values() for b in s.beats]
+    slots = [b.slot for s in structures.prose() for b in s.beats]
     assert len(slots) == len(set(slots))
+    act = {b.slot for b in structures.registry()["three-act"].beats}
+    assert all(b.slot in act for n in SCREEN for b in structures.registry()[n].beats)          # (screen structures reuse the three-act frames)
     keys = [b.key for s in structures.registry().values() for b in s.beats]
     assert len(keys) == len(set(keys))                      # so thread labels are unambiguous
 
@@ -74,7 +78,7 @@ def test_user_structures_merge_and_can_replace(tmp_path):
         "label": "Mine", "blurb": "Two beats.", "show_labels": True,
         "beats": [{"key": "m1", "slot": "once", "label": "First"}, {"key": "m2", "slot": "climax"}]})
     got = structures.load(tmp_path)
-    assert list(got) == NAMES + ["mine"] and got["mine"].keys == ["m1", "m2"]
+    assert list(got) == ALL + ["mine"] and got["mine"].keys == ["m1", "m2"]
     assert got["mine"].beats[1].label == "m2"                  # label defaults to the key
     write_json(tmp_path / "structures" / "three-act.json", {
         "label": "Short Act", "beats": [{"key": "only", "slot": "act_setup"}]})
@@ -108,7 +112,7 @@ def test_the_structure_step_rolls_every_structure():
     engine = Engine(seed=3)
     step = step_by_key("structure")
     seen = {step.roll(engine, {"kept": {}, "seeds": {}, "atoms": {}})["structure"] for _ in range(80)}
-    assert seen == {s.label for s in structures.registry().values()}
+    assert seen == {s.label for s in structures.prose()}
 
 
 def test_an_unknown_structure_falls_back_to_the_story_spine():
@@ -121,7 +125,7 @@ def test_an_unknown_structure_falls_back_to_the_story_spine():
 def test_sample_picks_a_structure_at_random_per_story():
     engine = Engine(seed=5)
     seen = {build_story(engine, ["western"])["kept"]["structure"]["structure"] for _ in range(60)}
-    assert seen == {s.label for s in structures.registry().values()}
+    assert seen == {s.label for s in structures.prose()}
 
 
 @pytest.mark.parametrize("name", NAMES)

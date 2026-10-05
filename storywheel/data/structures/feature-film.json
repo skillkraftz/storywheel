@@ -1,0 +1,60 @@
+{
+ "_note": "A feature film in three acts and eight sequences (the sequence approach: each sequence is a 10-15 page movement with its own small arc). Beats reuse the three-act frames. A story on this structure is a screenplay.",
+ "name": "feature-film",
+ "label": "Feature Film",
+ "blurb": "Three acts in eight sequences: the world and the want, the push into the story, new rules, the midpoint, the squeeze, the lowest point, the final battle, the new world. About 100 to 120 pages.",
+ "order": 10,
+ "show_labels": true,
+ "screen": true,
+ "pages": 110,
+ "beats": [
+  {
+   "key": "seq_a",
+   "slot": "act_setup",
+   "label": "Sequence A: The world and the want",
+   "act": "Act One"
+  },
+  {
+   "key": "seq_b",
+   "slot": "act_incident",
+   "label": "Sequence B: The push into the story",
+   "act": "Act One"
+  },
+  {
+   "key": "seq_c",
+   "slot": "act_turn",
+   "label": "Sequence C: New rules",
+   "act": "Act Two"
+  },
+  {
+   "key": "seq_d",
+   "slot": "act_trials",
+   "label": "Sequence D: Rising trouble",
+   "act": "Act Two"
+  },
+  {
+   "key": "seq_e",
+   "slot": "act_midpoint",
+   "label": "Sequence E: The midpoint",
+   "act": "Act Two"
+  },
+  {
+   "key": "seq_f",
+   "slot": "act_crisis",
+   "label": "Sequence F: The lowest point",
+   "act": "Act Two"
+  },
+  {
+   "key": "seq_g",
+   "slot": "act_climax",
+   "label": "Sequence G: The final battle",
+   "act": "Act Three"
+  },
+  {
+   "key": "seq_h",
+   "slot": "act_resolution",
+   "label": "Sequence H: The new world",
+   "act": "Act Three"
+  }
+ ]
+}

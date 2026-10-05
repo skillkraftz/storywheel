@@ -294,6 +294,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("E", "entity_notes", "Entity notes", show=False),
         Binding("A", "add_beat", "Add a beat", show=False),
         Binding("X", "remove_beat", "Remove a beat", show=False),
+        Binding("P", "start_script", "Start the script from the outline", show=False),
         navigation.back_binding(),
         navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
@@ -1597,17 +1598,42 @@ class BuilderScreen(KeptScreen, Screen):
         """A blank story in the open universe, with no Wheel draft behind it: a title, an empty manuscript to write in."""
         if not self.universe:
             return self.say("Open or create a universe first.")
-        self.app.push_screen(EditScreen("A new story in " + self.universe.name, {"title": ""}), self._story_named)
+        from . import settings as settings_mod
+        fmt = settings_mod.load_global().get("format", "short-story")
+        self.app.push_screen(EditScreen("A new story in " + self.universe.name,
+                                        {"title": "", "format (short-story, novel or screenplay)": fmt}), self._story_named)
 
     def _story_named(self, out):
         title = (out or {}).get("title", "").strip()
         if not title:
             return
-        story = self.universe.new_story(title, {"genre": " / ".join(self.universe.settings().get("genres", []))})
+        fmt = (out or {}).get("format (short-story, novel or screenplay)", "").strip().lower()
+        if fmt not in ("short-story", "novel", "screenplay"):
+            fmt = ""
+        story = self.universe.new_story(title, {"genre": " / ".join(self.universe.settings().get("genres", [])), "format": fmt})
+        if fmt in ("short-story", "novel"):
+            from . import settings as settings_mod
+            settings_mod.save_story(story.path, {"format": fmt})
         self.story = story
         self.refresh_all()
-        self.say(f"Started '{story.title}': a blank story, with no outline. Press w to write it, or edit its outline rows (right-click or e).")
+        kind = "screenplay" if fmt == "screenplay" else "story"
+        self.say(f"Started '{story.title}': a blank {kind}, with no outline. Press w to write it, or edit its outline rows (right-click or e)."
+                 + (" P starts the script from the outline." if kind == "screenplay" else ""))
         self.b.changed = True
+
+    def action_start_script(self):
+        """A screenplay story's script.fountain from its outline: the beats as sections and synopses (they don't print)."""
+        from . import screenplay
+        if self.story is None:
+            return self.say("Open a story first.")
+        if not self.story.is_screenplay():
+            return self.say("This story is not a screenplay. Set its format to screenplay (S, story settings) or give it a screen structure.")
+        try:
+            path = screenplay.start_from_outline(self.story)
+        except screenplay.ScriptExists as e:
+            return self.say(str(e))
+        self.refresh_all()
+        self.say(f"Started {path.name} from the outline: the beats are sections and synopses (they don't print). Press w to write.")
 
     def action_entity_notes(self):
         self.remove_class("-show-story")
@@ -1732,16 +1758,22 @@ class BuilderHooks:
             screen.say("This universe has no story to export yet.")
             return
         screen.story = story
+        if fmt is None and story.is_screenplay():
+            options = [("Script (.pdf): standard screenplay pages", "pdf"), ("Script (.pdf), anonymous: no name or contact", "pdf-anon"),
+                       ("Final Draft (.fdx)", "fdx"), ("Fountain (.fountain): the script as plain text", "fountain")]
+            self.push_screen(ChoiceScreen(f"Export '{story.title}' as…", options),
+                             lambda f: self.export(screen, f) if f else None)
+            return
         if fmt is None:
             options = [("Word (.docx), Shunn manuscript format", "docx"), ("Word (.docx), anonymous: no name or contact block", "docx-anon"), ("OpenDocument (.odt), needs LibreOffice", "odt"),
                        ("PDF, needs LibreOffice", "pdf"), ("Markdown (.md)", "md"), ("Plain text (.txt)", "txt"),
-                       ("Fountain screenplay (.fountain), a stub", "fountain")]
+                       ("Fountain (.fountain): the prose as action, to start adapting it", "fountain")]
             self.push_screen(ChoiceScreen(f"Export '{story.title}' as…", options),
                              lambda f: self.export(screen, f) if f else None)
             return
         anonymous = None
-        if fmt == "docx-anon":
-            fmt, anonymous = "docx", True
+        if fmt in ("docx-anon", "pdf-anon"):
+            fmt, anonymous = fmt.split("-")[0], True
         screen.say(f"Exporting {story.title} as .{fmt} …")
         self.refresh()
         try:

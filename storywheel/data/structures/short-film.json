@@ -1,0 +1,46 @@
+{
+ "_note": "A short film: one situation, a turn, a payoff. Beats reuse the three-act frames. A story on this structure is a screenplay.",
+ "name": "short-film",
+ "label": "Short Film",
+ "blurb": "One situation, a disruption, rising complications, a turn and a last image. About 5 to 15 pages.",
+ "order": 11,
+ "show_labels": true,
+ "screen": true,
+ "pages": 12,
+ "beats": [
+  {
+   "key": "opening",
+   "slot": "act_setup",
+   "label": "Opening image"
+  },
+  {
+   "key": "disruption",
+   "slot": "act_incident",
+   "label": "The disruption"
+  },
+  {
+   "key": "complications",
+   "slot": "act_trials",
+   "label": "Complications",
+   "repeat": {
+    "min": 1,
+    "max": 3
+   }
+  },
+  {
+   "key": "short_turn",
+   "slot": "act_crisis",
+   "label": "The turn"
+  },
+  {
+   "key": "payoff",
+   "slot": "act_climax",
+   "label": "The payoff"
+  },
+  {
+   "key": "last_image",
+   "slot": "act_resolution",
+   "label": "Last image"
+  }
+ ]
+}

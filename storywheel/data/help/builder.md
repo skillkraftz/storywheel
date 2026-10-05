@@ -33,6 +33,7 @@ new_story: New blank story (no Wheel draft behind it)
 entity_notes: Edit the selected entity's own notes, under its card
 add_beat: On the outline: add another of the beat under the cursor, where the structure lets it repeat
 remove_beat: On the outline: remove one of the repeated beat
+start_script: A screenplay: start script.fountain from the outline (the beats become sections and synopses, which do not print); an existing script with scenes is left alone
 focus_card: Back to the card
 toggle_story: On a narrow terminal: take turns between the Story panel and the cards
 ### StoryOptions | The stories list

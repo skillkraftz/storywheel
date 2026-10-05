@@ -283,7 +283,8 @@ def test_plus_story_makes_a_blank_story_with_no_wheel_draft(world):
         await pilot.click("#s-new")
         await pilot.pause()
         scr = app.screen
-        scr.query_one(Input).value = "A Brand New Tale"
+        scr.query(Input).first().value = "A Brand New Tale"
+        await pilot.press("enter")                                  # (to the format box: short-story is filled in)
         await pilot.press("enter")
         await pilot.pause()
         return type(scr).__name__, app.screen_ref.story.title, flat(screen_text(app)), app.next

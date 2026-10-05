@@ -37,7 +37,16 @@ def story_json(s):
             "meta": meta, "outline": sections, "scenes": [e["title"] for e in s.scene_list()], "files": [p.name for p in s.files()], "extra_files": [p.name for p in s.extra_files()], "words": s.word_count(),
             "path": str(s.path), "manuscript": str(s.manuscript_dir), "settings": settings.load_story(s.path),
             "author": {k: v for k, v in settings.load_global().items()
-                       if k in ("author_name", "legal_name", "address", "email", "phone")}}
+                       if k in ("author_name", "legal_name", "address", "email", "phone")},
+            "screenplay": s.is_screenplay(), "script": str(s.script_path),
+            "target_pages": _target_pages(s)}
+
+
+def _target_pages(s):
+    if not s.is_screenplay():
+        return None
+    from . import screenplay
+    return screenplay.target_pages(s)
 
 
 def universe_json(u):
@@ -258,6 +267,53 @@ def cmd_story(args):
     emit(story_json(s)) if args.json else print(json.dumps(story_json(s), indent=2, ensure_ascii=False))
 
 
+def _story_of(target):
+    uni, _, slug = (target or "").partition("/")
+    u = _universe(uni)
+    s = u.story(slug)
+    if not s:
+        sys.exit(f"No story '{slug}' in {u.slug}")
+    return s
+
+
+def cmd_script(args):
+    """Screenplays: script ensure|start UNIVERSE/STORY, script check|pages|scenes FILE."""
+    from pathlib import Path
+    from . import fountain, screenplay, screenplay_pdf
+    if args.action in ("ensure", "start"):
+        s = _story_of(args.target)
+        if not s.is_screenplay():
+            sys.exit(f"'{s.title}' is not a screenplay (its format is set in the story's settings).")
+        if args.action == "ensure":
+            path = screenplay.ensure_script(s)
+            emit({"path": str(path)}) if args.json else print(path)
+            return
+        try:
+            path = screenplay.start_from_outline(s, replace=args.replace)
+        except screenplay.ScriptExists as e:
+            sys.exit(str(e))
+        emit({"path": str(path)}) if args.json else print(f"  Started {path} from the outline.")
+        return
+    path = Path(args.target or "")
+    if not path.is_file():
+        sys.exit(f"No file {path}")
+    text = path.read_text(encoding="utf-8")
+    if args.action == "check":
+        found = screenplay.flip_test(text, args.target_pages)
+        if args.json:
+            emit({"problems": found, "pages": screenplay_pdf.estimate_pages(text)})
+        else:
+            for d in found:
+                print(f"  {d['line']:5d}  {d['message']}")
+            if not found:
+                print("  Nothing to flag.")
+    elif args.action == "pages":
+        pages = screenplay_pdf.estimate_pages(text)
+        emit({"pages": pages}) if args.json else print(pages)
+    else:
+        emit(fountain.scenes(text)) if args.json else print("\n".join(f"  {d['line']:5d}  {d['title']}" for d in fountain.scenes(text)))
+
+
 def cmd_promote(args):
     from . import promote, store
     from .engine import Engine
@@ -361,7 +417,9 @@ def default_format(story):
     from . import settings
     st = settings.load_story(story.path)
     fmt = str(st.get("export_format") or settings.load_global().get("export_format") or "docx").lower()      # (the story's own, else yours)
-    return "fountain" if str(st.get("format", "")).lower() == "screenplay" and fmt in ("docx", "odt", "pdf") else fmt
+    if str(st.get("format", "")).lower() == "screenplay":
+        return fmt if fmt in ("pdf", "fountain", "fdx") else "pdf"            # (a screenplay exports as a script)
+    return fmt
 
 
 def exports_status():
@@ -609,6 +667,12 @@ def add_parsers(sub):
     p.add_argument("target", nargs="?", help="for show: universe/story")
     p.add_argument("--universe")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("script", help="screenplays:  script ensure|start UNIVERSE/STORY [--replace] | script check|pages|scenes FILE [--target-pages N]")
+    p.add_argument("action", choices=["ensure", "start", "check", "pages", "scenes"])
+    p.add_argument("target", help="universe/story (ensure, start) or a .fountain file (check, pages, scenes)")
+    p.add_argument("--replace", action="store_true", help="start: replace a script that already has scenes (it is backed up first)")
+    p.add_argument("--target-pages", dest="target_pages", type=int, help="check: the length the script aims at")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("promote", help="bring a Wheel draft into a universe:  promote N --new NAME | --universe SLUG")
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
     p.add_argument("--universe", help="an existing universe (default: make a new one)")
@@ -619,7 +683,7 @@ def add_parsers(sub):
     p = sub.add_parser("manuscript", help="manuscript export:  manuscript export UNIVERSE/STORY --format docx | manuscript text UNIVERSE/STORY")
     p.add_argument("action", choices=["export", "text"])
     p.add_argument("target", help="universe/story")
-    p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt or fountain")
+    p.add_argument("--format", default="docx", help="docx (default), odt, pdf, md, txt, fountain or fdx (a screenplay: pdf, fountain or fdx)")
     p.add_argument("--out", help="folder to write into (default: the manuscripts folder)")
     p.add_argument("--anonymous", action="store_true", help="no name, contact block, byline or surname (header: Title / page)")
     p.add_argument("--json", action="store_true")
@@ -631,7 +695,7 @@ def add_parsers(sub):
     p = sub.add_parser("exports", help="exports:  exports status [--json] | exports make UNIVERSE/STORY [--format F] [--json]")
     p.add_argument("action", choices=["status", "make"])
     p.add_argument("target", nargs="?", help="universe/story (or a story slug that is in one universe only)")
-    p.add_argument("--format", help="docx, odt, pdf, md, txt or fountain (default: the story's own export format)")
+    p.add_argument("--format", help="docx, odt, pdf, md, txt, fountain or fdx (default: the story's own export format; a screenplay: pdf)")
     p.add_argument("--json", action="store_true")
     for name, text in (("define", "meanings of a word (offline dictionary)"), ("thesaurus", "similar and opposite words"),
                        ("lookup", "meanings, similar and opposite words")):
@@ -664,4 +728,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
