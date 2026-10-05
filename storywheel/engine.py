@@ -201,8 +201,9 @@ class Engine:
                 entry = Entry(name)
                 return entry if not accept or accept(entry) else None
         weights = mix.weights()
+        entries = [e for e in wl.entries if mix.frame_entry_ok(e)] if wl.is_template else wl.entries     # (frames: the story's own genres only)
         options = [(e, mix.entry_weight(e, weights) * (adjust(e.text) if adjust else 1.0) * (bias(e) if bias else 1.0))
-                   for e in wl.entries if not accept or accept(e)]
+                   for e in entries if not accept or accept(e)]
         if not options:
             return None
         live = [(e, w) for e, w in options if w > 0]

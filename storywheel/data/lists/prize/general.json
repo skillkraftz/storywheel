@@ -1,46 +1,130 @@
 {
-  "_note": "Something worth wanting, as a noun phrase. Short parts only. Plain entries fit any story; tagged ones are favored in those genres.",
-  "slot": "prize",
-  "tags": ["general"],
-  "entries": [
-    {"text": "first prize", "features": ["social"]},
-    {"text": "a fresh start", "features": ["social"]},
-    {"text": "a full pardon", "features": ["social"]},
-    {"text": "a good name", "features": ["social"]},
-    {"text": "a place on the council", "features": ["social"]},
-    {"text": "a seat at the table", "features": ["social"]},
-    {"text": "a small fortune", "features": ["material"]},
-    {"text": "a quiet corner", "features": ["material"]},
-    {"text": "the last word", "features": ["inner"]},
-    {"text": "the family land", "features": ["material"]},
-    {"text": "a second chance", "features": ["social"]},
-    {"text": "a place in the parade", "features": ["social"]},
-    {"text": "a stable job", "features": ["social"]},
-    {"text": "a fair trial", "features": ["social"]},
-    {"text": "a proper funeral", "features": ["inner", "social"]},
-    {"text": "a bigger house", "features": ["material"]},
-    {"text": "a loyal friend", "features": ["social"]},
-    {"text": "the truth", "features": ["inner"]},
-    {"text": "a clear conscience", "features": ["inner"]},
-    {"text": "a title", "features": ["social"]},
-    {"text": "a silver claim", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a spread of land", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a clear title", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a place on the drive", "tags": ["western", "historical"], "features": ["social"]},
-    {"text": "a deputy's badge", "tags": ["western", "historical"], "features": ["social"]},
-    {"text": "a stake in the railroad", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a fast horse", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "passage out West", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a water right", "tags": ["western", "historical"], "features": ["material"]},
-    {"text": "a small kingdom", "tags": ["fairy tale"], "features": ["material", "social"]},
-    {"text": "a wish granted", "tags": ["fairy tale"], "features": ["social"]},
-    {"text": "a place at court", "tags": ["fairy tale"], "features": ["social"]},
-    {"text": "a broken curse", "tags": ["fairy tale"], "features": ["social"]},
-    {"text": "a true name", "tags": ["fairy tale"], "features": ["social"]},
-    {"text": "a home in the wood", "tags": ["fairy tale"], "features": ["material"]},
-    {"text": "three wishes", "tags": ["fairy tale"], "features": ["material"]},
-    {"text": "a dragon's hoard", "tags": ["fairy tale"], "features": ["material"]},
-    {"text": "bread for winter", "tags": ["fairy tale"], "features": ["material"]},
-    {"text": "a royal pardon", "tags": ["fairy tale"], "features": ["social"]}
-  ]
+ "_note": "Something worth wanting, as a noun phrase. Short parts only. These fit any story; genre prizes live in the genres' own prize lists (western's and fairy tale's moved out in batch 16).",
+ "slot": "prize",
+ "tags": [
+  "general"
+ ],
+ "entries": [
+  {
+   "text": "first prize",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a fresh start",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a full pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a good name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place on the council",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a seat at the table",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a small fortune",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a quiet corner",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the last word",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the family land",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a second chance",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place in the parade",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a stable job",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a fair trial",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a proper funeral",
+   "features": [
+    "inner",
+    "social"
+   ]
+  },
+  {
+   "text": "a bigger house",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a loyal friend",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the truth",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a clear conscience",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a title",
+   "features": [
+    "social"
+   ]
+  }
+ ]
 }

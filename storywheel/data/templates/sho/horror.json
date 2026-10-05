@@ -9,7 +9,7 @@
   "{SOMEONE:!threatening} started knocking at {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
   "{first} left {THING:!living} on the step for {SOMEONE:!threatening}, and by morning both were gone.",
   "A cold snap came: {DISASTER:strikes} touched {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
-  "{first} kept putting off {DO_THING} {THING}, and the {season} grew darker.",
+  "{first} had to {DO_THING} {THING} {DEADLINE}, and kept putting it off.",
   "{CLOSE:human} asked about {TOPIC}, and {first} changed the subject {MANNER}."
  ]
 }

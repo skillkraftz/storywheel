@@ -1,36 +1,329 @@
 {
-  "_note": "Fills {CLOSE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead.",
-  "slot": "close",
-  "tags": ["general"],
-  "entries": [
-    "{first}'s sister",
-    "{first}'s oldest friend",
-    "{first}'s son",
-    "{first}'s daughter",
-    "{first}'s business partner",
-    "{first}'s mother",
-    "{first}'s father",
-    "{first}'s spouse",
-    "{first}'s apprentice",
-    {
-      "text": "{first}'s ex",
-      "features": ["human"]
-    },
-    {
-      "text": "{first}'s dog",
-      "features": ["creature", "friendly"]
-    },
-    "{first}'s best customer",
-    "{first}'s one true ally",
-    "{first}'s brother",
-    "{first}'s cousin",
-    "{first}'s landlady",
-    "{first}'s godmother",
-    "{first}'s old teacher",
-    "{first}'s neighbor",
-    "{first}'s only customer",
-    "{first}'s twin",
-    "{first}'s grandmother",
-    "{first}'s foster sibling"
-  ]
+ "_note": "Fills {CLOSE} in templates. Plain strings inherit this list's tags. An entry written as {\"text\": \"...\", \"tags\": [...]} carries its own tags instead. Each entry says which protagonists it fits by age (child, teen, adult, elder): a 15-year-old has a coach and a first crush, not a spouse or a best customer.",
+ "slot": "close",
+ "tags": [
+  "general"
+ ],
+ "entries": [
+  {
+   "text": "{first}'s sister",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s oldest friend",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s son",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s daughter",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s business partner",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s mother",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s father",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s spouse",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s apprentice",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s ex",
+   "features": [
+    "human",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s dog",
+   "features": [
+    "creature",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s best customer",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s one true ally",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s brother",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s cousin",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s landlady",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s godmother",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s old teacher",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s neighbor",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s only customer",
+   "features": [
+    "human",
+    "friendly",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s twin",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s grandmother",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s foster sibling",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult",
+    "elder"
+   ]
+  },
+  {
+   "text": "{first}'s best friend",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s little brother",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s older sister",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s coach",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s first crush",
+   "features": [
+    "human",
+    "friendly",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s lab partner",
+   "features": [
+    "human",
+    "friendly",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s stepfather",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s grandfather",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "{first}'s homeroom teacher",
+   "features": [
+    "human",
+    "friendly",
+    "child",
+    "teen"
+   ]
+  },
+  {
+   "text": "{first}'s locker neighbor",
+   "features": [
+    "human",
+    "friendly",
+    "teen"
+   ]
+  }
+ ]
 }

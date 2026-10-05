@@ -600,6 +600,7 @@ general, unowned descriptions of story shape.
 - `prize/adventure`
 - `prize/comedy`
 - `prize/coming-of-age`
+- `prize/fairy-tale`
 - `prize/fantasy`
 - `prize/general`
 - `prize/ghost-story`
@@ -610,6 +611,7 @@ general, unowned descriptions of story shape.
 - `prize/romance`
 - `prize/sci-fi`
 - `prize/thriller`
+- `prize/western`
 - `reaction/adventure`
 - `reaction/comedy`
 - `reaction/coming-of-age`

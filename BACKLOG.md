@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 15.
+Last updated after batch 16.
 
 
 ## Now
@@ -35,17 +35,13 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
 - **A draft can only be promoted once.** *Partial.* Decide: re-promoting updates the universe (with a preview), or stays one-way.
 
 
-## Weak spots found by the batch 15 check (`tools/genre_check.py`)
+## Weak spots found by the batch 15 check (`tools/genre_check.py`; batch 16 fixed the rest)
 
-- **Western and fairy tale repeat a few entries.** *Partial.* Not covered by the single-genre repetition test (only their blend is). Fails at 5 SD:
-  western `title/general` "{TITLE_ADJ} {title_nouns}" and `prize/general` "a dragon's hoard"; fairy tale `act_thing/general` "laid by", `prize/general` "a water right"
-  and "a stake in the railroad". `prize/general` holds western and fantasy prizes under the general tag: move them to their genres and give fairy tale prizes of its own.
-- **Watch items** (4 to 5 SD): western "by moonlight"; fairy tale four western prizes from `prize/general` (same cause) and one `want/general` frame; noir "polished".
-- **A genre's stories still use its neighbors' frames** (a mystery titled "Portrait Protocol" from thriller's titles). By design (profiles give neighbors weight), but
-  for frames it could be lower than for atoms.
 - **Place names can double a word** ("Hollow Hollow" from `place_adj` + `place_feature` in horror). Skip a feature that repeats the adjective.
-- **The "close" people are one general list** ("their only customer" in a coming-of-age story). Genre lists, or age-aware ones.
 - **Western and fairy tale have no frames of their own** (they use the general frames); the frame-sharing check does not cover them.
+- **The oddity titles are unreachable.** The `wildcard` title frames came only through the floor, which no longer applies to frames. Give them a
+  small share of their own (an occasional strange title) or remove them.
+- **A teen protagonist's close people are one general list.** Marked by age now, but not by genre: a coming-of-age story and a western share it.
 
 
 ## Later
@@ -97,6 +93,7 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - **Batch 7:** update by commit, comedy, fantasy and mystery content — `b7-*`.
 - **Batch 8:** neighbors, seasons, moods and sentence breaks; horror, sci-fi, romance; Words tabs reworked; Genre words as long ranked lists —
   `b8-a`, `b8-b`, `b8-horror`, `b8-scifi`, `b8-romance`, `b8-genre-words`.
+- **Batch 16:** frames only from the story's genres; people fit the protagonist's age; western and fairy tale repetition; generator scripts retired (`b16-*`).
 - **Batch 15:** own frames for mystery, horror, sci-fi and romance; ages and jobs; no blank fills; eras and technology in every genre; watch list; the all-genre check (`b15-*`).
 - **Batch 13–14:** the three genres resolved (`b13-*`); testing policy and heist, adventure, coming-of-age (`b14-*`).
 - **Batch 11–12:** help and footers (`b11-*`), the help toggle (`b12-a`), ghost story, noir, thriller and the shared rural and mythological floor lists (`b12-*`).

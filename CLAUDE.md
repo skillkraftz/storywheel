@@ -556,6 +556,9 @@ what each piece added.
   `STORYWHEEL_HOME` and `STORYWHEEL_LIBRARY` (and `STORYWHEEL_MANUSCRIPTS`, and `STORYWHEEL_DICTIONARY` when a dictionary is needed, pointing at a
   copy) to a temporary folder first. Never touch the owner's real `~/.storywheel` or `~/Writing`, and never use the network outside tests.
 - Docs and code with backticks go through quoted heredocs (`<<'EOF'`), never unquoted ones: the shell would run the backticked text.
+- **The data files are the source of truth** (`storywheel/data/**/*.json`). Edit them directly. Never write content through a generator script
+  and never rerun an old one: earlier batches used scratch scripts that later hand edits made out of date, and rerunning one silently undoes those
+  edits (it happened in batch 15 with a job's age band). The scratch scripts were deleted in batch 16; none are kept in the repository.
 
 
 - **Testing policy (firm; batch 14).**
@@ -951,4 +954,14 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Eras: never against a modern/period atom already in the story; with a genre default technology, other genres' eras of the other kind are ruled out, the genre's
   own eras never (`Ctx.era_accept`, `Ctx.own_eras`). Western, fairy tale and fantasy are `period` in `_tech`. Faker's jobs carry `modern` (`engine.GENERATED_FEATURES`).
 - Repetition: `report.FAIL_SD` 5 fails, `report.WATCH_SD` 4 lists a "watch" item. `tools/genre_check.py` is the all-genre check; run it at the end of a content batch.
+
+- Batch 16: frames (every template slot: titles, premises, twists, beats) come only from the story's own genres. `Mix.list_probabilities` keeps only the lists
+  of the story's genres plus general and untagged ones for any template slot and gives the floor nothing there; `Mix.frame_entry_ok` drops a general frame
+  whose entry tags name only other genres (`Engine.choose_entry`). Neighbors and the floor still apply to atoms. The `wildcard` oddity titles therefore no
+  longer appear unless a story's genres include `wildcard`.
+- People know the protagonist's age: `close` and `someone` entries may carry `child`/`teen`/`adult`/`elder`; an entry with none fits anyone, `adult` includes
+  `elder` (`steps.person_fits`, `Ctx.slot_accept`). Every `close` entry is marked; a `someone` is marked only when it implies a grown-up's relationship to the
+  protagonist (an old flame, a jilted fiancé, a former partner).
+- The repetition report's expected count is the larger of the weighted share and an even share among the list's entries that were picked at all: the
+  recent-picks memory rotates a list's usable entries, so weights alone underestimated untagged frames and narrowed verb sets and flagged them falsely.
 

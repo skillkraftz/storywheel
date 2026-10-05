@@ -115,7 +115,10 @@ def test_the_voice_follows_in_verbs_and_abstractions(genre):
         assert sum(bool(t[2] & flavor) for t in picks) / len(picks) >= 0.5, (genre, slot)
 
 
-@pytest.mark.parametrize("genre", GENRES)
+ALL_GENRES = ["western", "fairy tale"] + GENRES          # (western and fairy tale have no frames of their own, but the repetition check covers them too)
+
+
+@pytest.mark.parametrize("genre", ALL_GENRES)
 def test_no_repeats_and_nothing_far_above_its_fair_share(genre):
     r = report.build_report([genre], stories=200, seed=101)
     assert len(r["heavy_lines"]) == 0, r["heavy_lines"][:5]

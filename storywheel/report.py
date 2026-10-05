@@ -227,6 +227,8 @@ def normalize(line, story):
     return line
 
 
+from .engine import MEMORYLESS                                    # noqa: E402
+
 FAIL_SD = 5          # an entry this many standard deviations above chance (and 3x its share, 5+ picks) fails the repetition check
 WATCH_SD = 4         # ... and from this many it is listed as one to watch
 
@@ -244,12 +246,18 @@ def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5,
     active = defaultdict(float)
     for (lid, text), n in counts.items():
         active[lid] += shares.get((lid, text), 0.0)
+    # The recent-picks memory rotates a list's entries, so in practice a list whose picks are narrowed (by a frame's features, by a genre's
+    # own frames) comes out close to even among the entries it can use, whatever their weights. An entry is only over-picked if it beats
+    # BOTH its weighted share and an even share among the entries of its list that were picked at all.
+    distinct = Counter(lid for (lid, _t) in counts)
     rows = []
     for (lid, text), n in counts.items():
         share = shares.get((lid, text))
         if not share:
             continue                                     # invented names, generated words
-        expected = per_list[lid] * share / (active[lid] or 1.0)
+        weighted = per_list[lid] * share / (active[lid] or 1.0)
+        even = per_list[lid] / distinct[lid] if engine.library.lists[lid].slot not in MEMORYLESS else 0.0
+        expected = max(weighted, even)
         rows.append((n / expected, n, expected, lid, text))
     # (a rare entry picked 5 times when 1 was expected is noise, not a pattern: it must also be 5 standard deviations above what chance gives: with hundreds of rare entries, 4 flags one by luck about once a run)
     flagged = [r for r in rows if r[0] > factor and r[1] >= min_count and r[1] > r[2] + FAIL_SD * r[2] ** 0.5]

@@ -1,0 +1,131 @@
+{
+ "_note": "What a fairy-tale protagonist wants: wishes, a cottage, a broken curse, the king's favor.",
+ "slot": "prize",
+ "tags": [
+  "fairy tale",
+  "medieval"
+ ],
+ "entries": [
+  {
+   "text": "a small kingdom",
+   "features": [
+    "material",
+    "social"
+   ]
+  },
+  {
+   "text": "three wishes",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a home in the wood",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a dragon's hoard",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "bread for winter",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a golden goose",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a cottage by the mill",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a bottomless purse",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a cloak of feathers",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a gold-laying hen",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a wish granted",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place at court",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a broken curse",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a true name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a royal pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the king's favor",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a seat at the feast",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the miller's blessing",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a kind heart",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "clear sight",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

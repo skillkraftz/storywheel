@@ -1,0 +1,130 @@
+{
+ "_note": "What a western protagonist wants: land, water, a badge, a fair start out West.",
+ "slot": "prize",
+ "tags": [
+  "western",
+  "historical"
+ ],
+ "entries": [
+  {
+   "text": "a silver claim",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a spread of land",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a clear title",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a stake in the railroad",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a fast horse",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "passage out West",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a water right",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a quarter section",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a registered brand",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the mining rights",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a homestead deed",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a new saddle",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a place on the drive",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a deputy's badge",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a sheriff's star",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "the town's respect",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a full partnership",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a clean record",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a steady hand",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "an easy mind",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

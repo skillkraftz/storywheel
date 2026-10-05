@@ -769,6 +769,14 @@ share goes to untagged lists and lists of neighboring genres; genres that are no
 a slot has no neighbor lists at all the floor shrinks to that tenth. So a fantasy story gets no insurance adjuster, and a comedy no
 dragon's blood. A genre with no `_neighbors` entry keeps the even floor.
 
+**Frames are the genre's own.** Neighbors and the floor lend pieces (people, things, places, names, verbs), never frames: a story's titles,
+premises, twists and beats come only from its own genres' frames and the general ones (a general frame tagged for another genre is left out).
+So a mystery can meet a thriller's courier, but it is never titled like a thriller.
+
+**People fit the protagonist's age.** Close people and passing characters can say which protagonists they fit, with the same age bands as
+jobs (`child`, `teen`, `adult`, `elder`): a coming-of-age protagonist has a coach, a best friend and a first crush, never a spouse or a best
+customer, and is never visited by an old flame.
+
 **Moods** lean the same way: each mood in `lists/mood/general.json` is tagged with the genres it suits ("absurd" is comedy's, "eerie"
 is horror's), so "comedy · eerie" is rare. **Era and season agree**: an era that names a season ("the week before Christmas") sets it
 (`data/seasons.json` lists the words).

@@ -1,45 +1,63 @@
 {
-  "_note": "After 'Because of that, '. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
-  "slot": "escalation",
-  "tags": ["general"],
-  "entries": [
-    "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
-    "{CLOSE} {ACT_PERSON} {first} out of {MOTIVE}",
-    "{SOMEONE:human} learned about {TOPIC} and told the {rival}",
-    "{THING} went missing, and {SOMEONE:human} blamed {first}",
-    "{first} lost {LOSS}, and {SOMEONE:human} took {THING}",
-    "{SOMEONE:!plural} turned out to be {BETRAYAL}",
-    "{SOMEONE:human} accused {first} of {CRIME}",
-    "the {rival} demanded {PRIZE:!inner} {DEADLINE}",
-    "{DISASTER:strikes} struck {landmark}, and {CLOSE} paid for it",
-    "the {rival} {ACT_THING} {THING} {MANNER}",
-    "{first} {ACT_PLACE} {landmark} {MANNER}, but {SOMEONE} {was} already there",
-    "everything got worse, mostly because {first} {flaw}",
-    "the secret came out: {first} {secret}",
-    "{CLOSE:human} found out about {TOPIC} from {SOMEONE:human}",
-    "{the_someone} came back {MANNER}, demanding {PRIZE:!inner}",
-    "the {rival} demanded {the_thing} {DEADLINE}",
-    "the damage from {the_disaster:strikes} reached {landmark}",
-    "{the_message:physical} reached {SOMEONE:human} {MANNER}",
-    "{the_thing} turned out to belong to {SOMEONE:human}",
-    "the {rival} {ACT_PERSON} {the_someone} out of {MOTIVE}",
-    "{the_someone:human} told the {rival} about {TOPIC}",
-    "{the_thing} {was} stolen, and {the_someone:human} {was} the only suspect",
-    {
-      "text": "the {rival:human} sent riders after {first}",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{SOMEONE:human} showed up at {landmark} {MANNER}, hunting {first}",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "the {rival:magic|threatening} learned the true name of {THING:magic}",
-      "tags": ["fairy tale"]
-    },
-    {
-      "text": "{first}'s wish for {PRIZE:!inner} came true, at the price of {VALUE}",
-      "tags": ["fairy tale"]
-    }
-  ]
+ "_note": "After 'Because of that, '. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
+ "slot": "escalation",
+ "tags": [
+  "general"
+ ],
+ "entries": [
+  "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
+  "{CLOSE} {ACT_PERSON} {first} out of {MOTIVE}",
+  "{SOMEONE:human} learned about {TOPIC} and told the {rival}",
+  "{THING} went missing, and {SOMEONE:human} blamed {first}",
+  "{first} lost {LOSS}, and {SOMEONE:human} took {THING}",
+  "{SOMEONE:!plural} turned out to be {BETRAYAL}",
+  "{SOMEONE:human} accused {first} of {CRIME}",
+  "the {rival} demanded {PRIZE:!inner} {DEADLINE}",
+  "{DISASTER:strikes} struck {landmark}, and {CLOSE} paid for it",
+  "the {rival} {ACT_THING} {THING} {MANNER}",
+  "{first} {ACT_PLACE} {landmark} {MANNER}, but {SOMEONE} {was} already there",
+  "everything got worse, mostly because {first} {flaw}",
+  "the secret came out: {first} {secret}",
+  "{CLOSE:human} found out about {TOPIC} from {SOMEONE:human}",
+  "{the_someone} came back {MANNER}, demanding {PRIZE:!inner}",
+  "the {rival} demanded {the_thing} {DEADLINE}",
+  "the damage from {the_disaster:strikes} reached {landmark}",
+  "{the_message:physical} reached {SOMEONE:human} {MANNER}",
+  "{the_thing} turned out to belong to {SOMEONE:human}",
+  "the {rival} {ACT_PERSON} {the_someone} out of {MOTIVE}",
+  "{the_someone:human} told the {rival} about {TOPIC}",
+  {
+   "text": "{the_thing} {was} stolen, and {the_someone:human} {was} the only suspect",
+   "tags": [
+    "mystery",
+    "noir"
+   ]
+  },
+  {
+   "text": "the {rival:human} sent riders after {first}",
+   "tags": [
+    "western",
+    "historical"
+   ]
+  },
+  {
+   "text": "{SOMEONE:human} showed up at {landmark} {MANNER}, hunting {first}",
+   "tags": [
+    "western",
+    "historical"
+   ]
+  },
+  {
+   "text": "the {rival:magic|threatening} learned the true name of {THING:magic}",
+   "tags": [
+    "fairy tale"
+   ]
+  },
+  {
+   "text": "{first}'s wish for {PRIZE:!inner} came true, at the price of {VALUE}",
+   "tags": [
+    "fairy tale"
+   ]
+  }
+ ]
 }

@@ -4582,3 +4582,299 @@ One full run with `tools/fulltest.sh` (it also covers batch 14's era change and 
 1 failed in 216 s; serial pass 96 passed in 156 s; 6 min 12 s in all. The failure was the new blank-fill check reading "an easy A" (a grade) as an article followed
 by nothing; the check now tells "A" from "a". The failed test and its file were run again (`--lf`, then `tests/test_batch15.py`: 126 passed). The fix changed only a
 test, so no second full run. `stable` was moved to the commit that records this.
+
+
+# Batch 16 (0.16.0): closing out the genre engine
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| Frames only from the story's own genres; neighbors and the floor only for atoms | **Works** | `Mix.list_probabilities` (template slots: own genres, general and untagged lists, no floor) and `Mix.frame_entry_ok` (a general frame tagged for other genres is left out). Checked over 60 stories for each of the 14 genres and three blends (`tests/test_batch16.py`) |
+| Close people and passing characters fit the protagonist's age | **Works** | every `close` entry has age bands; 10 new close people (best friend, coach, first crush, lab partner, little brother, older sister, stepfather, grandfather, homeroom teacher, locker neighbor); grown-up relationships among `someone` (old flame, jilted fiancé, suitors, former partner, former lover) are `adult` |
+| Western and fairy tale repetition; single-genre repetition test for all 14 | **Works** | prizes moved to `prize/western.json` and `prize/fairy-tale.json` (20 each); a magic-someone rumor frame tagged fairy tale; the report's expected count also considers an even share of the list (see Known issues) |
+| Generator scripts retired; rule in CLAUDE.md | **Works** | the scratch scripts (never in the repository) were deleted; CLAUDE.md "Development rules" says the data files are the source of truth |
+| Seeded samples for mystery, sci-fi, thriller and coming-of-age | **Works** | section 3 |
+
+## 2. Tests added or changed
+
+- `tests/test_batch16.py` (25): frames from the story's own genres (14 genres, 3 blends, neighbors still lend atoms, entry tags), close people's age bands,
+  coming-of-age people, adult protagonists never get a teenager's people, a coming-of-age / romance blend drops the adult suitors, the Builder's teen character.
+- `tests/test_genre_content.py`: the single-genre repetition test runs for all 14 genres (was 12).
+- `tests/test_atoms.py`: one seeded test moved from seed 4 to 5 (seed 4 now draws a living thing to hide, which only one hiding place fits).
+
+## 3. Seeded samples (`storywheel sample GENRE -n 2 --seed 1616`)
+
+```
+### mystery
+1. JASPER AND THE ASSET QUESTION   (motif: asset)
+   mystery · quiet · Story Spine
+
+  * Jasper Flanagan, 58, a gracious handwriting expert. Wants a signed
+    statement from the asset about the stolen schematics. Needs to admit greed
+    and love cloud every question. Flaw: buries grief under questions, and
+    calls it honesty. Secret: once destroyed a cracked teacup that would have
+    cleared a missing witness. Rival: the press baron.
+  * Pike Haddon · the week of the storm · winter. Landmark: the river
+    crossing. Rumor: a smiling banker saw something at the river crossing in
+    the fog and has kept silent since.
+
+    Jasper, a gracious handwriting expert, is the last person to see a nervous
+    courier alive, and the first Pike Haddon suspects.
+
+    Once upon a time, nobody in Pike Haddon paid attention to Jasper, a
+    gracious handwriting expert, which suited a watcher.
+    Every day, Jasper stopped at the river crossing at dawn, noting who was
+    missing.
+    One day, a staged accident struck Pike Haddon, and the press baron closed
+    the inquiry by noon.
+    Because of that, Jasper retraced the night through the river crossing in
+    plain sight, step by step.
+    Because of that, the staged accident happened again at the river crossing,
+    the same way.
+    Until finally, Jasper unlocked the river crossing in a stolen van and
+    named a detective from the Yard.
+    Ever since then, Pike Haddon pretends the staged accident never happened,
+    and Jasper walks past the river crossing.
+
+    Twist: The guilty one was the detective from the Yard, who had helped
+    Jasper search on the cheap.
+    Threads: disaster: a staged accident (One day) · someone: a detective from
+    the Yard (Until finally)
+
+2. THE SILENCE AT ASHCOMBE PARVA: COUNTDOWN   (motif: countdown)
+   mystery · tender · Kishōtenketsu
+
+  * Christine Lockwood, 34, a shrewd crime reporter. Wants a fast horse and an
+    apology from the magistrate. Needs to leave the second passport unsolved
+    for the sake of a clear conscience. Flaw: trusts evidence over their
+    mother, and debt over both. Secret: was at the train station on the night
+    of a car bomb, and said otherwise. Rival: the neighbor.
+  * Ashcombe Parva · the 1930s · autumn. Landmark: the train station. Rumor:
+    the train station was locked from the inside after a hit-and-run.
+
+    Every guest at the train station has a reason to lie about the fixed
+    fight, and Christine, a shrewd crime reporter, must sort them out before
+    the summit opens.
+
+    Ki (introduction) — In the early hours in Ashcombe Parva, Christine sold a
+    hotel receipt in a hurry.
+    Shō (development) — Christine let a gossiping housekeeper examine a bottle
+    of rye, and they disagreed about the vanished courier over tea.
+    Ten (twist) — Then Christine understood that the gossiping housekeeper had
+    acted out of shame all along.
+    Ketsu (reconciliation) — In the end Christine thanked a lady with a veil
+    and returned to the train station, and the questions rested.
+
+    Twist: The neighbor solved the cop on the take first, and kept quiet out
+    of boredom.
+    Threads: thing: a hotel receipt (Ki (introduction)) · someone: a gossiping
+    housekeeper (Shō (development))
+
+### sci-fi
+1. INES AT THE EDGE OF TITAN ANCHORAGE: VOID   (motif: void)
+   sci-fi · epic · Story Spine
+
+  * Ines Ito, 55, a weary docking officer. Wants a patent delivered before the
+    next jump. Needs to stop hiding boredom inside vanity. Flaw: lets distrust
+    run the ship when hope rises. Secret: sealed the county fairgrounds on the
+    day a system blackout hit, with people still inside. Rival: the rival
+    captain.
+  * Titan Anchorage · after the crossing · spring. Landmark: the county
+    fairgrounds. Rumor: the ship's mind foresaw a signal from nowhere, and the
+    rival captain ignored it.
+
+    The rival captain rewrites the colony charter of Titan Anchorage, and
+    Ines, a weary docking officer, finds the original in the engine
+    compartment.
+
+    Once upon a time, Ines, a weary docking officer on Titan Anchorage, had
+    never seen a real sky.
+    Every day, Ines trained their twin under a false ID and held to honor.
+    One day, Ines found a forged manifest in the cargo hold, still
+    transmitting.
+    Because of that, Ines encrypted a fuel cell at the last minute and checked
+    it against records of the stolen goods.
+    Because of that, Ines found a second copy of the forged manifest in zero
+    gravity, older than the ship.
+    Until finally, the rival captain released the locks at the county
+    fairgrounds under cover of a blackout, and Ines carried the forged
+    manifest out.
+    Ever since then, when the orbit brings back the spring light, Ines stops
+    at the county fairgrounds and calls their sister.
+
+    Twist: The forged manifest was a seed vault, and Ines's daughter had
+    carried it by the book for years.
+    Threads: thing: a forged manifest (One day)
+
+2. THE HULL WELDER'S STRANGER   (motif: stranger)
+   sci-fi · tense · Kishōtenketsu
+
+  * Nika Laurent, 32, a calculating hull welder. Wants a seat on the board and
+    a shuttle seat off Reedfort. Needs to let their mother share the weight of
+    their past. Flaw: would trade a promise for a stranger's signal and a
+    clean readout. Secret: once wiped the memory of the stranger at full burn.
+    Rival: the quartermaster.
+  * Reedfort · the far future · autumn. Landmark: the beacon. Rumor: a nervous
+    courier owes the quartermaster a working reactor.
+
+    Nika, a calculating hull welder, learns that a ship's AI on Reedfort is
+    not who the records say.
+
+    Ki (introduction) — Nika was a calculating hull welder on Reedfort, who
+    watched the stars drift every autumn.
+    Shō (development) — Nika's oldest friend asked what the broken promise
+    meant, and Nika answered with a diagram on a stolen channel.
+    Ten (twist) — Then Nika grasped that fear was what made them human, not a
+    seat on the board and a shuttle seat off Reedfort.
+    Ketsu (reconciliation) — Nika and the stranger smuggled a vial of nanites
+    together in the dark, under a sky they had made.
+
+    Twist: The stranger had arranged the whole voyage under a false ID, to
+    bring Nika home.
+    Threads: someone: the stranger (Ketsu (reconciliation)) · thing: a vial of
+    nanites (Ketsu (reconciliation))
+
+### thriller
+1. NO EXIT FROM FORT LARKIN, ASSET   (motif: asset)
+   thriller · brooding · Story Spine
+
+  * Simon Quinn, 55, a quick air marshal. Wants the dossier wired before the
+    summit opens. Needs to stop outrunning boredom and face vanity. Flaw:
+    turns every plan into obsession when hope grows. Secret: walked away from
+    a forgotten statue on the day a chemical spill hit, and told their cousin
+    nothing. Rival: the station chief.
+  * Fort Larkin · the week before the summit · autumn. Landmark: a forgotten
+    statue. Rumor: the asset once checked a dead man's phone at a forgotten
+    statue.
+
+    Simon, a quick air marshal, wakes with the lights off in Fort Larkin with
+    a folded map and no idea whose it is.
+
+    Once upon a time, Fort Larkin watched Simon, a quick air marshal, yet
+    missed the wire transfer entirely.
+    Every day, Simon inspected a satellite phone by back roads and counted the
+    cameras at a forgotten statue.
+    One day, the station chief named a sleeper agent as the one behind a
+    hostage standoff, and Simon knew better.
+    Because of that, Simon swapped a leather briefcase with a wounded agent
+    for the evidence.
+    Because of that, the satellite phone was traced to the asset, and Simon
+    threatened the sleeper agent.
+    Until finally, Simon cornered the sleeper agent at a forgotten statue and
+    held up the satellite phone.
+    Ever since then, the file is sealed, and Simon counts the satellite phone
+    inside a hollow book.
+
+    Twist: Simon had held the satellite phone inside the walls the whole time,
+    and the station chief knew.
+    Threads: thing: a satellite phone (Every day) · someone: a sleeper agent
+    (One day) · disaster: a hostage standoff (One day)
+
+2. NINETY MINUTES IN GRAYSON'S CIRCLE: THE WITNESS   (motif: witness)
+   thriller · gritty · Kishōtenketsu
+
+  * Sara Kovak, 39, a resourceful cameraman. Wants a clean record despite the
+    rogue agent. Needs to trust their grandmother with the border crossing
+    before the clock runs out. Flaw: keeps moving to avoid wonder, and calls
+    it duty. Secret: answers to an aging diplomat on a stolen phone and tells
+    no one. Rival: the federal prosecutor.
+  * Grayson's Circle · a sleepless November · autumn. Landmark: the customs
+    hall. Rumor: the federal prosecutor spies on a girl with a camera at the
+    last second.
+
+    When a car bomb hits Grayson's Circle, Sara, a resourceful cameraman, must
+    return a bank statement by midnight, or more will fall.
+
+    Ki (introduction) — Sara, a resourceful cameraman, carried a stack of
+    passports everywhere and carried love.
+    Shō (development) — A smiling lobbyist started showing up at the customs
+    hall, and Sara charged a code book through a crowd.
+    Ten (twist) — Then Sara read the stack of passports again; it had never
+    been about a clean record despite the rogue agent.
+    Ketsu (reconciliation) — Grayson's Circle mended slowly, and Sara keeps
+    tabs on their old teacher by phone.
+
+    Twist: Sara's ex had sold their route to the federal prosecutor under
+    surveillance, out of duty.
+    Threads: thing: a stack of passports (Ki (introduction))
+
+### coming-of-age
+1. KAI, CEDAR LAKE, AND THE RESTLESS YEARBOOK   (motif: yearbook)
+   coming-of-age · whimsical · Story Spine
+
+  * Kai Chen, 14, a curious shop assistant. Wants a lucky coin bought before
+    the bus leaves. Needs to forgive their sister before the summer is over.
+    Flaw: calls every friend a rival and laziness a shield, hiding fear.
+    Secret: wrote a false note about the acceptance letter with a grin. Rival:
+    the rival band.
+  * Cedar Lake · the road-trip summer · summer. Landmark: the front steps.
+    Rumor: a teacher's resignation was started by a high school dropout.
+
+    A birthday card from a bookstore owner asks Kai, a curious shop assistant,
+    to meet at the front steps and say nothing.
+
+    Once upon a time, Kai was the curious shop assistant of Cedar Lake, and
+    ached to be somewhere else.
+    Every day, Kai waved at their lab partner at dawn and stood by home.
+    One day, a power outage emptied the front steps, and Kai wandered there at
+    the back.
+    Because of that, Kai stuffed a ticket to the show into a bag and waited at
+    the front steps against orders.
+    Because of that, yet another keepsake, a hand-me-down coat, surfaced taped
+    inside a guitar bag.
+    Until finally, the rival band backed down at the front steps under the
+    porch light, and Kai went home with the ticket to the show.
+    Ever since then, Kai trusts their brother and keeps the dance out of the
+    group chat.
+
+    Twist: The power outage was not the real trouble; Kai's mother had been
+    hiding the big fight.
+    Threads: disaster: a power outage (One day) · thing: a ticket to the show
+    (Because of that)
+
+2. A BRIGHT KID AND A BUS OUT OF BREN HOLLOW   (motif: kid)
+   coming-of-age · whimsical · Kishōtenketsu
+
+  * Xavier Carver, 18, a stubborn movie usher. Wants a scholarship and a way
+    out of Bren Hollow. Needs to see honesty outlast a good reputation. Flaw:
+    would trade kindness for a cool new friend. Secret: was asked by a part-
+    time boss behind the gym to keep quiet. Rival: the rich classmate.
+  * Bren Hollow · a rainy spring break · spring. Landmark: the water tower.
+    Rumor: a summer lifeguard was spotted sitting at the water tower on a
+    borrowed bike.
+
+    Xavier's father is moving away before the letter arrives, and Xavier, a
+    stubborn movie usher of Bren Hollow, still has to say goodbye to their
+    first crush.
+
+    Ki (introduction) — Every spring, Xavier, a stubborn movie usher of Bren
+    Hollow, strolled over to the water tower after curfew.
+    Shō (development) — Xavier kept delaying the job of pay for a bicycle with
+    no brakes, and the spring ran out.
+    Ten (twist) — Then Xavier noticed the bicycle with no brakes once more; it
+    was never about a scholarship and a way out of Bren Hollow.
+    Ketsu (reconciliation) — Xavier came to grips with the failed exam, and
+    chose trust over a place in the band.
+
+    Twist: Xavier had kept the bicycle with no brakes in a gym locker all
+    summer, and their best friend had noticed.
+    Threads: thing: a bicycle with no brakes (Shō (development))
+```
+
+## 4. Manual test script
+
+1. Roll a few mystery and sci-fi stories: no "Code Name ..." titles, and the beats read like the genre (a thriller's courier may still turn up as a person).
+2. Roll a coming-of-age protagonist and look at the people in want, need, secret and the beats: parents, siblings, friends, a coach, a crush.
+3. Roll westerns and fairy tales: prizes are land, badges and horses, or wishes, cottages and curses.
+
+## 5. Known issues
+
+- The repetition report's expected count is now the larger of an entry's weighted share and an even share of the list's picked entries. Without that,
+  the recent-picks memory (which rotates a list's entries) made even use look like repetition: western's 21 title frames were each picked 7-12 times in
+  200 stories, and the old report flagged one at 9 against 0.5 "expected". The check is a little more lenient for lists with few usable entries.
+- See BACKLOG.md for the oddity titles and the shared close list.
+
+## Full suite (batch 16)
+
+FULLRUN

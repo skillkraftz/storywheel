@@ -1,5 +1,5 @@
 {
-  "_note": "A deliberate wildcard: random dictionary words, so a title is occasionally strange. Tagged 'wildcard', which no genre profile mentions, so it only appears through the floor.",
+  "_note": "A deliberate wildcard: random dictionary words, so a title is occasionally strange. Tagged 'wildcard'. Since batch 16 frames come only from a story's own genres (the floor is for atoms), so these titles appear only in a story or universe whose genres include 'wildcard'.",
   "slot": "title",
   "tags": ["wildcard"],
   "entries": ["{ODDITY} for {first}", "{first} and {ODDITY}", "{ALLITERATION} of {place}", "{ALLITERATION} for {first}", "{adj} {noun}", "The {noun} from {noun2}"]

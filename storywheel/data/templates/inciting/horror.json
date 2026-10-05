@@ -14,6 +14,6 @@
   "a light came on at {landmark}, empty since {DISASTER:strikes}",
   "{first} woke {MANNER} holding {THING:portable}, with mud on the floor",
   "{DISASTER:strikes} cut {place} off, and every phone rang empty",
-  "the {rival} dared {first} {MANNER} to spend the night at {landmark}"
+  "the {rival} dared {first} {MANNER} to spend the night at {landmark} {DEADLINE}"
  ]
 }

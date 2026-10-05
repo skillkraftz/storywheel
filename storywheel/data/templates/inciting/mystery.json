@@ -14,6 +14,6 @@
   "{first} overheard {SOMEONE:human,!plural} at {landmark} lie about {TOPIC}",
   "the will was read at {landmark}, and {SOMEONE:human,!plural} went pale",
   "{DISASTER:manmade} hit {landmark}, and the times did not fit",
-  "the {rival} asked {first} {MANNER} to look into {TOPIC} quietly"
+  "the {rival} asked {first} {MANNER} to settle {TOPIC} {DEADLINE}"
  ]
 }

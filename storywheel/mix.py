@@ -137,6 +137,14 @@ class Mix:
         base = {name.lower() for name in self.data["base"]}
         return [wl for wl in lists if not wl.tags or "general" in wl.tags or any(t in base or t.startswith("universe:") for t in wl.tags)]
 
+    def frame_entry_ok(self, entry):
+        """Frames (titles, premises, twists, beats) come only from the story's own genres: an entry tagged with genres must share one with
+        the story; an untagged entry belongs to its list (general frames are everyone's). Neighbors and the floor are for atoms only."""
+        if not entry.tags:
+            return True
+        base = {name.lower() for name in self.data["base"]}
+        return any(t in base or t.startswith("universe:") for t in entry.tags)
+
     def tech(self):
         """"modern" or "period" when every genre of the story assumes the same technology (genres.json `_tech`), else None."""
         kinds = {self.tech_of.get(name.lower()) for name in self.data["base"]}
@@ -170,7 +178,8 @@ class Mix:
         returning nothing."""
         weights = self.weights()
         live = [wl for wl in lists if not self.is_list_excluded(wl)]
-        if live and self.slot_is_own(lists[0].slot):
+        frames = any(wl.is_template for wl in lists)
+        if live and (frames or self.slot_is_own(lists[0].slot)):
             live = self.own_lists(live) or live
         if not live:
             return [1.0 / len(lists)] * len(lists) if lists else []
@@ -179,7 +188,7 @@ class Mix:
         wild = [wl for wl in live if w[wl.id] <= 0]
         floor = self.floor_for(lists[0].slot)
         wild_share = 0.0 if not wild else (1.0 if not mentioned else floor)
-        if mentioned and self.slot_is_own(lists[0].slot):
+        if mentioned and (frames or self.slot_is_own(lists[0].slot)):
             wild_share = 0.0                # (the other genres' lists are gone from this slot already, see own_lists)
         total = sum(w[wl.id] for wl in mentioned)
         near_tags = self.near_tags()

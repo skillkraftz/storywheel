@@ -48,6 +48,19 @@ def job_bands(features):
     return marks
 
 
+PEOPLE_SLOTS = ("close", "someone")     # people around the protagonist: their age bands say which protagonists they fit
+
+
+def person_fits(features, bands):
+    """A close or passing person fits a protagonist in `bands` if it names none (anyone) or shares one; "adult" includes "elder"."""
+    marks = {f for f in (features or ()) if f in BANDS}
+    if not marks:
+        return True
+    if "adult" in marks:
+        marks.add("elder")
+    return bool(marks & bands)
+
+
 BAND_AGES = {"child": (8, 12), "teen": (13, 19), "adult": (20, 59), "elder": (60, 90)}
 
 
@@ -148,7 +161,7 @@ class Ctx(dict):
         """Text from a slot, chosen through the story mix and remembered (nothing used in
         this story is drawn again). Templates that use a thread we have are favored, and
         ones that need a thread we lack are skipped. `accept` narrows the entries (Entry -> bool)."""
-        accept = self.era_accept(accept) if slot == "era" else self.tech_accept(accept)
+        accept = self.slot_accept(slot, accept)
         picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
                                        accept=accept, commit=False, bias=self.bias(slot, ()))
         if picked is None:                      # nothing fits the restriction: say so rather than fail
@@ -156,6 +169,17 @@ class Ctx(dict):
             picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn, commit=False, bias=self.bias(slot, ()))
         wl, entry = picked
         return self.finish_atom(slot, wl, entry)
+
+    def slot_accept(self, slot, accept=None):
+        """`accept` narrowed by the story's rules for this slot: technology (or, for an era, the era rule), and for people the protagonist's age."""
+        if slot == "era":
+            return self.era_accept(accept)
+        accept = self.tech_accept(accept)
+        if slot in PEOPLE_SLOTS:
+            bands = self.age_bands()
+            inner = accept
+            return lambda e: person_fits(e.features, bands) and (inner is None or inner(e))
+        return accept
 
     def era_accept(self, accept=None):
         """Which eras may be drawn. Never one against an atom the story already uses: once a modern thing (or job, or message) is in the
@@ -229,7 +253,7 @@ class Ctx(dict):
                           else ("human",))
             if accept is None or accept(guest):
                 return None, guest
-        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), self.era_accept(accept) if slot == "era" else self.tech_accept(accept), commit=False,
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), self.slot_accept(slot, accept), commit=False,
                                      bias=self.bias(slot, local))
 
     def finish_atom(self, slot, wl, entry):

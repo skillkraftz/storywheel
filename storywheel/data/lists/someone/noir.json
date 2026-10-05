@@ -98,7 +98,9 @@
   {
    "text": "a former lover",
    "features": [
-    "human"
+    "human",
+    "adult",
+    "elder"
    ]
   },
   {

@@ -10,7 +10,7 @@
   "{PRIZE:material,!inner} and the name behind {DISASTER:manmade}",
   "{CLOSE:human} cleared of {DISASTER:manmade}",
   "a signed statement from {SOMEONE:human,!plural} about {TOPIC}",
-  "{PRIZE:social,!inner} before the {rival} takes the credit",
+  "{PRIZE:social,!inner} {DEADLINE}, before the {rival} takes the credit",
   "{THING:paper,!living} and a quiet word with the {rival}",
   "{PRIZE:material,!inner} and an apology from the {rival}"
  ]

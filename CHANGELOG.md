@@ -2,6 +2,18 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.16.0 — Batch 16: closing out the genre engine
+
+- **Frames come only from the story's own genres.** Titles, premises, twists and every beat are drawn from the story's genres and the general frames;
+  a general frame tagged for another genre is left out. Neighbors and the wildcard floor still lend atoms (people, things, places, names). Mystery and
+  sci-fi no longer roll thriller's "Code Name ..." titles. A test checks every frame of 60 stories per genre, and blends.
+- **The people around a protagonist know their age.** Close people and passing characters carry age bands: a coming-of-age protagonist gets parents,
+  siblings, a best friend, a coach, a first crush, a lab partner, never a spouse, a son, "their only customer" or an old flame; an adult never gets a teenager's coach.
+- **Western and fairy tale repetition fixed.** Their prizes moved out of the general list into their own (20 each); a fairy-tale rumor frame that wanted a
+  magic someone is tagged fairy tale. The repetition report now compares an entry with an even share of its list as well as its weighted share (the
+  recent-picks memory rotates entries, so weights alone flagged even use as repetition). The single-genre repetition test covers all 14 genres.
+- **Data files are the source of truth.** The scratch generator scripts are gone and CLAUDE.md says never to write content through one.
+
 ## 0.15.0 — Batch 15: finishing the genre engine
 
 ### Part A: frames of their own

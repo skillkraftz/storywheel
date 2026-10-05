@@ -108,7 +108,7 @@ def test_keeping_a_step_records_its_atoms_and_later_steps_avoid_them():
 
 def test_a_rerolled_field_avoids_the_atoms_its_siblings_use():
     from storywheel.refs import reroll_field
-    engine = Engine(seed=4)
+    engine = Engine(seed=5)         # (seed 4 now draws a living thing to hide: only one hiding place fits it, so the no-repeat rule has to give way)
     story = {"kept": {}, "seeds": {}, "atoms": {}}
     spine = next(s for s in STEPS if s.key == "spine")
     for _ in range(40):

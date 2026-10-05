@@ -15,7 +15,9 @@
   {
    "text": "an old flame",
    "features": [
-    "human"
+    "human",
+    "adult",
+    "elder"
    ]
   },
   {
@@ -29,7 +31,9 @@
    "text": "a rival suitor",
    "features": [
     "human",
-    "threatening"
+    "threatening",
+    "adult",
+    "elder"
    ]
   },
   {
@@ -94,7 +98,9 @@
    "text": "a jilted fiancé",
    "features": [
     "human",
-    "threatening"
+    "threatening",
+    "adult",
+    "elder"
    ]
   },
   {
@@ -173,7 +179,9 @@
    "text": "a wealthy suitor",
    "features": [
     "human",
-    "authority"
+    "authority",
+    "adult",
+    "elder"
    ]
   },
   {
@@ -236,13 +244,17 @@
   {
    "text": "a nervous groom",
    "features": [
-    "human"
+    "human",
+    "adult",
+    "elder"
    ]
   },
   {
    "text": "a determined bride",
    "features": [
-    "human"
+    "human",
+    "adult",
+    "elder"
    ]
   },
   {
