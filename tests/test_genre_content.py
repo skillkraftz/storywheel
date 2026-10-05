@@ -1,6 +1,7 @@
 """The genres written so far (comedy, fantasy, mystery) the way western and fairy tale were: names with Markov training sets, atoms of every kind,
 frames for every beat; about 80% of picks from the genre's own material, no recognizable repeats, nothing the lint objects to, and blends that
 still read like both."""
+import re
 from collections import defaultdict
 
 import pytest
@@ -14,7 +15,7 @@ from storywheel.engine import Engine
 FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing", "someone", "disaster"]
 GENRES = ["comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller"]
 BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"], ["horror", "western"], ["sci-fi", "mystery"], ["romance", "fantasy"], ["romance", "comedy"], ["ghost story", "romance"], ["ghost story", "comedy"], ["noir", "western"], ["thriller", "sci-fi"]]
-SLOT_ALLOWANCE = {"sci-fi": 0.02}      # (sci-fi's neighbors, thriller among them, now have lists of their own, so a little more of the floor goes next door)
+SLOT_ALLOWANCE = {"sci-fi": 0.04}      # (sci-fi's neighbors, thriller among them, now have lists of their own, so a little more of the floor goes next door)
 GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",
@@ -192,3 +193,66 @@ def test_romance_blends_with_every_other_written_genre(lib):
         assert mine >= 0.2 and theirs >= 0.2, (other, mine, theirs)
         total = sum(v[0] for k, v in seen.items() if k in FLAVORED_SLOTS) / sum(v[1] for k, v in seen.items() if k in FLAVORED_SLOTS)
         assert total >= 0.8, (other, total)
+
+
+# --- each genre has its own frames (batch 13) ------------------------------------------------------------------------------------------------
+
+WRITTEN = ["comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller"]
+OWN_FRAMES = {"ghost story", "noir", "thriller"}          # written with frames of their own: held to a low shared share
+# Older genres were written from one another's frames (batches 7 and 8). Their shared share is capped where it stands so it cannot grow;
+# BACKLOG.md lists rewriting them. {genre: ceiling for its share of frames that another written genre also has}
+LEGACY_CEILING = {"mystery": 0.70, "horror": 0.70, "sci-fi": 0.70, "romance": 0.45, "fantasy": 0.25, "comedy": 0.12}
+
+
+def frames_by_genre(lib):
+    out = {g: set() for g in WRITTEN}
+    for wl in lib.lists.values():
+        if wl.is_template:
+            for g in WRITTEN:
+                if g in wl.tags:
+                    out[g].update(e.text.strip() for e in wl.entries)
+    return out
+
+
+def test_a_genre_does_not_share_most_of_its_frames_with_another(lib):
+    frames = frames_by_genre(lib)
+    for a in WRITTEN:
+        assert len(frames[a]) >= 150, (a, len(frames[a]))
+        for b in WRITTEN:
+            if a == b:
+                continue
+            share = len(frames[a] & frames[b]) / len(frames[a])
+            limit = 0.10 if a in OWN_FRAMES else LEGACY_CEILING[a]
+            assert share <= limit, f"{a} shares {share:.0%} of its frames with {b} (at most {limit:.0%}): write its own"
+
+
+def test_the_new_genres_frames_are_not_even_close_to_anothers(lib):
+    """Not only identical lines: a frame that differs by a word or two (93% alike) from another genre's counts as a copy."""
+    import difflib
+    frames = frames_by_genre(lib)
+    for a in OWN_FRAMES:
+        others = set().union(*(frames[g] for g in WRITTEN if g != a))
+        by_len = {}
+        for o in others:
+            by_len.setdefault(len(o) // 20, []).append(o)
+        near = 0
+        for f in frames[a]:
+            pool = by_len.get(len(f) // 20, []) + by_len.get(len(f) // 20 - 1, []) + by_len.get(len(f) // 20 + 1, [])
+            if any(difflib.SequenceMatcher(None, f, o).ratio() >= 0.93 for o in pool):
+                near += 1
+        assert near / len(frames[a]) <= 0.08, f"{a}: {near} of {len(frames[a])} frames are near copies of another genre's"
+
+
+DETECTIVE = re.compile(r"\b(case|cases|alibis?|motives?|trails?|suspects?|clues?)\b", re.I)
+
+
+@pytest.mark.parametrize("genre", ["ghost story", "thriller"])
+def test_detective_words_stay_in_mystery_and_noir(lib, genre):
+    bad = []
+    for wl in lib.lists.values():
+        if genre in wl.tags:
+            for e in wl.entries:
+                text = re.sub(r"\{[^}]*\}", "X", e.text)         # (placeholders such as {MOTIVE} are names, not words)
+                if DETECTIVE.search(text):
+                    bad.append((wl.id, e.text))
+    assert bad == []

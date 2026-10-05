@@ -5,15 +5,15 @@
   "noir"
  ],
  "entries": [
-  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
-  "kept a tab at {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
-  "{ACT_THING:mundane} {THING} {MANNER} and noticed everything at {landmark}",
-  "walked past {landmark} {MANNER} and hoped for {PRIZE:!inner}",
-  "read the papers {MANNER} and avoided the {rival}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
-  "took coffee at {landmark} and kept faith with {VALUE}",
-  "{ACT_PLACE:mundane} {landmark} every night and said nothing of {TOPIC}",
-  "wrote down every favor in {place} {MANNER} and told no one",
-  "locked up {landmark} {MANNER} and feared {DISASTER}"
+  "after dark, {ACT_PLACE:mundane} {landmark} and then {ACT_THING:mundane} {THING} {MANNER}",
+  "nursed one drink at {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
+  "counted the day's take {MANNER} and noticed everyone at {landmark}",
+  "walked home from {landmark} {MANNER} and dreamed of {PRIZE:!inner}",
+  "read the racing page {MANNER} and ducked the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and tried to keep {VALUE}",
+  "took coffee at {landmark} and paid for {VALUE} in small change",
+  "drank at {landmark} every night and said nothing of {TOPIC}",
+  "paid the rent in {place} {MANNER} and asked for no favors",
+  "locked up {landmark} {MANNER} and watched for {DISASTER}"
  ]
 }

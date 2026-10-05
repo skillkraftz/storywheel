@@ -5,13 +5,13 @@
   "ghost story"
  ],
  "entries": [
-  "{first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
-  "{place} keeps the memory of {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
-  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {CLOSE}",
+  "at dusk {first} {HABIT_PLACE} {landmark}, and {HABIT_PERSON} {CLOSE} afterwards",
+  "{place} still remembers {the_disaster}, and {first} {HABIT_THING} {the_thing:!living} gently",
+  "each evening {first} {HABIT_PERSON} {the_someone:human}, then {HABIT_THING} {the_thing:!living} in silence",
+  "each {season}'s first evening {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
   "the house is quiet, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
   "{first} {HABIT_PERSON} {CLOSE} and speaks gently of {TOPIC}",
-  "{place} forgave {the_disaster}, and {first} {HABIT_PLACE} {landmark}",
-  "{first} {HABIT_THING} {the_thing:!living} and {HABIT_PERSON} {the_someone:human}"
+  "{place} let {the_disaster} rest, and {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {MANNER}"
  ]
 }

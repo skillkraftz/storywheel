@@ -5,11 +5,11 @@
   "ghost story"
  ],
  "entries": [
-  "Then {first} saw {the_thing} anew; it had never been about {want}.",
-  "Then {first} understood that {the_someone} had stayed out of {MOTIVE} all along.",
-  "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.",
-  "Then {first} saw that the {rival:human} had wanted {want} too, and had hidden {FEELING} behind {VICE}.",
-  "Then {first} saw that {need} mattered more than {want}.",
-  "Then {first} understood that {MOTIVE} had kept {first} from {want} all along."
+  "Then {first} saw {the_thing} anew; it was never about {want}.",
+  "Then {first} understood that {the_someone} had never wanted {want}, only {VALUE}.",
+  "Then {first} heard what {the_message} meant: {VALUE}, never {FEELING}.",
+  "Then {first} saw the {rival:human} grieving too, behind {VICE}, for {want}.",
+  "Then {first} knew that {need} was worth more than {want}.",
+  "Then {first} felt {MOTIVE} loosen, and {want} no longer mattered."
  ]
 }

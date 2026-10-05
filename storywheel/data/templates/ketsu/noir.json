@@ -5,11 +5,11 @@
   "noir"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt almost new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
-  "{first} laid down {VICE} at {landmark}, and the case was closed.",
-  "{place} did not mend, but {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} looked almost clean.",
+  "In the end, {first} understood {TOPIC}, and {VALUE} outweighed {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} shared {THING} {MANNER}, and the {season} went by.",
+  "{first} put down {VICE} at {landmark}, and the night went easy.",
+  "{place} did not mend, but {first} {HABIT_PERSON} {CLOSE:human} on Sundays.",
+  "{first} let the {rival} go at {landmark}, and the rain came {MANNER}."
  ]
 }

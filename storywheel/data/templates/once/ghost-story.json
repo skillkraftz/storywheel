@@ -5,15 +5,15 @@
   "ghost story"
  ],
  "entries": [
-  "in {place}, a {trait} {job} named {first} wanted {want}",
-  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and feared {FEELING}",
-  "{place} was a quiet parish, and {first}, a {trait} {job}, wanted {want}",
-  "{first} was the {trait} {job} of {place}, and heard what others missed",
-  "the {rival} ran {place}, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
-  "{first}, a {trait} {job} in {place}, guarded {THING} and a grief",
-  "{place} had never spoken of {DISASTER}, and {first}, a {trait} {job}, did not ask",
-  "{first}, a {trait} {job} of {place}, wanted {want} and spoke to no one",
-  "everyone in {place} knew {first}, a {trait} {job}, and no one knew {TOPIC}"
+  "in {place}, a {trait} {job} named {first} still kept a lamp lit for {CLOSE:human}",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and wanted {want}",
+  "{place} had buried {DISASTER} long ago, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, kept the house in {place} exactly as {CLOSE:human} had left it",
+  "after {DISASTER}, {first}, a {trait} {job}, stayed on in {place} and wanted {want}",
+  "{first}, a {trait} {job} of {place}, had never said goodbye to {CLOSE:human}",
+  "the {rival} wanted {landmark:built} sold, and {first}, a {trait} {job} of {place}, wanted {want}",
+  "{first}, a {trait} {job} in {place}, walked past {landmark} each {season} and wanted {want}",
+  "{first}, a {trait} {job}, had come to {place} {MANNER} to be near {CLOSE:human}",
+  "everyone in {place} spoke softly of {TOPIC}, and {first}, a {trait} {job}, wanted {want}"
  ]
 }

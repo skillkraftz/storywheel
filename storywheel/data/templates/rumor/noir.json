@@ -5,13 +5,13 @@
   "noir"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
-  "{DISASTER:manmade} {was} hushed up by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no one looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "{SOMEONE:human,!plural} pays the {rival} every Friday at {landmark:built}",
+  "{THING:valuable} changed hands {HIDING} at {landmark:built}",
+  "{DISASTER:manmade} {was} bought off by the {rival}",
+  "{landmark:built} {is} owned by the {rival} through three dummy names",
+  "{SOMEONE:human,!plural} was last seen leaving {landmark:built} {MANNER}",
+  "the {rival} keeps {THING:portable} {HIDING} at {landmark:built}",
+  "no cop in {place} will walk past {landmark:built} {MANNER}",
+  "{SOMEONE:human,!plural} talked to a reporter about {TOPIC} {MANNER}"
  ]
 }

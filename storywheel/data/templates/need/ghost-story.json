@@ -5,13 +5,13 @@
   "ghost story"
  ],
  "entries": [
-  "to {DO_PERSON:inner} {CLOSE:human} before it is too late",
-  "to put {VALUE} before {VICE}",
-  "to tell {CLOSE:human} the truth about {TOPIC}",
-  "to give up {VICE} and choose {VALUE}",
-  "to forgive {TOPIC} and keep {VALUE}",
-  "to stop hiding {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
-  "to value {VALUE} above {PRIZE:social,!inner}",
-  "to let go of {VICE} and trust {VALUE}"
+  "to {DO_PERSON:inner} {CLOSE:human} before the lamps go out",
+  "to hold {VALUE} closer than {VICE}",
+  "to learn that {VALUE} outlasts {FEELING}",
+  "to stop guarding {TOPIC} and choose {VALUE}",
+  "to sit with {FEELING} instead of {VICE}",
+  "to let {TOPIC} rest without losing {VALUE}",
+  "to ask {CLOSE:human} for {VALUE} before it is too late",
+  "to {DO_PERSON:inner} {CLOSE:human} and mean it"
  ]
 }

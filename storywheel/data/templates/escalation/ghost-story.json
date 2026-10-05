@@ -6,18 +6,18 @@
  ],
  "entries": [
   "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and spoke of {TOPIC}",
-  "{the_thing} turned up {HIDING}, and {the_someone:human} would not explain",
-  "the {rival} {ACT_PERSON} {first} {MANNER} for asking about {the_thing}",
+  "{the_thing} was found {HIDING}, and the cold deepened at {landmark}",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER} to keep {first} from {the_thing}",
   "{the_message} was in a hand {first} knew, and {first} doubted {CLOSE:human}",
-  "{the_disaster:strikes} was remembered again at {landmark}, and the {rival} blamed {first}",
-  "{first} found {the_thing:portable} {MANNER}, and the cold deepened",
-  "{the_someone:human} offered {first} {PRIZE:!inner} to leave the house be {MANNER}",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
+  "{the_disaster:strikes} was lived again at {landmark}, and {first} could not look away",
+  "{first} found {the_thing:portable} {MANNER}, and the house leaned closer",
+  "{the_someone:human} asked {first} for {PRIZE:!inner} {MANNER}",
+  "the lamps at {landmark} burned low whenever {first} spoke of {TOPIC}",
   "a second keepsake, {THING:portable}, matched {the_thing} {MANNER}",
-  "{SOMEONE:human,!plural} spoke to {first} {MANNER}, and {THING:portable} went missing",
+  "{SOMEONE:human,!plural} whispered to {first} {MANNER}, and {THING:portable} was moved",
   "a second silence fell at {landmark}, and the {rival} grew uneasy",
-  "{first} was warned off {TOPIC} by the {rival} {MANNER}",
+  "the {rival} told {first} to leave {TOPIC} alone {MANNER}",
   "{CLOSE:human} spoke of {TOPIC}, but not of {the_disaster}",
-  "{the_someone:human} vanished {MANNER}, leaving {the_thing:portable} behind"
+  "{the_someone:human} grew faint {MANNER}, and left {the_thing:portable} on the stair"
  ]
 }

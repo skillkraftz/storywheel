@@ -5,12 +5,12 @@
   "noir"
  ],
  "entries": [
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
-  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} {ACT_THING} {THING:portable} {MANNER} and found another lead.",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
-  "{first} tracked {THING:portable} to {landmark} and waited {MANNER}.",
-  "{the_someone:human} lied about {TOPIC}, and {first} said nothing {MANNER}."
+  "At {landmark}, {first} met {SOMEONE:!threatening}, who paid for a drink {MANNER}.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already bought {CLOSE:human}.",
+  "Every time {first} neared {PRIZE:!inner}, {VICE} sent the bill.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and turned up a better lead.",
+  "{the_thing} had {SOMEONE:human,!plural}'s prints on it, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} staked out {landmark} for {THING:portable} and waited {MANNER}.",
+  "{the_someone:human} lied about {TOPIC}, and {first} smiled {MANNER}."
  ]
 }

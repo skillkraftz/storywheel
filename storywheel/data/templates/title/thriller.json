@@ -5,15 +5,15 @@
   "thriller"
  ],
  "entries": [
-  "The {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_NOUN} in {place}",
-  "A {TITLE_NOUN} for {first}",
-  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
-  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "{TITLE_NOUN} Protocol: {place}",
   "Run, {first}, Run from {place}",
-  "{place} Protocol, {TITLE_NOUN}",
-  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
-  "No Exit from {place}, {TITLE_NOUN}"
+  "No Exit from {place}, {TITLE_NOUN}",
+  "Hunted in {place}: The {TITLE_NOUN}",
+  "The {TITLE_ADJ} {TITLE_NOUN} Contingency",
+  "{first}: Target {TITLE_NOUN}",
+  "Ninety Minutes in {place}: The {TITLE_NOUN}",
+  "Fallout in {place}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Blind {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Six Hours from {place}: {TITLE_NOUN}"
  ]
 }

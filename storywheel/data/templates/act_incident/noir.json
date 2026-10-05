@@ -5,12 +5,12 @@
   "noir"
  ],
  "entries": [
-  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}.",
-  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was trouble.",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}.",
-  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it.",
-  "The {rival} pinned {DISASTER} on {SOMEONE:human,!plural}, and {first} doubted it.",
-  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} for help.",
-  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind."
+  "{DISASTER:strikes} hit {place}, and {first} was paid to see nothing at {landmark}.",
+  "{first} found {THING:!living,!bulky} {HIDING}, and it was worth killing for.",
+  "{MESSAGE:physical} came from {SOMEONE:human,!plural}, offering {first} {PRIZE:material,!inner} to visit {landmark}.",
+  "The {rival} blamed {DISASTER} on {SOMEONE:human,!plural}, and {first} was offered a cut to agree.",
+  "{SOMEONE:!plural} drifted into {place} {MANNER} and wanted {first} to lend a hand.",
+  "{first} met {SOMEONE:human,!plural} at {landmark} {MANNER}, with {THING:portable} between them.",
+  "{first} took a job to {DO_THING} {THING} {DEADLINE}, and wondered who was paying."
  ]
 }

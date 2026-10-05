@@ -5,17 +5,17 @@
   "ghost story"
  ],
  "entries": [
-  "When {DISASTER:strikes} is remembered in {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or someone will stay unquiet.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and seeks its owner {DEADLINE}.",
-  "After {DISASTER:strikes} in {place}, the {rival} wants the house sold, and {first}, a {trait} {job}, hears {SOMEONE:human,!plural} on the stairs.",
-  "A {trait} {job} named {first} must {DO_PERSON:inner} {SOMEONE:human,!plural} {DEADLINE}, though the house resists.",
-  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and must learn {DEADLINE} who wrote it.",
-  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns that the {rival} wanted {TOPIC} forgotten.",
-  "To free {SOMEONE:human,!plural} of {DISASTER}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
-  "Every room at {landmark:built} remembers {DISASTER}, and {first}, a {trait} {job}, must stay {DEADLINE}.",
-  "A {trait} {job} named {first} inherits {THING} and a silence in {place} that the {rival} wants sold.",
-  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural}, and the first to feel {FEELING} at {landmark:built}.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, understands why {DISASTER} was never mourned.",
-  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been waiting {DEADLINE}."
+  "After {DISASTER:strikes}, {first}, a {trait} {job}, comes back to {place} to close the house, and finds {SOMEONE:human,!plural} still waiting at {landmark:built}.",
+  "{first}, a {trait} {job} of {place}, hears {SOMEONE:human,!plural} at {landmark:built} every night, and must learn {DEADLINE} what was left unsaid.",
+  "In {place}, {first}, a {trait} {job}, inherits {THING} and a presence that stays until {first} can {DO_PERSON:inner} {CLOSE:human}.",
+  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, begins to hear {SOMEONE:human,!plural} humming at {landmark:built}.",
+  "{first}, a {trait} {job}, is asked to {DO_THING} {THING} for {SOMEONE:human,!plural}, and learns that the dead wait.",
+  "A {trait} {job} named {first} rents {landmark:built} in {place}, where {DISASTER} was never mourned and {SOMEONE:human,!plural} still listens.",
+  "Every {season}, {SOMEONE:human,!plural} returns to {landmark:built}, and {first}, a {trait} {job}, must decide whether to let go.",
+  "At {landmark:built}, {first}, a {trait} {job}, finds {THING:portable} {HIDING} and a voice asking for {PRIZE:!inner}.",
+  "{first}, a {trait} {job} of {place}, has not spoken of {DISASTER} for years, until {SOMEONE:human,!plural} begins to appear {MANNER}.",
+  "Grieving {CLOSE:human}, {first}, a {trait} {job}, takes a post in {place} and finds that {landmark:built} remembers {DISASTER}.",
+  "To give {SOMEONE:human,!plural} peace, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}.",
+  "The {rival} wants {landmark:built} sold, but {first}, a {trait} {job}, hears {SOMEONE:human,!plural} asking to stay."
  ]
 }

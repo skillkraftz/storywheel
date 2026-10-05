@@ -5,12 +5,12 @@
   "thriller"
  ],
  "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the trail.",
-  "{the_thing} was destroyed, and {first} had nothing left but {VALUE}.",
-  "{the_someone:human} accused {first} at {landmark}, and the hunt turned.",
-  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
-  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
-  "{the_disaster:strikes} hit again, and {first} was too late.",
-  "{first} learned that {CLOSE:human} had lied about {the_thing} {MANNER}."
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the only ally left.",
+  "{the_thing} burned, and {first} was left with only {VALUE}.",
+  "{the_someone:human} betrayed {first} at {landmark}, and the hunt closed in.",
+  "{first} {ACT_THING:trades} {THING}, and the way to {PRIZE:!inner} closed.",
+  "Pinned down at {landmark}, {first} fought {FEELING} and {VICE} together.",
+  "{the_disaster:strikes} came back, and {first} was too late.",
+  "{CLOSE:human} had sold {the_thing} {MANNER}, and {first} found out too late."
  ]
 }

@@ -5,17 +5,17 @@
   "thriller"
  ],
  "entries": [
-  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or more will die.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and must trace its owner {DEADLINE}.",
-  "After {DISASTER:strikes} in {place}, the {rival} blames {SOMEONE:human,!plural}, and {first}, a {trait} {job}, alone doubts it.",
-  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, with the {rival} one step behind.",
-  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and has until midnight to stop {DISASTER}.",
-  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns that the {rival} wants {TOPIC} silenced.",
-  "To clear {SOMEONE:human,!plural} of {DISASTER:manmade}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
-  "Every exit at {landmark:built} is watched, and {first}, a {trait} {job}, must get {THING:portable} out {DEADLINE}.",
-  "A {trait} {job} named {first} inherits {THING} and a target in {place} that the {rival} wants erased.",
-  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural} alive, and the first the {rival} comes for.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, learns that {DISASTER:manmade} is only the start.",
-  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} knows too much about {TOPIC}."
+  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, has {DEADLINE} to {DO_THING} {THING}, or more will fall.",
+  "{first}, a {trait} {job}, sees something at {landmark:built} that {SOMEONE:human,!plural} would kill to bury, and runs.",
+  "A {trait} {job} named {first} must get {THING:portable} out of {place} {DEADLINE}, with the {rival} one step behind.",
+  "{first}, a {trait} {job}, is the only witness to {DISASTER:manmade}, and every door in {place} is closing.",
+  "After {DISASTER:strikes}, {first}, a {trait} {job}, gets {MESSAGE:physical} from {SOMEONE:human,!plural}: be gone {DEADLINE}.",
+  "{first}, a {trait} {job}, carries {THING:portable} across {place} {MANNER}, while the {rival} closes every exit.",
+  "To save {CLOSE:human}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, and each hour makes it worse.",
+  "{first}, a {trait} {job} of {place}, learns too much about {TOPIC}, and {SOMEONE:human,!plural} is sent to fix that.",
+  "The {rival} wants {first}, a {trait} {job}, silenced {DEADLINE}, and {landmark:built} is the only way out.",
+  "{first}, a {trait} {job}, wakes {MANNER} in {place} with {THING:portable} and no idea whose it is.",
+  "{first}, a {trait} {job}, trusts {SOMEONE:human,!plural} with {THING:portable}, and learns the {rival} is listening.",
+  "Three days before {DISASTER:manmade}, {first}, a {trait} {job} in {place}, finds {THING:!living,!bulky} {HIDING}."
  ]
 }

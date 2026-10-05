@@ -5,13 +5,13 @@
   "noir"
  ],
  "entries": [
-  "lets {VICE} outweigh {VALUE}",
-  "would sell {VALUE} for {TEMPTATION}",
-  "hides {FEELING} behind {VICE}",
-  "cannot let {TOPIC} lie and calls it {VALUE}",
-  "trusts {TEMPTATION} over {VALUE}",
-  "mistakes {VICE} for {VALUE}",
-  "reaches for {TEMPTATION} to avoid {FEELING}",
-  "keeps tabs on all and trusts {VICE} over {VALUE}"
+  "can be bought with {TEMPTATION} or {VICE}",
+  "drowns {FEELING} in {VICE}",
+  "lets {VICE} write the rules where {VALUE} used to",
+  "calls {VICE} a rule of the trade, and {VALUE} a luxury",
+  "keeps ledgers on all and trusts {VICE} over {VALUE}",
+  "owes too much to say {VALUE} aloud, and blames {VICE}",
+  "takes {TEMPTATION} just to feel {FEELING} less",
+  "talks tough to hide {FEELING}, and calls it {VALUE}"
  ]
 }

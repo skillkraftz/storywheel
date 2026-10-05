@@ -5,13 +5,13 @@
   "ghost story"
  ],
  "entries": [
-  "lets {VICE} outweigh {VALUE}",
-  "would hold on to {TEMPTATION} before {VALUE}",
-  "hides {FEELING} behind {VICE}",
-  "cannot let {TOPIC} rest and calls it {VALUE}",
-  "trusts {TEMPTATION} over {VALUE}",
-  "mistakes {VICE} for {VALUE}",
-  "reaches for {TEMPTATION} to avoid {FEELING}",
-  "keeps every letter and trusts {VICE} over {VALUE}"
+  "clings to {TEMPTATION} where {VALUE} is needed",
+  "keeps {TOPIC} close and calls it {VALUE}",
+  "answers {FEELING} with {VICE}",
+  "treats {VICE} as though it were {VALUE}",
+  "would rather haunt {landmark} than face {FEELING}",
+  "turns to {TEMPTATION} before {CLOSE:human}",
+  "tends every grave but ignores {TOPIC} and {FEELING}",
+  "retreats into {VICE} whenever {FEELING} comes"
  ]
 }

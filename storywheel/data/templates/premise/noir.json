@@ -5,17 +5,17 @@
   "noir"
  ],
  "entries": [
-  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or take the fall.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and learns who wants it {DEADLINE}.",
-  "After {DISASTER:strikes} in {place}, the {rival} pins it on {SOMEONE:human,!plural}, and {first}, a {trait} {job}, knows better.",
-  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though the city says leave it.",
-  "{first}, a {trait} {job}, gets {MESSAGE:physical} from {SOMEONE:human,!plural} and must learn {DEADLINE} why.",
-  "In {place}, {first}, a {trait} {job}, is hired to {DO_THING} {THING}, and learns that the {rival} lied about {TOPIC}.",
-  "To keep {SOMEONE:human,!plural} out of {DISASTER:manmade}, {first}, a {trait} {job}, must bury {THING:portable} {DEADLINE}.",
-  "Every guest at {landmark:built} owes the {rival} something, and {first}, a {trait} {job}, has been paid to forget it.",
-  "A {trait} {job} named {first} inherits {THING} and a debt in {place} that the {rival} wants collected.",
-  "{first}, a {trait} {job}, was the last to see {SOMEONE:human,!plural}, and is first on the {rival}'s list.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, sees how deep {DISASTER:manmade} goes.",
-  "At {landmark:built}, {first}, a {trait} {job}, finds out that {SOMEONE:human,!plural} sold {TOPIC} for cash."
+  "{first}, a {trait} {job} in {place}, takes {PRIZE:material,!inner} from the {rival}, and finds out what it bought.",
+  "When {SOMEONE:human,!plural} offers {first}, a {trait} {job}, {PRIZE:material,!inner} to look away from {DISASTER:manmade}, the price climbs {DEADLINE}.",
+  "{first}, a {trait} {job} of {place}, is the one honest hand at {landmark:built}, and {SOMEONE:human,!plural} is paid to change that.",
+  "A {trait} {job} named {first} owes the {rival} a favor, and {DISASTER:manmade} is how it comes due.",
+  "{first}, a {trait} {job}, is hired by {SOMEONE:human,!plural} to {DO_THING} {THING}, and smells a setup {DEADLINE}.",
+  "In {place}, everyone has a price, and {first}, a {trait} {job}, is offered {TEMPTATION} {DEADLINE}.",
+  "After {DISASTER:strikes}, {first}, a {trait} {job}, takes the money, keeps {THING:portable}, and waits for the bill.",
+  "{first}, a {trait} {job}, tries to {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, and the city profits from it.",
+  "A debt follows {first}, a {trait} {job}, from {place} to {landmark:built}, where {SOMEONE:human,!plural} waits to collect.",
+  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} that belongs to the {rival}, and cannot unfind it.",
+  "To protect {CLOSE:human}, {first}, a {trait} {job}, does a favor for the {rival} at {landmark:built}, and the favor grows.",
+  "The {rival} runs {place}, and {first}, a {trait} {job}, takes work that pays too well."
  ]
 }

@@ -5,13 +5,13 @@
   "thriller"
  ],
  "entries": [
-  "{PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} for {CLOSE:human}",
-  "{THING:portable,!living} from {landmark}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner}",
-  "{THING:valuable,!living} at {landmark}",
-  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
-  "{PRIZE:social,!inner} and a way out of {place}",
-  "{PRIZE:material,!inner} {DEADLINE}"
+  "{PRIZE:social,!inner} and papers for {CLOSE:human}",
+  "{THING:portable,!living} out of {landmark}",
+  "{PRIZE:material,!inner} and a ticket out of {place}",
+  "{THING:valuable,!living} delivered to {SOMEONE:authority,!plural}",
+  "{THING:portable,!living} back before {SOMEONE:human,!plural} notices",
+  "the {rival} off {CLOSE:human}'s back {DEADLINE}",
+  "{PRIZE:social,!inner} and quiet in {place}",
+  "{PRIZE:material,!inner} wired {DEADLINE}"
  ]
 }

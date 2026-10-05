@@ -5,12 +5,12 @@
   "ghost story"
  ],
  "entries": [
-  "In the end, {first} had {PRIZE:!inner} but kept {VALUE}.",
-  "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
-  "{first} learned {need}, and {place} forgave {TOPIC}.",
+  "In the end, {first} kept {VALUE} and let {PRIZE:!inner} go.",
+  "{place} grew quiet: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
+  "{first} learned {need}, and the house forgave {TOPIC}.",
   "The house was quiet, and {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
-  "The {rival} was gone, and {first} {HABIT_PLACE} {landmark} every {season}.",
+  "The {rival} moved away, and {first} {HABIT_PLACE} {landmark} each {season}.",
   "{first} {HABIT_PERSON} {the_someone:human} and speaks gently of {TOPIC}.",
-  "{place} forgave {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+  "{place} let {the_disaster} go, but {first} {HABIT_PLACE} {landmark}."
  ]
 }

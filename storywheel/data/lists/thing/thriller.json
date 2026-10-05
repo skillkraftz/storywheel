@@ -216,7 +216,7 @@
    ]
   },
   {
-   "text": "a case of vials",
+   "text": "a crate of vials",
    "features": [
     "portable",
     "valuable"
@@ -246,7 +246,7 @@
    ]
   },
   {
-   "text": "a trail of receipts",
+   "text": "a stack of receipts",
    "features": [
     "portable",
     "buryable",

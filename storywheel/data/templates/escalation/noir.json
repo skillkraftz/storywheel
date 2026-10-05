@@ -5,19 +5,19 @@
   "noir"
  ],
  "entries": [
-  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and lied about {TOPIC}",
-  "{the_thing} turned up {HIDING}, and {the_someone:human} named a price",
-  "the {rival} {ACT_PERSON} {first} {MANNER} for asking about {the_thing}",
-  "{the_message} proved a plant, and {first} doubted {CLOSE:human}",
-  "{the_disaster:strikes} hit again at {landmark}, and the {rival} blamed {first}",
-  "{first} found {the_thing:portable} {MANNER}, and a deal fell apart",
-  "{the_someone:human} offered {first} {PRIZE:!inner} to drop it {MANNER}",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
-  "a second lead, {THING:portable}, matched {the_thing} {MANNER}",
-  "{SOMEONE:human,!plural} lied to {first} {MANNER}, and {THING:portable} went missing",
-  "a second alibi cracked at {landmark}, and the {rival} grew nervous",
-  "{first} was warned off {TOPIC} by the {rival} {MANNER}",
-  "{CLOSE:human} owned up to {TOPIC}, but not to {the_disaster}",
-  "{the_someone:human} skipped town {MANNER}, leaving {the_thing:portable} behind"
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and named a price",
+  "{the_thing} changed hands {HIDING}, and {the_someone:human} wanted a cut",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER}, a message for {first}",
+  "{the_message} was a bribe on paper, and {first} counted it",
+  "{the_disaster:strikes} hit again at {landmark}, and the {rival} sent {first} the bill",
+  "{first} found {the_thing:portable} {MANNER}, and the price went up",
+  "{the_someone:human} pushed {PRIZE:!inner} at {first} to make it go away {MANNER}",
+  "{the_thing} had {SOMEONE:human,!plural}'s prints on it, and {first} {ACT_PERSON} {the_someone:human}",
+  "a second payoff, {THING:portable}, turned up {HIDING}",
+  "{SOMEONE:human,!plural} took {first}'s money {MANNER}, and {THING:portable} went missing",
+  "a deal fell apart at {landmark}, and the {rival} sent flowers",
+  "{first} was warned by {SOMEONE:authority,!plural} to stay out of {TOPIC} {MANNER}",
+  "{CLOSE:human} swore to {first} that {TOPIC} was nothing, and lied",
+  "{the_someone:human} left town {MANNER}, leaving {the_thing:portable} and a debt"
  ]
 }

@@ -5,12 +5,12 @@
   "thriller"
  ],
  "entries": [
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
-  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} {ACT_THING} {THING:portable} {MANNER} and found another lead.",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
-  "{first} tracked {THING:portable} to {landmark} and waited {MANNER}.",
-  "{the_someone:human} lied about {TOPIC}, and {first} said nothing {MANNER}."
+  "{SOMEONE:!threatening} met {first} at {landmark} {MANNER} and offered a lift.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} reached {CLOSE:human} first.",
+  "Each time {first} neared {PRIZE:!inner}, {VICE} cost another hour.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and bought a few minutes.",
+  "{the_thing} came from {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} followed {THING:portable} to {landmark} and held position {MANNER}.",
+  "{the_someone:human} lied about {TOPIC}, and {first} kept moving {MANNER}."
  ]
 }

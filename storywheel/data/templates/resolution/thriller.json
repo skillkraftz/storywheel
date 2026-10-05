@@ -5,13 +5,13 @@
   "thriller"
  ],
  "entries": [
-  "{first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
-  "{place} keeps the memory of {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
-  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {CLOSE}",
-  "the file is closed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PERSON} {CLOSE} and never speaks of {TOPIC}",
-  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
-  "{first} {HABIT_THING} {the_thing:!living} and {HABIT_PERSON} {the_someone:human}"
+  "these days {first} {HABIT_PLACE} {landmark} twice and {HABIT_PERSON} {CLOSE}",
+  "{place} rebuilt after {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "afterwards {first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living}",
+  "when the {season} turns, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the file is sealed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and keeps {TOPIC} off the phone",
+  "{place} reopened after {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_THING} {the_thing:!living} first, then {HABIT_PERSON} {the_someone:human}"
  ]
 }

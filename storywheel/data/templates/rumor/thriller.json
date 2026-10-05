@@ -5,13 +5,13 @@
   "thriller"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
+  "{THING:valuable} {is} said to be kept {HIDING} at {landmark:built}",
   "{DISASTER:manmade} {was} buried by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no one looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "{SOMEONE:human,!plural} was seen leaving {landmark} {MANNER}",
+  "{landmark:built} {was} closed after {DISASTER:manmade}",
+  "the {rival} wired money to {SOMEONE:human,!plural} {MANNER}",
+  "{SOMEONE:human,!plural} watches {landmark:built} {MANNER}",
+  "{THING:portable} {is} stored {HIDING} for the {rival}",
+  "the {rival} spies on {SOMEONE:human,!plural} {MANNER}"
  ]
 }

@@ -6,12 +6,12 @@
  ],
  "entries": [
   "{first} sat with {the_someone:human} at {landmark} and held out {the_thing:portable}.",
-  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof.",
+  "{first} spoke the name of {the_someone:human} at {landmark} {MANNER}, with {the_thing} in hand.",
   "{first} read {the_message} aloud at {landmark} and listened for {the_someone:human}.",
   "{the_someone:human} spoke of {the_disaster} when {first} showed {the_thing:portable}.",
   "{first} laid out {the_thing:portable} at {landmark} {MANNER} and waited.",
-  "{the_thing} answered the question, and {the_someone:human} wept {MANNER}.",
-  "{first} named {SOMEONE:human,!plural} at {landmark} {MANNER}, and chose {VALUE}.",
+  "{the_thing} answered the old question, and {the_someone:human} wept {MANNER}.",
+  "{first} said goodbye to {SOMEONE:human,!plural} at {landmark} {MANNER}, and chose {VALUE}.",
   "{first} returned {THING:portable} at {landmark} {MANNER}, and said goodbye.",
   "{first} forgave the {rival} at {landmark}, and chose {VALUE}."
  ]

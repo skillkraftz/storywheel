@@ -5,12 +5,12 @@
   "noir"
  ],
  "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the thread.",
-  "{the_thing} was destroyed, and {first} had nothing left but {VALUE}.",
-  "{the_someone:human} fingered {first} at {landmark}, and the city turned.",
-  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
-  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
-  "{the_disaster:strikes} hit again, and {first} was too late.",
-  "{first} learned that {CLOSE:human} had lied about {the_thing} {MANNER}."
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} was out of friends.",
+  "{the_thing} was sold out from under {first}, who had nothing left but {VALUE}.",
+  "{the_someone:human} pointed at {first} at {landmark}, and the city believed it.",
+  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} went to someone richer.",
+  "Alone at {landmark}, {first} counted {FEELING} and {VICE} like change.",
+  "{the_disaster:strikes} hit again, and {first} was out of favors.",
+  "{first} learned that {CLOSE:human} had been paid to lie about {the_thing} {MANNER}."
  ]
 }

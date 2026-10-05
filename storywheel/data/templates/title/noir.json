@@ -5,15 +5,15 @@
   "noir"
  ],
  "entries": [
-  "The {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_NOUN} in {place}",
-  "A {TITLE_NOUN} for {first}",
-  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
-  "The {TITLE_NOUN}'s {TITLE_NOUN}",
+  "{place} Pays in {TITLE_ADJ} {TITLE_NOUN}",
+  "A {TITLE_ADJ} {TITLE_NOUN} for {first}",
+  "Nobody Pays for the {TITLE_NOUN} in {place}",
   "Last Call in {place}, {first}",
   "{place} After Midnight, {TITLE_NOUN}",
-  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
-  "Nobody Pays for the {TITLE_NOUN} in {place}"
+  "Dead {TITLE_NOUN} in {place}",
+  "{first} Takes the {TITLE_ADJ} {TITLE_NOUN}",
+  "One Way Out of {place}: {TITLE_NOUN}",
+  "The {TITLE_NOUN} Always Wins in {place}",
+  "Rain on the {TITLE_ADJ} {TITLE_NOUN}"
  ]
 }

@@ -5,19 +5,17 @@
   "thriller"
  ],
  "entries": [
-  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
-  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
-  "{the_message:physical} was sent by {CLOSE:human}, who wanted {first} off the trail.",
-  "{the_disaster:manmade} was staged {MANNER} to bury {TOPIC}.",
-  "{the_thing:!living} was a decoy; {THING:portable} lay {HIDING}, and the {rival} knew.",
-  "The safe house at {landmark:built} was the trap, and {the_someone:human} had built it.",
-  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
-  "The witness was never gone: {the_someone:human,!plural} had staged the hiding {MANNER}.",
-  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
-  "{the_someone:human} was working for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
   "The {rival} had been {first}'s handler all along, out of {MOTIVE}.",
-  "{SOMEONE:human,!plural} had been watching from {landmark:built} {MANNER}.",
-  "It was never about {the_disaster:manmade}; it was about {MOTIVE}.",
-  "Everyone wanted it, but only {the_someone:human} had {the_thing:portable}."
+  "{the_message:physical} was sent by {CLOSE:human}, to make {first} run {MANNER}.",
+  "The safe house at {landmark:built} was the trap, and {the_someone:human} had built it.",
+  "{the_disaster:manmade} was a diversion {MANNER}, built to bury {TOPIC}.",
+  "{the_someone:human} had been answering to {SOMEONE:authority,!plural} all along, out of {MOTIVE}.",
+  "The witness was never gone: {the_someone:human,!plural} had staged the hiding {MANNER}.",
+  "{the_thing:!living} was a decoy to keep {first} running while {SOMEONE:human,!plural} moved {THING:portable}.",
+  "{first} had held {the_thing:!living} {HIDING} the whole time, and the {rival} knew.",
+  "{CLOSE:human} had sold {first}'s route to the {rival} {MANNER}, out of {MOTIVE}.",
+  "Every exit was watched by {SOMEONE:human,!plural}, because {first} was never meant to escape.",
+  "The countdown was a lie: {the_disaster:manmade} had already begun {MANNER}.",
+  "Everyone wanted {the_thing:portable}, but only {the_someone:human} knew what it unlocked."
  ]
 }

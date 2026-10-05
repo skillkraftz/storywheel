@@ -5,11 +5,11 @@
   "ghost story"
  ],
  "entries": [
-  "Over the {season}, {first} came to know {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
-  "{SOMEONE:!threatening} began visiting {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
-  "{first} showed {SOMEONE:!threatening} {THING:!living}, and they spoke of {TOPIC} {MANNER}.",
+  "As the {season} deepened, {first} grew fond of {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} took to sitting at {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} lent {SOMEONE:!threatening} {THING:!living}, and they talked softly of {TOPIC}.",
   "A quiet sorrow came: {DISASTER:strikes} was remembered in {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
-  "{first} kept meaning to {DO_THING} {THING}, and the {season} slipped by.",
-  "{CLOSE:human} asked about {TOPIC}, and {first} answered {MANNER}."
+  "{first} still meant to {DO_THING} {THING}, but the {season} went soft and slow.",
+  "{CLOSE:human} spoke softly of {TOPIC}, and {first} listened {MANNER}."
  ]
 }

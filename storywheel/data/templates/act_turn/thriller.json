@@ -5,12 +5,12 @@
   "thriller"
  ],
  "entries": [
-  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
-  "{first} questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
-  "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
-  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
+  "Before dawn, {first} {ACT_THING:stows} {THING:portable} {HIDING} and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} called {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
+  "{first} ran {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} doubled back through {landmark} {MANNER} to lose {SOMEONE:human,!plural}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}, and no road led home.",
   "{first} kept the lead {HIDING} and took the run {MANNER}.",
-  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and began."
+  "With {CLOSE:human} counting on it, {first} {ACT_PLACE} {landmark} and moved."
  ]
 }

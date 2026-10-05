@@ -5,11 +5,11 @@
   "thriller"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
-  "{first} laid down {VICE} at {landmark}, and the file was closed.",
-  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the alarms stopped.",
+  "{first} finally understood {TOPIC}, and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and no one followed.",
+  "{first} set down {VICE} at {landmark}, and the sirens faded.",
+  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} by phone.",
+  "{first} let the {rival} be at {landmark}, and quiet came back {MANNER}."
  ]
 }

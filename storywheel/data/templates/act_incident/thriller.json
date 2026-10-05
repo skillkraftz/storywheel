@@ -5,12 +5,12 @@
   "thriller"
  ],
  "entries": [
-  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}.",
-  "{first} found {THING:!living,!bulky} {HIDING}, and knew it was bait.",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}.",
-  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it.",
-  "The {rival} blamed {SOMEONE:human,!plural} for {DISASTER}, and {first} doubted it.",
-  "{SOMEONE:!plural} came to {place} {MANNER} and asked {first} for help.",
-  "{first} was called to {landmark}, where {DISASTER:strikes} had left {THING} behind."
+  "{DISASTER:strikes} hit {place}, and {first} saw who walked away.",
+  "{first} dug out {THING:!living,!bulky} {HIDING}, and realized it was bait.",
+  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}: meet at {landmark}, alone.",
+  "{SOMEONE:human,!plural} collapsed at {landmark} {MANNER}, and {first} was handed {THING:portable}.",
+  "The {rival} named {SOMEONE:human,!plural} as the one behind {DISASTER}, and {first} knew better.",
+  "{SOMEONE:!plural} came to {place} {MANNER} and begged {first} to hide {THING:portable}.",
+  "{first} was called to {landmark}, where {DISASTER:strikes} had just happened."
  ]
 }

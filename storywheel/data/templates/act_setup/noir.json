@@ -5,12 +5,12 @@
   "noir"
  ],
  "entries": [
-  "In {place}, {first}, a {trait} {job}, kept {THING} {HIDING} and wanted {want}.",
-  "{first}, a {trait} {job} of {place}, noticed {TOPIC} and wanted {want}.",
-  "{place} was loud, but {first}, a {trait} {job}, feared {FEELING}.",
-  "The {rival} ran {place}, and {first}, a {trait} {job}, watched {MANNER}.",
-  "{first}, a {trait} {job}, worked {landmark} in {place} and dreaded {DISASTER}.",
-  "{first}, a {trait} {job}, came to {place} {MANNER} to forget {TOPIC}.",
-  "In {place}, {first} was a {trait} {job} who wanted {want} and trusted no one."
+  "In {place}, {first}, a {trait} {job}, owed the {rival} a favor and wanted {want}.",
+  "{first}, a {trait} {job} of {place}, took small money and wanted {want}.",
+  "The bars of {place} were loud, and {first}, a {trait} {job}, was afraid of {FEELING}.",
+  "The {rival} owned {place}, and {first}, a {trait} {job}, drank {MANNER} at {landmark}.",
+  "{first}, a {trait} {job}, ran errands at {landmark} in {place} and dreaded {DISASTER}.",
+  "{first}, a {trait} {job}, came back to {place} {MANNER} for {want}.",
+  "In {place}, {first} was a {trait} {job} who wanted {want} and sold nothing cheap."
  ]
 }

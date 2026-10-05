@@ -5,15 +5,15 @@
   "noir"
  ],
  "entries": [
-  "in {place}, a {trait} {job} named {first} wanted {want}",
-  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and feared {FEELING}",
+  "in {place}, a {trait} {job} named {first} owed a favor and wanted {want}",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and a grudge",
   "{place} never slept, and {first}, a {trait} {job}, wanted {want}",
-  "{first} was the {trait} {job} of {place}, and saw what others sold",
-  "the {rival} ran {place}, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
-  "{first}, a {trait} {job} in {place}, guarded {THING} and a debt",
+  "{first} was the {trait} {job} of {place}, and knew what everyone cost",
+  "the {rival} owned half of {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, left {place} once {MANNER}, and came back for {want}",
+  "{first}, a {trait} {job} in {place}, carried {THING} and a debt",
   "{place} had seen {DISASTER} before, and {first}, a {trait} {job}, never asked",
-  "{first}, a {trait} {job} of {place}, wanted {want} and trusted no one",
-  "everyone in {place} knew {first}, a {trait} {job}, and no one knew {TOPIC}"
+  "{first}, a {trait} {job} of {place}, wanted {want} and owed everyone",
+  "everyone in {place} owed {first}, a {trait} {job}, something, and {first} wanted {want}"
  ]
 }

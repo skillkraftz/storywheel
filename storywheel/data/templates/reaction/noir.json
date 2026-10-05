@@ -5,15 +5,15 @@
   "noir"
  ],
  "entries": [
-  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
-  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
-  "{ACT_THING} {THING} {MANNER} and wrote down {TOPIC}",
-  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-  "questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}",
-  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-  "kept the lead {HIDING} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
-  "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
-  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+  "{ACT_PLACE} {landmark} {MANNER}, hunting for {THING}",
+  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING} for later",
+  "{ACT_THING} {THING} {MANNER} and took a note on {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and bought {SOMEONE:human,!plural} a drink",
+  "squeezed {CLOSE:human} {MANNER:speech} for news of {SOMEONE:human,!plural}",
+  "{ACT_PLACE} {landmark} {MANNER} and pocketed {THING:portable}",
+  "sold {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
+  "buried the lead {HIDING} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "took the job {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "tailed {SOMEONE:human,!plural} to {landmark} {MANNER}"
  ]
 }

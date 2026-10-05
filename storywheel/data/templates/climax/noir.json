@@ -5,17 +5,17 @@
   "noir"
  ],
  "entries": [
-  "{first} cornered {the_someone:human} at {landmark} and laid out {the_thing:portable}",
-  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof",
-  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human}",
-  "{the_someone:human} owned up to {the_disaster} at {landmark}, when {first} showed {the_thing:portable}",
-  "{first} laid a trap at {landmark} {MANNER}, baited with {the_thing:portable}",
-  "{the_thing} blew the alibi apart, and {the_someone:human} ran {MANNER}",
-  "{first} faced the {rival} at {landmark} with {the_thing:portable} and {VALUE}",
-  "{the_someone:human} cracked at {landmark}, and {first} named {MOTIVE}",
-  "{first} walked into {landmark} {MANNER} and named {SOMEONE:human,!plural}",
+  "{first} met {the_someone:human} at {landmark} with {the_thing:portable} and no way out",
+  "{first} named a price to {the_someone:human} at {landmark} {MANNER}, with {the_thing} on the table",
+  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human} count the cost",
+  "{the_someone:human} talked at {landmark} {MANNER}, once {first} showed {the_thing:portable}",
+  "{first} set the meeting at {landmark} {MANNER}, baited with {the_thing:portable}",
+  "{the_thing} was the last card, and {the_someone:human} folded {MANNER}",
+  "{first} sat down across from the {rival} at {landmark} with {the_thing:portable} and {VALUE}",
+  "{the_someone:human} cracked at {landmark}, and {first} named {MOTIVE} out loud",
+  "{first} walked into {landmark} {MANNER} and put {SOMEONE:human,!plural} on notice",
   "{first} made the trade at {landmark} {MANNER}, with {THING:portable} as the price",
-  "{SOMEONE:human,!plural} owned up to {DISASTER:manmade} at {landmark} {MANNER}",
-  "{first} put {the_thing} on the bar {MANNER} and let {the_someone:human} talk"
+  "{SOMEONE:human,!plural} talked about {DISASTER:manmade} at {landmark} {MANNER}",
+  "{first} slid {the_thing} across the bar {MANNER} and let {the_someone:human} think"
  ]
 }

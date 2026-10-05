@@ -6,13 +6,13 @@
  ],
  "entries": [
   "{first} cornered {the_someone:human} at {landmark} and held up {the_thing:portable}.",
-  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof.",
-  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human}.",
-  "{the_someone:human} admitted {the_disaster} when {first} showed {the_thing:portable}.",
-  "{first} set a trap at {landmark} {MANNER}, baited with {the_thing:portable}.",
-  "{the_thing} broke the cover story, and {the_someone:human} ran {MANNER}.",
-  "{first} named {SOMEONE:human,!plural} at {landmark} {MANNER}, and chose {VALUE}.",
-  "{first} made the trade at {landmark} {MANNER}, with {THING:portable} as the price.",
-  "{first} faced the {rival} at {landmark}, and chose {VALUE}."
+  "{first} broadcast {the_message} from {landmark} {MANNER} and watched {the_someone:human} run.",
+  "{the_someone:human} stalled at {landmark}, and {first} used {the_thing:portable} {MANNER}.",
+  "{first} left {the_thing:portable} in plain sight at {landmark} {MANNER}, then waited.",
+  "{first} faced the {rival} at {landmark} with {the_thing:portable}, and chose {VALUE}.",
+  "{first} crossed {landmark} {MANNER} with {THING:portable} and one minute left.",
+  "{first} burst into {landmark} {MANNER} and named {SOMEONE:human,!plural}, choosing {VALUE}.",
+  "{first} cut the line {MANNER} at {landmark}, and the countdown stopped.",
+  "The {rival} blinked at {landmark} {MANNER}, and {first} ran with {the_thing:portable}."
  ]
 }

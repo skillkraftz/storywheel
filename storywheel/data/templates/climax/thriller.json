@@ -6,16 +6,16 @@
  ],
  "entries": [
   "{first} cornered {the_someone:human} at {landmark} and held up {the_thing:portable}",
-  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof",
-  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human}",
-  "{the_someone:human} admitted {the_disaster} at {landmark}, when {first} showed {the_thing:portable}",
-  "{first} set a trap at {landmark} {MANNER}, baited with {the_thing:portable}",
-  "{the_thing} broke the cover story, and {the_someone:human} ran {MANNER}",
-  "{first} faced the {rival} at {landmark} with {the_thing:portable} and {VALUE}",
-  "{the_someone:human} broke at {landmark}, and {first} named {MOTIVE}",
+  "{first} broadcast {the_message} from {landmark} {MANNER} and watched {the_someone:human} run",
+  "{the_someone:human} stalled at {landmark}, and {first} used {the_thing:portable} {MANNER}",
+  "{first} left {the_thing:portable} in plain sight at {landmark} {MANNER}, then waited",
+  "{first} stood up to the {rival} at {landmark}, armed with {the_thing:portable} and {VALUE}",
+  "{the_someone:human} folded under the lights at {landmark}, and {first} named {MOTIVE}",
   "{first} burst into {landmark} {MANNER} and named {SOMEONE:human,!plural}",
-  "{first} made the trade at {landmark} {MANNER}, with {THING:portable} as the price",
-  "{SOMEONE:human,!plural} admitted {DISASTER:manmade} at {landmark} {MANNER}",
-  "{first} put {the_thing} on the table {MANNER} and let {the_someone:human} run out of time"
+  "{first} crossed {landmark} {MANNER} with {THING:portable} and one minute left",
+  "{SOMEONE:human,!plural} gave up the plan at {landmark} {MANNER}",
+  "{first} cut the line {MANNER} at {landmark}, and the countdown stopped",
+  "{first} held {the_thing} to the light at {landmark} {MANNER} and let {the_someone:human} decide",
+  "the {rival} blinked at {landmark} {MANNER}, and {first} ran with {the_thing:portable}"
  ]
 }

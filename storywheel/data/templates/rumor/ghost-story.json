@@ -5,13 +5,13 @@
   "ghost story"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
-  "{DISASTER:manmade} {was} never spoken of by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no one looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "a light is seen at {landmark:built} {MANNER}",
+  "{SOMEONE:human,!plural} is said to walk {landmark:built} {MANNER}",
+  "{THING:portable} {is} kept {HIDING} at {landmark:built}",
+  "{DISASTER:manmade} {was} never forgiven in {place}",
+  "{SOMEONE:human,!plural} keeps vigil at {landmark:built} {MANNER}",
+  "the {rival} will not enter {landmark:built} {MANNER}",
+  "{landmark:built} {was} shut after {DISASTER}",
+  "dogs in {place} will not pass {landmark:built} {MANNER}"
  ]
 }

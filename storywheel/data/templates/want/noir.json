@@ -5,13 +5,13 @@
   "noir"
  ],
  "entries": [
-  "{PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} for {CLOSE:human}",
-  "{THING:portable,!living} from {landmark}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner}",
-  "{THING:valuable,!living} at {landmark}",
-  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
-  "{PRIZE:social,!inner} and a way out of {place}",
-  "{PRIZE:material,!inner} {DEADLINE}"
+  "a cut of {THING:valuable,!living} and {PRIZE:social,!inner}",
+  "{PRIZE:material,!inner} and a way out of {place}",
+  "{THING:portable,!living} back from the {rival}",
+  "a clean exit from {landmark:built} {DEADLINE}",
+  "{PRIZE:social,!inner} for {CLOSE:human}",
+  "{THING:valuable,!living} and no questions at {landmark}",
+  "the {rival}'s attention off {CLOSE:human}",
+  "{PRIZE:material,!inner} {DEADLINE}, no questions asked"
  ]
 }

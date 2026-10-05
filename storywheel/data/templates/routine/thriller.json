@@ -5,15 +5,15 @@
   "thriller"
  ],
  "entries": [
-  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
-  "kept a log of visitors to {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
-  "{ACT_THING:mundane} {THING} {MANNER} and noticed everything at {landmark}",
-  "walked past {landmark} {MANNER} and hoped for {PRIZE:!inner}",
-  "read the feeds {MANNER} and avoided the {rival}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
-  "took coffee at {landmark} and kept faith with {VALUE}",
-  "{ACT_PLACE:mundane} {landmark} every morning and said nothing of {TOPIC}",
-  "noted every oddity in {place} {MANNER} and told no one",
-  "locked up {landmark} {MANNER} and feared {DISASTER}"
+  "twice a day, {ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "checked the exits at {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
+  "{ACT_THING:mundane} {THING} {MANNER} and counted the cameras at {landmark}",
+  "crossed {place} {MANNER} and hoped for {PRIZE:!inner}",
+  "read the news feeds {MANNER} and avoided the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} in mind",
+  "took coffee at {landmark} and stayed loyal to {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} each morning and said nothing of {TOPIC}",
+  "rehearsed the way out of {place} {MANNER} and told no one",
+  "double-locked {landmark} {MANNER} and feared {DISASTER}"
  ]
 }

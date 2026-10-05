@@ -5,11 +5,11 @@
   "ghost story"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
+  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} at {landmark}, and the house breathed out.",
+  "{first} learned to hold {TOPIC} lightly, and {VALUE} did the rest.",
+  "{first} and {SOMEONE:!threatening} {ACT_PLACE:mundane} {landmark} together {MANNER}, and the {season} turned.",
   "{first} laid down {VICE} at {landmark}, and the house was still.",
-  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "The lamps of {place} went dark one by one, and {first} {HABIT_PERSON} {CLOSE:human}.",
+  "{first} let {SOMEONE:!threatening} go at {landmark}, and the quiet came {MANNER}."
  ]
 }
