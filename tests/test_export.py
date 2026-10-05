@@ -255,14 +255,13 @@ def test_without_libreoffice_odt_and_pdf_say_so_and_keep_the_docx(story, monkeyp
     assert (Path(os.environ["STORYWHEEL_MANUSCRIPTS"]) / "The Last Clause" / f"The Last Clause {TODAY}.docx").exists()
 
 
-def test_a_screenplay_is_a_marked_stub(story):
+def test_a_story_switched_to_screenplay_needs_its_script(story):
+    """A screenplay's manuscript is script.fountain (tests/test_screenplay_pdf.py exports one); the prose files are not a script."""
     st = settings.load_story(story.path)
     st["format"] = "screenplay"
     settings.save_story(story.path, st)
-    r = export.export(story, "docx")
-    assert r["format"] == "fountain" and r["path"].endswith(".fountain")
-    assert any("stub" in w for w in r["warnings"])
-    assert Path(r["path"]).read_text().startswith("Title: The Last Clause\nAuthor: Andy Writer\n")
+    with pytest.raises(export.ExportError, match="script is empty"):
+        export.export(story, "docx")
 
 
 # --- commands ---------------------------------------------------------------------------------------------------------------

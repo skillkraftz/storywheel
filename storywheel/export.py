@@ -28,7 +28,8 @@ from pathlib import Path
 
 from . import paths, quotes, settings, tools, vault
 
-FORMATS = ("docx", "odt", "pdf", "md", "txt", "fountain")
+FORMATS = ("docx", "odt", "pdf", "md", "txt", "fountain", "fdx")
+SCRIPT_FORMATS = ("pdf", "fountain", "fdx")         # what a screenplay exports as
 INDENT_INCHES = 0.5
 TITLE_DOWN_POINTS = 4.5 * 72          # the title sits about halfway down the page (the margin is 1 inch)
 LINE_POINTS = 13.8                    # one single-spaced line of 12 pt type
@@ -101,7 +102,9 @@ def compile_text(story):
 
 
 def plain_text(story):
-    """No markup at all: scene breaks are '#', as in a manuscript."""
+    """No markup at all: scene breaks are '#', as in a manuscript. A screenplay is its Fountain text as written (its blank lines matter)."""
+    if story.is_screenplay():
+        return compile_text(story)
     blocks = []
     for kind, text in paragraphs(compile_text(story), _one_space(story), curly(story)):
         blocks.append("#" if kind == "scene_break" else strip_markup(text))
@@ -330,11 +333,56 @@ def build_txt(story, path, anonymous=None):
     return warnings
 
 
-def build_fountain(story, path):
-    info, warnings = author_info(story)
-    text = f"Title: {story.title}\nAuthor: {info['byline']}\n\n{compile_text(story)}\n"
-    Path(path).write_text(text, encoding="utf-8")
-    return warnings + ["Screenplay export is a stub: the manuscript is written out unformatted as a .fountain file."]
+def build_fountain(story, path, anonymous=None):
+    """A screenplay's .fountain: the script as written, with its title page made from your details (Settings > You); anonymous leaves your
+    name and contact out. A prose story is written out as Fountain action (a rough start for adapting it)."""
+    from . import fountain, screenplay
+    text = compile_text(story)
+    if not story.is_screenplay():
+        info, warnings = author_info(story, anonymous=bool(anonymous))
+        Path(path).write_text(f"Title: {story.title}\nAuthor: {info['byline']}\n\n{text}\n", encoding="utf-8")
+        return warnings + ["This story is prose: written out as Fountain action, unformatted (set its format to screenplay to write a script)."]
+    tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
+    head = [f"Title: {' '.join(tp['title'])}"]
+    if tp["credit"]:
+        head.append(f"Credit: {tp['credit']}")
+    if tp["author"]:
+        head.append(f"Author: {tp['author'][0]}")
+    if tp["source"]:
+        head.append(f"Source: {' '.join(tp['source'])}")
+    if tp["date"]:
+        head.append(f"Draft date: {' '.join(tp['date'])}")
+    if tp["contact"]:
+        head.append("Contact:")
+        head += [f"    {c}" for c in tp["contact"]]
+    script = fountain.parse(text)
+    body = "\n".join(text.split("\n")[script.body_start - 1:]) if script.title else text
+    Path(path).write_text("\n".join(head) + "\n\n" + body.lstrip("\n").rstrip("\n") + "\n", encoding="utf-8")
+    return warnings
+
+
+def fountain_or_prose_words(story):
+    if story.is_screenplay():
+        from . import fountain
+        return fountain.word_count(compile_text(story))
+    return vault.count_words(compile_text(story))
+
+
+def build_script_pdf(story, path, anonymous=None):
+    from . import screenplay, screenplay_pdf
+    tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
+    pages = screenplay_pdf.render(compile_text(story), path, tp)
+    target = screenplay.target_pages(story)
+    if target and abs(pages - target) > 0.15 * target:
+        warnings.append(f"{pages} pages against a target of {target}.")
+    return warnings
+
+
+def build_fdx(story, path, anonymous=None):
+    from . import screenplay, screenplay_fdx
+    tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
+    screenplay_fdx.write(compile_text(story), path, tp)
+    return warnings
 
 
 MARKER = ".storywheel-story"
@@ -461,18 +509,35 @@ def export(story, fmt="docx", out_dir=None, anonymous=None):
     if fmt not in FORMATS:
         raise ExportError(f"Unknown format '{fmt}'. Choose one of: {', '.join(FORMATS)}")
     if not story.files() or not compile_text(story).strip():
+        if story.is_screenplay():
+            raise ExportError("The script is empty: write it first (the Writer starts script.fountain; the Builder's P starts it from the outline).")
         raise ExportError("The manuscript is empty: write something first.")
     out = Path(out_dir) if out_dir else export_folder(story)
     out.mkdir(parents=True, exist_ok=True)
-    exts = {"docx": ["docx"], "odt": ["docx", "odt"], "pdf": ["docx", "pdf"], "md": ["md"], "txt": ["txt"], "fountain": ["fountain"]}[fmt]
-    base = out / unique_stem(out, file_stem(story), exts)
     warnings = []
-    words = vault.count_words(compile_text(story))
     st = settings.load_story(story.path)
-    if str(st.get("format", "")).lower() == "screenplay" and fmt in ("docx", "odt", "pdf"):
-        fmt = "fountain"
-        warnings.append("This story's format is 'screenplay': exported as a .fountain file instead (screenplay layout is a stub).")
-    if fmt == "docx":
+    script = story.is_screenplay()
+    anon_now = bool(st.get("export_anonymous")) if anonymous is None else bool(anonymous)
+    if script and fmt not in SCRIPT_FORMATS:
+        warnings.append(f"A screenplay exports as PDF, .fountain or .fdx: made a PDF instead of .{fmt}.")
+        fmt = "pdf"
+    if fmt == "fdx" and not script:
+        raise ExportError("Final Draft (.fdx) export is for screenplays. Set the story's format to screenplay first.")
+    exts = {"docx": ["docx"], "odt": ["docx", "odt"], "pdf": ["pdf"] if script else ["docx", "pdf"], "md": ["md"], "txt": ["txt"],
+            "fountain": ["fountain"], "fdx": ["fdx"]}[fmt]
+    base = out / unique_stem(out, file_stem(story), exts)
+    if script:
+        from . import fountain
+        words = fountain.word_count(compile_text(story))
+    else:
+        words = vault.count_words(compile_text(story))
+    if script and fmt == "pdf":
+        path = base.with_suffix(".pdf")
+        warnings += build_script_pdf(story, path, anon_now)
+    elif script and fmt == "fdx":
+        path = base.with_suffix(".fdx")
+        warnings += build_fdx(story, path, anon_now)
+    elif fmt == "docx":
         words, warnings = build_docx(story, base.with_suffix(".docx"), anonymous)
         path = base.with_suffix(".docx")
         if str(st.get("format", "")).lower() == "novel":
@@ -489,10 +554,10 @@ def export(story, fmt="docx", out_dir=None, anonymous=None):
         warnings = build_txt(story, path, anonymous)
     else:
         path = base.with_suffix(".fountain")
-        warnings += build_fountain(story, path)
+        warnings += build_fountain(story, path, anon_now)
     anon = bool(settings.load_story(story.path).get("export_anonymous")) if anonymous is None else bool(anonymous)
     try:
-        record_export(story, out, path, fmt, vault.count_words(compile_text(story)), anon)
+        record_export(story, out, path, fmt, fountain_or_prose_words(story), anon)
     except OSError as e:
         warnings.append(f"The export was written, but its record ({MANIFEST}) could not be: {e}")
     return {"path": str(path), "shown": paths.tilde(path), "format": fmt, "words": words, "warnings": warnings}

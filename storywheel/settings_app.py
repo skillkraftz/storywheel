@@ -79,7 +79,7 @@ SECTIONS = [
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
         ("format", "Default format", "choice", ["short-story", "novel", "screenplay"],
-         "For new stories (a story can choose its own). short-story is complete; novel is partial (chapters start new pages); screenplay is a stub."),
+         "For new stories (a story can choose its own). short-story is complete; novel is partial (chapters start new pages); screenplay writes Fountain and exports script pages (PDF, .fdx)."),
         ("export_format", "Default export type", "choice", ["docx", "odt", "pdf", "md", "txt"], "The file type the one-key export makes; you can pick another each time."),
         ("export_title_bold", "Title in bold", "bool", None, "On the first page of the .docx."),
         ("export_header", "Page header shows", "choice", ["full", "keyword"],

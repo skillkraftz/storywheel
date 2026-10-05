@@ -7,10 +7,10 @@ name = "storywheel"
 dynamic = ["version"]
 description = "Roll a story one piece at a time, keep what clicks, export to markdown."
 requires-python = ">=3.9"
-dependencies = ["textual>=1.0", "wonderwords>=2.2", "faker", "python-docx>=1.1", "wordfreq>=3.0"]
+dependencies = ["textual>=1.0", "wonderwords>=2.2", "faker", "python-docx>=1.1", "wordfreq>=3.0", "reportlab>=4.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-xdist", "pyte"]
+dev = ["pytest", "pytest-xdist", "pyte", "pdfplumber"]
 
 [project.scripts]
 storywheel = "storywheel.cli:main"
@@ -22,7 +22,7 @@ packages = ["storywheel"]
 version = {attr = "storywheel.__version__"}
 
 [tool.setuptools.package-data]
-storywheel = ["data/*.json", "data/*/*.json", "data/*/*/*.json", "data/help/*.md", "nvim/*.lua", "nvim/*/*.lua", "nvim/*/*/*.lua", "nvim/*/*.vim"]
+storywheel = ["data/*.json", "data/*/*.json", "data/*/*/*.json", "data/help/*.md", "nvim/*.lua", "nvim/*/*.lua", "nvim/*/*/*.lua", "nvim/*/*.vim", "fonts/*.ttf", "fonts/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -109,6 +109,8 @@ def run_tui(story, engine, script, size=(200, 50)):
 # slow:   left out while working (`-m "not slow"`): real terminals, performance, and the 200-story fidelity / repetition checks.
 
 SERIAL_FILES = {"test_appearance.py", "test_hub.py", "test_kitty_keys.py", "test_switching.py", "test_performance.py", "test_grammar_server.py"}
+# tests that start LibreOffice: two at once share its profile and one of them fails, so they run in the serial pass
+SERIAL_TESTS = ("test_export.py::test_the_docx_opens_in_libreoffice", "test_export.py::test_odt_is_made_with_libreoffice")
 SLOW_FILES = SERIAL_FILES | {"test_menu_keys.py", "test_menus.py", "test_dropdowns.py", "test_setup_update.py", "test_builder_ratings.py", "test_layout_batch6.py"}
 SLOW_TESTS = (                                   # (parts of node ids) each takes more than about five seconds on its own
     "test_genre_content.py::test_no_genres_frames_are_even_close",
@@ -155,7 +157,7 @@ def pytest_collection_modifyitems(config, items):
         except (OSError, TypeError, AttributeError):
             source = ""
         real_terminal = "pty.fork" in source or "real_terminal" in item.name
-        if fname in SERIAL_FILES or real_terminal:
+        if fname in SERIAL_FILES or real_terminal or any(part in name for part in SERIAL_TESTS):
             item.add_marker(pytest.mark.serial)
         if fname in SLOW_FILES or real_terminal or any(part in name for part in SLOW_TESTS):
             item.add_marker(pytest.mark.slow)
