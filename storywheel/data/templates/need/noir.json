@@ -8,7 +8,7 @@
   "to stop selling {VALUE} to pay for {VICE}",
   "to say no to {TEMPTATION} and {VICE} for once",
   "to {DO_PERSON:inner} {CLOSE:human} before the city does",
-  "to learn that {VALUE} costs more than {PRIZE:social,!inner}",
+  "to admit {VALUE} costs more than {PRIZE:social,!inner}",
   "to quit running from {FEELING} and {VICE}",
   "to keep a promise to {CLOSE:human} despite {VICE}",
   "to put {VALUE} ahead of {TEMPTATION}",

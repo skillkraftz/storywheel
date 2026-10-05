@@ -203,8 +203,8 @@ def test_invented_names_are_at_least_four_letters_and_never_dictionary_words():
 # --- profiles and the psychology lists -----------------------------------------------------------------------------
 
 # how much "modern" (Faker names, cities and jobs, everyday jobs) fits each genre; 0.1 unless the genre's content says otherwise
-MODERN = {"comedy": 0.2, "fantasy": 0, "mystery": 0.2, "sci-fi": 0.3}
-GENERAL = {"fantasy": 0.15}
+MODERN = {"comedy": 0.2, "fantasy": 0, "mystery": 0.2, "sci-fi": 0.3, "noir": 0.05}
+GENERAL = {"fantasy": 0.15, "ghost story": 0.15, "noir": 0.15, "thriller": 0.15}     # (batch 13: their own material carries them)
 
 
 def test_every_profile_has_general_03_and_its_own_modern_share():

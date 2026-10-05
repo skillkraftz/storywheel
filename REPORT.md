@@ -3225,4 +3225,4 @@ the dials are in `genrefit.py`.
 
 ## Full suite (batch 13)
 
-See the end of this section when the full run has finished.
+2,317 passed, 4 skipped, 0 failed, in one run (20 min). An earlier full run found one failure of mine (three ghost story / noir / thriller need frames began with "to learn", which other frames already supply); they were reworded and the whole suite re-run. `test_kinds_floors.py` now expects the lower general/modern weights of the three genres. The samples above were rolled before those three rewordings. `stable` was moved to the commit that records this.

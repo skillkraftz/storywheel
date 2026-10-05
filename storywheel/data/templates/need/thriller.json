@@ -10,7 +10,7 @@
   "to stop outrunning {FEELING} and face {VICE}",
   "to {DO_PERSON:inner} {CLOSE:human} while there is still time",
   "to put {VALUE} ahead of {TEMPTATION} when it counts",
-  "to learn that {VALUE} lasts longer than {PRIZE:social,!inner}",
+  "to accept that {VALUE} outlasts {PRIZE:social,!inner}",
   "to let {CLOSE:human} help with {TOPIC}",
   "to stand still and feel {FEELING}, and keep {VALUE}"
  ]
