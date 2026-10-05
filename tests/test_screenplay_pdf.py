@@ -255,3 +255,12 @@ def test_the_exports_status_command_knows_scripts(lamp_story):
     status = {d["story"]: d for d in cli_world.exports_status()}
     d = status[export.story_id(lamp_story)]
     assert d["state"] == "up to date" and d["default_format"] == "pdf" and d["last_export"]["format"] == "pdf"
+
+
+def test_the_page_breaks_sample_shows_both_rules(tmp_path):
+    """tests/fixtures/screenplay/page-breaks.fountain is the sample the owner opens: Edie's speech breaks across pages 1 and 2, and the
+    last scene heading, which would land on the bottom line of page 2, starts page 3."""
+    pages = render((FIXTURE.parent / "page-breaks.fountain").read_text(encoding="utf-8"), tmp_path)
+    assert body(pages[0])[-1]["text"] == "(MORE)" and body(pages[1])[0]["text"] == "EDIE (CONT'D)"
+    assert body(pages[2])[0]["text"] == "EXT. TOWN HALL - CONTINUOUS"
+    assert body(pages[1])[-1]["top"] < 1.0 + 54 / 6 - 0.1                       # (page 2 ends early rather than strand the heading)

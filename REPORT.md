@@ -4934,3 +4934,98 @@ the same way. I used Wrap's output as a second reference for the layout.
 
 Sources: [Final Draft: What are the margins for a screenplay?](https://www.finaldraft.com/blog/what-are-the-margins-for-a-screenplay),
 [StudioBinder: Screenplay margins](https://www.studiobinder.com/blog/screenplay-margins/), [NFI: Screenplay format](https://www.nfi.edu/screenplay-format/).
+
+## Checklist
+
+| Item | Status | Notes |
+|---|---|---|
+| A. Try the renderers on a covering sample, judge them against the standard, measure them by reading the PDFs back | **Works** | screenplain, afterwriting and Wrap; table above |
+| A. Comparison table and the pick in REPORT.md | **Works** | Our own reportlab renderer; none of the three was good enough on its own |
+| B. A screenplay's manuscript is one .fountain file; the prose rules don't apply to it | **Works** | `manuscript/script.fountain`; blank lines kept, paste keeps layout, no indent, no `***` rewriting, no prose export, no migrations |
+| B. Spelling, autocorrect and quotes still work; grammar skips cues, headings and transitions | **Works** | Grammar reads only action, dialogue, parentheticals and lyrics (tested through `fountain.prose_lines` and the Lua skip) |
+| B. The Wheel and Builder can make a screenplay story | **Works** | Wheel: write "short film" or "feature film" in the structure step, then promote. Builder: + Story asks for a format |
+| B. Feature film (acts and sequences) and short film structures | **Works** | Never rolled at random; they reuse the three-act frames for their beats |
+| B. "Start the script from the outline": sections and synopses that don't print | **Works** | Builder `P`; never overwrites a script that has scenes |
+| C. Tab cycles the element; Enter after a cue starts dialogue, after dialogue returns to action | **Works** | |
+| C. Scene headings and character cues capitalized automatically | **Works** | Headings when you leave the line; a cue when it is a known name and you press Enter (a new name: type it in capitals or press Tab) |
+| C. Names and locations complete from the script and the universe | **Works** | |
+| C. Display-only indents approximate the page; the file stays plain Fountain | **Works** | Visual: check by eye (manual script below) |
+| C. Sidebar lists scenes by heading under their sections, and jumps | **Works** | Moving a scene is cut and paste (the sidebar says so) |
+| C. Status line "p. 12 of ~15" | **Works** | An estimate (see Known issues) |
+| C. Flip test on a key, results in a list that jumps | **Works** | Alt+F; long action, long speeches, camera directions, CUT TO: overuse, length against the target |
+| D. Formatted PDF with a standard title page from Settings; anonymous leaves name and contact out | **Works** | |
+| D. .fountain and Final Draft .fdx | **Works** | The .fdx is checked as XML only; nobody has opened it in Final Draft yet (manual script) |
+| D. Usual manuscripts folder and the export record (so the backup offer sees scripts) | **Works** | `exports status` shows scripts with their default format, pdf |
+| D. Tests read the PDF back: positions, pagination, (MORE)/(CONT'D), no orphaned heading | **Works** | Tolerance 0.05" |
+| E. A "screenplays" help page, including the honest note about a final check in Fade In | **Works** | `storywheel help screenplays`, and the help screens |
+| E. A sample screenplay story in the fixtures, its PDF path here, and a manual test script | **Works** | Below |
+
+## The sample
+
+- The script: `tests/fixtures/screenplay/the-lamp.fountain`, "The Lamp in the Attic", about 3.3 pages. It has every element: title page, sections,
+  synopses, (V.O.), (O.S.), (CONT'D), parentheticals, dual dialogue, transitions, centered text, `===`, lyrics, a note and the boneyard.
+- **Its PDF: `/home/andy/projects/storywheel/tests/fixtures/screenplay/the-lamp.pdf`**. Also `the-lamp-anonymous.pdf` and `the-lamp.fdx`
+  beside it.
+- **The page-break sample: `/home/andy/projects/storywheel/tests/fixtures/screenplay/page-breaks.pdf`**. Edie's speech breaks from page 1 to
+  page 2 with (MORE) and EDIE (CONT'D). On page 2 the last scene heading would have landed on the bottom line, so it starts page 3 instead.
+- `python tools/screenplay_sample.py` remakes all four in a temporary storywheel home with a made-up author ("Andy Example"), so your settings are
+  never read.
+
+## Tests added (batch 17)
+
+| File | Tests | What |
+|---|---|---|
+| `tests/test_screenplay.py` | 31 | The Fountain parser (every element, notes and boneyard, cues, forced elements), grammar skip lines, screen structures never random, a story on a screen structure is a screenplay with a target, promotion from a Short Film draft, start from the outline (sections/synopses, acts over sequences, never overwrite, backup), the prose rules leave a script alone, a new scene is a heading, the flip test, the page estimate, the `script` CLI and `story show --json` |
+| `tests/test_screenplay_pdf.py` | 24 | The PDF read back with pdfplumber: Letter, Courier Prime 12, every element's position, columns, page numbers, top margin and 55 lines, dual dialogue, centered text and italic lyrics, `===`, (MORE)/(CONT'D), never a break after a cue or parenthetical, no stranded heading (five fill levels), paginator and PDF agree, the page-break sample, the title page, anonymous, manuscripts folder and export record, docx -> pdf, the .fdx, the .fountain, `exports status` |
+| `tests/test_screenplay_writer.py` | 17 | The Writer in a headless Neovim: prose rules off, Enter and paste, the Tab cycle, Enter after a cue and after dialogue, capitalization, completion, indents, the file stays plain, sidebar and jump, the status line, the flip test list, Lua/Python parity on the fixture, the menu's script exports |
+| `tests/test_builder_layout.py` | +1 | Builder `P`: starts the script, refuses one with scenes, explains for a prose story |
+| changed | | `test_structures.py` (screen structures in the registry, not rolled), `test_export.py` (the old stub test replaced), `test_help.py` (14 pages) |
+
+The two LibreOffice export tests now run in the serial pass. Running them side by side failed once: two soffice processes shared a profile.
+
+## Manual test script
+
+Set up a throwaway library first if you want to keep your real one clean. Otherwise do this in your own.
+
+1. **Make a script story.** F2 for the Builder, open a universe, + Story, name it, and type `screenplay` in the format box. Or in the Wheel,
+   on the structure step, press `e` and type `short film`, keep it and the steps you like, then send it to the Builder.
+2. **Start from the outline** (Wheel route): on the story in the Builder press `P`. Then `w` to write. Expect a title page, `FADE IN:`, and the
+   beats as `#` lines and `=` lines.
+3. **Write a page** in the Writer. Things to check by eye:
+   - Type `int. kitchen - night`, then Enter. It should become uppercase, with a blank line after it.
+   - Type an action line, Enter, then a name in capitals and Enter. Your cursor should be on the dialogue line, indented on screen.
+   - Type a line, Enter. A blank line should appear and you are back to action.
+   - On an empty line press Tab a few times. It should cycle character, parenthetical, dialogue, transition, action, and the on-screen
+     indent should follow.
+   - Type `MA` on a cue line (after a blank line). A list should pop up with MARA, or your universe's characters; Tab walks it and
+     Enter takes a name. After `INT. ` the list should be locations.
+   - `* * *` and `***` should stay as you typed them, and nothing should be indented in the file. Open `script.fountain` in another editor to confirm.
+4. **Sidebar and status line.** Press F9 for the sidebar: scenes should be listed under their acts, and Enter should jump. The status line should
+   read `p. N of ~12`.
+5. **Flip test.** Write one long action paragraph (six lines or more) and the words "We see" somewhere. Press Alt+F. You should get a list,
+   and Enter should jump to each spot.
+6. **Export.** Writer menu (F12) > Story > Export script (.pdf), then the anonymous one, the .fdx and the .fountain. Open the PDF. Check: Courier,
+   the title page with your name bottom left (Settings > You), page numbers from page 2, (MORE)/(CONT'D) if a speech broke. Check that the anonymous
+   one has no name or address. Open the .fdx in Fade In, Final Draft or WriterDuet if you have one: element types and the title page should
+   come through.
+7. **Grammar** (if you use LanguageTool): cue names and headings should never be flagged; dialogue should be.
+8. Compare `tests/fixtures/screenplay/the-lamp.pdf` with a script PDF you trust.
+
+## Known issues and questions
+
+- **The page estimate is approximate.** The Writer's "p. N" adds a flat 4% for the keep-together rules instead of applying them. On the
+  sample it reads 3.3, and the PDF has three full pages plus a quarter of a fourth. It can drift on scripts with many page-bottom moves.
+  Good enough for "am I near 12 pages", not for timing.
+- **CONT'D is not added for you** when the same character speaks again after a line of action. Many screenwriting apps add it on export; here
+  you write `MARA (CONT'D)` yourself. Across a page break it is added automatically, as the standard asks.
+- **A new cue name is not capitalized on Enter.** Only a name the script or universe already knows is. Lowercase `mara` followed by a line of
+  speech is action in Fountain, so capitalizing it on a guess would change what you wrote. Tab makes it a cue.
+- **Dual dialogue that doesn't fit moves to the next page whole.** It never splits.
+- **Transitions are flush right** (ending at 7.5"). Some guides put them at 6.0" from the left edge instead.
+- The .fdx follows Final Draft's published XML shape but has not been opened in Final Draft here (no copy on this machine).
+- The sample short film runs 4 pages against the Short Film structure's 12-page target, so its export carries a "4 pages against a target of 12"
+  note. That is the warning working, not a bug.
+
+## Full run
+
+(to be filled in)

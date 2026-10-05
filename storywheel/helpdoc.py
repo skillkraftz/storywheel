@@ -23,7 +23,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent / "data" / "help"
 
 MODES = ("wheel", "builder", "writer", "settings", "words")
-TOPICS = ("universes", "structures", "genres-and-flavor", "exports", "backups", "dictionary", "grammar", "keys")
+TOPICS = ("universes", "structures", "genres-and-flavor", "exports", "screenplays", "backups", "dictionary", "grammar", "keys")
 
 KEY_NAMES = {"question_mark": "?", "slash": "/", "backslash": "\\", "plus": "+", "minus": "-", "equals_sign": "=", "escape": "Esc", "space": "space",
              "enter": "Enter", "tab": "Tab", "comma": ",", "full_stop": ".", "pageup": "PgUp", "pagedown": "PgDn"}
@@ -111,7 +111,7 @@ def resolve(word):
     alias = {"f1": "wheel", "f2": "builder", "f3": "writer", "f4": "settings", "f5": "words", "genres": "genres-and-flavor", "flavor": "genres-and-flavor",
              "genre": "genres-and-flavor", "export": "exports", "backup": "backups", "dictionaries": "dictionary", "thesaurus": "dictionary",
              "rhymes": "dictionary", "shortcuts": "keys", "universe": "universes", "structure": "structures", "spelling": "grammar",
-             "common": "keys"}
+             "common": "keys", "screenplay": "screenplays", "script": "screenplays", "fountain": "screenplays"}
     if w in alias:
         return alias[w]
     hits = [n for n in names() if n.startswith(w)] if w else []

@@ -298,8 +298,19 @@ the scene, in the manuscript, and today against your goal as `today 312 / 1,000 
 The **.docx** follows Shunn's proper manuscript format for a short story: 12 pt Times New Roman (or Courier New), double
 spaced, 1 inch margins, half-inch indents, your name and address at the top left of page 1 with the rounded word count
 at the right, the title halfway down, a header "Surname / Keyword / page" from page 2, a centered `#` for scene breaks,
-a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial;
-screenplay is a marked stub (a `.fountain` file).
+a centered END, italics kept. Also `md`, `txt`, `odt` and `pdf` (those two need LibreOffice). Novel layout is partial.
+A screenplay exports as standard script pages (PDF, Courier Prime 12), Final Draft (`.fdx`) or Fountain; see below.
+
+### Screenplays
+
+A story on the Feature Film or Short Film structure (or any story with `format = "screenplay"`) is written as one Fountain file,
+`manuscript/script.fountain`. `P` in the Builder starts it from the outline (acts and beats as sections and synopses, which don't print).
+In the Writer, Tab cycles a line between action, character, parenthetical, dialogue and transition, Enter knows what comes after a cue or a
+speech, headings and cues are capitalized, names and locations complete, the page is approximated with display-only indents, the sidebar lists
+scenes under their acts, the status line shows `p. 12 of ~15`, and Alt+F runs the flip test (long action, long speeches, camera directions,
+CUT TO: overuse, length against the target). Export makes a PDF with a title page from your settings (anonymous leaves your name and contact
+out), an `.fdx` and a `.fountain`. `storywheel help screenplays` has the details. Samples: `tests/fixtures/screenplay/the-lamp.pdf` and
+`page-breaks.pdf` (`python tools/screenplay_sample.py` remakes them).
 
 ### Help
 

@@ -2,6 +2,19 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.17.0 — Batch 17: screenplays, first usable version
+
+- **Screenplay stories.** A story on the new Feature Film or Short Film structure (or with format screenplay) is written as one Fountain file.
+  None of the prose rules touch it. P in the Builder starts the script from the outline, with acts and beats as sections and synopses.
+- **The Writer in screenplay mode.** Tab cycles a line's element and Enter knows what comes next. Headings and cues are capitalized, and
+  names and locations complete. Display-only indents make it read like a script. The sidebar lists scenes under their acts, the status line
+  shows pages against the target, and Alt+F runs a flip test.
+- **Script export.** Standard script pages as a PDF from our own renderer (reportlab, Courier Prime bundled), with (MORE)/(CONT'D) across
+  pages, no scene heading stranded at a page bottom, dual dialogue, and a title page from your settings. Also Final Draft (.fdx) and
+  Fountain. The renderer was chosen after measuring screenplain, afterwriting and Wrap (REPORT.md).
+- **Help:** a Screenplays page. **Samples:** `tests/fixtures/screenplay/` (the scripts and their PDFs).
+- New dependency: reportlab (BSD). Dev dependency: pdfplumber.
+
 ## 0.16.0 — Batch 16: closing out the genre engine
 
 - **Frames come only from the story's own genres.** Titles, premises, twists and every beat are drawn from the story's genres and the general frames;

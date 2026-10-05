@@ -336,3 +336,20 @@ def test_entity_notes_are_under_the_card_and_still_save(world):
     inside, focused, body = run(script)
     assert inside and focused == "notes" and body == "ok"
 
+
+
+def test_p_starts_a_screenplay_from_its_outline_and_says_why_not_for_prose(world):
+    u, s, s2 = world
+    film = u.new_story("Night Shift", {"structure": "Short Film"}, {"Short Film": "**Opening image.** A diner at 3 a.m."})
+    async def script(app, pilot):
+        await pilot.press("P")
+        await pilot.pause()
+        return flat(screen_text(app))
+    text = run(script, story="night-shift")
+    assert film.script_path.exists() and "= A diner at 3 a.m." in film.script_path.read_text()
+    assert "Started script.fountain from the outline" in text
+    film.script_path.write_text(film.script_path.read_text() + "\nINT. DINER - NIGHT\n\nRain on the glass.\n")
+    text = run(script, story="night-shift")
+    assert "already has scenes in it; it was left alone" in text and "Rain on the glass." in film.script_path.read_text()
+    text = run(script)
+    assert "not a screenplay" in text and not (s.path / "manuscript" / "script.fountain").exists()

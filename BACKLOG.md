@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 16.
+Last updated after batch 17.
 
 
 ## Now
@@ -24,8 +24,16 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
 
 - **Novel profile.** *Partial.* Shunn's novel title page (contact block, word count, title, byline), each chapter on a new page a third of the
   way down with its heading, chapters as the sidebar's top level with scenes inside, adding/renaming/reordering chapters.
-- **Screenplay profile.** *Stub.* Today it writes an unformatted `.fountain`. Needs Fountain editing (scene headings, character names,
-  transitions; Tab/Enter moves between elements) and export to formatted pages (Courier 12, element margins, page numbers) as .docx and PDF.
+- **Screenplays from real use.** *Verify.* Batch 17 built a first usable version (Fountain in the Writer, the flip test, PDF/.fdx/.fountain
+  export). Write a few pages and report what needs polish. Ideas held back from batch 17 to keep to its checklist:
+  - Scene numbers on the page (Fountain `#12#` is parsed but not printed) for shooting scripts; revision colours, revision marks (`*` in the margin), locked pages.
+  - Move scenes from the sidebar (today: cut and paste); a scene's synopsis shown in the sidebar.
+  - Story words and Overused that understand Fountain (skip cues and headings); character speech counts per scene.
+  - A "screenplay" format profile for novels' adaptation: turn a prose story into Fountain action as a start (today the prose `.fountain` export does a rough version).
+  - Dual dialogue that breaks across pages (today the pair moves to the next page whole).
+  - A tighter page estimate in the Writer (it uses the PDF's wrap widths but adds a flat 4% for the keep-together rules instead of applying them).
+  - Title page fields beyond Title/Credit/Author/Source/Draft date/Contact (Notes, Copyright, WGA registration).
+  - `.docx` screenplay export for people who insist on Word.
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys covers the Writer only; extend it to the Wheel, Builder, Settings and the
   F1–F5 mode keys, with the same conflict checks.
 - **Obsidian `[[wikilinks]]` resolving to entities.** *Missing.* Resolve `[[Name]]` in entity notes and outlines (Builder links and "Appears in";

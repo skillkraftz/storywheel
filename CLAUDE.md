@@ -417,9 +417,45 @@ terminal multiplexer is the fallback, but start with suspend-and-return.
 - **Short story** (default): scene files, Shunn short-story export.
 - **Novel**: chapters as files (with headings), scenes inside them; Shunn
   novel export.
-- **Screenplay**: Fountain (`.fountain`) files with Fountain-aware editing.
-  Export through a Fountain converter if one is installed. It's fine for this
-  to be a clearly marked stub in the first sweep.
+- **Screenplay**: one Fountain file with Fountain-aware editing and export to
+  script pages. See Screenplays below.
+
+
+## Screenplays
+
+A screenplay story is written in Fountain (plain text) and exported as standard script pages. Built in batch 17; a first usable version.
+
+- **The story.** Its `settings.toml` says `format = "screenplay"` and `target_pages`. Its manuscript is one file,
+  `manuscript/script.fountain`, and none of the prose rules touch it: blank lines are kept (they mean something in Fountain), paste keeps the
+  layout, there is no virtual paragraph indent, no `***` rewriting, and no one-line-paragraph or one-file migration. Spelling, autocorrect and
+  quote straightening still work. Grammar checking reads only action, dialogue, parentheticals and lyrics.
+- **Making one.** A story whose structure is a screen structure becomes a screenplay: Feature Film (three acts in eight sequences, 110 pages)
+  or Short Film (12 pages), both in `data/structures/` with `"screen": true`. They reuse the three-act frames and are never rolled at random
+  (`structures.prose()`), so the writer picks one in the Wheel. The Builder's new-story box also takes a format. P in the Builder writes the
+  script from the outline: a title page, each beat as a Fountain section (`# Act One`, `## Sequence A`) with its text as a synopsis (`= ...`),
+  which never print. A script that already has scenes is never overwritten, and a forced replace backs it up first.
+- **Reading Fountain.** `fountain.py` is the one reader. It parses the title page and every element (headings, action, cues with extensions
+  and `^` dual, parentheticals, dialogue, transitions, centered, `===`, sections, synopses, lyrics; notes and boneyard are skipped while
+  line numbers stay true). The page estimate, flip test, scene list, word count, export and grammar skip list all use it. The Writer's
+  `sw/script.lua` ports its line classifier, and a test checks that both read the fixture the same way.
+- **The Writer.** Tab cycles the line's element (action, character, parenthetical, dialogue, transition), fixing the blank lines around it.
+  Enter after a cue or parenthetical starts dialogue; Enter after dialogue starts action. Headings, and cues of known names, are
+  capitalized. Character names and locations complete from the script and the universe. Display-only inline indents approximate the page.
+  The sidebar shows scenes by heading under their sections. The status line shows "p. N of ~T". Alt+F (`key_flip_test`) runs the flip test
+  into a list that jumps to each spot.
+- **The flip test** (`screenplay.flip_test`) flags action blocks over 4 printed lines, speeches over 10, and camera directions (we see,
+  CAMERA, ANGLE ON, PAN, ZOOM...). It also flags CUT TO: used more than once per five scenes, and a length more than 15% off the target.
+- **Export** (`screenplay_pdf.py`, our own renderer, chosen in batch 17 Part A over screenplain, afterwriting and Wrap). It uses reportlab
+  and the bundled Courier Prime (OFL), on US Letter with 12-pt type, 10 characters an inch, and 55 lines of 12 pt. Margins are 1.5" left,
+  ending at 7.5", with the body 1" from the top. Cues sit at 3.7", parentheticals at 3.1" (25 wide), dialogue at 2.5" (35 wide), and action
+  is 60 wide. Transitions end at 7.5", and page numbers ("2.") run from page 2 at 0.5" down. Two blank lines go before a heading, and a
+  heading is kept with what follows. A speech splits after a dialogue line, preferring a sentence end, with (MORE) and "NAME (EXT) (CONT'D)".
+  Action splits only with 2+ lines on each side. Dual dialogue is set in columns. The title page comes from Settings > You: title at row 21
+  centered, "Written by", the name, contact bottom left, and the date bottom right. Anonymous leaves out the name, credit and contact. Also
+  `.fdx` (`screenplay_fdx.py`, Final Draft XML) and `.fountain` (the title page rebuilt from settings). A script asked for docx/odt/md/txt
+  gets a PDF and says so. Exports go to the manuscripts folder and the export record like any other.
+- **Not done** (BACKLOG.md): scene numbers on the page, revision colours and marks, a screenplay word bank, Fountain in Words' Story words,
+  Fountain-aware `storywheel lookup` of cues, and moving scenes from the sidebar.
 
 
 ## Export
@@ -923,6 +959,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   Cut, Copy, Paste, Fix Spelling… (when `spell.bad_word()`), Look Up, Add to Dictionary and More… (the full menu, `sw.menu`, whose height follows the window). Do
   not add a broad `OptionList { height: ... }` rule to a screen's CSS without checking dropdowns: `Select`'s list is an OptionList (`tests/test_dropdowns.py`).
 
+- Batch 17 (screenplays): our own PDF renderer (reportlab + bundled Courier Prime), chosen after measuring screenplain, afterwriting and Wrap
+  (REPORT.md, batch 17 Part A); `fountain.py` is the one reader of a script. A screenplay's manuscript is `manuscript/script.fountain`
+  (`vault.SCRIPT_FILE`) and is exempt from every prose rule. Screen structures (`"screen": true`) are never rolled at random. The two
+  LibreOffice export tests run in the serial pass (`conftest.SERIAL_TESTS`): two soffice processes at once share a profile and one fails.
 - Batch 12 genres: ghost story (melancholy, grief, memory, a house that remembers; horror's neighbor), noir (money, cynicism, a city that always wins; mystery's and
   thriller's neighbor) and thriller (pressure, a clock, pursuit; neighbor of mystery, noir and heist) are written like the batch 7/8 genres (profile weight 4, lists for every
   slot, frames for every beat, names with Markov training sets). Shared floor lists tagged `rural` and `mythological` (eight slots each) are the real neighbors of western,

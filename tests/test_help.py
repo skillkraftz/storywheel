@@ -15,7 +15,7 @@ SKIP_NVIM = pytest.mark.skipif(writer.check() is not None, reason="Neovim 0.10+ 
 # --- the files ---------------------------------------------------------------------------------------------------------------------
 
 def test_there_is_one_file_per_mode_and_the_topics():
-    assert helpdoc.names() == ["wheel", "builder", "writer", "settings", "words", "universes", "structures", "genres-and-flavor", "exports", "backups",
+    assert helpdoc.names() == ["wheel", "builder", "writer", "settings", "words", "universes", "structures", "genres-and-flavor", "exports", "screenplays", "backups",
                                "dictionary", "grammar", "keys"]
     for n in helpdoc.names():
         doc = helpdoc.load(n)
@@ -195,7 +195,7 @@ def test_settings_has_a_help_tab_that_searches_everything(world):
         other = str(app.screen.query_one("#helptext", Static).content)
         return pages, results, shown, other
     pages, results, shown, other = run_hub(script)
-    assert pages == 13 and results and any("Rhymes" in r for r in results) and "Rhymes" in shown + other and shown != other
+    assert pages == 14 and results and any("Rhymes" in r for r in results) and "Rhymes" in shown + other and shown != other
     assert "rhymes" in (shown + other).lower()
 
 

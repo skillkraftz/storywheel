@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<FinalDraft DocumentType="Script" Template="No" Version="5">
+  <Content>
+    <Paragraph Type="Action">
+      <Text>FADE IN:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <Text>EXT. HOLLOWAY HOUSE - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Rain hammers a tall, narrow house at the end of a lane. Every window is dark except one: a small round window under the roof, where a lamp burns.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>MARA HOLLOWAY (40s, coat soaked through, a ring of keys in her fist) stands at the gate.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA (V.O.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I told myself I would never come back. Not for the funeral. Not for the house. Not for anything that was left in it.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She opens the gate. It shrieks.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <Text>INT. HOLLOWAY HOUSE - HALLWAY - CONTINUOUS</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Dust sheets over everything. Mara finds a light switch. Nothing.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(under her breath)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Of course.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>VOICE (O.S.)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Close the door, Mara. You're letting the cold in.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mara freezes. Turns slowly toward the stairs.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Who's there?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Silence. Then, very faintly, a door closes somewhere above her.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA (CONT'D)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I have a phone. I'm calling the police.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She does not take out her phone.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <Text>INT. HOLLOWAY HOUSE - ATTIC - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>A low room under the eaves. Boxes, a rocking horse, a dressmaker's dummy. In the middle of the floor, on a tea chest, the lamp: brass, polished, burning steadily.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Beside it sits BRAM ASHER (70s, cardigan, carpet slippers), the old neighbor. He doesn't look surprised to see her.</Text>
+    </Paragraph>
+    <DualDialogue>
+    <Paragraph Type="Character">
+      <Text>BRAM</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>You took your time.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What are you doing in my mother's house?</Text>
+    </Paragraph>
+    </DualDialogue>
+    <Paragraph Type="Character">
+      <Text>BRAM</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Keeping the lamp lit. Same as every night for thirty-one years. She asked me to, the week your father left, and I said I would, and I'm not a man who stops doing a thing just because the person who asked him has gone and died on him. You'd know that if you'd ever once come home. Every night at nine I come up those stairs, I wipe the glass, I trim the wick, and I sit with it until it's steady. And every night I think, this is the night Mara comes back. Thirty-one years of nights. So yes. You took your time.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mara sits down on a box. The fight goes out of her.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Why the lamp?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>BRAM</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(a long look at her)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>So you'd know where the house was. In the dark.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Action" Alignment="Center">
+      <Text>THE NEXT MORNING</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading" StartsNewPage="Yes">
+      <Text>EXT. HOLLOWAY HOUSE - GARDEN - DAY</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Wet grass. A FOR SALE sign leans against the wall. Mara, in last night's clothes, drinks coffee from a jar.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>An ESTATE AGENT (30s, relentlessly cheerful) picks his way across the lawn.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ESTATE AGENT</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Lovely bones. Lovely, lovely bones. We'll want the attic cleared, of course. Buyers don't like to see a lamp burning in an empty house. Gives them ideas.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>What ideas?</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>ESTATE AGENT</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(laughing)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>That somebody's still home.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mara looks up. The round window. The lamp, burning in daylight.</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <Text>INT. HOLLOWAY HOUSE - ATTIC - DAY</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Mara alone with the lamp. She reaches for it, hesitates, and turns the little brass key that lowers the wick.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The flame does not go down.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She turns the key the whole way. The flame stays exactly where it is.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Mum?</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>The lamp flickers once.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA (CONT'D)</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical">
+      <Text>(quietly)</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>I'm here. I came back.</Text>
+    </Paragraph>
+    <Paragraph Type="Lyrics">
+      <Text>Hush now, the lamp is lit, the house is warm, and you are in it.</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>She knows the song. She sings the next line under her breath without meaning to.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>DISSOLVE TO:</Text>
+    </Paragraph>
+    <Paragraph Type="Scene Heading">
+      <Text>INT. HOLLOWAY HOUSE - KITCHEN - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Bram and Mara at the kitchen table, a bottle of whisky between them.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>BRAM</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She never blamed you.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>MARA</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>She should have.</Text>
+    </Paragraph>
+    <Paragraph Type="Character">
+      <Text>BRAM</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue">
+      <Text>Well. She didn't.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition">
+      <Text>FADE OUT.</Text>
+    </Paragraph>
+  </Content>
+  <TitlePage>
+    <Content>
+    <Paragraph Alignment="Center"><Text>The Lamp in the Attic</Text></Paragraph>
+    <Paragraph Alignment="Center"><Text></Text></Paragraph>
+    <Paragraph Alignment="Center"><Text>Written by</Text></Paragraph>
+    <Paragraph Alignment="Center"><Text>Andy Example</Text></Paragraph>
+    <Paragraph Alignment="Left"><Text>Andy Example</Text></Paragraph>
+    <Paragraph Alignment="Left"><Text>12 Example Road</Text></Paragraph>
+    <Paragraph Alignment="Left"><Text>Exampletown EX1 2AB</Text></Paragraph>
+    <Paragraph Alignment="Left"><Text>andy@example.com</Text></Paragraph>
+    <Paragraph Alignment="Left"><Text>555 0100</Text></Paragraph>
+    </Content>
+  </TitlePage>
+</FinalDraft>
