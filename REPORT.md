@@ -4598,9 +4598,10 @@ test, so no second full run. `stable` was moved to the commit that records this.
 
 ## 2. Tests added or changed
 
-- `tests/test_batch16.py` (25): frames from the story's own genres (14 genres, 3 blends, neighbors still lend atoms, entry tags), close people's age bands,
+- `tests/test_batch16.py` (26): frames from the story's own genres (14 genres, 3 blends, neighbors still lend atoms, entry tags), close people's age bands,
   coming-of-age people, adult protagonists never get a teenager's people, a coming-of-age / romance blend drops the adult suitors, the Builder's teen character.
 - `tests/test_genre_content.py`: the single-genre repetition test runs for all 14 genres (was 12).
+- `tests/test_outline_beats.py`: the beat-roll test looks across six seeds.
 - `tests/test_atoms.py`: one seeded test moved from seed 4 to 5 (seed 4 now draws a living thing to hide, which only one hiding place fits).
 
 ## 3. Seeded samples (`storywheel sample GENRE -n 2 --seed 1616`)
@@ -4877,4 +4878,7 @@ test, so no second full run. `stable` was moved to the commit that records this.
 
 ## Full suite (batch 16)
 
-FULLRUN
+One full run with `tools/fulltest.sh`: parallel pass 2,577 passed, 4 skipped, 1 failed in 238 s; serial pass 96 passed in 156 s; 6 min 34 s in all. The failure was
+`tests/test_outline_beats.py::test_roll_beat_uses_the_generator_and_the_universe`: with frames limited to the story's genres, seed 3's beat no longer named
+the universe's protagonist. The test now rolls six seeds and asks that at least one names her (and that none leaves a brace). Rerun with `--lf` and the whole
+file (9 passed). The fix changed only a test, so no second full run. `stable` was moved to the commit that records this.

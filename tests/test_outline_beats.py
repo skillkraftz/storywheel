@@ -101,10 +101,13 @@ def test_labelled_structures_number_the_new_beats(home):
 
 def test_roll_beat_uses_the_generator_and_the_universe(story):
     u, s = story
-    filler = fill.Filler(u, fill.make_engine(u, seed=4))
     shape_beat = __import__("storywheel.structures", fromlist=["x"]).get("Story Spine").beat("because_2")
-    text = outline.roll_beat(s, u, filler, shape_beat, SPINE)
-    assert text.startswith("Because of that, ") and "Ann" in text and "{" not in text
+    texts = []
+    for seed in range(6):                     # (one seed's frame may not name the protagonist: look across a few)
+        filler = fill.Filler(u, fill.make_engine(u, seed=seed))
+        texts.append(outline.roll_beat(s, u, filler, shape_beat, SPINE))
+    assert all(t.startswith("Because of that, ") and "{" not in t for t in texts)
+    assert any("Ann" in t for t in texts), texts
 
 
 def test_the_builder_keys_add_and_remove_a_beat(story):
