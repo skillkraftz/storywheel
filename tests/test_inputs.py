@@ -1,7 +1,7 @@
 """What a candidate was built from: field rerolls, stand-ins, stale candidates."""
 import pytest
 
-from storywheel import store
+from storywheel import steps, store
 from storywheel.ratings import Ratings
 from storywheel.session import Session
 from conftest import make_engine
@@ -44,6 +44,8 @@ def test_no_field_reroll_repeats_itself_forever(home, step_key):
         s = start(home, seed=seed)
         keep_to(s, step_key)
         for field in s.field_names:
+            if field == "season" and steps.season_of(s.fields.get("era")):
+                continue                      # (an era that names a season fixes it: batch 8)
             seen = {s.fields[field]}
             for _ in range(10):
                 s.reroll_field(field)

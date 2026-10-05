@@ -27,6 +27,7 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
 - **Screenplay profile.** *Stub.* Today it writes an unformatted `.fountain`. Needs Fountain editing (scene headings, character names,
   transitions; Tab/Enter moves between elements) and export to formatted pages (Courier 12, element margins, page numbers) as .docx and PDF.
 - **Rewrite the legacy frames.** *Partial.* Mystery, horror, sci-fi and romance share 35-65% of their frames; give each its own (the three newest share none). `LEGACY_CEILING` in `tests/test_genre_content.py` holds them where they are.
+- **Blank `{rival}` in a rolled Builder beat.** *Bug.* `outline.roll_beat` on a story with no rival produces "the  stopped Ann's apprentice"; set such frames aside or fill a stand-in (the Wheel does).
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys covers the Writer only; extend it to the Wheel, Builder, Settings and the
   F1–F5 mode keys, with the same conflict checks.
 - **Obsidian `[[wikilinks]]` resolving to entities.** *Missing.* Resolve `[[Name]]` in entity notes and outlines (Builder links and "Appears in";

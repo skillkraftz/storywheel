@@ -247,8 +247,8 @@ def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5,
             continue                                     # invented names, generated words
         expected = per_list[lid] * share / (active[lid] or 1.0)
         rows.append((n / expected, n, expected, lid, text))
-    # (a rare entry picked 5 times when 1 was expected is noise, not a pattern: it must also be 4 standard deviations above what chance gives)
-    flagged = [r for r in rows if r[0] > factor and r[1] >= min_count and r[1] > r[2] + 4 * r[2] ** 0.5]
+    # (a rare entry picked 5 times when 1 was expected is noise, not a pattern: it must also be 5 standard deviations above what chance gives: with hundreds of rare entries, 4 flags one by luck about once a run)
+    flagged = [r for r in rows if r[0] > factor and r[1] >= min_count and r[1] > r[2] + 5 * r[2] ** 0.5]
     flagged.sort(reverse=True)
 
     lines = Counter()

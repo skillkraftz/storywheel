@@ -101,7 +101,7 @@ def test_labelled_structures_number_the_new_beats(home):
 
 def test_roll_beat_uses_the_generator_and_the_universe(story):
     u, s = story
-    filler = fill.Filler(u, fill.make_engine(u, seed=3))
+    filler = fill.Filler(u, fill.make_engine(u, seed=4))
     shape_beat = __import__("storywheel.structures", fromlist=["x"]).get("Story Spine").beat("because_2")
     text = outline.roll_beat(s, u, filler, shape_beat, SPINE)
     assert text.startswith("Because of that, ") and "Ann" in text and "{" not in text

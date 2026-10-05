@@ -110,7 +110,7 @@ def test_removing_a_middle_beat_moves_the_later_ones_up():
 
 
 def test_removing_the_first_occurrence_keeps_the_others():
-    s = session_on_spine()
+    s = session_on_spine(seed=4)          # (a later beat that names a thing the first introduced is rewritten when the first goes: seed 3 draws such a frame)
     s.add_beat("because_2")
     texts = dict(s.fields)
     assert s.remove_beat("because_2")

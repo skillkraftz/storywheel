@@ -854,7 +854,7 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - Batch 8 (C): horror, sci-fi and romance are written like the batch 7 genres (profile weight 4; sci-fi modern 0.3 for near-future settings; horror's
   neighbors are ghost story, mythological and rural, so until ghost story exists its floor shrinks to a tenth rather than leaking mystery lists in).
   Romance's lists are deliberately portable (towns, bookshops, letters, keepsakes) because it is the commonest pairing; `test_romance_blends_with_every_other_written_genre`
-  checks it against every written genre. The repetition report only flags an entry that is also 4 standard deviations above chance, so a rare entry
+  checks it against every written genre. The repetition report only flags an entry that is also 5 standard deviations above chance (4 in batches 8 to 13; it flagged a rare mood by luck about once a run), so a rare entry
   (a mood) picked 5 times against 1 expected is not reported.
 
 - Batch 8 rework (Genre words): the tab lists WORDS, not generator slots. `wordlists.py` reads the dictionary's lemmas by part of speech from a `lexicon`
