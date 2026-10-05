@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 14.
+Last updated after batch 15.
 
 
 ## Now
@@ -26,8 +26,6 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
   way down with its heading, chapters as the sidebar's top level with scenes inside, adding/renaming/reordering chapters.
 - **Screenplay profile.** *Stub.* Today it writes an unformatted `.fountain`. Needs Fountain editing (scene headings, character names,
   transitions; Tab/Enter moves between elements) and export to formatted pages (Courier 12, element margins, page numbers) as .docx and PDF.
-- **Rewrite the legacy frames.** *Partial.* Mystery, horror, sci-fi and romance share 35-65% of their frames; give each its own (the three newest share none). `LEGACY_CEILING` in `tests/test_genre_content.py` holds them where they are.
-- **Blank `{rival}` in a rolled Builder beat.** *Bug.* `outline.roll_beat` on a story with no rival produces "the  stopped Ann's apprentice"; set such frames aside or fill a stand-in (the Wheel does).
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys covers the Writer only; extend it to the Wheel, Builder, Settings and the
   F1–F5 mode keys, with the same conflict checks.
 - **Obsidian `[[wikilinks]]` resolving to entities.** *Missing.* Resolve `[[Name]]` in entity notes and outlines (Builder links and "Appears in";
@@ -35,6 +33,19 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
 - **Words typed outside the Writer aren't counted** (Obsidian, say). *Partial.* Count the difference when the program notices a file changed.
 - **Changing the library folder** only points at the new place. *Partial.* Offer to move the universes.
 - **A draft can only be promoted once.** *Partial.* Decide: re-promoting updates the universe (with a preview), or stays one-way.
+
+
+## Weak spots found by the batch 15 check (`tools/genre_check.py`)
+
+- **Western and fairy tale repeat a few entries.** *Partial.* Not covered by the single-genre repetition test (only their blend is). Fails at 5 SD:
+  western `title/general` "{TITLE_ADJ} {title_nouns}" and `prize/general` "a dragon's hoard"; fairy tale `act_thing/general` "laid by", `prize/general` "a water right"
+  and "a stake in the railroad". `prize/general` holds western and fantasy prizes under the general tag: move them to their genres and give fairy tale prizes of its own.
+- **Watch items** (4 to 5 SD): western "by moonlight"; fairy tale four western prizes from `prize/general` (same cause) and one `want/general` frame; noir "polished".
+- **A genre's stories still use its neighbors' frames** (a mystery titled "Portrait Protocol" from thriller's titles). By design (profiles give neighbors weight), but
+  for frames it could be lower than for atoms.
+- **Place names can double a word** ("Hollow Hollow" from `place_adj` + `place_feature` in horror). Skip a feature that repeats the adjective.
+- **The "close" people are one general list** ("their only customer" in a coming-of-age story). Genre lists, or age-aware ones.
+- **Western and fairy tale have no frames of their own** (they use the general frames); the frame-sharing check does not cover them.
 
 
 ## Later
@@ -86,6 +97,7 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - **Batch 7:** update by commit, comedy, fantasy and mystery content — `b7-*`.
 - **Batch 8:** neighbors, seasons, moods and sentence breaks; horror, sci-fi, romance; Words tabs reworked; Genre words as long ranked lists —
   `b8-a`, `b8-b`, `b8-horror`, `b8-scifi`, `b8-romance`, `b8-genre-words`.
+- **Batch 15:** own frames for mystery, horror, sci-fi and romance; ages and jobs; no blank fills; eras and technology in every genre; watch list; the all-genre check (`b15-*`).
 - **Batch 13–14:** the three genres resolved (`b13-*`); testing policy and heist, adventure, coming-of-age (`b14-*`).
 - **Batch 11–12:** help and footers (`b11-*`), the help toggle (`b12-a`), ghost story, noir, thriller and the shared rural and mythological floor lists (`b12-*`).
 - **Batch 10:** extra files in a manuscript folder are never merged (`b10-a`); Lookup in five boxes with rhymes from CMU (`b10-b`).

@@ -5,7 +5,7 @@
   "thriller"
  ],
  "entries": [
-  "{TITLE_NOUN} Protocol: {place}",
+  "Code Name {TITLE_NOUN}: {place}",
   "Run, {first}, Run from {place}",
   "No Exit from {place}, {TITLE_NOUN}",
   "Hunted in {place}: The {TITLE_NOUN}",

@@ -248,3 +248,24 @@ def test_the_report_keeps_a_watch_list_between_4_and_5_standard_deviations():
     for ratio, n, expected, _lid, _text in r["watch"]:
         assert expected + 4 * expected ** 0.5 < n <= expected + 5 * expected ** 0.5
     assert "Watch (4 to 5 standard deviations" in report.format_report(r)
+
+
+# --- every genre is complete (Part C) --------------------------------------------------------------------------------------------
+
+@pytest.mark.parametrize("genre", GENRES)
+def test_every_genre_has_a_profile_neighbors_a_core_vocabulary_and_an_age_range(lib, genre):
+    import json
+    from storywheel import genrefit, library as lib_mod
+    from storywheel.mix import Mix
+    doc = json.loads((lib_mod.DATA / "genres.json").read_text(encoding="utf-8"))
+    assert lib.profiles[genre][genre] >= 3
+    assert doc["_neighbors"].get(genre), genre
+    words = genrefit.core_words()[genre]
+    assert len(words["a"]) + len(words["v"]) >= 40
+    lo, hi = Mix({"base": [genre], "exclude_tags": [], "exclude_lists": [], "boost": {}}, lib).age_range()
+    assert 13 <= lo < hi <= 80
+    eras = [e for wl in lib.by_slot["era"] if genre in wl.tags for e in wl.entries]
+    assert len(eras) >= 4
+    if lib.tech.get(genre):
+        other = "modern" if lib.tech[genre] == "period" else "period"
+        assert sum(other not in (e.features or ()) for e in eras) / len(eras) >= 0.7, genre      # (a genre's eras mostly match its technology)

@@ -3632,3 +3632,950 @@ Time while working: a related test file in parallel is about 5 s to 4 min (the g
   (5) three seeded tests (`test_roll_beat_uses_the_generator_and_the_universe`, `test_removing_the_first_occurrence_keeps_the_others`) draw different frames now and got other seeds.
 - Builder's "roll a beat" can leave a blank where a frame says `{rival}` and the story has no rival ("the  stopped Ann's apprentice"). It was always possible; more frames make it likelier.
   In BACKLOG.
+
+
+# Batch 15 (0.15.0): finishing the genre engine
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| A. Mystery, horror, sci-fi and romance have frames of their own for premises, twists, titles and every beat of the three structures | **Works** | mystery = clues, suspects, the reveal (threads carry the clues); horror = dread, wrongness, isolation; sci-fi = systems, distance, what makes a human; romance = longing, misunderstanding, choosing each other |
+| A. Frame sharing tightened for all twelve genres with frames | **Works** | at most 10% identical with any other genre and 8% near copies (93% alike); comedy's 30 lines shared with fantasy rewritten in its own voice. The check now uses difflib's quick ratios first (it was the slowest test) |
+| B. Age: protagonist age ranges per genre, job age bands | **Works** | `_ages` in genres.json (coming-of-age 13-19, the rest 20-80); `child`, `teen`, `adult`, `elder` on jobs; age and job agree when rolled together, when either is rerolled alone, and in the Builder |
+| B. Blank fills | **Works** | an empty field counts as missing, so a frame gets a stand-in (the Builder's beat rolls left "the  stopped"); a check over every genre and structure, Builder beat rolls and character rolls |
+| B. Technology and era in every genre | **Works** | western, fairy tale and fantasy are `period`; eras of those genres and a few others carry the feature; an era is never drawn against a modern or period atom the story already has, and a genre's default rules out other genres' eras (no "present day" western) but not its own; Faker's jobs count as modern |
+| B. Repetition report: 5 SD fails, 4-5 SD listed as "watch" | **Works** | `report.FAIL_SD`, `report.WATCH_SD`; watch items below |
+| C. Final check across all 14 genres | **Works** | the table below (`tools/genre_check.py`); what is still weak is in BACKLOG.md |
+| C. One seeded `sample GENRE -n 2` per genre | **Works** | section 4 |
+
+## 2. All fourteen genres (`tools/genre_check.py`, 200 stories each)
+
+| Genre | Own material (8 slots) | Lines 5+ times | Repeats (5 SD) | Watch (4-5 SD) | Lint | Most frames shared | Near copies | Technology | Era breaks | Ages | Age breaks | Core words | Neighbors |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| western | 94% | 0 | 2 | 1 | 0 | - | - | period | 0 | 20-80 | 0 | 40 | historical, adventure, rural |
+| fairy tale | 94% | 0 | 3 | 5 | 0 | - | - | period | 0 | 20-80 | 0 | 40 | mythological, rural |
+| comedy | 84% | 0 | 0 | 0 | 0 | 0% | 0% | - | 0 | 20-80 | 0 | 40 | romance, domestic, coming-of-age |
+| fantasy | 90% | 0 | 0 | 0 | 0 | 0% | 3% | period | 0 | 20-80 | 0 | 40 | mythological, adventure |
+| mystery | 88% | 0 | 0 | 0 | 0 | 0% | 2% | - | 0 | 20-80 | 0 | 40 | noir, thriller, urban, historical |
+| horror | 94% | 0 | 0 | 0 | 0 | 0% | 6% | - | 0 | 20-80 | 0 | 40 | ghost story, mythological, rural |
+| sci-fi | 86% | 0 | 0 | 0 | 0 | 1% | 3% | - | 0 | 20-80 | 0 | 40 | thriller, adventure, modern, urban |
+| romance | 86% | 0 | 0 | 0 | 0 | 0% | 1% | - | 0 | 20-80 | 0 | 40 | comedy, domestic, coming-of-age, historical |
+| ghost story | 98% | 0 | 0 | 0 | 0 | 0% | 1% | - | 0 | 20-80 | 0 | 43 | horror, mystery, historical, rural |
+| noir | 98% | 0 | 0 | 1 | 0 | 0% | 1% | period | 0 | 20-80 | 0 | 45 | mystery, thriller, urban, historical |
+| thriller | 98% | 0 | 0 | 0 | 0 | 0% | 6% | modern | 0 | 20-80 | 0 | 45 | mystery, noir, heist, urban |
+| heist | 98% | 0 | 0 | 0 | 0 | 0% | 3% | modern | 0 | 20-80 | 0 | 47 | thriller, noir, urban |
+| adventure | 98% | 0 | 0 | 0 | 0 | 0% | 6% | period | 0 | 20-80 | 0 | 44 | fantasy, western, sci-fi, historical |
+| coming-of-age | 98% | 0 | 0 | 0 | 0 | 1% | 3% | modern | 0 | 13-19 | 0 | 45 | romance, comedy, domestic, rural |
+
+Watch items (between 4 and 5 standard deviations above chance; not failures):
+
+- western: `manner/general` "by moonlight" picked 5 times against 1.0 expected (5.1x)
+- fairy tale: `prize/general` "passage out West" picked 5 times against 0.9 expected (5.4x)
+- fairy tale: `prize/general` "a silver claim" picked 5 times against 0.9 expected (5.4x)
+- fairy tale: `prize/general` "a place on the drive" picked 5 times against 0.9 expected (5.4x)
+- fairy tale: `prize/general` "a fast horse" picked 5 times against 0.9 expected (5.4x)
+- fairy tale: `want/general` "{THING:valuable,!living} and {PRIZE:material} {DEADLINE}" picked 7 times against 1.6 expected (4.3x)
+- noir: `act_thing/noir` "polished" picked 15 times against 4.6 expected (3.2x)
+
+Western and fairy tale are the two genres without frames of their own and without a single-genre repetition test; their failures above are listed in BACKLOG.md.
+
+## 3. Tests added
+
+- `tests/test_batch15.py` (148): ages and jobs (data, every genre, coming-of-age, a blend, rerolls, the Builder), blank fills (14 genres x 3 structures, Builder beats
+  for 7 genres x 3 structures, Builder character fields, empty kept fields), technology and era (every genre, period genres, modern-leaning genres, era lists agree,
+  Faker jobs), the repetition watch list, and every genre's profile, neighbors, core vocabulary, age range and eras.
+- `tests/test_genre_content.py`: the frame-sharing limits apply to all twelve genres with frames; detective words are checked in eight genres (was five).
+- Changed: `tests/test_era_and_places.py` (western is period now).
+
+## 4. Seeded samples (`storywheel sample GENRE -n 2 --seed 1515`)
+
+```
+### western
+1. THE RATTLESNAKE OF REST   (motif: rattlesnake)
+   western · bleak · Kishōtenketsu
+
+  * Vance Kessup, 79, a sunburned mail rider. Wants a fresh start and a berth
+    out of Rest. Needs to admit envy to their foster sibling. Flaw: would
+    sooner guard a heavy flour sack than admit dread. Secret: once sold a crop
+    ledger to a silk-vested gambler on foot. Rival: the land office clerk.
+  * Rest · the 1890s · summer. Landmark: the courthouse. Rumor: a church
+    deacon once packed a gambler's ring at the courthouse.
+
+    A shootout in the street has sealed the roads out of Rest, so Vance, a
+    sunburned mail rider, must lose a sword with no name by the new moon.
+
+    Ki (introduction) — Vance was a sunburned mail rider in Rest, who watched
+    the horizon every summer.
+    Shō (development) — Vance's brother asked what what really happened at the
+    courthouse meant, and Vance changed the subject at high noon.
+    Ten (twist) — Then Vance saw that the rattlesnake had stood for faith all
+    along.
+    Ketsu (reconciliation) — In the end, Vance understood the second family,
+    and honor mattered more than a ship of one's own.
+
+    Twist: The land office clerk had posed as Vance's guide, out of spite.
+
+2. A LUCKY KIND OF CLAIM   (motif: claim)
+   western · brooding · Kishōtenketsu
+
+  * Ignacio Lockham, 58, a daring horse trader. Wants a silver claim deed and
+    a clear title. Needs to forgive their son for poaching. Flaw: lets spite
+    get in the way of independence. Secret: secretly trusts an eastern
+    schoolteacher. Rival: the banker.
+  * Eden · the 1860s · autumn. Landmark: the water tower. Rumor: the banker
+    pays a widow in black on half rations to redraw the charts.
+
+    Sailors in Eden swear a pocket sextant still waits out there, and Ignacio,
+    a daring horse trader, decides to prove them right.
+
+    Ki (introduction) — In Eden, Ignacio walked through the water tower on
+    horseback, and read the weather.
+    Shō (development) — Over the autumn, Ignacio came to know a starving boy
+    and called to their one true ally under a false name.
+    Ten (twist) — Then Ignacio saw that the banker had only ever carried
+    pride.
+    Ketsu (reconciliation) — Ignacio and a field hand polished a hand scythe
+    together against orders, and the autumn went on.
+
+    Twist: The starving boy was wanted by the law the whole time.
+    Threads: someone: a starving boy (Shō (development)) · thing: a hand
+    scythe (Ketsu (reconciliation))
+
+### fairy tale
+1. GUS'S ACORN   (motif: acorn)
+   fairy tale · wistful · Kishōtenketsu
+
+  * Gus Rigas, 52, an impulsive swan keeper. Wants bread for winter and an end
+    to a sleeping sickness. Needs to admit tenderness to their old teacher.
+    Flaw: trades a kept bargain for a good name too readily. Secret: once lost
+    a basket of stones for a sorcerer's apprentice. Rival: the queen.
+  * Greenhallow · the age of forests · winter. Landmark: the woodland well.
+    Rumor: a knight with no horse is looking for a red ribbon near
+    Greenhallow.
+
+    Gus, an impulsive swan keeper in Greenhallow, finds the acorn and must
+    decide its fate in a week.
+
+    Ki (introduction) — Nobody in Greenhallow thought much of Gus, an
+    impulsive swan keeper with a singing bone.
+    Shō (development) — A small trouble came: a hard frost hit Greenhallow,
+    and Gus wished it away behind everyone's back.
+    Ten (twist) — Then Gus understood that wanting bread for winter and an end
+    to a sleeping sickness had meant wonder all along.
+    Ketsu (reconciliation) — In the end, Gus understood the family curse, and
+    trust mattered more than a place in the parade.
+
+    Twist: The singing bone was a fake, and a changeling left behind the real
+    one in an oak hollow.
+    Threads: thing: a singing bone (Ki (introduction)) · disaster: a hard
+    frost (Shō (development))
+
+2. SINGING PROPHECIES   (motif: prophecy)
+   fairy tale · hopeful · Story Spine
+
+  * Mabel Vickers, 34, a spry temple priest. Wants a home in the wood and a
+    wish granted. Needs to forgive their best customer for arson. Flaw:
+    mistakes cowardice for a gentle heart. Secret: feels fear about the
+    stranger's visit. Rival: the elder sister.
+  * Brindlewick · the year of three kings · summer. Landmark: the olive grove.
+    Rumor: nobody has seen a wandering minstrel since a curse.
+
+    A spry temple priest agrees to smuggle a prophecy scroll for a ribbon
+    witch, but a drought summer gets in the way.
+
+    Once upon a time, in Brindlewick, a spry temple priest named Mabel kept a
+    secret: Mabel feels fear about the stranger's visit.
+    Every day, Mabel circled the olive grove in front of everyone.
+    One day, a raven brought Mabel a riddle on the doorstep.
+    Because of that, Mabel trusted their cousin out of enchantment.
+    Because of that, the riddle on the doorstep reached a temple priestess
+    under false pretenses.
+    Until finally, Mabel chose forgiveness over a royal pardon.
+    Ever since then, Mabel shares bread with the temple priestess.
+
+    Twist: Long ago, Mabel cached a cracked looking-glass at the stroke of
+    midnight, and forgot.
+    Threads: message: a riddle on the doorstep (One day) · someone: a temple
+    priestess (Because of that)
+
+### comedy
+1. WITH LOVE FROM MAPLE CORNERS: THE CASSEROLE   (motif: casserole)
+   comedy · playful · Kishōtenketsu
+
+  * Delia Isherham, 51, a dutiful bingo caller. Wants back a mayoral sash from
+    a visiting inspector. Needs to trust their mother with the whole silly
+    truth about the hidden letter. Flaw: would sooner rehearse with a stuffed
+    badger than admit spite. Secret: keeps a patchwork quilt in a hollow
+    wedding cake, a gift never returned. Rival: the meddling aunt.
+  * Maple Corners · the week of the fete · summer. Landmark: the roundabout.
+    Rumor: a very polite burglar hangs around the roundabout on a dare.
+
+    After a traffic jam hits Maple Corners, Delia, a dutiful bingo caller, has
+    to disguise a bicycle with no brakes before the cake is cut and grow up
+    fast.
+
+    Ki (introduction) — Delia was a dutiful bingo caller in Maple Corners,
+    where every summer somebody else won a good reputation.
+    Shō (development) — A gossiping neighbor began loitering at the
+    roundabout, and Delia returned a pair of clown shoes in a borrowed hat out
+    of sheer nerves.
+    Ten (twist) — Then in the dark Delia saw the pair of clown shoes was never
+    about back a mayoral sash from a visiting inspector.
+    Ketsu (reconciliation) — So Delia hugged a very loud tourist and walked
+    past the roundabout, and Maple Corners laughed about it for years.
+
+    Twist: None of it was real: a kid nobody recognized and Delia's
+    grandmother had staged it for a good name.
+    Threads: thing: a pair of clown shoes (Shō (development)) · someone: a
+    very loud tourist (Ketsu (reconciliation))
+
+2. THE IRON BRIDESMAID FIASCO OF MUDDLECOMBE   (motif: bridesmaid)
+   comedy · playful · Three-Act Outline
+
+  * Lucas Latimer, 70, a curious pest controller. Wants a golden egg cup and a
+    blue rosette by sundown. Needs to admit pride to their best customer.
+    Flaw: turns every talk into never admitting a mistake when regret swells.
+    Secret: entered a contest for a good review under a false name over tea.
+    Rival: the ambitious editor.
+  * Muddlecombe · the roundabout year · spring. Landmark: the bowling club.
+    Rumor: a county-wide gossip was started by the ambitious editor.
+
+    The whole of Muddlecombe turns up at the bowling club when Lucas, a
+    curious pest controller, announces the chairmanship.
+
+    Act I: Setup — In Muddlecombe, Lucas, a curious pest controller, rehearsed
+    a speech about a promise at the bowling club during the fete.
+    Act I: Inciting incident — A shifty bookie took the seat beside Lucas at
+    the bowling club by accident.
+    Act I: First turn — Lucas hired a village idiot's cousin to borrow a
+    rented llama, and regretted it at once.
+    Act II: Rising action — At the bowling club, Lucas bumped into a pompous
+    councillor, who offered terrible advice under the stars.
+    Act II: Midpoint — The village idiot's cousin turned out to know Lucas's
+    godmother, and Lucas apologized to the ambitious editor in full view.
+    Act II: Crisis — The ambitious editor offered Lucas a medal from the Yard,
+    and it cost courage.
+    Act III: Climax — Lucas walked out to meet the ambitious editor in front
+    of everyone, with the truth and nothing else.
+    Act III: Resolution — Lucas kept the rented llama at the bowling club as a
+    reminder of vanity.
+
+    Twist: The village idiot's cousin was a fraud, and Lucas had cornered the
+    real one without a plan.
+    Threads: someone: a village idiot's cousin (Act I: First turn) · thing: a
+    rented llama (Act I: First turn)
+
+### fantasy
+1. THE WINTER CURSE   (motif: curse)
+   fantasy · epic · Kishōtenketsu
+
+  * Verena Warbor, 79, a mournful chronicler. Wants the throne before the
+    gates fall. Needs to let go of zeal and keep faith with courage. Flaw:
+    trusts a crown over friendship. Secret: carries a grimoire bound in
+    leather in a false-bottomed chest. Rival: the warlord.
+  * Pyrmarsh · the old kings' dying · spring. Landmark: the mountain
+    monastery. Rumor: a wyrm in human form once fled the mountain monastery on
+    the eve of battle.
+
+    Verena, a mournful chronicler of Pyrmarsh, must return a hag-stone before
+    the siege ends, or the warlord will claim the realm.
+
+    Ki (introduction) — Every spring, Verena, a mournful chronicler of
+    Pyrmarsh, walked the walls of the mountain monastery before dawn.
+    Shō (development) — A quiet trouble came: a drought from above fell on
+    Pyrmarsh, and Verena ignored the warlord through the storm.
+    Ten (twist) — Then Verena saw that to let go of zeal and keep faith with
+    courage mattered more than the throne before the gates fall.
+    Ketsu (reconciliation) — Verena laid impatience down at the mountain
+    monastery, and the wind dropped.
+
+    Twist: The warlord had been Verena's oldest friend, bound by honor.
+    Threads: disaster: a drought from above (Shō (development))
+
+2. OATH OF THE SILENT HELM   (motif: helm)
+   fantasy · brooding · Kishōtenketsu
+
+  * Deryn Kallis, 25, a weathered royal falconer. Wants a small kingdom shared
+    before the old king dies. Needs to make peace with their grandmother
+    before the war ends. Flaw: lets bloodlust outweigh hope. Secret: paid
+    their name for a spell cast under a false banner. Rival: the king's
+    chancellor.
+  * Vantle Harbor · before the sundering · autumn. Landmark: the dragonbone
+    arch. Rumor: a map of the underways is guarded under the lake on behalf of
+    the king's chancellor.
+
+    Deryn, a weathered royal falconer from Vantle Harbor, carries a curse
+    inscribed on bone through a land at war by the new moon.
+
+    Ki (introduction) — In Vantle Harbor, Deryn repaired a lockless key by
+    torchlight while the war went on elsewhere.
+    Shō (development) — Deryn's apprentice asked about the inheritance, and
+    Deryn answered at great cost.
+    Ten (twist) — Then Deryn saw the lockless key anew; it had never been
+    about a small kingdom shared before the old king dies.
+    Ketsu (reconciliation) — Vantle Harbor mended slowly, and Deryn writes to
+    their neighbor in the evenings.
+
+    Twist: The Order had sworn to guard the lockless key, not to use it: Deryn
+    used it under the black moon anyway.
+    Threads: thing: a lockless key (Ki (introduction))
+
+### mystery
+1. CODE NAME PORTRAIT: UNION TERMINAL   (motif: portrait)
+   mystery · bleak · Kishōtenketsu
+
+  * Barnaby Brensen, 33, an unflappable passenger transport manager. Wants the
+    ransom and a ticket out of Union Terminal. Needs to put trust ahead of a
+    clean escape when it counts. Flaw: cannot stop checking exits, and
+    mistakes vanity for a promise. Secret: filed a false report on the
+    inheritance under a false name. Rival: the jealous neighbor.
+  * Union Terminal · a foggy November · autumn. Landmark: the estate office.
+    Rumor: the estate office was locked from the inside after a poisoned water
+    supply.
+
+    Three people saw a drunken vicar leave the estate office, and each tells
+    Barnaby, an unflappable passenger transport manager, something different.
+
+    Ki (introduction) — In Union Terminal, Barnaby checked the estate office
+    at full speed, and counted the visitors.
+    Shō (development) — Barnaby's cousin charged a hat with a feather for
+    them, out of fear.
+    Ten (twist) — Then Barnaby turned the hat with a feather over: it had
+    never pointed to the ransom and a ticket out of Union Terminal.
+    Ketsu (reconciliation) — Barnaby and a nervous witness shared a spare
+    magazine without a trace, and the autumn went by.
+
+    Twist: The victim was alive: the nervous witness had hidden in the fog in
+    Union Terminal all along.
+    Threads: thing: a hat with a feather (Shō (development)) · someone: a
+    nervous witness (Ketsu (reconciliation))
+
+2. RAIN ON THE BROKEN AGENT   (motif: agent)
+   mystery · bleak · Story Spine
+
+  * Evelyn Carue, 74, a meticulous radiographer. Wants a way out and quiet in
+    Saint Langton. Needs to admit temper and grief cloud every question. Flaw:
+    hides anger behind a list of facts and cowardice. Secret: secretly writes
+    to a retired colonel. Rival: the intelligence chief.
+  * Saint Langton · the flower show summer · summer. Landmark: the dovecote.
+    Rumor: the intelligence chief paid for the silence of a blackmailed
+    banker.
+
+    To save Evelyn's neighbor, Evelyn, a meticulous radiographer, must bury a
+    brass door key before the guests leave, and each hour makes it worse.
+
+    Once upon a time, Evelyn, a meticulous radiographer, was stuck in Saint
+    Langton with the intelligence chief breathing down their neck.
+    Every day, Evelyn counted the day's take at closing time and noticed
+    everyone at the dovecote.
+    One day, a mail-order bride's letter came from a doctor with a secret: I
+    know who, meet at the dovecote.
+    Because of that, Evelyn called their godmother in a whisper about a smooth
+    lawyer.
+    Because of that, a snake-oil salesman sold Evelyn out after dark, and a
+    locked suitcase vanished.
+    Until finally, Evelyn named a price to the doctor with a secret at the
+    dovecote on a thin lead, with the locked suitcase on the table.
+    Ever since then, Evelyn avoids the doctor with a secret now and then, and
+    checks the locked suitcase.
+
+    Twist: Every alibi held but one: the doctor with a secret lied about the
+    dovecote.
+    Threads: message: a mail-order bride's letter (One day) · someone: a
+    doctor with a secret (One day) · thing: a locked suitcase (Because of
+    that)
+
+### horror
+1. WHAT WAITS AT CINDER RIDGE, CROW   (motif: crow)
+   horror · uneasy · Kishōtenketsu
+
+  * Kit Evers, 57, a curious piano teacher. Wants a suitcase full of cash and
+    a new lock on the cemetery on the hill. Needs to stay in the room with
+    love and keep honesty. Flaw: lets curiosity answer when regret knocks.
+    Secret: made a promise about the unmarked grave in the cold and broke it.
+    Rival: the sensible aunt.
+  * Cinder Ridge · the autumn of the sale · autumn. Landmark: the cemetery on
+    the hill. Rumor: children who play at the cemetery on the hill come home
+    quieter, says an old governess.
+
+    Each morning Kit, a curious piano teacher, finds a carved wooden swan
+    closer to the bed.
+
+    Ki (introduction) — Kit knew which floorboards of Cinder Ridge sang, and
+    told their twin nothing of the unsent letters.
+    Shō (development) — Kit left a milk pail on the step for the crow, and by
+    morning both were gone.
+    Ten (twist) — Then Kit saw the milk pail anew; it was never about a
+    suitcase full of cash and a new lock on the cemetery on the hill.
+    Ketsu (reconciliation) — Cinder Ridge slept through the winters again, and
+    Kit avoids their sister in daylight.
+
+    Twist: Every warning had come from the crow, who was trying to keep Kit
+    alive.
+    Threads: thing: a milk pail (Shō (development)) · someone: the crow (Shō
+    (development))
+
+2. IT FOLLOWED TOBIAS HOME FROM THE WELL   (motif: well)
+   horror · tense · Three-Act Outline
+
+  * Tobias Sarakis, 52, a wary herald. Wants a train ticket and rest for
+    Bitter Wold. Needs to face fear and forgive the hired man. Flaw: retreats
+    into panic whenever relief comes. Secret: was the one who opened the
+    church bell loft on the night of a dust storm. Rival: the mother superior.
+  * Bitter Wold · a snowbound February · winter. Landmark: the church bell
+    loft. Rumor: a rusted bell is kept down the old well so it cannot follow
+    anyone.
+
+    In Bitter Wold, Tobias, a wary herald, inherits a gramophone record and a
+    presence that stays until Tobias can let go of their landlady.
+
+    Act I: Setup — The mother superior owned the land around Bitter Wold, and
+    Tobias, a wary herald, rented a cold house by flashlight.
+    Act I: Inciting incident — A final diary entry arrived from a retired
+    detective, dead since spring: come to the church bell loft.
+    Act I: First turn — Tobias answered a coded radio call and begged a
+    neighbor for the truth.
+    Act II: Rising action — The retired detective would not speak of the
+    inheritance, and the lights in Bitter Wold kept failing.
+    Act II: Midpoint — The retired detective promised Tobias the town's trust
+    for one more night alone.
+    Act II: Crisis — At the church bell loft, Tobias sat alone with dread and
+    guilt.
+    Act III: Climax — Tobias burned the coded radio call at the church bell
+    loft in the dead of night and heard the retired detective scream.
+    Act III: Resolution — Tobias writes to the retired detective and speaks
+    gently of the unpaid debt.
+
+    Twist: The retired detective was the only thing in Bitter Wold still
+    human.
+    Threads: someone: a retired detective (Act I: Inciting incident) ·
+    message: a coded radio call (Act I: First turn)
+
+### sci-fi
+1. CODE NAME PROTOCOL: NEW CAIRO   (motif: protocol)
+   sci-fi · uneasy · Kishōtenketsu
+
+  * Vik Novic, 34, a brilliant gravity engineer. Wants passage out of here and
+    a shuttle seat off New Cairo. Needs to put a promise before cowardice.
+    Flaw: trusts the instruments over people and greed over fear. Secret: once
+    answered an encrypted burst meant for the whole colony. Rival: the
+    shipping magnate.
+  * New Cairo · the far future · autumn. Landmark: the shuttle bay. Rumor: the
+    shipping magnate trades oxygen to a colony governor under cover of a
+    blackout.
+
+    A machine at the shuttle bay asks Vik, a brilliant gravity engineer,
+    whether it is alive.
+
+    Ki (introduction) — Vik swept the shuttle bay in New Cairo, a brilliant
+    gravity engineer with passage out of here and a shuttle seat off New Cairo
+    on their mind.
+    Shō (development) — All autumn long, Vik practiced reading an android
+    steward and thanked their sister against the clock.
+    Ten (twist) — Then Vik saw the android steward had acted out of ambition,
+    which no machine could fake.
+    Ketsu (reconciliation) — At last Vik comforted a woman in red and
+    patrolled the shuttle bay, and the station hummed again.
+
+    Twist: The android steward had arranged the whole voyage quietly, to bring
+    Vik home.
+    Threads: someone: an android steward (Shō (development))
+
+2. THE FALSE CONTRACT DIRECTIVE   (motif: contract)
+   sci-fi · bleak · Three-Act Outline
+
+  * Leif Petro, 41, a meticulous baker. Wants a pardon and real air in
+    Callisto Ring. Needs to stop hiding panic inside distrust. Flaw: reaches
+    for a clean slate whenever relief spikes. Secret: sealed the sealed lab on
+    the day a landslide on the road hit, with people still inside. Rival: AI
+    overseer.
+  * Callisto Ring · the long burn · summer. Landmark: the sealed lab. Rumor:
+    the AI overseer edits the logs of a security chief in zero gravity.
+
+    Leif, a meticulous baker, wakes between shifts in Callisto Ring with a
+    jade amulet and no idea whose it is.
+
+    Act I: Setup — Leif, a meticulous baker, came aboard Callisto Ring before
+    the next jump with a past nobody checked.
+    Act I: Inciting incident — A rogue drone docked at Callisto Ring at the
+    last minute by the book: no flight plan, no pulse.
+    Act I: First turn — Leif opened a link to their cousin on minimum power
+    and asked about a cryo patient.
+    Act II: Rising action — Leif tracked a burner phone to the sealed lab and
+    waited in the cold on a stolen channel.
+    Act II: Midpoint — Leif found a second copy of the burner phone at full
+    burn, older than the ship.
+    Act II: Crisis — The burner phone burned out, and Leif had nothing left
+    but the crew.
+    Act III: Climax — The cryo patient asked Leif at the sealed lab what makes
+    a human, and Leif answered duty.
+    Act III: Resolution — The AI overseer was relieved of command, and Leif
+    inspects the sealed lab when the summer light returned.
+
+    Twist: The burner phone held the last human memory on Callisto Ring, and
+    Leif had nearly wiped it.
+    Threads: someone: a cryo patient (Act I: First turn) · thing: a burner
+    phone (Act II: Rising action)
+
+### romance
+1. WITH LOVE FROM MARIGOLD: THE ENGAGEMENT   (motif: engagement)
+   romance · playful · Kishōtenketsu
+
+  * Maeve Marloway, 33, a bumbling cinema manager. Wants a patchwork quilt
+    returned by a quiet gardener in person. Needs to make peace with their
+    brother and then let go. Flaw: fibs about the broken engagement rather
+    than lose the family blessing. Secret: keeps a dance card behind the
+    clock, a gift never returned. Rival: the competing baker.
+  * Marigold · the long engagement year · summer. Landmark: the vineyard.
+    Rumor: a framed photograph is stashed in the desk drawer for the competing
+    baker.
+
+    Everyone in Marigold wants a place at the table. Everyone except Maeve, a
+    bumbling cinema manager who only wants a patchwork quilt returned by a
+    quiet gardener in person.
+
+    Ki (introduction) — Maeve was a bumbling cinema manager in Marigold, who
+    passed one window every summer.
+    Shō (development) — Maeve's cousin asked about their past, and Maeve
+    blushed on a whim.
+    Ten (twist) — Then Maeve knew loyalty had been love all along, not a
+    patchwork quilt returned by a quiet gardener in person.
+    Ketsu (reconciliation) — Maeve let the competing baker keep the vineyard,
+    and found something better in the rain.
+
+    Twist: The competing baker had already chosen a travelling salesman, and
+    only wanted Maeve happy.
+
+2. COME BACK TO PRIMROSE HILL, LETTER   (motif: letter)
+   romance · hopeful · Story Spine
+
+  * Claire Carring, 80, an overconfident town clerk. Wants a cottage deed and
+    an excuse to stay in Primrose Hill. Needs to put forgiveness before
+    impatience. Flaw: runs to a small fib whenever fear gets serious. Secret:
+    once delivered a handwritten poem meant for their neighbor. Rival: the
+    wealthy fiancé.
+  * Primrose Hill · the week of the festival · autumn. Landmark: the bookshop.
+    Rumor: a jilted fiancé leaves flowers at the bookshop on one day of the
+    year.
+
+    A misunderstanding at the bookshop turns Claire, an overconfident town
+    clerk, and a shy neighbor into rivals for a good name.
+
+    Once upon a time, everyone in Primrose Hill knew why a handsome doctor
+    left, except Claire.
+    Every day, Claire danced alone in the kitchen on the quiet and told their
+    ex nothing.
+    One day, the wealthy fiancé bet Claire over tea that love was a fairy
+    story.
+    Because of that, Claire closed up the bookshop by post hoping for a
+    glimpse of a determined bride.
+    Because of that, the handsome doctor teamed up with Claire with a straight
+    face, and nothing was simple again.
+    Until finally, the wealthy fiancé gave way at the bookshop at the last
+    minute, and Claire chose the handsome doctor.
+    Ever since then, every anniversary, Claire lingers at the bookshop and
+    smiles at their only customer.
+
+    Twist: The handsome doctor was a fraud, and Claire had confided in the
+    real one with a smile.
+    Threads: someone: a handsome doctor (Once upon a time)
+
+### ghost story
+1. THE STAIR BEYOND THE LINGERING DOOR   (motif: stair)
+   ghost story · uneasy · Kishōtenketsu
+
+  * Dorothea Ington, 25, a weary clockmaker. Wants the old piano and rest for
+    Lowmoor. Needs to say goodbye to their grandmother before the lamps go
+    out. Flaw: clings to an old photograph where mercy is needed. Secret: once
+    waited for an old nurse in the cold hour, and grieves it still. Rival: the
+    new vicar.
+  * Lowmoor · the year's last night · autumn. Landmark: the hall mirror.
+    Rumor: the new vicar will not enter the hall mirror by moonlight.
+
+    After a missed last train, Dorothea, a weary clockmaker, comes back to
+    Lowmoor to close the house, and finds a visiting daughter still waiting at
+    the hall mirror.
+
+    Ki (introduction) — Every night in Lowmoor, Dorothea dusted a cold teacup
+    at the edge of sleep, listening.
+    Shō (development) — As the autumn deepened, Dorothea grew fond of a faded
+    child and sat with their business partner without a sound.
+    Ten (twist) — Then Dorothea knew that to say goodbye to their grandmother
+    before the lamps go out was worth more than the old piano and rest for
+    Lowmoor.
+    Ketsu (reconciliation) — So Dorothea consoled an east wing tenant at the
+    hall mirror, and the house breathed out.
+
+    Twist: Letting go was all the faded child asked, and Dorothea had refused
+    beside the window.
+    Threads: thing: a cold teacup (Ki (introduction)) · someone: a faded child
+    (Shō (development))
+
+2. WHERE THE IRON VISITOR WAITS   (motif: visitor)
+   ghost story · dreadful · Three-Act Outline
+
+  * Jessamine Pryce, 73, a gracious village doctor. Wants an answer from an
+    estranged sister by All Hallows. Needs to hold a kept promise closer than
+    avoidance. Flaw: retreats into curiosity whenever grief comes. Secret:
+    promised the visitor to stay and left through the keyhole. Rival: the
+    estate agent.
+  * Thornwick Parva · the long summer of mourning · summer. Landmark: the
+    drawing room. Rumor: dogs in Thornwick Parva will not pass the drawing
+    room at the tide's turn.
+
+    When a pressed flower book turns up sewn into a pillow, Jessamine, a
+    gracious village doctor of Thornwick Parva, begins to hear a grieving
+    widow humming at the drawing room.
+
+    Act I: Setup — The estate agent wanted the drawing room sold, and
+    Jessamine, a gracious village doctor, listened in the grey light.
+    Act I: Inciting incident — An unsigned confession arrived from a boy at
+    the window long after the funeral, asking Jessamine to come to the drawing
+    room.
+    Act I: First turn — Watched by Jessamine's only customer, Jessamine
+    revisited the drawing room and made a start.
+    Act II: Rising action — The boy at the window spoke of the missing
+    portrait, and Jessamine said nothing after the clock struck.
+    Act II: Midpoint — The boy at the window asked Jessamine for a name on the
+    stone and nothing else.
+    Act II: Crisis — At the drawing room, Jessamine sat alone with love and
+    coldness.
+    Act III: Climax — Jessamine forgave the estate agent at the drawing room,
+    and chose gentleness.
+    Act III: Resolution — The estate agent moved away, and Jessamine sweeps
+    the drawing room each summer.
+
+    Twist: A mantel clock lay under the garden stone: what the boy at the
+    window left, and what Jessamine was meant to find.
+    Threads: someone: a boy at the window (Act I: Inciting incident)
+
+### noir
+1. HALCYON BAY PAYS IN CROOKED HOTEL   (motif: hotel)
+   noir · epic · Kishōtenketsu
+
+  * Dutch Salazar, 61, a wary jukebox repairman. Wants a sealed file before
+    the cops arrive, no questions asked. Needs to quit running from envy and
+    pride. Flaw: puts drink ahead of their one true ally. Secret: signed a
+    false statement about the missing ledger for a smooth lawyer. Rival: the
+    insurance man.
+  * Halcyon Bay · the heat wave summer · summer. Landmark: the bus terminal.
+    Rumor: a society wife was last seen leaving the bus terminal through
+    cigarette smoke.
+
+    Dutch, a wary jukebox repairman in Halcyon Bay, takes the missing necklace
+    from the insurance man, and finds out what it bought.
+
+    Ki (introduction) — Dutch, a wary jukebox repairman, owed money and
+    carried shame.
+    Shō (development) — Dutch bought a smiling banker a round, and they talked
+    about the vanished blonde with a wry smile.
+    Ten (twist) — Then Dutch understood that the smiling banker had sold out
+    for shame, not a sealed file before the cops arrive, no questions asked.
+    Ketsu (reconciliation) — So Dutch trusted a well-dressed stranger and
+    returned to the bus terminal, and Halcyon Bay looked almost clean.
+
+    Twist: The smiling banker took the fall behind everyone's back, out of
+    jealousy, and the insurance man sent flowers.
+    Threads: someone: a smiling banker (Shō (development))
+
+2. ONE WAY OUT OF CHURCH CIRCLE: MARK   (motif: mark)
+   noir · bleak · Kishōtenketsu
+
+  * Sam Carue, 74, a stubbled pawnbroker. Wants a safe-deposit key and no
+    questions asked in Church Circle. Needs to level with their business
+    partner before the city does. Flaw: takes a way out of town just to feel
+    grief less. Secret: once intercepted a love letter and wonders who paid.
+    Rival: the club owner.
+  * Church Circle · the 1920s · spring. Landmark: the subway platform. Rumor:
+    a jewel heist was bought off by the club owner.
+
+    A debt follows Sam, a stubbled pawnbroker, from Church Circle to the
+    subway platform, where a trench-coated stranger waits to collect.
+
+    Ki (introduction) — In Church Circle, Sam polished a silver flask in a
+    hurry while the city looked away.
+    Shō (development) — Sam kept saying no to a quick fortune, and the spring
+    slipped by.
+    Ten (twist) — Then Sam priced the silver flask at last; it was never worth
+    a safe-deposit key and no questions asked in Church Circle.
+    Ketsu (reconciliation) — Church Circle did not mend, but Sam distrusts
+    their mother on Sundays.
+
+    Twist: The club owner wanted Sam to find the silver flask behind a loose
+    brick, and so Sam did.
+    Threads: thing: a silver flask (Ki (introduction))
+
+### thriller
+1. CODE NAME COURIER: UNION TERMINAL   (motif: courier)
+   thriller · uneasy · Kishōtenketsu
+
+  * Ines Strov, 64, a paranoid pharmacist. Wants a pair of binoculars back
+    before a bank examiner notices. Needs to stand still and feel anger, and
+    keep steadiness. Flaw: mistakes paranoia for the truth. Secret: answers to
+    a private security chief by back roads and tells no one. Rival: the cartel
+    lawyer.
+  * Union Terminal · the day before the hearing · autumn. Landmark: the harbor
+    crane. Rumor: a girl with a camera was seen leaving the harbor crane in a
+    stolen van.
+
+    Ines, a paranoid pharmacist, trusts a smiling lobbyist with a black
+    notebook, and learns the cartel lawyer is listening.
+
+    Ki (introduction) — Ines was a paranoid pharmacist in Union Terminal, who
+    checked the locks twice each autumn.
+    Shō (development) — Ines put off the job of recover a hidden microphone,
+    and the autumn ran short.
+    Ten (twist) — Then Ines read the hidden microphone again; it had never
+    been about a pair of binoculars back before a bank examiner notices.
+    Ketsu (reconciliation) — Ines finally understood the sealed order, and
+    chose trust over the ransom.
+
+    Twist: Ines's one true ally had sold their route to the cartel lawyer with
+    the lights off, out of ideology.
+    Threads: thing: a hidden microphone (Shō (development))
+
+2. NINETY MINUTES IN IRONHAVEN: THE PROTOCOL   (motif: protocol)
+   thriller · gritty · Story Spine
+
+  * Amir Petroud, 58, a wary inspector. Wants the flash drive wired before the
+    summit opens. Needs to accept that a promise outlasts a witness's
+    testimony. Flaw: cannot stop checking exits, and mistakes secrecy for
+    honor. Secret: filed a false report on the vanished courier with the
+    engine running. Rival: the ambitious deputy.
+  * Ironhaven · the night of the blackout · summer. Landmark: the motorway
+    bridge. Rumor: a ledger of payments is said to be kept in a dead drop at
+    the motorway bridge.
+
+    After a blizzard, Amir, a wary inspector, gets a courier's envelope from a
+    pilot with debts: be gone by midnight.
+
+    Once upon a time, Amir, a wary inspector in Ironhaven, carried a pocket
+    recorder and a false name.
+    Every day, Amir checked the motorway bridge each morning and said nothing
+    of the border crossing.
+    One day, the ambitious deputy named a shaken translator as the one behind
+    a dockside ambush, and Amir knew better.
+    Because of that, Amir left a false lead in a storage unit, then thanked a
+    hired killer at the last second.
+    Because of that, Amir found the pocket recorder at full speed, and the
+    stakes doubled.
+    Until finally, Amir left the pocket recorder in plain sight at the
+    motorway bridge under surveillance, then waited.
+    Ever since then, Ironhaven rebuilt after the dockside ambush, and Amir
+    hides the pocket recorder.
+
+    Twist: Everyone wanted the pocket recorder, but only the shaken translator
+    knew what it unlocked.
+    Threads: thing: a pocket recorder (Once upon a time) · someone: a shaken
+    translator (One day) · disaster: a dockside ambush (One day)
+
+### heist
+1. BORIS TAKES PORT MAGNIFICO, THE DIAMOND   (motif: diamond)
+   heist · uneasy · Kishōtenketsu
+
+  * Boris Beaumond, 80, a nervy cat burglar. Wants a head start and the casino
+    take. Needs to hold still and feel shame, keeping conscience. Flaw: calls
+    every friend a mark and vanity a talent, hiding wonder. Secret: once
+    forged a cashier's slip addressed to a deputy director. Rival: the gang
+    boss.
+  * Port Magnifico · the year of the exhibition · spring. Landmark: the old
+    customs house. Rumor: a loud auctioneer drinks at the old customs house on
+    the quiet.
+
+    The plan is simple: Boris, a nervy cat burglar, and strangers will lift a
+    replica statue from the old customs house before the gala ends.
+
+    Ki (introduction) — Each spring, Boris, a nervy cat burglar of Port
+    Magnifico, strolled past the old customs house without a sound.
+    Shō (development) — Boris's old teacher wondered aloud about the vault
+    code, and Boris dodged the question on a tight schedule.
+    Ten (twist) — Then Boris saw the gang boss was frightened as well, and
+    wanted a head start and the casino take too.
+    Ketsu (reconciliation) — Boris came to understand the master key and
+    picked a promise over a pardon.
+
+    Twist: Boris's father walked off with the take by the freight lift, out of
+    desperation, and left Boris the blame.
+
+2. LAST CALL AT MONTE VERDE: STRONGBOX   (motif: strongbox)
+   heist · tense · Story Spine
+
+  * Paolo Marchetti, 80, a patient locksmith. Wants the diamonds and a ticket
+    away from the old partner. Needs to stand by their business partner before
+    the final job. Flaw: chases one more job whenever relief gets close.
+    Secret: slipped out of the storage vault on the night a police checkpoint
+    hit, and told their cousin nothing. Rival: the rival crew.
+  * Monte Verde · the holiday rush · winter. Landmark: the storage vault.
+    Rumor: nobody has seen a waiter with eyes since a hostage mix-up.
+
+    A crew gathers in Monte Verde: Paolo, a patient locksmith, a security
+    consultant, and one traitor not yet named.
+
+    Once upon a time, Paolo, a patient locksmith in Monte Verde, studied the
+    rival crew's habits in a borrowed uniform and wanted the diamonds and a
+    ticket away from the old partner.
+    Every day, Paolo studied floor plans of the storage vault at the shift
+    change and never mentioned the bribed guard.
+    One day, the rival crew cornered Paolo with a forged badge, and a job was
+    the exit.
+    Because of that, Paolo toured the storage vault in a delivery van in
+    search of a crate of champagne.
+    Because of that, Paolo came across the crate of champagne on a stolen
+    schedule, and the job got bigger.
+    Until finally, Paolo set the crate of champagne on the table at the
+    storage vault with a smile and waited out the silence.
+    Ever since then, the money is spent, and Paolo wipes clean the crate of
+    champagne behind a vault panel.
+
+    Twist: The crate of champagne was never the prize; it opened the storage
+    vault.
+    Threads: thing: a crate of champagne (Because of that)
+
+### adventure
+1. THE SILENT CARAVAN BEYOND SALTMARSH LANDING   (motif: caravan)
+   adventure · wondrous · Kishōtenketsu
+
+  * Hollis Oakley, 61, a daring coachman. Wants the emerald hoard shared
+    before the water runs out. Needs to rank loyalty above a shortcut when it
+    counts. Flaw: never rests, and mistakes stubbornness for courage. Secret:
+    inked a false chart of the rival's head start on foot. Rival: the
+    neighbor.
+  * Saltmarsh Landing · a stormy spring at sea · spring. Landmark: the burial
+    chamber. Rumor: the burial chamber was abandoned after a shipwreck.
+
+    With half a map, Hollis, a daring coachman, leaves Saltmarsh Landing to
+    find the sunken gold by the new moon.
+
+    Ki (introduction) — Hollis, a daring coachman, carried a stolen saddlebag
+    wherever Hollis went, and carried loneliness too.
+    Shō (development) — Hollis lent an old harpooner a pocket sextant, and the
+    two swapped tales of the lost expedition.
+    Ten (twist) — Then Hollis looked over the stolen saddlebag afresh; it had
+    never been about the emerald hoard shared before the water runs out.
+    Ketsu (reconciliation) — Saltmarsh Landing grew older without them, and
+    Hollis avoids their spouse by letter.
+
+    Twist: The ruins at the burial chamber were a stage set, built by lantern
+    light by the old harpooner.
+    Threads: thing: a stolen saddlebag (Ki (introduction)) · someone: an old
+    harpooner (Shō (development))
+
+2. SEEKING THE IDOL: LAST WATER   (motif: idol)
+   adventure · playful · Story Spine
+
+  * Maric Ingsley, 43, a reckless bush pilot. Wants a gold circlet returned
+    before a young stowaway misses it. Needs to rest a while, feel spite, and
+    keep home. Flaw: mistakes impatience for honor. Secret: keeps a rusted
+    iron key in a cabin trunk as a way home. Rival: the ruthless hunter.
+  * Last Water · the age of steamships · summer. Landmark: the sea cliff.
+    Rumor: the ruthless hunter bribes a mapmaker's widow across the ice.
+
+    Maric, a reckless bush pilot, inherits half a chart, and a desert nomad
+    keeps the other half somewhere near the sea cliff.
+
+    Once upon a time, Maric, a reckless bush pilot of Last Water, kept a torn
+    journal wrapped in oilcloth against the day the road called.
+    Every day, Maric worked the docks of Last Water by canoe and dreamed of
+    the golden idol.
+    One day, a wrapped scroll from a treasure hunter reached Maric: come to
+    the sea cliff and bring the compass.
+    Because of that, Maric told their only customer about the burial mound,
+    and regretted it.
+    Because of that, the torn journal was stolen inside a saddlebag lining,
+    and the treasure hunter kept silent.
+    Until finally, the treasure hunter hesitated at the sea cliff, and Maric
+    raised the torn journal on a borrowed mule.
+    Ever since then, the chart hangs framed, and Maric unrolls the torn
+    journal in a hollow tree.
+
+    Twist: The wrapped scroll was a warning, scratched on half rations by
+    Maric's cousin.
+    Threads: thing: a torn journal (Once upon a time) · message: a wrapped
+    scroll (One day) · someone: a treasure hunter (One day)
+
+### coming-of-age
+1. THE SUMMER OF FIRST DIARY   (motif: diary)
+   coming-of-age · tender · Kishōtenketsu
+
+  * Theo Floreno, 14, an earnest shop apprentice. Wants a varsity jacket
+    bought before the summer ends. Needs to let their cousin share the weight
+    of the summer job. Flaw: stays busy to dodge spite, and calls it kindness.
+    Secret: once teased a mean girl at the back and still feels sick about it.
+    Rival: the team captain.
+  * Elm Corners · the summer before senior year · summer. Landmark: the bus
+    station. Rumor: the team captain spreads stories about a drifter at the
+    lake in a rush.
+
+    Hoping to impress a coach with a temper, Theo, an earnest shop apprentice,
+    takes a risk with a grin, and the team captain hears about it.
+
+    Ki (introduction) — On school mornings in Elm Corners, Theo polished a
+    prom ticket with a racing heart.
+    Shō (development) — A small crisis hit: a layoff at the plant struck Elm
+    Corners, and Theo waved at the team captain after curfew.
+    Ten (twist) — Then Theo saw the team captain was lonely too, and wanted a
+    varsity jacket bought before the summer ends as well.
+    Ketsu (reconciliation) — At last Theo defended a night bus driver and
+    locked up the bus station, and the summer let go.
+
+    Twist: The grown-ups were guessing too; the night bus driver admitted it
+    in a hand-me-down jacket.
+    Threads: thing: a prom ticket (Ki (introduction)) · disaster: a layoff at
+    the plant (Shō (development)) · someone: a night bus driver (Ketsu
+    (reconciliation))
+
+2. LEAVING FAIRHAVEN, KEEPING THE STRANGER   (motif: stranger)
+   coming-of-age · tender · Three-Act Outline
+
+  * Imani Pruitt, 14, a sensitive diner waitress. Wants the disapproving aunt
+    to leave their only customer alone at last. Needs to thank their foster
+    sibling before the summer is over. Flaw: tucks love behind a joke and
+    bitterness. Secret: once lied to a girl from the city through the screen
+    door. Rival: the overbearing father.
+  * Fairhaven · a cold November · autumn. Landmark: the school parking lot.
+    Rumor: a handheld console is stashed above a ceiling tile for the
+    overbearing father.
+
+    An unsigned letter from a quiet kid in back asks Imani, a sensitive diner
+    waitress, to meet at the school parking lot and say nothing.
+
+    Act I: Setup — Fairhaven felt too small, and Imani, a sensitive diner
+    waitress, felt too big for it.
+    Act I: Inciting incident — A town librarian rolled into Fairhaven at three
+    in the morning and rearranged the whole summer.
+    Act I: First turn — While the house slept, Imani stashed a pocket knife in
+    a gym locker and ran from the school parking lot under the porch light.
+    Act II: Rising action — Imani called a high school dropout, but the
+    overbearing father reached their best customer with the story first.
+    Act II: Midpoint — Behind the school parking lot, Imani found a set of
+    drumsticks, and the old story unraveled.
+    Act II: Crisis — The high school dropout let Imani down at the school
+    parking lot, and the whole group split.
+    Act III: Climax — The overbearing father backed down at the school parking
+    lot on the last bus, and Imani went home with the pocket knife.
+    Act III: Resolution — Imani hides the pocket knife in a coffee can, and
+    avoids the high school dropout.
+
+    Twist: The high school dropout was no stranger, and came to Fairhaven
+    against orders for Imani's sake.
+    Threads: thing: a pocket knife (Act I: First turn) · someone: a high
+    school dropout (Act II: Rising action)
+```
+
+## 5. Manual test script
+
+1. Roll a coming-of-age protagonist in the Wheel: the age is 13-19 and the job a teen's. Reroll the age, then the job, a few times: they keep agreeing.
+2. In the Builder, give a character the job "retired colonel" and roll the age: 60 or older.
+3. Open a story in the Builder whose protagonist has no rival and roll beats (Outline tab): no blank where the rival would be.
+4. Roll a few westerns: never a modern era. Roll heists: mostly modern eras; a period one never brings a phone.
+5. Read the mystery, horror, sci-fi and romance samples above; mark lines that sound wrong.
+
+## 6. Known issues
+
+- See BACKLOG.md "Weak spots found by the batch 15 check".
+- The age bands cover jobs only; "someone" and "close" people can still be any age.
+
+## Full suite (batch 15)
+
+FULLRUN

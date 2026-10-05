@@ -2,6 +2,25 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.15.0 — Batch 15: finishing the genre engine
+
+### Part A: frames of their own
+- Mystery (clues, suspects, the reveal), horror (dread, wrongness, isolation, escalation), sci-fi (technology, systems, distance, what makes a human) and romance
+  (longing, obstacles, misunderstanding, choosing each other) have new frames for premises, twists, titles and every beat of all three structures. Comedy's lines that
+  were identical to fantasy's were rewritten in comedy's voice. Every genre with frames now shares at most 10% of them with any other and has at most 8% near copies.
+
+### Part B: coherence
+- Ages: each genre has a protagonist age range (`_ages` in genres.json: coming-of-age 13-19, the rest 20-80) and jobs say who can do them (`child`, `teen`, `adult`,
+  `elder`), so "a 62-year-old paperboy" and "a 30-year-old retired colonel" no longer happen, in the Wheel or the Builder, whichever of age and job is rolled first.
+- Blank fills: an empty field is treated as missing, so a frame that needs it gets a stand-in. The Builder's beat rolls no longer say "the  stopped Ann's apprentice".
+- Technology: western, fairy tale and fantasy assume period technology; their eras say so. An era is never chosen against a modern or period thing already in the story,
+  and a genre's default technology rules out other genres' eras (no "present day" in a western) while allowing all of its own. Faker's jobs count as modern.
+- The repetition report lists entries between 4 and 5 standard deviations above chance as "watch" items (5 still fails).
+
+### Part C: all fourteen genres
+- `tools/genre_check.py` prints one table for every genre: own material, repeats, watch items, lint, frame sharing, technology, ages, core vocabulary and neighbors.
+  What is still weak is in BACKLOG.md.
+
 ## 0.14.0 — Batch 14: testing policy, then heist, adventure and coming-of-age
 
 ### Part 0: testing policy

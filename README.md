@@ -805,12 +805,23 @@ where every list came from and its license.
 rolls 200 stories in memory and reports the entries picked far more often than their
 fair share, the rendered lines seen again and again (names blanked out), and any
 frozen templates or over-long atoms. A healthy run has no line seen five times. The
-same check runs in the test suite.
+same check runs in the test suite. An entry 5 standard deviations above chance (and 3x its
+share, 5+ picks) is a failure; one between 4 and 5 is listed as "watch", so a real repeat
+is seen before it grows.
+
+    python tools/genre_check.py
+
+checks all fourteen genres at once and prints a markdown table: how much of a story comes
+from the genre's own material, repeats and watch items, lint, how many frames it shares
+with another genre (identical, and 93% alike), its technology and whether any story broke
+it, its protagonists' age range and whether any job broke it, its core vocabulary and its
+neighbors.
 
 ## Development
 
     pip install -e '.[dev]'
-    pytest
+    pytest -m "not slow" tests/test_<area>.py      # while working: the tests of what changed
+    tools/fulltest.sh                              # end of a batch: everything, in parallel, then the serial tests
 
 ### Building lists
 

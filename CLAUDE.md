@@ -939,3 +939,16 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   protagonist is rolled before the setting. A frame is a near copy of another genre's when `difflib` finds it 93% alike; the three newest genres may not share more than 10%
   identical or 8% near-copy frames with any other genre, and their frames were written in distinct voices (heist: the plan and the crew; adventure: the road and the chart;
   coming-of-age: the summer and the first time) to make that possible.
+
+- Batch 15: every genre with frames has frames of its own (at most 10% identical with any other genre, 8% near copies at 93% alike; `tests/test_genre_content.py`
+  `SHARED_LIMIT`, `NEAR_LIMIT`). The rewritten genres' frames were written with `/tmp`-only generator scripts; the JSON files are the source.
+- Ages: genres.json `_ages` ({genre: [youngest, oldest]}, `_default` 20-80; coming-of-age 13-19; a blend uses the overlap, else the first). Jobs carry `child`, `teen`,
+  `adult`, `elder`; a job with none is `adult`, and an adult's job is open to an elder (`steps.job_bands`). The protagonist's age is invented in the job's bands when the
+  job is known, and the job is drawn for the age's band when the age is known (`Ctx.invent_age`, `Ctx.job_accept`), so either order agrees.
+- The same atom text in two lists has the union of their features (`Engine.features_of`): "tutor" is a teen's job in coming-of-age's list. Era lists may not disagree
+  about technology for the same text (a test).
+- An empty (or blank) field in a kept step or the current item is missing, not a value (`steps.filled`): frames get a stand-in.
+- Eras: never against a modern/period atom already in the story; with a genre default technology, other genres' eras of the other kind are ruled out, the genre's
+  own eras never (`Ctx.era_accept`, `Ctx.own_eras`). Western, fairy tale and fantasy are `period` in `_tech`. Faker's jobs carry `modern` (`engine.GENERATED_FEATURES`).
+- Repetition: `report.FAIL_SD` 5 fails, `report.WATCH_SD` 4 lists a "watch" item. `tools/genre_check.py` is the all-genre check; run it at the end of a content batch.
+
