@@ -12,7 +12,7 @@ from storywheel import dictionary, genrefit, suggest, vault, wordlists
 def index(tmp_path, monkeypatch):
     out, _ = build_fixture(tmp_path / "dict")
     monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(out))
-    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w, 0.0)))
+    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w) or 0.1))     # (a word the table lacks is rare, not a fragment)
     monkeypatch.setattr(genrefit, "seed_words", lambda lib: {"western": Counter({"goose": 1.0, "run": 1.0, "happy": 1.0, "wolf": 1.0})})
     monkeypatch.setattr(genrefit, "domain_names", lambda lib: {})
     dictionary.forget()

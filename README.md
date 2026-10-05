@@ -457,7 +457,9 @@ from them offline (with a one-line message); it only downloads again if they are
     WordNet meanings (the first most) and the glow spreads with a decaying weight through synonyms, similar-to, also-see, broader and
     narrower meanings, parts and wholes, and one step through derivationally related words (storm, stormy); words the Moby thesaurus
     lists beside a strong seed get a small share; WordNet's subject domains (`_domains` in `genres.json`: sci-fi gets astronomy,
-    computing, physics; mystery gets law and crime...) give their meanings a share. A word every genre uses counts for nothing. It is
+    computing, physics; mystery gets law and crime...) give their meanings a small share. A short hand-picked core vocabulary per genre (`data/genre_core.json`, 40+ mood
+    adjectives and verbs: *lingering, hushed, mournful* for ghost story, *seedy, jaded, crooked* for noir) is the strongest seed. Numbers, number words, Roman
+    numerals, fragments and anything under three letters are never listed. A word every genre uses counts for nothing. It is
     done once and kept in the dictionary index (`storywheel dictionary install` and `storywheel update` do it), and done again, in a
     minute at most, the first time you open the tab after the genre lists change. Without the dictionary the tab says so and offers
     only the *From the Wheel* lists.

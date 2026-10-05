@@ -917,3 +917,9 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   fairy tale, horror and fantasy; `tests/test_fidelity.py` has its exact threshold again. Lessons: an inner prize or verb whose text also exists in another list WITHOUT the
   `inner` feature makes `tests/test_coherence.py` fail (it compares by text), so give such atoms their own wording; a new neighbor list lowers a genre's own share a little
   (sci-fi has a 2-point allowance per slot in `test_genre_content.py`).
+
+- Batch 13: ghost story, noir and thriller have frames of their own (a test caps frame sharing between genres; the older four are held at their current levels).
+  `genres.json` `_own_slots` restricts a genre's concrete slots to its own lists plus general, untagged and `universe:*` lists (not neighbors'); `_tech` gives a
+  genre's default technology and the `modern` / `period` features keep atoms from the wrong era. `report.sentence_problems` lints sentence shapes found by reading samples.
+- Genre fit (`genrefit.VERSION` 2): `data/genre_core.json` (hand-picked adjectives `a` and verbs `v`, 40+ per written genre) is the strongest seed (`CORE_SHARE` 1.0);
+  `DOMAIN_SHARE` is 0.3; `is_browsable` drops numbers, number words, Roman numerals, unknown short fragments and words under three letters from the lexicon and the fit.

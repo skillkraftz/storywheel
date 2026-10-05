@@ -754,7 +754,7 @@ def fit(monkeypatch, index):
     from dictfixture import ZIPF
     monkeypatch.setattr(genrefit, "seed_words", lambda lib: {"western": Counter({"dog": 1.0, "run": 1.0, "happy": 1.0}), "fantasy": Counter({"wolf": 1.0, "leave": 1.0})})
     monkeypatch.setattr(genrefit, "domain_names", lambda lib: {})
-    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w, 0.0)))
+    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w) or 0.1))     # (a word the table lacks is rare, not a fragment)
 
 
 async def open_genre(app, pilot):

@@ -1,7 +1,7 @@
 """Genre fit: how well each dictionary word belongs to each genre, worked out once and kept in the dictionary index.
 
 Seeds are the words the generator itself uses for a genre: the atoms of every list tagged with the genre, and the fixed words of its
-sentence frames. Each seed lights up its WordNet meanings (the first meaning most, later ones less), and the glow spreads with a
+sentence frames, and a short hand-picked core vocabulary (`data/genre_core.json`, the strongest seeds). Each seed lights up its WordNet meanings (the first meaning most, later ones less), and the glow spreads with a
 decaying weight through the meaning's synonyms (they share it), similar-to, also-see, broader and narrower meanings, parts and wholes,
 causes and entailments, and, one step, through derivationally related words (storm -> stormy). Words the Moby thesaurus lists beside a
 strong seed get a small share. WordNet's subject domains (a meaning "in astronomy") are mapped to genres in `genres.json` (`_domains`)
@@ -20,13 +20,14 @@ from collections import Counter, defaultdict
 
 from . import dictionary
 
-VERSION = 1
+VERSION = 2
 KEEP = 0.12                       # scores below this are not stored
 DECAY = {"similar": 0.5, "also": 0.4, "hypernym": 0.35, "hyponym": 0.35, "entails": 0.3, "causes": 0.3, "attribute": 0.3,
          "mero_part": 0.25, "mero_substance": 0.25, "mero_member": 0.25, "holo_part": 0.25, "holo_substance": 0.25, "holo_member": 0.25}
 DERIVED = 0.45                    # through a derivationally related word
 MOBY_SHARE = 0.18                 # of a strong seed's weight, for the words the thesaurus lists beside it
-DOMAIN_SHARE = 0.7                # for a meaning that belongs to one of the genre's subject domains
+DOMAIN_SHARE = 0.3                # for a meaning that belongs to one of the genre's subject domains (low: the dictionary's subject labels are lumpy, ghost story's were all religion)
+CORE_SHARE = 1.0                  # for a word of the genre's hand-picked core vocabulary (data/genre_core.json): the strongest seed there is
 SENSE_WEIGHT = (1.0, 0.6, 0.35)   # a seed word lights its first meaning most
 RANK_FACTOR = (1.0, 0.8, 0.65, 0.5)   # a word fits a genre less by a meaning that is far down its own list
 SKIP_SLOTS = {"first_name", "last_name", "place", "place_stem", "place_end", "close"}
@@ -84,6 +85,40 @@ def seed_pos(library):
     return out
 
 
+def core_words():
+    """{genre: {"a": [adjectives], "v": [verbs]}} from data/genre_core.json (single lowercase words)."""
+    from . import library as lib_mod
+    try:
+        doc = json.loads((lib_mod.DATA / "genre_core.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return {g.strip().lower(): {k: [w for w in str(v.get(k, "")).lower().split() if w] for k in ("a", "v")}
+            for g, v in doc.items() if not g.startswith("_") and isinstance(v, dict)}
+
+
+NUMBER_WORDS = set("""zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty thirty forty
+fifty sixty seventy eighty ninety hundred thousand million billion trillion twoscore threescore fourscore third fourth fifth sixth seventh eighth ninth tenth
+eleventh twelfth twentieth thirtieth fortieth fiftieth hundredth thousandth""".split())
+ROMAN = re.compile(r"^(?=[ivxlcdm]+$)m{0,4}(cm|cd|d?c{0,3})(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})$")
+
+
+def is_browsable(word, zipf=0):
+    """Should a dictionary word be offered for browsing and given a genre fit? No numbers or number words made only of numerals ("fifty-four",
+    "twoscore", "thirty-first"; "one-eyed" is a word), no Roman numerals the frequency data does not know ("xl", "xiv"), nothing under three letters,
+    and no unknown fragment ("liv": a short word the frequency data has never met)."""
+    w = (word or "").lower()
+    if len(w) < 3 or re.search(r"[^a-z' -]", w):
+        return False
+    parts = [p for p in re.split(r"[- ]", w) if p]
+    if not parts or all(p in NUMBER_WORDS for p in parts) or (len(parts) > 1 and parts[-1] in ("first", "second") and all(p in NUMBER_WORDS for p in parts[:-1])):
+        return False
+    if zipf <= 150 and ROMAN.match(w):
+        return False                                             # ("mix" and "dim" are Roman numerals too, but people use them)
+    if zipf == 0 and len(w) <= 4 and " " not in w and "-" not in w:
+        return False
+    return True
+
+
 def domain_names(library):
     """{genre: [subject domain words]} from genres.json `_domains` (read again from the file: the library keeps only profiles)."""
     from . import library as lib_mod
@@ -103,6 +138,7 @@ def stamp(library, db):
         h.update(genre.encode())
         h.update(",".join(f"{w}:{n:.1f}" for w, n in sorted(words.items())).encode())
     h.update(json.dumps(domain_names(library), sort_keys=True).encode())
+    h.update(json.dumps(core_words(), sort_keys=True).encode())
     for genre, hints in sorted(seed_pos(library).items()):
         h.update(f"{genre}:" .encode() + ",".join(f"{w}{''.join(sorted(p))}" for w, p in sorted(hints.items())).encode())
     try:
@@ -157,6 +193,8 @@ def _rows_for_lexicon(db, zipf):
         if not w or re.search(r"[^a-z' -]", w):
             continue                                             # digits and symbols are not words to browse
         z = int(round(100 * zipf(w))) if zipf else 0
+        if not is_browsable(w, z if zipf else 1):
+            continue                                             # numbers, number words, fragments, anything under three letters
         out.append((wid, w, pos, syn, z))
     out.sort(key=lambda r: (r[2], r[1]))
     return out
@@ -240,7 +278,9 @@ def build(path, library, progress=lambda m: None, zipf=None):
         material = seed_words(library)
         hints = seed_pos(library)
         domains = domain_names(library)
+        core = core_words()
         lexicon = _rows_for_lexicon(ro, zipf)
+        browsable = {(wid, pos) for wid, _w, pos, _s, _z in lexicon}
         adj, members, deriv = _graph(ro)
         sense_of = defaultdict(list)
         for wid, syn, order in ro.execute("select word_id, synset_id, ord from senses order by word_id, ord"):
@@ -258,7 +298,7 @@ def build(path, library, progress=lambda m: None, zipf=None):
         moby_cache = {}
         domain_syns = _domain_synsets(ro, {g: domains.get(g, []) for g in set(material) | set(domains)})
         rows = []
-        for genre in sorted(set(material) | set(domain_syns)):
+        for genre in sorted(set(material) | set(domain_syns) | set(core)):
             progress(f"Working out which words fit {genre}…")
             seeds = defaultdict(float)
             strong = {}
@@ -281,6 +321,16 @@ def build(path, library, progress=lambda m: None, zipf=None):
             for syn in domain_syns.get(genre, ()):
                 if DOMAIN_SHARE > seeds[syn]:
                     seeds[syn] = DOMAIN_SHARE
+            core_best = {}                                          # (word id, pos) -> 1.0: the hand-picked words themselves
+            for pos, words in core.get(genre, {}).items():
+                for word in words:
+                    for (wid, _w, _note) in dictionary.base_words(ro, word):
+                        mine = [syn for syn in sense_of.get(wid, ()) if POS_GROUP.get(sense_pos.get(syn, ""), "") == pos][:3]
+                        for order, syn in enumerate(mine):
+                            seeds[syn] = max(seeds[syn], CORE_SHARE * (1.0, 0.7, 0.45)[order])
+                        if mine:
+                            core_best[(wid, pos)] = CORE_SHARE
+                            strong[wid] = max(strong.get(wid, 0.0), CORE_SHARE)
             score = _spread(dict(seeds), adj, members, deriv, sense_of)
             best = {}                                               # (word id, pos) -> score
             for syn, s in score.items():
@@ -290,6 +340,7 @@ def build(path, library, progress=lambda m: None, zipf=None):
                     v = s * RANK_FACTOR[min(rank.get((m, syn), 0), len(RANK_FACTOR) - 1)]     # the word's own first meaning counts most
                     if v > best.get(key, 0.0):
                         best[key] = v
+            best.update({k: max(v, best.get(k, 0.0)) for k, v in core_best.items()})
             for wid, weight in strong.items():
                 if weight < 0.6:
                     continue
@@ -303,8 +354,8 @@ def build(path, library, progress=lambda m: None, zipf=None):
                         if share > best.get(key, 0.0):
                             best[key] = share
             for (wid, pos), s in best.items():
-                if s >= KEEP and pos:
-                    rows.append((genre, wid, pos, int(round(s * 100))))
+                if s >= KEEP and pos and (wid, pos) in browsable:
+                    rows.append((genre, wid, pos, int(round(min(s, 1.0) * 100))))
         meta_schema = dict(ro.execute("select key, value from meta")).get("schema")
     finally:
         ro.close()

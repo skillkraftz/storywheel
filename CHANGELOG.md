@@ -2,6 +2,24 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.13.0 — Batch 13: the three new genres, resolved
+
+### Part A: frames of their own
+- Ghost story, noir and thriller have their own sentence frames for premises, twists, titles and every beat of Story Spine, Three-Act Outline and Kishōtenketsu.
+  Detective words (case, alibi, motive, trail, suspect) are for mystery and noir only. A test fails if a genre's frames are mostly shared with another's.
+
+### Part B: era and place
+- Atoms and eras can be `modern` or `period`; a story's technology follows its era (or the genre's default before an era is chosen). `_own_slots` in `genres.json` keeps
+  noir's, thriller's and ghost story's places, eras, people and jobs to their own lists.
+
+### Part C: sentence lint
+- The lint finds "still fears fear", "opened a mule", "locked up the moor", a want placed at a landmark, a verb ending in an adverb. Samples of the three genres were scanned and
+  the data fixed.
+
+### Part D: genre fit
+- `data/genre_core.json`: 40+ hand-picked mood adjectives and verbs per written genre are the strongest seeds. Subject domains weigh less (0.3, was 0.7). Numbers, number words,
+  Roman numerals, fragments and anything under three letters are no longer listed. The fit is rebuilt automatically on the first use.
+
 ## 0.12.0 — Batch 12: help toggle, three genres
 
 ### Part A: help toggle

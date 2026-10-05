@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 10.
+Last updated after batch 13.
 
 
 ## Now
@@ -26,6 +26,7 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
   way down with its heading, chapters as the sidebar's top level with scenes inside, adding/renaming/reordering chapters.
 - **Screenplay profile.** *Stub.* Today it writes an unformatted `.fountain`. Needs Fountain editing (scene headings, character names,
   transitions; Tab/Enter moves between elements) and export to formatted pages (Courier 12, element margins, page numbers) as .docx and PDF.
+- **Rewrite the legacy frames.** *Partial.* Mystery, horror, sci-fi and romance share 35-65% of their frames; give each its own (the three newest share none). `LEGACY_CEILING` in `tests/test_genre_content.py` holds them where they are.
 - **Content for the last three genres** (heist, coming-of-age, adventure): atom lists, templates, name sets, with
   features on every atom and `tests/test_genre_content.py` (add the genre to `GENRES`). Heist is thriller's and noir's neighbor.
 - **Configurable keys outside the Writer.** *Missing.* Settings > Keys covers the Writer only; extend it to the Wheel, Builder, Settings and the

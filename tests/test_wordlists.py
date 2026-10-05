@@ -15,7 +15,7 @@ from storywheel.virtuallist import VirtualList
 def index(tmp_path, monkeypatch):
     out, _ = build_fixture(tmp_path / "dict")
     monkeypatch.setenv("STORYWHEEL_DICTIONARY", str(out))
-    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w, 0.0)))
+    monkeypatch.setattr(genrefit, "zipf_function", lambda: (lambda w: ZIPF.get(w) or 0.1))     # (a word the table lacks is rare, not a fragment)
     dictionary.forget()
     yield out
     dictionary.forget()
@@ -103,7 +103,7 @@ def test_subject_domains_light_their_meanings(index, monkeypatch):
     built(index, lib)
     db = sqlite3.connect(index)
     fit = {(g, w): s for g, w, s in db.execute("select f.genre, l.w, f.score from fit f join lexicon l on l.word_id = f.word_id and l.pos = f.pos")}
-    assert fit[("fantasy", "kennel")] == 70 and fit[("fantasy", "vaccinate")] == 70       # meanings "in veterinary medicine"
+    assert fit[("fantasy", "kennel")] == fit[("fantasy", "vaccinate")] == round(100 * genrefit.DOMAIN_SHARE)       # meanings "in veterinary medicine" (a low share: the subject labels are lumpy)
 
 
 def test_the_fit_is_stale_until_built_and_again_when_a_genres_lists_change(index, lib):

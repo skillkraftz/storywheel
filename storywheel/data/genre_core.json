@@ -1,0 +1,47 @@
+{
+ "_note": "A short, hand-picked core vocabulary for each genre: its mood (adjectives, a) and its characteristic actions (verbs, v), single words as WordNet has them. They are the strongest seeds of the genre fit (genrefit.py), so the first words the Genre words tab offers for a genre are these and their neighbors, not whatever the subject domains of the dictionary happen to hold. Words the dictionary lacks are ignored.",
+ "ghost story": {
+  "a": "lingering hushed mournful faded wistful spectral forlorn ghostly haunted pale wan melancholy sorrowful elegiac plaintive solemn tender vanished bereaved desolate yearning translucent unquiet",
+  "v": "haunt linger grieve mourn whisper fade drift remember wait weep vanish appear beckon yearn resurface hover murmur flicker forgive bury"
+ },
+ "noir": {
+  "a": "seedy jaded crooked cynical hard-boiled shabby gritty grimy sleazy corrupt bitter weary shady world-weary smoky dingy sordid desperate venal treacherous ruthless tawdry rain-slick",
+  "v": "double-cross bribe betray blackmail swindle extort launder tail frame cheat plot scheme snitch fleece hustle loiter stash smuggle threaten bargain gamble brood"
+ },
+ "thriller": {
+  "a": "tense urgent relentless breathless ruthless frantic covert clandestine desperate hunted perilous deadly ominous furtive tenacious treacherous fugitive lethal harrowing gripping menacing hostile paranoid",
+  "v": "chase pursue flee escape ambush abduct hijack sabotage detonate decode infiltrate evade intercept threaten hunt stalk kidnap smuggle betray race corner survive"
+ },
+ "western": {
+  "a": "dusty rugged lawless grizzled weathered parched rowdy desolate barren rustic gritty wild stoic sunburned scorched lonesome sturdy bleak brazen",
+  "v": "gallop ride rustle brand herd duel holster prospect homestead ranch saddle lasso drift track ambush swagger gamble hang wrangle parley stampede"
+ },
+ "fairy tale": {
+  "a": "enchanted wicked magical whimsical fabled cursed charmed mythical gentle humble ancient spellbound wondrous fanciful poor wise cunning golden enchanting kindly luckless",
+  "v": "enchant bewitch wander bless curse vanish transform rescue wish marry banish slumber spin grant beguile outwit dwell befriend vow"
+ },
+ "comedy": {
+  "a": "absurd ridiculous zany goofy madcap farcical hapless bumbling silly whimsical awkward clumsy hilarious comical eccentric daft droll pompous flustered sheepish wacky",
+  "v": "bumble blunder fumble bluster stumble bungle quip gawk flounder scheme trip bicker squabble fluster scramble tumble lampoon grovel wisecrack"
+ },
+ "fantasy": {
+  "a": "arcane ancient mystical enchanted valiant fabled legendary mythic ethereal sorcerous fearless eldritch majestic ruinous noble sacred cursed dauntless wondrous lofty",
+  "v": "conjure summon vanquish quest banish forge bewitch unleash slay wield smite prophesy embark enchant rally swear ward cast muster journey"
+ },
+ "mystery": {
+  "a": "baffling puzzling cryptic enigmatic suspicious elusive inscrutable secretive furtive observant shrewd meticulous perplexing sinister evasive mysterious unsolved incriminating",
+  "v": "investigate deduce interrogate conceal suspect uncover examine deceive accuse unravel snoop eavesdrop scrutinize reveal trace question expose solve sleuth decipher interview inspect"
+ },
+ "horror": {
+  "a": "eerie macabre grisly ghastly sinister gruesome terrifying haunting ominous dreadful nightmarish monstrous creepy malevolent sickening hideous bloodcurdling putrid savage ravenous",
+  "v": "lurk stalk scream shudder devour mutilate haunt torment creep writhe cower claw possess slither gnash terrify sacrifice maim shriek prowl"
+ },
+ "sci-fi": {
+  "a": "futuristic interstellar galactic cybernetic robotic artificial quantum extraterrestrial orbital synthetic sentient mechanical atomic cosmic lunar digital autonomous alien nuclear virtual",
+  "v": "orbit launch teleport terraform colonize hack encrypt scan calibrate transmit clone mutate simulate decode dock engineer upload beam program reboot"
+ },
+ "romance": {
+  "a": "tender passionate affectionate devoted charming smitten blushing wistful adoring ardent sweet intimate yearning flirtatious enamored radiant lovesick dreamy gallant bashful",
+  "v": "kiss court woo embrace adore flirt cherish blush propose confide linger yearn treasure serenade swoon reunite charm date flatter hug"
+ }
+}

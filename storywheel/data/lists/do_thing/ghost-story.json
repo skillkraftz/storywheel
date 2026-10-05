@@ -32,12 +32,6 @@
    ]
   },
   {
-   "text": "open",
-   "object": [
-    "!living"
-   ]
-  },
-  {
    "text": "deliver",
    "object": [
     "portable"
