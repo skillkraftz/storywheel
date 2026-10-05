@@ -87,6 +87,9 @@ VOCAB = {
     "speech": "a spoken manner ('in the old tongue', 'in whispers'): fits speaking, not crawling or paying",
     "carrying": "needs something in hand ('with drawn steel', 'with a clipboard')",
     "feeling": "a state of mind ('in silent dread', 'in a panic'): only where a frame asks for it",
+    # when (technology): an atom without either feature fits any time
+    "modern": "needs present-day technology (a burner phone, a flash drive): not in the 1920s",
+    "period": "belongs to an older time (a telegram, a gramophone): not in the present day",
     # anything
     "plural": "takes 'are' and 'were': 'the stockyards', 'two scarred brothers'",
 }

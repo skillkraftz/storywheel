@@ -22,7 +22,8 @@
   {
    "text": "a data leak",
    "features": [
-    "manmade"
+    "manmade",
+    "modern"
    ]
   },
   {
@@ -102,7 +103,8 @@
   {
    "text": "a hacked election",
    "features": [
-    "manmade"
+    "manmade",
+    "modern"
    ]
   },
   {

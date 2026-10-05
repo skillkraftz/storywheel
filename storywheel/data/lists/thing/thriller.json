@@ -9,7 +9,8 @@
    "text": "a burner phone",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
@@ -17,7 +18,8 @@
    "features": [
     "portable",
     "buryable",
-    "valuable"
+    "valuable",
+    "modern"
    ]
   },
   {
@@ -39,7 +41,8 @@
    "text": "a hotel key card",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
@@ -68,22 +71,24 @@
    "text": "a stolen laptop",
    "features": [
     "portable",
-    "valuable"
+    "valuable",
+    "modern"
    ]
   },
   {
-   "text": "a roll of microfilm",
+   "text": "a memory card",
    "features": [
     "portable",
     "buryable",
-    "paper"
+    "modern"
    ]
   },
   {
    "text": "a pocket recorder",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
@@ -121,7 +126,8 @@
    "text": "a GPS tracker",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
@@ -183,14 +189,16 @@
    "features": [
     "portable",
     "buryable",
-    "valuable"
+    "valuable",
+    "modern"
    ]
   },
   {
    "text": "a satellite phone",
    "features": [
     "portable",
-    "valuable"
+    "valuable",
+    "modern"
    ]
   },
   {
@@ -226,7 +234,8 @@
    "text": "a hard drive",
    "features": [
     "portable",
-    "valuable"
+    "valuable",
+    "modern"
    ]
   },
   {
@@ -277,21 +286,24 @@
    "text": "a dead man's phone",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
-   "text": "a wire recorder",
+   "text": "a hidden microphone",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {
-   "text": "a pager",
+   "text": "a tracking beacon",
    "features": [
     "portable",
-    "buryable"
+    "buryable",
+    "modern"
    ]
   },
   {

@@ -16,7 +16,8 @@
    "text": "the airport terminal",
    "features": [
     "built",
-    "indoor"
+    "indoor",
+    "modern"
    ]
   },
   {
@@ -44,7 +45,8 @@
    "text": "the rooftop helipad",
    "features": [
     "built",
-    "outdoor"
+    "outdoor",
+    "modern"
    ]
   },
   {
@@ -65,7 +67,8 @@
    "text": "the data center",
    "features": [
     "built",
-    "indoor"
+    "indoor",
+    "modern"
    ]
   },
   {

@@ -5,15 +5,65 @@
   "thriller"
  ],
  "entries": [
-  "the week before the summit",
-  "the night of the vote",
-  "a long holiday weekend",
-  "the storm season",
-  "the day before the hearing",
-  "the campaign's final week",
-  "the heat of August",
-  "a sleepless November",
-  "the night of the blackout",
-  "forty hours before the deal"
+  {
+   "text": "the week before the summit",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the night of the vote",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "a long holiday weekend",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the storm season",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the day before the hearing",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the campaign's final week",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the heat of August",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "a sleepless November",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the night of the blackout",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "forty hours before the deal",
+   "features": [
+    "modern"
+   ]
+  }
  ]
 }

@@ -13,7 +13,6 @@
   "Border",
   "Black",
   "Grand",
-  "Vale",
   "Summit",
   "Bridge",
   "Steel",
@@ -22,12 +21,14 @@
   "Red",
   "Silver",
   "Delta",
-  "Ridge",
   "Granite",
   "Cobalt",
-  "Lakeside",
   "Eastern",
   "Coastal",
-  "Port"
+  "Port",
+  "Central",
+  "Capital",
+  "Union",
+  "Meridian"
  ]
 }

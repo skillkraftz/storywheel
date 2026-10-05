@@ -1,6 +1,28 @@
 {
-  "_note": "Eras that belong to the modern world. Tagged modern, so a western or fairy tale only gets them at the modern weight.",
-  "slot": "era",
-  "tags": ["modern"],
-  "entries": ["present day", "the late 90s", "the 1970s", "the 2000s"]
+ "_note": "Eras that belong to the modern world. Tagged modern, so a western or fairy tale only gets them at the modern weight.",
+ "slot": "era",
+ "tags": [
+  "modern"
+ ],
+ "entries": [
+  {
+   "text": "present day",
+   "features": [
+    "modern"
+   ]
+  },
+  "the late 90s",
+  {
+   "text": "the 1970s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the 2000s",
+   "features": [
+    "modern"
+   ]
+  }
+ ]
 }

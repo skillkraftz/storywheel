@@ -5,7 +5,13 @@
   "thriller"
  ],
  "entries": [
-  "a printed email",
+  {
+   "text": "a printed email",
+   "features": [
+    "physical",
+    "modern"
+   ]
+  },
   "a ransom demand",
   "a typed warning",
   "a leaked memo",

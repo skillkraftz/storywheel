@@ -14,7 +14,12 @@
   "air marshal",
   "border guard",
   "inspector",
-  "hacker",
+  {
+   "text": "hacker",
+   "features": [
+    "modern"
+   ]
+  },
   "surgeon",
   "bodyguard",
   "interpreter",
@@ -35,7 +40,12 @@
   "cameraman",
   "photojournalist",
   "consultant",
-  "data engineer",
+  {
+   "text": "data engineer",
+   "features": [
+    "modern"
+   ]
+  },
   "hotel manager",
   "coast guard officer",
   "park ranger",

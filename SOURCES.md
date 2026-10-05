@@ -630,6 +630,9 @@ general, unowned descriptions of story shape.
 - `title_noun/sci-fi`
 - `title_noun/thriller`
 - `title_noun/western`
+- `topic/ghost-story`
+- `topic/noir`
+- `topic/thriller`
 - `trait/comedy-traits`
 - `trait/fantasy-traits`
 - `trait/ghost-story-traits`

@@ -89,12 +89,31 @@ class Ctx(dict):
         self.atom_log = []                      # (field, slot, text) in the order drawn
         self._motif_offered = False
 
+    def tech(self):
+        """The technology this story assumes: its era's own (a "period" or "modern" feature) once the era is known, else the one its genres assume
+        (genres.json `_tech`), else None. Atoms that need the other kind are never drawn."""
+        era = dict.get(self, "era")
+        if era:
+            feats = self.engine.features_of("era", era) or ()
+            for kind in ("period", "modern"):
+                if kind in feats:
+                    return kind
+        return self.mix.tech()
+
+    def tech_accept(self, accept=None):
+        """`accept` (a function Entry -> bool, or None) narrowed to the story's technology."""
+        tech = self.tech()
+        if tech is None:
+            return accept
+        banned = "modern" if tech == "period" else "period"
+        return lambda e: banned not in (e.features or ()) and (accept is None or accept(e))
+
     def draw(self, slot):
         """Text from a slot, chosen through the story mix and remembered (nothing used in
         this story is drawn again). Templates that use a thread we have are favored, and
         ones that need a thread we lack are skipped."""
         wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
-                                          commit=False, bias=self.bias(slot, ()))
+                                          accept=self.tech_accept(), commit=False, bias=self.bias(slot, ()))
         return self.finish_atom(slot, wl, entry)
 
     def adjuster(self, slot):
@@ -120,7 +139,7 @@ class Ctx(dict):
                           else ("human",))
             if accept is None or accept(guest):
                 return None, guest
-        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept, commit=False,
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), self.tech_accept(accept), commit=False,
                                      bias=self.bias(slot, local))
 
     def finish_atom(self, slot, wl, entry):

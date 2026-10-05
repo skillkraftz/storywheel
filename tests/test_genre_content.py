@@ -16,7 +16,7 @@ FLAVORED_SLOTS = ["first_name", "last_name", "job", "place", "landmark", "thing"
 GENRES = ["comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller"]
 BLENDS = [["comedy", "fairy tale"], ["fantasy", "mystery"], ["mystery", "western"], ["horror", "western"], ["sci-fi", "mystery"], ["romance", "fantasy"], ["romance", "comedy"], ["ghost story", "romance"], ["ghost story", "comedy"], ["noir", "western"], ["thriller", "sci-fi"]]
 SLOT_ALLOWANCE = {"sci-fi": 0.04}      # (sci-fi's neighbors, thriller among them, now have lists of their own, so a little more of the floor goes next door)
-GENERAL = {"fantasy": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
+GENERAL = {"fantasy": 0.15, "ghost story": 0.15, "noir": 0.15, "thriller": 0.15}            # how much of the neutral, all-purpose material a genre lets in (0.3 unless its content says otherwise)
 ATOM_SLOTS = ["someone", "thing", "disaster", "message", "hiding", "act_person", "act_thing", "act_place", "act_message", "do_thing", "do_person",
               "habit_thing", "habit_person", "habit_place", "manner", "prize", "deadline", "motive", "vice", "value", "temptation", "trait",
               "rival", "landmark", "job", "title_adj", "title_noun", "era"]

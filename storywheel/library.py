@@ -164,6 +164,8 @@ class Library:
         self.floor = floor                                  # wildcard share for one-off slots
         self.floors = floors or {}                          # slot -> its own (usually lower) share
         self.neighbors = neighbors or {}                    # genre -> tags of the genres whose lists the floor may draw from
+        self.own_slots = {}                                 # genre -> slots where the floor is off (only its own and the general lists)
+        self.tech = {}                                      # genre -> "modern" or "period": the technology its stories assume
         self.by_slot = {}
         for wl in lists.values():
             self.by_slot.setdefault(wl.slot, []).append(wl)
@@ -184,8 +186,15 @@ class Library:
                 floors.update(more_floors)
                 neighbors.update(more_neighbors)
         roots += [Path(r) for r in extra_roots]
-        return cls(load_lists(roots), profiles, default,
-                   DEFAULT_FLOOR if floor is None else float(floor), floors, neighbors)
+        lib = cls(load_lists(roots), profiles, default,
+                  DEFAULT_FLOOR if floor is None else float(floor), floors, neighbors)
+        docs = [json.loads((DATA / "genres.json").read_text(encoding="utf-8"))]
+        if user_dir and (Path(user_dir) / "genres.json").exists():
+            docs.append(json.loads((Path(user_dir) / "genres.json").read_text(encoding="utf-8")))
+        for doc in docs:
+            lib.own_slots.update({k.strip().lower(): list(v) for k, v in doc.get("_own_slots", {}).items()})
+            lib.tech.update({k.strip().lower(): v for k, v in doc.get("_tech", {}).items()})
+        return lib
 
     def replace_lists(self, prefix, new_lists):
         """Swap every list whose id starts with `prefix` for `new_lists` (used for universe atoms)."""

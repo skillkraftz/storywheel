@@ -611,6 +611,7 @@ frames **require** them. The whole vocabulary is small and lives in `storywheel/
 | | `gentle` | a kind or reconciling act, for endings |
 | | `stows`, `trades` | puts something somewhere; gives something up for something |
 | manners | `speech`, `carrying`, `feeling` | a spoken manner ("in whispers"), one that needs something in hand ("with drawn steel"), a state of mind ("in silent dread"). Drawn only where a frame asks for it, e.g. `{MANNER:speech}` |
+| when | `modern`, `period` | needs present-day technology (a burner phone); belongs to an older time (a telegram). An atom with neither fits any time; a story's era (or, before one is chosen, its genre: noir is `period`, thriller `modern`, in genres.json `_tech`) keeps out the other kind |
 | anything | `plural` | takes "are" and "were": "the stockyards", "two scarred brothers" |
 
 An atom lists its own features (a list sets defaults for its entries); anything not listed

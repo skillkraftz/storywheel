@@ -1,6 +1,34 @@
 {
-  "_note": "Eras of the early twentieth century, tagged for the genres that favor them.",
-  "slot": "era",
-  "tags": ["noir", "mystery", "thriller"],
-  "entries": ["the 1920s", "the 1930s", "wartime", "the jazz age"]
+ "_note": "Eras of the early twentieth century, tagged for the genres that favor them.",
+ "slot": "era",
+ "tags": [
+  "noir",
+  "mystery"
+ ],
+ "entries": [
+  {
+   "text": "the 1920s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the 1930s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "wartime",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the jazz age",
+   "features": [
+    "period"
+   ]
+  }
+ ]
 }

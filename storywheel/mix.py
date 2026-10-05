@@ -63,6 +63,8 @@ class Mix:
         self.floor = library.floor
         self.floors = library.floors
         self.neighbors = getattr(library, "neighbors", {})
+        self.own_slots = getattr(library, "own_slots", {})
+        self.tech_of = getattr(library, "tech", {})
 
     @classmethod
     def for_story(cls, story, library):
@@ -125,6 +127,20 @@ class Mix:
             near.update(self.neighbors.get(name.lower(), ()))
         return near
 
+    def slot_is_own(self, slot):
+        """Does one of the story's genres keep this slot to its own lists (genres.json `_own_slots`)?"""
+        return any(slot in self.own_slots.get(name.lower(), ()) for name in self.data["base"])
+
+    def own_lists(self, lists):
+        """For a slot a genre keeps to itself: only the lists of the story's own genres, the general (and untagged) ones, and a universe's own."""
+        base = {name.lower() for name in self.data["base"]}
+        return [wl for wl in lists if not wl.tags or "general" in wl.tags or any(t in base or t.startswith("universe:") for t in wl.tags)]
+
+    def tech(self):
+        """"modern" or "period" when every genre of the story assumes the same technology (genres.json `_tech`), else None."""
+        kinds = {self.tech_of.get(name.lower()) for name in self.data["base"]}
+        return kinds.pop() if len(kinds) == 1 else None
+
     def is_near(self, wl, near):
         """A list the floor may draw from freely: untagged, or tagged with a neighboring genre."""
         return not wl.tags or any(t in near for t in wl.tags)
@@ -144,6 +160,8 @@ class Mix:
         returning nothing."""
         weights = self.weights()
         live = [wl for wl in lists if not self.is_list_excluded(wl)]
+        if live and self.slot_is_own(lists[0].slot):
+            live = self.own_lists(live) or live
         if not live:
             return [1.0 / len(lists)] * len(lists) if lists else []
         w = {wl.id: self.list_weight(wl, weights) for wl in live}
@@ -151,6 +169,8 @@ class Mix:
         wild = [wl for wl in live if w[wl.id] <= 0]
         floor = self.floor_for(lists[0].slot)
         wild_share = 0.0 if not wild else (1.0 if not mentioned else floor)
+        if mentioned and self.slot_is_own(lists[0].slot):
+            wild_share = 0.0                # (the other genres' lists are gone from this slot already, see own_lists)
         total = sum(w[wl.id] for wl in mentioned)
         near_tags = self.near_tags()
         known = any(name.lower() in self.neighbors for name in self.data["base"])     # genres without neighbors listed keep the even floor

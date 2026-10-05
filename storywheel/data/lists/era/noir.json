@@ -5,15 +5,65 @@
   "noir"
  ],
  "entries": [
-  "a rainy October",
-  "the night of the election",
-  "the week after payday",
-  "the winter of the strike",
-  "the heat wave summer",
-  "the year the war ended",
-  "the fair's last night",
-  "a wet March",
-  "the week before Christmas",
-  "the big fight night"
+  {
+   "text": "a rainy October",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the night of the election",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the week after payday",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the winter of the strike",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the heat wave summer",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the year the war ended",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the fair's last night",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "a wet March",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the week before Christmas",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the big fight night",
+   "features": [
+    "period"
+   ]
+  }
  ]
 }
