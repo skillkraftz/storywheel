@@ -5028,4 +5028,5 @@ Set up a throwaway library first if you want to keep your real one clean. Otherw
 
 ## Full run
 
-(to be filled in)
+`tools/fulltest.sh`, one run, everything green. Parallel pass: 2,649 passed and 4 skipped in 231 s. Serial pass: 98 passed in 158 s. Total
+389 s. Nothing needed a `--lf` rerun. 4 skips, the same count as batch 16's full run.
