@@ -38,9 +38,19 @@ local function known(name)
   return name:match("^manuscript%.md$") ~= nil or name:match("^%d+%-[a-z0-9%-]+%.md$") ~= nil
 end
 
+-- A screenplay is one Fountain file, manuscript/script.fountain.
+function M.is_screenplay()
+  return M.settings().format == "screenplay"
+end
+
 function M.scenes()
   local out = {}
   if not M.manuscript then return out end
+  if M.is_screenplay() then
+    local p = M.manuscript .. "/script.fountain"
+    if util.exists(p) then out[1] = { path = p, name = "script.fountain" } end
+    return out
+  end
   for _, name in ipairs(vim.fn.readdir(M.manuscript)) do
     if known(name) then out[#out + 1] = { path = M.manuscript .. "/" .. name, name = name } end
   end
@@ -58,6 +68,13 @@ M.files = M.scenes
 function M.ensure_first_scene()
   if not M.manuscript then return end
   util.mkdir(M.manuscript)
+  if M.is_screenplay() then
+    if #M.files() == 0 then
+      local made = util.cli_json({ "script", "ensure", M.universe .. "/" .. M.slug, "--json" })
+      if not made then util.write(M.manuscript .. "/script.fountain", "Title: " .. (M.info.title or "") .. "\nCredit: Written by\n\nFADE IN:\n\n") end
+    end
+    return
+  end
   if #M.files() == 0 then util.write(M.manuscript .. "/manuscript.md", "") end
 end
 
@@ -72,6 +89,15 @@ end
 -- { n=, path=, name=, start=, finish=, label=, title=, marked=, first_line=, words=, body= }
 function M.scene_list()
   local out = {}
+  if M.is_screenplay() then
+    for _, f in ipairs(M.files()) do
+      for _, sc in ipairs(require("sw.script").scenes(M.lines_of(f.path))) do
+        sc.path, sc.name = f.path, f.name
+        out[#out + 1] = sc
+      end
+    end
+    return out
+  end
   for _, f in ipairs(M.files()) do
     for _, sc in ipairs(util.parse_scenes(M.lines_of(f.path))) do
       sc.n, sc.path, sc.name = #out + 1, f.path, f.name
@@ -111,6 +137,17 @@ function M.add_scene(title)
   local lines = vim.api.nvim_buf_get_lines(b, 0, -1, false)
   while #lines > 0 and lines[#lines] == "" do table.remove(lines) end
   if #lines > 0 then lines[#lines + 1] = "" end
+  if M.is_screenplay() then                                       -- a script's scene is a scene heading
+    local head = ((title and title ~= "") and title or "INT. NEW SCENE - DAY")
+    if not require("sw.script").is_heading(head) then head = "." .. head end
+    lines[#lines + 1] = head:upper()
+    local at = #lines
+    lines[#lines + 1] = ""
+    lines[#lines + 1] = ""
+    vim.api.nvim_buf_set_lines(b, 0, -1, false, lines)
+    vim.api.nvim_buf_call(b, function() vim.cmd("silent! write") end)
+    return path, at
+  end
   lines[#lines + 1] = ("* * * " .. (title or "")):gsub("%s+$", "")
   local marker_line = #lines
   lines[#lines + 1] = ""

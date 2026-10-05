@@ -61,6 +61,7 @@ end
 function M.decorate(buf)
   buf = buf or vim.api.nvim_get_current_buf()
   if not vim.api.nvim_buf_is_valid(buf) then return end
+  if require("sw.script").is_script(buf) then return require("sw.script").decorate(buf) end    -- (a screenplay: none of the prose rules)
   vim.api.nvim_buf_clear_namespace(buf, M.ns, 0, -1)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local indent_on = story.setting("indent_display", true)
@@ -283,6 +284,16 @@ function M.map_buffer(buf)
   map("n", "<Up>", "gk")
   map("i", "<Down>", "<C-o>gj")
   map("i", "<Up>", "<C-o>gk")
+  local script = require("sw.script")
+  if script.is_script(buf) then
+    -- a screenplay: italic and bold as in prose, then the screenplay keys (Tab, Enter, the flip test); no paragraph rules, no scene breaks
+    for _, spec in ipairs({ { story.setting("key_italic", "<A-i>"), "*" }, { story.setting("key_bold", "<A-b>"), "**" }, { "<C-b>", "**" } }) do
+      map("i", spec[1], function() M.toggle_insert(spec[2]) end)
+      map({ "x", "s" }, spec[1], function() M.wrap_visual(spec[2]) end)
+    end
+    script.map_buffer(buf)
+    return
+  end
   -- paragraphs
   map("i", "<CR>", function() return M.enter_expr() end, { expr = true, replace_keycodes = false })
   map("n", "o", "A<CR>", { remap = true })

@@ -42,6 +42,13 @@ function M.scene(buf)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local win = vim.fn.bufwinid(buf)
   local row = (win ~= -1) and vim.api.nvim_win_get_cursor(win)[1] or 1
+  local script = require("sw.script")
+  if script.is_script(buf) then
+    for _, sc in ipairs(script.scenes(lines)) do
+      if row >= sc.start and row <= sc.finish then return sc.words end
+    end
+    return 0
+  end
   for _, sc in ipairs(util.parse_scenes(lines)) do
     if row >= sc.start and row <= sc.finish then return sc.words end
   end
@@ -96,6 +103,9 @@ end
 function M.refresh()
   M.scene_cached = M.scene()
   M.total_cached = M.manuscript()
+  local buf = vim.api.nvim_get_current_buf()
+  local script = require("sw.script")
+  M.pages_cached = script.is_script(buf) and script.status(buf) or nil
   vim.cmd("redrawstatus")
 end
 
@@ -110,8 +120,8 @@ function M.line()
     today_text = string.format("today %s words", commas(today))
   end
   local g = require("sw.grammar").status_text()
-  return string.format("  words: in this scene %s · in the story %s · %s%s", commas(M.scene_cached), commas(M.total_cached),
-                       today_text, g ~= "" and ("  ·  " .. g) or "")
+  return string.format("  %swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
+                       commas(M.scene_cached), commas(M.total_cached), today_text, g ~= "" and ("  ·  " .. g) or "")
 end
 
 -- (a statusline expression is read as a statusline: its % signs must be doubled)

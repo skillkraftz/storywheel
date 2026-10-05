@@ -26,7 +26,12 @@ function M.build()
   local lines, entries = {}, {}
   local path = main_path()
   local row = vim.api.nvim_win_is_valid(layout.main) and vim.api.nvim_win_get_cursor(layout.main)[1] or 0
+  local section = nil
   for _, sc in ipairs(story.scene_list()) do
+    if sc.section and sc.section ~= "" and sc.section ~= section then      -- a screenplay's acts and sequences group its scenes
+      section = sc.section
+      lines[#lines + 1] = truncate("  ▸ " .. section, M.width() - 1)
+    end
     local here = sc.path == path and row >= sc.start and row <= sc.finish
     local line = string.format("%s%02d %s — %s", here and "▶ " or "  ", sc.n, sc.title, sc.first_line)
     lines[#lines + 1] = truncate(line, M.width() - 1)
@@ -74,6 +79,14 @@ function M.rename(entry, title)
   entry = entry or M.current_entry()
   if not entry or not title or title == "" then return end
   local b = buffer_of(entry.path)
+  if require("sw.script").is_script(b) then                              -- a screenplay's scene is renamed by its heading
+    local head = title:upper()
+    if not require("sw.script").is_heading(head) then head = "." .. head end
+    vim.api.nvim_buf_set_lines(b, entry.start - 1, entry.start, false, { head })
+    save(b)
+    M.render()
+    return
+  end
   local marker = "* * * " .. title
   if entry.marked then
     vim.api.nvim_buf_set_lines(b, entry.start - 1, entry.start, false, { marker })
@@ -88,6 +101,10 @@ end
 function M.move(entry, direction)
   entry = entry or M.current_entry()
   if not entry then return false end
+  if story.is_screenplay() then
+    vim.api.nvim_echo({ { "In a screenplay, move a scene by cutting and pasting it (its heading and everything up to the next).", "Normal" } }, false, {})
+    return false
+  end
   local all = story.scene_list()
   local idx
   for i, sc in ipairs(all) do if sc.path == entry.path and sc.start == entry.start then idx = i end end

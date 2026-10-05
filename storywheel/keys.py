@@ -20,6 +20,7 @@ WRITER_KEYS = {
     "key_lookup_word": ("Look up a typed word", "<F6>"),
     "key_grammar_next": ("Next grammar problem", "<F10>"),
     "key_grammar_list": ("List of grammar problems", "<S-F10>"),
+    "key_flip_test": ("Flip test (screenplays)", "<A-f>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 

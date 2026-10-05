@@ -16,6 +16,7 @@ key_lookup: Dictionary and thesaurus card for the word under the cursor (Enter o
 key_lookup_word: Look up a word you type
 key_grammar_next: Jump to the next grammar problem
 key_grammar_list: List the grammar problems
+key_flip_test: A screenplay's flip test: long action blocks and speeches, camera directions, CUT TO: overuse, the length against the target (a list that jumps to each)
 ### fixed | Fixed keys
 <C-c>: Copy
 <C-x>: Cut

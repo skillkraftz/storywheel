@@ -220,8 +220,15 @@ function M.scan()
   if not M.is_manuscript(buf) then return end
   local queued = {}
   for _, it in ipairs(M.queue) do queued[it.hash] = true end
-  for _, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
-    if M.is_prose(line) then
+  local all = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local skip = {}
+  local script = require("sw.script")
+  if script.is_script(buf) then                          -- a screenplay: cues, headings, transitions and notes are not sentences
+    local prose_kinds = { action = true, dialogue = true, parenthetical = true, lyrics = true }
+    for i, kind in ipairs(script.types(all)) do if not prose_kinds[kind] then skip[i] = true end end
+  end
+  for i, line in ipairs(all) do
+    if not skip[i] and M.is_prose(line) then
       local h = hash(line)
       if not M.cache.clean[h] and not M.cache.found[h] and not queued[h] then
         local plain, start, stop, units = M.strip(line)

@@ -174,7 +174,11 @@ end
 function M.paste()
   local lines, linewise = get_register()
   if #lines == 0 then return false end
-  lines = M.clean_pasted(lines)
+  if require("sw.script").is_script(0) then                  -- a screenplay keeps its blank lines and indents: only quotes are straightened
+    for i, l in ipairs(lines) do lines[i] = require("sw.typing").straighten((l:gsub("\r$", ""))) end
+  else
+    lines = M.clean_pasted(lines)
+  end
   if M.has_selection() then M.delete_selection() end
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if linewise then

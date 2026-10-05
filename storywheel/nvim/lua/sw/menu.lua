@@ -9,6 +9,33 @@ local function groups()
   local sw = require("sw")
   local prose = require("sw.prose")
   local notepad = require("sw.notepad")
+  local story_mod = require("sw.story")
+  local exports
+  if story_mod.is_screenplay() then
+    exports = {
+      { "Export script (.pdf)", function() sw.export("pdf") end },
+      { "Export anonymous script (.pdf)", function() sw.export("pdf", true) end },
+      { "Export for Final Draft (.fdx)", function() sw.export("fdx") end },
+      { "Export Fountain (.fountain)", function() sw.export("fountain") end },
+      { "Flip test (" .. util.key_label(story_mod.setting("key_flip_test", "<A-f>")) .. ")", function() require("sw.script").flip_test() end },
+    }
+  else
+    exports = {
+      { "Export manuscript (.docx)", function() sw.export("docx") end },
+      { "Export anonymous manuscript (.docx)", function() sw.export("docx", true) end },
+    }
+  end
+  local story_items = {
+    { "Scenes sidebar", function() require("sw.sidebar").toggle() end },
+    { "Story outline (" .. util.key_label(story_mod.setting("key_overview", "<C-o>")) .. ")", function() require("sw.overview").toggle() end },
+    { "New scene", function() sw.new_scene() end },
+    { "Word counts", function() sw.show_stats() end },
+  }
+  vim.list_extend(story_items, exports)
+  vim.list_extend(story_items, {
+    { "Copy manuscript as plain text", function() sw.copy_manuscript() end },
+    { "Restore from a backup…", function() require("sw.restore").open() end },
+  })
   return {
     { "Edit", {
       { "Undo (" .. util.key_label("<C-z>") .. ")", function() notepad.undo() end },
@@ -33,16 +60,7 @@ local function groups()
       { "Peek at the name under the cursor", function() require("sw.world").peek() end },
       { "Words (F5): dictionary, words to learn, overused words", function() sw.words() end },
     } },
-    { "Story", {
-      { "Scenes sidebar", function() require("sw.sidebar").toggle() end },
-      { "Story outline (" .. util.key_label(require("sw.story").setting("key_overview", "<C-o>")) .. ")", function() require("sw.overview").toggle() end },
-      { "New scene", function() sw.new_scene() end },
-      { "Word counts", function() sw.show_stats() end },
-      { "Export manuscript (.docx)", function() sw.export("docx") end },
-      { "Export anonymous manuscript (.docx)", function() sw.export("docx", true) end },
-      { "Copy manuscript as plain text", function() sw.copy_manuscript() end },
-      { "Restore from a backup…", function() require("sw.restore").open() end },
-    } },
+    { "Story", story_items },
     { "Leave", {
       { "Settings (F4)", function() sw.leave("settings") end },
       { "Back to the Builder (F2)", function() sw.leave("builder") end },

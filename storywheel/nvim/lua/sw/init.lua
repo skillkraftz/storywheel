@@ -172,6 +172,7 @@ end
 
 function M.export(format, anonymous)
   backup.save_all()
+  if story.is_screenplay() and (format == nil or format == "docx") then format = "pdf" end     -- (a script exports as a PDF)
   local args = { "manuscript", "export", story.universe .. "/" .. story.slug, "--format", format or "docx", "--json" }
   if anonymous then args[#args + 1] = "--anonymous" end
   vim.api.nvim_echo({ { "Exporting…", "Normal" } }, false, {})

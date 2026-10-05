@@ -146,6 +146,8 @@ end
 
 -- While typing a word of 3 or more letters, offer matching names from the universe.
 function M.complete()
+  local script = require("sw.script")
+  if script.is_script(0) and script.complete() then return end            -- a cue or a heading: names and locations from the script too
   if vim.fn.pumvisible() == 1 or #M.entities == 0 then return end
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
