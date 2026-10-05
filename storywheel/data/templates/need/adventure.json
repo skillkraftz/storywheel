@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "need",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "to confide in {CLOSE:human} about {TOPIC} before the road ends",
+  "to pick {VALUE} over {VICE} at the edge",
+  "to give up outrunning {FEELING} and face {VICE}",
+  "to {DO_PERSON:inner} {CLOSE:human} while the road still allows it",
+  "to rank {VALUE} above {TEMPTATION} when it counts",
+  "to accept that {VALUE} outlasts {PRIZE:social,!inner}",
+  "to let {CLOSE:human} share {TOPIC}",
+  "to rest a while, feel {FEELING}, and keep {VALUE}"
+ ]
+}

@@ -1,0 +1,305 @@
+{
+ "_note": "What the crew carries, plans around and steals.",
+ "slot": "thing",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "a set of blueprints",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stolen keycard",
+   "features": [
+    "portable",
+    "buryable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a duffel of cash",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a forged guest list",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a diamond necklace",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a rare painting",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a vault schematic",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bag of loose gems",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ring of skeleton keys",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a coil of rope",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a cutting torch",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a stethoscope",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bearer bond",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pair of night goggles",
+   "features": [
+    "portable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a brass master key",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a signal jammer",
+   "features": [
+    "portable",
+    "buryable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a bundle of gold bars",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a laminated badge",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a getaway map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stack of counterfeit bills",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a drill bit",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a walkie-talkie",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a dummy briefcase",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a glass cutter",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a roll of fake plates",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a ledger of debts",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a crate of antique coins",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a replica statue",
+   "features": [
+    "portable",
+    "valuable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a pocket watch",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a coded timetable",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a security tape",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a black wig",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a chauffeur's cap",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a catering uniform",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a spool of thin wire",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stolen guest pass",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a crate of champagne",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a poker chip",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a fake dossier",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a suitcase of tools",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  }
+ ]
+}

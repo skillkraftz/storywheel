@@ -1,0 +1,37 @@
+{
+ "_note": "How a job is carried out.",
+ "slot": "manner",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "in disguise",
+  "with a forged badge",
+  "through the service door",
+  "in a borrowed uniform",
+  "under a false name",
+  "on a stolen schedule",
+  "with perfect timing",
+  "in a delivery van",
+  "behind the cameras",
+  {
+   "text": "in a whisper",
+   "features": [
+    "speech"
+   ]
+  },
+  "with a smile",
+  {
+   "text": "with a duffel in hand",
+   "features": [
+    "carrying"
+   ]
+  },
+  "by the freight lift",
+  "at the shift change",
+  "without a sound",
+  "on a tight schedule",
+  "in a tuxedo",
+  "on the quiet"
+ ]
+}

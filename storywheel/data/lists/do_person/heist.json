@@ -1,0 +1,116 @@
+{
+ "_note": "Base-form verbs for heist that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "find",
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "warn",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "recruit",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "outsmart",
+  {
+   "text": "pay off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "confide in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "level with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stand by",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "convince",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "double back for",
+   "object": [
+    "!threatening"
+   ]
+  }
+ ]
+}

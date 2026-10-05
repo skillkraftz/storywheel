@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "inciting",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hammered {place}, and {first} saw the way out",
+  "{first} turned up {THING:!living,!bulky} {HIDING}, and recognized the coast of {landmark}",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} reached {first}: come to {landmark} and bring the compass",
+  "the {rival} slipped out of {place} {MANNER}, and {first} gave chase",
+  "{SOMEONE:!plural} landed in {place} {MANNER} and offered {first} a share of {PRIZE:material}",
+  "a wager was struck over {PRIZE:material,!inner}: {DO_THING} {THING} {DEADLINE}",
+  "{SOMEONE:human,!plural} pressed {THING:portable} into {first}'s hands at {landmark} {MANNER}, and the voyage began",
+  "{first} spotted {SOMEONE:human,!plural} at {landmark} {MANNER}, unrolling a map",
+  "{DISASTER:strikes} cleared the road to {landmark}, and {first} set out {MANNER}",
+  "the {rival} taunted {first} {MANNER}, and {first} swore to {DO_THING} {THING}"
+ ]
+}

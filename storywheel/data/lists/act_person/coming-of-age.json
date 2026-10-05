@@ -1,0 +1,188 @@
+{
+ "_note": "Past-tense verbs for coming-of-age that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "argued with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "ignored",
+  {
+   "text": "confided in",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "waved at",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "teased",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "forgave",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "stood up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "walked home with",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "lied to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "sat beside",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "met",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "called",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "dared",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "quarreled with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "followed",
+  "avoided",
+  {
+   "text": "borrowed from",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "hugged",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "stopped",
+   "subject": [
+    "human"
+   ]
+  },
+  "envied",
+  {
+   "text": "defended",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "dodged"
+ ]
+}

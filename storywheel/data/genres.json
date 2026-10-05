@@ -17,16 +17,19 @@
     "ghost story": ["horror", "mystery", "historical", "rural"],
     "sci-fi": ["thriller", "adventure", "modern", "urban"],
     "romance": ["comedy", "domestic", "coming-of-age", "historical"],
-    "coming-of-age": ["domestic", "romance", "comedy", "adventure"],
-    "adventure": ["western", "historical", "mythological", "fantasy"]
+    "coming-of-age": ["romance", "comedy", "domestic", "rural"],
+    "adventure": ["fantasy", "western", "sci-fi", "historical"]
   },
   "_own_slots_note": "Slots where a genre keeps to its own lists and the general ones: other genres' lists (even its neighbors') are left out there, so their villages, eras, characters and frames never turn up in it. The three newest genres do this for their story shapes and for every kind of person, place and thing.",
   "_own_slots": {
     "noir": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"],
     "thriller": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"],
-    "ghost story": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"]},
+    "ghost story": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"],
+    "heist": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"],
+    "adventure": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"],
+    "coming-of-age": ["era", "place", "place_adj", "place_feature", "landmark", "someone", "rival", "job", "title_noun", "title_adj", "thing", "disaster", "message", "hiding", "prize", "topic", "premise", "twist", "title", "once", "routine", "inciting", "reaction", "escalation", "climax", "resolution", "want", "need", "flaw", "secret", "rumor", "act_setup", "act_incident", "act_turn", "act_midpoint", "act_trials", "act_crisis", "act_climax", "act_resolution", "ki", "sho", "ten", "ketsu", "deadline", "manner", "motive", "value", "temptation", "trait", "first_name", "last_name", "act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing"]},
   "_tech_note": "The technology a genre's stories assume (once an era is chosen, the era's own 'modern' or 'period' feature decides). Atoms that need the other kind are never drawn.",
-  "_tech": {"noir": "period", "thriller": "modern"},
+  "_tech": {"noir": "period", "thriller": "modern", "heist": "modern", "adventure": "period", "coming-of-age": "modern"},
   "_domains_note": "Subject domains WordNet knows (a meaning 'in astronomy'): the words of a genre's domains get a share of the genre's fit in the Words mode's Genre words. Names are WordNet lemmas of the domain (law, physics...).",
   "_domains": {
     "sci-fi": ["astronomy", "computer science", "physics", "electronics", "computer", "optics", "telecom", "genetic science", "cosmogeny", "aeronautics"],
@@ -49,15 +52,15 @@
   "mystery":       {"mystery": 4, "noir": 1, "thriller": 1, "urban": 0.5, "general": 0.3, "modern": 0.2},
   "romance":       {"romance": 4, "comedy": 0.5, "domestic": 1, "general": 0.3, "modern": 0.1},
   "horror":        {"horror": 4, "ghost story": 1.5, "mythological": 0.5, "rural": 0.5, "general": 0.3, "modern": 0.1},
-  "western":       {"western": 3, "historical": 2, "rural": 1, "adventure": 0.5, "general": 0.3, "modern": 0.1},
+  "western":       {"western": 3, "historical": 2, "rural": 1, "adventure": 0.25, "general": 0.3, "modern": 0.1},
   "sci-fi":        {"sci-fi": 4, "modern": 0.3, "urban": 0.5, "general": 0.3},
   "comedy":        {"comedy": 4, "romance": 0.5, "domestic": 1, "general": 0.3, "modern": 0.2},
   "fairy tale":    {"fairy tale": 3, "mythological": 1, "medieval": 1.5, "rural": 1, "general": 0.3, "modern": 0.1},
-  "heist":         {"heist": 3, "thriller": 1, "urban": 1, "general": 0.3, "modern": 0.1},
+  "heist":         {"heist": 4, "thriller": 0.5, "noir": 0.5, "urban": 0.5, "general": 0.15, "modern": 0.1},
   "ghost story":   {"ghost story": 4, "horror": 1, "mystery": 0.25, "historical": 0.5, "rural": 0.5, "general": 0.15, "modern": 0.1},
-  "coming-of-age": {"coming-of-age": 3, "domestic": 1, "rural": 0.5, "adventure": 0.5, "general": 0.3, "modern": 0.1},
+  "coming-of-age": {"coming-of-age": 4, "domestic": 0.5, "romance": 0.25, "comedy": 0.25, "rural": 0.25, "general": 0.15, "modern": 0.2},
   "noir":          {"noir": 4, "mystery": 0.75, "thriller": 0.75, "urban": 1, "historical": 0.25, "general": 0.15, "modern": 0.05},
   "thriller":      {"thriller": 4, "mystery": 0.5, "noir": 0.5, "urban": 0.5, "general": 0.15, "modern": 0.1},
   "fantasy":       {"fantasy": 4, "mythological": 1, "general": 0.15, "modern": 0},
-  "adventure":     {"adventure": 3, "western": 0.5, "historical": 0.5, "general": 0.3, "modern": 0.1}
+  "adventure":     {"adventure": 4, "fantasy": 0.5, "western": 0.5, "sci-fi": 0.25, "historical": 0.5, "general": 0.15, "modern": 0.05}
 }

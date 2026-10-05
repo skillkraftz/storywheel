@@ -1,0 +1,42 @@
+{
+ "_note": "Present-tense habits with a place.",
+ "slot": "habit_place",
+ "tags": [
+  "heist"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  "returns to",
+  {
+   "text": "walks past",
+   "subject": [
+    "human"
+   ]
+  },
+  "avoids",
+  "keeps watch over",
+  {
+   "text": "locks up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "indoor"
+   ]
+  },
+  {
+   "text": "stops at",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "drops by",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

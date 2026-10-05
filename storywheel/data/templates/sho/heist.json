@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "sho",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "All {season} long, {first} practiced reading {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} kept dropping by {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} handed {SOMEONE:!threatening} {THING:!living}, and they swapped stories about {TOPIC}.",
+  "A fire alarm rang: {DISASTER:strikes} hit {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
+  "{first} kept postponing the chance to {DO_THING} {THING} while the {season} wore on.",
+  "{CLOSE:human} wondered aloud about {TOPIC}, and {first} dodged the question {MANNER}."
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_incident",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{DISASTER:strikes} knocked out the cameras in {place}, and {first} noticed the gap.",
+  "{first} found {THING:!living,!bulky} {HIDING} and read what it opened: the {rival}'s vault.",
+  "An envelope from {SOMEONE:human,!plural} named one night, one target, and {landmark}.",
+  "{SOMEONE:human,!plural} passed {first} {THING:portable} at {landmark} {MANNER}, and said nothing more.",
+  "The {rival} cheated {SOMEONE:human,!plural} out of everything, and {first} was asked to even the score.",
+  "{SOMEONE:!plural} sat down with {first} {MANNER} and slid {THING:valuable} across the table.",
+  "{PRIZE:material,!inner} was dangled before {first}: {DO_THING} {THING} {DEADLINE}."
+ ]
+}

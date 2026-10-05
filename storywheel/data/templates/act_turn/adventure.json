@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_turn",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "At first light, {first} {ACT_THING:stows} {THING:portable} {HIDING} and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} yelled across to {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
+  "{first} pressed forward {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} looped back through {landmark} {MANNER} to shake off {SOMEONE:human,!plural}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}, and the way home was shut.",
+  "{first} kept the chart {HIDING} and took the pass {MANNER}.",
+  "With {CLOSE:human} waiting at home, {first} {ACT_PLACE} {landmark} and moved on."
+ ]
+}

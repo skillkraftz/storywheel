@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "twist",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "The {rival} had posed as {first}'s guide, out of {MOTIVE}.",
+  "The chart led nowhere, because {the_someone:human} had inked it {MANNER} to send rivals astray.",
+  "{the_thing:valuable} had never been kept at {landmark}; {SOMEONE:human,!plural} had carried it off {MANNER}.",
+  "No accident caused {the_disaster:strikes}; {the_someone:human} had arranged it, out of {MOTIVE}.",
+  "{CLOSE:human} had passed the route to the {rival}, out of {MOTIVE}.",
+  "The true treasure was {PRIZE:inner}, as {the_someone:human} had known from the start.",
+  "{the_thing:portable} was a copy, and {the_someone:human} kept the original {HIDING}.",
+  "The ruins at {landmark:built} were a stage set, built {MANNER} by {the_someone:human}.",
+  "{first} had camped beside {the_thing:!living} {HIDING} three nights earlier, and the {rival} knew.",
+  "{the_someone:human} had joined the race for {MOTIVE}, never for {PRIZE:material}.",
+  "The {rival} was only a decoy; {the_someone:human} ran the real race {MANNER}.",
+  "{the_message:physical} was a warning, scratched {MANNER} by {CLOSE:human}."
+ ]
+}

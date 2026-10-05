@@ -1,0 +1,32 @@
+{
+ "_note": "Second half of a heist city name.",
+ "slot": "place_feature",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "Strip",
+  "Quay",
+  "Row",
+  "Plaza",
+  "Docks",
+  "Arcade",
+  "Boulevard",
+  "Exchange",
+  "Square",
+  "Heights",
+  "Harbor",
+  "District",
+  "Mile",
+  "Avenue",
+  "Landing",
+  "Terrace",
+  "Gardens",
+  "Market",
+  "Bridge",
+  "Promenade",
+  "Bazaar",
+  "Court",
+  "Arches"
+ ]
+}

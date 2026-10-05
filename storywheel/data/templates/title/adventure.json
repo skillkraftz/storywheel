@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "title",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "The {TITLE_ADJ} {TITLE_NOUN} Beyond {place}",
+  "Beyond {place}, the {TITLE_NOUN}",
+  "At the Edge of {place}: A {TITLE_NOUN}",
+  "{first} Against the {TITLE_ADJ} {TITLE_NOUN}",
+  "Across {place} by {TITLE_NOUN}",
+  "The Last {TITLE_NOUN} out of {place}",
+  "Race for the {TITLE_ADJ} {TITLE_NOUN}",
+  "Seeking the {TITLE_NOUN}: {place}",
+  "{place} and the {TITLE_NOUN}",
+  "Into the {TITLE_ADJ} {TITLE_NOUN} of {place}"
+ ]
+}

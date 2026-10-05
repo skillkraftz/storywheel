@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_turn",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "While the house slept, {first} {ACT_THING:stows} {THING:portable} {HIDING} and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} confided in {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
+  "{first} stayed awake {MANNER} to {DO_THING} {THING} {DEADLINE}.",
+  "{first} cut through {landmark} {MANNER} to avoid {SOMEONE:human,!plural}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}, and childhood was over.",
+  "{first} kept the secret {HIDING} and went to work {MANNER}.",
+  "With {CLOSE:human} counting on it, {first} {ACT_PLACE} {landmark} and kept going."
+ ]
+}

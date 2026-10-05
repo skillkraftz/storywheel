@@ -1,0 +1,299 @@
+{
+ "_note": "What explorers carry, find and fight over.",
+ "slot": "thing",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "a hand-drawn map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a brass compass",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a rope ladder",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a torn journal",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a rusted iron key",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a golden idol",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a canvas tent",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "an oil lantern",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a climbing axe",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a leather satchel",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a signal flare",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a silver locket",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a jade amulet",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a stone tablet",
+   "features": [
+    "valuable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a coil of rope",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a battered flask",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a crate of supplies",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a treasure chart",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ship's log",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a brass telescope",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a flint and steel",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a pearl necklace",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a sealed clay jar",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a bundle of furs",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a sword with no name",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pocket sextant",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a field notebook",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a carved bone whistle",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a royal seal ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a gold circlet",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pack of dried meat",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a bottle of rum",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a water skin",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a stolen saddlebag",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a gem-studded dagger",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a rolled parchment",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a smoked-glass lens",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a rowboat oar",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a wooden compass box",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a set of climbing spikes",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "_note": "Past-tense verbs for coming-of-age that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "survived",
+   "subject": [
+    "human"
+   ]
+  },
+  "dreaded",
+  {
+   "text": "laughed off",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "caused",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "manmade"
+   ]
+  },
+  "ignored",
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "weathered",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "escaped",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "talked about",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "forgot",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

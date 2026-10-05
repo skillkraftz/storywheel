@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "title",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "The Summer of {TITLE_ADJ} {TITLE_NOUN}",
+  "Last {TITLE_NOUN} in {place}",
+  "{first}, {place}, and the {TITLE_ADJ} {TITLE_NOUN}",
+  "Growing Up in {place}: A {TITLE_NOUN}",
+  "A {TITLE_ADJ} {TITLE_NOUN} and a Bus Out of {place}",
+  "Leaving {place}, Keeping the {TITLE_NOUN}",
+  "Before {place}, {TITLE_ADJ} {TITLE_NOUN}",
+  "The {TITLE_NOUN} We Left in {place}",
+  "Every {TITLE_NOUN} in {place}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} Summer"
+ ]
+}

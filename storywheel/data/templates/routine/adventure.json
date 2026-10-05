@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "routine",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} each spring and {ACT_THING:mundane} {THING}",
+  "walked the quay at {place} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} {MANNER} and redrew {landmark} from memory",
+  "worked the docks of {place} {MANNER} and dreamed of {PRIZE:!inner}",
+  "studied the shipping news {MANNER} and kept clear of the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and stayed true to {VALUE}",
+  "drank tea near {landmark} and trusted in {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} every season and never spoke of {TOPIC}",
+  "packed and repacked the kit {MANNER} and told {CLOSE:human} nothing",
+  "oiled every buckle {MANNER} and feared {DISASTER}"
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "sho",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "Slowly, through the {season}, {first} came to know {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} took to showing up at {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} lent {SOMEONE:!threatening} {THING:!living}, and the two swapped tales of {TOPIC}.",
+  "A squall blew in: {DISASTER:strikes} struck {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
+  "{first} delayed the task of {DO_THING} {THING}, and the {season} slipped away.",
+  "{CLOSE:human} asked what {TOPIC} meant, and {first} changed the subject {MANNER}."
+ ]
+}

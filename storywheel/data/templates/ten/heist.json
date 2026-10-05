@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "ten",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "Then {first} saw that {the_thing} had never been about {want}.",
+  "Then {first} saw {the_someone} had played every angle for {MOTIVE}, not for {want}.",
+  "Then {first} understood {the_message} was about {VALUE}, nothing more.",
+  "Then {first} saw the {rival:human} was frightened as well, and wanted {want} too.",
+  "Then {first} chose: {need}, not {want}.",
+  "Then {first} knew {MOTIVE} had been the real heist, not {want}."
+ ]
+}

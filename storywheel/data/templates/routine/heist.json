@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "routine",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} on slow afternoons and {ACT_THING:mundane} {THING:!modern}",
+  "counted the steps from {landmark} to the exit and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
+  "{ACT_THING:mundane} {THING:!modern} {MANNER} and redrew the plan of {landmark}",
+  "tipped well in {place} {MANNER} and hoped for {PRIZE:!inner}",
+  "kept the lock picks oiled {MANNER} and steered clear of the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} every Sunday and held tight to {VALUE}",
+  "studied floor plans of {landmark} {MANNER} and never mentioned {TOPIC}",
+  "{ACT_PLACE:mundane} {landmark} before work and fretted over {DISASTER}",
+  "practiced a new accent {MANNER} and told {CLOSE:human} it was for a play",
+  "memorized the guard shifts {MANNER} and swore by {VALUE}"
+ ]
+}

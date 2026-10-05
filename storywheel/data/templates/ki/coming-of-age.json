@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "ki",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{first} was a {trait} {job} in {place}, who ticked off the days each {season}.",
+  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and stayed near the edges.",
+  "{first}, a {trait} {job}, hauled {THING:!living} around town, and hauled {FEELING} too.",
+  "Every {season}, {first}, a {trait} {job} of {place}, strolled over to {landmark} {MANNER}.",
+  "{first} observed everyone in {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "On school mornings in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."
+ ]
+}

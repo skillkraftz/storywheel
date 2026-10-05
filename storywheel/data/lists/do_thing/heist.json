@@ -1,0 +1,71 @@
+{
+ "_note": "Base-form verbs for heist that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "steal",
+  {
+   "text": "lift",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "swap",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "crack",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "forge",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "copy",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "recover",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "smuggle",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "replace",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "borrow",
+   "object": [
+    "portable"
+   ]
+  },
+  "return",
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "_note": "Base-form verbs for coming-of-age that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "find",
+  "return",
+  {
+   "text": "earn",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "replace",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "pay for",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "fix",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "mail",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "win",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "save",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "give back",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "read",
+   "object": [
+    "paper"
+   ]
+  }
+ ]
+}

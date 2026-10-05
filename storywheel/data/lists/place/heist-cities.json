@@ -1,0 +1,32 @@
+{
+ "_note": "Gambling towns, port cities and financial districts, built from parts plus a few names.",
+ "slot": "place",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Port Magnifico",
+  "Gold Harbor",
+  "New Vegas Row",
+  "Lucky Quay",
+  "Marble City",
+  "Casino Bay",
+  "Velvet Heights",
+  "Silverton",
+  "Crown Point",
+  "Monte Verde",
+  "Diamond Cross",
+  "Belmont Docks"
+ ]
+}

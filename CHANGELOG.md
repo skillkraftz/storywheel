@@ -2,6 +2,23 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.14.0 — Batch 14: testing policy, then heist, adventure and coming-of-age
+
+### Part 0: testing policy
+- `pytest-xdist` is in the dev extra. `tools/fulltest.sh` runs the whole suite in parallel (`-n auto -m "not serial"`) and then the serial tests alone; the full run went from
+  20 min 27 s to about 5 min 26 s. Tests are marked `serial` (real terminal, the hub, shared ports) and `slow` (real terminals, performance, the 200-story checks) in
+  `tests/conftest.py`; while working only related, not-slow tests are run. CLAUDE.md holds the rules.
+
+### Part 1: three more genres
+- **Heist** (a crew, a plan, a mark, an inside job, a plan going wrong, a double-cross, a getaway), **adventure** (a journey, a map, wilds and ruins, rivals racing for the same
+  prize) and **coming-of-age** (a first time, a summer that changes everything, leaving home, friendship tested): 35 atom lists and 27 frame sets each, frames of their own for every
+  beat of all three structures, names that train the Markov maker, hand-picked core vocabularies in `genre_core.json` (heist 47 words, adventure 44, coming-of-age 45).
+- Technology: heist and coming-of-age assume modern (and have a few period eras); adventure is period only. The era is now drawn without the technology filter, so a period era can
+  be chosen by a genre whose default is modern; everything drawn after it follows the era.
+- Neighbors: heist (thriller, noir, urban), adventure (fantasy, western, sci-fi, historical), coming-of-age (romance, comedy, domestic, rural). Western's weight for adventure is 0.25 (was 0.5).
+- Tests: the three genres are in `GENRES`, `WRITTEN` and `OWN_FRAMES` (no more than 10% identical frames with any other genre, no more than 8% near copies), with blends heist / comedy,
+  adventure / fantasy and coming-of-age / ghost story; `tests/test_batch14_genres.py` covers technology, own places and core vocabulary.
+
 ## 0.13.0 — Batch 13: the three new genres, resolved
 
 ### Part A: frames of their own

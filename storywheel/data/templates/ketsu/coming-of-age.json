@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "ketsu",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the summer let go.",
+  "{first} came to grips with {TOPIC}, and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the evening went easy.",
+  "{first} laid {VICE} down at {landmark}, and the evening went soft.",
+  "{place} looked smaller, and {first} {HABIT_PERSON} {CLOSE:human} by phone.",
+  "{first} left the {rival} with {landmark}, and peace returned {MANNER}."
+ ]
+}

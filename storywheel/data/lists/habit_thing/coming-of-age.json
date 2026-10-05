@@ -1,0 +1,60 @@
+{
+ "_note": "Present-tense habits with a thing.",
+ "slot": "habit_thing",
+ "tags": [
+  "coming-of-age"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "checks",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "keeps close",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "hides",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "carries",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "rereads",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "counts",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "polishes",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

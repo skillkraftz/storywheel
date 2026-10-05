@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_trials",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{SOMEONE:!threatening} spotted {first} at {landmark} {MANNER} and offered a lift home.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} reached {CLOSE:human} with the story first.",
+  "Every time {first} drew near {PRIZE:!inner}, {VICE} set things back a week.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and found a little peace.",
+  "{the_thing} was passed along by {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} carried {THING:portable} to {landmark} and sat alone {MANNER}.",
+  "{the_someone:human} dodged {TOPIC}, and {first} kept pushing {MANNER}."
+ ]
+}

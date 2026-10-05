@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "title",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{first} Takes {place}, the {TITLE_NOUN}",
+  "Ten Minutes to Empty {place}: {TITLE_NOUN}",
+  "Who Robbed {place}? The {TITLE_NOUN}",
+  "{TITLE_ADJ} Hands, {TITLE_ADJ} {TITLE_NOUN}",
+  "The {place} {TITLE_NOUN}",
+  "A Fortune in {place}: The {TITLE_NOUN}",
+  "Behind {place}: The {TITLE_NOUN}",
+  "Honor Among Thieves in {place}, {TITLE_NOUN}",
+  "Last Call at {place}: {TITLE_NOUN}",
+  "{TITLE_ADJ} {TITLE_NOUN}, {place}"
+ ]
+}

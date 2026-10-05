@@ -1,0 +1,310 @@
+{
+ "_note": "What a young person carries, keeps and loses. Some are of today (phones), some of the recent past (cassettes).",
+ "slot": "thing",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "a diary with a lock",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a secondhand guitar",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a worn paperback",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a driver's permit",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a letter of acceptance",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a bus ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a ring of house keys",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a varsity jacket",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a pocket knife",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a class ring",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a shoebox of photos",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a yearbook",
+   "features": [
+    "portable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a friendship bracelet",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a skateboard",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a sleeping bag",
+   "features": [
+    "portable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a summer paycheck",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a ticket to the show",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a stolen road map",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a pair of binoculars",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a borrowed camera",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a cracked phone",
+   "features": [
+    "portable",
+    "buryable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a printed screenshot",
+   "features": [
+    "portable",
+    "buryable",
+    "paper",
+    "modern"
+   ]
+  },
+  {
+   "text": "a pair of earbuds",
+   "features": [
+    "portable",
+    "buryable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a handheld console",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable",
+    "modern"
+   ]
+  },
+  {
+   "text": "a cassette mixtape",
+   "features": [
+    "portable",
+    "buryable",
+    "period"
+   ]
+  },
+  {
+   "text": "a disposable camera",
+   "features": [
+    "portable",
+    "buryable",
+    "period"
+   ]
+  },
+  {
+   "text": "a payphone token",
+   "features": [
+    "portable",
+    "buryable",
+    "period"
+   ]
+  },
+  {
+   "text": "a pager",
+   "features": [
+    "portable",
+    "buryable",
+    "period"
+   ]
+  },
+  {
+   "text": "a lucky coin",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a creased diary",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a set of drumsticks",
+   "features": [
+    "portable",
+    "buryable"
+   ]
+  },
+  {
+   "text": "a dented trumpet",
+   "features": [
+    "portable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a duffel bag",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a pair of cleats",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a hand-me-down coat",
+   "features": [
+    "portable"
+   ]
+  },
+  {
+   "text": "a borrowed car",
+   "features": [
+    "valuable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a bicycle with no brakes",
+   "features": [
+    "valuable",
+    "bulky"
+   ]
+  },
+  {
+   "text": "a bag of quarters",
+   "features": [
+    "portable",
+    "buryable",
+    "valuable"
+   ]
+  },
+  {
+   "text": "a prom ticket",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  },
+  {
+   "text": "a scribbled address",
+   "features": [
+    "portable",
+    "buryable",
+    "paper"
+   ]
+  }
+ ]
+}

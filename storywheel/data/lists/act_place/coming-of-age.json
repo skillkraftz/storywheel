@@ -1,0 +1,127 @@
+{
+ "_note": "Past-tense verbs for coming-of-age that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "hung around",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "snuck into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "left",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "swept",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "indoor"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked past",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "biked to",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "visited",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "indoor"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "stayed late at",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "ran from",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "cut across",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "watched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "stopped at",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  "searched",
+  {
+   "text": "waited at",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

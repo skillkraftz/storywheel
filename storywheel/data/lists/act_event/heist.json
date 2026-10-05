@@ -1,0 +1,62 @@
+{
+ "_note": "Past-tense verbs for heist that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "rehearsed",
+  {
+   "text": "caused",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "survived",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "foresaw",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "shrugged off",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "covered up",
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "exploited",
+   "subject": [
+    "human"
+   ]
+  },
+  "ignored",
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "laughed off",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

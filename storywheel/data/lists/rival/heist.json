@@ -1,0 +1,120 @@
+{
+ "_note": "The mark and the people on the other side. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "casino owner",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "crooked banker",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "art collector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "jewel broker",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "museum director",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "security chief",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "gang boss",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "retired inspector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "insurance investigator",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "rival crew",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "arms dealer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "mob accountant",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "billionaire host",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "old partner",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "city prosecutor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "crooked cop",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,262 @@
+{
+ "_note": "The crew and the people around the job: specialists, marks, guards and fixers.",
+ "slot": "someone",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "a safecracker",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a getaway driver",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a master forger",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smooth con artist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an inside man",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a nervous lookout",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired thief",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a green rookie",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hacker with debts",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a night watchman",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a casino pit boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bank manager",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bribed guard",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a charming fence",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a demolitions expert",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a jewelry appraiser",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a museum curator",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a tired detective",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a rival crew boss",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a waiter with eyes",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stage magician",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a locksmith",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an insurance adjuster",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a quiet bookkeeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a croupier",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a duchess in disguise",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a former partner",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a hired muscle",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a cleaner with keys",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a young pickpocket",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a security consultant",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a loud auctioneer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an elevator operator",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a double-dealing broker",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a card dealer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bored valet",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an art dealer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a deputy director",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a gentleman burglar",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a chatty courier",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

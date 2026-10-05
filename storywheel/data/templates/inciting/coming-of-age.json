@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "inciting",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hit {place}, and {first} saw home in a new light",
+  "{first} came across {THING:!living,!bulky} {HIDING}, and discovered what {CLOSE:human} had kept back",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} said: be at {landmark}, and be alone",
+  "the {rival} humiliated {SOMEONE:human,!plural} in public, and {first} spoke up",
+  "{SOMEONE:!plural} rolled into {place} {MANNER} and rearranged the whole summer",
+  "{PRIZE:material,!inner} was on offer if {first} would {DO_THING} {THING} {DEADLINE}",
+  "{SOMEONE:human,!plural} gave {first} {THING:portable} at {landmark} {MANNER}, and nothing was quite the same",
+  "{first} noticed {SOMEONE:human,!plural} at {landmark} {MANNER} and could not look elsewhere",
+  "{DISASTER:strikes} emptied {landmark}, and {first} wandered there {MANNER}",
+  "the {rival} dared {first} {MANNER}, and {first} said yes"
+ ]
+}

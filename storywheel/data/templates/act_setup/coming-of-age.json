@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_setup",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "In {place}, {first}, a {trait} {job}, hid {THING} {HIDING} and ticked off the days.",
+  "{first}, a {trait} {job} of {place}, overheard whispers about {TOPIC} and wanted {want}.",
+  "{place} felt too small, and {first}, a {trait} {job}, felt too big for it.",
+  "The {rival} ruled the halls of {place}, and {first}, a {trait} {job}, kept a low profile {MANNER}.",
+  "{first}, a {trait} {job}, pulled shifts near {landmark} in {place} and dreamed of {PRIZE:material}.",
+  "{first}, a {trait} {job}, had moved to {place} {MANNER} and felt like a guest.",
+  "In {place}, {first} was a {trait} {job} who wanted {want} and wrote it in a notebook."
+ ]
+}

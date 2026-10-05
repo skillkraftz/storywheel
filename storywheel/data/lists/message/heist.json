@@ -1,0 +1,99 @@
+{
+ "_note": "Something passed on paper before or during the job.",
+ "slot": "message",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "a coded invitation",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a floor plan",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a typed schedule",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a crew list",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a note under the door",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a guard rotation chart",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a forged invoice",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a folded napkin sketch",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a torn ticket stub",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a cashier's slip",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a hotel bill",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a postcard with a time",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a sealed envelope",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a waiter's whisper note",
+   "features": [
+    "physical"
+   ]
+  },
+  {
+   "text": "a bank memo",
+   "features": [
+    "physical"
+   ]
+  }
+ ]
+}

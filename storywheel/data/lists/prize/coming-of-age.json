@@ -1,0 +1,105 @@
+{
+ "_note": "What young people want.",
+ "slot": "prize",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "a used car",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a guitar of one's own",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a college letter",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a plane ticket",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a summer paycheck",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a good camera",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a spot on the team",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a cool-table seat",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a date to the dance",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a good reputation",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place in the band",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a scholarship",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a sense of self",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a first real friend",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "the courage to leave",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "peace with home",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

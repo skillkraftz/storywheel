@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_turn",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "In the small hours, {first} {ACT_THING:stows} {THING:portable} {HIDING} and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} dialed {CLOSE:human}, {MANNER:speech}, to ask after {SOMEONE:human,!plural}.",
+  "{first} worked late {MANNER}, trying to {DO_THING} {THING} {DEADLINE}.",
+  "{first} slipped out through {landmark} {MANNER} to dodge {SOMEONE:human,!plural}.",
+  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}, and the old life was gone.",
+  "{first} kept the plan {HIDING} and ran the job {MANNER}.",
+  "With {CLOSE:human} counting on the take, {first} {ACT_PLACE} {landmark} and went in."
+ ]
+}

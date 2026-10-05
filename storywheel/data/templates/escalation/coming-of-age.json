@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "escalation",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and the summer sped up",
+  "{the_thing} went astray {HIDING}, and {the_someone:human} refused to explain",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER} to shove {first} aside",
+  "{the_message} stirred up trouble, and {first} began to doubt {CLOSE:human}",
+  "{the_disaster:strikes} hit again at {landmark}, and the others blamed {first}",
+  "{first} found {the_thing:portable} {MANNER}, and the secret grew heavier",
+  "{the_someone:human} suggested {first} drop it all {MANNER}, with {PRIZE:!inner} as the bait",
+  "{the_thing} tied back to {SOMEONE:human,!plural}, so {first} {ACT_PERSON} {the_someone:human}",
+  "yet another keepsake, {THING:portable}, surfaced {HIDING}",
+  "{SOMEONE:human,!plural} let {first} down {MANNER}, and {THING:portable} was lost",
+  "a second friendship cracked at {landmark}, and the {rival} noticed",
+  "the {rival} gave {first} an ultimatum: {DEADLINE}",
+  "{CLOSE:human} grew quiet about {TOPIC}, then stopped calling",
+  "{the_someone:human} left {place} {MANNER}, leaving {the_thing:portable} and a goodbye"
+ ]
+}

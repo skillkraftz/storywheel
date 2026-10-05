@@ -91,7 +91,7 @@ class Ctx(dict):
 
     def tech(self):
         """The technology this story assumes: its era's own (a "period" or "modern" feature) once the era is known, else the one its genres assume
-        (genres.json `_tech`), else None. Atoms that need the other kind are never drawn."""
+        (genres.json `_tech`), else None. Atoms that need the other kind are never drawn (the era itself is drawn freely: it is what sets the technology)."""
         era = dict.get(self, "era")
         if era:
             feats = self.engine.features_of("era", era) or ()
@@ -113,7 +113,7 @@ class Ctx(dict):
         this story is drawn again). Templates that use a thread we have are favored, and
         ones that need a thread we lack are skipped."""
         wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
-                                          accept=self.tech_accept(), commit=False, bias=self.bias(slot, ()))
+                                          accept=None if slot == "era" else self.tech_accept(), commit=False, bias=self.bias(slot, ()))
         return self.finish_atom(slot, wl, entry)
 
     def adjuster(self, slot):
@@ -139,7 +139,7 @@ class Ctx(dict):
                           else ("human",))
             if accept is None or accept(guest):
                 return None, guest
-        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), self.tech_accept(accept), commit=False,
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept if slot == "era" else self.tech_accept(accept), commit=False,
                                      bias=self.bias(slot, local))
 
     def finish_atom(self, slot, wl, entry):

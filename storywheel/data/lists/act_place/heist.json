@@ -1,0 +1,120 @@
+{
+ "_note": "Past-tense verbs for heist that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "scouted",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "staked out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "slipped into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "walked through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "mapped",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "toured",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "cleared",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "built"
+   ]
+  },
+  {
+   "text": "fled",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "indoor"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "watched",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "timed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "stopped at",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "photographed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "paced out",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "ten",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "Then {first} looked over {the_thing} afresh; it had never been about {want}.",
+  "Then {first} learned {the_someone} had been fleeing {MOTIVE} all along, not chasing {want}.",
+  "Then {first} grasped that {the_message} spoke of {VALUE}, nothing else.",
+  "Then {first} saw the {rival:human} was lost too, and wanted {want} as well.",
+  "Then {first} chose: {need}, not {want}.",
+  "Then {first} understood {MOTIVE} had been the true journey, not {want}."
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "ketsu",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the crew breathed out.",
+  "{first} came to understand {TOPIC} and picked {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and nobody gave chase.",
+  "{first} put {VICE} down at {landmark}, and the night went quiet.",
+  "{place} glittered on, and {first} {HABIT_PERSON} {CLOSE:human} by phone.",
+  "{first} let the {rival} keep {landmark}, and calm returned {MANNER}."
+ ]
+}

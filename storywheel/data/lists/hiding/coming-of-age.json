@@ -1,0 +1,104 @@
+{
+ "_note": "Where a teenager hides something.",
+ "slot": "hiding",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "in a bedside shoebox",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a loose floorboard",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a gym locker",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "taped inside a guitar bag",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow book",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under the mattress",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a coffee can",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a tree hollow",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a pillowcase",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in a sock drawer",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind the water heater",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a backpack lining",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "above a ceiling tile",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,205 @@
+{
+ "_note": "What goes wrong with the plan. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "a tripped alarm",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a jammed vault door",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a tipped-off guard",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blown fuse",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a late elevator",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a wrong turn",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a surprise inspection",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a partner's disappearance",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rival's raid",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a security upgrade",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a power cut",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lockdown",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hostage mix-up",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a leaked plan",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a fire drill",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stuck window",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a swapped floor plan",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a frozen camera feed",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a lost getaway key",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a police checkpoint",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a crew member's slip",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a guard's panic",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bank holiday",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a counterfeit scare",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a collapsed ceiling",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a flooded tunnel",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a double-booked job",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a doctored schedule",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a fake vault",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a dead radio",
+   "features": [
+    "manmade"
+   ]
+  }
+ ]
+}

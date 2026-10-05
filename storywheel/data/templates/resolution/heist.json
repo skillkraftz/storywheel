@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "resolution",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "these days {first} {HABIT_PLACE} {landmark} once a year and {HABIT_PERSON} {CLOSE}",
+  "{place} shrugged off {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "quietly now, {first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living}",
+  "each {season}, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the money is spent, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and keeps {TOPIC} to a whisper",
+  "life in {place} went on after {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_PERSON} {the_someone:human} on Fridays and {HABIT_THING} {the_thing:!living} on Saturdays"
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "inciting",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{DISASTER:strikes} knocked out the cameras in {place}, and {first} noticed the gap",
+  "{first} found {THING:!living,!bulky} {HIDING} and read what it opened: the {rival}'s vault",
+  "an envelope from {SOMEONE:human,!plural} named one night, one target, and {landmark}",
+  "the {rival} cheated {SOMEONE:human,!plural} out of everything, and {first} was asked to even the score",
+  "{SOMEONE:!plural} sat down with {first} {MANNER} and slid {THING:valuable} across the table",
+  "{PRIZE:material,!inner} was dangled before {first}: {DO_THING} {THING} {DEADLINE}",
+  "{SOMEONE:human,!plural} passed {first} {THING:portable} at {landmark} {MANNER}, and said nothing more",
+  "{first} watched {SOMEONE:human,!plural} work {landmark} {MANNER} and spotted what everyone missed",
+  "{DISASTER:strikes} cleared out {landmark}, and the door stood open for {first} {MANNER}",
+  "the {rival} cornered {first} {MANNER}, and a job was the exit"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_setup",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "In {place}, {first}, a {trait} {job}, hid {THING} {HIDING} and learned every lock by touch.",
+  "{first}, a {trait} {job} of {place}, caught wind of {TOPIC} and wanted {want}.",
+  "{place} looked solid from the street, but {first}, a {trait} {job}, saw the cracks.",
+  "The {rival} owned half of {place}, and {first}, a {trait} {job}, drew plans {MANNER}.",
+  "{first}, a {trait} {job}, ran errands near {landmark} in {place} and dreamed of {PRIZE:material}.",
+  "{first}, a {trait} {job}, drifted into {place} {MANNER} to leave an old life.",
+  "In {place}, {first} was a {trait} {job} who wanted {want} and wore gloves."
+ ]
+}

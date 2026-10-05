@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_midpoint",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{the_thing} vanished {HIDING}, and {the_someone:human} stopped picking up.",
+  "{SOMEONE:human,!plural} was feeding the {rival}, and {first} found the receipts.",
+  "{the_message} looked like a trap, and {first} began to doubt {CLOSE:human}.",
+  "At {landmark}, {first} turned up {THING:portable}, and the cover story crumbled.",
+  "{the_someone:human} offered {first} {PRIZE:!inner} to quit the job.",
+  "{the_disaster:strikes} struck again; the crew blamed {first}.",
+  "Word of {TOPIC} got out: {the_someone:human} {ACT_THING} {the_thing:!living} for the {rival}."
+ ]
+}

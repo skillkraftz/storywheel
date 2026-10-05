@@ -1,0 +1,30 @@
+{
+ "_note": "Ports, camps and frontier towns, built from parts plus a few names.",
+ "slot": "place",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Port Calloway",
+  "Cape Desolation",
+  "Fort Meridian",
+  "Tidewater Reach",
+  "Saltmarsh Landing",
+  "Windward Cay",
+  "Kestrel Point",
+  "Cinder Gorge",
+  "Ravenscar",
+  "Last Water"
+ ]
+}

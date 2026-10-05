@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "premise",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "With half a map, {first}, a {trait} {job}, leaves {place} to find {PRIZE:material} {DEADLINE}.",
+  "{first}, a {trait} {job}, and the {rival} both want {PRIZE:material}, and {landmark} is where their routes meet.",
+  "{DISASTER:strikes} has sealed the roads out of {place}, so {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}.",
+  "{first}, a {trait} {job}, inherits half a chart, and {SOMEONE:human,!plural} keeps the other half somewhere near {landmark}.",
+  "Against advice, {first}, a {trait} {job}, hires {SOMEONE:human,!plural} to cross the wilds {MANNER}, and neither trusts the other.",
+  "{CLOSE:human} has vanished into the wilds, and {first}, a {trait} {job} of {place}, sets out for {landmark}.",
+  "{first}, a {trait} {job}, digs up {THING:!living,!bulky} {HIDING} that names {landmark}, and the {rival} soon hears of it.",
+  "A {trait} {job} named {first} signs on with an expedition leaving {place}, and each leg grows harder.",
+  "The {rival} is two days ahead, so {first}, a {trait} {job}, hauls {THING:portable} through the wilds {MANNER}.",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} reaches {first}, a {trait} {job} of {place}: bring the chart to {landmark}.",
+  "{first}, a {trait} {job}, owes the {rival} a fortune and must {DO_THING} {THING} at {landmark} to pay.",
+  "Sailors in {place} swear {THING:valuable} still waits out there, and {first}, a {trait} {job}, decides to prove them right."
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "_note": "Deadlines for a heist.",
+ "slot": "deadline",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "before the vault timer resets",
+  "before the guards change",
+  "before the auction closes",
+  "by closing time",
+  "before the armored truck arrives",
+  "before the fireworks end",
+  "by dawn",
+  "before the gala ends"
+ ]
+}

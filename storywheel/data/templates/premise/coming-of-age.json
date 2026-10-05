@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "premise",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "Over one long summer in {place}, {first}, a {trait} {job}, tries to {DO_THING} {THING} {DEADLINE}.",
+  "After {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, has to {DO_THING} {THING} {DEADLINE} and grow up fast.",
+  "{first}, a {trait} {job}, means to leave {place} {DEADLINE}, until {SOMEONE:human,!plural} supplies a reason to stay.",
+  "Everything about the summer changes for {first}, a {trait} {job} of {place}, when {SOMEONE:human,!plural} arrives {MANNER}.",
+  "{first}, a {trait} {job}, comes across {THING:!living,!bulky} {HIDING} and learns a family secret about {CLOSE:human}.",
+  "For the first time, {first}, a {trait} {job}, leaves {place} {MANNER}, and begins to miss it.",
+  "{first}, a {trait} {job} of {place}, quarrels with {CLOSE:human} over {TOPIC}, and the whole {season} goes sour.",
+  "Hoping to impress {SOMEONE:human,!plural}, {first}, a {trait} {job}, takes a risk {MANNER}, and the {rival} hears about it.",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} asks {first}, a {trait} {job}, to meet at {landmark} and say nothing.",
+  "After {DISASTER:strikes}, {first}, a {trait} {job} in {place}, sees how the grown-ups really live.",
+  "{CLOSE:human} is moving away {DEADLINE}, and {first}, a {trait} {job} of {place}, still has to {DO_PERSON:inner} {CLOSE:human}.",
+  "A summer job at {landmark} in {place} puts {first}, a {trait} {job}, face to face with {SOMEONE:human,!plural}."
+ ]
+}

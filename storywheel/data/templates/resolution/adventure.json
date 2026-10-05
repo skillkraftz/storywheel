@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "resolution",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "each spring {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "{place} recovered from {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "in old age {first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living}",
+  "come {season}, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the chart hangs framed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and keeps {TOPIC} off the charts",
+  "ships returned to {place} after {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_THING} {the_thing:!living} at dawn and {HABIT_PERSON} {the_someone:human} by noon"
+ ]
+}

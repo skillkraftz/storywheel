@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "once",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "in {place}, a {trait} {job} named {first} wanted {want}, and slept beside a packed bag",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} against the day the road called",
+  "{place} ended every chart, and {first}, a {trait} {job}, wanted {want}",
+  "{first} was the {trait} {job} of {place}, forever gazing at far ridges",
+  "the {rival} held the only road out of {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, washed up in {place} {MANNER} and never quite unpacked",
+  "{first}, a {trait} {job} in {place}, owned {THING} and a restless streak",
+  "trouble had a habit of finding {place}, and {first}, a {trait} {job}, rather liked that",
+  "{first}, a {trait} {job} of {place}, wanted {want} and listened to every sailor's tale",
+  "{place} was a small harbor, and {first}, a {trait} {job}, felt too big for it"
+ ]
+}

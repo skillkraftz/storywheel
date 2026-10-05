@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_crisis",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the last companion.",
+  "{the_thing} sank in the river, and {first} was left with only {VALUE}.",
+  "{the_someone:human} abandoned {first} at {landmark}, and the party scattered.",
+  "Low on food, {first} {ACT_THING:trades} {THING}, and the way to {PRIZE:!inner} closed.",
+  "Stranded at {landmark}, {first} struggled with {FEELING} and {VICE} together.",
+  "{the_disaster:strikes} returned with a vengeance, and {first} arrived too late.",
+  "{CLOSE:human} had bartered {the_thing} {MANNER}, and {first} learned of it too late."
+ ]
+}

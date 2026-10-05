@@ -3226,3 +3226,394 @@ the dials are in `genrefit.py`.
 ## Full suite (batch 13)
 
 2,317 passed, 4 skipped, 0 failed, in one run (20 min). An earlier full run found one failure of mine (three ghost story / noir / thriller need frames began with "to learn", which other frames already supply); they were reworded and the whole suite re-run. `test_kinds_floors.py` now expects the lower general/modern weights of the three genres. The samples above were rolled before those three rewordings. `stable` was moved to the commit that records this.
+
+
+# Batch 14 (0.14.0): testing policy, then heist, adventure and coming-of-age
+
+## 1. Checklist
+
+| Feature | Status | Note |
+|---|---|---|
+| 0. pytest-xdist in the dev extra; the full run uses `-n auto` | **Works** | `tools/fulltest.sh`: a parallel pass (`-m "not serial"`), then a serial pass (`-m serial`) |
+| 0. `serial` and `slow` markers, assigned in one place | **Works** | `tests/conftest.py` (`SERIAL_FILES`, `SLOW_FILES`, `SLOW_TESTS`, and any test that opens a real terminal on a pty); 96 serial, 252 slow of 2,321 |
+| 0. CLAUDE.md rules: related tests only while working, one full run, `--lf` after a failure, no polling loops | **Works** | the firm rules replace "full suite in one run" |
+| 0. Full run time before and after | **Works** | before 20 min 27 s (one process); after about 5 min 26 s (see section 4) |
+| 1. Heist: crew, plan, mark, inside job, plan going wrong, double-cross, getaway | **Works** | own frames for every beat of all three structures; thriller's and noir's neighbor |
+| 1. Adventure: journey, map, wilds and ruins, rivals racing, danger at every leg | **Works** | period technology only; neighbor of fantasy, western and sci-fi |
+| 1. Coming-of-age: a first time, a summer that changes everything, leaving home, friendship tested | **Works** | modern and recent-past eras (the technology follows the era); neighbor of romance and comedy |
+| 1. Own frames (not mostly shared), era and technology features, genre places and place-name parts, 40+ core words, neighbors, lint | **Works** | each shares at most 1 identical frame and at most 10 near copies with every other genre |
+| 1. Fidelity, repetition, lint; blends heist / comedy, adventure / fantasy, coming-of-age / ghost story | **Works** | all in `tests/test_genre_content.py` |
+| 1. Seeded samples and the top 30 adjectives and verbs | **Works** | sections 2 and 3 |
+
+## 2. The genre fit (top 30 adjectives and verbs, `tools/genre_fit_report.py --build`, on a copy of the installed index)
+
+```
+### adventure
+adjectives: lost, touch-and-go, fell, wild, dangerous, ancient, hidden, out of sight, remote, legendary, mysterious, cruel, brutal, savage, vicious, concealed, daring, rugged, intimidating, fearless, adventurous, barren, daunting, treacherous, towering, cryptic, perilous, desolate, uncharted, forbidding
+verbs: get over, live on, cut through, cross, track down, battle, cut across, notice, weather, scale, take flight, journey, combat, survive, hunt, rescue, chart, hunt down, boost, discover, brave, brave out, explore, venture, climb, climb up, observe, detect, sail, wade
+
+### comedy
+adjectives: poor, funny, off-the-wall, last-minute, wonderful, ridiculous, comic, silly, heavy-handed, nuts, awkward, hilarious, enormous, self-satisfied, around the bend, pathetic, round the bend, tremendous, bizarre, absurd, ham-handed, hot and bothered, notorious, bats, infamous, disastrous, honorary, eccentric, goofy, ill-famed
+verbs: fuck up, ball up, trip, drop the ball, hang around, scheme, mess about, mess up, mill about, mill around, foul up, spoil, practise, reopen, stumble, boob, tumble, scramble, fumble, flatter, fluff, blunder, muck up, bollocks, bollocks up, fawn, goof, bumble, topple, rehearse
+
+### coming-of-age
+adjectives: self-aware, curious, awkward, lonely, shy, self-conscious, tender, eager, uncertain, round-eyed, wide-eyed, lone, reckless, hopeful, queer, naive, unsure, peculiar, earnest, rum, restless, sheltered, nostalgic, dizzy, rebellious, impulsive, bittersweet, giddy, carefree, self-willed
+verbs: long, remember, leave, wonder, dream, grow, graduate, flower, recall, go forth, belong, pretend, dare, mature, make bold, rebel, float, bloom, confess, drift, flush, blossom, crimson, blush, reconcile, stumble, fumble, linger, quarrel, be adrift
+
+### fairy tale
+adjectives: kind, poor, wonderful, magic, ancient, golden, cute, wise, magical, gentle, tongue-tied, humble, pathetic, spell-bound, kindly, wicked, wizard, cursed, good-hearted, large-hearted, trusting, unlucky, fascinated, marvelous, cunning, enchanted, mythical, agile, marvellous, sly
+verbs: like, wish, sleep, get married, cast out, grant, swear, rescue, marry, entrance, spin, hook up with, spin around, bless, charm, disappear, curse, transform, stray, wander, wed, dwell, vow, trance, roam, vanish, brood, slumber, banish, kip
+
+### fantasy
+adjectives: wonderful, weird, magic, ancient, cloud-covered, noble, sacred, legendary, magical, high-minded, wizard, noble-minded, cursed, shattered, imposing, catastrophic, majestic, fearless, mystical, marvelous, enchanted, marvellous, lofty, uncanny, valiant, howling, ethereal, rattling, disgraced, exalted
+verbs: off, call down, bring up, beat, beat out, murder, cast, cast out, journey, lay to rest, swear, entrance, ward, rally, revenge, quest, inter, charm, drum up, curse, bump off, forge, summon, trance, summons, muster, muster up, unleash, embark, slay
+
+### ghost story
+adjectives: taken up, grave, tender, obsessed, pale, haunted, wan, faded, vanished, mourning, spectral, grieving, muted, grief-stricken, solemn, barren, melancholy, subdued, translucent, desolate, ghostly, bleached, hushed, bereaved, forlorn, melancholic, mournful, wistful, sorrowful, plaintive
+verbs: long, remember, wait, seem, appear, wave, recall, forgive, disappear, float, bury, fade, drift, whisper, sorrow, flick, haunt, mourn, vanish, weep, grieve, linger, hover, flicker, be adrift, yearn, murmur, recollect, resurface, oscillate
+
+### heist
+adjectives: cute, smooth, polish, too-generous, elaborate, sneak, polished, slick, daring, crooked, flawless, calculating, cunning, lavish, agile, sly, cocky, ingenious, treacherous, meticulous, crafty, glittering, shrewd, astute, brazen, brazen-faced, light-fingered, nimble, scheming, flamboyant
+verbs: make off, go off, put one over, run off, put one across, plot, scheme, steal, rob, mouse, con, sneak, scam, cod, rig, forge, disguise, bluff, bluff out, cabbage, bribe, loot, heist, conn, deceive, fleece, grease one's palms, plume, smuggle, plunder
+
+### horror
+adjectives: fell, terrible, sharp-set, hair-raising, threatening, cruel, brutal, savage, creepy, terrifying, vicious, outrageous, horrific, frightening, dreadful, dread, sinister, haunting, hideous, horrendous, monstrous, ominous, dreaded, eerie, sickening, gruesome, menacing, superstitious, ghastly, nauseous
+verbs: cry, sacrifice, pipe, twist, torture, cow, scream, shout out, possess, yell, creep, crawl, worm, claw, haunt, stalk, torment, devour, shudder, lurk, shrill, outlast, terrify, squirm, shriek, prowl, outlive, maim, wriggle, cower
+
+### mystery
+adjectives: searching, clever, threatening, mysterious, suspicious, sneak, sinister, elusive, ominous, unresolved, unsolved, secretive, meticulous, cryptic, probing, menacing, baffling, puzzling, enigmatic, shrewd, astute, observant, evasive, incriminating, perplexing, canny, stealthy, faithless, treasonous, traitorous
+verbs: look into, question, study, bring out, size up, call into question, figure out, take stock, interview, hide, suspect, reveal, solve, investigate, trace, examine, expose, puzzle out, analyze, accuse, inspect, conceal, derive, uncover, analyse, snoop, deceive, revisit, unravel, infer
+
+### noir
+adjectives: flash, desperate, bitter, bored, corrupt, jade, jade-green, shady, hard-boiled, ruthless, crooked, weary, world-weary, cynical, hard-bitten, moth-eaten, gritty, smoky, treacherous, shabby, flashy, sleazy, granular, sordid, jaded, grainy, gaudy, seedy, dingy, coarse-grained
+verbs: go after, take a chance, dog, run a risk, lay away, frame, frame in, plot, hang around, scheme, mess about, take chances, adventure, chase, give chase, mill about, cop, mill around, tail, con, rip off, cheat, bargain, scam, threaten, gamble, hustle, squirrel away, cache, dwell
+
+### romance
+adjectives: in love, taken with, sweet, soft on, struck, devoted, passionate, tender, charming, intimate, fond, fiery, witty, radiant, affectionate, ardent, potty, dreamy, gallant, blushing, fervent, smitten, impassioned, infatuated, adoring, enamored, flirtatious, wistful, torrid, bashful
+verbs: long, court, date, pass out, suggest, hold dear, prize, kiss, chat up, entrance, romance, treasure, embrace, charm, hug, propose, woo, flush, faint, adore, crimson, blush, cherish, flirt, trance, reunite, linger, encompass, flatter, yearn
+
+### sci-fi
+adjectives: man-made, digital, nuclear, mechanical, virtual, alien, artificial, self-governing, atomic, sovereign, synthetic, autonomous, cosmic, lunar, orbital, departing, robotic, galactic, outward-bound, futuristic, interstellar, uncharted, sentient, extraterrestrial, outbound, homesick, futurist, cybernetic, unmapped, semisynthetic
+verbs: found, set up, program, write in code, launch, engineer, establish, beam, scan, hack, orbit, dock, upload, clone, transmit, reboot, simulate, imitate, orb, decipher, cipher, decode, teleport, cypher, calibrate, colonize, encrypt, decrypt, mutate, colonise
+
+### thriller
+adjectives: dead, touch-and-go, desperate, threatening, deadly, urgent, fascinating, pressing, hostile, sneak, tense, lethal, undercover, paranoid, grim, ruthless, sinister, hunted, covert, fugitive, relentless, absorbing, ominous, gripping, frantic, fleeting, treacherous, cloak-and-dagger, torturing, clandestine
+verbs: go after, get away, live on, step on it, dog, race, speed, track down, take flight, corner, lie in wait, escape, blow up, survive, hunt, rush, hunt down, chase, rush along, give chase, belt along, engage, tail, pursue, corn, bucket along, skirt, threaten, flee, explode
+
+### western
+adjectives: only, weather, waste, wild, sure-handed, dust-covered, baked, hardy, dusty, hard-boiled, rugged, god-fearing, hard-bitten, sturdy, bleak, barren, gritty, rustic, devout, lawless, rowdy, desolate, stoic, weathered, brazen, lonesome, brazen-faced, scorched, granular, stalwart
+verbs: take a chance, track, run a risk, ride, brand, lie in wait, crowd, hang, take chances, adventure, prospect, rope, ranch, float, drift, gamble, herd, saddle, duel, ambush, brawl, homestead, sag, swag, strut, swagger, stampede, be adrift, gallop, lasso
+```
+
+## 3. Seeded samples (`storywheel sample GENRE -n 3 --seed 2025`)
+
+```
+### heist
+1. DOUBLE GETAWAY, MARBLE HEIGHTS   (motif: getaway)
+   heist · wry · Kishōtenketsu
+
+  * Marco Voss, 46, a sly security installer. Wants the gold bars split before
+    the guards change. Needs to say sorry to their brother about the rooftop
+    plan. Flaw: backs gambling over their only customer. Secret: keeps a stack
+    of counterfeit bills buried at the wine cellar as a retirement plan.
+    Rival: the billionaire host.
+  * Marble Heights · the year of the exhibition · summer. Landmark: the wine
+    cellar. Rumor: the billionaire host pays a bank manager on a stolen
+    schedule to keep quiet.
+
+    Marco, a sly security installer, wants the billionaire host ruined, and
+    the wine cellar is where the money sleeps.
+
+    Ki (introduction) — In Marble Heights, Marco locked up the wine cellar
+    through the service door, and priced every lock.
+    Shō (development) — Marco kept postponing the chance to crack a roll of
+    fake plates while the summer wore on.
+    Ten (twist) — Then Marco saw that the roll of fake plates had never been
+    about the gold bars split before the guards change.
+    Ketsu (reconciliation) — Marco put bluster down at the wine cellar, and
+    the night went quiet.
+
+    Twist: The roll of fake plates was never the prize; it opened the wine
+    cellar.
+    Threads: thing: a roll of fake plates (Shō (development))
+
+2. LAST CALL AT MARBLE CITY: TAKE   (motif: take)
+   heist · tense · Three-Act Outline
+
+  * Cleo Ivano, 83, a polished street magician. Wants a brass master key and a
+    head start on the next job. Needs to trust their cousin with the split
+    before the plan goes live. Flaw: chases a bigger score whenever shame gets
+    close. Secret: took envelopes from a night watchman on a tight schedule
+    and said nothing. Rival: the old partner.
+  * Marble City · the holiday rush · winter. Landmark: the telephone exchange.
+    Rumor: a rival's raid was quietly paid for by the old partner.
+
+    A crew gathers in Marble City: Cleo, a polished street magician, a rival
+    crew boss, and one traitor not yet named.
+
+    Act I: Setup — The old partner owned half of Marble City, and Cleo, a
+    polished street magician, drew plans in a borrowed uniform.
+    Act I: Inciting incident — The old partner cheated a hired muscle out of
+    everything, and Cleo was asked to even the score.
+    Act I: First turn — Cleo kept the plan inside a grand piano and ran the
+    job on the quiet.
+    Act II: Rising action — The hired muscle fudged the false floor, and Cleo
+    redrew the plan in a tuxedo.
+    Act II: Midpoint — The hired muscle offered Cleo a place in the crew to
+    quit the job.
+    Act II: Crisis — The old partner distracted Cleo's grandmother in a
+    delivery van, and the crew lost its nerve.
+    Act III: Climax — Cleo killed the lights behind the cameras at the
+    telephone exchange, and the alarm went quiet.
+    Act III: Resolution — Cleo learned to trust their cousin with the split
+    before the plan goes live, and the crew went home.
+
+    Twist: The inside man at the telephone exchange was the hired muscle, who
+    had no plan to leave.
+    Threads: someone: a hired muscle (Act I: Inciting incident)
+
+3. A FORTUNE IN SILVERTON: THE LOCKET   (motif: locket)
+   heist · tense · Three-Act Outline
+
+  * Vince Delmar, 64, a bold antiques dealer. Wants a clean name and the
+    casino take. Needs to stop hiding guilt behind greed. Flaw: keeps scheming
+    to dodge loneliness, calling it honor. Secret: was paid by a tired
+    detective with a forged badge to look elsewhere. Rival: the city
+    prosecutor.
+  * Silverton · the winter of the freeze · winter. Landmark: the casino floor.
+    Rumor: a crate of champagne is rumored to sit behind a loose brick at the
+    casino floor.
+
+    Vince, a bold antiques dealer of Silverton, gets one night to empty the
+    city prosecutor's safe, and an inside man holds the only key.
+
+    Act I: Setup — Vince, a bold antiques dealer in Silverton, kept a stolen
+    guest pass in a rented storage unit and told their best customer nothing
+    about the alarm schedule.
+    Act I: Inciting incident — A charming fence sat down with Vince in
+    disguise and slid a bearer bond across the table.
+    Act I: First turn — Vince dialed their ex, in a whisper, to ask after a
+    demolitions expert.
+    Act II: Rising action — Vince tricked a museum curator, but the city
+    prosecutor got to their sister first.
+    Act II: Midpoint — The stolen guest pass vanished in a hotel laundry cart,
+    and the demolitions expert stopped picking up.
+    Act II: Crisis — Boxed in at the casino floor, Vince wrestled tenderness
+    and envy together.
+    Act III: Climax — Vince strolled into the casino floor with perfect timing
+    and called out a locksmith, choosing a promise.
+    Act III: Resolution — Vince checks on the demolitions expert and keeps the
+    bribed guard to a whisper.
+
+    Twist: Long ago, Vince sold a cutting torch without a sound, and forgot.
+    Threads: thing: a stolen guest pass (Act I: Setup) · someone: a
+    demolitions expert (Act I: First turn)
+
+### adventure
+1. INTO THE FINAL VOYAGE OF THUNDER HAVEN   (motif: voyage)
+   adventure · playful · Kishōtenketsu
+
+  * Henry Strand, 46, a wandering florist. Wants the sunken gold shared before
+    the rains come. Needs to let their brother share the empty well. Flaw:
+    relies on zeal instead of their only customer. Secret: keeps a ship's log
+    wrapped in oilcloth as a way home. Rival: the treacherous partner.
+  * Thunder Haven · a long summer of drought · summer. Landmark: the sea
+    cliff. Rumor: the treacherous partner pays a hermit scholar in the dead of
+    night to redraw the charts.
+
+    Henry, a wandering florist, digs up a silver locket buried at the sea
+    cliff that names the sea cliff, and the treacherous partner soon hears of
+    it.
+
+    Ki (introduction) — Henry, a wandering florist, carried a pocket sextant
+    wherever Henry went, and carried spite too.
+    Shō (development) — A squall blew in: an avalanche struck Thunder Haven,
+    and Henry shared supper with the treacherous partner under a blazing sun.
+    Ten (twist) — Then Henry saw the treacherous partner was lost too, and
+    wanted the sunken gold shared before the rains come as well.
+    Ketsu (reconciliation) — Henry finally saw through the missing half and
+    chose home over the lost treasure.
+
+    Twist: The pocket sextant had never been kept at the sea cliff; a smuggler
+    had carried it off against all odds.
+    Threads: thing: a pocket sextant (Ki (introduction)) · disaster: an
+    avalanche (Shō (development))
+
+2. AT THE EDGE OF WINDWARD CAY: A FRONTIER   (motif: frontier)
+   adventure · gritty · Story Spine
+
+  * Cormac Lockwell, 84, a curious trapper. Wants a gem-studded dagger
+    returned before a grave robber misses it. Needs to pick kindness over
+    pride at the edge. Flaw: keeps wandering to dodge homesickness, and calls
+    it loyalty. Secret: was bribed by a village elder on half rations to lose
+    the way. Rival: the rival guide.
+  * Windward Cay · the winter the river froze · winter. Landmark: the rock
+    arch. Rumor: the rock arch was abandoned after a stolen map.
+
+    A curious trapper named Cormac signs on with an expedition leaving
+    Windward Cay, and each leg grows harder.
+
+    Once upon a time, Cormac, a curious trapper of Windward Cay, wanted a gem-
+    studded dagger returned before a grave robber misses it and listened to
+    every sailor's tale.
+    Every day, Cormac worked the docks of Windward Cay through the fog and
+    dreamed of a famous name.
+    One day, a raid on the camp hammered Windward Cay, and Cormac saw the way
+    out.
+    Because of that, Cormac looped back through the rock arch by canoe to
+    shake off a pearl diver.
+    Because of that, a desert nomad deserted the party by lantern light,
+    taking a field notebook along.
+    Until finally, the rival guide turned back at the rock arch on a borrowed
+    mule, and Cormac went on with the field notebook.
+    Ever since then, Cormac checks the field notebook at dawn and visits the
+    pearl diver by noon.
+
+    Twist: The chart led nowhere, because the pearl diver had inked it at the
+    last moment to send rivals astray.
+    Threads: disaster: a raid on the camp (One day) · someone: a pearl diver
+    (Because of that) · thing: a field notebook (Because of that)
+
+3. WILD ANCHORS   (motif: anchor)
+   adventure · swashbuckling · Three-Act Outline
+
+  * Isol Pembroke, 40, a stubborn customs clerk. Wants the treasure baron off
+    their father's heels for good. Needs to rest a while, feel guilt, and keep
+    courage. Flaw: would swap honor for a free passage. Secret: once ambushed
+    a mapmaker's widow against the current and has never breathed a word.
+    Rival: the grave robber.
+  * Tidewater Reach · the autumn of the survey · autumn. Landmark: the
+    crumbling pyramid. Rumor: the grave robber bribes a nervous interpreter in
+    the dead of night.
+
+    The grave robber is two days ahead, so Isol, a stubborn customs clerk,
+    hauls a rope ladder through the wilds across the ice.
+
+    Act I: Setup — Isol, a stubborn customs clerk, worked near the crumbling
+    pyramid outside Tidewater Reach and dreamed of the golden idol.
+    Act I: Inciting incident — The grave robber slipped out of Tidewater Reach
+    on half rations, and Isol gave chase.
+    Act I: First turn — Isol gave up a promise for the royal seal and left
+    Tidewater Reach through the fog.
+    Act II: Rising action — A salt trader found Isol at the crumbling pyramid
+    at a dead run and offered to guide.
+    Act II: Midpoint — A lost botanist was writing to the grave robber, and
+    Isol found the letters.
+    Act II: Crisis — Alone at the crumbling pyramid, Isol faced love and
+    bluster at once.
+    Act III: Climax — Isol stormed the crumbling pyramid by lantern light and
+    named a ferry keeper, choosing home.
+    Act III: Resolution — Isol warns the ferry keeper and keeps the burial
+    mound out of every atlas.
+
+    Twist: The ruins at the crumbling pyramid were a stage set, built on foot
+    by the ferry keeper.
+    Threads: someone: a ferry keeper (Act III: Climax)
+
+### coming-of-age
+1. QUIET DANCE, GOLDEN SUMMER   (motif: dance)
+   coming-of-age · whimsical · Kishōtenketsu
+
+  * Ava Dawson, 62, a headstrong paperboy. Wants the snooty cousin to leave
+    their business partner alone at last. Needs to let their son share the
+    weight of the move away. Flaw: puts pride ahead of their only customer.
+    Secret: keeps a ring of house keys in a backpack lining as an escape fund.
+    Rival: the mean girl.
+  * Lakeside Village · the cassette-tape winter · winter. Landmark: the bus
+    station. Rumor: a broken curfew was pinned on the mean girl.
+
+    Ava's cousin is moving away before the move, and Ava, a headstrong
+    paperboy of Lakeside Village, still has to tell the truth to their mother.
+
+    Ki (introduction) — Ava was a headstrong paperboy in Lakeside Village, who
+    ticked off the days each winter.
+    Shō (development) — A small crisis hit: a blizzard struck Lakeside
+    Village, and Ava sat beside the mean girl behind the gym.
+    Ten (twist) — Then Ava saw the mean girl was lonely too, and wanted the
+    snooty cousin to leave their business partner alone at last as well.
+    Ketsu (reconciliation) — Ava came to grips with the summer job, and chose
+    family over a college letter.
+
+    Twist: The mean girl turned out to share loneliness, out of ambition.
+    Threads: disaster: a blizzard (Shō (development))
+
+2. BEFORE MAPLE CORNERS, LONG PORCH   (motif: porch)
+   coming-of-age · melancholy · Kishōtenketsu
+
+  * Felix Abara, 52, a bookish class president. Wants a used car saved up
+    before graduation. Needs to see courage outlast a date to the dance. Flaw:
+    stays busy to dodge boredom, and calls it loyalty. Secret: once lied to a
+    skate-park regular through the screen door. Rival: the head coach.
+  * Maple Corners · the summer before senior year · summer. Landmark: the
+    public pool. Rumor: a high school dropout was spotted sitting at the
+    public pool against orders.
+
+    For the first time, Felix, a bookish class president, leaves Maple Corners
+    in a hand-me-down jacket, and begins to miss it.
+
+    Ki (introduction) — Felix, a bookish class president, hauled a diary with
+    a lock around town, and hauled grief too.
+    Shō (development) — Felix's apprentice asked what the dance meant, and
+    Felix shrugged it off at the back.
+    Ten (twist) — Then Felix sensed loneliness had been the real summer, not a
+    used car saved up before graduation.
+    Ketsu (reconciliation) — Felix left the head coach with the public pool,
+    and peace returned in a rush.
+
+    Twist: Felix had kept the diary with a lock inside a pillowcase all
+    summer, and their brother had noticed.
+    Threads: thing: a diary with a lock (Ki (introduction))
+
+3. GROWING UP IN LAKE HARMON: A GOODBYE   (motif: goodbye)
+   coming-of-age · tender · Story Spine
+
+  * Cass Ellivan, 34, a curious paper carrier. Wants a pair of cleats returned
+    before an older cousin finds out. Needs to confide in their twin about the
+    big fight before it is too late. Flaw: refuses to admit mistakes, and
+    mistakes envy for mercy. Secret: once mailed a letter to the dead meant
+    for nobody else but a bus-stop stranger. Rival: the rival band.
+  * Lake Harmon · a rainy spring break · spring. Landmark: the water tower.
+    Rumor: the rival band bribes a quiet kid in back after curfew to hush
+    things up.
+
+    Hoping to impress a quiet exchange student, Cass, a curious paper carrier,
+    takes a risk with sweaty palms, and the rival band hears about it.
+
+    Once upon a time, Lake Harmon was tiny, and Cass, a curious paper carrier,
+    kept bumping into its edges.
+    Every day, Cass kept the radio low with a grin and dreaded a canceled
+    concert.
+    One day, a sister home from college gave Cass a yearbook at the water
+    tower under the porch light, and nothing was quite the same.
+    Because of that, Cass hid a stolen road map in a tree hollow, then
+    borrowed from a town librarian on the last bus.
+    Because of that, the sister home from college left Lake Harmon against
+    orders, leaving the yearbook and a goodbye.
+    Until finally, the sister home from college and Cass made peace over the
+    yearbook.
+    Ever since then, after graduation Cass trusts the sister home from college
+    and hides the yearbook.
+
+    Twist: Years earlier, the sister home from college had stood where Cass
+    stood, and understood the family secret best.
+    Threads: disaster: a canceled concert (Every day) · someone: a sister home
+    from college (One day) · thing: a yearbook (One day)
+```
+
+## 4. Full run time
+
+FULLTIME
+
+## 5. Manual test script
+
+1. Roll heist, adventure and coming-of-age stories in the Wheel (Flavor, or `storywheel sample`) and read them; mark lines that sound wrong.
+2. Words > Genre words > Adjectives / Verbs for each genre: the hand-picked words lead.
+3. A coming-of-age story whose era is "the summer of 1994" should have a mixtape or a pager, never a smartphone; a modern era the reverse.
+4. An adventure never mentions a phone or a laptop.
+
+## 6. Known issues
+
+- The "close" people ("their only customer", "their apprentice") are still one general list, so a coming-of-age story can name an odd relation.
+- The floor still lets about one pick in ten from other genres through for abstract slots (a "lighthouse" in a heist).
+- Setting an era that differs from the genre's default technology (a period era in a heist) can leave a modern thing in an earlier protagonist field; the protagonist frames of heist and coming-of-age avoid technology things (`!modern`) to prevent it.
+- The eras are drawn without the technology filter (the era sets the technology); that change touches every genre, and no test of the older genres needed adjusting.

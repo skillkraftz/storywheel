@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_incident",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{DISASTER:strikes} hit {place}, and {first} saw home in a new light.",
+  "{first} came across {THING:!living,!bulky} {HIDING}, and discovered what {CLOSE:human} had kept back.",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} said: be at {landmark}, and be alone.",
+  "{SOMEONE:human,!plural} gave {first} {THING:portable} at {landmark} {MANNER}, and nothing was quite the same.",
+  "The {rival} humiliated {SOMEONE:human,!plural} in public, and {first} spoke up.",
+  "{SOMEONE:!plural} rolled into {place} {MANNER} and rearranged the whole summer.",
+  "{PRIZE:material,!inner} was on offer if {first} would {DO_THING} {THING} {DEADLINE}."
+ ]
+}

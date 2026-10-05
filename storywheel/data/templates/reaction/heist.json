@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "reaction",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
+  "tucked {THING:portable} away {HIDING} for later, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and memorized the floor plan",
+  "{ACT_MESSAGE} {MESSAGE:physical} and brought in {SOMEONE:human,!plural} for a cut",
+  "phoned {CLOSE:human} {MANNER:speech} to announce one last job",
+  "{ACT_PLACE} {landmark} again {MANNER}, this time with {THING:portable}",
+  "gave {SOMEONE:human} {THING} for {PRIZE:material,!inner} and a promise",
+  "set up a decoy {HIDING}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "worked late {MANNER}, trying to {DO_THING} {THING} {DEADLINE}",
+  "slipped out through {landmark} {MANNER} to dodge {SOMEONE:human,!plural}"
+ ]
+}

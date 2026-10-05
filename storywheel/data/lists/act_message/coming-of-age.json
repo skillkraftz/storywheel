@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for coming-of-age that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "passed",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "reread",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "tore up",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "mailed",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "pinned up",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

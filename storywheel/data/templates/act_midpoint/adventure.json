@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_midpoint",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{the_thing} was stolen {HIDING}, and {the_someone:human} kept silent.",
+  "{SOMEONE:human,!plural} was writing to the {rival}, and {first} found the letters.",
+  "{the_message} proved a lure, and {first} began to doubt {CLOSE:human}.",
+  "At {landmark}, {first} uncovered {THING:portable}, and the old chart fell apart.",
+  "{the_someone:human} dangled {PRIZE:!inner} before {first} to turn back.",
+  "{the_disaster:strikes} returned, and the party blamed {first}.",
+  "News of {TOPIC} arrived by sea: {the_someone:human} {ACT_THING} {the_thing:!living} for the {rival}."
+ ]
+}

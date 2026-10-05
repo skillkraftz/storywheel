@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "resolution",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "nowadays {first} {HABIT_PLACE} {landmark} on Sundays and {HABIT_PERSON} {CLOSE}",
+  "{place} moved on after {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "after graduation {first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living}",
+  "as each {season} comes round, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the box is packed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and keeps {TOPIC} out of the group chat",
+  "{place} seemed smaller after {the_disaster}, and {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_THING} {the_thing:!living} each night and {HABIT_PERSON} {the_someone:human} each weekend"
+ ]
+}

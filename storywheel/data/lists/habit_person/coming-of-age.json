@@ -1,0 +1,49 @@
+{
+ "_note": "Present-tense habits with a person.",
+ "slot": "habit_person",
+ "tags": [
+  "coming-of-age"
+ ],
+ "subject": [
+  "!plural"
+ ],
+ "entries": [
+  {
+   "text": "calls",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "writes to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "avoids",
+  "visits",
+  {
+   "text": "waves at",
+   "subject": [
+    "human"
+   ]
+  },
+  "trusts",
+  {
+   "text": "checks on",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "keeps in touch with"
+ ]
+}

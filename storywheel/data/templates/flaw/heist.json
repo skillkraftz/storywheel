@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "flaw",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "calls every friend a mark and {VICE} a talent, hiding {FEELING}",
+  "chases {TEMPTATION} whenever {FEELING} gets close",
+  "backs {VICE} over {CLOSE:human}",
+  "keeps scheming to dodge {FEELING}, calling it {VALUE}",
+  "will sell {VALUE} for {TEMPTATION}",
+  "bends every plan toward {VICE} once {FEELING} grows",
+  "always wants one more angle, mistaking {VICE} for {VALUE}",
+  "hides {FEELING} behind a grin and {VICE}"
+ ]
+}

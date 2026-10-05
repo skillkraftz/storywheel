@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_resolution",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "When the dust cleared, {first} had {PRIZE:!inner} and still had {VALUE}.",
+  "{place} forgot {the_disaster}, and {first} {HABIT_PLACE} {landmark} once a year.",
+  "{first} learned {need}, and the crew went home.",
+  "With the money spent, {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "With the {rival} ruined, {first} {HABIT_PLACE} {landmark} when the {season} came.",
+  "{first} {HABIT_PERSON} {the_someone:human} and keeps {TOPIC} to a whisper.",
+  "life in {place} went on after {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+ ]
+}

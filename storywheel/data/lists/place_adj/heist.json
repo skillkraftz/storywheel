@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a heist city name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "Gold",
+  "Silver",
+  "Velvet",
+  "Crown",
+  "Neon",
+  "Marble",
+  "Royal",
+  "Lucky",
+  "Ivory",
+  "Emerald",
+  "Harbor",
+  "Midtown",
+  "Old",
+  "Grand",
+  "Platinum",
+  "Jade",
+  "Ruby",
+  "Sapphire",
+  "Bright",
+  "Gilded",
+  "Opal",
+  "Onyx",
+  "Copper",
+  "Cobalt"
+ ]
+}

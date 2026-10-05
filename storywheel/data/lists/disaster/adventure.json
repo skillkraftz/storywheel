@@ -1,0 +1,215 @@
+{
+ "_note": "Perils on the road and at sea. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "a rockslide",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a flash flood",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sandstorm",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a monsoon",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a rope bridge collapse",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a jungle fever",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a shipwreck",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a mutiny",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a cave-in",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an avalanche",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a stolen map",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a vanished guide",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a poisoned well",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "an ambush at the ford",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a snapped mast",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a swamp fog",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a volcanic tremor",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a leaking boat",
+   "features": [
+    "strikes"
+   ]
+  },
+  {
+   "text": "a raid on the camp",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a wildfire",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failed supply run",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rival's sabotage",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blizzard on the pass",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a lost mule train",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a plague of insects",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a landslide on the road",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a river in flood",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a killing frost",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a sinking ferry",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a collapsed tunnel",
+   "features": [
+    "natural",
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}

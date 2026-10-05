@@ -1,0 +1,156 @@
+{
+ "_note": "Past-tense verbs for adventure that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "dug up",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "traced",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "buried",
+   "object": [
+    "buryable"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "packed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "lost",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "traded",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "carried",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "claimed",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "stole",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "repaired",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "unrolled",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "counted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "swapped",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "checked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

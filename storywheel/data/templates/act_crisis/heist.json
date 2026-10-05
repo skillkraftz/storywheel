@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_crisis",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "The {rival} {ACT_PERSON} {CLOSE:human} {MANNER}, and the crew lost its nerve.",
+  "{the_thing} burned in the fire, and {first} was left with only {VALUE}.",
+  "{the_someone:human} double-crossed {first} at {landmark}, and the crew scattered.",
+  "To stay afloat, {first} {ACT_THING:trades} {THING}, and the road to {PRIZE:!inner} closed.",
+  "Boxed in at {landmark}, {first} wrestled {FEELING} and {VICE} together.",
+  "{the_disaster:strikes} struck once more, and {first} came too late.",
+  "{CLOSE:human} had quietly sold {the_thing} {MANNER}, and {first} heard about it last."
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "climax",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{first} overtook {the_someone:human} at {landmark} and thrust out {the_thing:portable}",
+  "{first} read {the_message} aloud at {landmark} {MANNER} and watched {the_someone:human} stop short",
+  "{the_someone:human} hesitated at {landmark}, and {first} raised {the_thing:portable} {MANNER}",
+  "{first} laid {the_thing:portable} on the old stones at {landmark} {MANNER}, then waited",
+  "{first} squared off against the {rival} at {landmark} with {the_thing:portable} and {VALUE}",
+  "{the_someone:human} gave way at {landmark}, and {first} named {MOTIVE}",
+  "{first} stormed {landmark} {MANNER} and named {SOMEONE:human,!plural}",
+  "{first} sprinted over {landmark} {MANNER} with {THING:portable} and the last light fading",
+  "{SOMEONE:human,!plural} lowered arms at {landmark} {MANNER}",
+  "{first} sliced the rope {MANNER} at {landmark}, and the chase ended",
+  "{first} lifted {the_thing} to the sun at {landmark} {MANNER} and let {the_someone:human} decide",
+  "the {rival} turned back at {landmark} {MANNER}, and {first} went on with {the_thing:portable}"
+ ]
+}

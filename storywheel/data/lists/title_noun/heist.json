@@ -1,0 +1,90 @@
+{
+ "_note": "Title nouns for heists.",
+ "slot": "title_noun",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "job",
+   "kind": "idea"
+  },
+  {
+   "text": "score",
+   "kind": "idea"
+  },
+  {
+   "text": "heist",
+   "kind": "idea"
+  },
+  {
+   "text": "vault",
+   "kind": "place"
+  },
+  {
+   "text": "crew",
+   "kind": "person"
+  },
+  {
+   "text": "getaway",
+   "kind": "idea"
+  },
+  {
+   "text": "mark",
+   "kind": "person"
+  },
+  {
+   "text": "safecracker",
+   "kind": "person"
+  },
+  {
+   "text": "gambit",
+   "kind": "idea"
+  },
+  {
+   "text": "switch",
+   "kind": "idea"
+  },
+  "diamond",
+  "blueprint",
+  {
+   "text": "take",
+   "kind": "idea"
+  },
+  {
+   "text": "lift",
+   "kind": "idea"
+  },
+  {
+   "text": "con",
+   "kind": "idea"
+  },
+  {
+   "text": "fence",
+   "kind": "person"
+  },
+  {
+   "text": "inside man",
+   "kind": "person"
+  },
+  "decoy",
+  {
+   "text": "double-cross",
+   "kind": "idea"
+  },
+  {
+   "text": "payday",
+   "kind": "idea"
+  },
+  "strongbox",
+  {
+   "text": "masquerade",
+   "kind": "idea"
+  },
+  "jackpot",
+  {
+   "text": "grifter",
+   "kind": "person"
+  }
+ ]
+}

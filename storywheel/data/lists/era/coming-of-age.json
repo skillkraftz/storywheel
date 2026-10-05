@@ -1,0 +1,75 @@
+{
+ "_note": "When the story happens. Some eras fix the technology (modern or period).",
+ "slot": "era",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "the summer before senior year",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the first semester away",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "a rainy spring break",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the last week of school",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the year of moving",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the long hot July",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "a cold November",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the road-trip summer",
+   "features": [
+    "modern"
+   ]
+  },
+  {
+   "text": "the summer of 1994",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the cassette-tape winter",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the year the mall opened",
+   "features": [
+    "period"
+   ]
+  }
+ ]
+}

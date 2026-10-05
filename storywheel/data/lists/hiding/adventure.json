@@ -1,0 +1,103 @@
+{
+ "_note": "Where a map or prize is hidden.",
+ "slot": "hiding",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "under a flat stone",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a ship's biscuit tin",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a waterfall",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a sealed jar",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "beneath the campfire ashes",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hollow tree",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a boot heel",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a saddlebag lining",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "in a cave alcove",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "wrapped in oilcloth",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a loose temple stone",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a cabin trunk",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sewn into a sail",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

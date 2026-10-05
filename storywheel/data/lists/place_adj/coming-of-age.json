@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a small-town name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "Maple",
+  "Willow",
+  "Cedar",
+  "Lakeside",
+  "Riverside",
+  "Fairview",
+  "Pleasant",
+  "Spring",
+  "Elm",
+  "Oakdale",
+  "Pinecrest",
+  "Cherry",
+  "Sunset",
+  "Hillcrest",
+  "Brookfield",
+  "Meadow",
+  "Harbor",
+  "Clover",
+  "Bay",
+  "Prairie",
+  "Orchard",
+  "Birch",
+  "Aspen",
+  "Juniper"
+ ]
+}

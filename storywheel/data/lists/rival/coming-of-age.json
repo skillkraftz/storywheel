@@ -1,0 +1,114 @@
+{
+ "_note": "Who stands in the way. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "school bully",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "star quarterback",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "rich classmate",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "strict principal",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "overbearing father",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "jealous ex",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "rival band",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "snooty cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "disapproving aunt",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "popular girl",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "head coach",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "landlord",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "summer boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "team captain",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "mean girl",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "new stepfather",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

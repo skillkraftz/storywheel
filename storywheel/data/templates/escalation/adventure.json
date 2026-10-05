@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "escalation",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and the party lost a week",
+  "{the_thing} was stolen {HIDING}, and {the_someone:human} kept silent",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER} to slow {first} down",
+  "{the_message} proved a lure, and {first} began to doubt {CLOSE:human}",
+  "{the_disaster:strikes} returned at {landmark}, and the party blamed {first}",
+  "{first} stumbled on {the_thing:portable} {MANNER}, and the prize grew",
+  "{the_someone:human} dangled {PRIZE:!inner} before {first} to turn back {MANNER}",
+  "{the_thing} traced back to {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
+  "yet another prize, {THING:portable}, lay waiting {HIDING}",
+  "{SOMEONE:human,!plural} deserted the party {MANNER}, taking {THING:portable} along",
+  "a second route opened near {landmark}, and the {rival} reached it first",
+  "the {rival} pulled ahead: {DEADLINE}",
+  "{CLOSE:human} turned vague about {TOPIC}, then fell behind",
+  "{the_someone:human} slipped away {MANNER}, leaving {the_thing:portable} and a warning"
+ ]
+}

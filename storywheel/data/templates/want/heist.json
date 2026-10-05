@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "want",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{PRIZE:social,!inner} and {PRIZE:material,!inner}",
+  "{THING:valuable,!living,!modern} and {PRIZE:social,!inner} on the next job",
+  "{PRIZE:material,!inner} and a one-way ticket away from the {rival}",
+  "{THING:valuable,!living,!modern} sold to {SOMEONE:authority,!plural}",
+  "{THING:portable,!living,!modern} returned unseen to {SOMEONE:human,!plural}",
+  "the {rival} out of {CLOSE:human}'s life for good",
+  "{PRIZE:social,!inner} and a calm life in {place}",
+  "{PRIZE:material,!inner} split {DEADLINE}"
+ ]
+}

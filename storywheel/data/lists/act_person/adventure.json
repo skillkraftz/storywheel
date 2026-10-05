@@ -1,0 +1,163 @@
+{
+ "_note": "Past-tense verbs for adventure that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "guided",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "rescued",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "raced",
+  "tracked",
+  "fought",
+  "outran",
+  {
+   "text": "hired",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "befriended",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "followed",
+  "ambushed",
+  {
+   "text": "saved",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "bargained with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "warned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "trusted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "dodged",
+  {
+   "text": "shared supper with",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "called to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "carried",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  "outwitted",
+  {
+   "text": "met",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "stopped",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "traded with",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "trades"
+   ]
+  }
+ ]
+}

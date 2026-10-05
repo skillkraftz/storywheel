@@ -1,0 +1,30 @@
+{
+ "_note": "Small towns and suburbs, built from parts plus a few names.",
+ "slot": "place",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{PLACE_ADJ} {PLACE_FEATURE}",
+  "{LAST_NAME} {PLACE_FEATURE}",
+  "{LAST_NAME}'s {PLACE_FEATURE}",
+  "Millbrook",
+  "Cedar Lake",
+  "Fairhaven",
+  "Lake Harmon",
+  "Elm Grove",
+  "Piney Falls",
+  "East Haven",
+  "Maple Corners",
+  "Dunmore Flats",
+  "Hartwell"
+ ]
+}

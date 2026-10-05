@@ -1,0 +1,100 @@
+{
+ "_note": "Base-form verbs for adventure that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "find",
+  {
+   "text": "rescue",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "warn",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  "outrun",
+  {
+   "text": "guide",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "reach",
+  "confront",
+  {
+   "text": "convince",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stand by",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "confide in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

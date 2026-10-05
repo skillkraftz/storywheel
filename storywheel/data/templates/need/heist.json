@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "need",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "to trust {CLOSE:human} with {TOPIC} before the plan goes live",
+  "to choose {VALUE} over {VICE} on the night",
+  "to stop hiding {FEELING} behind {VICE}",
+  "to {DO_PERSON:inner} {CLOSE:human} before the final job",
+  "to rank {VALUE} above {TEMPTATION} when the vault opens",
+  "to prize {VALUE} over {PRIZE:social,!inner}",
+  "to let {CLOSE:human} in on {TOPIC}",
+  "to hold still and feel {FEELING}, keeping {VALUE}"
+ ]
+}

@@ -1,0 +1,105 @@
+{
+ "_note": "What explorers race for.",
+ "slot": "prize",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "the lost treasure",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the golden idol",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the jade crown",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the sunken gold",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the emerald hoard",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the royal seal",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a famous name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a royal charter",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a ship of one's own",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a hero's welcome",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a king's pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a seat in the society",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a steady heart",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a reason to stay",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a brave spirit",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a mended friendship",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

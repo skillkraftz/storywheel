@@ -1,0 +1,296 @@
+{
+ "_note": "Where the job happens: casinos, vaults, galleries and the ways in.",
+ "slot": "landmark",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "the casino floor",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bank vault",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the museum gallery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the loading dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the armored truck bay",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the freight elevator",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hotel rooftop",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the auction house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the jewelry exchange",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the security office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the service tunnel",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the parking garage",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the penthouse suite",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the opera house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the diamond district",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the harbor warehouse",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sewer junction",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the private airfield",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the counting room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ventilation shaft",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hidden safe room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the staff entrance",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the gallery skylight",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the train depot",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the mark's mansion",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cargo pier",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the wine cellar",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the pawn shop",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ballroom",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back alley",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the storage vault",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the coat check",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the garden maze",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the clock tower",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the old customs house",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the river barge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the stadium box office",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airport duty-free",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cathedral crypt",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the telephone exchange",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the racetrack paddock",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  }
+ ]
+}

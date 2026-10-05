@@ -25,7 +25,7 @@ def index(tmp_path, monkeypatch):
 def test_every_written_genre_has_a_core_vocabulary_of_forty_to_eighty_words():
     from storywheel.library import Library
     lib = Library.load()
-    written = ["western", "fairy tale", "comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller"]
+    written = ["western", "fairy tale", "comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller", "heist", "adventure", "coming-of-age"]
     got = core()
     for genre in written:
         words = got[genre]["a"] + got[genre]["v"]

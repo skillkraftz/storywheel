@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_trials",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{SOMEONE:!threatening} found {first} at {landmark} {MANNER} and offered to guide.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already charmed {CLOSE:human}.",
+  "Whenever {first} came near {PRIZE:!inner}, {VICE} cost another day.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and gained a little time.",
+  "{the_thing} had come down through {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} followed {THING:portable} to {landmark} and made camp {MANNER}.",
+  "{the_someone:human} fibbed about {TOPIC}, and {first} pressed forward {MANNER}."
+ ]
+}

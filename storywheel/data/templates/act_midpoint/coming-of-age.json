@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_midpoint",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{the_thing} went astray {HIDING}, and {the_someone:human} refused to explain.",
+  "{SOMEONE:human,!plural} was whispering to the {rival}, and {first} overheard.",
+  "{the_message} stirred up trouble, and {first} began to doubt {CLOSE:human}.",
+  "Behind {landmark}, {first} found {THING:portable}, and the old story unraveled.",
+  "{the_someone:human} suggested {first} forget it all, with {PRIZE:!inner} as the bait.",
+  "{the_disaster:strikes} hit again, and the others blamed {first}.",
+  "It all came out about {TOPIC}: {the_someone:human} {ACT_THING} {the_thing:!living} for the {rival}."
+ ]
+}

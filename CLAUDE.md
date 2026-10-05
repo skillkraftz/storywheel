@@ -135,9 +135,8 @@ Outline and Kishōtenketsu ship today. User structures go in
 **Ratings** gently down-weight frames and atom pairs that keep getting -.
 
 **Content status**: western, fairy tale, comedy, fantasy, mystery, horror,
-sci-fi, romance, ghost story, noir and thriller are fully written and annotated with features. The other
-three genres (heist, coming-of-age, adventure) run on
-general atoms until their lists are written. Expanding genre content is ongoing work outside this sweep.
+sci-fi, romance, ghost story, noir, thriller, heist, adventure and coming-of-age are fully written and annotated with features. Expanding
+genre content is ongoing work outside this sweep.
 
 
 ## Core concepts
@@ -933,3 +932,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   genre's default technology and the `modern` / `period` features keep atoms from the wrong era. `report.sentence_problems` lints sentence shapes found by reading samples.
 - Genre fit (`genrefit.VERSION` 2): `data/genre_core.json` (hand-picked adjectives `a` and verbs `v`, 40+ per written genre) is the strongest seed (`CORE_SHARE` 1.0);
   `DOMAIN_SHARE` is 0.3; `is_browsable` drops numbers, number words, Roman numerals, unknown short fragments and words under three letters from the lexicon and the fit.
+
+- Batch 14: heist, adventure and coming-of-age are written like the batch 13 genres (own frames for every beat, `_own_slots`, `_tech`, a core vocabulary of 40+ words).
+  Heist and coming-of-age default to modern technology and have a few period eras; adventure is period only. `Ctx.draw` and `pick_atom` do not filter the `era` slot by
+  technology: the era is what sets the technology, so a genre can reach an era of the other kind; protagonist frames of such genres ask for `{THING:!modern}` because the
+  protagonist is rolled before the setting. A frame is a near copy of another genre's when `difflib` finds it 93% alike; the three newest genres may not share more than 10%
+  identical or 8% near-copy frames with any other genre, and their frames were written in distinct voices (heist: the plan and the crew; adventure: the road and the chart;
+  coming-of-age: the summer and the first time) to make that possible.

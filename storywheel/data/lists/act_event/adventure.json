@@ -1,0 +1,62 @@
+{
+ "_note": "Past-tense verbs for adventure that take a disaster.",
+ "slot": "act_event",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "survived",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "outran",
+   "subject": [
+    "human"
+   ]
+  },
+  "predicted",
+  {
+   "text": "caused",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "escaped",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "weathered",
+   "subject": [
+    "human"
+   ]
+  },
+  "ignored",
+  {
+   "text": "withstood",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "warned of",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "denied",
+   "subject": [
+    "human"
+   ]
+  }
+ ]
+}

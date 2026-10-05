@@ -1,0 +1,153 @@
+{
+ "_note": "Past-tense verbs for coming-of-age that take a thing.",
+ "slot": "act_thing",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "hid",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "borrowed",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "lost",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "reread",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "packed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "sold",
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "mailed",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "tore up",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "polished",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "saved up for",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "stashed",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "returned",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "traded",
+   "object": [
+    "valuable"
+   ],
+   "features": [
+    "trades"
+   ]
+  },
+  {
+   "text": "carried",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "fixed",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "buried",
+   "object": [
+    "buryable"
+   ],
+   "features": [
+    "stows"
+   ]
+  },
+  {
+   "text": "kept",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "counted",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "paper"
+   ]
+  },
+  {
+   "text": "checked",
+   "object": [
+    "!living"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

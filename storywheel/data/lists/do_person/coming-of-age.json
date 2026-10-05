@@ -1,0 +1,120 @@
+{
+ "_note": "Base-form verbs for coming-of-age that take a person.",
+ "slot": "do_person",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "find",
+  {
+   "text": "forgive",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "apologize to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  "face down",
+  {
+   "text": "confide in",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "make peace with",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "stay close to",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "tell the truth to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  "reach",
+  {
+   "text": "win over",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "say goodbye to",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "thank",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "trust",
+   "object": [
+    "!threatening"
+   ],
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "protect",
+   "object": [
+    "!threatening"
+   ]
+  },
+  {
+   "text": "reconcile with",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

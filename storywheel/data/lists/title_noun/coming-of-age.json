@@ -1,0 +1,78 @@
+{
+ "_note": "Title nouns for coming-of-age stories.",
+ "slot": "title_noun",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "summer",
+   "kind": "idea"
+  },
+  {
+   "text": "road",
+   "kind": "place"
+  },
+  {
+   "text": "town",
+   "kind": "place"
+  },
+  "letter",
+  "bike",
+  {
+   "text": "dance",
+   "kind": "idea"
+  },
+  {
+   "text": "promise",
+   "kind": "idea"
+  },
+  {
+   "text": "lake",
+   "kind": "place"
+  },
+  {
+   "text": "season",
+   "kind": "idea"
+  },
+  {
+   "text": "birthday",
+   "kind": "idea"
+  },
+  {
+   "text": "graduate",
+   "kind": "person"
+  },
+  {
+   "text": "stranger",
+   "kind": "person"
+  },
+  {
+   "text": "friend",
+   "kind": "person"
+  },
+  {
+   "text": "kid",
+   "kind": "person"
+  },
+  "radio",
+  {
+   "text": "porch",
+   "kind": "place"
+  },
+  "yearbook",
+  "guitar",
+  "bus",
+  {
+   "text": "curfew",
+   "kind": "idea"
+  },
+  {
+   "text": "goodbye",
+   "kind": "idea"
+  },
+  "diary",
+  "playlist",
+  "mixtape"
+ ]
+}

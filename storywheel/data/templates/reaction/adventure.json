@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "reaction",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER} in hope of {THING}",
+  "buried {THING:portable} for safety, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and memorized every landmark",
+  "{ACT_MESSAGE} {MESSAGE:physical} and sent runners to {SOMEONE:human,!plural}",
+  "shouted to {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}",
+  "shouldered {THING:portable} and {ACT_PLACE} {landmark} {MANNER}",
+  "haggled with {SOMEONE:human} over {THING} for {PRIZE:material,!inner}",
+  "laid a false camp {HIDING}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "pressed forward {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "looped back through {landmark} {MANNER} to shake off {SOMEONE:human,!plural}"
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "climax",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{first} backed {the_someone:human} into a corner at {landmark} and laid down {the_thing:portable}",
+  "{first} played {the_message} for the room at {landmark} {MANNER} and watched {the_someone:human} bolt",
+  "{the_someone:human} froze at {landmark}, and {first} palmed {the_thing:portable} {MANNER}",
+  "{first} set {the_thing:portable} on the table at {landmark} {MANNER} and waited out the silence",
+  "{first} stared down the {rival} at {landmark}, holding {the_thing:portable} and {VALUE}",
+  "{the_someone:human} cracked under the chandeliers at {landmark}, and {first} named {MOTIVE}",
+  "{first} strolled into {landmark} {MANNER} and called out {SOMEONE:human,!plural}",
+  "{first} crossed {landmark} {MANNER} with {THING:portable} and a minute to spare",
+  "{SOMEONE:human,!plural} folded at {landmark} {MANNER} and called off the double-cross",
+  "{first} killed the lights {MANNER} at {landmark}, and the alarm went quiet",
+  "{first} raised {the_thing} at {landmark} {MANNER} and let {the_someone:human} pick",
+  "the {rival} blinked at {landmark} {MANNER}, and {first} made the switch"
+ ]
+}

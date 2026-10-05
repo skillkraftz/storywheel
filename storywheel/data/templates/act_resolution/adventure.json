@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_resolution",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "At journey's end, {first} had {PRIZE:!inner} and still had {VALUE}.",
+  "{place} recovered from {the_disaster}, and {first} {HABIT_PLACE} {landmark} each spring.",
+  "{first} grasped {need}, and the ships sailed home.",
+  "With the chart framed, {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "The {rival} had vanished, and {first} {HABIT_PLACE} {landmark} when the {season} came.",
+  "{first} {HABIT_PERSON} {the_someone:human} and keeps {TOPIC} out of every atlas.",
+  "Ships returned to {place} after {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+ ]
+}

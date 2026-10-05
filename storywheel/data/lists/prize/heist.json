@@ -1,0 +1,105 @@
+{
+ "_note": "What people want from a heist.",
+ "slot": "prize",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "the diamonds",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the payroll",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the painting",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the gold bars",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the bearer bonds",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "the casino take",
+   "features": [
+    "material"
+   ]
+  },
+  {
+   "text": "a seat at the table",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a clean name",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a place in the crew",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a head start",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "respect",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "a pardon",
+   "features": [
+    "social"
+   ]
+  },
+  {
+   "text": "an honest night's sleep",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a quiet life",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "nerves of steel",
+   "features": [
+    "inner"
+   ]
+  },
+  {
+   "text": "a debt repaid",
+   "features": [
+    "inner"
+   ]
+  }
+ ]
+}

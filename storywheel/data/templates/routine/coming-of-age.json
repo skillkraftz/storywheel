@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "routine",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{ACT_PLACE:mundane} {landmark} after class and {ACT_THING:mundane} {THING:!modern}",
+  "rode past {landmark} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING:!modern} {MANNER} and imagined life beyond {landmark}",
+  "worked the register in {place} {MANNER} and longed for {PRIZE:!inner}",
+  "paged through old yearbooks {MANNER} and avoided the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and stood by {VALUE}",
+  "sat by {landmark} and believed in {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} every evening and kept {TOPIC} to themself",
+  "practiced a speech {MANNER} and told {CLOSE:human} nothing",
+  "kept the radio low {MANNER} and dreaded {DISASTER}"
+ ]
+}

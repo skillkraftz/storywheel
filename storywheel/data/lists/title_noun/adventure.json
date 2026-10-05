@@ -1,0 +1,84 @@
+{
+ "_note": "Title nouns for adventures.",
+ "slot": "title_noun",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "expedition",
+   "kind": "idea"
+  },
+  "compass",
+  {
+   "text": "temple",
+   "kind": "place"
+  },
+  {
+   "text": "river",
+   "kind": "place"
+  },
+  "treasure",
+  {
+   "text": "voyage",
+   "kind": "idea"
+  },
+  {
+   "text": "island",
+   "kind": "place"
+  },
+  "crown",
+  "chart",
+  {
+   "text": "horizon",
+   "kind": "place"
+  },
+  {
+   "text": "frontier",
+   "kind": "place"
+  },
+  "relic",
+  {
+   "text": "passage",
+   "kind": "place"
+  },
+  {
+   "text": "explorer",
+   "kind": "person"
+  },
+  {
+   "text": "stowaway",
+   "kind": "person"
+  },
+  {
+   "text": "quest",
+   "kind": "idea"
+  },
+  {
+   "text": "summit",
+   "kind": "place"
+  },
+  {
+   "text": "journey",
+   "kind": "idea"
+  },
+  "idol",
+  {
+   "text": "wilderness",
+   "kind": "place"
+  },
+  {
+   "text": "tide",
+   "kind": "idea"
+  },
+  {
+   "text": "caravan",
+   "kind": "idea"
+  },
+  "map",
+  {
+   "text": "mutineer",
+   "kind": "person"
+  }
+ ]
+}

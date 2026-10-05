@@ -1,0 +1,18 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_climax",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{first} walked up to {the_someone:human} at {landmark} and offered {the_thing:portable}.",
+  "{first} read {the_message} aloud at {landmark} {MANNER} and watched {the_someone:human} look away.",
+  "{the_someone:human} paused at {landmark}, and {first} handed back {the_thing:portable} {MANNER}.",
+  "{first} left {the_thing:portable} on the steps of {landmark} {MANNER}, then waited.",
+  "{first} spoke up to the {rival} at {landmark} with {the_thing:portable}, and chose {VALUE}.",
+  "{first} sprinted across {landmark} {MANNER}, clutching {THING:portable}, with seconds to spare.",
+  "{first} stormed up to {landmark} {MANNER} and confronted {SOMEONE:human,!plural}, choosing {VALUE}.",
+  "{first} switched off the music {MANNER} at {landmark} and told the truth.",
+  "The {rival} backed down at {landmark} {MANNER}, and {first} went home with {the_thing:portable}."
+ ]
+}

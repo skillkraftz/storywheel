@@ -1,0 +1,119 @@
+{
+ "_note": "Who races for the same prize. Phrased to follow 'the'.",
+ "slot": "rival",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "rival explorer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "treasure baron",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "pirate captain",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "colonel of the expedition",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "museum collector",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "bandit queen",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "smuggler lord",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "rival guide",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "ruthless hunter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "jealous brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "treacherous partner",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "warlord of the pass",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "shipping magnate",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "grave robber",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "sea raider",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "rich patron",
+   "features": [
+    "human",
+    "authority"
+   ]
+  }
+ ]
+}

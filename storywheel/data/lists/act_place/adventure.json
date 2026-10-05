@@ -1,0 +1,148 @@
+{
+ "_note": "Past-tense verbs for adventure that take a place.",
+ "slot": "act_place",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "explored",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "crossed",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "scaled",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "outdoor"
+   ]
+  },
+  {
+   "text": "reached",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "camped at",
+   "subject": [
+    "human"
+   ]
+  },
+  "searched",
+  {
+   "text": "circled",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "fled",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "entered",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "mapped",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "waded into",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "natural"
+   ]
+  },
+  {
+   "text": "descended into",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "staked out",
+   "subject": [
+    "human"
+   ]
+  },
+  {
+   "text": "returned to",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "passed through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "locked up",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "indoor"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "walked through",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "looked over",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "checked",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "visited",
+   "subject": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  }
+ ]
+}

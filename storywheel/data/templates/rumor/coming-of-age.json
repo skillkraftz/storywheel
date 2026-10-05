@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "rumor",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "kids say {THING:valuable} {is} stashed {HIDING} near {landmark}",
+  "{DISASTER:manmade} {was} pinned on the {rival}",
+  "{SOMEONE:human,!plural} was spotted sitting at {landmark} {MANNER}",
+  "{landmark} {was} boarded up following {DISASTER:manmade}",
+  "the {rival} bribes {SOMEONE:human,!plural} {MANNER} to hush things up",
+  "{SOMEONE:human,!plural} hangs around {landmark} {MANNER}",
+  "{THING:portable} {is} stashed {HIDING} for the {rival}",
+  "the {rival} spreads stories about {SOMEONE:human,!plural} {MANNER}"
+ ]
+}

@@ -772,8 +772,8 @@ dragon's blood. A genre with no `_neighbors` entry keeps the even floor.
 is horror's), so "comedy · eerie" is rare. **Era and season agree**: an era that names a season ("the week before Christmas") sets it
 (`data/seasons.json` lists the words).
 
-**Written genres:** western, fairy tale, comedy, fantasy, mystery, horror, sci-fi and romance have their own names, jobs, places, things,
-people, troubles, title words and frames for every beat; the others run on general atoms until their lists are written.
+**Written genres:** western, fairy tale, comedy, fantasy, mystery, horror, sci-fi, romance, ghost story, noir, thriller, heist, adventure and coming-of-age have their own
+names, jobs, places, things, people, troubles, title words and frames for every beat.
 
 A genre name that has no profile still works: it becomes a tag with weight 3,
 so `steampunk` will favor lists tagged `steampunk`. You can add profiles in

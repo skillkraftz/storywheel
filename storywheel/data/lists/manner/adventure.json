@@ -1,0 +1,35 @@
+{
+ "_note": "How a journey goes.",
+ "slot": "manner",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "by lantern light",
+  "on a borrowed mule",
+  "against the current",
+  "under a blazing sun",
+  "in the dead of night",
+  {
+   "text": "with a machete in hand",
+   "features": [
+    "carrying"
+   ]
+  },
+  "by canoe",
+  "on foot",
+  "through the fog",
+  "at the last moment",
+  {
+   "text": "in a whisper",
+   "features": [
+    "speech"
+   ]
+  },
+  "on half rations",
+  "against all odds",
+  "across the ice",
+  "by rope and nerve",
+  "at a dead run"
+ ]
+}

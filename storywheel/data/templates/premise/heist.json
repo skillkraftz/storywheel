@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "premise",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "The plan is simple: {first}, a {trait} {job}, and strangers will lift {THING:valuable} from {landmark:built} {DEADLINE}.",
+  "{first}, a {trait} {job} of {place}, gets one night to empty the {rival}'s safe, and {SOMEONE:human,!plural} holds the only key.",
+  "After {DISASTER:strikes} wrecks the first plan, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE} with half a crew.",
+  "{first}, a {trait} {job}, spends a year planning to hit {landmark:built}, then learns the {rival} is planning the same.",
+  "Nobody in {place} trusts {first}, a {trait} {job}, but {SOMEONE:human,!plural} offers a fortune to {DO_THING} {THING} {MANNER}.",
+  "{first}, a {trait} {job}, takes a last job for the {rival}: {DO_THING} {THING} {DEADLINE}.",
+  "A {trait} {job} named {first} stumbles on {THING:!living,!bulky} {HIDING}, a map to the {rival}'s whole fortune.",
+  "{first}, a {trait} {job}, wants the {rival} ruined, and {landmark:built} is where the money sleeps.",
+  "A crew gathers in {place}: {first}, a {trait} {job}, {SOMEONE:human,!plural}, and one traitor not yet named.",
+  "{first}, a {trait} {job}, reads {MESSAGE:physical} twice and realizes {SOMEONE:human,!plural} is selling that job to the {rival}.",
+  "{first}, a {trait} {job} of {place}, retires from crime, until {SOMEONE:human,!plural} turns up {MANNER} with {THING:valuable}.",
+  "The {rival} has never been robbed, and {first}, a {trait} {job} of {place}, means to change that {DEADLINE}."
+ ]
+}

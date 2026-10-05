@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "ki",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{first} was a {trait} {job} in {place}, who checked every exit twice each {season}.",
+  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and priced every lock.",
+  "{first}, a {trait} {job}, kept {THING:!living} close and kept {FEELING} closer.",
+  "Each {season}, {first}, a {trait} {job} of {place}, strolled past {landmark} {MANNER}.",
+  "{first} sized up every visitor to {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "Well before sunrise in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."
+ ]
+}

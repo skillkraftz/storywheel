@@ -1,0 +1,162 @@
+{
+ "_note": "Past-tense verbs for heist that take a person.",
+ "slot": "act_person",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "conned",
+  "charmed",
+  "distracted",
+  {
+   "text": "bribed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "tricked",
+  {
+   "text": "recruited",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "trusted",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "double-crossed",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  "tailed",
+  {
+   "text": "warned",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "paid off",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "signaled",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "greeted",
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "thanked",
+   "features": [
+    "mundane",
+    "gentle"
+   ]
+  },
+  {
+   "text": "called",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "mundane"
+   ]
+  },
+  {
+   "text": "met",
+   "features": [
+    "mundane"
+   ]
+  },
+  "outwitted",
+  {
+   "text": "hired",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  },
+  {
+   "text": "sheltered",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "covered for",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ],
+   "features": [
+    "gentle"
+   ]
+  },
+  {
+   "text": "bumped into",
+   "features": [
+    "mundane"
+   ]
+  },
+  "dodged",
+  "shadowed",
+  {
+   "text": "pulled aside",
+   "subject": [
+    "human"
+   ],
+   "object": [
+    "human"
+   ]
+  }
+ ]
+}

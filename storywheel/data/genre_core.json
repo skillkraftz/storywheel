@@ -43,5 +43,17 @@
  "romance": {
   "a": "tender passionate affectionate devoted charming smitten blushing wistful adoring ardent sweet intimate yearning flirtatious enamored radiant lovesick dreamy gallant bashful",
   "v": "kiss court woo embrace adore flirt cherish blush propose confide linger yearn treasure serenade swoon reunite charm date flatter hug"
+ },
+ "heist": {
+  "a": "slick sly audacious cunning daring brazen suave nimble crooked smooth lavish glittering meticulous cocky ingenious flawless treacherous elaborate calculating shifty polished furtive devious shrewd flamboyant",
+  "v": "rob steal pilfer scheme swindle disguise forge bribe bluff outwit plunder sneak plot smuggle burgle loot con deceive dupe rig fleece abscond"
+ },
+ "adventure": {
+  "a": "daring perilous uncharted rugged treacherous fearless remote ancient hidden wild intrepid daunting savage lost mysterious dangerous adventurous desolate windswept towering forbidding legendary",
+  "v": "explore trek climb brave chart venture navigate plunge scale wander hike sail hunt uncover cross flee survive rescue battle discover journey roam"
+ },
+ "coming-of-age": {
+  "a": "awkward restless hopeful tender bittersweet nostalgic impulsive shy uncertain wistful carefree earnest rebellious naive sheltered homesick giddy self-conscious lonely curious eager reckless wide-eyed",
+  "v": "grow blush wonder outgrow graduate rebel confess drift yearn fumble linger daydream dare stumble leave belong bloom mature quarrel reconcile pretend remember"
  }
 }

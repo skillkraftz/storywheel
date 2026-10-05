@@ -1,0 +1,261 @@
+{
+ "_note": "Guides, rivals, hermits and strangers met along the way.",
+ "slot": "someone",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "a mountain guide",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a rival explorer",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a map seller",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a ship captain",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a mule driver",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a river pilot",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a hermit scholar",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a smuggler",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a village elder",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a young stowaway",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a cartographer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a grave robber",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a desert nomad",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a jungle botanist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a treasure hunter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a ship's cook",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a wandering priest",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bounty hunter",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a ferry keeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired sailor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a colonel of the survey",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a pearl diver",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bush pilot",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a fur trapper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a caravan master",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a nervous interpreter",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sunburned prospector",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lighthouse keeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a deserter from the fort",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a half-mad prospector",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a jungle healer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "an old harpooner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a runaway cabin boy",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a salt trader",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a rope-bridge keeper",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a masked horseman",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a lost botanist",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a scarred sergeant",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a mapmaker's widow",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sly innkeeper",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

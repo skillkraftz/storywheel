@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "act_trials",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{SOMEONE:!threatening} joined {first} at {landmark} {MANNER} and offered to help.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} got to {CLOSE:human} first.",
+  "Whenever {first} neared {PRIZE:!inner}, {VICE} cost the crew another day.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and bought the plan some time.",
+  "{the_thing} arrived via {SOMEONE:human,!plural}, so {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} trailed {THING:portable} to {landmark} and held the line {MANNER}.",
+  "{the_someone:human} fudged {TOPIC}, and {first} redrew the plan {MANNER}."
+ ]
+}

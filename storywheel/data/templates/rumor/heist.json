@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "rumor",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{THING:valuable} {is} rumored to sit {HIDING} at {landmark:built}",
+  "{DISASTER:manmade} {was} quietly paid for by the {rival}",
+  "{SOMEONE:human,!plural} was seen scouting {landmark} {MANNER}",
+  "{landmark:built} {was} shut for a week after {DISASTER:manmade}",
+  "the {rival} pays {SOMEONE:human,!plural} {MANNER} to keep quiet",
+  "{SOMEONE:human,!plural} drinks at {landmark:built} {MANNER}",
+  "{THING:portable} {is} guarded {HIDING} for the {rival}",
+  "the {rival} has {SOMEONE:human,!plural} watched {MANNER}"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_crisis",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost a best friend.",
+  "{the_thing} got ruined, and all {first} had left was {VALUE}.",
+  "{the_someone:human} let {first} down at {landmark}, and the whole group split.",
+  "{first} {ACT_THING:trades} {THING} for nothing, and the way to {PRIZE:!inner} closed.",
+  "Alone at {landmark}, {first} wrestled with {FEELING} and {VICE} together.",
+  "{the_disaster:strikes} hit a second time, and {first} missed it by minutes.",
+  "{CLOSE:human} had given away {the_thing} {MANNER}, and {first} learned of it too late."
+ ]
+}

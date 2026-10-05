@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for adventure that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "deciphered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "sent",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "pinned up",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "tore",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

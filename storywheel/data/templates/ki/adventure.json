@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "ki",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{first} was a {trait} {job} in {place}, who watched the horizon every {season}.",
+  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and read the weather.",
+  "{first}, a {trait} {job}, carried {THING:!living} wherever {first} went, and carried {FEELING} too.",
+  "Every {season}, {first}, a {trait} {job} of {place}, wandered down to {landmark} {MANNER}.",
+  "{first} listened to each sailor in {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "As the tide went out in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."
+ ]
+}

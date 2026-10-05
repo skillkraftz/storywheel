@@ -1,0 +1,35 @@
+{
+ "_note": "How a young person does things.",
+ "slot": "manner",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "after curfew",
+  "on a borrowed bike",
+  "with a racing heart",
+  "behind the gym",
+  "in a rush",
+  "with sweaty palms",
+  "at the back",
+  "on the last bus",
+  "through the screen door",
+  {
+   "text": "in a whisper",
+   "features": [
+    "speech"
+   ]
+  },
+  "with a grin",
+  "in a hand-me-down jacket",
+  "under the porch light",
+  "at three in the morning",
+  {
+   "text": "with a duffel bag",
+   "features": [
+    "carrying"
+   ]
+  },
+  "against orders"
+ ]
+}

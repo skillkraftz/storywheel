@@ -1,0 +1,64 @@
+{
+ "_note": "Past-tense verbs for heist that take a message.",
+ "slot": "act_message",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "slipped",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "forged",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "memorized",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "passed on",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "burned",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "decoded",
+   "object": [
+    "physical"
+   ]
+  },
+  "answered",
+  {
+   "text": "hid",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "delivered",
+   "object": [
+    "physical"
+   ]
+  },
+  {
+   "text": "copied",
+   "object": [
+    "physical"
+   ]
+  }
+ ]
+}

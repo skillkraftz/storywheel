@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "reaction",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER}, hoping to find {THING}",
+  "hid {THING:portable} {HIDING}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and rehearsed what to say about {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and asked {SOMEONE:human,!plural} what it meant",
+  "confided in {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}",
+  "stuffed {THING:portable} into a bag and {ACT_PLACE} {landmark} {MANNER}",
+  "lent {THING} to {SOMEONE:human} in return for {PRIZE:material,!inner}",
+  "made up an excuse {HIDING}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "stayed awake {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "cut through {landmark} {MANNER} to avoid {SOMEONE:human,!plural}"
+ ]
+}

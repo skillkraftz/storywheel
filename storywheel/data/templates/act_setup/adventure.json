@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "act_setup",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "In {place}, {first}, a {trait} {job}, hid {THING} {HIDING} and studied every chart.",
+  "{first}, a {trait} {job} of {place}, kept hearing tales of {TOPIC} and wanted {want}.",
+  "{place} lay quiet, but {first}, a {trait} {job}, felt the pull of the road.",
+  "The {rival} watched the harbor of {place}, and {first}, a {trait} {job}, sailed {MANNER}.",
+  "{first}, a {trait} {job}, worked near {landmark} outside {place} and dreamed of {PRIZE:material}.",
+  "{first}, a {trait} {job}, reached {place} {MANNER} to leave an old life behind.",
+  "In {place}, {first} was a {trait} {job} who wanted {want} and traveled light."
+ ]
+}

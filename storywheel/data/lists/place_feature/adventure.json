@@ -1,0 +1,32 @@
+{
+ "_note": "Second half of a port or camp name.",
+ "slot": "place_feature",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "Harbor",
+  "Landing",
+  "Crossing",
+  "Rest",
+  "Camp",
+  "Cove",
+  "Ridge",
+  "Falls",
+  "Wells",
+  "Haven",
+  "Point",
+  "Station",
+  "Bluff",
+  "Reach",
+  "Gorge",
+  "Sound",
+  "Ford",
+  "Outpost",
+  "Springs",
+  "Quay",
+  "Strand",
+  "Basin",
+  "Rapids"
+ ]
+}

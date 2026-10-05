@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "flaw",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "calls every stranger a rival and {VICE} a skill, hiding {FEELING}",
+  "lunges toward {TEMPTATION} whenever {FEELING} draws near",
+  "relies on {VICE} instead of {CLOSE:human}",
+  "keeps wandering to dodge {FEELING}, and calls it {VALUE}",
+  "would swap {VALUE} for {TEMPTATION}",
+  "turns every journey into {VICE} once {FEELING} grows",
+  "never rests, and mistakes {VICE} for {VALUE}",
+  "covers {FEELING} with laughter and {VICE}"
+ ]
+}

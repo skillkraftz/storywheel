@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "sho",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "All {season}, {first} worked out how to read {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} started hanging around {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} lent {SOMEONE:!threatening} {THING:!living}, and they traded confessions about {TOPIC}.",
+  "A small crisis hit: {DISASTER:strikes} struck {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
+  "{first} kept delaying the job of {DO_THING} {THING}, and the {season} ran out.",
+  "{CLOSE:human} asked what {TOPIC} meant, and {first} shrugged it off {MANNER}."
+ ]
+}

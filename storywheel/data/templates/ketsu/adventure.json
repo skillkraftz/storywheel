@@ -1,0 +1,15 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "ketsu",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the road fell quiet.",
+  "{first} finally saw through {TOPIC} and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the road behind stayed empty.",
+  "{first} laid {VICE} down at {landmark}, and the wind dropped.",
+  "{place} grew older without them, and {first} {HABIT_PERSON} {CLOSE:human} by letter.",
+  "{first} gave {landmark} to the {rival}, and the road home opened {MANNER}."
+ ]
+}

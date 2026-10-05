@@ -1,0 +1,290 @@
+{
+ "_note": "Where growing up happens: pools, diners, bus stops and back porches.",
+ "slot": "landmark",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "the public pool",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the high school gym",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the water tower",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the lake dock",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the corner diner",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bus station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the drive-in lot",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the school roof",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the record store",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bowling alley",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the back porch",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the basement",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the football bleachers",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the quarry swimming hole",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the mall food court",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the train overpass",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the laundromat",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the community college",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the summer camp lodge",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the beach boardwalk",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the gas station",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the movie theater",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the library steps",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the skate park",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cornfield",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the treehouse",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the attic",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the graduation stage",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the lakeside cabin",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the airport gate",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bus stop",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the dorm room",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the school parking lot",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the trailer park",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the front steps",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the roller rink",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the hardware store",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the riverbank",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the old ballfield",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the church basement",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "want",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "{PRIZE:social,!inner} and a way out of {place}",
+  "{THING:valuable,!living,!modern} and {PRIZE:social,!inner} for the season",
+  "{PRIZE:material,!inner} and a bus ticket away from the {rival}",
+  "{THING:valuable,!living,!modern} bought {DEADLINE}",
+  "{THING:portable,!living,!modern} returned before {SOMEONE:human,!plural} finds out",
+  "the {rival} to leave {CLOSE:human} alone at last",
+  "{PRIZE:social,!inner} and {PRIZE:material,!inner} to take home",
+  "{PRIZE:material,!inner} saved up {DEADLINE}"
+ ]
+}

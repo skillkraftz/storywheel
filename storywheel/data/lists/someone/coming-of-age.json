@@ -1,0 +1,259 @@
+{
+ "_note": "People who shape a growing-up: friends, mentors, crushes and bullies.",
+ "slot": "someone",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "a summer lifeguard",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a new neighbor",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a favorite teacher",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "an older cousin",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a band drummer",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a town librarian",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a coach with a temper",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a quiet exchange student",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sleepy diner cook",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a boy from next door",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a girl from the city",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a grandmother with secrets",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a night bus driver",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a drifter at the lake",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a high school dropout",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a camp counselor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a bookstore owner",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a stern principal",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a family friend",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a school bully",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a night-shift nurse",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a lonely widower",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a former best friend",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a sister home from college",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a shy poet",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a skate-park regular",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a record store clerk",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a mean girl",
+   "features": [
+    "human",
+    "threatening"
+   ]
+  },
+  {
+   "text": "a star quarterback",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a part-time boss",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a school counselor",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a talkative barber",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a street musician",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a retired shop teacher",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a new girl in class",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a friend's older brother",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a visiting uncle",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a church choir leader",
+   "features": [
+    "human",
+    "authority"
+   ]
+  },
+  {
+   "text": "a quiet kid in back",
+   "features": [
+    "human"
+   ]
+  },
+  {
+   "text": "a bus-stop stranger",
+   "features": [
+    "human"
+   ]
+  }
+ ]
+}

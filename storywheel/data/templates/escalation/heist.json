@@ -1,0 +1,23 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "escalation",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and the schedule slipped",
+  "{the_thing} vanished {HIDING}, and {the_someone:human} stopped picking up",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER} to draw the crew out",
+  "{the_message} looked like a trap, and {first} began to doubt {CLOSE:human}",
+  "{the_disaster:strikes} struck again at {landmark}, and the crew pointed at {first}",
+  "{first} came across {the_thing:portable} {MANNER}, and the job got bigger",
+  "{the_someone:human} dangled {PRIZE:!inner} before {first} to end it {MANNER}",
+  "{the_thing} belonged to {SOMEONE:human,!plural}, so {first} {ACT_PERSON} {the_someone:human}",
+  "another prize, {THING:portable}, was found {HIDING}",
+  "{SOMEONE:human,!plural} sold out the crew {MANNER}, and {THING:portable} went missing",
+  "a second spy was exposed at {landmark}, and the {rival} tightened up",
+  "the {rival} set a clock on the crew: {DEADLINE}",
+  "{CLOSE:human} said less and less about {TOPIC}, then missed the meeting",
+  "{the_someone:human} dropped out of sight {MANNER}, leaving {the_thing:portable} and an empty chair"
+ ]
+}

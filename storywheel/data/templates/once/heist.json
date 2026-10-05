@@ -1,0 +1,19 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "once",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "{first}, a {trait} {job}, spent every evening in {place} planning a robbery, and wanted {want}",
+  "{place} paid its bills in cash, and {first}, a {trait} {job}, noticed where it was kept",
+  "{first} was a {trait} {job} by day in {place}, a lock expert by night, wanting {want}",
+  "owing the {rival} more than a {job} could earn, {first} wanted {want}",
+  "{first}, a {trait} {job} of {place}, kept {THING:!modern} {HIDING} and a forged passport nearby",
+  "in {place}, nobody suspected a {trait} {job} like {first}, who wanted {want}",
+  "after three honest years as a {job} in {place}, {first} wanted {want} and a little revenge",
+  "{first}, a {trait} {job} in {place}, studied the {rival}'s habits {MANNER} and wanted {want}",
+  "{place} kept a vault for every secret; {first}, a {trait} {job}, wanted {want}",
+  "everyone in {place} liked {first}, a {trait} {job}, and nobody knew about {want}"
+ ]
+}

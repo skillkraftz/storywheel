@@ -1,0 +1,102 @@
+{
+ "_note": "Where the take or the tools are stashed.",
+ "slot": "hiding",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  {
+   "text": "in a safe-deposit box",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a hollow statue",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "under a casino carpet",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a bus-station locker",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "behind a vault panel",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a false-bottom suitcase",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "taped under a desk",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "inside a grand piano",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a rented storage unit",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "in a florist's cooler",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "buried at {landmark}",
+   "subject": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "behind a loose brick",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  },
+  {
+   "text": "in a hotel laundry cart",
+   "subject": [
+    "!living"
+   ]
+  },
+  {
+   "text": "sewn into a coat lining",
+   "subject": [
+    "!living",
+    "!bulky"
+   ]
+  }
+ ]
+}

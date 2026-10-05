@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "rumor",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{THING:valuable} {is} said to lie {HIDING} at {landmark}",
+  "{DISASTER:manmade} {was} blamed on the {rival}",
+  "{SOMEONE:human,!plural} was spotted near {landmark} {MANNER}",
+  "{landmark} {was} abandoned after {DISASTER:manmade}",
+  "the {rival} pays {SOMEONE:human,!plural} {MANNER} to redraw the charts",
+  "{SOMEONE:human,!plural} camps by {landmark} {MANNER}",
+  "{THING:portable} {is} guarded {HIDING} on behalf of the {rival}",
+  "the {rival} bribes {SOMEONE:human,!plural} {MANNER}"
+ ]
+}

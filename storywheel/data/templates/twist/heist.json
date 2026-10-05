@@ -1,0 +1,21 @@
+{
+ "_note": "Frames for heist.",
+ "slot": "twist",
+ "tags": [
+  "heist"
+ ],
+ "entries": [
+  "The whole crew worked for the {rival}, and {first} was the only thief.",
+  "{the_someone:human} had worked both sides, out of {MOTIVE}.",
+  "The loot in {landmark:built} was only paper; {the_someone:human} had the fortune.",
+  "{CLOSE:human} had misdrawn the blueprints, out of {MOTIVE}.",
+  "{the_disaster:strikes} was part of the plan; {the_someone:human} had arranged it {MANNER}.",
+  "{the_thing:portable} was never the prize; it opened {landmark:built}.",
+  "The getaway car was waiting, but {SOMEONE:human,!plural} drove it away {MANNER}.",
+  "{first} had stolen {the_thing:!living} two days ago unawares, and the {rival} noticed.",
+  "The mark was a stand-in: {the_someone:human} owned {landmark:built} all along.",
+  "{the_message:physical} was the {rival}'s own invitation, a test of {first}.",
+  "{CLOSE:human} walked off with the take {MANNER}, out of {MOTIVE}, and left {first} the blame.",
+  "The inside man at {landmark:built} was {the_someone:human}, who had no plan to leave."
+ ]
+}

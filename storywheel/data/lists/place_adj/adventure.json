@@ -1,0 +1,33 @@
+{
+ "_note": "First half of a port or camp name: {PLACE_ADJ} {PLACE_FEATURE}.",
+ "slot": "place_adj",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "Port",
+  "Cape",
+  "Fort",
+  "Salt",
+  "Iron",
+  "Thunder",
+  "Coral",
+  "Jade",
+  "Lost",
+  "Windward",
+  "Tidewater",
+  "Crescent",
+  "Bright",
+  "Cinder",
+  "Rain",
+  "Sun",
+  "Storm",
+  "Raven",
+  "Eagle",
+  "Dragon",
+  "Copper",
+  "Amber",
+  "Mist",
+  "Granite"
+ ]
+}

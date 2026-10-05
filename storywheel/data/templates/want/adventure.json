@@ -1,0 +1,17 @@
+{
+ "_note": "Frames for adventure.",
+ "slot": "want",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "{PRIZE:social,!inner} and a berth out of {place}",
+  "{THING:valuable,!living} and {PRIZE:social,!inner} on the next voyage",
+  "{PRIZE:material,!inner} and {PRIZE:social,!inner} on the atlas",
+  "{THING:valuable,!living} handed to {SOMEONE:authority,!plural} for a fortune",
+  "{THING:portable,!living} returned before {SOMEONE:human,!plural} misses it",
+  "the {rival} off {CLOSE:human}'s heels for good",
+  "{PRIZE:social,!inner} and an end to feuds in {place}",
+  "{PRIZE:material,!inner} shared {DEADLINE}"
+ ]
+}

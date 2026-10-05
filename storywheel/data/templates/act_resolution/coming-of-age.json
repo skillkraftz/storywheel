@@ -1,0 +1,16 @@
+{
+ "_note": "Frames for coming-of-age.",
+ "slot": "act_resolution",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  "In the end, {first} had {PRIZE:!inner} and still had {VALUE}.",
+  "{place} moved on after {the_disaster}, and {first} {HABIT_PLACE} {landmark} on Sundays.",
+  "{first} came to see {need}, and the summer ended.",
+  "With the box packed, {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "The {rival} was a stranger now, and {first} {HABIT_PLACE} {landmark} when the {season} came.",
+  "{first} {HABIT_PERSON} {the_someone:human} and keeps {TOPIC} out of the group chat.",
+  "{place} seemed smaller after {the_disaster}, and {first} {HABIT_PLACE} {landmark}."
+ ]
+}

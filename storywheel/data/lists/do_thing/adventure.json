@@ -1,0 +1,66 @@
+{
+ "_note": "Base-form verbs for adventure that take a thing.",
+ "slot": "do_thing",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  "find",
+  {
+   "text": "recover",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "claim",
+   "object": [
+    "valuable"
+   ]
+  },
+  {
+   "text": "decipher",
+   "object": [
+    "paper"
+   ]
+  },
+  "steal",
+  "return",
+  {
+   "text": "bury",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "carry",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "bring home",
+   "object": [
+    "portable"
+   ]
+  },
+  {
+   "text": "unearth",
+   "object": [
+    "buryable"
+   ]
+  },
+  {
+   "text": "destroy",
+   "object": [
+    "!living"
+   ]
+  },
+  {
+   "text": "guard",
+   "object": [
+    "!living"
+   ]
+  }
+ ]
+}

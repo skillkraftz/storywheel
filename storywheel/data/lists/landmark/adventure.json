@@ -1,0 +1,300 @@
+{
+ "_note": "Wilds, ruins and waystations along the route.",
+ "slot": "landmark",
+ "tags": [
+  "adventure"
+ ],
+ "entries": [
+  {
+   "text": "the ruined temple",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the jungle clearing",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the rope bridge",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the sunken harbor",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hidden valley",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the glacier edge",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the cliffside monastery",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the salt flats",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the river rapids",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the abandoned fort",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the cave mouth",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the mountain pass",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the desert well",
+   "features": [
+    "built",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the crumbling pyramid",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the pirate cove",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the lost city gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the mining camp",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the trading post",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the ship's deck",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the swamp island",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the burial chamber",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the lighthouse ruin",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the waterfall pool",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the ancient causeway",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the lakeside camp",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the harbor tavern",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the rock arch",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the whaling station",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the caravan crossroads",
+   "features": [
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the fogbound ridge",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the overgrown stairway",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the hanging gardens",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the star temple",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the sea cliff",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the buried library",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the bone desert",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  },
+  {
+   "text": "the forgotten shrine",
+   "features": [
+    "built",
+    "indoor"
+   ]
+  },
+  {
+   "text": "the crater lake",
+   "features": [
+    "natural",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the iron gate",
+   "features": [
+    "built",
+    "outdoor"
+   ]
+  },
+  {
+   "text": "the last waterhole",
+   "features": [
+    "natural",
+    "outdoor",
+    "diggable"
+   ]
+  }
+ ]
+}

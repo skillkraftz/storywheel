@@ -1,0 +1,203 @@
+{
+ "_note": "What shakes a young person's world. Phrased to follow 'a'.",
+ "slot": "disaster",
+ "tags": [
+  "coming-of-age"
+ ],
+ "entries": [
+  {
+   "text": "a fight at the party",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a failed exam",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a family move",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a lost job",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a car accident",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a broken curfew",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a parents' divorce",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a storm on the lake",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a power outage",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a school fire",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a falling out",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a rumor at school",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a flooded basement",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a heat wave",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a blizzard",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a layoff at the plant",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a house sale",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a camp closure",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a canceled concert",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a stolen car",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a messy breakup",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a teacher's resignation",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a missed audition",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a family funeral",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a bad grade",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a blackout at the dance",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a hospital stay",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a court date",
+   "features": [
+    "manmade"
+   ]
+  },
+  {
+   "text": "a town flood",
+   "features": [
+    "natural",
+    "strikes"
+   ]
+  },
+  {
+   "text": "a bus strike",
+   "features": [
+    "manmade",
+    "strikes"
+   ]
+  }
+ ]
+}
