@@ -90,6 +90,11 @@ VOCAB = {
     # when (technology): an atom without either feature fits any time
     "modern": "needs present-day technology (a burner phone, a flash drive): not in the 1920s",
     "period": "belongs to an older time (a telegram, a gramophone): not in the present day",
+    # ages (jobs): who can do this work. A job with none of these is "adult" (and an elder may still do it)
+    "child": "a job for someone under 13 (a paper round at 12)",
+    "teen": "a job or role for someone 13 to 19 (paperboy, class president, freshman)",
+    "adult": "a grown-up's work (the default for a job); said only when a job also has teen or elder",
+    "elder": "someone 60 or older ('retired ...')",
     # anything
     "plural": "takes 'are' and 'were': 'the stockyards', 'two scarred brothers'",
 }

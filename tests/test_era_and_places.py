@@ -73,9 +73,10 @@ def test_a_thriller_with_no_era_yet_assumes_modern_and_a_noir_assumes_period(lib
     e = Engine(seed=1)
     assert Ctx(e, story_for(["thriller"])).tech() == "modern"
     assert Ctx(e, story_for(["noir"])).tech() == "period"
-    assert Ctx(e, story_for(["western"])).tech() is None
+    assert Ctx(e, story_for(["western"])).tech() == "period"                 # (batch 15: western, fairy tale and fantasy are period too)
     assert Ctx(e, story_for(["noir", "thriller"])).tech() is None             # (they disagree: no rule)
-    assert Ctx(e, story_for(["noir", "western"])).tech() is None
+    assert Ctx(e, story_for(["noir", "western"])).tech() == "period"
+    assert Ctx(e, story_for(["mystery"])).tech() is None
 
 
 def test_noir_stories_have_no_modern_technology_and_thrillers_no_period_technology():

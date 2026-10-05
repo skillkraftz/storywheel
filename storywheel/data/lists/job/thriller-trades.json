@@ -57,7 +57,12 @@
   "radio operator",
   "political aide",
   "medical examiner",
-  "retired colonel",
+  {
+   "text": "retired colonel",
+   "features": [
+    "elder"
+   ]
+  },
   "night nurse"
  ]
 }

@@ -1,6 +1,70 @@
 {
-  "_note": "When the story happens.",
-  "slot": "era",
-  "tags": ["fairy tale", "medieval"],
-  "entries": ["once upon a time", "long ago", "the days of curses", "long ago and far away", "the age of forests", "the year of three kings", "before the roads were built", "the age of wishes", "the age of talking beasts", "a time unwritten"]
+ "_note": "When the story happens.",
+ "slot": "era",
+ "tags": [
+  "fairy tale",
+  "medieval"
+ ],
+ "entries": [
+  {
+   "text": "once upon a time",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "long ago",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the days of curses",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "long ago and far away",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the age of forests",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the year of three kings",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "before the roads were built",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the age of wishes",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the age of talking beasts",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "a time unwritten",
+   "features": [
+    "period"
+   ]
+  }
+ ]
 }

@@ -1,6 +1,70 @@
 {
-  "_note": "When the story happens.",
-  "slot": "era",
-  "tags": ["western", "historical"],
-  "entries": ["the 1860s", "the 1870s", "the 1880s", "the 1890s", "just after the war", "the year the railroad came", "the last open range years", "the gold rush years", "the year of the strike", "the last cattle drives"]
+ "_note": "When the story happens.",
+ "slot": "era",
+ "tags": [
+  "western",
+  "historical"
+ ],
+ "entries": [
+  {
+   "text": "the 1860s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the 1870s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the 1880s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the 1890s",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "just after the war",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the year the railroad came",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the last open range years",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the gold rush years",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the year of the strike",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the last cattle drives",
+   "features": [
+    "period"
+   ]
+  }
+ ]
 }

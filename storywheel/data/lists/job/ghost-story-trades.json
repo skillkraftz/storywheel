@@ -32,7 +32,12 @@
   "railway porter",
   "house clerk",
   "seamstress",
-  "retired captain",
+  {
+   "text": "retired captain",
+   "features": [
+    "elder"
+   ]
+  },
   "landlady",
   "letter carrier",
   "undertaker",

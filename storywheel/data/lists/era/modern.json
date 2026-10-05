@@ -11,7 +11,12 @@
     "modern"
    ]
   },
-  "the late 90s",
+  {
+   "text": "the late 90s",
+   "features": [
+    "period"
+   ]
+  },
   {
    "text": "the 1970s",
    "features": [

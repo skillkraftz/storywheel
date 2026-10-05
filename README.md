@@ -613,7 +613,8 @@ frames **require** them. The whole vocabulary is small and lives in `storywheel/
 | | `gentle` | a kind or reconciling act, for endings |
 | | `stows`, `trades` | puts something somewhere; gives something up for something |
 | manners | `speech`, `carrying`, `feeling` | a spoken manner ("in whispers"), one that needs something in hand ("with drawn steel"), a state of mind ("in silent dread"). Drawn only where a frame asks for it, e.g. `{MANNER:speech}` |
-| when | `modern`, `period` | needs present-day technology (a burner phone); belongs to an older time (a telegram). An atom with neither fits any time; a story's era (or, before one is chosen, its genre: noir is `period`, thriller `modern`, in genres.json `_tech`) keeps out the other kind |
+| when | `modern`, `period` | needs present-day technology (a burner phone); belongs to an older time (a telegram). An atom with neither fits any time; a story's era (or, before one is chosen, its genre: noir, western, fairy tale, fantasy and adventure are `period`; thriller, heist and coming-of-age `modern`, in genres.json `_tech`) keeps out the other kind |
+| age (jobs) | `child`, `teen`, `adult`, `elder` | who can do the job: a protagonist's age falls in a band the job fits (paperboy and class president are `teen`, "retired ..." is `elder`). A job with none is `adult`, and an adult's job is open to an `elder` too. Each genre's protagonist ages are in genres.json `_ages` (coming-of-age 13 to 19, the rest 20 to 80) |
 | anything | `plural` | takes "are" and "were": "the stockyards", "two scarred brothers" |
 
 An atom lists its own features (a list sets defaults for its entries); anything not listed

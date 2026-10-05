@@ -227,6 +227,10 @@ def normalize(line, story):
     return line
 
 
+FAIL_SD = 5          # an entry this many standard deviations above chance (and 3x its share, 5+ picks) fails the repetition check
+WATCH_SD = 4         # ... and from this many it is listed as one to watch
+
+
 def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5, structure=None):
     engine, batch = roll_batch(genres, stories, seed, structure)
     shares = fair_share(engine, genres)
@@ -248,8 +252,11 @@ def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5,
         expected = per_list[lid] * share / (active[lid] or 1.0)
         rows.append((n / expected, n, expected, lid, text))
     # (a rare entry picked 5 times when 1 was expected is noise, not a pattern: it must also be 5 standard deviations above what chance gives: with hundreds of rare entries, 4 flags one by luck about once a run)
-    flagged = [r for r in rows if r[0] > factor and r[1] >= min_count and r[1] > r[2] + 5 * r[2] ** 0.5]
+    flagged = [r for r in rows if r[0] > factor and r[1] >= min_count and r[1] > r[2] + FAIL_SD * r[2] ** 0.5]
     flagged.sort(reverse=True)
+    # between WATCH_SD and FAIL_SD: not a failure, but listed, so a real repeat is seen before it grows
+    watch = [r for r in rows if r[0] > factor and r[1] >= min_count and r[2] + WATCH_SD * r[2] ** 0.5 < r[1] <= r[2] + FAIL_SD * r[2] ** 0.5]
+    watch.sort(reverse=True)
 
     lines = Counter()
     where = {}
@@ -263,7 +270,7 @@ def build_report(genres, stories=200, seed=101, top=15, factor=3.0, min_count=5,
 
     problems = lint(engine.library)
     return {"engine": engine, "stories": stories, "genres": genres, "seed": seed,
-            "picks": len(engine.trace), "rows": rows, "flagged": flagged,
+            "picks": len(engine.trace), "rows": rows, "flagged": flagged, "watch": watch,
             "top_entries": sorted((r for r in rows if len(engine.library.lists[r[3]].entries) >= 15),
                                   key=lambda r: -r[1])[:top],
             "heavy_lines": [(t, n) for t, n in lines.items() if n >= 5],
@@ -285,6 +292,9 @@ def format_report(r, top=15):
         out.append(f"  {n:4d}  {ratio:5.1f}x  {lid:28s} {text[:60]}{flag}")
     out += ["", f"Entries over 3x their fair share (and picked 5+ times): {len(r['flagged'])}"]
     for ratio, n, expected, lid, text in r["flagged"][:top]:
+        out.append(f"  {ratio:5.1f}x  {n:4d} vs {expected:5.1f} expected  {lid}  {text[:56]}")
+    out += ["", f"Watch (4 to 5 standard deviations above chance; not a failure yet): {len(r.get('watch', []))}"]
+    for ratio, n, expected, lid, text in r.get("watch", [])[:top]:
         out.append(f"  {ratio:5.1f}x  {n:4d} vs {expected:5.1f} expected  {lid}  {text[:56]}")
     out += ["", "Most repeated rendered lines (names and places blanked, 2+ times):"]
     for n, text, where in r["repeated"]:

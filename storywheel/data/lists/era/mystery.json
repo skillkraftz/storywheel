@@ -14,6 +14,11 @@
   "the power cut night",
   "the autumn of the inquest",
   "the flower show summer",
-  "the year after the war"
+  {
+   "text": "the year after the war",
+   "features": [
+    "period"
+   ]
+  }
  ]
 }

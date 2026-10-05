@@ -166,6 +166,7 @@ class Library:
         self.neighbors = neighbors or {}                    # genre -> tags of the genres whose lists the floor may draw from
         self.own_slots = {}                                 # genre -> slots where the floor is off (only its own and the general lists)
         self.tech = {}                                      # genre -> "modern" or "period": the technology its stories assume
+        self.ages = {}                                      # genre -> (youngest, oldest) protagonist; "_default" for the rest
         self.by_slot = {}
         for wl in lists.values():
             self.by_slot.setdefault(wl.slot, []).append(wl)
@@ -194,6 +195,7 @@ class Library:
         for doc in docs:
             lib.own_slots.update({k.strip().lower(): list(v) for k, v in doc.get("_own_slots", {}).items()})
             lib.tech.update({k.strip().lower(): v for k, v in doc.get("_tech", {}).items()})
+            lib.ages.update({k.strip().lower(): (int(v[0]), int(v[1])) for k, v in doc.get("_ages", {}).items() if not k.startswith("_note")})
         return lib
 
     def replace_lists(self, prefix, new_lists):

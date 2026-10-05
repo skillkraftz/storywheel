@@ -7,7 +7,12 @@
  "entries": [
   "village constable",
   "coroner",
-  "retired detective",
+  {
+   "text": "retired detective",
+   "features": [
+    "elder"
+   ]
+  },
   "private investigator",
   "crime reporter",
   "pathologist",

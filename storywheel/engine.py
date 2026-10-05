@@ -35,6 +35,10 @@ BLOCKED_WORDS = re.compile(
 MEMORYLESS = {"mood"}
 
 
+
+# What a generator's output is, for the rules that read features: Faker's jobs are today's jobs ("data analyst"), never a 1920s one.
+GENERATED_FEATURES = {"faker.job": ("modern",)}
+
 class Engine:
     def __init__(self, seed=None, library=None, user_dir=None, rng=None, persist=False, ratings=None):
         """`persist=True` loads and saves the recent-picks memory in user_dir. Leave it
@@ -54,6 +58,7 @@ class Engine:
         self._dictionary = None
         self._object_words = None
         self._feature_index = None
+        self._generated = {}               # (slot, text) -> features of what a generator made (see GENERATED_FEATURES)
         self.last_entry = None             # the Entry behind the most recent pick
         self.notices = []                  # things the user should hear about (see take_notices)
         self.universes = []                # universes the generator may draw from (see set_universes)
@@ -185,7 +190,10 @@ class Engine:
         beyond using the random generator. With reuse=False, entries already used in this
         story (`avoid`) are not offered at all."""
         if wl.generator:
-            entry = Entry(self.generate(wl.generator), kind=None)
+            feats = GENERATED_FEATURES.get(wl.generator)
+            entry = Entry(self.generate(wl.generator), kind=None, features=feats)
+            if feats:
+                self._generated[(wl.slot, entry.text.lower())] = feats
             return entry if not accept or accept(entry) else None
         if wl.markov and self.rng.random() < wl.markov:
             name = self.maker(wl).make(self.rng, reject=self.dictionary)
@@ -285,8 +293,12 @@ class Engine:
             for wl in self.library.lists.values():
                 if not wl.is_template and not wl.generator:
                     for e in wl.entries:
-                        self._feature_index.setdefault((wl.slot, e.text.lower()), e.features)
-        return self._feature_index.get((slot, (text or "").lower()))
+                        key = (wl.slot, e.text.lower())
+                        have = self._feature_index.get(key)
+                        # the same words in two lists are the same thing: what either says it is ("tutor" is a teen's job in one list)
+                        self._feature_index[key] = e.features if have is None else tuple(dict.fromkeys(have + (e.features or ())))
+        key = (slot, (text or "").lower())
+        return self._feature_index.get(key) or self._generated.get(key)
 
     @property
     def object_words(self):

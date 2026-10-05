@@ -236,7 +236,15 @@ def roll_beat(story, universe, filler, beat, texts):
     sync_base(pseudo)
     pro = next((e for e in universe.entities("character") if str(e.fields.get("role", "")).lower() == "protagonist"), None)
     if pro is not None and pro.name:
-        pseudo["kept"]["protagonist"] = {k: str(pro.fields.get(k, "") or "") for k in ("name", "age", "job", "trait", "want", "need", "flaw", "secret", "rival")}
+        kept = {}
+        for k in ("name", "age", "job", "trait", "want", "need", "flaw", "secret", "rival"):
+            value = str(pro.fields.get(k, "") or "").strip()
+            if k == "rival" and value:
+                target = universe.resolve(value)                # a link to a character: use its name
+                value = target.name if target is not None else value
+            if value:
+                kept[k] = value                                 # an empty field is left out: a frame that needs it gets a stand-in
+        pseudo["kept"]["protagonist"] = kept
     shape = structures.get(meta.get("structure"))
     step = steps.spine_step(shape)
     if "mix" in pseudo and not pseudo["mix"].get("base"):

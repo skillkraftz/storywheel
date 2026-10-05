@@ -5,15 +5,65 @@
   "fantasy"
  ],
  "entries": [
-  "the age of ruin",
-  "the long war's end",
-  "the last king's reign",
-  "before the sundering",
-  "the age of broken crowns",
-  "the last dragon's days",
-  "the war's fourth winter",
-  "the black moon year",
-  "the old kings' dying",
-  "the order's third age"
+  {
+   "text": "the age of ruin",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the long war's end",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the last king's reign",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "before the sundering",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the age of broken crowns",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the last dragon's days",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the war's fourth winter",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the black moon year",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the old kings' dying",
+   "features": [
+    "period"
+   ]
+  },
+  {
+   "text": "the order's third age",
+   "features": [
+    "period"
+   ]
+  }
  ]
 }

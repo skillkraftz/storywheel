@@ -65,6 +65,7 @@ class Mix:
         self.neighbors = getattr(library, "neighbors", {})
         self.own_slots = getattr(library, "own_slots", {})
         self.tech_of = getattr(library, "tech", {})
+        self.ages_of = getattr(library, "ages", {})
 
     @classmethod
     def for_story(cls, story, library):
@@ -140,6 +141,15 @@ class Mix:
         """"modern" or "period" when every genre of the story assumes the same technology (genres.json `_tech`), else None."""
         kinds = {self.tech_of.get(name.lower()) for name in self.data["base"]}
         return kinds.pop() if len(kinds) == 1 else None
+
+    def age_range(self):
+        """(youngest, oldest) for the protagonist: the ranges the story's genres set (genres.json `_ages`), overlapped where they overlap,
+        else the first one; a story whose genres set none uses `_default`."""
+        ranges = [self.ages_of[name.lower()] for name in self.data["base"] if name.lower() in self.ages_of]
+        if not ranges:
+            return self.ages_of.get("_default", (20, 80))
+        lo, hi = max(r[0] for r in ranges), min(r[1] for r in ranges)
+        return (lo, hi) if lo <= hi else ranges[0]
 
     def is_near(self, wl, near):
         """A list the floor may draw from freely: untagged, or tagged with a neighboring genre."""

@@ -5,49 +5,298 @@
   "coming-of-age"
  ],
  "entries": [
-  "lifeguard",
-  "camp counselor",
-  "diner waitress",
-  "paper carrier",
-  "grocery bagger",
-  "bookstore clerk",
-  "babysitter",
-  "dishwasher",
-  "farmhand",
-  "movie usher",
-  "pool cleaner",
-  "lawn mower",
-  "gas station attendant",
-  "ice cream scooper",
-  "record store clerk",
-  "library page",
-  "summer intern",
-  "mall cashier",
-  "dog walker",
-  "tutor",
-  "busboy",
-  "ticket taker",
-  "car wash worker",
-  "fast-food cook",
-  "stock boy",
-  "shop assistant",
-  "painter's helper",
-  "student",
-  "high school senior",
-  "freshman",
-  "exchange student",
-  "drum major",
-  "swim team captain",
-  "track runner",
-  "class president",
-  "band member",
-  "yearbook editor",
-  "paperboy",
-  "junior varsity player",
-  "bike messenger",
-  "barista",
-  "lunch lady's helper",
-  "stagehand",
-  "orchestra violinist"
+  {
+   "text": "lifeguard",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "camp counselor",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "diner waitress",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "paper carrier",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "grocery bagger",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "bookstore clerk",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "babysitter",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "dishwasher",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "farmhand",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "movie usher",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "pool cleaner",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "lawn mower",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "gas station attendant",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "ice cream scooper",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "record store clerk",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "library page",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "summer intern",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "mall cashier",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "dog walker",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "tutor",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "busboy",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "ticket taker",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "car wash worker",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "fast-food cook",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "stock boy",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "shop assistant",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "painter's helper",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "student",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "high school senior",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "freshman",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "exchange student",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "drum major",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "swim team captain",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "track runner",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "class president",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "band member",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "yearbook editor",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "paperboy",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "junior varsity player",
+   "features": [
+    "teen"
+   ]
+  },
+  {
+   "text": "bike messenger",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "barista",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "lunch lady's helper",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "stagehand",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  },
+  {
+   "text": "orchestra violinist",
+   "features": [
+    "teen",
+    "adult"
+   ]
+  }
  ]
 }

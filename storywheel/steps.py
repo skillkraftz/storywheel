@@ -20,10 +20,46 @@ from .text import fix_articles, fix_particles, implicit, particle_verbs, motif_f
 
 MOTIF_SOMEONE_CHANCE = 0.25    # how often a person or creature motif is offered as a {SOMEONE}
 
+# --- ages -------------------------------------------------------------------------------------------
+# A protagonist's age and job agree: a job says who can do it with an age band feature (child, teen, adult, elder). A job with none is an
+# adult's; an adult's job may also be an elder's (a 66-year-old sheriff), but "retired ..." is elder only and "paperboy" teen only.
+BANDS = ("child", "teen", "adult", "elder")
+
+
+def band_of(age):
+    """The age band of an age (a number or a numeric string); None if it is not a number."""
+    try:
+        n = int(str(age).strip())
+    except (TypeError, ValueError):
+        return None
+    return "child" if n < 13 else "teen" if n < 20 else "adult" if n < 60 else "elder"
+
+
+def bands_in(lo, hi):
+    """The bands an age range covers."""
+    return {band_of(n) for n in (lo, hi, 13, 20, 60) if lo <= n <= hi}
+
+
+def job_bands(features):
+    """The bands a job with these features fits."""
+    marks = {f for f in (features or ()) if f in BANDS} or {"adult"}
+    if "adult" in marks:
+        marks.add("elder")
+    return marks
+
+
+BAND_AGES = {"child": (8, 12), "teen": (13, 19), "adult": (20, 59), "elder": (60, 90)}
+
 
 def public(d):
     """Drop internal keys (the ones starting with _)."""
     return {k: v for k, v in (d or {}).items() if not k.startswith("_")}
+
+
+def filled(d):
+    """public(d) without empty values: a field with nothing in it is missing, so a frame that needs it gets a stand-in
+    (never "the  stopped Ann's apprentice")."""
+    return {k: v for k, v in public(d).items() if not (v is None or (isinstance(v, str) and not v.strip()))}
 
 
 # Fields about the protagonist, shown on their own card: 'Vesna's sister' reads 'their sister'.
@@ -62,9 +98,9 @@ class Ctx(dict):
         self.kept = {}
         for key, fields in story["kept"].items():
             if key != exclude:
-                self.kept.update(public(fields))
+                self.kept.update(filled(fields))
         self.update(self.kept)
-        self.update(public(current))
+        self.update(filled(current))
         self.made = {}
         self.made_by = {}                       # which field's work invented each key of `made`
         self.inputs = {}                        # earlier steps' values this roll read (see record_read)
@@ -108,13 +144,67 @@ class Ctx(dict):
         banned = "modern" if tech == "period" else "period"
         return lambda e: banned not in (e.features or ()) and (accept is None or accept(e))
 
-    def draw(self, slot):
+    def draw(self, slot, accept=None):
         """Text from a slot, chosen through the story mix and remembered (nothing used in
         this story is drawn again). Templates that use a thread we have are favored, and
-        ones that need a thread we lack are skipped."""
-        wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
-                                          accept=None if slot == "era" else self.tech_accept(), commit=False, bias=self.bias(slot, ()))
+        ones that need a thread we lack are skipped. `accept` narrows the entries (Entry -> bool)."""
+        accept = self.era_accept(accept) if slot == "era" else self.tech_accept(accept)
+        picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn,
+                                       accept=accept, commit=False, bias=self.bias(slot, ()))
+        if picked is None:                      # nothing fits the restriction: say so rather than fail
+            self.engine.notify(f"Nothing for '{slot.replace('_', ' ')}' fitted every rule; one was relaxed.")
+            picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn, commit=False, bias=self.bias(slot, ()))
+        wl, entry = picked
         return self.finish_atom(slot, wl, entry)
+
+    def era_accept(self, accept=None):
+        """Which eras may be drawn. Never one against an atom the story already uses: once a modern thing (or job, or message) is in the
+        story, a period era is passed over, and the other way round. Otherwise the genres' default technology rules eras from other genres'
+        lists ("present day" never turns up in a western), but a genre's OWN eras are all allowed: a heist may be set in a period era of its
+        own list even though heists assume today's technology. That era then decides what follows."""
+        kinds = set()
+        for slot, text in self.used | self.drawn:
+            feats = self.engine.features_of(slot, text) or ()
+            kinds.update(f for f in feats if f in ("modern", "period"))
+        if len(kinds) == 1:
+            banned = "period" if kinds == {"modern"} else "modern"
+            return lambda e: banned not in (e.features or ()) and (accept is None or accept(e))
+        tech = self.mix.tech()
+        if tech is None:
+            return accept
+        banned = "modern" if tech == "period" else "period"
+        own = self.own_eras()
+        return lambda e: (banned not in (e.features or ()) or e.text in own) and (accept is None or accept(e))
+
+    def own_eras(self):
+        """Era texts from lists tagged with one of the story's own genres."""
+        base = {name.lower() for name in self.mix.data["base"]}
+        return {e.text for wl in self.engine.library.by_slot.get("era", []) if base & set(wl.tags) for e in wl.entries}
+
+    # --- age and job -------------------------------------------------------------------------------
+    def age_bands(self):
+        """The bands the protagonist's age may fall in: the age's own if it is known, else those of the genres' age range."""
+        band = band_of(dict.get(self, "age"))
+        if band:
+            return {band}
+        return bands_in(*self.mix.age_range())
+
+    def job_accept(self):
+        bands = self.age_bands()
+        return lambda e: bool(job_bands(e.features) & bands)
+
+    def invent_age(self):
+        """An age in the genres' range, and in a band the protagonist's job fits if the job is known."""
+        lo, hi = self.mix.age_range()
+        job = dict.get(self, "job")
+        if job:
+            fits = job_bands(self.engine.features_of("job", job))
+            spans = [(max(lo, a), min(hi, b)) for band, (a, b) in BAND_AGES.items() if band in fits]
+            spans = [s for s in spans if s[0] <= s[1]] or [(a, b) for band, (a, b) in BAND_AGES.items() if band in fits]
+            weights = [b - a + 1 for a, b in spans]
+            a, b = self.engine.rng.choices(spans, weights=weights)[0]
+            return str(self.engine.rng.randint(a, b))
+        return str(self.engine.rng.randint(lo, hi))
 
     def adjuster(self, slot):
         """How much likelier or rarer each entry of a slot is, for threads and for ratings."""
@@ -139,7 +229,7 @@ class Ctx(dict):
                           else ("human",))
             if accept is None or accept(guest):
                 return None, guest
-        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), accept if slot == "era" else self.tech_accept(accept), commit=False,
+        return self.engine.pick_item(slot, self.mix, None, self.used | self.drawn | set(local), self.era_accept(accept) if slot == "era" else self.tech_accept(accept), commit=False,
                                      bias=self.bias(slot, local))
 
     def finish_atom(self, slot, wl, entry):
@@ -313,7 +403,9 @@ class Ctx(dict):
         if key == "name":
             return f"{self['first']} {self['last']}"
         if key == "age":
-            return str(e.rng.randint(17, 84))
+            return self.invent_age()
+        if key == "job":
+            return fill(self, self.draw("job", self.job_accept()))
         if key == "genre":
             return " / ".join(e.rng.sample(e.library.genre_names, 2))
         if key == "structure":
