@@ -68,7 +68,12 @@
     "human"
    ]
   },
-  "unlocked",
+  {
+   "text": "unlocked",
+   "object": [
+    "!living"
+   ]
+  },
   {
    "text": "traced",
    "object": [

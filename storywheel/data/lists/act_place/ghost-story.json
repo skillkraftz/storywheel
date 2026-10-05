@@ -23,7 +23,7 @@
     "human"
    ],
    "object": [
-    "built"
+    "indoor"
    ],
    "features": [
     "mundane"
@@ -35,7 +35,7 @@
     "human"
    ],
    "object": [
-    "built"
+    "indoor"
    ],
    "features": [
     "mundane"
@@ -104,7 +104,7 @@
   {
    "text": "aired",
    "object": [
-    "built"
+    "indoor"
    ],
    "features": [
     "mundane"

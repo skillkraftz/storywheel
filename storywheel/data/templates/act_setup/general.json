@@ -3,7 +3,7 @@
   "slot": "act_setup",
   "tags": ["general"],
   "entries": [
-    "In {place}, {first} was a {trait} {job} who wanted {want} and feared {FEELING}.",
+    "In {place}, {first} was a {trait} {job} who wanted {want} and carried {FEELING}.",
     "{first}, a {trait} {job} in {place}, kept {THING} {HIDING} and told {CLOSE:human} nothing about {TOPIC}.",
     "{first} was a {job} in {place}, and {VICE} kept {first} from {want}.",
     "The {rival:authority} held power over {place}, and {first}, a {trait} {job}, had {THING} to lose.",

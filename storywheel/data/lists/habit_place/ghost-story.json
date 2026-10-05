@@ -18,7 +18,7 @@
   {
    "text": "locks up",
    "object": [
-    "built"
+    "indoor"
    ]
   },
   {
@@ -27,7 +27,7 @@
     "human"
    ],
    "object": [
-    "built"
+    "indoor"
    ]
   },
   "keeps watch over",
@@ -35,7 +35,7 @@
   {
    "text": "sweeps",
    "object": [
-    "built"
+    "indoor"
    ]
   },
   "avoids"

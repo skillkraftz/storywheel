@@ -11,7 +11,7 @@
   "{ACT_THING:mundane} {THING} {MANNER} and dreamed of {PRIZE:!inner}",
   "had tea at {landmark} {MANNER} and avoided the {rival}",
   "{ACT_PLACE:mundane} {landmark} every day and hoped for {PRIZE:!inner}",
-  "{ACT_THING:mundane} {THING} {MANNER} and feared {FEELING}",
+  "{ACT_THING:mundane} {THING} {MANNER} and carried {FEELING}",
   "wrote letters {MANNER} and never sent them to {CLOSE:human}",
   "sat at {landmark} {MANNER} and watched for {DISASTER}",
   "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and said nothing of {TOPIC}"

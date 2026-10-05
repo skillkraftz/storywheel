@@ -8,9 +8,9 @@
   "a cut of {THING:valuable,!living} and {PRIZE:social,!inner}",
   "{PRIZE:material,!inner} and a way out of {place}",
   "{THING:portable,!living} back from the {rival}",
-  "a clean exit from {landmark:built} {DEADLINE}",
+  "a clean exit from {place} {DEADLINE}",
   "{PRIZE:social,!inner} for {CLOSE:human}",
-  "{THING:valuable,!living} and no questions at {landmark}",
+  "{THING:valuable,!living} and no questions asked in {place}",
   "the {rival}'s attention off {CLOSE:human}",
   "{PRIZE:material,!inner} {DEADLINE}, no questions asked"
  ]

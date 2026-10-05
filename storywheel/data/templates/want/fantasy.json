@@ -9,7 +9,7 @@
     "{PRIZE:!inner} for {CLOSE:human}",
     "{THING:valuable,!living} and {PRIZE:social,!inner}",
     "{THING:magic,!living} and {PRIZE:!inner} {DEADLINE}",
-    "{THING:valuable,!living} at {landmark}",
+    "{THING:valuable,!living} and the key to {landmark}",
     "{PRIZE:material,!inner} for {CLOSE:human}",
     "{PRIZE:social,!inner} and peace for {place}",
     "{THING:portable,!living} back from {SOMEONE:human,!plural}"

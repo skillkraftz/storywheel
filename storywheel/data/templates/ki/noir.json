@@ -7,7 +7,7 @@
  "entries": [
   "{first} was a {trait} {job} in {place}, where each {season} sold {PRIZE:!inner} to someone richer.",
   "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and nobody asked why.",
-  "{first}, a {trait} {job}, owed money and feared {FEELING}.",
+  "{first}, a {trait} {job}, owed money and carried {FEELING}.",
   "Come {season}, {first}, a {trait} {job} of {place}, drank at {landmark} {MANNER}.",
   "{first} ran a tab in {place} and told {CLOSE:human} nothing about {TOPIC}.",
   "In {place}, {first} {ACT_THING:mundane} {THING} {MANNER} while the city looked away."

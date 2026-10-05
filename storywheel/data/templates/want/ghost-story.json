@@ -7,9 +7,9 @@
  "entries": [
   "a last word with {CLOSE:human} {DEADLINE}",
   "{PRIZE:!inner} for {SOMEONE:human,!plural}",
-  "{THING:portable,!living} to return to {SOMEONE:human,!plural}",
+  "{THING:portable,!living} meant for {SOMEONE:human,!plural}",
   "{landmark:built} kept as it was in {place}",
-  "a quiet night at {landmark} and {PRIZE:social,!inner}",
+  "a quiet night in {place} and {PRIZE:social,!inner}",
   "the keys to {landmark:built} {DEADLINE}",
   "an answer from {SOMEONE:human,!plural} {DEADLINE}",
   "{PRIZE:material,!inner} and rest for {place}"

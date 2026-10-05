@@ -64,6 +64,7 @@
   {
    "text": "the walled garden",
    "features": [
+    "built",
     "outdoor",
     "diggable"
    ]

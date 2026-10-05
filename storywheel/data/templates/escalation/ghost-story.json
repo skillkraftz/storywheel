@@ -16,7 +16,7 @@
   "a second keepsake, {THING:portable}, matched {the_thing} {MANNER}",
   "{SOMEONE:human,!plural} whispered to {first} {MANNER}, and {THING:portable} was moved",
   "a second silence fell at {landmark}, and the {rival} grew uneasy",
-  "the {rival} told {first} to leave {TOPIC} alone {MANNER}",
+  "the {rival} told {first} to drop {TOPIC} {MANNER}",
   "{CLOSE:human} spoke of {TOPIC}, but not of {the_disaster}",
   "{the_someone:human} grew faint {MANNER}, and left {the_thing:portable} on the stair"
  ]

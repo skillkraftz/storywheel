@@ -5,7 +5,7 @@
   "thriller"
  ],
  "entries": [
-  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, has {DEADLINE} to {DO_THING} {THING}, or more will fall.",
+  "When {DISASTER:strikes} hits {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or more will fall.",
   "{first}, a {trait} {job}, sees something at {landmark:built} that {SOMEONE:human,!plural} would kill to bury, and runs.",
   "A {trait} {job} named {first} must get {THING:portable} out of {place} {DEADLINE}, with the {rival} one step behind.",
   "{first}, a {trait} {job}, is the only witness to {DISASTER:manmade}, and every door in {place} is closing.",

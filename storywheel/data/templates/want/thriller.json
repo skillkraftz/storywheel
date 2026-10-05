@@ -6,11 +6,11 @@
  ],
  "entries": [
   "{PRIZE:social,!inner} and papers for {CLOSE:human}",
-  "{THING:portable,!living} out of {landmark}",
+  "{THING:portable,!living} and the key to {landmark}",
   "{PRIZE:material,!inner} and a ticket out of {place}",
   "{THING:valuable,!living} delivered to {SOMEONE:authority,!plural}",
   "{THING:portable,!living} back before {SOMEONE:human,!plural} notices",
-  "the {rival} off {CLOSE:human}'s back {DEADLINE}",
+  "the {rival} off {CLOSE:human}'s back for good",
   "{PRIZE:social,!inner} and quiet in {place}",
   "{PRIZE:material,!inner} wired {DEADLINE}"
  ]

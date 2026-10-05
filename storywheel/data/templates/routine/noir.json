@@ -5,7 +5,7 @@
   "noir"
  ],
  "entries": [
-  "after dark, {ACT_PLACE:mundane} {landmark} and then {ACT_THING:mundane} {THING} {MANNER}",
+  "{ACT_PLACE:mundane} {landmark} after dark, then {ACT_THING:mundane} {THING} {MANNER}",
   "nursed one drink at {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
   "counted the day's take {MANNER} and noticed everyone at {landmark}",
   "walked home from {landmark} {MANNER} and dreamed of {PRIZE:!inner}",

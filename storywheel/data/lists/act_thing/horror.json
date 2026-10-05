@@ -39,7 +39,7 @@
     "!living"
    ]
   },
-  "opened",
+  {"text": "opened", "object": ["!living"]},
   {
    "text": "carried",
    "object": [

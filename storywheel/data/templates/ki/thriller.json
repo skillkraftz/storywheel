@@ -7,7 +7,7 @@
  "entries": [
   "{first} was a {trait} {job} in {place}, who checked the locks twice each {season}.",
   "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and watched the door.",
-  "{first}, a {trait} {job}, carried {THING:!living} everywhere and feared {FEELING}.",
+  "{first}, a {trait} {job}, carried {THING:!living} everywhere and carried {FEELING}.",
   "Each {season}, {first}, a {trait} {job} of {place}, crossed {landmark} {MANNER}.",
   "{first} logged every stranger in {place} and told {CLOSE:human} nothing of {TOPIC}.",
   "Before dawn in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."

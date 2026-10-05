@@ -14,6 +14,6 @@
   "read the manifests {MANNER} and avoided the {rival}",
   "{ACT_PLACE:mundane} {landmark} every shift and said nothing of {TOPIC}",
   "checked the airlocks {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
-  "counted the oxygen {MANNER} and feared {FEELING}"
+  "counted the oxygen {MANNER} and carried {FEELING}"
  ]
 }

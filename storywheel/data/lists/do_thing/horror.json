@@ -24,7 +24,7 @@
     "!living"
    ]
   },
-  "open",
+  {"text": "open", "object": ["!living"]},
   {
    "text": "carry",
    "object": [

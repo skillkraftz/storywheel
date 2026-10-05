@@ -83,9 +83,54 @@ def lint(library):
                     problems.append((wl.id, e.text, f"nothing can fill {{{name}}}"))
     problems += reframe_problems(library)
     problems += grammar_problems(library)
+    problems += sentence_problems(library)
     from . import frames
     problems += frames.lint(library)                    # can every frame be filled?
     return problems
+
+
+# Sentence-level problems found by reading samples (batch 13): each is a shape that reads wrongly whatever the atoms are.
+_FEAR_FEELING = re.compile(r"\b(?:fear|fears|feared|afraid of|dread|dreads|dreaded) \{FEELING")                  # "still fears fear"
+_THING_AT_PLACE = re.compile(r"\{(?:THING|PRIZE)[^}]*\} (?:at|from|in|inside|near|out of) \{landmark")          # "wants a music box at the cellar steps"
+ANIMALS = {"mule", "horse", "mare", "stallion", "colt", "pony", "donkey", "dog", "hound", "puppy", "cat", "kitten", "raven", "crow", "owl", "wolf", "fox", "hen", "rooster",
+           "goat", "sheep", "lamb", "ox", "bull", "cow", "calf", "pig", "hawk", "falcon", "eagle", "bear", "snake", "rat", "mouse", "cattle", "stag", "deer", "hare", "rabbit", "sparrow",
+           "dove", "swan", "heron", "toad", "frog", "spider", "bee", "moth", "horses", "dogs", "cats", "ravens", "crows", "wolves", "sheep"}
+ENCLOSURE_VERBS = ("locked up", "locks up", "swept", "sweeps", "sealed off", "seals off", "tidied", "dusted", "aired", "boarded up", "boards up", "shut up", "bolted", "barred", "closed up")
+ADVERB_ENDINGS = {"twice", "again", "aloud", "quietly", "carefully", "slowly", "quickly", "together", "gently", "silently", "once", "thrice"}
+INANIMATE_VERBS = ("opened", "unlocked", "wound", "mended", "polished", "dusted", "cleaned", "burned", "unwrapped", "oiled", "forged", "copied", "sealed", "salted", "locked away",
+                   "open", "burn", "mend", "forge", "copy", "restore", "dusts", "polishes", "winds", "opens", "burns", "keeps wrapped", "tucked away", "folded", "stowed away")
+VERB_SLOTS = ("act_person", "act_thing", "act_place", "act_event", "act_message", "do_person", "do_thing", "habit_person", "habit_place", "habit_thing")
+
+
+def sentence_problems(library):
+    """Shapes that read badly however they are filled: a fear verb before {FEELING} (the feeling may be fear), a thing or prize said to be at a landmark,
+    an animal that is not marked living, an enclosing verb that can take an open place, and a verb that ends in an adverb ("read twice" + object)."""
+    out = []
+    for wl in library.lists.values():
+        if wl.is_template:
+            for e in wl.entries:
+                if _FEAR_FEELING.search(e.text):
+                    out.append((wl.id, e.text, "a fear verb before {FEELING}: the feeling can be fear (\"fears fear\")"))
+                if wl.slot == "want" and _THING_AT_PLACE.search(e.text):
+                    out.append((wl.id, e.text, "a want placed at a landmark reads as a location (\"a music box at the cellar steps\")"))
+            continue
+        if wl.generator:
+            continue
+        for e in wl.entries:
+            words = set(re.findall(r"[a-z']+", e.text.lower()))
+            if wl.slot == "thing" and (words & ANIMALS) and "living" not in (e.features or ()) and not re.search(r"\b(?:statue|figurine|carving|carved|painting|mask|skull|bone|pelt|hide|feather|egg|nest|shoe|collar|bell|whistle|saddle|blanket|stew|inflatable|pantomime|rocking|stuffed|trap|poison|brand|ledger|oil|cricket|wooden|toy)\b", e.text.lower()):
+                out.append((wl.id, e.text, "an animal that is not marked living (verbs for objects would apply to it)"))
+            if wl.slot in ("act_place", "habit_place") and e.text.lower().startswith(ENCLOSURE_VERBS):
+                obj = set(e.object or ()) | set(wl.object or ()) if hasattr(wl, "object") else set(e.object or ())
+                if not obj & {"built", "indoor"}:
+                    out.append((wl.id, e.text, "an enclosing verb that does not require a built or indoor place (\"locked up the moor\")"))
+            if wl.slot in ("act_thing", "do_thing", "habit_thing") and e.text.lower() in INANIMATE_VERBS:
+                obj = set(e.object or ())
+                if not obj & {"!living", "paper", "built"}:
+                    out.append((wl.id, e.text, "a verb for objects that does not rule out an animal (\"opened a mule\"): give it object !living"))
+            if wl.slot in VERB_SLOTS and e.text.split() and e.text.split()[-1].lower() in ADVERB_ENDINGS:
+                out.append((wl.id, e.text, "a verb ending in an adverb sits before its object (\"read twice a letter\")"))
+    return out
 
 
 # Phrase shapes that read badly whatever the atoms are (found by scanning hundreds of samples):

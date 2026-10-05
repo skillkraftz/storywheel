@@ -10,7 +10,7 @@
     "{THING:portable,!living} back, and {PRIZE:social,!inner} too",
     "{PRIZE:!inner} to impress {CLOSE:human}",
     "{THING:valuable,!living} and {PRIZE:social,!inner} {DEADLINE}",
-    "{THING:valuable,!living} at {landmark} {DEADLINE}",
+    "{THING:valuable,!living} and the key to {landmark} {DEADLINE}",
     "an apology from {CLOSE:human} and {PRIZE:!inner}",
     "{THING:portable} for {CLOSE:human} {DEADLINE}"
   ]

@@ -27,7 +27,7 @@
     {"text": "copied", "object": ["paper"]},
     {"text": "kept", "features": ["mundane", "stows"]},
     {"text": "bought", "features": ["mundane"]},
-    "found again",
+    "recovered",
     {"text": "left behind", "features": ["stows"]},
     {"text": "threw away", "object": ["!living"]},
     "clung to",

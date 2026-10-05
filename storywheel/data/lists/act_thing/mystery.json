@@ -67,7 +67,7 @@
     "!living"
    ]
   },
-  "unlocked",
+  {"text": "unlocked", "object": ["!living"]},
   {
    "text": "photographed",
    "object": [

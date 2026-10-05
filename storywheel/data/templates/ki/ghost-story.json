@@ -10,6 +10,6 @@
   "Each {season} {first}, a {trait} {job} of {place}, visited {landmark} and said nothing.",
   "{first} kept {THING:!living} on the mantel and spoke of {TOPIC} to no one.",
   "Every night in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}, listening.",
-  "{first}, a {trait} {job}, listened {MANNER} for {SOMEONE:human,!plural} and feared {FEELING}."
+  "{first}, a {trait} {job}, listened {MANNER} for {SOMEONE:human,!plural} and carried {FEELING}."
  ]
 }

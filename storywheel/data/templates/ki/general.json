@@ -5,7 +5,7 @@
   "entries": [
     "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
     "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as {first} did every {season}.",
-    "{first}, a {trait} {job}, loved {THING} and feared {FEELING}.",
+    "{first}, a {trait} {job}, loved {THING} and carried {FEELING}.",
     "Every {season}, {first} {ACT_THING:mundane} {THING} {MANNER}, and {CLOSE} watched.",
     "{first} {ACT_PERSON:mundane} {CLOSE} and {ACT_THING:mundane} {THING} {MANNER}, as quiet as any day in {place}.",
     "{first} wanted {want}, but for now was content to {DO_THING} {THING}.",

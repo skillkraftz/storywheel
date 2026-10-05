@@ -5,9 +5,9 @@
   "ghost story"
  ],
  "entries": [
-  "In {place}, {first}, a {trait} {job}, kept {THING} {HIDING} beside the bed and wanted {want}.",
+  "In {place}, {first}, a {trait} {job}, kept {THING} {HIDING} and wanted {want}.",
   "{first}, a {trait} {job} of {place}, still spoke to {CLOSE:human} and wanted {want}.",
-  "The streets of {place} were hushed, and {first}, a {trait} {job}, feared {FEELING}.",
+  "The streets of {place} were hushed, and {first}, a {trait} {job}, carried {FEELING}.",
   "The {rival} wanted {landmark:built} sold, and {first}, a {trait} {job}, listened {MANNER}.",
   "{first}, a {trait} {job}, tended {landmark} in {place} and dreaded {DISASTER}.",
   "{first}, a {trait} {job}, came to {place} {MANNER} to be near {CLOSE:human}.",

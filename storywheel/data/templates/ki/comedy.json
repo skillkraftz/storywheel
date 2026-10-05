@@ -7,7 +7,7 @@
  "entries": [
   "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
   "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as {first} did every {season}.",
-  "{first}, a {trait} {job}, chaired the {TITLE_NOUN} committee and feared {FEELING}.",
+  "{first}, a {trait} {job}, chaired the {TITLE_NOUN} committee and carried {FEELING}.",
   "Every {season}, {first}, a {trait} {job} in {place}, rehearsed a speech about {TOPIC}.",
   "{first} was the {trait} {job} of {place}, and the {rival} had opinions about it.",
   "In {place}, {first} {ACT_THING:mundane} {THING} each morning and said nothing to {CLOSE:human}."

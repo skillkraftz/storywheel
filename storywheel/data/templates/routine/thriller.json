@@ -5,7 +5,7 @@
   "thriller"
  ],
  "entries": [
-  "twice a day, {ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
+  "{ACT_PLACE:mundane} {landmark} {MANNER} twice a day and {ACT_THING:mundane} {THING}",
   "checked the exits at {landmark} and {ACT_PERSON:mundane} {CLOSE:human} {MANNER}",
   "{ACT_THING:mundane} {THING} {MANNER} and counted the cameras at {landmark}",
   "crossed {place} {MANNER} and hoped for {PRIZE:!inner}",

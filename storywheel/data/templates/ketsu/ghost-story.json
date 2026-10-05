@@ -6,7 +6,7 @@
  ],
  "entries": [
   "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} at {landmark}, and the house breathed out.",
-  "{first} learned to hold {TOPIC} lightly, and {VALUE} did the rest.",
+  "{first} learned to hold {TOPIC} lightly, and found {VALUE}.",
   "{first} and {SOMEONE:!threatening} {ACT_PLACE:mundane} {landmark} together {MANNER}, and the {season} turned.",
   "{first} laid down {VICE} at {landmark}, and the house was still.",
   "The lamps of {place} went dark one by one, and {first} {HABIT_PERSON} {CLOSE:human}.",

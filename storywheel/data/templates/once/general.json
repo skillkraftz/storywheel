@@ -9,7 +9,7 @@
     "in {place}, a {trait} {job} named {first} kept a secret: {first} {secret}",
     "{first}, a {trait} {job}, was stuck in {place} with the {rival} breathing down their neck",
     "a {trait} {job} named {first} {ACT_PLACE:mundane} {landmark} in {place}, hoping for {PRIZE:!inner}",
-    "{first}, a {trait} {job} from {place}, wanted {want} and feared {FEELING}",
+    "{first}, a {trait} {job} from {place}, wanted {want} and carried {FEELING}",
     "the {rival} {ACT_PERSON} {first}, a {trait} {job} in {place}, out of {MOTIVE}",
     "in {place}, {first}, a {trait} {job}, kept {THING} {HIDING}",
     "{first} was {age}, a {job} in {place}, and wanted {want}",
@@ -27,7 +27,7 @@
       "tags": ["fairy tale"]
     },
     {
-      "text": "beyond the wood, in {place}, lived a {trait} {job} named {first}, who feared {FEELING}",
+      "text": "beyond the wood, in {place}, lived a {trait} {job} named {first}, who carried {FEELING}",
       "tags": ["fairy tale"]
     }
   ]

@@ -89,7 +89,7 @@
     "human"
    ],
    "object": [
-    "built"
+    "indoor"
    ],
    "features": [
     "mundane"
@@ -98,7 +98,7 @@
   {
    "text": "swept",
    "object": [
-    "built"
+    "indoor"
    ],
    "features": [
     "mundane"
