@@ -10,7 +10,7 @@ requires-python = ">=3.9"
 dependencies = ["textual>=1.0", "wonderwords>=2.2", "faker", "python-docx>=1.1", "wordfreq>=3.0"]
 
 [project.optional-dependencies]
-dev = ["pytest", "pyte"]
+dev = ["pytest", "pytest-xdist", "pyte"]
 
 [project.scripts]
 storywheel = "storywheel.cli:main"
@@ -26,3 +26,7 @@ storywheel = ["data/*.json", "data/*/*.json", "data/*/*/*.json", "data/help/*.md
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "slow: real terminal, performance, or 200-story fidelity/repetition checks; left out while working (-m 'not slow'), run in the end-of-batch full run",
+    "serial: cannot run in parallel (real terminal, shared ports, the hub); the end-of-batch full run runs these in a separate pass without xdist",
+]

@@ -559,7 +559,17 @@ what each piece added.
 - Docs and code with backticks go through quoted heredocs (`<<'EOF'`), never unquoted ones: the shell would run the backticked text.
 
 
-- The `stable` branch is what typewriter installs. At the end of every batch, and only after the FULL suite has passed in one run, move it to that
+- **Testing policy (firm; batch 14).**
+  - Tests carry two markers, assigned in one place (`tests/conftest.py`: `SERIAL_FILES`, `SLOW_FILES`, `SLOW_TESTS`, and any test that opens a real terminal on a pty).
+    `serial` = cannot run in parallel (real terminal, the hub, shared ports). `slow` = real terminals, performance, and the 200-story fidelity / repetition checks.
+    A new test of either kind is added to those lists.
+  - While working, run only the tests related to what changed, and leave the slow ones out: `pytest -m "not slow" tests/test_<area>.py`. Never the whole suite mid-batch.
+  - End of a batch: ONE full run, `tools/fulltest.sh` (parallel pass with `-n auto -m "not serial"`, then the serial pass `-m serial`). If anything fails, fix it, rerun
+    only the failed tests (`--lf`) and their files, and then move `stable`. Run the whole suite again only if the fix changed engine code or data used by many genres.
+  - No background polling loops while tests run (no `until`/`sleep` watchers). Start the run, and stop when the checklist is done. Further ideas go to BACKLOG.md,
+    not into fixes beyond the checklist.
+  - The report states the full run's time (batch 13 serial: 20 min 27 s; batch 14 with xdist: about 5 min 26 s).
+- The `stable` branch is what typewriter installs. At the end of every batch, and only after the end-of-batch full run has passed (see the testing policy), move it to that
   commit (`git branch -f stable HEAD`). Never move it any other time (not after a partial test run, not mid-batch). Never push.
 
 
