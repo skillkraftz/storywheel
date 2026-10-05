@@ -3682,7 +3682,7 @@ Western and fairy tale are the two genres without frames of their own and withou
 
 ## 3. Tests added
 
-- `tests/test_batch15.py` (148): ages and jobs (data, every genre, coming-of-age, a blend, rerolls, the Builder), blank fills (14 genres x 3 structures, Builder beats
+- `tests/test_batch15.py` (126): ages and jobs (data, every genre, coming-of-age, a blend, rerolls, the Builder), blank fills (14 genres x 3 structures, Builder beats
   for 7 genres x 3 structures, Builder character fields, empty kept fields), technology and era (every genre, period genres, modern-leaning genres, era lists agree,
   Faker jobs), the repetition watch list, and every genre's profile, neighbors, core vocabulary, age range and eras.
 - `tests/test_genre_content.py`: the frame-sharing limits apply to all twelve genres with frames; detective words are checked in eight genres (was five).
@@ -4578,4 +4578,7 @@ Western and fairy tale are the two genres without frames of their own and withou
 
 ## Full suite (batch 15)
 
-FULLRUN
+One full run with `tools/fulltest.sh` (it also covers batch 14's era change and fixes, which batch 14 reran only in part): parallel pass 2,549 passed, 4 skipped,
+1 failed in 216 s; serial pass 96 passed in 156 s; 6 min 12 s in all. The failure was the new blank-fill check reading "an easy A" (a grade) as an article followed
+by nothing; the check now tells "A" from "a". The failed test and its file were run again (`--lf`, then `tests/test_batch15.py`: 126 passed). The fix changed only a
+test, so no second full run. `stable` was moved to the commit that records this.

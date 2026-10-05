@@ -128,7 +128,7 @@ def test_the_builder_rolls_an_age_that_fits_a_retired_job(home):
 # --- blank fills -----------------------------------------------------------------------------------------------------------------
 
 BLANK = [(re.compile(r"\S  +\S"), "two spaces"),
-         (re.compile(r"\b(?:the|a|an)\s*(?:[,.;:!?]|$)", re.I), "an article followed by nothing"),
+         (re.compile(r"\b(?:[Tt]he|a|an)\s*(?:[,.;:!?]|$)"), "an article followed by nothing"),          # (case matters: "an easy A")
          (re.compile(r"\b(?:of|at|with|from|to) (?:the|a|an)?\s*[,.;:!?]", re.I), "a preposition followed by nothing"),
          (re.compile(r"\s[,.;:!?]"), "a space before punctuation"),
          (re.compile(r"\b(the|a|an) (?:the|a|an)\b"), "two articles"),
