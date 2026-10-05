@@ -5,12 +5,12 @@
   "horror"
  ],
  "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the trail.",
-  "{the_thing} was destroyed, and {first} had nothing left but {VALUE}.",
-  "{the_someone:human} turned on {first} at {landmark}, and the town stayed silent.",
-  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
-  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
-  "{the_disaster:strikes} struck again, and {first} was too late.",
-  "{first} learned that {CLOSE:human} had lied about {the_thing} {MANNER}."
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} heard it happen through the wall.",
+  "{the_thing} broke in two, and {first} had nothing left but {VALUE}.",
+  "{the_someone} locked {first} in {landmark}, and the dark came closer.",
+  "{first} {ACT_THING:trades} {THING} for a night's peace, regretting it {MANNER}.",
+  "Trapped in {landmark}, {first} fought {FEELING} and {VICE} at once.",
+  "{the_disaster:strikes} came back worse, and {first} was alone.",
+  "{CLOSE:human} had opened the door {MANNER}, and nothing could close it now."
  ]
 }

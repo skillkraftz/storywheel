@@ -198,10 +198,10 @@ def test_romance_blends_with_every_other_written_genre(lib):
 # --- each genre has its own frames (batch 13) ------------------------------------------------------------------------------------------------
 
 WRITTEN = ["comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller", "heist", "adventure", "coming-of-age"]
-OWN_FRAMES = {"ghost story", "noir", "thriller", "heist", "adventure", "coming-of-age"}          # written with frames of their own: held to a low shared share
-# Older genres were written from one another's frames (batches 7 and 8). Their shared share is capped where it stands so it cannot grow;
-# BACKLOG.md lists rewriting them. {genre: ceiling for its share of frames that another written genre also has}
-LEGACY_CEILING = {"mystery": 0.70, "horror": 0.70, "sci-fi": 0.70, "romance": 0.45, "fantasy": 0.25, "comedy": 0.12}
+# Every written genre has frames of its own (batch 15 rewrote mystery, horror, sci-fi and romance, and comedy's lines that fantasy shared):
+# at most 10% of its frames identical to any other genre's, and at most 8% near copies of any.
+SHARED_LIMIT = 0.10
+NEAR_LIMIT = 0.08
 
 
 def frames_by_genre(lib):
@@ -222,15 +222,14 @@ def test_a_genre_does_not_share_most_of_its_frames_with_another(lib):
             if a == b:
                 continue
             share = len(frames[a] & frames[b]) / len(frames[a])
-            limit = 0.10 if a in OWN_FRAMES else LEGACY_CEILING[a]
-            assert share <= limit, f"{a} shares {share:.0%} of its frames with {b} (at most {limit:.0%}): write its own"
+            assert share <= SHARED_LIMIT, f"{a} shares {share:.0%} of its frames with {b} (at most {SHARED_LIMIT:.0%}): write its own"
 
 
-def test_the_new_genres_frames_are_not_even_close_to_anothers(lib):
+def test_no_genres_frames_are_even_close_to_anothers(lib):
     """Not only identical lines: a frame that differs by a word or two (93% alike) from another genre's counts as a copy."""
     import difflib
     frames = frames_by_genre(lib)
-    for a in OWN_FRAMES:
+    for a in WRITTEN:
         others = set().union(*(frames[g] for g in WRITTEN if g != a))
         by_len = {}
         for o in others:
@@ -238,15 +237,19 @@ def test_the_new_genres_frames_are_not_even_close_to_anothers(lib):
         near = 0
         for f in frames[a]:
             pool = by_len.get(len(f) // 20, []) + by_len.get(len(f) // 20 - 1, []) + by_len.get(len(f) // 20 + 1, [])
-            if any(difflib.SequenceMatcher(None, f, o).ratio() >= 0.93 for o in pool):
-                near += 1
-        assert near / len(frames[a]) <= 0.08, f"{a}: {near} of {len(frames[a])} frames are near copies of another genre's"
+            for o in pool:
+                sm = difflib.SequenceMatcher(None, f, o)
+                # (the quick ratios are upper bounds of ratio(): most pairs are ruled out without the slow comparison)
+                if sm.real_quick_ratio() >= 0.93 and sm.quick_ratio() >= 0.93 and sm.ratio() >= 0.93:
+                    near += 1
+                    break
+        assert near / len(frames[a]) <= NEAR_LIMIT, f"{a}: {near} of {len(frames[a])} frames are near copies of another genre's"
 
 
 DETECTIVE = re.compile(r"\b(case|cases|alibis?|motives?|trails?|suspects?|clues?)\b", re.I)
 
 
-@pytest.mark.parametrize("genre", ["ghost story", "thriller", "heist", "adventure", "coming-of-age"])
+@pytest.mark.parametrize("genre", ["ghost story", "thriller", "heist", "adventure", "coming-of-age", "horror", "sci-fi", "romance"])
 def test_detective_words_stay_in_mystery_and_noir(lib, genre):
     bad = []
     for wl in lib.lists.values():

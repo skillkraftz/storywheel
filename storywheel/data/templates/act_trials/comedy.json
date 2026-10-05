@@ -5,9 +5,9 @@
   "comedy"
  ],
  "entries": [
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already {ACT_PERSON} {CLOSE:human}, twice.",
   "Each time {first} neared {PRIZE:!inner}, {VICE} tripped everything up.",
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
+  "At {landmark}, {first} bumped into {SOMEONE:!threatening}, who offered terrible advice {MANNER}.",
   "{first} {ACT_THING:trades} {THING} to keep {the_someone:human} quiet.",
   "{first} told one more fib to {CLOSE:human}, and {landmark} filled with gossip.",
   "{first} tried to {DO_THING} {THING} and ended up in the {rival}'s office.",

@@ -5,7 +5,7 @@
   "comedy"
  ],
  "entries": [
-  "the {rival} {ACT_PERSON} {first} out of {MOTIVE}",
+  "the {rival}, out of {MOTIVE}, {ACT_PERSON} {first} in front of everyone",
   "{CLOSE} {ACT_PERSON} {first} {MANNER}, and the whole of {place} found out",
   "{SOMEONE:human,!plural} {ACT_THING} {THING} {MANNER}, and nobody could stop it",
   "{DISASTER:strikes} hit {place}, and everyone blamed {first}",

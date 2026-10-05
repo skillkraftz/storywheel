@@ -5,15 +5,15 @@
   "horror"
  ],
  "entries": [
-  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
-  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
-  "{ACT_THING} {THING} {MANNER} and wrote down {TOPIC}",
-  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-  "questioned {CLOSE:human} about {SOMEONE:human,!plural} {MANNER}",
-  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-  "boarded up {landmark} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
-  "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
-  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+  "{ACT_PLACE} {landmark} {MANNER}, every lamp lit, looking for {THING}",
+  "buried {THING:portable} far from {place}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and read everything about {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and begged {SOMEONE:human,!plural} for the truth",
+  "warned {CLOSE:human} {MANNER} to stay away from {SOMEONE:!plural}",
+  "carried {THING:portable} like a charm and {ACT_PLACE} {landmark} {MANNER}",
+  "gave {THING} to {SOMEONE:human} in exchange for {PRIZE:material,!inner} and a warning",
+  "nailed the cellar shut, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "stayed awake {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "fled through {landmark} {MANNER} and did not look back at {SOMEONE:!plural}"
  ]
 }

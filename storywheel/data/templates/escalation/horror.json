@@ -5,18 +5,19 @@
   "horror"
  ],
  "entries": [
-  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and lied about {TOPIC}",
-  "{the_thing} turned up {HIDING}, and {the_someone:human} denied everything",
-  "the {rival} {ACT_PERSON} {first} {MANNER} for asking about {the_thing}",
-  "{the_message} could not have been sent, and {first} doubted {CLOSE:human}",
-  "{the_disaster:strikes} struck again at {landmark}, and the {rival} blamed {first}",
-  "{first} found {the_thing:portable} {MANNER}, and it had moved since morning",
-  "{the_someone:human} offered {first} {PRIZE:!inner} to stay quiet {MANNER}",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
-  "a second sign, {THING:portable}, matched {the_thing} {MANNER}",
-  "{CLOSE:human} was gone by morning, and {the_thing} lay where {CLOSE:human} slept",
-  "the lights failed at {landmark}, and {the_someone:human} was not alone",
-  "{SOMEONE:human,!plural} lied to {first} {MANNER}, and {THING:portable} went missing",
-  "{first} was warned off {TOPIC} by the {rival} {MANNER}"
+  "{the_someone} {ACT_PERSON} {first} {MANNER}, and the nights grew longer",
+  "{the_thing} came back {HIDING}, though {first} had burned it",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER}, and {CLOSE:human} stopped speaking",
+  "{the_message} kept arriving at {landmark}, a word shorter each time",
+  "{the_disaster:strikes} came again to {landmark}, and the dark stayed after it",
+  "{first} found {the_thing:portable} in the bed {MANNER}, and it was wet",
+  "{the_someone} promised {first} {PRIZE:!inner} for one more night {MANNER}",
+  "{the_thing} had belonged to {SOMEONE:!plural}, and {first} {ACT_PERSON} {the_someone}",
+  "something new, {THING:portable}, waited {HIDING}",
+  "{SOMEONE:human,!plural} vanished from {place} {MANNER}, and nobody asked where",
+  "a second door appeared in {landmark}, and {CLOSE:human} had opened it",
+  "the {rival} counted the nights left: {DEADLINE}",
+  "{CLOSE:human} began to forget {TOPIC}, and then to forget {first}",
+  "{the_someone} stood at {landmark} {MANNER}, holding {the_thing:portable}, and smiled"
  ]
 }

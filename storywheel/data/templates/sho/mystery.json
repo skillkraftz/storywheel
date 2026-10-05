@@ -5,11 +5,11 @@
   "mystery"
  ],
  "entries": [
-  "Over the {season}, {first} came to know {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
-  "{SOMEONE:!threatening} began visiting {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
-  "{first} showed {SOMEONE:!threatening} {THING:!living}, and they spoke of {TOPIC} {MANNER}.",
-  "A quiet trouble came: {DISASTER:strikes} touched {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
-  "{first} kept meaning to {DO_THING} {THING}, and the {season} slipped by.",
-  "{CLOSE:human} asked about {TOPIC}, and {first} answered {MANNER}."
+  "Through the {season}, {first} took tea with {SOMEONE:!threatening} and {ACT_PERSON:mundane} {CLOSE} {MANNER}.",
+  "{SOMEONE:!threatening} kept appearing near {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+  "{first} let {SOMEONE:!threatening} examine {THING:!living}, and they disagreed about {TOPIC} {MANNER}.",
+  "A small puzzle came up: {DISASTER:manmade} touched {place}, and {first} {ACT_PERSON:mundane} the {rival} {MANNER}.",
+  "{first} left the riddle of {DO_THING} {THING} for later, and the {season} went by.",
+  "{CLOSE:human} asked {first} about {TOPIC}, and got a careful answer {MANNER}."
  ]
 }

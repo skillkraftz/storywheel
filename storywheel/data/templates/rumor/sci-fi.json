@@ -5,13 +5,13 @@
   "sci-fi"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
-  "{DISASTER:manmade} {was} covered up by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no scan looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "{THING:valuable} {is} stored {HIDING} below {landmark:built}, off every map",
+  "the ship's mind foresaw {DISASTER:strikes}, and the {rival} ignored it",
+  "{SOMEONE:!plural} still walks {landmark} {MANNER}, though the crew list says otherwise",
+  "{landmark:built} {was} sealed after {DISASTER:strikes} with the lights still on",
+  "the {rival} trades oxygen to {SOMEONE:human,!plural} {MANNER}",
+  "{SOMEONE:!plural} listens to {landmark:built} on a frequency no one uses",
+  "{THING:portable} {is} hidden {HIDING} where the scanners do not reach",
+  "the {rival} edits the logs of {SOMEONE:human,!plural} {MANNER}"
  ]
 }

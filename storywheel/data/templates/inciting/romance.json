@@ -5,15 +5,15 @@
   "romance"
  ],
  "entries": [
-  "{SOMEONE:human,!plural} arrived in {place} {MANNER} and asked for {first}",
-  "{first} found {THING:!living,!bulky} {HIDING}, with someone else's name on it",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to meet at {landmark}",
-  "{DISASTER:strikes} struck {place}, and {first} found {SOMEONE:human,!plural} at {landmark}",
-  "the {rival} announced {DISASTER:manmade}, and {first} was the last to hear",
-  "{first} bumped into {SOMEONE:human,!plural} at {landmark} {MANNER}, and dropped {THING:portable}",
-  "{SOMEONE:human,!plural} moved into {landmark:built}, and {first} could not stop thinking of it",
-  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and {SOMEONE:human,!plural} was to help",
-  "{first} agreed to {DO_PERSON:!inner} {SOMEONE:human,!plural} {MANNER}, for the wrong reasons",
-  "an old friend, {SOMEONE:human,!plural}, came back to {place} {MANNER}"
+  "{DISASTER} brought {SOMEONE:human,!plural} back to {place}",
+  "{first} found {THING:!living,!bulky} {HIDING}, with a name engraved on it",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} said only: {landmark}, at eight",
+  "the {rival} announced the engagement of {SOMEONE:human,!plural} at {landmark}, and {first} could not breathe",
+  "{SOMEONE:human,!plural} took the seat beside {first} at {landmark} {MANNER}",
+  "{first} spilled coffee on {SOMEONE:human,!plural} at {landmark}, and neither looked away",
+  "{SOMEONE:human,!plural} returned {THING:portable} to {first} {MANNER}, and lingered",
+  "{first} heard {SOMEONE:human,!plural} laugh across {landmark} and knew that laugh",
+  "{DISASTER:strikes} stranded {first} and {SOMEONE:human,!plural} at {landmark} overnight",
+  "the {rival} bet {first} {MANNER} that love was a fairy story"
  ]
 }

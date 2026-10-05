@@ -5,12 +5,12 @@
   "romance"
  ],
  "entries": [
-  "{SOMEONE:human,!plural} arrived in {place} {MANNER} and asked for {first}.",
-  "{first} found {THING:!living,!bulky} {HIDING}, with someone else's name on it.",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to meet at {landmark}.",
-  "{DISASTER:strikes} struck {place}, and {first} found {SOMEONE:human,!plural} at {landmark}.",
-  "The {rival} announced {DISASTER:manmade}, and {first} was the last to hear.",
-  "{first} bumped into {SOMEONE:human,!plural} at {landmark} {MANNER}.",
-  "{SOMEONE:human,!plural} moved into {landmark:built}, and {first} could not stop thinking of it."
+  "{DISASTER} brought {SOMEONE:human,!plural} back to {place}.",
+  "{first} found {THING:!living,!bulky} {HIDING}, with a name engraved on it.",
+  "{MESSAGE:physical} from {SOMEONE:human,!plural} said only: {landmark}, at eight.",
+  "The {rival} announced the engagement of {SOMEONE:human,!plural} at {landmark}, and {first} could not breathe.",
+  "{SOMEONE:human,!plural} took the seat beside {first} at {landmark} {MANNER}.",
+  "{first} spilled coffee on {SOMEONE:human,!plural} at {landmark}, and neither looked away.",
+  "{SOMEONE:human,!plural} returned {THING:portable} to {first} {MANNER}, and lingered."
  ]
 }

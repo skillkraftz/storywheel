@@ -5,15 +5,15 @@
   "mystery"
  ],
  "entries": [
-  "in {place}, a {trait} {job} named {first} wanted {want}",
-  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and carried {FEELING}",
-  "{place} was a quiet village, and {first}, a {trait} {job}, wanted {want}",
-  "{first} was the {trait} {job} of {place}, and noticed what others did not",
-  "the {rival} ran {place}, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
-  "{first}, a {trait} {job} in {place}, guarded {THING} and a secret",
-  "{place} had never seen {DISASTER}, and {first}, a {trait} {job}, liked it so",
-  "{first}, a {trait} {job} of {place}, wanted {want} and trusted no one",
-  "everyone in {place} knew {first}, a {trait} {job}, and no one knew {TOPIC}"
+  "in {place}, a {trait} {job} named {first} noticed things, and wanted {want}",
+  "{first}, a {trait} {job} of {place}, remembered every lie told at {landmark}",
+  "{place} trusted its neighbors, and {first}, a {trait} {job}, trusted nobody, wanting {want}",
+  "{first} was the {trait} {job} who solved small puzzles in {place}, and wanted {want}",
+  "the {rival} kept order in {place}, and {first}, a {trait} {job}, asked questions anyway",
+  "{first}, a {trait} {job}, moved to {place} {MANNER} and noticed what the locals ignored",
+  "{first}, a {trait} {job} in {place}, collected odd facts about {TOPIC}",
+  "{place} had one unsolved mystery, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job} of {place}, read every report and wanted {want}",
+  "nobody in {place} paid attention to {first}, a {trait} {job}, which suited a watcher"
  ]
 }

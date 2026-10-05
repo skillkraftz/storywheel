@@ -12,6 +12,6 @@
   "would sooner {DO_THING} {THING} than admit {FEELING}",
   "boasts about {PRIZE:material,!inner} and hides {FEELING} behind {VICE}",
   "always says too much about {TOPIC} and calls it {VALUE}",
-  "mistakes {VICE} for {VALUE}"
+  "keeps mistaking {VICE} for {VALUE}, loudly"
  ]
 }

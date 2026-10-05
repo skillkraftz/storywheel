@@ -5,12 +5,12 @@
   "horror"
  ],
  "entries": [
-  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
-  "{first} questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}.",
-  "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
-  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
-  "{first} kept the sign {HIDING} and took the night {MANNER}.",
-  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and went in."
+  "{first} {ACT_PLACE} {landmark} {MANNER}, every lamp lit, looking for {THING}.",
+  "{first} buried {THING:portable} far from {place}, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}.",
+  "{first} {ACT_THING} {THING} {MANNER} and read everything about {TOPIC}.",
+  "{first} {ACT_MESSAGE} {MESSAGE:physical} and begged {SOMEONE:human,!plural} for the truth.",
+  "{first} warned {CLOSE:human} {MANNER} to stay away from {SOMEONE:!plural}.",
+  "{first} carried {THING:portable} like a charm and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} gave {THING} to {SOMEONE:human} in exchange for {PRIZE:material,!inner} and a warning."
  ]
 }

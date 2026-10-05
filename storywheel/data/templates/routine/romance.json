@@ -5,15 +5,15 @@
   "romance"
  ],
  "entries": [
-  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
-  "walked past {landmark} {MANNER} and told no one about {TOPIC}",
-  "{ACT_THING:mundane} {THING} {MANNER} and dreamed of {PRIZE:!inner}",
-  "had tea at {landmark} {MANNER} and avoided the {rival}",
-  "{ACT_PLACE:mundane} {landmark} every day and hoped for {PRIZE:!inner}",
-  "{ACT_THING:mundane} {THING} {MANNER} and carried {FEELING}",
-  "wrote letters {MANNER} and never sent them to {CLOSE:human}",
-  "sat at {landmark} {MANNER} and watched for {DISASTER}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and said nothing of {TOPIC}"
+  "{ACT_PLACE:mundane} {landmark} every Saturday and {ACT_THING:mundane} {THING}",
+  "wrote letters at {landmark} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} {MANNER} and hummed old songs",
+  "watched the door of {landmark} {MANNER} and avoided the {rival}",
+  "bought flowers in {place} for nobody and hoped for {PRIZE:!inner}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and believed in {VALUE}",
+  "kept a table for two at {landmark} and lived by {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} at sunset and never mentioned {TOPIC}",
+  "reread one old letter {MANNER} and dreaded {DISASTER}",
+  "danced alone in the kitchen {MANNER} and told {CLOSE:human} nothing"
  ]
 }

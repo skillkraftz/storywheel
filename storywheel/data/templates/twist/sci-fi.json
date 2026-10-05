@@ -5,18 +5,17 @@
   "sci-fi"
  ],
  "entries": [
-  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
-  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
-  "{the_message:physical} was sent by {CLOSE:human}, who wanted {first} off {landmark:built}.",
-  "{the_disaster:strikes} was no accident: it was staged {MANNER} to hide {TOPIC}.",
-  "{the_thing:!living} was a decoy, and {THING:portable} lay {HIDING}.",
-  "The alibi {the_someone:human} offered was forged, and {the_thing} was the proof.",
-  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
-  "The victim was never gone: {the_someone:human,!plural} lay in cryo at {landmark:built} all along.",
-  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
-  "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
-  "Everyone wanted a way out, but {the_someone:human} kept {the_thing:portable}.",
-  "The {rival} had planted {THING:portable} {HIDING} to frame {SOMEONE:human,!plural}.",
-  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone knew it {MANNER}."
+  "The {rival} was a copy, printed {MANNER} out of {MOTIVE}.",
+  "{the_someone} was the mind of {place}, speaking through a borrowed body.",
+  "{the_thing:!living} held the last human memory on {place}, and {first} had nearly wiped it.",
+  "The mind of {place} staged {the_disaster:strikes} as a test, out of {MOTIVE}.",
+  "{CLOSE:human} had died crossing to {place}; this one was rebuilt.",
+  "The signal from {landmark} was {first}'s own, sent back {MANNER} from a failed future.",
+  "{the_message:physical} had been sent by {SOMEONE:!plural}, centuries before {place} was founded.",
+  "{first} was the copy; the original slept {HIDING}.",
+  "{the_someone} had arranged the whole voyage {MANNER}, to bring {first} home.",
+  "The stars outside {landmark:built} were projections by {SOMEONE:!plural}, and {place} had never left orbit.",
+  "{the_thing:portable} was a seed vault, and {CLOSE:human} had carried it {MANNER} for years.",
+  "Every log mentioning {TOPIC} had been edited by the {rival}, out of {MOTIVE}."
  ]
 }

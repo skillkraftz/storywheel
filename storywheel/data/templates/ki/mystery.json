@@ -5,11 +5,11 @@
   "mystery"
  ],
  "entries": [
-  "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
-  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as always.",
-  "{first}, a {trait} {job}, kept {THING:!living} and carried {FEELING}.",
-  "Every {season}, {first}, a {trait} {job} of {place}, walked past {landmark} {MANNER}.",
-  "{first} kept notes on {place} and told {CLOSE:human} nothing of {TOPIC}.",
-  "In {place}, {first} {ACT_THING:mundane} {THING} {MANNER} while the village slept."
+  "{first} was a {trait} {job} in {place}, who noticed every open window that {season}.",
+  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and counted the visitors.",
+  "{first}, a {trait} {job}, kept {THING:!living} in one pocket and {FEELING} in the other.",
+  "Every {season}, {first}, a {trait} {job} of {place}, read the notices at {landmark} {MANNER}.",
+  "{first} knew every name in {place} and told {CLOSE:human} nothing about {TOPIC}.",
+  "In the early hours in {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."
  ]
 }

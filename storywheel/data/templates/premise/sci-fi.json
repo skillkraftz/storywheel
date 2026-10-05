@@ -5,17 +5,17 @@
   "sci-fi"
  ],
  "entries": [
-  "When {DISASTER:strikes} cuts off {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or no one gets home.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and seeks its owner.",
-  "After {DISASTER:strikes} on {place}, the {rival} blames {SOMEONE:human,!plural}, and {first}, a {trait} {job}, reads the logs differently.",
-  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though everything about {landmark:built} says it is a trap.",
-  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and must reach {landmark:built} {DEADLINE}.",
-  "On {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns the {rival} has done it before.",
-  "To clear {SOMEONE:human,!plural} of {DISASTER:manmade}, {first}, a {trait} {job}, must reach {landmark:built} {DEADLINE}.",
-  "Every night at {landmark:built} a signal repeats, and {first}, a {trait} {job}, must trace the sender {DEADLINE}.",
-  "A {trait} {job} named {first} inherits {THING} and a debt on {place} that the {rival} wants collected.",
-  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural}, and the first suspect in {DISASTER:manmade}.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, uncovers {DISASTER:manmade} no one will name.",
-  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been dead for years."
+  "{first}, a {trait} {job} aboard {place}, picks up a signal from {landmark} that should not exist.",
+  "Three light-years from help, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE} or {place} goes dark.",
+  "After {DISASTER:strikes} cripples {place}, {first}, a {trait} {job}, is the only crew member awake.",
+  "{first}, a {trait} {job}, learns that {SOMEONE:!plural} on {place} is not who the records say.",
+  "The {rival} rewrites the colony charter of {place}, and {first}, a {trait} {job}, finds the original {HIDING}.",
+  "{first}, a {trait} {job}, wakes from cryosleep at {landmark} forty years late, and {place} has changed.",
+  "A machine at {landmark} asks {first}, a {trait} {job}, whether it is alive.",
+  "{CLOSE:human} volunteers for an upload, and {first}, a {trait} {job} of {place}, must decide what came back.",
+  "{first}, a {trait} {job}, carries {THING:portable} across {place} while every system tracks the theft.",
+  "{MESSAGE:physical}, ninety years in transit, reaches {first}, a {trait} {job} of {place}: turn back.",
+  "The {rival} sells the air of {place} by the hour, and {first}, a {trait} {job}, stops paying.",
+  "{first}, a {trait} {job}, repairs {THING:!living} at {landmark} and finds a voice inside it."
  ]
 }

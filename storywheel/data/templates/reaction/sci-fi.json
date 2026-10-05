@@ -5,15 +5,15 @@
   "sci-fi"
  ],
  "entries": [
-  "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
-  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
-  "{ACT_THING} {THING} {MANNER} and logged {TOPIC}",
-  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-  "questioned {CLOSE:human} about {SOMEONE:human,!plural} {MANNER}",
-  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-  "sealed off {landmark} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
-  "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
-  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+  "{ACT_PLACE} {landmark} {MANNER} and scanned every deck for {THING}",
+  "sealed {THING:portable} in a shielded locker, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and checked it against records of {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and forwarded it to {SOMEONE:!plural} on a private channel",
+  "opened a link to {CLOSE:human} {MANNER} and asked about {SOMEONE:!plural}",
+  "clipped {THING:portable} to a suit belt and {ACT_PLACE} {landmark} {MANNER}",
+  "bartered {THING} with {SOMEONE:human} for {PRIZE:material,!inner} and an access code",
+  "spoofed the station logs, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "rerouted power {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "crawled through the ducts behind {landmark} {MANNER} to slip past {SOMEONE:!plural}"
  ]
 }

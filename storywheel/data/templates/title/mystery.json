@@ -5,15 +5,15 @@
   "mystery"
  ],
  "entries": [
-  "The {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_NOUN} at {place}",
-  "Death and the {TITLE_NOUN} at {place}",
-  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-  "A {TITLE_NOUN} in {place}",
-  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
-  "The {TITLE_NOUN}'s {TITLE_NOUN}",
-  "The Case of the {TITLE_ADJ} {TITLE_NOUN}",
-  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
-  "Who Took the {TITLE_NOUN} in {place}"
+  "The {TITLE_ADJ} {TITLE_NOUN} Affair",
+  "Death and the {TITLE_NOUN} in {place}",
+  "{first} and the {TITLE_NOUN} Question",
+  "Who Killed the {TITLE_NOUN} of {place}?",
+  "The {place} Inquiry: {TITLE_NOUN}",
+  "Nine Suspects in {place}, {TITLE_ADJ} {TITLE_NOUN}",
+  "Footprints at {place}: The {TITLE_NOUN}",
+  "{TITLE_ADJ} Evidence, {TITLE_ADJ} {TITLE_NOUN}",
+  "The Silence at {place}: {TITLE_NOUN}",
+  "The {TITLE_NOUN} Nobody Saw in {place}"
  ]
 }

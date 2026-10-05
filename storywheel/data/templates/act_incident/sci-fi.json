@@ -5,12 +5,12 @@
   "sci-fi"
  ],
  "entries": [
-  "{DISASTER:strikes} hit {place}, and {first} was the first at {landmark}.",
-  "{first} found {THING:!living,!bulky} {HIDING}, and it was on no manifest.",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}.",
-  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it.",
-  "The {rival} blamed {SOMEONE:human,!plural} for {DISASTER}, and {first} doubted it.",
-  "{SOMEONE:!plural} came aboard {place} {MANNER} and asked {first} for help.",
-  "{first} found a door open at {landmark} {MANNER}, and nobody inside."
+  "{DISASTER:strikes} tore through {place}, and the backup systems woke {first}.",
+  "{first} found {THING:!living,!bulky} {HIDING}, still transmitting.",
+  "{MESSAGE:physical} came from {SOMEONE:!plural} on the far side of {place}: open {landmark}.",
+  "The {rival} cut power to {landmark} {MANNER}, and {SOMEONE:!plural} woke in the dark.",
+  "{SOMEONE:!plural} docked at {place} {MANNER} {MANNER}: no flight plan, no pulse.",
+  "The ship's mind asked {first} {MANNER} for help with {TOPIC}.",
+  "{first} decoded the static from {landmark}, and it was the name of {CLOSE:human}."
  ]
 }

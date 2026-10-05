@@ -5,15 +5,15 @@
   "romance"
  ],
  "entries": [
-  "{ACT_PLACE} {landmark} {MANNER} in search of {SOMEONE:human,!plural}",
-  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
-  "{ACT_THING} {THING} {MANNER} and told {CLOSE:human} about {SOMEONE:human,!plural}",
-  "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-  "asked {CLOSE:human} about {SOMEONE:human,!plural} {MANNER}",
-  "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-  "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-  "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and pretended not to care",
-  "made a plan {MANNER} to {DO_THING} {THING} {DEADLINE}",
-  "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
+  "{ACT_PLACE} {landmark} {MANNER} hoping for a glimpse of {SOMEONE:human,!plural}",
+  "wrapped {THING:portable} as a gift, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and practiced a speech about {TOPIC}",
+  "{ACT_MESSAGE} {MESSAGE:physical} and wrote back to {SOMEONE:human,!plural} at dawn",
+  "told {CLOSE:human} everything about {SOMEONE:human,!plural} {MANNER}",
+  "wore {THING:portable} for courage and {ACT_PLACE} {landmark} {MANNER}",
+  "traded {THING} with {SOMEONE:human} for {PRIZE:material,!inner} and a dance",
+  "pretended not to care, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "hurried {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "took the long way past {landmark} {MANNER}, hoping {SOMEONE:human,!plural} was there"
  ]
 }

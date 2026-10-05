@@ -5,18 +5,17 @@
   "horror"
  ],
  "entries": [
-  "The {rival} had planted {the_thing:portable} {HIDING} to keep {the_someone:human} from leaving.",
-  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
-  "{the_message:physical} was written by {CLOSE:human}, who wanted {first} off {landmark:built}.",
-  "{the_disaster:strikes} was no accident: it was staged {MANNER} to hide {TOPIC}.",
-  "{the_thing:!living} was a decoy, and {THING:portable} lay {HIDING}.",
-  "The alibi {the_someone:human} offered was false, and {the_thing} was the proof.",
-  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
-  "The victim was never gone: {the_someone:human,!plural} stayed inside {landmark:built} all along.",
-  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
-  "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
-  "Everyone wanted to leave, but {the_someone:human} kept {the_thing:portable}.",
-  "The {rival} had planted {THING:portable} {HIDING} to frame {SOMEONE:human,!plural}.",
-  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone knew it {MANNER}."
+  "{the_someone} had died at {landmark} years ago, and had never left.",
+  "{CLOSE:human} had opened the door to it {MANNER}, out of {MOTIVE}.",
+  "{the_thing:!living} was not keeping it out; {the_thing:!living} was calling it in.",
+  "The {rival} fed it every winter, out of {MOTIVE}, and {first} was this year's offering.",
+  "{the_disaster:strikes} was meant to cure {place}, and it had failed.",
+  "The voice in {landmark} was {first}'s own, left there {MANNER} on a night {first} forgot.",
+  "{the_someone} was the only thing in {place} still human.",
+  "Every warning had come from {the_someone}, who was trying to keep {first} alive.",
+  "{the_message:physical} was written {MANNER} in {first}'s own hand.",
+  "{first} had been missing since {DISASTER:strikes}, and {place} had stopped looking.",
+  "{the_thing:portable} had been passed to {first} {MANNER}, to carry the curse away from {CLOSE:human}.",
+  "Nothing came from {landmark}; {SOMEONE:!plural} came from under {place}, and the {rival} knew."
  ]
 }

@@ -5,7 +5,7 @@
   "comedy"
  ],
  "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost {LOSS}.",
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the bet and {THING:portable}.",
   "{the_message:physical} was read aloud at {landmark}, and {first} wished for the floor to open.",
   "{CLOSE:human} found out about {TOPIC}, and {first} had no more excuses.",
   "{the_thing} was discovered {HIDING}, and the {rival} demanded an explanation.",

@@ -1,19 +1,19 @@
 {
-  "_note": "",
-  "slot": "reaction",
-  "tags": [
-    "mystery"
-  ],
-  "entries": [
-    "{ACT_PLACE} {landmark} {MANNER} in search of {THING}",
-    "{ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and {ACT_THING:stows} {THING} {HIDING}",
-    "{ACT_THING} {THING} {MANNER} and wrote down {TOPIC}",
-    "{ACT_MESSAGE} {MESSAGE:physical} and {ACT_PERSON} {SOMEONE:human,!plural}",
-    "questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}",
-    "{ACT_PLACE} {landmark} {MANNER} and kept {THING:portable} {HIDING}",
-    "{ACT_THING:trades} {THING} to {SOMEONE:human} for {PRIZE:material,!inner}",
-    "kept the clue {HIDING} and {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
-    "set out {MANNER} to {DO_THING} {THING} {DEADLINE}",
-    "followed {SOMEONE:human,!plural} to {landmark} {MANNER}"
-  ]
+ "_note": "",
+ "slot": "reaction",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{ACT_PLACE} {landmark} {MANNER} and sketched where {THING} had stood",
+  "lifted {THING:portable} with a handkerchief, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "{ACT_THING} {THING} {MANNER} and wrote down every name",
+  "{ACT_MESSAGE} {MESSAGE:physical} and compared its handwriting to {THING:paper}",
+  "questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}",
+  "kept {THING:portable} as evidence and {ACT_PLACE} {landmark} {MANNER}",
+  "traded what was known of {TOPIC} with {SOMEONE:human} for a name",
+  "listed who was where, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}",
+  "went back {MANNER} to {DO_THING} {THING} {DEADLINE}",
+  "retraced the night through {landmark} {MANNER}, step by step"
+ ]
 }

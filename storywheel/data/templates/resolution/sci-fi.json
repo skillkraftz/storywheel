@@ -5,13 +5,13 @@
   "sci-fi"
  ],
  "entries": [
-  "{first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
-  "{place} keeps the record of {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
-  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {CLOSE}",
-  "the lights of {place} stay on, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PERSON} {CLOSE} and never speaks of {TOPIC}",
-  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
-  "{first} {HABIT_THING} {the_thing:!living} and {HABIT_PERSON} {the_someone:human}"
+  "{first} {HABIT_PLACE} {landmark} every cycle and {HABIT_PERSON} {CLOSE}",
+  "{place} recovered from {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "{first} {HABIT_PERSON} {the_someone} through the old channel and {HABIT_THING} {the_thing:!living}",
+  "when the orbit brings back the {season} light, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the logs are sealed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and keeps {TOPIC} out of the archive",
+  "{place} found a new course after {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
+  "{first} {HABIT_THING} {the_thing:!living} at shift change and {HABIT_PERSON} {the_someone} on the long cycle"
  ]
 }

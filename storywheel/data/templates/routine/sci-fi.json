@@ -5,15 +5,15 @@
   "sci-fi"
  ],
  "entries": [
-  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
-  "{ACT_THING:mundane} {THING} {MANNER} and listened for {DISASTER}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
-  "walked through {landmark} {MANNER} and logged every sound",
-  "{ACT_THING:mundane} {THING} {MANNER} and told no one about {TOPIC}",
-  "ate alone at {landmark} {MANNER} and hoped for {PRIZE:!inner}",
-  "read the manifests {MANNER} and avoided the {rival}",
-  "{ACT_PLACE:mundane} {landmark} every shift and said nothing of {TOPIC}",
-  "checked the airlocks {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
-  "counted the oxygen {MANNER} and carried {FEELING}"
+  "{ACT_PLACE:mundane} {landmark} at every shift change and {ACT_THING:mundane} {THING}",
+  "ran diagnostics on {landmark} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} {MANNER} and logged the readings by hand",
+  "watched the long-range scans {MANNER} and avoided the {rival}",
+  "recycled water at {landmark} and hoped for {PRIZE:!inner}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and held to {VALUE}",
+  "ate alone in {landmark} and kept faith with {VALUE}",
+  "{ACT_PLACE:mundane} {landmark} on night cycle and never logged {TOPIC}",
+  "calibrated the oxygen scrubbers {MANNER} and feared {DISASTER}",
+  "sent messages home to {CLOSE:human} {MANNER}"
  ]
 }

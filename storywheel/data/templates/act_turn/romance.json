@@ -5,12 +5,12 @@
   "romance"
  ],
  "entries": [
-  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
-  "{first} asked {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}.",
-  "{first} made a plan {MANNER} to {DO_THING} {THING} {DEADLINE}.",
-  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
-  "{first} kept the letter {HIDING} and answered {MANNER}.",
-  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and began."
+  "{first} {ACT_PLACE} {landmark} {MANNER} hoping for a glimpse of {SOMEONE:human,!plural}.",
+  "{first} wrapped {THING:portable} as a gift, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}.",
+  "{first} {ACT_THING} {THING} {MANNER} and practiced a speech about {TOPIC}.",
+  "{first} {ACT_MESSAGE} {MESSAGE:physical} and wrote back to {SOMEONE:human,!plural} at dawn.",
+  "{first} told {CLOSE:human} everything about {SOMEONE:human,!plural} {MANNER}.",
+  "{first} wore {THING:portable} for courage and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} traded {THING} with {SOMEONE:human} for {PRIZE:material,!inner} and a dance."
  ]
 }

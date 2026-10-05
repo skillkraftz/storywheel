@@ -5,13 +5,13 @@
   "horror"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
-  "{DISASTER:manmade} {was} hushed up by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no one looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "children who play at {landmark} come home quieter, says {SOMEONE:human,!plural}",
+  "{DISASTER:strikes} {was} the first of seven, and the {rival} counts them",
+  "{SOMEONE:!plural} walks the edge of {place} {MANNER}",
+  "{landmark} {was} left unfinished when {SOMEONE:human,!plural} vanished",
+  "the {rival} leaves food out for something {MANNER}",
+  "{SOMEONE:human,!plural} hears breathing in the walls of {landmark:built}",
+  "{THING:portable} {is} kept {HIDING} so it cannot follow anyone",
+  "the {rival} sends strangers to {landmark} every {season}"
  ]
 }

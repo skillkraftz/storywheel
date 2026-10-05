@@ -5,11 +5,11 @@
   "mystery"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
-  "{first} laid down {VICE} at {landmark}, and the case was closed.",
-  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "In the end {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the questions rested.",
+  "{first} let {TOPIC} stay answered, and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, as if nothing had happened.",
+  "{first} gave up {VICE} at {landmark}, and the house grew quiet.",
+  "{place} found other gossip, and {first} {HABIT_PERSON} {CLOSE:human} on Sundays.",
+  "{first} left the last question about {landmark} to the {rival}, and slept well {MANNER}."
  ]
 }

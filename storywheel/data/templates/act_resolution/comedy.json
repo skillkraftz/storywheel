@@ -5,9 +5,9 @@
   "comedy"
  ],
  "entries": [
-  "In the end, {first} lost {PRIZE:!inner} but kept {VALUE}.",
+  "In the end, {first} lost {PRIZE:!inner}, kept {VALUE}, and got a parade.",
   "{place} laughed about it for years: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
-  "{first} learned {need}, and {place} forgot about {TOPIC}.",
+  "{first} finally managed {need}, and {place} found a new scandal.",
   "Every {season}, {place} held a {TITLE_NOUN} contest in honor of {first}.",
   "The {rival} and {first} still disagreed about {TOPIC}, but over tea.",
   "{first} kept {the_thing} {HIDING} as a reminder of {VICE}.",

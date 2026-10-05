@@ -1,16 +1,16 @@
 {
-  "_note": "",
-  "slot": "act_turn",
-  "tags": [
-    "mystery"
-  ],
-  "entries": [
-    "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
-    "{first} questioned {CLOSE:human} {MANNER:speech} about {SOMEONE:human,!plural}.",
-    "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
-    "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
-    "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
-    "{first} kept the clue {HIDING} and took the case {MANNER}.",
-    "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and began."
-  ]
+ "_note": "",
+ "slot": "act_turn",
+ "tags": [
+  "mystery"
+ ],
+ "entries": [
+  "{first} {ACT_PLACE} {landmark} {MANNER} and sketched where {THING} had stood.",
+  "{first} lifted {THING:portable} with a handkerchief, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}.",
+  "{first} {ACT_THING} {THING} {MANNER} and wrote down every name.",
+  "{first} {ACT_MESSAGE} {MESSAGE:physical} and compared its handwriting to {THING:paper}.",
+  "{first} questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}.",
+  "{first} kept {THING:portable} as evidence and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} traded what was known of {TOPIC} with {SOMEONE:human} for a name."
+ ]
 }

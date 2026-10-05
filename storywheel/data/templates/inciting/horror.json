@@ -5,15 +5,15 @@
   "horror"
  ],
  "entries": [
-  "{DISASTER:strikes} came to {place}, and {first} was the first to see {landmark}",
-  "{first} found {THING:!living,!bulky} {HIDING}, and it was warm",
-  "{MESSAGE:physical} arrived from {SOMEONE:human,!plural}, asking {first} to come to {landmark}",
-  "{SOMEONE:!plural} came to {place} {MANNER} and would not say why",
-  "the {rival} blamed {SOMEONE:human,!plural} for {DISASTER}, and {first} knew it was not so",
-  "{first} heard knocking at {landmark} {MANNER}, and {SOMEONE:!plural} was there",
-  "{SOMEONE:human,!plural} vanished {MANNER}, and {first} was the last to see it",
-  "{first} woke to find {THING:portable} moved {HIDING}",
-  "{DISASTER:manmade} came to light {MANNER}, and the {rival} wanted it forgotten",
-  "{first} was asked to {DO_THING} {THING} {DEADLINE}, and wondered why"
+  "{DISASTER:strikes} came to {place}, and afterwards the knocking started",
+  "{first} found {THING:!living,!bulky} {HIDING}, still warm",
+  "{MESSAGE:physical} arrived from {SOMEONE:!plural}, dead since spring: come to {landmark}",
+  "the {rival} sealed {landmark} {MANNER}, and something inside began to scratch",
+  "{SOMEONE:!plural} walked into {place} {MANNER} with no shadow at all",
+  "{first} heard {CLOSE:human} laughing in an empty room at {landmark}",
+  "a light came on at {landmark}, empty since {DISASTER:strikes}",
+  "{first} woke {MANNER} holding {THING:portable}, with mud on the floor",
+  "{DISASTER:strikes} cut {place} off, and every phone rang empty",
+  "the {rival} dared {first} {MANNER} to spend the night at {landmark}"
  ]
 }

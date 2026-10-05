@@ -5,17 +5,17 @@
   "romance"
  ],
  "entries": [
-  "The {rival} had written the letters, and meant {VALUE}.",
-  "{the_someone:human,!plural} had never stopped waiting at {landmark:built}, and {the_thing} proved it.",
-  "{the_message:physical} was written by {CLOSE:human}, who wanted them together.",
-  "{the_disaster:manmade} was a mix-up, as everyone knew {MANNER}.",
-  "{the_thing:!living} was never the gift: {THING:portable} lay {HIDING}.",
-  "The reason {the_someone:human} stayed away was {MOTIVE}, not indifference.",
-  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
-  "{the_someone:human,!plural} had been {first}'s pen friend all along.",
-  "{first} had held {the_thing:!living} {HIDING} all along, and {the_someone:human} knew.",
-  "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}, and regretted it.",
-  "Everyone guessed the truth, but {the_someone:human} kept {the_thing:portable}.",
-  "The {rival} had been {first}'s oldest friend, bound by {VALUE}."
+  "{the_someone:human} had written {the_message:physical}, and waited years for an answer.",
+  "The {rival} had kept them apart out of {MOTIVE}, and had loved {first} too.",
+  "{the_thing:!living} had been bought for {first} long ago, and never given.",
+  "{CLOSE:human} had hidden every letter {MANNER}, out of {MOTIVE}.",
+  "{the_someone:human} was never engaged; {CLOSE:human} gave that ring.",
+  "The misunderstanding began with {the_message:physical}, read {MANNER} by the wrong person.",
+  "{first} had been the reason {the_someone:human} came back to {place} at all.",
+  "{the_disaster:strikes} had not separated them; {CLOSE:human} had.",
+  "{the_someone:human} had been the stranger at {landmark} that first night, remembering every word.",
+  "{the_thing:portable} had been kept {HIDING} by {the_someone:human}, all this time.",
+  "The {rival} had already chosen {SOMEONE:human,!plural}, and only wanted {first} happy.",
+  "{first} and {the_someone:human} had been writing to each other {MANNER} without knowing."
  ]
 }

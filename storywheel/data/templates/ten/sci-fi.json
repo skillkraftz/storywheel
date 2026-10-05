@@ -5,11 +5,11 @@
   "sci-fi"
  ],
  "entries": [
-  "Then {first} saw {the_thing} anew; it had never been about {want}.",
-  "Then {first} understood that {the_someone} had acted out of {MOTIVE} all along.",
-  "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.",
-  "Then {first} saw that the {rival:human} had wanted {want} too, and had hidden {FEELING} behind {VICE}.",
-  "Then {first} saw that {need} mattered more than {want}.",
-  "Then {first} understood that {MOTIVE} had kept {first} from {want} all along."
+  "Then {first} scanned {the_thing} again: never about {want}.",
+  "Then {first} saw {the_someone} had acted out of {MOTIVE}, which no machine could fake.",
+  "Then {first} decoded the rest of {the_message}: it asked only for {VALUE}.",
+  "Then {first} saw the {rival:human} was lonely too, and also wanted {want}.",
+  "Then {first} ran the numbers and chose {need} over {want}.",
+  "Then {first} grasped that {MOTIVE} was what made them human, not {want}."
  ]
 }

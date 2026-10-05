@@ -5,11 +5,11 @@
   "romance"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
-  "{first} laid down {VICE} at {landmark}, and the evening began.",
-  "{place} warmed slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and stayed.",
+  "{first} let go of {TOPIC}, and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the night ran late.",
+  "{first} gave up {VICE} at {landmark}, and the waiting was over.",
+  "{place} bloomed again, and {first} {HABIT_PERSON} {CLOSE:human} every week.",
+  "{first} let the {rival} keep {landmark}, and found something better {MANNER}."
  ]
 }

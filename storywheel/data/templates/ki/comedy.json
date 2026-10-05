@@ -5,7 +5,7 @@
   "comedy"
  ],
  "entries": [
-  "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
+  "{first} was a {trait} {job} in {place}, where every {season} somebody else won {PRIZE:!inner}.",
   "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as {first} did every {season}.",
   "{first}, a {trait} {job}, chaired the {TITLE_NOUN} committee and carried {FEELING}.",
   "Every {season}, {first}, a {trait} {job} in {place}, rehearsed a speech about {TOPIC}.",

@@ -5,11 +5,11 @@
   "sci-fi"
  ],
  "entries": [
-  "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.",
-  "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.",
-  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
-  "{first} laid down {VICE} at {landmark}, and the alarms fell quiet.",
-  "{place} mended slowly, and {first} {HABIT_PERSON} {CLOSE:human} in the evenings.",
-  "{first} forgave the {rival} at {landmark}, and the quiet returned {MANNER}."
+  "At last {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and the station hummed again.",
+  "{first} accepted {TOPIC}, and chose {VALUE} over {PRIZE:!inner}.",
+  "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, under a sky they had made.",
+  "{first} left {VICE} behind in {landmark}, and the hull stopped singing.",
+  "{place} kept its course, and {first} {HABIT_PERSON} {CLOSE:human} across the light-years.",
+  "{first} gave {landmark} over to the {rival}, and the long quiet returned {MANNER}."
  ]
 }

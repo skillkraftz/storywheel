@@ -5,17 +5,17 @@
   "mystery"
  ],
  "entries": [
-  "When {DISASTER:strikes} shakes {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or an innocent person will pay.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and seeks its owner {DEADLINE}.",
-  "After {DISASTER:strikes} in {place}, the {rival} accuses {SOMEONE:human,!plural}, and {first}, a {trait} {job}, thinks otherwise.",
-  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though every clue points elsewhere.",
-  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and has until midnight to solve {DISASTER}.",
-  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns that the {rival} lied about {TOPIC}.",
-  "To clear {SOMEONE:human,!plural} of {DISASTER:manmade}, {first}, a {trait} {job}, must find {THING:portable} {DEADLINE}.",
-  "Every guest at {landmark:built} has a motive for {DISASTER:manmade}, and {first}, a {trait} {job}, must name one {DEADLINE}.",
-  "A {trait} {job} named {first} inherits {THING} and a mystery in {place} that the {rival} wants buried.",
-  "{first}, a {trait} {job}, is the last person to see {SOMEONE:human,!plural}, and the first suspect in {DISASTER}.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, uncovers {DISASTER:manmade} no one remembers.",
-  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been lying about {TOPIC}."
+  "{first}, a {trait} {job} of {place}, finds {SOMEONE:human,!plural} dead at {landmark:built} and refuses the easy answer.",
+  "Every guest at {landmark:built} has a reason to lie about {TOPIC}, and {first}, a {trait} {job}, must sort them out {DEADLINE}.",
+  "When {THING:valuable} vanishes from {landmark:built}, {first}, a {trait} {job}, counts five suspects in {place}.",
+  "{first}, a {trait} {job}, notices that {MESSAGE:physical} found beside {SOMEONE:human,!plural} was written after the death.",
+  "The {rival} calls {DISASTER:manmade} an accident, but {first}, a {trait} {job} of {place}, has seen {THING:!living,!bulky} {HIDING}.",
+  "{first}, a {trait} {job}, is the last person to see {SOMEONE:human,!plural} alive, and the first {place} suspects.",
+  "A locked room at {landmark:built}, a missing key, and {first}, a {trait} {job}, who cannot let it go.",
+  "{first}, a {trait} {job}, reads an old account of {DISASTER:manmade} and spots what everyone in {place} missed.",
+  "{CLOSE:human} is accused of {DISASTER:manmade}, and only {first}, a {trait} {job} of {place}, believes otherwise.",
+  "{first}, a {trait} {job}, inherits a notebook of questions about {TOPIC}, and one answer is in {place}.",
+  "Three people saw {SOMEONE:human,!plural} leave {landmark}, and each tells {first}, a {trait} {job}, something different.",
+  "Somebody in {place} is lying about {TOPIC}, and {first}, a {trait} {job}, means to learn who {DEADLINE}."
  ]
 }

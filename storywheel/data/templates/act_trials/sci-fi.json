@@ -5,12 +5,12 @@
   "sci-fi"
  ],
  "entries": [
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
-  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} {ACT_THING} {THING:portable} {MANNER} and found another lead.",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
-  "{first} tracked {THING:portable} to {landmark} and waited {MANNER}.",
-  "{the_someone:human} lied about {TOPIC}, and {first} said nothing {MANNER}."
+  "{SOMEONE:!threatening} met {first} at {landmark} {MANNER} with a spare suit.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already locked {CLOSE:human} out of the network.",
+  "Each step toward {PRIZE:!inner} cost {first} another hour of air, and {VICE} cost more.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and bought one more cycle.",
+  "{the_thing} had been built by {SOMEONE:!plural}, and {first} {ACT_PERSON} {the_someone}.",
+  "{first} tracked {THING:portable} to {landmark} and waited in the cold {MANNER}.",
+  "{the_someone} gave conflicting data about {TOPIC}, and {first} ran it again {MANNER}."
  ]
 }

@@ -5,14 +5,17 @@
   "romance"
  ],
  "entries": [
-  "{first} ran to {landmark} {MANNER} with {the_thing:portable} and said it at last",
-  "{first} put {the_thing} in {the_someone:human}'s hand {MANNER} and waited",
-  "{the_someone:human} read {the_message} aloud at {landmark}, and {first} did not look away",
-  "{first} gave up {THING:valuable,!living} at {landmark} to stay with {the_someone:human}",
-  "{first} told {the_someone:human} the truth about {TOPIC} at {landmark} {MANNER}",
-  "{the_disaster} could not keep them apart: {first} crossed {landmark} {MANNER}",
-  "{first} {ACT_PERSON} {the_someone:human} before everyone at {landmark}",
-  "{the_someone:human} came back to {landmark} {MANNER}, and {first} was waiting",
-  "{first} stood before the whole town at {landmark} and chose {VALUE}"
+  "{first} ran to {landmark} and gave {the_someone:human} {the_thing:portable}",
+  "{first} read {the_message} aloud at {landmark} {MANNER}, in front of everyone",
+  "{the_someone:human} turned to go at {landmark}, and {first} said it at last {MANNER}",
+  "{first} left {the_thing:portable} at {landmark} {MANNER} with a note, and waited",
+  "{first} stood up to the {rival} at {landmark}, holding {the_thing:portable} and choosing {VALUE}",
+  "{the_someone:human} admitted {MOTIVE} at {landmark}, and {first} answered with a kiss",
+  "{first} interrupted the party at {landmark} {MANNER} and spoke to {SOMEONE:human,!plural}",
+  "{first} crossed {landmark} in the rain {MANNER} with {THING:portable} and nothing rehearsed",
+  "{SOMEONE:human,!plural} stepped aside at {landmark} {MANNER} and let them go",
+  "{first} stopped the train at {landmark} {MANNER}, and {the_someone:human} got off",
+  "{first} placed {the_thing} in the hands of {the_someone:human} at {landmark} {MANNER}",
+  "the {rival} gave way at {landmark} {MANNER}, and {first} chose {the_someone:human}"
  ]
 }

@@ -11,7 +11,7 @@
   "{DISASTER:manmade} {was} started by the {rival}",
   "everyone knows the {rival} {ACT_MESSAGE} {MESSAGE:physical}",
   "{landmark:built} {was} built to hide {THING:!living}",
-  "{SOMEONE:human,!plural} is hiding from the {rival} at {landmark}",
+  "{SOMEONE:human,!plural} is hiding from the {rival} in a laundry basket at {landmark}",
   "{THING:valuable} {lies|lie} {HIDING}"
  ]
 }

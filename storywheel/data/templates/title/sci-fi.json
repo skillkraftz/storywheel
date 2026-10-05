@@ -5,15 +5,15 @@
   "sci-fi"
  ],
  "entries": [
-  "The {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_NOUN} at {place}",
-  "Last {TITLE_NOUN} to {place}",
-  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-  "A {TITLE_ADJ} {TITLE_NOUN} over {place}",
-  "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
-  "The {TITLE_NOUN}'s {TITLE_NOUN}",
-  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
-  "{TITLE_ADJ} Signal from {place}",
-  "Beyond the {TITLE_ADJ} {TITLE_NOUN}"
+  "The {TITLE_ADJ} {TITLE_NOUN} Protocol",
+  "Signal from {place}, {TITLE_NOUN}",
+  "{first} at the Edge of {place}: {TITLE_NOUN}",
+  "After the {TITLE_NOUN}, {place}",
+  "The {TITLE_NOUN} Between {place} and the Stars",
+  "Ninety Years to {place}: The {TITLE_NOUN}",
+  "{TITLE_ADJ} Orbit, {TITLE_ADJ} {TITLE_NOUN}",
+  "What the {TITLE_ADJ} {TITLE_NOUN} Remembered",
+  "Station {place}: {TITLE_NOUN}",
+  "The Long {TITLE_NOUN} of {first}"
  ]
 }

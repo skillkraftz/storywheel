@@ -5,13 +5,13 @@
   "mystery"
  ],
  "entries": [
-  "lets {VICE} outweigh {VALUE}",
-  "would risk {VALUE} for {TEMPTATION}",
-  "hides {FEELING} behind {VICE}",
-  "cannot let {TOPIC} lie and calls it {VALUE}",
-  "trusts {TEMPTATION} over {VALUE}",
-  "mistakes {VICE} for {VALUE}",
-  "reaches for {TEMPTATION} to avoid {FEELING}",
-  "keeps notes on everyone and trusts {VICE} over {VALUE}"
+  "treats friends as witnesses and {VICE} as method, hiding {FEELING}",
+  "values being right over {VALUE}, and calls {VICE} rigor",
+  "trusts evidence over {CLOSE:human}, and {VICE} over both",
+  "buries {FEELING} under questions, and calls it {VALUE}",
+  "would trade {VALUE} for one more answer about {TOPIC}",
+  "sees every kindness as {VICE} in disguise, and {FEELING} as weakness",
+  "cannot leave a question alone, mistaking {VICE} for {VALUE}",
+  "hides {FEELING} behind a list of facts and {VICE}"
  ]
 }

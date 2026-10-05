@@ -5,12 +5,12 @@
   "horror"
  ],
  "entries": [
-  "{the_thing} turned up {HIDING}, and {the_someone:human} denied everything.",
-  "{first} learned that {SOMEONE:human,!plural} was working for the {rival}.",
-  "{the_message} could not have been sent, and {first} doubted {CLOSE:human}.",
-  "At {landmark}, {first} found {THING:portable}, and an old lie fell apart.",
-  "{the_someone:human} offered {first} {PRIZE:!inner} to leave it alone.",
-  "{the_disaster:strikes} struck again, and the {rival} blamed {first}.",
-  "The truth about {TOPIC} came out: {the_someone:human} {ACT_THING} {the_thing:!living} all along."
+  "{the_someone} {ACT_PERSON} {first} {MANNER}, and the nights grew longer.",
+  "{the_thing} came back {HIDING}, though {first} had burned it.",
+  "The {rival} {ACT_PERSON} {CLOSE:human} {MANNER}, and {CLOSE:human} stopped speaking.",
+  "{the_message} kept arriving at {landmark}, a word shorter each time.",
+  "{the_disaster:strikes} came again to {landmark}, and the dark stayed after it.",
+  "{first} found {the_thing:portable} in the bed {MANNER}, and it was wet.",
+  "{the_someone} promised {first} {PRIZE:!inner} for one more night {MANNER}."
  ]
 }

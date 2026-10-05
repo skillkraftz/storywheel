@@ -5,18 +5,19 @@
   "sci-fi"
  ],
  "entries": [
-  "{the_someone:human} {ACT_PERSON} {first} {MANNER}, and lied about {TOPIC}",
-  "{the_thing} turned up {HIDING}, and {the_someone:human} denied everything",
-  "the {rival} {ACT_PERSON} {first} {MANNER} for asking about {the_thing}",
-  "{the_message} had been altered, and {first} doubted {CLOSE:human}",
-  "{the_disaster:strikes} struck again at {landmark}, and the {rival} blamed {first}",
-  "{first} found {the_thing:portable} {MANNER}, and the logs had been wiped",
-  "{the_someone:human} offered {first} {PRIZE:!inner} to drop it {MANNER}",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}",
-  "a second clue, {THING:portable}, matched {the_thing} {MANNER}",
-  "{CLOSE:human} stopped answering messages, and {the_thing} was gone from {landmark}",
-  "the power failed at {landmark}, and {the_someone:human} was not alone",
-  "{SOMEONE:human,!plural} lied to {first} {MANNER}, and {THING:portable} went missing",
-  "{first} was warned off {TOPIC} by the {rival} {MANNER}"
+  "{the_someone} {ACT_PERSON} {first} {MANNER}, and the station's mind stopped answering",
+  "{the_thing} was erased from the inventory, and {the_someone} had root access",
+  "the {rival} {ACT_PERSON} {CLOSE:human} {MANNER} to force {first} back into line",
+  "{the_message} repeated on every channel of {place}, faster each cycle",
+  "{the_disaster:strikes} spread to {landmark}, and the hull began to sing",
+  "{first} found a second copy of {the_thing:portable} {MANNER}, older than the ship",
+  "{the_someone} offered {first} {PRIZE:!inner} in exchange for silence {MANNER}",
+  "{the_thing} carried the signature of {SOMEONE:!plural}, and {first} {ACT_PERSON} {the_someone}",
+  "a stranger device, {THING:portable}, booted up {HIDING}",
+  "{SOMEONE:human,!plural} went offline {MANNER}, and {THING:portable} went with them",
+  "{DISASTER:strikes} spread near {landmark}, and the {rival} locked the doors",
+  "the oxygen math left {first} one deadline: {DEADLINE}",
+  "{CLOSE:human} stopped remembering {TOPIC}, and then stopped remembering Earth",
+  "{the_someone} left a recording at {landmark} {MANNER}, with {the_thing:portable} in frame"
  ]
 }

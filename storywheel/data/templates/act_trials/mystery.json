@@ -5,12 +5,12 @@
   "mystery"
  ],
  "entries": [
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
-  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} {ACT_THING} {THING:portable} {MANNER} and found another clue.",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
-  "{first} tracked {THING:portable} to {landmark} and waited {MANNER}.",
-  "{the_someone:human} lied about {TOPIC}, and {first} said nothing {MANNER}."
+  "{SOMEONE:!threatening} gave {first} a statement at {landmark} {MANNER}, and it held.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already taken a statement from {CLOSE:human}.",
+  "Every lead {first} followed toward {PRIZE:!inner} ended in {VICE}.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and found a fingerprint.",
+  "{the_thing} had passed through the hands of {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
+  "{first} traced {THING:portable} to {landmark} and waited for the owner {MANNER}.",
+  "{the_someone:human} gave three versions of {TOPIC}, and {first} wrote down all of them."
  ]
 }

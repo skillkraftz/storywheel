@@ -5,13 +5,13 @@
   "mystery"
  ],
  "entries": [
-  "{THING:valuable} {lies|lie} {HIDING} at {landmark:built}",
-  "{DISASTER:manmade} {was} hushed up by the {rival}",
-  "{SOMEONE:human,!plural} once {ACT_PLACE} {landmark} {MANNER}",
-  "{landmark:built} {was} the scene of {DISASTER:manmade}",
-  "the {rival} paid {SOMEONE:human,!plural} to keep quiet {MANNER}",
-  "{SOMEONE:human,!plural} never left {landmark:built} {MANNER}",
-  "{THING:portable} {lies|lie} {HIDING} where no one looks",
-  "the {rival} {ACT_MESSAGE} {MESSAGE:physical} {MANNER}"
+  "they say {THING:valuable} never left {landmark:built}",
+  "{DISASTER:manmade} {was} no accident, and the {rival} knows it",
+  "{SOMEONE:human,!plural} saw something at {landmark} {MANNER} and has kept silent since",
+  "{landmark:built} {was} locked from the inside after {DISASTER:manmade}",
+  "the {rival} paid for the silence of {SOMEONE:human,!plural}",
+  "{SOMEONE:human,!plural} writes letters to {landmark:built} that nobody answers",
+  "{THING:portable} {is} missing from the inventory of {landmark:built}",
+  "the {rival} burned a ledger about {TOPIC} {MANNER}"
  ]
 }

@@ -5,13 +5,13 @@
   "sci-fi"
  ],
  "entries": [
-  "to {DO_PERSON:inner} {CLOSE:human} before the next jump",
-  "to put {VALUE} before {VICE}",
-  "to trust {CLOSE:human} with the truth about {TOPIC}",
-  "to give up {VICE} and choose {VALUE}",
-  "to forgive {TOPIC} and keep {VALUE}",
-  "to stop hiding {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
-  "to value {VALUE} above {PRIZE:social,!inner}",
-  "to let go of {VICE} and trust {VALUE}"
+  "to tell {CLOSE:human} the price of {TOPIC}",
+  "to choose {VALUE} over {VICE} when the systems fail",
+  "to stop hiding {FEELING} inside {VICE}",
+  "to {DO_PERSON:inner} {CLOSE:human} across the distance",
+  "to put {VALUE} before {TEMPTATION} when it counts",
+  "to accept that {VALUE} outlives {PRIZE:social,!inner}",
+  "to let {CLOSE:human} share the weight of {TOPIC}",
+  "to feel {FEELING} like a human and keep {VALUE}"
  ]
 }

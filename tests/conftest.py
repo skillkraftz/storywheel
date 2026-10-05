@@ -111,7 +111,10 @@ def run_tui(story, engine, script, size=(200, 50)):
 SERIAL_FILES = {"test_appearance.py", "test_hub.py", "test_kitty_keys.py", "test_switching.py", "test_performance.py", "test_grammar_server.py"}
 SLOW_FILES = SERIAL_FILES | {"test_menu_keys.py", "test_menus.py", "test_dropdowns.py", "test_setup_update.py", "test_builder_ratings.py", "test_layout_batch6.py"}
 SLOW_TESTS = (                                   # (parts of node ids) each takes more than about five seconds on its own
-    "test_genre_content.py::test_the_new_genres_frames_are_not_even_close",
+    "test_genre_content.py::test_no_genres_frames_are_even_close",
+    "test_batch15.py::test_no_rendered_text_has_an_empty_fill",
+    "test_batch15.py::test_a_period_era_never_gets",
+    "test_batch15.py::test_builder_beat_rolls_never_leave_a_blank",
     "test_genre_content.py::test_romance_blends_with_every_other",
     "test_genre_content.py::test_blends_read_like_both",
     "test_genre_content.py::test_no_repeats_and_nothing_far_above",

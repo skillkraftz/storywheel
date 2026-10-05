@@ -5,15 +5,15 @@
   "horror"
  ],
  "entries": [
-  "{ACT_PLACE:mundane} {landmark} {MANNER} and {ACT_THING:mundane} {THING}",
-  "locked up {landmark} {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
-  "{ACT_THING:mundane} {THING} {MANNER} and listened for {DISASTER}",
-  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and kept {VALUE} close",
-  "walked past {landmark} {MANNER} and did not look in",
-  "{ACT_THING:mundane} {THING} {MANNER} and told no one about {TOPIC}",
-  "sat up {MANNER} at {landmark} and hoped for {PRIZE:!inner}",
-  "kept a candle by the window {MANNER} and avoided the {rival}",
-  "{ACT_PLACE:mundane} {landmark} every day and said nothing of {TOPIC}",
-  "counted the doors of {landmark} {MANNER} and carried {FEELING}"
+  "{ACT_PLACE:mundane} {landmark} before dark and {ACT_THING:mundane} {THING}",
+  "salted the windowsills {MANNER} and {ACT_PERSON:mundane} {CLOSE:human}",
+  "{ACT_THING:mundane} {THING} {MANNER} and avoided mirrors after dark",
+  "counted the doors of {landmark} {MANNER} and dreaded {DISASTER}",
+  "kept the radio loud {MANNER} and steered around the {rival}",
+  "{ACT_PERSON:mundane} {CLOSE:human} {MANNER} and clung to {VALUE}",
+  "boiled water at {landmark} and prayed for {PRIZE:!inner}",
+  "{ACT_PLACE:mundane} {landmark} only at noon, never speaking of {TOPIC}",
+  "checked under the stairs {MANNER} and told {CLOSE:human} it was nothing",
+  "listened to the walls of {place} {MANNER} and tried to sleep"
  ]
 }

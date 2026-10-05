@@ -5,19 +5,19 @@
   "mystery"
  ],
  "entries": [
-  "The {rival} had planted {the_thing:portable} {HIDING} to frame {the_someone:human}.",
-  "{the_someone:human,!plural} had never left {landmark:built}, and {the_thing} proved it.",
-  "{the_message:physical} was written by {CLOSE:human}, who wanted {first} off the case.",
-  "{the_disaster:manmade} was staged {MANNER} to hide {TOPIC}.",
-  "{the_thing:!living} was a decoy; {THING:portable} lay {HIDING}.",
-  "The alibi {the_someone:human} offered was false, and {the_thing} was the proof.",
-  "{CLOSE:human} was the one who {ACT_PERSON} {first} {MANNER}, out of {MOTIVE}.",
-  "The victim was never gone: {the_someone:human,!plural} had staged {the_disaster:manmade} {MANNER}.",
-  "{first} had held {the_thing:!living} {HIDING} all along, and the {rival} knew.",
-  "{the_someone:human} was acting for {SOMEONE:authority,!plural}, out of {MOTIVE}.",
-  "The {rival} had planted {THING:portable} {HIDING} to frame {SOMEONE:human,!plural}.",
-  "{SOMEONE:human,!plural} had never left {landmark:built}, and everyone knew it {MANNER}.",
-  "{DISASTER:manmade} was staged {MANNER} to hide {TOPIC}.",
-  "Everyone had a motive, but only {the_someone:human} had {the_thing:portable}."
+  "The {rival} had planted {the_thing:!living} {HIDING} to point at {CLOSE:human}, out of {MOTIVE}.",
+  "{the_someone:human} staged the whole thing {MANNER}, out of {MOTIVE}.",
+  "{the_message:physical} was forged by {CLOSE:human}, who feared {TOPIC} most.",
+  "The clock at {landmark:built} was wrong, and {the_someone:human} had set it back {MANNER}.",
+  "Two people committed {the_disaster:manmade}, and {first} had trusted both.",
+  "{the_thing:portable} was the clue all along, sitting {HIDING} since the first day.",
+  "The {rival} solved {TOPIC} first, and kept quiet out of {MOTIVE}.",
+  "The victim was alive: {the_someone:human} had hidden {MANNER} in {place} all along.",
+  "{CLOSE:human} wrote {the_message:physical}, to protect {SOMEONE:human,!plural} from {TOPIC}.",
+  "Every alibi held but one: {the_someone:human} lied about {landmark}.",
+  "{first} had misread {the_thing:!living}; it proved {SOMEONE:human,!plural} innocent.",
+  "The guilty one was {the_someone:human}, who had helped {first} search {MANNER}.",
+  "{the_disaster:manmade} hid an older crime at {landmark}, and the {rival} had known.",
+  "Nobody stole {the_thing:valuable}; {CLOSE:human} had sold it {MANNER} to pay for {TOPIC}."
  ]
 }

@@ -5,15 +5,15 @@
   "horror"
  ],
  "entries": [
-  "The {TITLE_ADJ} {TITLE_NOUN}",
-  "The {TITLE_NOUN} in {place}",
-  "Something in the {TITLE_NOUN} at {place}",
-  "{first} and the {TITLE_ADJ} {TITLE_NOUN}",
-  "A {TITLE_ADJ} {TITLE_NOUN} in {place}",
+  "What Waits at {place}, {TITLE_NOUN}",
   "The {TITLE_ADJ} {TITLE_NOUN} of {place}",
-  "The {TITLE_NOUN}'s {TITLE_NOUN}",
-  "The {TITLE_ADJ} {TITLE_NOUN}, the {TITLE_ADJ} {TITLE_NOUN}",
-  "{TITLE_ADJ} {TITLE_NOUN}, {TITLE_ADJ} {TITLE_NOUN}",
-  "Do Not Open the {TITLE_NOUN} at {place}"
+  "Do Not Open the {TITLE_ADJ} {TITLE_NOUN}",
+  "{first} Hears the {TITLE_NOUN}",
+  "Below {place}, the {TITLE_NOUN}",
+  "The Last Night in {place}: {TITLE_NOUN}",
+  "{TITLE_ADJ} Hours, {TITLE_ADJ} {TITLE_NOUN}",
+  "Something in the {TITLE_NOUN} at {place}",
+  "Whatever Came to {place}, {TITLE_NOUN}",
+  "It Followed {first} Home from the {TITLE_NOUN}"
  ]
 }

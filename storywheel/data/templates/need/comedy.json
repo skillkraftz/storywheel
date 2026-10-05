@@ -11,7 +11,7 @@
   "to {DO_PERSON:inner} {CLOSE:human} and stop {VICE}",
   "to say sorry to {CLOSE:human} and mean it about {TOPIC}",
   "to value {VALUE} more than {PRIZE:social,!inner}",
-  "to trust {CLOSE:human} with the truth about {TOPIC}",
+  "to trust {CLOSE:human} with the whole silly truth about {TOPIC}",
   "to stop pretending about {TOPIC} and {DO_PERSON:inner} {CLOSE:human}"
  ]
 }

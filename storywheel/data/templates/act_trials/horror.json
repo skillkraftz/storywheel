@@ -5,12 +5,12 @@
   "horror"
  ],
  "entries": [
-  "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
-  "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} {ACT_THING} {THING:portable} {MANNER} and found another sign.",
-  "{the_thing} pointed at {SOMEONE:human,!plural}, and {first} {ACT_PERSON} {the_someone:human}.",
-  "{first} tracked {THING:portable} to {landmark} and waited {MANNER}.",
-  "{the_someone:human} lied about {TOPIC}, and {first} said nothing {MANNER}."
+  "{SOMEONE:!threatening} met {first} at {landmark} {MANNER}, refusing to name what lived there.",
+  "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} had already reached {CLOSE:human} in the night.",
+  "Each time {first} came near {PRIZE:!inner}, the dark took something back.",
+  "{first} {ACT_THING} {THING:portable} {MANNER} and it whispered.",
+  "{the_thing} had come down from {SOMEONE:!plural}, and {first} {ACT_PERSON} {the_someone}.",
+  "{first} followed the scratching to {landmark} and waited {MANNER} with {THING:portable}.",
+  "{the_someone} would not speak of {TOPIC}, and the lights in {place} kept failing."
  ]
 }

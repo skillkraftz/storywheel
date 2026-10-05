@@ -5,11 +5,11 @@
   "romance"
  ],
  "entries": [
-  "{first} was a {trait} {job} in {place}, where each {season} meant {PRIZE:!inner} for someone else.",
-  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as always.",
-  "{first}, a {trait} {job}, kept {THING:!living} and carried {FEELING}.",
-  "Every {season}, {first}, a {trait} {job} of {place}, walked past {landmark} {MANNER}.",
-  "{first} wrote letters about {place} and told {CLOSE:human} nothing of {TOPIC}.",
-  "In {place}, {first} {ACT_THING:mundane} {THING} {MANNER} while the town slept."
+  "{first} was a {trait} {job} in {place}, who passed one window every {season}.",
+  "In {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and noticed who else did.",
+  "{first}, a {trait} {job}, wore {THING:!living} every day for luck, and wore {FEELING} plainly.",
+  "Every {season}, {first}, a {trait} {job} of {place}, waited at {landmark} {MANNER}.",
+  "{first} knew every couple in {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "Each morning in {place}, before the shops opened, {first} {ACT_THING:mundane} {THING} {MANNER}."
  ]
 }

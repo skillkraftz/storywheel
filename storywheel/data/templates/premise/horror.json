@@ -5,17 +5,17 @@
   "horror"
  ],
  "entries": [
-  "When {DISASTER:strikes} cuts off {place}, {first}, a {trait} {job}, must {DO_THING} {THING} {DEADLINE}, or no one will leave.",
-  "{first}, a {trait} {job} of {place}, finds {THING:!living,!bulky} {HIDING} and wishes it stayed buried.",
-  "After {DISASTER:strikes} in {place}, the {rival} accuses {SOMEONE:human,!plural}, and {first}, a {trait} {job}, knows who is lying.",
-  "A {trait} {job} named {first} must {DO_PERSON:!inner} {SOMEONE:human,!plural} {DEADLINE}, though everything about {landmark:built} says to stay away.",
-  "{first}, a {trait} {job}, receives {MESSAGE:physical} from {SOMEONE:human,!plural} and must reach {landmark:built} {DEADLINE}.",
-  "In {place}, {first}, a {trait} {job}, is asked to {DO_THING} {THING}, and learns the {rival} has done it before.",
-  "To save {SOMEONE:human,!plural} from {DISASTER:manmade}, {first}, a {trait} {job}, must go back to {landmark:built} {DEADLINE}.",
-  "Every night at {landmark:built} something moves, and {first}, a {trait} {job}, has a week to learn why.",
-  "A {trait} {job} named {first} inherits {THING} and a house in {place} that the {rival} wants gone.",
-  "{first}, a {trait} {job}, is the last to see {SOMEONE:human,!plural}, and hears knocking at {landmark:built}.",
-  "When {THING:portable} turns up {HIDING}, {first}, a {trait} {job} of {place}, uncovers {DISASTER:manmade} no one will name.",
-  "At {landmark:built}, {first}, a {trait} {job}, discovers that {SOMEONE:human,!plural} has been dead for years."
+  "{first}, a {trait} {job}, moves into {landmark:built} outside {place}, and something there has been waiting.",
+  "The roads out of {place} close after {DISASTER:strikes}, and {first}, a {trait} {job}, is not alone in the dark.",
+  "{first}, a {trait} {job} of {place}, hears {SOMEONE:!plural} call from {landmark} every night at the same hour.",
+  "Nobody in {place} will say what happened at {landmark}, and {first}, a {trait} {job}, is hired to clean it.",
+  "{first}, a {trait} {job}, digs up {THING:!living,!bulky} {HIDING}, and the nights in {place} begin to go wrong.",
+  "Each morning {first}, a {trait} {job}, finds {THING:portable} closer to the bed.",
+  "{CLOSE:human} comes home from {landmark} changed, and only {first}, a {trait} {job}, can tell.",
+  "{first}, a {trait} {job}, must survive {DEADLINE} in {place}, where the {rival} keeps the doors locked from outside.",
+  "Snow seals {place}, and {first}, a {trait} {job}, counts more footprints than people in {landmark}.",
+  "{MESSAGE:physical} under the door tells {first}, a {trait} {job}: do not open {landmark} again.",
+  "{first}, a {trait} {job}, returns to {place} for a funeral, and {SOMEONE:!plural} is still expected at dinner.",
+  "The {rival} offers {first}, a {trait} {job}, {PRIZE:material,!inner} to spend one night at {landmark}."
  ]
 }

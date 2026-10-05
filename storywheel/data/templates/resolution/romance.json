@@ -5,13 +5,13 @@
   "romance"
  ],
  "entries": [
-  "{first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {the_someone:human}",
-  "{place} still talks of {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
-  "{first} {HABIT_PERSON} {the_someone:human} and {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PLACE} {landmark} every {season}, and {HABIT_PERSON} {the_someone:human}",
-  "the lights of {place} come on early, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
-  "{first} {HABIT_PERSON} {the_someone:human} and never doubts {VALUE}",
-  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}",
-  "{first} {HABIT_THING} {the_thing:!living} and {HABIT_PERSON} {the_someone:human}"
+  "{first} {HABIT_PLACE} {landmark} with {the_someone:human} every Sunday and {HABIT_PERSON} {CLOSE}",
+  "{place} still talks about {the_disaster}, and {first} {HABIT_THING} {the_thing:!living}",
+  "{first} {HABIT_PERSON} {the_someone:human} each morning and {HABIT_THING} {the_thing:!living}",
+  "every anniversary, {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}",
+  "the letters are boxed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}",
+  "{first} {HABIT_PERSON} {CLOSE} and laughs now about {TOPIC}",
+  "{place} has forgiven {the_disaster}, and {first} {HABIT_PLACE} {landmark} hand in hand",
+  "{first} {HABIT_THING} {the_thing:!living} on anniversaries and {HABIT_PERSON} {the_someone:human} daily"
  ]
 }

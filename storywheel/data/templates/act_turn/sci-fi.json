@@ -5,12 +5,12 @@
   "sci-fi"
  ],
  "entries": [
-  "{first} {ACT_PLACE} {landmark} {MANNER} and {ACT_THING:stows} {THING:portable} {HIDING}.",
-  "{first} questioned {CLOSE:human} {MANNER} about {SOMEONE:human,!plural}.",
-  "{first} set out {MANNER} to {DO_THING} {THING} {DEADLINE}.",
-  "{first} followed {SOMEONE:human,!plural} to {landmark} {MANNER}.",
-  "{first} {ACT_PERSON} {SOMEONE:human,!plural} {MANNER} and could not turn back.",
-  "{first} kept the clue {HIDING} and took the case {MANNER}.",
-  "With {CLOSE:human} watching, {first} {ACT_PLACE} {landmark} and went in."
+  "{first} {ACT_PLACE} {landmark} {MANNER} and scanned every deck for {THING}.",
+  "{first} sealed {THING:portable} in a shielded locker, then {ACT_PERSON} {SOMEONE:human,!plural} {MANNER}.",
+  "{first} {ACT_THING} {THING} {MANNER} and checked it against records of {TOPIC}.",
+  "{first} {ACT_MESSAGE} {MESSAGE:physical} and forwarded it to {SOMEONE:!plural} on a private channel.",
+  "{first} opened a link to {CLOSE:human} {MANNER} and asked about {SOMEONE:!plural}.",
+  "{first} clipped {THING:portable} to a suit belt and {ACT_PLACE} {landmark} {MANNER}.",
+  "{first} bartered {THING} with {SOMEONE:human} for {PRIZE:material,!inner} and an access code."
  ]
 }

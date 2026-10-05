@@ -5,11 +5,11 @@
   "comedy"
  ],
  "entries": [
-  "Then {first} saw {the_thing} anew; it had never been about {want}.",
-  "Then {first} understood that {the_someone} had acted out of {MOTIVE} all along.",
-  "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.",
-  "Then {first} saw that the {rival:human} had wanted {want} too, and had hidden {FEELING} behind {VICE}.",
+  "Then {first} dropped {the_thing} and laughed: never about {want}.",
+  "Then {first} learned {the_someone} had been bumbling out of {MOTIVE} all along.",
+  "Then {first} reread {the_message} upside down and saw it meant {VALUE}, not {FEELING}.",
+  "Then {first} caught the {rival:human} sulking over {want}, hiding {FEELING} behind {VICE}.",
   "Then {first} laughed: {VICE} had made {landmark} the center of {place} all along.",
-  "Then {first} saw that {need} mattered more than {want}."
+  "Then, embarrassingly, {first} picked {need} over {want}."
  ]
 }

@@ -5,15 +5,15 @@
   "horror"
  ],
  "entries": [
-  "in {place}, a {trait} {job} named {first} wanted {want}",
-  "{place} had been quiet for years, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and carried {FEELING}",
-  "the nearest help was miles from {place}, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
-  "{place} did not welcome visitors, and {first}, a {trait} {job}, kept to {landmark}",
-  "the {rival} watched {place}, and {first}, a {trait} {job}, wanted {want}",
-  "everyone in {place} knew {first}, a {trait} {job}, and no one spoke of {TOPIC}",
-  "{first}, a {trait} {job} in {place}, slept badly and dreaded {DISASTER}",
-  "the lights of {place} went out early, and {first}, a {trait} {job}, wanted {want}"
+  "in {place}, a {trait} {job} named {first} wanted {want}, and slept with the light on",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and never asked why",
+  "{place} was quiet the way {landmark} was quiet, and {first} wanted {want}",
+  "{first} was the {trait} {job} of {place}, and never walked past {landmark} after dusk",
+  "the {rival} owned most of {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, arrived in {place} {MANNER} and felt watched from the start",
+  "{first}, a {trait} {job} in {place}, had heard the stories about {TOPIC} and laughed",
+  "{place} lost a child each {season}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job} of {place}, wanted {want} and locked the doors twice",
+  "dogs would not cross {landmark}, and {first}, a {trait} {job}, wanted {want}"
  ]
 }

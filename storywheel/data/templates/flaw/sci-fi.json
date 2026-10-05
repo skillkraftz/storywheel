@@ -5,13 +5,13 @@
   "sci-fi"
  ],
  "entries": [
-  "lets {VICE} outweigh {VALUE}",
-  "would risk {VALUE} for {TEMPTATION}",
-  "hides {FEELING} behind {VICE}",
-  "cannot leave {TOPIC} alone and calls it {VALUE}",
-  "trusts {TEMPTATION} over {VALUE}",
-  "mistakes {VICE} for {VALUE}",
-  "reaches for {TEMPTATION} to avoid {FEELING}",
-  "runs numbers on everyone and trusts {VICE} over {VALUE}"
+  "trusts the instruments over people and {VICE} over {FEELING}",
+  "reaches for {TEMPTATION} whenever {FEELING} spikes",
+  "puts {VICE} ahead of {CLOSE:human}",
+  "keeps working to avoid {FEELING}, and calls it {VALUE}",
+  "would trade {VALUE} for {TEMPTATION} and a clean readout",
+  "lets {VICE} run the ship when {FEELING} rises",
+  "cannot leave a system unoptimized, mistaking {VICE} for {VALUE}",
+  "hides {FEELING} behind protocol and {VICE}"
  ]
 }

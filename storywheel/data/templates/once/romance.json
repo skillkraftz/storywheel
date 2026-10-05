@@ -5,15 +5,15 @@
   "romance"
  ],
  "entries": [
-  "in {place}, a {trait} {job} named {first} wanted {want}",
-  "everyone in {place} knew everyone, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} and carried {FEELING}",
-  "the {rival} watched over {place}, and {first}, a {trait} {job}, wanted {want}",
-  "{first}, a {trait} {job}, had come to {place} {MANNER} to forget {TOPIC}",
-  "{first}, a {trait} {job} in {place}, doubted love and wanted {want}",
-  "everyone in {place} had an opinion about {first}, a {trait} {job}, and {TOPIC}",
-  "{first}, a {trait} {job}, spent every {season} in {place} wanting {want}",
-  "the whole town of {place} was waiting for {first}, a {trait} {job}, to want {want}",
-  "{first}, a {trait} {job} of {place}, had stopped hoping for {PRIZE:!inner}"
+  "in {place}, a {trait} {job} named {first} wanted {want}, and pretended not to want love",
+  "{first}, a {trait} {job} of {place}, kept {THING} {HIDING} from a summer long ago",
+  "{place} was full of couples, and {first}, a {trait} {job}, wanted {want}",
+  "{first} was the {trait} {job} of {place}, who advised everyone on {TOPIC}",
+  "the {rival} decided who married whom in {place}, and {first}, a {trait} {job}, wanted {want}",
+  "{first}, a {trait} {job}, came home to {place} {MANNER} after a broken engagement",
+  "{first}, a {trait} {job} in {place}, still kept an unsent letter about {TOPIC}",
+  "{place} had a festival every {season}, and {first}, a {trait} {job}, always went alone",
+  "{first}, a {trait} {job} of {place}, wanted {want} and a second chance",
+  "everyone in {place} knew why {SOMEONE:human,!plural} left, except {first}"
  ]
 }

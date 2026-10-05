@@ -5,11 +5,11 @@
   "horror"
  ],
  "entries": [
-  "Then {first} saw {the_thing} anew; it had never been about {want}.",
-  "Then {first} understood that {the_someone} had acted out of {MOTIVE} all along.",
-  "Then {first} realized {the_message} had been about {VALUE}, not {FEELING}.",
-  "Then {first} saw that the {rival:human} had wanted {want} too, and had hidden {FEELING} behind {VICE}.",
-  "Then {first} saw that {need} mattered more than {want}.",
-  "Then {first} understood that {MOTIVE} had kept {first} from {want} all along."
+  "Then in the dark {first} saw {the_thing} was never about {want}.",
+  "Then {first} understood {the_someone} had been afraid of {MOTIVE}, not hungry for {want}.",
+  "Then {first} heard {the_message} again: a plea for {VALUE}.",
+  "Then {first} saw the {rival:human} was haunted too, and also wanted {want}.",
+  "Then, shaking, {first} chose {need} over {want}.",
+  "Then {first} felt {MOTIVE} had been the real haunting, not {want}."
  ]
 }

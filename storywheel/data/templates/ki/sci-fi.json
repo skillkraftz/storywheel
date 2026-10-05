@@ -5,11 +5,11 @@
   "sci-fi"
  ],
  "entries": [
-  "{first} was a {trait} {job} on {place}, where each {season} meant {PRIZE:!inner} for someone else.",
-  "On {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, as always.",
-  "{first}, a {trait} {job}, kept {THING:!living} and carried {FEELING}.",
-  "Every {season}, {first}, a {trait} {job} of {place}, walked through {landmark} {MANNER}.",
-  "{first} kept logs on {place} and told {CLOSE:human} nothing of {TOPIC}.",
-  "On {place}, {first} {ACT_THING:mundane} {THING} {MANNER} while the crew slept."
+  "{first} was a {trait} {job} on {place}, who watched the stars drift every {season}.",
+  "On {place}, {first} {ACT_PLACE:mundane} {landmark} {MANNER}, and listened to the hull.",
+  "{first}, a {trait} {job}, carried {THING:!living} from a lost world, and {FEELING} too.",
+  "Every {season} cycle, {first}, a {trait} {job} of {place}, checked {landmark} {MANNER}.",
+  "{first} knew every system on {place} and told {CLOSE:human} nothing of {TOPIC}.",
+  "Between shifts on {place}, {first} {ACT_THING:mundane} {THING} {MANNER}."
  ]
 }

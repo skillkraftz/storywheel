@@ -5,12 +5,12 @@
   "mystery"
  ],
  "entries": [
-  "In the end, {first} had {PRIZE:!inner} but kept {VALUE}.",
-  "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
-  "{first} learned {need}, and {place} forgot {TOPIC}.",
-  "The case was closed, and {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
-  "The {rival} was gone, and {first} {HABIT_PLACE} {landmark} every {season}.",
-  "{first} {HABIT_PERSON} {the_someone:human} and never speaks of {TOPIC}.",
-  "{place} forgot {the_disaster}, but {first} {HABIT_PLACE} {landmark}."
+  "With the verdict read, {first} had {PRIZE:!inner} and kept {VALUE}.",
+  "The file on {the_disaster} was closed, and {first} {HABIT_PLACE} {landmark} on quiet days.",
+  "{first} came to see {need}, and {place} began to talk again.",
+  "Evidence was returned, and {first} {HABIT_THING} {the_thing:!living} {HIDING}.",
+  "The {rival} resigned, and {first} {HABIT_PLACE} {landmark} when the {season} came.",
+  "{first} {HABIT_PERSON} {the_someone:human} now and then, and never discusses {TOPIC}.",
+  "{place} pretends {the_disaster} never happened, but {first} {HABIT_PLACE} {landmark}."
  ]
 }

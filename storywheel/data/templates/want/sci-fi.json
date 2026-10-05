@@ -5,13 +5,13 @@
   "sci-fi"
  ],
  "entries": [
-  "{PRIZE:!inner} {DEADLINE}",
-  "{PRIZE:!inner} for {CLOSE:human}",
-  "{THING:valuable,!living} and {PRIZE:social,!inner}",
-  "{PRIZE:material,!inner} {DEADLINE}",
-  "{THING:portable,!living} back from {SOMEONE:human,!plural}",
-  "{PRIZE:social,!inner} and peace for {place}",
-  "{THING:valuable,!living} and the key to {landmark}",
-  "{PRIZE:material,!inner} for {CLOSE:human}"
+  "{PRIZE:social,!inner} and passage off {place}",
+  "{THING:valuable,!living} and full access to {landmark}",
+  "{PRIZE:material,!inner} and {PRIZE:social,!inner} on the next transport",
+  "{THING:portable,!living} decoded before {SOMEONE:human,!plural} notices",
+  "the {rival} removed from command of {place}",
+  "{PRIZE:social,!inner} and real air in {place}",
+  "{THING:valuable,!living} and a channel to {CLOSE:human}",
+  "{PRIZE:material,!inner} delivered {DEADLINE}"
  ]
 }

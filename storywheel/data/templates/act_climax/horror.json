@@ -5,12 +5,14 @@
   "horror"
  ],
  "entries": [
-  "{first} faced {the_someone} at {landmark} and held up {the_thing:portable}.",
-  "{first} named {the_someone:human} at {landmark} {MANNER}, with {the_thing} as proof.",
-  "{first} read {the_message} aloud at {landmark} and watched {the_someone:human}.",
-  "{the_someone:human} confessed to {the_disaster} when {first} showed {the_thing:portable}.",
-  "{first} laid a trap at {landmark} {MANNER}, baited with {the_thing:portable}.",
-  "{the_thing} did its work, and {the_someone:human} ran {MANNER}.",
-  "{first} unmasked the {rival} at {landmark}, and chose {VALUE}."
+  "{first} went down into {landmark} with {the_thing:portable} and every light dying.",
+  "{first} burned {the_message} at {landmark} {MANNER} and heard {the_someone} scream.",
+  "{the_someone} reached for {first} at {landmark}, and {first} raised {the_thing:portable} {MANNER}.",
+  "{first} left {the_thing:portable} at the threshold of {landmark} {MANNER} and ran.",
+  "{first} faced the {rival} in {landmark}, armed only with {the_thing:portable} and {VALUE}.",
+  "{the_someone} spoke its true name at {landmark}, and {first} answered with {MOTIVE}.",
+  "{first} broke into {landmark} {MANNER} and found {SOMEONE:human,!plural} still breathing.",
+  "{first} dragged {THING:portable} across {landmark} {MANNER} as the walls closed.",
+  "{SOMEONE:!plural} let go of {place} at {landmark} {MANNER}."
  ]
 }

@@ -5,12 +5,12 @@
   "romance"
  ],
  "entries": [
-  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost heart.",
-  "{the_thing} was lost, and {first} had nothing left but {VALUE}.",
-  "{the_someone:human} left {landmark} {MANNER}, and the town stayed silent.",
-  "{first} {ACT_THING:trades} {THING}, and {PRIZE:!inner} slipped away.",
-  "Alone at {landmark}, {first} faced {FEELING} and {VICE} at once.",
-  "{the_disaster:strikes} struck again, and {first} was too late.",
-  "{first} learned that {CLOSE:human} had hidden {the_thing} {MANNER}."
+  "The {rival} {ACT_PERSON} {CLOSE:human}, and {first} lost the one person who understood.",
+  "{the_thing} was broken, and {first} was left holding only {VALUE}.",
+  "{the_someone:human} said goodbye at {landmark}, and meant it.",
+  "{first} {ACT_THING:trades} {THING} in a temper, and {PRIZE:!inner} slipped away.",
+  "Alone at {landmark}, {first} weighed {FEELING} against {VICE}.",
+  "{the_disaster:strikes} came again, and {CLOSE:human} called off the wedding.",
+  "{CLOSE:human} had returned {the_thing} {MANNER}, and {first} took it for a refusal."
  ]
 }

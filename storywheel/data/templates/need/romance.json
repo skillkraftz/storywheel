@@ -5,13 +5,13 @@
   "romance"
  ],
  "entries": [
-  "to {DO_PERSON:inner} {CLOSE:human} before it is too late",
-  "to put {VALUE} before {VICE}",
-  "to trust {CLOSE:human} with the truth about {TOPIC}",
-  "to give up {VICE} and choose {VALUE}",
-  "to forgive {TOPIC} and keep {VALUE}",
-  "to stop hiding {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
-  "to value {VALUE} above {PRIZE:social,!inner}",
-  "to let go of {VICE} and trust {VALUE}"
+  "to tell {CLOSE:human} what {TOPIC} really meant",
+  "to choose {VALUE} over {VICE} when love asks",
+  "to stop guarding {FEELING} from {CLOSE:human}",
+  "to {DO_PERSON:inner} {CLOSE:human} and then let go",
+  "to set {VALUE} above {TEMPTATION} for good",
+  "to believe {VALUE} lasts longer than {PRIZE:social,!inner}",
+  "to let {CLOSE:human} see {FEELING} about {TOPIC}",
+  "to risk {FEELING} and keep {VALUE}"
  ]
 }

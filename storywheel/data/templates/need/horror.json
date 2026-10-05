@@ -5,13 +5,13 @@
   "horror"
  ],
  "entries": [
-  "to {DO_PERSON:inner} {CLOSE:human} before it is too late",
-  "to put {VALUE} before {VICE}",
-  "to trust {CLOSE:human} with the truth about {TOPIC}",
-  "to give up {VICE} and choose {VALUE}",
-  "to forgive {TOPIC} and keep {VALUE}",
-  "to stop hiding {FEELING} and {DO_PERSON:inner} {CLOSE:human}",
-  "to value {VALUE} above {PRIZE:social,!inner}",
-  "to let go of {VICE} and trust {VALUE}"
+  "to tell {CLOSE:human} the truth about {TOPIC}",
+  "to face {FEELING} instead of feeding {VICE}",
+  "to stop calling {TOPIC} a dream and face {FEELING}",
+  "to {DO_PERSON:inner} {CLOSE:human} before the dark does",
+  "to hold to {VALUE} when {TEMPTATION} whispers",
+  "to accept that {VALUE} costs more than {PRIZE:social,!inner}",
+  "to let {CLOSE:human} carry part of {TOPIC}",
+  "to stay in the room with {FEELING} and keep {VALUE}"
  ]
 }
