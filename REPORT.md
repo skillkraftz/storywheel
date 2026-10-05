@@ -4882,3 +4882,55 @@ One full run with `tools/fulltest.sh`: parallel pass 2,577 passed, 4 skipped, 1 
 `tests/test_outline_beats.py::test_roll_beat_uses_the_generator_and_the_universe`: with frames limited to the story's genres, seed 3's beat no longer named
 the universe's protagonist. The test now rolls six seeds and asks that at least one names her (and that none leaves a brace). Rerun with `--lf` and the whole
 file (9 passed). The fix changed only a test, so no second full run. `stable` was moved to the commit that records this.
+
+
+# Batch 17 (0.17.0): screenplays, first usable version
+
+## Part A: choosing the PDF renderer
+
+I rendered two Fountain test scripts with each renderer. The first covers a title page, scene headings, action, cues with (V.O.), (O.S.) and (CONT'D),
+parentheticals, dual dialogue, transitions, centered text and a forced page break. The second is a 14-page stress script with 40 scenes and long speeches,
+so speeches have to break across pages and scene headings land near page bottoms. I read every PDF back with pdfplumber (character coordinates, fonts,
+page sizes) to get the numbers below.
+
+**The standard.** These values come from Final Draft's margin guide and the usual formatting guides. US Letter. 12-point Courier. Margins: 1.5" left,
+1" right, 1" top and bottom. Action and scene headings run from 1.5" to 7.5". The character cue starts about 3.7" from the left edge. The parenthetical
+starts about 3.1" and ends about 5.6". Dialogue runs from about 2.5" to 6.0". Transitions are right-aligned so they end at the 1" right margin. The page
+number is top right, ending at 7.5", about 0.5" from the top, from page 2 ("2."). A page holds about 55 lines. A speech that breaks across pages ends with
+"(MORE)" and continues under "NAME (CONT'D)", and a scene heading is never left alone at the bottom of a page. The guides differ a little on transitions:
+some place them at 6.0" from the left edge rather than flush right.
+
+| | screenplain 0.12 | afterwriting 1.17.3 | Wrap 0.3.2 | Standard |
+|---|---|---|---|---|
+| Language / install | Python (pip), uses reportlab | Node (npm) | Go binary | |
+| Page size | Letter | A4 by default; Letter with `print_profile=usletter` | Letter or A4 | Letter |
+| Font | Courier Prime 12 | Courier Prime 12 | Courier Prime 12 (only if installed as a system font; otherwise built-in Courier) | 12-pt Courier |
+| Action and heading left edge | 1.5" | 1.5" | 1.5" | 1.5" |
+| Character cue | **3.4"** | **3.5"** | 3.7" | 3.7" |
+| Parenthetical | **2.8"** | **3.0"** | 3.1" | 3.1" |
+| Dialogue | **2.4"** | 2.5" | 2.5" | 2.5" to 6.0" |
+| Transition | right-aligned, ends at **7.6"** | right-aligned, ends at **7.6"** | starts at 6.0", ends near 7.2" | ends at 7.5" (or starts at 6.0") |
+| Page number | "2.", ends at 7.6", 0.47" down | "2.", ends at 7.6", 0.5" down | "2.", ends at 7.5", 0.36" down | ends at 7.5", 0.5" down |
+| Lines used per page (stress script) | 46 to 55 | 51 to 55 | 51 to 55 | about 55 |
+| Speech across a page: (MORE) / (CONT'D) | **never splits a speech**: the whole speech moves to the next page, leaving gaps | yes (with `split_dialogue`) | yes | yes |
+| Scene heading alone at a page bottom (40 scenes) | none | none | none | never |
+| Dual dialogue | yes | yes | yes | |
+| Title page | title centered, contact bottom left | **title uppercased**, contact bottom right | contact bottom right | title centered, contact bottom left |
+| Offline | yes | yes | yes | |
+| Raspberry Pi (arm64) without Node | yes | **no (needs Node)** | **no arm64 release** (build with Go); the Linux x86 release needs a Nix loader path | |
+| License | MIT | MIT | GPL-3.0 (as an external program) | |
+| Maintained | last change 2026-04 | last change 2026-01 | last change 2026-08, last release 2023 | |
+
+**None is good enough on its own.** Wrap lays out the page exactly, but there is no arm64 build, it needs Courier Prime installed system-wide, and it puts the
+contact block on the right. afterwriting splits speeches correctly, but it needs Node, defaults to A4, its cues and parentheticals sit 0.1" to 0.2" left of
+the standard, and it uppercases the title. screenplain is the closest fit for storywheel's stack (pure Python, Pi-friendly), but it never writes
+(MORE)/(CONT'D) and its indents are 0.1" to 0.3" off.
+
+**My pick: our own renderer** (`storywheel/screenplay_pdf.py`), built on reportlab with Courier Prime bundled. reportlab is BSD-licensed and installs as a
+pure-Python wheel (`reportlab-5.0.1-py3-none-any.whl`), so it works on a Raspberry Pi. Courier Prime is under the SIL Open Font License, which allows
+bundling. The renderer is laid out to the standard above, uses storywheel's own title page, works offline, and the tests read its PDFs back against the
+same numbers. The Fountain parser is ours too (`storywheel/fountain.py`), so the Writer, the flip test, the page estimate and the export all read a script
+the same way. I used Wrap's output as a second reference for the layout.
+
+Sources: [Final Draft: What are the margins for a screenplay?](https://www.finaldraft.com/blog/what-are-the-margins-for-a-screenplay),
+[StudioBinder: Screenplay margins](https://www.studiobinder.com/blog/screenplay-margins/), [NFI: Screenplay format](https://www.nfi.edu/screenplay-format/).
