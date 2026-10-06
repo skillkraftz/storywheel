@@ -40,6 +40,7 @@ SECTIONS = [
         ("accent_color", "Accent color", "color", None, "Titles, borders, scene breaks, the chosen item. Blank: the usual blue. A name or a hex color like #5fafd7."),
     ]),
     ("Writer", [
+        ("stats_skip_paste", "Don't count pasted text", "bool", None, "On: words you paste are not added to today's count (they raise the starting total instead). Off: pasted words count as written."),
         ("notepad_mode", "Notepad mode", "bool", None, "On: type like in an ordinary editor (Escape does not change modes). Off: Vim behavior."),
         ("writer_kitty", "Open the Writer in its own kitty window", "bool", None, "When storywheel runs inside kitty, the Writer opens in a window of its own with the font, size, line height, padding and opacity below, and the window closes when you come back. storywheel itself keeps your normal spacing. Outside kitty the Writer runs in this terminal."),
         ("writer_font", "Writer font", "text", None, "Only in the kitty Writer window. Blank: your kitty font."),
@@ -132,6 +133,20 @@ def parse(kind, text):
     return True, text
 
 
+class StatsTable(DataTable):
+    """The Stats tab's tables: e edits the highlighted day (the days table), 0 resets it, R forgets a story's history (the stories table)."""
+    BINDINGS = [Binding("e", "fix", "Edit"), Binding("0", "zero", "Reset"), Binding("R", "forget", "Forget history")]
+
+    def action_fix(self):
+        self.screen.stats_edit(self, False)
+
+    def action_zero(self):
+        self.screen.stats_edit(self, True)
+
+    def action_forget(self):
+        self.screen.stats_forget(self)
+
+
 class SettingsScreen(KeptScreen, Screen):
     BINDINGS = navigation.footer([
         *navigation.mode_bindings("settings"),
@@ -204,10 +219,10 @@ class SettingsScreen(KeptScreen, Screen):
                             yield Static(f"App storage: {paths.home()}\nSettings file: {settings.global_path()}", markup=False)
             with TabPane("Stats", id="t-stats"):
                 yield Static("", id="summary", markup=False)
-                yield Static("Words per day (newest first)", classes="title")
-                yield DataTable(id="days")
-                yield Static("Per story", classes="title")
-                yield DataTable(id="stories")
+                yield Static("Words per day (newest first)   e edits the day's total, 0 resets it", classes="title")
+                yield StatsTable(id="days")
+                yield Static("Per story   R forgets the story's recorded history (its manuscript is untouched)", classes="title")
+                yield StatsTable(id="stories")
             with TabPane("Help", id="t-help"):
                 yield Static("Search every help page: modes, keys, exports, backups, the dictionary, grammar... Pick a result to read it.", classes="hint", markup=False)
                 yield Input(placeholder="search the help (empty lists the pages)", id="helpsearch")
@@ -485,7 +500,7 @@ class SettingsScreen(KeptScreen, Screen):
         days.add_column("", width=32)
         top = max(per_day.values(), default=0) or 1
         for date, words in writing_stats.history(90):
-            days.add_row(date, f"{words:,}", "█" * max(1 if words else 0, int(30 * words / top)))
+            days.add_row(date, f"{words:,}", "█" * max(1 if words else 0, int(30 * words / top)), key=date)
         stories = self.query_one("#stories", DataTable)
         stories.clear(columns=True)
         cells = [(uni, title, f"{words:,}", f"{t:,}" if t else "") for uni, title, words, t in rows]
@@ -493,6 +508,58 @@ class SettingsScreen(KeptScreen, Screen):
             stories.add_column(head, width=max([len(head)] + [len(c[i]) for c in cells]) + 1)
         for c in cells:
             stories.add_row(*c)
+
+    def _row_key(self, table):
+        try:
+            return table.coordinate_to_cell_key(table.cursor_coordinate).row_key.value
+        except Exception:
+            return None
+
+    def stats_edit(self, table, reset):
+        """Edit or reset the highlighted day's words (with a confirm)."""
+        from .tui import ConfirmScreen, EditScreen
+        if table.id != "days":
+            return self.say_stats("Choose a day in the Words per day table.")
+        date = self._row_key(table)
+        if not date:
+            return
+        now = writing_stats.days().get(date, 0)
+        if reset:
+            return self.app.push_screen(ConfirmScreen(f"Reset {date} from {now:,} words to 0?"), lambda yes: self._set_day(date, 0) if yes else None)
+
+        def done(out):
+            text = str((out or {}).get("words", "")).replace(",", "").strip()
+            if not text.isdigit():
+                return None if out is None else self.say_stats("Words must be a whole number.")
+            self.app.push_screen(ConfirmScreen(f"Change {date} from {now:,} to {int(text):,} words?"),
+                                 lambda yes: self._set_day(date, int(text)) if yes else None)
+        self.app.push_screen(EditScreen(f"Words written on {date}", {"words": str(now)}), done)
+
+    def _set_day(self, date, words):
+        writing_stats.set_day(date, words)
+        self.refresh_stats()
+        self.say_stats(f"{date} is now {writing_stats.days().get(date, 0):,} words.")
+
+    def stats_forget(self, table):
+        from .tui import ConfirmScreen
+        if table.id != "stories":
+            return self.say_stats("Choose a story in the Per story table.")
+        idx = table.cursor_row
+        found = [(u, s) for u in vault.list_universes() for s in u.stories()]
+        if not 0 <= idx < len(found):
+            return
+        story = found[idx][1]
+        recorded = sum(writing_stats.story_days(story).values())
+        self.app.push_screen(ConfirmScreen(f"Forget the recorded writing history of '{story.title}' ({recorded:,} words over its days)?\n"
+                                           "Its manuscript is not touched."), lambda yes: self._forget(story) if yes else None)
+
+    def _forget(self, story):
+        n = writing_stats.reset_story(story)
+        self.refresh_stats()
+        self.say_stats(f"Forgot {n:,} recorded words of '{story.title}'.")
+
+    def say_stats(self, text):
+        self.notify(text)
 
     # --- actions ----------------------------------------------------------------------------------------------
 

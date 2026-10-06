@@ -91,6 +91,41 @@ def summary(universe=None, story=None, today=None):
     return out
 
 
+def set_day(date, words, universes=None):
+    """Correct one day's total across all stories to `words`: the difference goes on an "(edited)" machine entry of the story that wrote
+    most that day (the first story when none did), so nothing else in stats.json is touched. Returns the change."""
+    stories = [s for u in (universes if universes is not None else vault.list_universes()) for s in u.stories()]
+    if not stories:
+        return 0
+    have = {s: story_days(s).get(date, 0) for s in stories}
+    delta = max(0, int(words)) - sum(have.values())
+    if not delta:
+        return 0
+    target = max(stories, key=lambda s: have[s])
+    try:
+        data = json.loads(target.stats_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    data.setdefault("days", {})
+    day = data["days"].setdefault(date, {})
+    machines = day.get("machines")
+    if not isinstance(machines, dict) or not machines:
+        machines = {"(earlier)": int(day.get("words", 0) or 0)} if day.get("words") else {}
+    machines["(edited)"] = int(machines.get("(edited)", 0)) + delta
+    day["machines"] = machines
+    day["words"] = day_words(day)
+    data.setdefault("sessions", [])
+    target.stats_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    return delta
+
+
+def reset_story(story):
+    """Forget a story's recorded history (its days and sessions). The manuscript is not touched. Returns the words that were recorded."""
+    before = sum(story_days(story).values())
+    story.stats_path.write_text(json.dumps({"days": {}, "sessions": []}, indent=2), encoding="utf-8")
+    return before
+
+
 def history(limit=60):
     """[(date, words)] newest first, for the stats tab."""
     per_day = days()

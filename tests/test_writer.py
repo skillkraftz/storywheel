@@ -804,3 +804,15 @@ def test_words_today_roll_over_at_midnight_and_count_per_machine(home, story):
     from storywheel import writing_stats
     assert writing_stats.story_days(story)["2020-01-01"] == 105
     assert len(data["days"]) == 2 and data["days"][next(d for d in data["days"] if d != "2020-01-01")]["machines"]
+
+
+def test_pasted_words_do_not_count_as_written_today(home, story):
+    r = run_lua(story, """
+        local st = require("sw.stats")
+        st.begin()
+        local before = st.today()
+        st.skip_pasted({ "one two three", "four" })
+        R.diff = st.start_total - st.manuscript()
+        R.today = st.today() - before
+    """)
+    assert r["diff"] == 4 and r["today"] == 0

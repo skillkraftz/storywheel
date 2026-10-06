@@ -55,6 +55,14 @@ function M.scene(buf)
   return buffer_words(buf)
 end
 
+-- Pasted text is not writing: with the setting stats_skip_paste (on by default) its words move the starting total, so they never reach today's count.
+function M.skip_pasted(lines)
+  local v = story.setting("stats_skip_paste", true)
+  if v == false or v == "false" or not story.dir then return end
+  M.check_day()
+  M.start_total = M.start_total + util.count_words(table.concat(lines, "\n"))
+end
+
 function M.mine()
   M.check_day()
   return M.day_base + math.max(0, M.manuscript() - M.start_total)

@@ -288,3 +288,21 @@ def test_settings_is_remembered_as_where_you_were(home):
         pass
     run(script, back="wheel", st=st)
     assert state.State().get("mode") == "settings" and state.State().get("back") == "wheel"
+
+
+def test_stats_tab_edits_and_resets_a_day_and_forgets_a_story_with_confirms(home):
+    """Batch 19: Settings > Stats edits a day's words (confirm), resets it, and forgets a story's history."""
+    import json
+    from textual.widgets import DataTable
+    u = vault.create_universe("Stats")
+    s = u.new_story("Tale")
+    s.stats_path.write_text(json.dumps({"days": {"2020-01-02": {"words": 100}}, "sessions": []}))
+    from storywheel import writing_stats
+    assert writing_stats.set_day("2020-01-02", 250) == 150
+    assert writing_stats.story_days(s)["2020-01-02"] == 250
+    writing_stats.set_day("2020-01-02", 0)
+    assert writing_stats.story_days(s)["2020-01-02"] == 0
+    writing_stats.set_day("2020-01-02", 40)
+    assert writing_stats.reset_story(s) == 40 and writing_stats.story_days(s) == {}
+    from storywheel import settings
+    assert settings.load_global()["stats_skip_paste"] is True

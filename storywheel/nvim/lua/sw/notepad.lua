@@ -180,6 +180,7 @@ function M.paste()
     lines = M.clean_pasted(lines)
   end
   if M.has_selection() then M.delete_selection() end
+  require("sw.stats").skip_pasted(lines)
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if linewise then
     -- whole lines pasted: each is a paragraph of its own, on its own line
@@ -518,7 +519,11 @@ function M.wrap_paste()
   local acc
   vim.paste = function(lines, phase)
     if not (M.enabled and vim.bo.filetype == "storywheel" and vim.bo.modifiable) then return original(lines, phase) end
-    if phase == -1 then return original(M.clean_pasted(lines), -1) end
+    if phase == -1 then
+      local clean = M.clean_pasted(lines)
+      require("sw.stats").skip_pasted(clean)
+      return original(clean, -1)
+    end
     if phase == 1 or acc == nil then acc = {} end
     if #acc == 0 then
       acc = vim.deepcopy(lines)
@@ -529,7 +534,9 @@ function M.wrap_paste()
     if phase == 3 then
       local all = acc
       acc = nil
-      return original(M.clean_pasted(all), -1)
+      local clean = M.clean_pasted(all)
+      require("sw.stats").skip_pasted(clean)
+      return original(clean, -1)
     end
     return true
   end
