@@ -2,6 +2,20 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.18.0 — Batch 18: choosing formats properly, and help that knows the format
+
+- **A real story form.** The Builder's + Story (and `m` on a story, to change it later) is a form of pickers: format (short story, novel,
+  screenplay as a feature film or a short film), a structure among those that fit the format, genres pre-filled from the universe, and a
+  target length in words or pages. Nothing is typed but the title and a number, so a typo can't become the default. Changing prose to a
+  screenplay (or back) warns first and keeps both kinds of files.
+- **The Wheel's structure step** has a format line, picked from the list, and rolls or picks only the structures that fit it. A promoted
+  draft keeps its format and gets the format's usual target.
+- **The target length** shows in the Writer's status line for prose ("in the story 1,234 / 5,000") as it already did in pages for scripts.
+- **Help in tabs.** The Writer's help opens on the guide to the story's format (Screenplay, or Writing prose), beside Writing basics, Keys and
+  Export. Every mode's help is its guide, Keys and Topics. Tab, Shift+Tab, the number keys or a click switch tabs; search covers every tab.
+- **Automatic (CONT'D)** when a character speaks again after action in the same scene (on by default, as in Final Draft and Fade In; a
+  switch in Settings > Export). It shows dimmed in the Writer and never goes into the file.
+
 ## 0.17.0 — Batch 17: screenplays, first usable version
 
 - **Screenplay stories.** A story on the new Feature Film or Short Film structure (or with format screenplay) is written as one Fountain file.

@@ -220,6 +220,28 @@ def parse(text):
     return Script(title, els, used + 1)
 
 
+def has_contd(ext):
+    return "CONT'D" in (ext or "").upper().replace("’", "'")
+
+
+def auto_contd(elements):
+    """The character cues that get an automatic (CONT'D): the same character speaking again in the same scene with nothing but action (or
+    other non-dialogue) since their last speech, as Final Draft and Fade In do by default. A scene heading or a transition starts afresh;
+    another character's speech, dual dialogue, and a cue that already says (CONT'D) are left alone. Returns the cue Elements."""
+    out, last = [], None
+    for e in elements:
+        if e.type in ("heading", "transition", "page_break"):
+            last = None
+        elif e.type == "character":
+            if e.dual or (last is not None and last.dual):
+                last = e
+                continue
+            if last is not None and e.name.upper() == last.name.upper() and not has_contd(e.ext):
+                out.append(e)
+            last = e
+    return out
+
+
 # --- what the Writer and the grammar checker need line by line -------------------------------------------------------------------
 
 def line_types(text):

@@ -203,9 +203,13 @@ def _speech(elements, i, dual_side=None):
     return lines, splits, j
 
 
-def blocks(text):
+def blocks(text, contd=False):
+    """The script as Blocks. `contd`: add an automatic (CONT'D) where a character speaks again after action in the same scene."""
     script = fountain.parse(text)
     els = [e for e in script.elements if e.type not in ("section", "synopsis")]
+    if contd:
+        for cue in fountain.auto_contd(els):
+            cue.ext = (cue.ext + " " + CONTD).strip()
     out = []
     i = 0
     while i < len(els):
@@ -268,9 +272,9 @@ class Page:
         return len(self.lines)
 
 
-def paginate(text):
+def paginate(text, contd=False):
     """The script's pages: each page a list of lines (None = a blank line), at most LINES_PER_PAGE long."""
-    bl = blocks(text)
+    bl = blocks(text, contd)
     pages = [Page()]
 
     def room():
@@ -308,7 +312,8 @@ def paginate(text):
             if usable:
                 best = max(usable, key=lambda k: (b.lines[k].text.rstrip().endswith((".", "!", "?", "--", "…")), k))
                 head = b.lines[:best + 1] + [Line("more", [Run(MORE)], X["character"])]
-                cue = Line("character", runs_of(f"{b.speech['name']} {b.speech['ext'] + ' ' if b.speech['ext'] else ''}{CONTD}"), b.speech["cue_x"])
+                ext = b.speech["ext"] if fountain.has_contd(b.speech["ext"]) else (b.speech["ext"] + " " + CONTD).strip()
+                cue = Line("character", runs_of(f"{b.speech['name']} {ext}"), b.speech["cue_x"])
                 rest = [cue] + b.lines[best + 1:]
                 splits = [k - best for k in b.split_at if k > best]
                 pages[-1].lines += [None] * space + head
@@ -419,7 +424,7 @@ def _title_page(c, tp):
         c.drawString(RIGHT * INCH - w, TOP * INCH + 3 + k * LINE, line)
 
 
-def render(text, path, title_page=None):
+def render(text, path, title_page=None, contd=False):
     """Write the script as a PDF. `title_page` = {title: [lines], credit: str, author: [lines], source: [lines], contact: [lines], date: [lines]}
     or None for no title page. Returns the number of script pages."""
     from reportlab.pdfgen import canvas
@@ -434,7 +439,7 @@ def render(text, path, title_page=None):
     if title_page:
         _title_page(c, title_page)
         c.showPage()
-    pages = paginate(text)
+    pages = paginate(text, contd)
     for n, page in enumerate(pages, start=1):
         if n > 1:
             label = f"{n}."

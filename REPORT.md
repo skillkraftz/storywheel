@@ -5030,3 +5030,73 @@ Set up a throwaway library first if you want to keep your real one clean. Otherw
 
 `tools/fulltest.sh`, one run, everything green. Parallel pass: 2,649 passed and 4 skipped in 231 s. Serial pass: 98 passed in 158 s. Total
 389 s. Nothing needed a `--lf` rerun. 4 skips, the same count as batch 16's full run.
+
+# Batch 18 (0.18.0): choosing formats properly, and help that knows the format
+
+## Checklist
+
+| Item | Status | Notes |
+|---|---|---|
+| A. Replace typed format fields with a form of pickers: format, structure that fits, genres, target length | **Works** | Builder `+Story` (and `T`): `storyform.py`. Title box, Format / Structure / Genres rows that open lists, a digits-only target box. Error lines for no title or no number |
+| A. A typo can no longer silently become the default | **Works** | Nothing typed but the title and a number. At the Wheel's plain prompt a typed structure that doesn't fit is refused, with the list |
+| A. The Wheel's structure step: choose the format, then roll or pick a fitting structure | **Works** | A format line on the card: click, `f` or `e` opens the list; `f` rolls the structure among fitting ones, `e` picks; `w` starts with the format |
+| A. Change format, structure, genres and target later from the Builder, with a warning for prose <-> screenplay | **Works** | `m` (Builder, and on the Stories list). The other format's files are kept and never offered as "extra files" to delete |
+| A. Target used by the status line and the flip test | **Works** | Prose: "in the story N / 5,000". Scripts: "p. N of ~T" and the flip test's length check, as before |
+| B. Writer help float in tabs: format guide, Writing basics, Keys, Export; Tab / Shift+Tab, numbers, click; opens on the format's tab; F3 toggles | **Works** | Tabs in a clickable window bar. A novel gets "Writing prose" (a novel guide later, as asked) |
+| B. Screenplay tab covers Tab, Enter, the lowercase name, sidebar, page estimate, flip test, export, (CONT'D) | **Works** | A test checks each is there |
+| B. TUI help panels use the same tabbed layout, opening on the mode you're in | **Works** | Every mode: its guide, Keys, Topics. Search covers every tab |
+| C. Setting for automatic (CONT'D) after action in the same scene; help says what the major apps default to | **Works** | On by default, like Final Draft and Fade In (their knowledge bases say so). Settings > Export. PDF, plus dimmed on screen. Never written into the file |
+| C. Across page breaks (CONT'D) stays automatic | **Works** | Also fixed: a cue already written (CONT'D) no longer became "(CONT'D) (CONT'D)" when its speech broke across a page |
+| C. REPORT note: open the .fdx in Fade In's free trial | **Works** | Step 8 of the manual test script below |
+
+## Tests added (batch 18)
+
+| File | Tests | What |
+|---|---|---|
+| `tests/test_storyform.py` | 12 | formats.py (fitting structures, names, a draft's format, saved settings); the Builder form (pickers, only fitting structures, digits-only target, title needed, genres list, `m` with the warning and parked files); the Wheel's format line and fitting structures, rolling stays in the format, promotion keeps the format; the Writer's status line against the target |
+| `tests/test_help_tabs.py` | 24 | The tabs per format and per mode; the screenplay tab's contents; the CLI; the Builder's and Wheel's help (opens on the mode, Tab / Shift+Tab / numbers / click, search box keeps digits, opening on a section's tab); the Writer's float (opens on Screenplay, Tab, Shift+Tab, numbers, the click handler, F3 toggles) |
+| `tests/test_contd.py` | 8 | Which cues continue (same scene, after action; not after another speaker, a new scene, a transition, a dual pair, or an existing CONT'D); PDF on and off; no doubling across a page break; the export follows the setting and the file stays plain; the Settings switch; the Writer's dimmed (CONT'D) on and off |
+| changed | | `test_structures.py` (structure step has a format; a typed structure that doesn't fit is refused), `test_tui.py`, `test_builder.py`, `test_mouse.py`, `test_settings_mode.py`, `test_writer.py`, `test_help.py` (help in tabs), `test_builder_layout.py` (+Story is the form), `test_inputs.py` (the format is never rolled), `test_screenplay.py` |
+
+## Manual test script
+
+1. **Builder, new story.** F2, open a universe, `+Story` (or `T`). Type a title. Enter on Format and choose Screenplay (short film). The
+   structure should become Short Film and the target 12 (pages). Enter on Structure: only Short Film (and None) should be offered. Enter on
+   Genres: space toggles, `d` finishes. Try typing letters in the target box: nothing should appear. Ctrl+S or Create. The Outline tab should
+   show the Short Film beats, empty.
+2. **Change it later.** On a short story that has some prose, press `m`, choose Screenplay (feature film). Before you save, a yellow note
+   should say what happens to the prose. Save, press `w`: the Writer should open `script.fountain`. Press `m` again and go back to Short story:
+   your prose should be there, untouched.
+3. **The Wheel.** F1, new draft, keep a genre. On the Structure step, click the "format" line: a list. Choose Novel. `f` on the structure
+   should only ever give Story Spine, Three-Act Outline or Kishōtenketsu. Choose Screenplay (short film): the structure should switch to Short
+   Film. Keep, finish, send it to the Builder: the story should be a screenplay with a 12-page target.
+4. **Status line.** In the Writer on a prose story, the status line should read "in the story N / 5,000" (or the target you set).
+5. **Help in the Writer.** F3 in a script: the bar should show "1 Screenplay" highlighted, then Writing basics, Keys, Export. Tab, Shift+Tab,
+   3, and a mouse click on a tab name should switch. F3 again should close it. In a prose story it should open on "Writing prose".
+6. **Help in the other modes.** `?` in the Wheel, Builder, Settings and Words: a tab bar with the mode's guide first, then Keys, then Topics.
+   `/` and a word should find matches in every tab, each marked with its tab's name.
+7. **(CONT'D).** In a script, write MARA, a line, then action, then MARA again with a line. The second cue should show a dim (CONT'D) on
+   screen. Export the PDF: "MARA (CONT'D)". Turn Settings > Export > "Screenplays: automatic (CONT'D)" off and export again: plain MARA.
+8. **Fade In.** Download Fade In's free trial (fadeinpro.com) and open the exported `.fdx` (or `tests/fixtures/screenplay/the-lamp.fdx`).
+   Check that every element comes in as the right type (scene heading, action, character, parenthetical, dialogue, transition), that the dual
+   dialogue is side by side, that the page break before THE NEXT MORNING scene holds, and that the title page has the title, "Written by",
+   the name and the contact block. Fade In adds its own (CONT'D) on opening (its own setting): that is expected.
+
+## Known issues and questions
+
+- **A novel's help tab is "Writing prose"**, the same as a short story's, until the novel profile has its own behaviour to describe.
+- **Structures typed in the Wheel's old drafts.** A draft kept before this batch has no format line. Its format is read from its structure
+  (a screen structure means a script, anything else your default format) and shown when you next open its structure step.
+- **Changing a story's structure in the Builder** adds the new structure's beats to the outline and leaves the old beats there too. Nothing
+  is deleted; you remove what you don't want.
+- **Search in the TUI help** covers every tab of the page you are on; Settings > Help still searches every page.
+- **The help's Tab key** switches tabs even while the search box has focus (Enter or Esc leaves the box).
+- I used the web once, to check what Final Draft and Fade In do by default with (CONT'D). Final Draft's knowledge base says automatic
+  character continueds are on by default and can be turned off under Document > Mores and Continueds. Fade In's knowledge base says it adds
+  "(cont'd)" automatically (in lowercase) when a character keeps talking after an action line.
+  ([Final Draft](https://kb.finaldraft.com/hc/en-us/articles/15575063405972-How-do-I-turn-off-the-automatic-character-continueds),
+  [Fade In](https://www.fadeinpro.com/kb/content/3/102/en/why-is-cont_d-after-dialog-lowercase-when-in-final-draft-it-is-cont_d.html))
+
+## Full run
+
+(to be filled in)

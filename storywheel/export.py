@@ -371,7 +371,7 @@ def fountain_or_prose_words(story):
 def build_script_pdf(story, path, anonymous=None):
     from . import screenplay, screenplay_pdf
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
-    pages = screenplay_pdf.render(compile_text(story), path, tp)
+    pages = screenplay_pdf.render(compile_text(story), path, tp, contd=bool(settings.load_story(story.path).get("script_contd", True)))
     target = screenplay.target_pages(story)
     if target and abs(pages - target) > 0.15 * target:
         warnings.append(f"{pages} pages against a target of {target}.")

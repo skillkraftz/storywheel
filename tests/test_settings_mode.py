@@ -245,7 +245,7 @@ def test_typing_q_in_a_box_does_not_leave(home):
 def test_f4_is_in_every_help_screen_and_every_mode_has_the_key(home):
     from storywheel.nvim import __file__ as _unused  # noqa: F401  (the package folder exists)
     async def wheel(app, pilot):
-        await pilot.press("question_mark")
+        await pilot.press("question_mark", "2")                  # (the Keys tab)
         await pilot.pause()
         return flat(screen_text(app))
     assert "F1 F2 F3 F4 F5" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))

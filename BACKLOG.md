@@ -3,7 +3,7 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 17.
+Last updated after batch 18.
 
 
 ## Now
@@ -24,6 +24,12 @@ Nothing is broken that I know of (no open bugs). What is worth doing first, from
 
 - **Novel profile.** *Partial.* Shunn's novel title page (contact block, word count, title, byline), each chapter on a new page a third of the
   way down with its heading, chapters as the sidebar's top level with scenes inside, adding/renaming/reordering chapters.
+- **From batch 18 (held back to keep to the checklist).** *Idea.*
+  - The novel's own help tab (today a novel gets Writing prose) and a novel guide once the novel profile is deeper.
+  - Fade In's lowercase "(cont'd)" style as a choice beside (CONT'D).
+  - The story form for the universe too (genre leanings, exclusions and boosts are still typed in a box with `s`).
+  - Per-format default targets in Settings (today: 5,000 words, 80,000 words, 110 pages, 12 pages, in `formats.py`).
+  - A help tab for the Wheel's current step (the step hint is on the card today).
 - **Screenplays from real use.** *Verify.* Batch 17 built a first usable version (Fountain in the Writer, the flip test, PDF/.fdx/.fountain
   export). Write a few pages and report what needs polish. Ideas held back from batch 17 to keep to its checklist:
   - Scene numbers on the page (Fountain `#12#` is parsed but not printed) for shooting scripts; revision colours, revision marks (`*` in the margin), locked pages.

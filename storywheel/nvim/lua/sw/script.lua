@@ -254,6 +254,32 @@ end
 
 -- --- the page on screen: display-only indents ---------------------------------------------------------------------------------
 
+-- The rows (1-based) of cues that get an automatic (CONT'D): the same character again in the same scene with only action between (the
+-- rule of fountain.auto_contd; the setting script_contd, on by default as in Final Draft and Fade In). Shown dimmed; the file keeps the name.
+function M.contd_rows(lines, t)
+  local out, last = {}, nil
+  for i, kind in ipairs(t) do
+    if kind == "heading" or kind == "transition" or kind == "page_break" then
+      last = nil
+    elseif kind == "character" then
+      local name, ext, dual = M.split_cue(lines[i])
+      local said = (ext or ""):upper():find("CONT'D", 1, true) ~= nil
+      if dual or (last and last.dual) then
+        last = { name = name:upper(), dual = dual }
+      else
+        if last and last.name == name:upper() and not said then out[i] = true end
+        last = { name = name:upper(), dual = dual }
+      end
+    end
+  end
+  return out
+end
+
+function M.contd_on()
+  local v = story.setting("script_contd", true)
+  return v ~= false and v ~= "false"
+end
+
 function M.decorate(buf)
   buf = buf or vim.api.nvim_get_current_buf()
   if not vim.api.nvim_buf_is_valid(buf) then return end
@@ -264,8 +290,12 @@ function M.decorate(buf)
   local win = vim.fn.bufwinid(buf)
   if win ~= -1 and vim.fn.mode():match("^i") then live = vim.api.nvim_win_get_cursor(win)[1] end
   local t = M.types(lines, live)
+  local contd = M.contd_on() and M.contd_rows(lines, t) or {}
   for i, kind in ipairs(t) do
     local line = lines[i]
+    if contd[i] then
+      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, #line, { virt_text = { { " (CONT'D)", "Comment" } }, virt_text_pos = "inline" })
+    end
     local pad
     if M.INDENT[kind] then pad = M.INDENT[kind]
     elseif kind == "transition" then pad = math.max(0, M.WIDTH.action - vim.fn.strdisplaywidth(trim(line)))

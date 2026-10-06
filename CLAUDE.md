@@ -425,13 +425,13 @@ terminal multiplexer is the fallback, but start with suspend-and-return.
 
 A screenplay story is written in Fountain (plain text) and exported as standard script pages. Built in batch 17; a first usable version.
 
-- **The story.** Its `settings.toml` says `format = "screenplay"` and `target_pages`. Its manuscript is one file,
+- **The story.** Its `settings.toml` says `format = "screenplay"`, `script_kind` (feature-film or short-film) and `target_pages`. Its manuscript is one file,
   `manuscript/script.fountain`, and none of the prose rules touch it: blank lines are kept (they mean something in Fountain), paste keeps the
   layout, there is no virtual paragraph indent, no `***` rewriting, and no one-line-paragraph or one-file migration. Spelling, autocorrect and
   quote straightening still work. Grammar checking reads only action, dialogue, parentheticals and lyrics.
-- **Making one.** A story whose structure is a screen structure becomes a screenplay: Feature Film (three acts in eight sequences, 110 pages)
-  or Short Film (12 pages), both in `data/structures/` with `"screen": true`. They reuse the three-act frames and are never rolled at random
-  (`structures.prose()`), so the writer picks one in the Wheel. The Builder's new-story box also takes a format. P in the Builder writes the
+- **Making one.** Choose the format Screenplay (feature film) or Screenplay (short film) in the Wheel's structure step or on the Builder's
+  story form (batch 18, `formats.py`). Their structures are Feature Film (three acts in eight sequences, 110 pages) and Short Film (12 pages),
+  in `data/structures/` with `"screen": true` and `"formats"`. They reuse the three-act frames and are offered only for their format. P in the Builder writes the
   script from the outline: a title page, each beat as a Fountain section (`# Act One`, `## Sequence A`) with its text as a synopsis (`= ...`),
   which never print. A script that already has scenes is never overwritten, and a forced replace backs it up first.
 - **Reading Fountain.** `fountain.py` is the one reader. It parses the title page and every element (headings, action, cues with extensions
@@ -454,6 +454,8 @@ A screenplay story is written in Fountain (plain text) and exported as standard 
   centered, "Written by", the name, contact bottom left, and the date bottom right. Anonymous leaves out the name, credit and contact. Also
   `.fdx` (`screenplay_fdx.py`, Final Draft XML) and `.fountain` (the title page rebuilt from settings). A script asked for docx/odt/md/txt
   gets a PDF and says so. Exports go to the manuscripts folder and the export record like any other.
+- **(CONT'D)**: across a page break always; after action in the same scene when `script_contd` is on (default, as Final Draft and Fade
+  In do): in the PDF and dimmed on screen, never written into the file, never doubled (`fountain.auto_contd`, `sw.script.contd_rows`).
 - **Not done** (BACKLOG.md): scene numbers on the page, revision colours and marks, a screenplay word bank, Fountain in Words' Story words,
   Fountain-aware `storywheel lookup` of cues, and moving scenes from the sidebar.
 
@@ -963,6 +965,17 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   (REPORT.md, batch 17 Part A); `fountain.py` is the one reader of a script. A screenplay's manuscript is `manuscript/script.fountain`
   (`vault.SCRIPT_FILE`) and is exempt from every prose rule. Screen structures (`"screen": true`) are never rolled at random. The two
   LibreOffice export tests run in the serial pass (`conftest.SERIAL_TESTS`): two soffice processes at once share a profile and one fails.
+- Batch 18: a story's format is picked, never typed. `formats.py` has the four formats (short-story, novel, feature-film, short-film); settings.toml
+  keeps `format` as short-story/novel/screenplay (what the Writer and export read) plus `script_kind`, and the target as `target_words` or
+  `target_pages`. A structure's JSON `"formats"` lists the formats it fits (default: the prose two; a screen structure feature-film). A Wheel
+  draft keeps its format key as `format`; the structure step's `format` field shows it and is picked (click, f or e), never rolled, and a
+  structure typed at the plain prompt that doesn't fit is refused with the list. The Builder's story form (`storyform.py`; + Story and `m`)
+  has a title box, Format / Structure / Genres rows that open pickers, and a digits-only target box. Changing prose <-> screenplay keeps
+  both kinds of files; `Story.extra_files` never lists the other format's own files. A new story with a structure gets its beats, empty,
+  in the outline (`outline.blank_beats`).
+- Help in tabs (batch 18): `helpdoc.tabs(page, fmt)`. The Writer: [Screenplay | Writing prose, Writing basics, Keys, Export]; a mode:
+  [guide, Keys, Topics]. The TUI's `HelpScreen` has a `Tabs` bar (Tab/Shift+Tab priority bindings, digits, clicks) and searches every tab;
+  the Writer's float shows them in a clickable winbar (`%N@v:lua.SwHelpTab@`). `storywheel help PAGE --tabs [--format F] [--json]`.
 - Batch 12 genres: ghost story (melancholy, grief, memory, a house that remembers; horror's neighbor), noir (money, cynicism, a city that always wins; mystery's and
   thriller's neighbor) and thriller (pressure, a clock, pursuit; neighbor of mystery, noir and heist) are written like the batch 7/8 genres (profile weight 4, lists for every
   slot, frames for every beat, names with Markov training sets). Shared floor lists tagged `rural` and `mythological` (eight slots each) are the real neighbors of western,

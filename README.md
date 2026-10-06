@@ -248,8 +248,8 @@ the story's outline. Same-name entities are offered as merges (blank fields fill
 
 ### The Universe Builder (F2)
 
-Left, top to bottom: **Universes** (create, rename, delete after a confirm), **Stories** (titles only; `+Story` makes a blank story
-with no Wheel draft behind it, then Write, Export, Backups…) and a large **Story** panel for the selected story with tabs
+Left, top to bottom: **Universes** (create, rename, delete after a confirm), **Stories** (titles only; `+Story` opens the story form: title, format, a structure
+that fits the format, genres and a target length, all picked from lists; `m` changes them later; then Write, Export, Backups…) and a large **Story** panel for the selected story with tabs
 **Outline** (the beats, editable one row at a time; `A` / `X` add or remove a repeatable beat), **Scenes** (a click or Enter opens
 the Writer at that scene) and **Notes** (the story's own, saved as you type in `notes.md`). Middle: the writing-stats box, then
 tabs for Characters, Places, Things, Groups and Notes with the selected entity as a card; under the card are that entity's own
@@ -303,7 +303,8 @@ A screenplay exports as standard script pages (PDF, Courier Prime 12), Final Dra
 
 ### Screenplays
 
-A story on the Feature Film or Short Film structure (or any story with `format = "screenplay"`) is written as one Fountain file,
+A story whose format is Screenplay (feature film) or Screenplay (short film), chosen in the Wheel's structure step or on the Builder's story
+form, is written as one Fountain file,
 `manuscript/script.fountain`. `P` in the Builder starts it from the outline (acts and beats as sections and synopses, which don't print).
 In the Writer, Tab cycles a line between action, character, parenthetical, dialogue and transition, Enter knows what comes after a cue or a
 speech, headings and cues are capitalized, names and locations complete, the page is approximated with display-only indents, the sidebar lists
@@ -314,8 +315,9 @@ out), an `.fdx` and a `.fountain`. `storywheel help screenplays` has the details
 
 ### Help
 
-Press `?` (or the key of the mode you are in: F1 in the Wheel, F2 in the Builder...) for that mode's help: what it is for, every key and mouse action, with a
-search box. In the Writer, F3 or the menu's Help opens it in a float (`/` searches). Settings > Help searches every page, and `storywheel help [TOPIC]` prints
+Press `?` (or the key of the mode you are in: F1 in the Wheel, F2 in the Builder...) for that mode's help, in tabs: the mode's guide, Keys (every key
+and mouse action) and Topics, with a search box that searches every tab. In the Writer, F3 or the menu's Help opens a float in tabs: the guide to the
+story's format (Screenplay, or Writing prose), Writing basics, Keys and Export; Tab, Shift+Tab, a number or a click switch tabs, `/` searches. Settings > Help searches every page, and `storywheel help [TOPIC]` prints
 one (`storywheel help` lists them; `-s WORDS` searches). The pages are in `storywheel/data/help/`; the key tables are made from the real bindings.
 
 ### Exports from scripts

@@ -89,6 +89,9 @@ SECTIONS = [
          "Without a name in Settings > You, exports are anonymous anyway."),
         ("export_one_space", "One space after periods", "bool", None, "Double spaces after . ! ? are exported as one space."),
         ("export_curly_quotes", "Curly quotes in the export", "bool", None, "The manuscript keeps straight quotes (so spellcheck works); the export turns them into “curly” ones."),
+        ("script_contd", "Screenplays: automatic (CONT'D)", "bool", None,
+         "A character who speaks again after action in the same scene gets (CONT'D) after the name in the PDF (and, dimmed, on screen in the Writer). "
+         "Final Draft and Fade In do this by default; turn it off if you prefer the cleaner page. Across a page break (CONT'D) is always added."),
         ("manuscripts_dir", "Manuscripts folder", "path", None,
          "Exports go here, one folder per story: <folder>/<Story Title>/<Story Title> <date>.docx. Default ~/Writing."),
     ]),
