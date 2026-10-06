@@ -5099,4 +5099,8 @@ Set up a throwaway library first if you want to keep your real one clean. Otherw
 
 ## Full run
 
-(to be filled in)
+`tools/fulltest.sh`, one run. Parallel pass: 2,691 passed, 1 failed and 4 skipped in 231 s. Serial pass: 97 passed and 1 failed in 158 s.
+Total 389 s. Both failures were tests that read keys from the first page of a help screen, which is now the mode's guide; they now press
+2 for the Keys tab (`test_builder_layout.py::test_the_help_mentions_the_new_keys`, `test_switching.py::test_every_help_screen_lists_the_mode_keys`).
+Rerun with `--lf`, then both files in full: 46 passed. The fix changed only tests, so the suite was not run again. 4 skips, the same count as
+batch 17.

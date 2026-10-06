@@ -268,7 +268,7 @@ def test_the_builder_says_why_it_cannot_open_the_writer(home, world, monkeypatch
 
 def test_every_help_screen_lists_the_mode_keys(home, world):
     async def wheel(app, pilot):
-        await pilot.press("question_mark")
+        await pilot.press("question_mark", "2")                  # (the Keys tab)
         await pilot.pause()
         return flat(screen_text(app))
     assert "F1 F2 F3 F4 F5" in run_tui(store.new_story(), make_engine(home), wheel, size=(200, 100))

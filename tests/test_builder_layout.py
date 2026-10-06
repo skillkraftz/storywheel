@@ -249,7 +249,7 @@ def test_the_chosen_tab_is_remembered(world):
 
 def test_the_help_mentions_the_new_keys(world):
     async def script(app, pilot):
-        await pilot.press("question_mark")
+        await pilot.press("question_mark", "2")                  # (the Keys tab)
         await pilot.pause()
         return flat(screen_text(app))
     text = run(script, size=(220, 90))
