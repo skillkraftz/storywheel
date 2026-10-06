@@ -46,15 +46,11 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 ## Mouse
 - Click places the cursor; drag selects; double-click selects a word. The wheel scrolls.
 - Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu.
-## Writing
-Enter starts a new paragraph on the next line: one line is one paragraph, each shown with an indent. A scene break is *** on a line of its own (typing *** and Enter works too). Tab completes names: type three letters of any word of a character's or place's name, any case. Spelling marks: red wavy means not a word; blue lowercase where a capital belongs; pink a rare word; cyan another region's spelling. Settings > Spelling softens or hides the last three.
 ## With Vim keys on
 In Settings > Writer you can turn notepad mode off to get Vim. In Normal mode, press Space first: n scene sidebar, p peek (also F8), a new scene, i show invisibles, t typewriter mode, s spellcheck, w word counts, c copy the manuscript as plain text, e export, S this story's settings, k check which keys your terminal sends, ]] and [[ next and previous scene, ? this help.
 ## Grammar (optional)
 Off by default. Install once with storywheel grammar install, then turn it on in the Writer menu or Settings > Grammar. A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline; right-click one for the message, fixes, Ignore this one and Turn off this rule.
-## The scene sidebar
-Space n or the sidebar key: Enter jumps, a adds a scene, r renames, J and K move it down and up, q closes.
 ## Leaving
 F2 or the Builder key saves everything and goes back to the Builder; F1 the Wheel; F4 Settings; :q works too.
 ## This help
-Scroll with the arrow keys or PgUp/PgDn, search with / (n for the next match), close with F3 again, Esc or q. The other mode keys (F1, F2, F4, F5) close it and switch as usual.
+It has tabs: the guide to this story's format (Screenplay, or Writing prose for a short story or a novel), Writing basics, Keys and Export. It opens on the format's guide. Tab and Shift+Tab, the number keys or a click on a tab switch. Scroll with the arrow keys or PgUp/PgDn, search the tab with / (n for the next match), close with F3 again, Esc or q. The other mode keys (F1, F2, F4, F5) close it and switch as usual.

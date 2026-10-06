@@ -15,7 +15,7 @@ SKIP_NVIM = pytest.mark.skipif(writer.check() is not None, reason="Neovim 0.10+ 
 # --- the files ---------------------------------------------------------------------------------------------------------------------
 
 def test_there_is_one_file_per_mode_and_the_topics():
-    assert helpdoc.names() == ["wheel", "builder", "writer", "settings", "words", "universes", "structures", "genres-and-flavor", "exports", "screenplays", "backups",
+    assert helpdoc.names() == ["wheel", "builder", "writer", "settings", "words", "universes", "structures", "genres-and-flavor", "exports", "screenplays", "writing-prose", "backups",
                                "dictionary", "grammar", "keys"]
     for n in helpdoc.names():
         doc = helpdoc.load(n)
@@ -160,7 +160,7 @@ def test_the_help_screen_searches_scrolls_and_shows_a_message_when_nothing_match
         still = type(app.screen).__name__
         return len(str(full)), focused, narrowed, head, none, still
     n, focused, narrowed, head, none, still = run_hub(script)
-    assert focused and "Rename the entity" in narrowed and len(narrowed) < n and "match" in head
+    assert focused and "Rename the entity" in narrowed and "[Keys]" in narrowed and "match" in head and "every tab" in head
     assert "Nothing on this page matches" in none and still == "HelpScreen"
 
 
@@ -195,7 +195,7 @@ def test_settings_has_a_help_tab_that_searches_everything(world):
         other = str(app.screen.query_one("#helptext", Static).content)
         return pages, results, shown, other
     pages, results, shown, other = run_hub(script)
-    assert pages == 14 and results and any("Rhymes" in r for r in results) and "Rhymes" in shown + other and shown != other
+    assert pages == 15 and results and any("Rhymes" in r for r in results) and "Rhymes" in shown + other and shown != other
     assert "rhymes" in (shown + other).lower()
 
 
@@ -211,8 +211,11 @@ def test_f3_in_the_writer_opens_the_same_help_in_a_float_that_escape_closes(home
         R.float = vim.api.nvim_win_get_config(0).relative
         R.text = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), '\\n')
         R.mod = vim.bo.modifiable
+        R.bar = vim.wo.winbar
     """)
-    assert r["float"] == "editor" and "The Writer" in r["text"] and "Italic" in r["text"] and "Fixed keys" in r["text"] and r["mod"] is False
+    assert r["float"] == "editor" and "1 Writing prose" in r["bar"] and "4 Export" in r["bar"] and "Paragraphs" in r["text"] and r["mod"] is False   # (the prose guide first)
+    r = nrun(s, "", "<F3>3", "R.text = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), '\\n')")
+    assert "Italic" in r["text"] and "Fixed keys" in r["text"]                     # (3: the Keys tab)
     r = nrun(s, "", "<F3><Esc>", "R.float = vim.api.nvim_win_get_config(0).relative; R.mode = vim.fn.mode()")
     assert r["float"] == "" and r["mode"] == "i"                                # (closed; back to typing)
     r = nrun(s, "", "<F3>/Alt<CR>", "R.line = vim.fn.line('.'); R.hl = vim.v.hlsearch")
@@ -230,4 +233,4 @@ def test_the_writer_menus_help_item_opens_it_too(home):
     """)
     idx = next(i for i, l in enumerate(r["labels"]) if l == "Help")
     r = nrun(s, "", "<F12>" + "<Down>" * idx + "<CR>", "R.float = vim.api.nvim_win_get_config(0).relative; R.t = vim.api.nvim_buf_get_lines(0, 0, 3, false)[1]")
-    assert r["float"] == "editor" and r["t"] == "The Writer"
+    assert r["float"] == "editor" and r["t"] == "About"                            # (the first tab: the guide to this story's format)

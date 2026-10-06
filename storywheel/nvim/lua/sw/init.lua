@@ -190,33 +190,85 @@ function M.show_stats()
                                       tostring(story.setting("daily_goal", 0))), "Normal" } }, false, {})
 end
 
-function M.help()
+-- The help's tabs, from `storywheel help writer --tabs`: the guide to this story's format (Screenplay, or Writing prose), Writing basics,
+-- Keys, Export. Each tab is {title, lines}.
+function M.help_format()
+  if story.is_screenplay() then return "screenplay" end
+  return (story.info or {}).format_key or "short-story"
+end
+
+function M.help_tabs(width)
+  local data = util.cli_json({ "help", "writer", "--tabs", "--json", "--width", tostring(width or 88), "--format", M.help_format() })
+  if type(data) ~= "table" or #data == 0 then return { { title = "Help", lines = M.HELP_FALLBACK } } end
+  local out = {}
+  for _, tab in ipairs(data) do
+    out[#out + 1] = { title = tab.title, lines = vim.split((tab.text or ""):gsub("\n$", ""), "\n", { plain = true }) }
+  end
+  return out
+end
+
+-- A click on a tab in the help's bar (the winbar's %@ click regions pass the tab number as the first argument).
+function _G.SwHelpTab(n)
+  require("sw").help_show(tonumber(n))
+end
+
+local function help_bar(tabs, current)
+  local parts = {}
+  for i, tab in ipairs(tabs) do
+    local hl = i == current and "%#TabLineSel#" or "%#TabLine#"
+    parts[#parts + 1] = string.format("%s%%%d@v:lua.SwHelpTab@ %d %s %%X", hl, i, i, tab.title:gsub("%%", "%%%%"))
+  end
+  return table.concat(parts, "%#TabLineFill# ") .. "%#TabLineFill#%=%#Comment# Tab / Shift+Tab / 1-" .. #tabs .. "  ·  / search  ·  F3, Esc, q close "
+end
+
+-- Show tab n of the open help (wrapping round).
+function M.help_show(n)
+  local h = M.help_state
+  if not (h and M.help_win and vim.api.nvim_win_is_valid(M.help_win)) then return end
+  n = ((n - 1) % #h.tabs) + 1
+  h.current = n
+  vim.bo[h.buf].modifiable = true
+  vim.api.nvim_buf_set_lines(h.buf, 0, -1, false, h.tabs[n].lines)
+  vim.bo[h.buf].modifiable = false
+  vim.wo[M.help_win].winbar = help_bar(h.tabs, n)
+  pcall(vim.api.nvim_win_set_cursor, M.help_win, { 1, 0 })
+end
+
+-- F3 (and the menu's Help): the help float, in tabs, opening on the guide to this story's format. F3 again closes it.
+function M.help(tab)
   if M.help_win and vim.api.nvim_win_is_valid(M.help_win) then          -- F3 again (or the menu's Help again) closes it
     M.help_close()
     return
   end
   local width = math.max(40, math.min(100, vim.o.columns - 6))
-  local lines = M.help_lines(width - 2)
+  local tabs = M.help_tabs(width - 2)
+  local tallest = 5
+  for _, t in ipairs(tabs) do tallest = math.max(tallest, #t.lines + 1) end
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-  vim.bo[buf].modifiable = false
-  local height = math.max(5, math.min(#lines, vim.o.lines - 6))
+  local height = math.max(5, math.min(tallest, vim.o.lines - 6))
   local win = vim.api.nvim_open_win(buf, true, { relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2),
-    width = width, height = height, style = "minimal", border = "rounded", title = " Help: / searches, n next, Esc or q closes ", title_pos = "center" })
+    width = width, height = height, style = "minimal", border = "rounded", title = " Help ", title_pos = "center" })
   vim.wo[win].wrap = true
   vim.wo[win].linebreak = true
   vim.wo[win].cursorline = true
   vim.cmd("stopinsert")
   M.help_win = win
+  M.help_state = { buf = buf, tabs = tabs, current = 1 }
+  M.help_show(tab or 1)
   M.help_close = function()
     if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
     M.help_win = nil
+    M.help_state = nil
     vim.cmd("nohlsearch")
     local layout = require("sw.layout")
     if layout.main and vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
     require("sw.notepad").insert(true)
   end
-  for _, k in ipairs({ "q", "<Esc>", "<F3>" }) do vim.keymap.set("n", k, M.help_close, { buffer = buf, nowait = true }) end
+  local function map(k, fn) vim.keymap.set("n", k, fn, { buffer = buf, nowait = true }) end
+  for _, k in ipairs({ "q", "<Esc>", "<F3>" }) do map(k, M.help_close) end
+  map("<Tab>", function() M.help_show(M.help_state.current + 1) end)
+  map("<S-Tab>", function() M.help_show(M.help_state.current - 1) end)
+  for i = 1, math.min(9, #tabs) do map(tostring(i), function() M.help_show(i) end) end
   vim.keymap.set("n", "<Space>", "<PageDown>", { buffer = buf, nowait = true })
   vim.keymap.set("n", "<BS>", "<PageUp>", { buffer = buf, nowait = true })
   return win

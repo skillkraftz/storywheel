@@ -23,7 +23,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent / "data" / "help"
 
 MODES = ("wheel", "builder", "writer", "settings", "words")
-TOPICS = ("universes", "structures", "genres-and-flavor", "exports", "screenplays", "backups", "dictionary", "grammar", "keys")
+TOPICS = ("universes", "structures", "genres-and-flavor", "exports", "screenplays", "writing-prose", "backups", "dictionary", "grammar", "keys")
 
 KEY_NAMES = {"question_mark": "?", "slash": "/", "backslash": "\\", "plus": "+", "minus": "-", "equals_sign": "=", "escape": "Esc", "space": "space",
              "enter": "Enter", "tab": "Tab", "comma": ",", "full_stop": ".", "pageup": "PgUp", "pagedown": "PgDn"}
@@ -240,6 +240,61 @@ def sections(name):
         out.append(("Keys", "\n".join(lines).rstrip()))
     out.extend((h, b) for h, b in doc.sections)
     return out
+
+
+# --- tabs (batch 18): the help screens and the Writer's float show a page as tabs --------------------------------------------------
+
+KEY_SECTIONS = ("Keys", "Mouse")
+SCRIPT_FORMATS = ("screenplay", "feature-film", "short-film")
+
+
+def _short_title(name):
+    title = load(name).title
+    return title[4:] if title.startswith("The ") else title
+
+
+def _topic_sections():
+    """Every topic page as one section each (its introduction, then its own sections), for the Topics tab."""
+    out = []
+    for t in TOPICS:
+        doc = load(t)
+        parts = []
+        for heading, body in sections(t):
+            parts += ([body] if heading == "About" else [heading, "~" * len(heading), body])
+        out.append((doc.title, "\n\n".join(parts)))
+    return out
+
+
+def tabs(name, fmt=None):
+    """[(tab title, [(heading, body)])]: how a help page is shown as tabs.
+
+    The Writer: the guide to the story's format (Screenplay, or Writing prose for a short story or a novel), Writing basics, Keys, Export.
+    A mode: its guide (the introduction and its own sections), Keys (and Mouse), Topics (every topic page). A topic page is one tab."""
+    page = sections(name)
+    keys_ = [(h, b) for h, b in page if h in KEY_SECTIONS]
+    rest = [(h, b) for h, b in page if h not in KEY_SECTIONS]
+    if name == "writer":
+        script = str(fmt or "").lower() in SCRIPT_FORMATS
+        guide = "screenplays" if script else "writing-prose"
+        return [("Screenplay" if script else "Writing prose", sections(guide)), ("Writing basics", rest), ("Keys", keys_),
+                ("Export", sections("exports"))]
+    if name in MODES:
+        return [(_short_title(name), rest), ("Keys", keys_), ("Topics", _topic_sections())]
+    return [(load(name).title, page)]
+
+
+def tab_text(secs, width=None, query=""):
+    """(text, matches): a tab's sections as plain text; with a query only the sections containing every word of it."""
+    words = [w for w in (query or "").lower().split() if w]
+    parts, found = [], 0
+    for heading, body in secs:
+        if words and not all(w in f"{heading} {body}".lower() for w in words):
+            continue
+        found += 1
+        parts += [heading, "-" * len(heading), wrap(body, width), ""]
+    if words and not found:
+        parts += [f"Nothing in this tab matches “{query}”. Try another tab, or Settings > Help, which searches every page."]
+    return "\n".join(parts).rstrip() + "\n", found
 
 
 def wrap(body, width):

@@ -302,6 +302,7 @@ def test_the_help_screen_opens_and_the_keys_underneath_do_nothing(home):
     async def script(app, pilot):
         s = app.session
         await press(pilot, "question_mark")
+        await press(pilot, "2")                                 # (the Keys tab: 2 switches tabs and acts on nothing underneath)
         text = str(app.screen.query_one("#help-text").content)
         n, step = len(s.hist), s.step.key
         await press(pilot, "k", "space", "x")                   # none of these may act on the story

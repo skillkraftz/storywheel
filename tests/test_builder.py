@@ -500,7 +500,8 @@ def test_help_lists_the_mode_keys_and_the_entity_keys(home):
     world(home)
     async def script(app, pilot):
         await press(pilot, "question_mark")
-        return flat(str(app.screen.query_one("#help-text").content))        # (the whole page, scrolled or not)
+        await press(pilot, "2")                                              # (the Keys tab)
+        return flat(str(app.screen.query_one("#help-text").content))        # (the whole tab, scrolled or not)
     text = run_builder(home, script, size=(220, 90))
     for needle in ("F1 F2 F3 F4 F5", "Roll every blank field", "Write the highlighted field by hand", "Rename the entity"):
         assert needle in text, needle

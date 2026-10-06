@@ -401,6 +401,14 @@ def cmd_help(args):
     name = helpdoc.resolve(args.topic)
     if not name:
         sys.exit(f"No help page called '{args.topic}'. Try:  storywheel help   (lists them)  or  storywheel help -s {args.topic}")
+    if getattr(args, "tabs", False):
+        out = [{"title": t, "text": helpdoc.tab_text(secs, args.width or None)[0]} for t, secs in helpdoc.tabs(name, args.format)]
+        if args.json:
+            emit(out)
+        else:
+            for tab in out:
+                print(f"[{tab['title']}]\n\n{tab['text']}")
+        return
     if args.json:
         emit({"name": name, "title": helpdoc.load(name).title, "sections": [{"heading": h, "text": b} for h, b in helpdoc.sections(name)]})
     else:
@@ -701,6 +709,8 @@ def add_parsers(sub):
     p.add_argument("topic", nargs="?", help="a mode (wheel, builder, writer, settings, words) or a topic (universes, structures, exports...)")
     p.add_argument("-s", "--search", nargs="+", metavar="WORD", help="search every help page")
     p.add_argument("--width", type=int, default=88, help="wrap lines at this width (0: no wrapping)")
+    p.add_argument("--tabs", action="store_true", help="the page as the help screens show it: in tabs (the Writer: --format picks the guide)")
+    p.add_argument("--format", help="with --tabs on writer: the story's format (short-story, novel, screenplay, feature-film, short-film)")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("exports", help="exports:  exports status [--json] | exports make UNIVERSE/STORY [--format F] [--json]")
     p.add_argument("action", choices=["status", "make"])
