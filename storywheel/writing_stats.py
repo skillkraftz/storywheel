@@ -21,7 +21,16 @@ def story_days(story):
         data = json.loads(story.stats_path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
-    return {d: int(v.get("words", 0)) for d, v in (data.get("days") or {}).items()}
+    return {d: day_words(v) for d, v in (data.get("days") or {}).items()}
+
+
+def day_words(day):
+    """One day's words: the sum over machines when stats.json has them (days[date].machines = {host: words}, so a sync tool merging the
+    files from two computers can't count a day twice), else the older single `words` number."""
+    machines = day.get("machines")
+    if isinstance(machines, dict) and machines:
+        return sum(int(v or 0) for v in machines.values())
+    return int(day.get("words", 0) or 0)
 
 
 def days(universes=None):

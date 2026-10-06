@@ -783,3 +783,24 @@ def test_f4_in_the_writer_goes_to_settings(home, story):
     return_file = story.path.parent / "return.txt"
     run_typed(story, "", "<F4>", "", quits=True)
     assert return_file.read_text() == "settings"
+
+
+def test_words_today_roll_over_at_midnight_and_count_per_machine(home, story):
+    """Batch 19: a Writer open across midnight saves yesterday's count under yesterday and starts today at 0; days keep per-machine words."""
+    import json as _json
+    path = story.stats_path
+    path.write_text(_json.dumps({"days": {"2020-01-01": {"words": 40}}, "sessions": []}))
+    run_lua(story, """
+        local st = require("sw.stats")
+        st.begin()
+        st.day = "2020-01-01"; st.day_base = 40; st.others = 0; st.host = "laptop"
+        st.start_total = st.manuscript() - 25          -- 25 words written in this session, before midnight
+        st.check_day()                                  -- the real date is not 2020-01-01: the day rolls over
+        R.after = { day = st.day, base = st.day_base, today = st.today() }
+    """)
+    data = _json.loads(path.read_text())
+    old = data["days"]["2020-01-01"]
+    assert old["machines"] == {"(earlier)": 40, "laptop": 65} and old["words"] == 105
+    from storywheel import writing_stats
+    assert writing_stats.story_days(story)["2020-01-01"] == 105
+    assert len(data["days"]) == 2 and data["days"][next(d for d in data["days"] if d != "2020-01-01")]["machines"]

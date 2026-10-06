@@ -55,19 +55,52 @@ function M.scene(buf)
   return buffer_words(buf)
 end
 
-function M.today()
+function M.mine()
+  M.check_day()
   return M.day_base + math.max(0, M.manuscript() - M.start_total)
+end
+
+function M.today()
+  return (M.others or 0) + M.mine()
 end
 
 function M.stats_path()
   return story.dir .. "/stats.json"
 end
 
+M.host = (vim.uv.os_gethostname and vim.uv.os_gethostname()) or "this-machine"
+M.day = nil              -- the date the counts below belong to
+
+-- Per-machine words of a day: old files have a single `words`, which is kept as the "(earlier)" machine.
+local function machines_of(day)
+  local m = {}
+  for k, v in pairs(day.machines or {}) do m[k] = tonumber(v) or 0 end
+  if next(m) == nil and tonumber(day.words) then m["(earlier)"] = tonumber(day.words) end
+  return m
+end
+
+local function sum_others(m)
+  local n = 0
+  for k, v in pairs(m) do if k ~= M.host then n = n + v end end
+  return n
+end
+
 function M.begin()
   if not story.dir then return end
+  M.day = util.today()
   M.start_total = M.manuscript()
   local data = util.json_read(M.stats_path(), { days = {}, sessions = {} })
-  M.day_base = ((data.days or {})[util.today()] or {}).words or 0
+  local m = machines_of((data.days or {})[M.day] or {})
+  M.day_base = m[M.host] or 0           -- what this machine already wrote today
+  M.others = sum_others(m)              -- what other machines wrote today (counted in the display, never rewritten)
+end
+
+-- A new day started while the Writer stayed open: save the old day's count under its own date, then start the new day from scratch.
+function M.check_day()
+  if M.day and M.day ~= util.today() then
+    M.save()
+    M.begin()
+  end
 end
 
 -- Write stats.json: today's total, and this session's record (the same record is updated, not duplicated).
@@ -76,10 +109,15 @@ function M.save()
   local data = util.json_read(M.stats_path(), { days = {}, sessions = {} })
   data.days = data.days or {}
   data.sessions = data.sessions or {}
-  local today = M.today()
-  local day = data.days[util.today()] or {}
-  day.words = today
-  data.days[util.today()] = day
+  local date = M.day or util.today()
+  local day = data.days[date] or {}
+  local m = machines_of(day)
+  m[M.host] = M.day_base + math.max(0, M.manuscript() - M.start_total)
+  day.machines = m
+  local total = 0
+  for _, v in pairs(m) do total = total + v end
+  day.words = total                     -- (the sum, for readers that only know `words`)
+  data.days[date] = day
   local words = math.max(0, M.manuscript() - M.start_total)
   local found = false
   for _, s in ipairs(data.sessions) do
@@ -112,7 +150,8 @@ end
 -- The status line: words in the scene, in the story, and written today against the goal as "312 / 1,000 words · 31%" (each number says what it is).
 function M.line()
   local goal = tonumber(story.setting("daily_goal", 0)) or 0
-  local today = math.max(0, M.total_cached - M.start_total) + M.day_base
+  M.check_day()
+  local today = (M.others or 0) + math.max(0, M.total_cached - M.start_total) + M.day_base
   local today_text
   if goal > 0 then
     today_text = string.format("today %s / %s words · %d%%", commas(today), commas(goal), math.floor(100 * today / goal + 0.5))
