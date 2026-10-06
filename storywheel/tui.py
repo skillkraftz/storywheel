@@ -681,6 +681,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("a", "update_inputs", "Update", show=False),
         Binding("i", "ignore", "Ignore", show=False),
         Binding("C", "copy_draft", "Copy as new", show=False),
+        Binding("N", "new_draft", "New draft"),
         Binding("b", "back", "Back"),
         Binding("x", "skip", "Skip"),
         Binding("u", "universe_add", "Univ", key_display="u/U"),
@@ -785,7 +786,7 @@ class MainScreen(KeptScreen, Screen):
                     with Horizontal(id="buttons"):
                         for label, name in (("Roll", "roll"), ("Keep", "keep"), ("Back", "back"),
                                             ("Skip", "skip"), ("Flavor", "mix"), ("+Beat", "add_beat"), ("-Beat", "remove_beat"),
-                                            ("Send to Builder", "send")):
+                                            ("Send to Builder", "send"), ("New draft", "new_draft")):
                             yield _quiet(Button(label, id=f"btn-{name}"))
                 with Vertical(id="hist-box"):
                     yield Static("History", id="hist-title", markup=False, classes="title")
@@ -821,6 +822,30 @@ class MainScreen(KeptScreen, Screen):
                      "Press C to make an editable copy as a new draft.")
             return True
         return False
+
+    def action_new_draft(self):
+        """Start a fresh draft: ask which universe it belongs to (the current draft's first), then open it. The draft you leave is saved."""
+        from . import vault
+        unis = vault.list_universes()
+        if not unis:
+            self._start_draft(None)
+            return
+        current = self.session.story.get("home") or (self.session.story.get("universes") or [None])[0]
+        unis.sort(key=lambda u: u.slug != current)
+        options = [(u.name + ("  (current)" if u.slug == current else ""), u.slug) for u in unis]
+        self.app.push_screen(ChoiceScreen("New draft: which universe does it belong to?", options), self._start_draft_in)
+
+    def _start_draft_in(self, slug):
+        if slug:
+            self._start_draft(slug)
+
+    def _start_draft(self, slug):
+        new = store.new_story()
+        if slug:
+            new["universes"], new["home"] = [slug], slug
+        store.save_draft(new)
+        self.switch_story(new)
+        self.say("Started a new draft" + (f" in {slug}" if slug else "") + ". The one you left is saved (Past stories).")
 
     def action_copy_draft(self):
         story = self.session.story

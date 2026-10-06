@@ -481,3 +481,26 @@ def test_the_old_universe_command_migrates_and_points_to_the_new_world(home):
     (home / "home" / "universe.json").write_text(json.dumps({"protagonist": [{"name": "Wade Hollis", "job": "drover"}]}))
     res = cli(["universe"], home)
     assert "Loose Ends" in res.stdout and vault.get_universe("loose-ends").entity("wade-hollis")
+
+
+def test_new_draft_asks_for_a_universe_and_keeps_the_old_draft(home):
+    """Batch 19: N in the Wheel starts a fresh draft in a picked universe; the draft you leave still exists."""
+    import time
+    from conftest import make_engine, run_tui
+    from storywheel import store, vault
+    vault.create_universe("Alpha", ["noir"])
+    vault.create_universe("Beta", ["western"])
+    old = store.new_story()
+    old["id"] = "20200101-000000"
+    store.save_draft(old)
+    async def script(app, pilot):
+        await pilot.press("N")
+        await pilot.pause()
+        first = type(app.screen).__name__
+        await pilot.press("down", "enter")
+        await pilot.pause()
+        return first, app.session.story["id"], app.session.story.get("home")
+    first, new_id, home_slug = run_tui(old, make_engine(home), script)
+    assert first == "ChoiceScreen" and new_id != old["id"] and home_slug == "beta"
+    ids = {s["id"] for s in store.all_stories()}
+    assert old["id"] in ids and new_id in ids

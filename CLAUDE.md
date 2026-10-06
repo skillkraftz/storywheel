@@ -1018,3 +1018,5 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 - The repetition report's expected count is the larger of the weighted share and an even share among the list's entries that were picked at all: the
   recent-picks memory rotates a list's usable entries, so weights alone underestimated untagged frames and narrowed verb sets and flagged them falsely.
 
+- Batch 19 (exception to the stable rule, at the owner's request because usage was nearly out): after each item passes its related tests it is committed,
+  tagged `b19-N` and `stable` is moved to it, without a full run in between. Item 1: `N` / the New draft button in the Wheel asks for a universe and starts a fresh draft.
