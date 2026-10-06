@@ -125,3 +125,9 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - `storywheel update` of a plain install needs a git remote that serves the repository; there is no signature check.
 - Switch times on a Raspberry Pi are an estimate; `tools/measure_switch.py hub` on the Pi gives real figures.
 - No git remote is configured in this checkout on purpose; nothing is pushed.
+
+## Help pages that may name keys that no longer exist (batch 19, item 6: a quick search, not an audit)
+
+- Searched the help pages for removed things (Neovide, "Wheel draft" started from the Builder, the right column, sync, Ctrl+H find): nothing found.
+- `writing-prose.md` mentions "Space n" for the sidebar; that only works with Vim keys on (notepad mode off). The F9 key is the real one.
+- Not checked: every key named in free text (as opposed to the key tables, which are made from the real bindings and tested).
