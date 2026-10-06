@@ -120,6 +120,7 @@ class Ctx(dict):
         self._depth = 0
         self.step_key = exclude
         self.hints = {}                         # e.g. the title noun, offered as the motif
+        self._story = story
         # Threads: what the spine has introduced so far. A spine roll (record=True)
         # starts empty and adds to it; other steps read the story's kept threads.
         self.threads = dict(story.get("threads", {})) if threads is None else threads
@@ -422,6 +423,12 @@ class Ctx(dict):
             return self.seeds[key]
         return self.invent(key)
 
+    @property
+    def format_key(self):
+        """The draft's format (formats.py): what the structure step offers structures for."""
+        from . import formats
+        return formats.of_draft(self._story)
+
     def invent(self, key):
         e = self.engine
         if key == "name":
@@ -433,7 +440,8 @@ class Ctx(dict):
         if key == "genre":
             return " / ".join(e.rng.sample(e.library.genre_names, 2))
         if key == "structure":
-            return e.rng.choice([st.label for st in structures.prose()])        # (a screen structure is chosen on purpose)
+            from . import formats                                           # (only the structures that fit the draft's format)
+            return e.rng.choice([st.label for st in formats.structures_for(self.format_key) or structures.prose()])
         if key in PLURALS:
             return plural(fill(self, self.draw(PLURALS[key])))
         if key == "title":
@@ -652,8 +660,15 @@ def spine_step(structure, repeats=None):
 
 
 def structure_hint():
-    return ("The shape of the story's body. " +
+    return ("The shape of the story's body. Choose the format first (e or a click on it: short story, novel, or a screenplay), then roll "
+            "or pick (e) a structure among those that fit it. " +
             " ".join(f"{st.label}: {st.blurb}" for st in structures.registry().values()))
+
+
+def format_field(c):
+    """The structure step's format: the one chosen for the draft (it is picked, never rolled)."""
+    from . import formats
+    return formats.get(c.format_key).label
 
 
 def steps_for(story, repeats=None):
@@ -667,7 +682,7 @@ def steps_for(story, repeats=None):
              "Later steps lean toward ideas that fit what you keep here.",
              {"genre": field("genre"), "mood": mood_field}),
 
-        Step("structure", "Structure", structure_hint(), {"structure": field("structure")}),
+        Step("structure", "Structure", structure_hint(), {"format": format_field, "structure": field("structure")}),
 
         Step("title", "Title",
              "A title is a promise about tone. The motif is the thing the title is "

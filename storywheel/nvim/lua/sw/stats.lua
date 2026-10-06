@@ -120,8 +120,10 @@ function M.line()
     today_text = string.format("today %s words", commas(today))
   end
   local g = require("sw.grammar").status_text()
+  local target = M.pages_cached == nil and tonumber((story.info or {}).target_words) or 0       -- (prose: the story's target length, from the story form)
+  local total = commas(M.total_cached) .. ((target and target > 0) and (" / " .. commas(target)) or "")
   return string.format("  %swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
-                       commas(M.scene_cached), commas(M.total_cached), today_text, g ~= "" and ("  ·  " .. g) or "")
+                       commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
 end
 
 -- (a statusline expression is read as a statusline: its % signs must be doubled)

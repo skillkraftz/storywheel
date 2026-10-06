@@ -39,7 +39,17 @@ def story_json(s):
             "author": {k: v for k, v in settings.load_global().items()
                        if k in ("author_name", "legal_name", "address", "email", "phone")},
             "screenplay": s.is_screenplay(), "script": str(s.script_path),
-            "target_pages": _target_pages(s)}
+            "target_pages": _target_pages(s), "format_key": _formats().of_story(s), "target_words": _target_words(s)}
+
+
+def _formats():
+    from . import formats
+    return formats
+
+
+def _target_words(s):
+    number, unit = _formats().target(s)
+    return number if unit == "words" else None
 
 
 def _target_pages(s):

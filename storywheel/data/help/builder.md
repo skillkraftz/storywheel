@@ -22,14 +22,15 @@ rtab('scenes'): Story panel: the Scenes tab (Enter on a scene opens the Writer t
 rtab('notes'): Story panel: the story's own notes
 new_universe: New universe
 universe_settings: Universe settings: genre leanings, exclusions, boosts, its own word lists
-story_settings: Story settings: format, goals, export
+story_settings: Story settings: font, goals, how the Writer looks (the format is on the story form, m)
 global_settings: Your details (author, address...) in Settings
 overview: Show the universe overview in the top box
 fix_names: Fix names written in the wrong capitals ("Locked box" to "a locked box"), with a preview
 writer: Write the open story in the Writer
 export: Export the open story (docx, odt, pdf, md, txt)
 copy_manuscript: Copy the manuscript to the clipboard as plain text
-new_story: New blank story (no Wheel draft behind it)
+new_story: New story (no Wheel draft behind it): a form with its title, format, structure, genres and target length, all picked from lists
+story_form: Change the open story's format, structure, genres and target length (the same form; it warns when the Writer would open a different file)
 entity_notes: Edit the selected entity's own notes, under its card
 add_beat: On the outline: add another of the beat under the cursor, where the structure lets it repeat
 remove_beat: On the outline: remove one of the repeated beat
@@ -41,6 +42,7 @@ act('write'): Write the story in the Writer
 act('delete'): Delete the story (asks first)
 act('export'): Export the story
 act('backups'): Look at the story's backups, and restore one
+act('form'): Format, structure, genres and target length of this story
 ### UniverseList | The universes list
 act('new'): New universe
 act('rename'): Rename the universe

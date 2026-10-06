@@ -229,17 +229,17 @@ def test_a_brand_new_story_is_not_shifted():
 
 def test_pick_a_structure_finish_then_go_back_and_change_it(home):
     h, o = home / "h", home / "o"
-    first = "\n".join(["k", "e", "Three-Act Outline", "k", "k", "k", "k", "k", "k", "k"]) + "\n"
+    first = "\n".join(["k", "e structure", "Three-Act Outline", "k", "k", "k", "k", "k", "k", "k"]) + "\n"
     res = run_cli([], first, h, o)
     assert res.returncode == 0, res.stderr
     assert "STRUCTURE" in res.stdout and "Setup, a disruption, a choice" in res.stdout    # the blurb is shown
     saved = json.loads(next((h / "stories").glob("*.json")).read_text())
-    assert saved["kept"]["structure"] == {"structure": "Three-Act Outline"}
+    assert saved["kept"]["structure"] == {"format": "Short story", "structure": "Three-Act Outline"} and saved["format"] == "short-story"
     assert list(saved["kept"]["spine"]) == structures.registry()["three-act"].keys
     assert "**Act I: Setup.**" in next(o.glob("*.md")).read_text()
 
     # resume (a finished story opens on its last step; go back to the structure) and switch shape
-    second = "\n".join(["b"] * 6 + ["e", "Kishotenketsu", "k"] + ["k"] * 6) + "\n"
+    second = "\n".join(["b"] * 6 + ["e structure", "Kishotenketsu", "k"] + ["k"] * 6) + "\n"
     res = run_cli(["resume"], second, h, o)
     assert res.returncode == 0, res.stderr
     assert "New structure: the story body will be rolled again" in res.stdout
@@ -250,6 +250,8 @@ def test_pick_a_structure_finish_then_go_back_and_change_it(home):
     assert "**Ketsu (reconciliation).**" in md and "Act I: Setup" not in md
 
 
-def test_an_unrecognized_structure_is_called_out_on_the_card(home):
-    res = run_cli([], "\n".join(["k", "e", "zigzag", "q"]) + "\n", home / "h", home / "o")
-    assert "Not one of the known structures" in res.stdout
+def test_an_unrecognized_structure_is_refused_with_the_ones_that_fit(home):
+    """A typed structure must be one of the list (batch 18): a typo is said, never silently turned into the Story Spine."""
+    res = run_cli([], "\n".join(["k", "e structure", "zigzag", "k", "q"]) + "\n", home / "h", home / "o")
+    assert "'zigzag' is not one of the structures for a short story. Choose one of: Story Spine, Three-Act Outline, Kishōtenketsu." in res.stdout
+    assert "STRUCTURE" in res.stdout.split("Choose one of")[-1]                 # (k did not keep it: still on the structure step)

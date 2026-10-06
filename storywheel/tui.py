@@ -1322,8 +1322,8 @@ class MainScreen(KeptScreen, Screen):
         return None if self.session.step.single else names[min(index, len(names) - 1)]
 
     def on_card_list_field(self, event):
-        if event.button == 3:
-            self.action_edit()
+        if event.button == 3 or (self.session.step.key == "structure" and self.card_field() == "format"):
+            self.action_edit()                      # (a format is picked, never rolled: a click on it opens the list)
         else:
             self.action_reroll_field()
 
@@ -1395,7 +1395,9 @@ class MainScreen(KeptScreen, Screen):
         if self.locked():
             return
         s = self.session
-        s.keep()
+        if s.keep() is False:                       # (a structure that doesn't fit the format: the note says why)
+            self.after()
+            return
         self.hist_mode = "rolls"
         if s.done:
             path = s.save()
@@ -1420,6 +1422,8 @@ class MainScreen(KeptScreen, Screen):
         if field is None:
             self.session.roll()
             self.after("This step has one field, so f rolls the whole thing.")
+        elif self.session.step.key == "structure" and field == "format":
+            self.action_edit()
         else:
             self.session.reroll_field(field)
             self.after()
@@ -1432,8 +1436,27 @@ class MainScreen(KeptScreen, Screen):
             return
         s = self.session
         field = self.card_field() or s.field_names[0]
+        if s.step.key == "structure":
+            return self.pick_structure_field(field)
         self.app.push_screen(EditScreen(f"Edit {field.replace('_', ' ')}", {field: s.cand[field]}),
                              lambda out: self._edited(field, out))
+
+    def pick_structure_field(self, field):
+        """The structure step's fields come from lists: the format from the four formats, the structure from those that fit it."""
+        from . import formats
+        s = self.session
+        if field == "format":
+            self.app.push_screen(ChoiceScreen("Format", formats.choices()), self._format_picked)
+        else:
+            key = formats.of_draft(s.story)
+            options = [(f"{st.label}: {st.blurb}", st.label) for st in formats.structures_for(key)]
+            self.app.push_screen(ChoiceScreen(f"Structure for a {formats.get(key).label.lower()}", options),
+                                 lambda label: self._edited("structure", {"structure": label}) if label else None)
+
+    def _format_picked(self, key):
+        if key and self.session.set_format(key):
+            self.after()
+            self.card.highlighted = self.session.field_names.index("format")
 
     def _edited(self, field, out):
         if out is not None and self.session.edit_field(field, out[field]):
@@ -1443,6 +1466,8 @@ class MainScreen(KeptScreen, Screen):
         if self.locked():
             return
         s = self.session
+        if s.step.key == "structure":
+            return self.pick_structure_field("format")          # (nothing to write here: both fields come from lists)
         self.app.push_screen(EditScreen("Write your own (each box starts as it is now)", dict(s.fields)), self._written)
 
     def _written(self, out):

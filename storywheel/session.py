@@ -13,7 +13,7 @@ import copy
 import random
 import re
 
-from . import promote, store, structures, universe_atoms, vault
+from . import formats, promote, store, structures, universe_atoms, vault
 from . import ratings as R
 from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
@@ -275,8 +275,47 @@ class Session:
             cand["motif"] = motif
             self.note(f"The motif now follows your title: '{motif}'. Edit the motif field if that isn't what it is about.")
 
+    # --- the structure step: a format and a structure that fits it (picked from lists; a typed one must be one of them) -------------
+
+    def structure_fields(self, fields):
+        """The structure step's fields made exact ("short film" -> "Screenplay: short film", "kishotenketsu" -> "Kishōtenketsu"), or None
+        with a note saying why not: an unknown format or structure, or a structure that doesn't fit the format."""
+        out = dict(fields)
+        key = formats.find(out.get("format")) if out.get("format") else formats.of_draft(self.story)
+        if key is None:
+            self.note(f"'{out.get('format')}' is not a format. Choose one: " + ", ".join(f.label for f in formats.FORMATS) + ".")
+            return None
+        shape = structures.find(out.get("structure", ""))
+        fit = [s.label for s in formats.structures_for(key)]
+        if shape is None or shape.label not in fit:
+            what = f"'{out.get('structure')}' is not one of the structures" if shape is None else f"{shape.label} doesn't fit"
+            self.note(f"{what} for a {formats.get(key).label.lower()}. Choose one of: {', '.join(fit)}.")
+            return None
+        out.update(format=formats.get(key).label, structure=shape.label)
+        return out
+
+    def set_format(self, key):
+        """Choose the draft's format: the structure is rolled again among those that fit when the one showing doesn't."""
+        key = formats.find(key)
+        if key is None:
+            return False
+        self.story["format"] = key
+        cand = with_field(self.cand, "format", formats.get(key).label, src="edited")
+        self._add(cand)
+        if not formats.fits(structures.find(cand.get("structure", "")), key):
+            self.reroll_field("structure")
+            self.note(f"A {formats.get(key).label.lower()}: the structure was rolled again among the ones that fit it.")
+        return True
+
     def edit_field(self, field, text):
         text = text.strip()
+        if text and self.step.key == "structure":
+            fixed = self.structure_fields(dict(self.fields, **{field: text}))
+            if fixed is None:
+                return False
+            if field == "format":
+                return self.set_format(fixed["format"])
+            text = fixed[field]
         if text and text != self.cand.get(field):
             old_title = self.cand.get("title", "")
             new = with_field(self.cand, field, text, src="edited")
@@ -288,6 +327,11 @@ class Session:
 
     def replace_fields(self, new):
         """The whole item rewritten (in $EDITOR, or by hand): it joins the history."""
+        if self.step.key == "structure":
+            new = self.structure_fields(new)
+            if new is None:
+                return False
+            self.story["format"] = formats.find(new["format"])
         if new != self.fields:
             cand = inherit(dict(new, _src="edited"), self.cand)
             if new.get("motif") == self.fields.get("motif"):            # (you didn't also change the motif by hand)
@@ -365,8 +409,12 @@ class Session:
         story, step, i, cand = self.story, self.step, self.i, self.cand
         old = story["kept"].get(step.key)
         new = public(cand)
-        if step.key == "structure" and structures.find(new["structure"]):
-            new["structure"] = structures.find(new["structure"]).label     # "kishotenketsu" -> "Kishōtenketsu"
+        if step.key == "structure":
+            fixed = self.structure_fields(new)
+            if fixed is None:
+                return False                                               # (said why: nothing is kept)
+            new = fixed
+            story["format"] = formats.find(new["format"])
         for k, v in cand.get("_made", {}).items():
             story["seeds"].setdefault(k, v)
         story["kept"][step.key] = new

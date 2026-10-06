@@ -42,6 +42,18 @@ def beat_label(heading, i, label, body):
     return f"{i + 1}."
 
 
+def blank_beats(shape):
+    """A structure's beats section with nothing written yet: each beat's label (or, for a structure whose openers say where you are, the
+    opener), one paragraph each, so the Outline shows every beat to fill in."""
+    paras = []
+    for b in shape.expand({}):
+        if shape.show_labels or not b.opening.strip():
+            paras.append(f"**{b.label}.**")
+        else:
+            paras.append(b.opening.strip() + " …")
+    return "\n\n".join(paras)
+
+
 def settings_lines(text):
     return [(m.group(1), m.group(2)) for m in (SETTING.match(l) for l in text.splitlines()) if m]
 

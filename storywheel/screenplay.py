@@ -21,11 +21,9 @@ CAMERA = re.compile(r"\b(we see|we hear|we watch|camera|pan(?:s|ning)? (?:to|acr
 
 
 def make_screenplay(story, shape=None):
-    values = {"format": "screenplay"}
-    pages = shape.pages if shape is not None and shape.pages else None
-    if pages:
-        values["target_pages"] = pages
-    settings.save_story(story.path, values)
+    from . import formats
+    kind = shape.formats[0] if shape is not None and shape.screen and shape.formats else "feature-film"
+    formats.apply(story, kind, shape.pages if shape is not None and shape.pages else None)
 
 
 def target_pages(story):

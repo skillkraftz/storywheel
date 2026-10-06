@@ -110,7 +110,7 @@ def test_a_story_on_a_screen_structure_is_a_screenplay_with_a_page_target(shortf
 def test_a_blank_story_can_be_made_a_screenplay(home):
     u = vault.create_universe("Blank", ["noir"])
     s = u.new_story("Cold Coffee", {"format": "screenplay"})
-    assert s.is_screenplay() and screenplay.target_pages(s) == screenplay.DEFAULT_PAGES
+    assert s.is_screenplay() and screenplay.target_pages(s) == 110                       # (a screenplay with no kind: a feature film)
 
 
 def test_promoting_a_wheel_draft_on_a_screen_structure_makes_a_screenplay(home):

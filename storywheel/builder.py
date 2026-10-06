@@ -26,7 +26,7 @@ from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
-from . import fill, outline, paths, promote, rename, schemas, settings, state, vault, writing_stats
+from . import fill, outline, paths, promote, rename, schemas, settings, state, structures, vault, writing_stats
 from .text import motif_from, plural_n
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
@@ -38,7 +38,7 @@ def __getattr__(name):
         return helpdoc.text("builder")
     raise AttributeError(name)
 
-SETTINGS_FIELDS = [("format", "format (short-story / novel / screenplay)"), ("font", "font"),
+SETTINGS_FIELDS = [("font", "font"),
                    ("column_width", "column width (characters)"), ("daily_goal", "daily word goal"),
                    ("title_keyword", "short title for page headers"), ("indent_display", "show paragraph indent (true/false)"),
                    ("typewriter", "typewriter mode (true/false)"), ("invisibles", "show invisibles (true/false)"),
@@ -257,7 +257,8 @@ class BackupsScreen(ModalScreen):
 
 class StoryOptions(OptionList):
     BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
-                Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups")]
+                Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups"),
+                Binding("m", "act('form')", "Format, structure…")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -291,6 +292,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
         Binding("T", "new_story", "New (blank) story", show=False),
+        Binding("m", "story_form", "Format, structure, genres, target", show=False),
         Binding("E", "entity_notes", "Entity notes", show=False),
         Binding("A", "add_beat", "Add a beat", show=False),
         Binding("X", "remove_beat", "Remove a beat", show=False),
@@ -1365,6 +1367,9 @@ class BuilderScreen(KeptScreen, Screen):
         elif what == "backups":
             self.story = s
             self.app.push_screen(BackupsScreen(s), lambda result: self._restored(result))
+        elif what == "form":
+            self.story = s
+            self.action_story_form()
         elif what == "delete":
             self.app.push_screen(ConfirmScreen(f"Delete the story '{s.title}' and its manuscript?\n\n"
                                                "It moves to the library's .trash folder."),
@@ -1466,7 +1471,8 @@ class BuilderScreen(KeptScreen, Screen):
             return
         st = settings.load_story(self.story.path)
         fields = {label: str(st.get(key, "")) for key, label in SETTINGS_FIELDS}
-        self.app.push_screen(EditScreen(f"Story settings: {self.story.title}   (the Writer reads them on its next start)", fields),
+        self.app.push_screen(EditScreen(f"Story settings: {self.story.title}   (the Writer reads them on its next start; "
+                                        "format, structure and target: m)", fields),
                              self._story_settings_done)
 
     def _story_settings_done(self, out):
@@ -1474,7 +1480,6 @@ class BuilderScreen(KeptScreen, Screen):
             return
         st = settings.load_story(self.story.path)
         vals = dict(zip([k for k, _ in SETTINGS_FIELDS], out.values()))
-        st["format"] = vals["format"].strip() or st["format"]
         st["font"] = vals["font"].strip() or st["font"]
         st["column_width"] = _as_int(vals["column_width"], st["column_width"])
         st["daily_goal"] = _as_int(vals["daily_goal"], st["daily_goal"])
@@ -1595,30 +1600,72 @@ class BuilderScreen(KeptScreen, Screen):
         self.b.changed = True
 
     def action_new_story(self):
-        """A blank story in the open universe, with no Wheel draft behind it: a title, an empty manuscript to write in."""
+        """A new story in the open universe, with no Wheel draft behind it: the story form (title, format, structure, genres, target)."""
         if not self.universe:
             return self.say("Open or create a universe first.")
-        from . import settings as settings_mod
-        fmt = settings_mod.load_global().get("format", "short-story")
-        self.app.push_screen(EditScreen("A new story in " + self.universe.name,
-                                        {"title": "", "format (short-story, novel or screenplay)": fmt}), self._story_named)
+        from . import formats
+        from .storyform import StoryFormScreen
+        fmt = formats.global_default()
+        values = {"title": "", "format": fmt, "structure": "", "genres": list(self.universe.settings().get("genres", [])),
+                  "target": formats.get(fmt).target}
+        self.app.push_screen(StoryFormScreen("A new story in " + self.universe.name, values), self._story_made)
 
-    def _story_named(self, out):
-        title = (out or {}).get("title", "").strip()
-        if not title:
+    def _story_made(self, out):
+        if not out or not out.get("title"):
             return
-        fmt = (out or {}).get("format (short-story, novel or screenplay)", "").strip().lower()
-        if fmt not in ("short-story", "novel", "screenplay"):
-            fmt = ""
-        story = self.universe.new_story(title, {"genre": " / ".join(self.universe.settings().get("genres", [])), "format": fmt})
-        if fmt in ("short-story", "novel"):
-            from . import settings as settings_mod
-            settings_mod.save_story(story.path, {"format": fmt})
+        from . import formats, outline as outline_mod
+        shape = structures.find(out["structure"])
+        sections = {shape.label: outline_mod.blank_beats(shape)} if shape is not None else {}
+        story = self.universe.new_story(out["title"], {"genre": " / ".join(out["genres"]), "structure": shape.label if shape else "",
+                                                        "format": out["format"], "target": out["target"]}, sections)
         self.story = story
         self.refresh_all()
-        kind = "screenplay" if fmt == "screenplay" else "story"
-        self.say(f"Started '{story.title}': a blank {kind}, with no outline. Press w to write it, or edit its outline rows (right-click or e)."
+        f = formats.get(out["format"])
+        kind = "screenplay" if f.unit == "pages" else "story"
+        shaped = f"its {shape.label} beats are in the outline to fill in" if shape else "no outline"
+        self.say(f"Started '{story.title}': a blank {f.label.lower()} ({shaped}). Press w to write it, or edit its outline rows (right-click or e)."
                  + (" P starts the script from the outline." if kind == "screenplay" else ""))
+        self.b.changed = True
+
+    def action_story_form(self):
+        """Change the open story's format, structure, genres and target length (the same form as a new story)."""
+        if not self.story:
+            return self.say("Open a story first.")
+        from . import formats
+        from .storyform import StoryFormScreen
+        meta, _sections = self.story.load_outline()
+        number, _unit = formats.target(self.story)
+        values = {"title": self.story.title, "format": formats.of_story(self.story), "structure": meta.get("structure", ""),
+                  "genres": [g.strip().lower() for g in str(meta.get("genre", "")).split("/") if g.strip()], "target": number}
+        has_writing = any(p.exists() and p.read_text(encoding="utf-8").strip() for p in self.story.files())
+        self.app.push_screen(StoryFormScreen(f"Format, structure, genres and target: {self.story.title}", values, new=False,
+                                             has_writing=has_writing), self._story_form_done)
+
+    def _story_form_done(self, out):
+        if not out or self.story is None:
+            return
+        from . import formats, outline as outline_mod
+        story = self.story
+        before = formats.of_story(story)
+        meta, sections = story.load_outline()
+        said = []
+        shape = structures.find(out["structure"])
+        new_structure = shape.label if shape else ""
+        if new_structure != meta.get("structure", ""):
+            if shape is not None and shape.label not in sections:
+                story.set_section(shape.label, outline_mod.blank_beats(shape))
+                said.append(f"the {shape.label} beats were added to the outline" +
+                            (" (the old beats stay there too)" if meta.get("structure") else ""))
+        changes = {"genre": " / ".join(out["genres"]), "structure": new_structure}
+        if out["title"] and out["title"] != story.title:
+            changes["title"] = out["title"]
+        story.set_meta(**changes)
+        formats.apply(story, out["format"], out["target"])
+        if formats.is_script(before) != formats.is_script(out["format"]):
+            said.append("the Writer now opens " + ("script.fountain" if formats.is_script(out["format"]) else "the prose manuscript")
+                        + "; the other files stay where they are")
+        self.refresh_all()
+        self.say("Saved: " + formats.get(out["format"]).label + (", " + "; ".join(said) if said else "") + ".")
         self.b.changed = True
 
     def action_start_script(self):

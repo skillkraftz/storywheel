@@ -18,7 +18,8 @@ action): the writer adds or removes one in the Wheel and in the Builder's outlin
 
 A screen structure (`"screen": true`, with `"pages"`: its usual length) is for a screenplay: each beat may name its `"act"`, which becomes a
 section (`# Act One`) when the script is started from the outline. A story on a screen structure is a screenplay. Screen structures are never
-picked at random; you choose one.
+picked at random; you choose one. `"formats"` says which formats a structure fits (formats.py: short-story, novel, feature-film,
+short-film); it defaults to the two prose formats, or for a screen structure to feature-film. The pickers offer only the structures that fit.
 
 A beat with `"reframe": true` (kishotenketsu's *ten*) may only reinterpret something already
 established in the story: its templates may use threads and the story's own fields, never a fresh
@@ -95,11 +96,12 @@ class BeatLabels(dict):
 
 
 class Structure:
-    def __init__(self, name, label, blurb, beats, show_labels=False, order=100, screen=False, pages=0):
+    def __init__(self, name, label, blurb, beats, show_labels=False, order=100, screen=False, pages=0, formats=None):
         self.name, self.label, self.blurb = name, label, blurb
         self.beats, self.show_labels, self.order = beats, show_labels, order
         self.screen = screen          # a screen structure: a story built on it is a screenplay (and it is never picked at random)
         self.pages = pages            # a screen structure's usual length in pages (the target a new script starts with)
+        self.formats = tuple(formats or (("feature-film",) if screen else ("short-story", "novel")))     # the formats it fits
 
     @property
     def keys(self):
@@ -153,7 +155,8 @@ def _read(path):
             raise StructureError(f"{path}: needs at least one beat, and beat keys must be unique")
         name = doc.get("name") or path.stem
         return Structure(name, doc.get("label", name), doc.get("blurb", ""), beats, bool(doc.get("show_labels")),
-                         doc.get("order", 100), bool(doc.get("screen")), int(doc.get("pages", 0) or 0))
+                         doc.get("order", 100), bool(doc.get("screen")), int(doc.get("pages", 0) or 0),
+                         [str(f).lower() for f in doc.get("formats") or []])
     except (ValueError, KeyError, TypeError) as e:
         raise StructureError(f"{path}: {e!r} (see structures.py for the format)")
 

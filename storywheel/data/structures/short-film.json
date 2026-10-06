@@ -6,6 +6,7 @@
  "order": 11,
  "show_labels": true,
  "screen": true,
+ "formats": ["short-film"],
  "pages": 12,
  "beats": [
   {

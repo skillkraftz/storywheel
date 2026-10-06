@@ -307,13 +307,19 @@ class Story:
         return known
 
     def extra_files(self):
-        """Files in the manuscript folder that are not part of the manuscript and that you have not told us to ignore: [Path]."""
+        """Files in the manuscript folder that are not part of the manuscript and that you have not told us to ignore: [Path]. The other
+        format's own files are never extra: a screenplay's prose files (and a prose story's script.fountain) are kept for when the format
+        changes back."""
         if not self.manuscript_dir.is_dir():
             return []
         mine = set(self.scenes())
         ignored = set(self.ignored_files())
+        script = self.is_screenplay()
+
+        def parked(p):
+            return bool(KNOWN_FILE.match(p.name)) if script else p.name == SCRIPT_FILE
         return sorted(p for p in self.manuscript_dir.iterdir()
-                      if p.is_file() and p not in mine and not p.name.startswith(".") and p.name not in ignored)
+                      if p.is_file() and p not in mine and not p.name.startswith(".") and p.name not in ignored and not parked(p))
 
     @property
     def ignored_path(self):
@@ -854,15 +860,16 @@ class Universe:
         s.path.mkdir(parents=True, exist_ok=True)
         m = {"id": slug, "title": title, "universe": self.slug, "created": datetime.date.today().isoformat()}
         m.update(meta or {})
-        fmt = str(m.pop("format", "") or "")                   # (the format is a setting, not part of the outline)
+        fmt = str(m.pop("format", "") or "").strip().lower()   # (the format and target are settings, not part of the outline)
+        target = m.pop("target", None)
         s.save_outline(m, sections or {})
         _write(s.path / ".one-line-paragraphs", "one line = one paragraph\n")      # (new stories already follow the rule)
         _write(s.path / ".straight-quotes", "straight quotes in the manuscript; the export makes them curly\n")
-        from . import structures
+        from . import formats, structures
         shape = structures.find(m.get("structure", ""))
-        if (shape is not None and shape.screen) or fmt.lower() == "screenplay":
-            from . import screenplay
-            screenplay.make_screenplay(s, shape)                                  # (a story on a screen structure is a screenplay)
+        if formats.known(fmt) or fmt == "screenplay" or (shape is not None and shape.screen):
+            key = fmt if formats.known(fmt) else formats.from_setting("screenplay", "", m.get("structure", ""))
+            formats.apply(s, key, target)                                          # (a story on a screen structure is a screenplay)
         if seed is not None:
             _write(s.path / "seed.json", json.dumps(seed, indent=2))
         return s

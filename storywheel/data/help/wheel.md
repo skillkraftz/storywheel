@@ -49,6 +49,8 @@ use: Use the entry in this story (as a new candidate; nothing is kept until you 
 - ▲ ▼ at the end of a line: like or dislike it.
 - Buttons under the card: Roll, Keep, Back, Skip, Flavor, +Beat, -Beat. Click a step to jump to it, a history row to pick it.
 - To select text with the mouse while this app has it, hold Shift and drag (some terminals: Alt, or Option on a Mac).
+## Format and structure
+The structure step has two lines. The format (short story, novel, or a screenplay as a feature film or a short film) is picked from a list: click it, or f or e on it. The structure is rolled (f, a click) or picked (e, right-click) among the ones that fit the format: the screen structures only for a screenplay. Nothing here is typed, so a typo can't turn into the Story Spine; a structure typed at the plain prompt must be one of the list or it is refused with the list. A story promoted to the Builder keeps its format, with that format's usual target length.
 ## Moving around
 up and down move within a list; Tab goes to the next list (steps, card, history); Enter on the card rerolls the field, in the history picks that roll, on a step jumps there; Esc goes back to the card.
 ## Stand-ins and stale candidates
