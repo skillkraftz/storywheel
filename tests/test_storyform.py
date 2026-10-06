@@ -224,4 +224,4 @@ def test_the_status_line_shows_the_story_against_its_target(home):
     s = u.new_story("Short One", {"format": "short-story", "target": 5000})
     s.append_scene("Opening", "Rain on the window and nobody home.")
     r = run_writer(s, "", "", "R.line = require('sw.stats').line()")
-    assert "in the story 7 / 5,000" in r["line"]
+    assert "in the story 7 / 5,000 words · 0%" in r["line"]

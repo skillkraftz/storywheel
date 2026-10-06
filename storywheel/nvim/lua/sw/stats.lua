@@ -168,7 +168,10 @@ function M.line()
   end
   local g = require("sw.grammar").status_text()
   local target = M.pages_cached == nil and tonumber((story.info or {}).target_words) or 0       -- (prose: the story's target length, from the story form)
-  local total = commas(M.total_cached) .. ((target and target > 0) and (" / " .. commas(target)) or "")
+  local total = commas(M.total_cached)
+  if target and target > 0 then
+    total = string.format("%s / %s words · %d%%", total, commas(target), math.floor(100 * M.total_cached / target + 0.5))
+  end
   return string.format("  %swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
                        commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
 end
