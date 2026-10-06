@@ -62,9 +62,11 @@ SECTIONS = [
          "Besides Neovim's English list, accept every word in the offline dictionary (and its plurals, -ing, -ed, -er, -est forms). Needs the dictionary: run storywheel dictionary install."),
         ("spell_lenient", "Accept words built from known words", "bool", None,
          "A known word plus -ing, -ed, -er, -ers, -ly, -ness, -less, -ful, or un-/re- in front passes (\"gunsmithing\", \"unlatch\"). Needs the dictionary."),
+        ("spell_region", "English spelling", "choice", ["US", "UK"],
+         "US: realize, color, center. UK: realise, colour, centre. The other region's spellings are marked as misspellings (red). A story can choose its own."),
         ("spell_marks", "Spelling marks", "choice", ["all", "subtle", "misspellings only"],
          "Red wavy = not a word (always shown). Blue = a lowercase letter where a capital belongs (SpellCap); pink = a rare word (SpellRare); "
-         "cyan = a word from another region's spelling (SpellLocal). 'subtle' shows those three as a faint dotted line; 'misspellings only' hides them."),
+         "'subtle' shows those two as a faint dotted line; 'misspellings only' hides them. The other region's spelling (SpellLocal; see English spelling) is always red."),
         ("autocorrect", "Autocorrect common slips", "bool", None, "When you finish a word: i → I, im → I'm, dont → don't, teh → the... (a short list; never inside other words)."),
     ]),
     ("Grammar", [

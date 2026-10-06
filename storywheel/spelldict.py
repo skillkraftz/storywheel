@@ -16,7 +16,7 @@ import subprocess
 
 from . import dictionary, inflect, paths
 
-VERSION = 1                       # bump when the way the lists are made changes
+VERSION = 2                       # bump when the way the lists are made changes
 WORD = re.compile(r"^[a-z][a-z'-]*[a-z]$")
 
 
@@ -103,6 +103,36 @@ def moby_words(db):
     return out
 
 
+# US/UK pairs: a word whose other-region spelling is also in the list is left out of OUR lists, so that only the English spelling file
+# (en_us or en_gb, chosen by the "English spelling" setting) decides which of the two is right. The same on every machine: no word is
+# tested against a downloaded file.
+VARIANT_RULES = (("is", "iz"), ("our", "or"), ("re", "er"), ("ence", "ense"), ("yse", "yze"), ("ll", "l"), ("ogue", "og"), ("ae", "e"), ("oe", "e"))
+
+
+def _counterparts(w):
+    """Other-region spellings of a word (candidates only): -ise/-ize, -our/-or, -re/-er, -ence/-ense, -yse/-yze, -lled/-led, -ogue/-og, ae/e."""
+    out = set()
+    for uk, us in VARIANT_RULES:
+        for a, b in ((uk, us), (us, uk)):
+            i = w.find(a)
+            while i != -1:
+                out.add(w[:i] + b + w[i + len(a):])
+                i = w.find(a, i + 1)
+    out.discard(w)
+    return out
+
+
+def regional_variants(words):
+    """The words of `words` that have a US/UK twin in `words` too (realise and realize, colour and color, travelled and traveled)."""
+    pool = words if isinstance(words, (set, frozenset)) else set(words)
+    return {w for w in pool if len(w) > 4 and any(c in pool for c in _counterparts(w) if _plausible(w, c))}
+
+
+def _plausible(w, c):
+    """The twin must be the same word spelled the other way: the same length within 1 and the same first two letters."""
+    return abs(len(w) - len(c)) <= 1 and w[:2] == c[:2]
+
+
 def stamp_of():
     p = dictionary.index_path()
     st = p.stat()
@@ -124,6 +154,8 @@ def build(nvim, progress=lambda m: None):
     plain, lenient = dictionary_words(db)
     plain |= moby_words(db)
     lenient -= plain
+    drop = regional_variants(plain | lenient)
+    plain, lenient = plain - drop, lenient - drop
     out = folder()
     (out / "spell").mkdir(parents=True, exist_ok=True)
     counts = {}

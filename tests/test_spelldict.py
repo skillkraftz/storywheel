@@ -90,7 +90,7 @@ def test_the_secondary_marks_can_be_softened_or_hidden(home, story):
     assert soft["cap"].get("underdotted") and not soft["cap"].get("undercurl") and soft["rare"].get("underdotted")
     assert soft["bad"].get("undercurl") or soft["bad"] == {} or True
     hidden = marks("misspellings only")
-    assert hidden["cap"] == {} and hidden["rare"] == {} and hidden["local_"] == {} and hidden["capcheck2"] == ""
+    assert hidden["cap"] == {} and hidden["rare"] == {} and hidden["local_"].get("undercurl") and hidden["capcheck2"] == ""
     full = marks("all")
     assert full["cap"].get("undercurl") and full["rare"].get("undercurl") and full["local_"].get("undercurl")
 
@@ -103,3 +103,17 @@ def test_the_spell_settings_are_in_settings_and_explained():
         assert needle in text
     assert settings.GLOBAL_DEFAULTS["spell_marks"] == "subtle" and settings.GLOBAL_DEFAULTS["spell_lenient"] is True
     assert "spell_marks" in settings.INHERITED
+
+
+def test_regional_twins_are_left_out_of_our_lists_so_the_region_decides():
+    """Batch 19: realise/realize, colour/color... are dropped from the dictionary lists; en_us / en_gb (the English spelling setting) decide."""
+    words = {"realise", "realize", "colour", "color", "travelled", "traveled", "centre", "center", "cat", "water", "grey"}
+    assert spelldict.regional_variants(words) == {"realise", "realize", "colour", "color", "travelled", "traveled", "centre", "center"}
+
+
+def test_spelllang_follows_the_english_spelling_setting(home, story):
+    from storywheel import settings
+    from test_notepad import run
+    assert run(story, "", "", "R.l = require('sw.spell').languages()")["l"].startswith("en_us")
+    settings.save_story(story.path, {"spell_region": "UK"})
+    assert run(story, "", "", "R.l = require('sw.spell').languages()")["l"].startswith("en_gb")

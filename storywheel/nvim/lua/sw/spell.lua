@@ -7,7 +7,7 @@ M.dir = nil
 
 -- The dictionary's words (and words built from them) are compiled lists in a folder on the runtimepath (see storywheel/spelldict.py).
 function M.languages()
-  local langs = { "en_us" }
+  local langs = { story.setting("spell_region", "US") == "UK" and "en_gb" or "en_us" }
   local root = os.getenv("STORYWHEEL_SPELLLANG_DIR")
   if root and root ~= "" then
     local function has(name) return vim.uv.fs_stat(root .. "/spell/" .. name .. ".utf-8.spl") ~= nil end
@@ -20,10 +20,11 @@ function M.languages()
 end
 
 -- Red wavy (SpellBad) always means "not a word". The other three marks can be softened or hidden (Settings > Writer > Spelling marks):
--- SpellCap = lowercase where a capital belongs, SpellRare = rare word, SpellLocal = another region's spelling.
+-- SpellCap = lowercase where a capital belongs, SpellRare = rare word. SpellLocal (another region's spelling) is always red: it is wrong for the story's region.
 function M.marks()
   local mode = story.setting("spell_marks", "subtle")
-  for _, g in ipairs({ "SpellCap", "SpellRare", "SpellLocal" }) do
+  vim.api.nvim_set_hl(0, "SpellLocal", { undercurl = true, sp = "Red" })      -- the other region's spelling is a misspelling (spell_region)
+  for _, g in ipairs({ "SpellCap", "SpellRare" }) do
     if mode == "all" then
       vim.api.nvim_set_hl(0, g, { undercurl = true, sp = ({ SpellCap = "Blue", SpellRare = "Magenta", SpellLocal = "Cyan" })[g] })
     elseif mode == "misspellings only" then

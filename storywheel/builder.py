@@ -42,7 +42,7 @@ SETTINGS_FIELDS = [("font", "font"),
                    ("column_width", "column width (characters)"), ("daily_goal", "daily word goal"),
                    ("title_keyword", "short title for page headers"), ("indent_display", "show paragraph indent (true/false)"),
                    ("typewriter", "typewriter mode (true/false)"), ("invisibles", "show invisibles (true/false)"),
-                   ("spellcheck", "spellcheck (true/false)")]
+                   ("spellcheck", "spellcheck (true/false)"), ("spell_region", "English spelling (US / UK)")]
 GLOBAL_FIELDS = [("legal_name", "legal name (first page, top left)"), ("author_name", "byline / pen name"),
                  ("address", "address (use \\n for new lines)"), ("email", "email"), ("phone", "phone")]
 
@@ -1484,6 +1484,9 @@ class BuilderScreen(KeptScreen, Screen):
         st["column_width"] = _as_int(vals["column_width"], st["column_width"])
         st["daily_goal"] = _as_int(vals["daily_goal"], st["daily_goal"])
         st["title_keyword"] = vals["title_keyword"].strip()
+        region = vals["spell_region"].strip().upper()
+        if region in ("US", "UK"):
+            st["spell_region"] = region
         for k in ("indent_display", "typewriter", "invisibles", "spellcheck"):
             st[k] = _as_bool(vals[k], st[k])
         before = settings.load_story(self.story.path)

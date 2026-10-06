@@ -23,7 +23,7 @@ GLOBAL_DEFAULTS = {
     "paragraph_spacing": 0,
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False, "export_curly_quotes": True, "script_contd": True, "stats_skip_paste": True,
-    "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle",
+    "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle", "spell_region": "US",
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
     "transparent_background": True, "text_color": "", "accent_color": "",
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
@@ -38,7 +38,7 @@ STORY_DEFAULTS = {
     "paragraph_spacing": 0,
     "scene_marker": "***",
     "export_title_bold": True, "export_header": "full", "export_anonymous": False, "export_one_space": False, "export_curly_quotes": True, "script_contd": True, "stats_skip_paste": True,
-    "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle",
+    "autocorrect": True, "spell_dictionary": True, "spell_lenient": True, "spell_marks": "subtle", "spell_region": "US",
     "grammar": False, "grammar_off_rules": "", "grammar_pause_ms": 1500, "grammar_language": "en-US", "grammar_memory_mb": 512, "grammar_port": 18081,
     "transparent_background": True, "text_color": "", "accent_color": "",
     "key_italic": "<A-i>", "key_bold": "<A-b>", "key_scene_break": "<A-s>", "key_menu": "<F12>", "key_sidebar": "<F9>",
@@ -49,7 +49,7 @@ STORY_DEFAULTS.update(CATEGORY_DEFAULTS)
 # story settings that fall back to your global settings
 INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
              "notepad_mode", "writer_kitty", "writer_font", "writer_font_size", "writer_line_height", "writer_padding", "writer_opacity", "paragraph_spacing",
-             "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "script_contd", "stats_skip_paste", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color",
+             "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "script_contd", "stats_skip_paste", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "spell_region", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color",
              "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_overview", "key_builder", "key_replace", "key_quit", "key_lookup", "key_lookup_word", "key_grammar_next", "key_grammar_list", "key_flip_test")
 
 
