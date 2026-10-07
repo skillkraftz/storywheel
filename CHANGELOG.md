@@ -2,7 +2,7 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
-## Batch 20 (after 0.18.0)
+## 0.20.0 — Batch 20: small Wheel and Writer fixes
 
 - Wheel: Past stories has a New button (a fresh draft, asking for a universe) instead of Open; Enter or a click on a story still opens it.
 - Every Writer action has a key that works while typing (Alt+N new scene, Alt+V invisibles, Alt+T typewriter, Alt+L spell, Alt+W word counts,
@@ -10,6 +10,14 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
 - The Writer help's Keys tab lists each action with its key and its Vim-mode Space key; Writing basics points to it.
 - Alt+C and Ctrl+E center the line (or selected lines), stored as >text< like Fountain; shown centered, exported centered (.docx/.odt/.pdf),
   centered in plain .txt, a centered block in .md; the markers are not words.
+
+## 0.19.0 — Batch 19: restore broken basics
+
+- **New draft in the Wheel** (`N`, a button, help): asks which universe, keeps the draft you leave.
+- **Words today roll over at midnight** in a Writer left open; day counts are kept per machine (`days[date].machines`), so merged sync files can't double-count.
+- **Settings > Stats** can edit or reset a day and forget a story's history (each after a confirm); pasted words are not counted as written (setting).
+- **Story target percentage** in the Writer's status line.
+- **English spelling US / UK** (setting, per story too): the other region's spellings are misspellings; the dictionary lists leave out regional twins.
 
 ## 0.18.0 — Batch 18: choosing formats properly, and help that knows the format
 

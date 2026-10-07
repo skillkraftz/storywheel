@@ -5104,3 +5104,12 @@ Total 389 s. Both failures were tests that read keys from the first page of a he
 2 for the Keys tab (`test_builder_layout.py::test_the_help_mentions_the_new_keys`, `test_switching.py::test_every_help_screen_lists_the_mode_keys`).
 Rerun with `--lf`, then both files in full: 46 passed. The fix changed only tests, so the suite was not run again. 4 skips, the same count as
 batch 17.
+
+# Batches 19 and 20 (0.19.0, 0.20.0)
+
+Done in short sessions with related tests per item (batch 19 ended with one full run: 2,698 + 98 passed, 4 skipped, 412 s; batch 20 had none).
+Version numbers were not bumped in these two batches by mistake; 0.19.0 and 0.20.0 were set afterwards (see CHANGELOG.md).
+
+- **Batch 19 (b19-1 to b19-6, b19-final):** New draft in the Wheel; midnight rollover and per-machine day counts; Stats editing and "don't count pasted text"; story target percentage; US/UK spelling; help-page check (BACKLOG.md).
+- **Batch 20 (b20-1 to b20-4):** Past stories "New" button; notepad keys for every Writer action (Settings > Keys); the Keys tab with Vim-mode keys; centered lines (Alt+C, Ctrl+E, stored `>text<`).
+- Not checked by hand: Alt+letter keys in VTE and kitty, the Settings > Stats key presses (`e`, `0`, `R`), and the UK/US marks with a real `en_us` / `en_gb` file.
