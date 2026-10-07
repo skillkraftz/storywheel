@@ -92,7 +92,9 @@ def paragraphs(text, single_space=False, curly_quotes=False):
             out.append(("scene_break", ""))
         elif s:
             s = one_space(s) if single_space else s
-            out.append(("text", quotes.smarten(s) if curly_quotes else s))
+            s = quotes.smarten(s) if curly_quotes else s
+            inner = vault.centered_text(s)
+            out.append(("centered", inner) if inner else ("text", s))
     return out
 
 
@@ -107,7 +109,11 @@ def plain_text(story):
         return compile_text(story)
     blocks = []
     for kind, text in paragraphs(compile_text(story), _one_space(story), curly(story)):
-        blocks.append("#" if kind == "scene_break" else strip_markup(text))
+        if kind == "centered":
+            text = strip_markup(text)
+            blocks.append(text.center(72).rstrip())            # (no markers in .txt; a centered line is centered in 72 columns)
+        else:
+            blocks.append("#" if kind == "scene_break" else strip_markup(text))
     return "\n\n".join(blocks)
 
 
@@ -300,6 +306,9 @@ def build_docx(story, path, anonymous=None):
         for kind, block_text in paragraphs(text, single, curly_on):
             if kind == "scene_break":
                 para("#", WD_ALIGN_PARAGRAPH.CENTER, runs=False)
+            elif kind == "centered":
+                para(block_text, WD_ALIGN_PARAGRAPH.CENTER)
+                first_block = False
             else:
                 p = para(block_text, indent=True, before=(24 if first_block and not novel else None))
                 first_block = False
@@ -318,7 +327,7 @@ def _byline_md(info):
 def build_md(story, path, anonymous=None):
     st = settings.load_story(story.path)
     info, warnings = author_info(story, anonymous=bool(st.get("export_anonymous")) if anonymous is None else anonymous)
-    body = "\n\n".join("* * *" if k == "scene_break" else t for k, t in paragraphs(compile_text(story), _one_space(story), curly(story)))
+    body = "\n\n".join("* * *" if k == "scene_break" else (f'<div align="center">{t}</div>' if k == "centered" else t) for k, t in paragraphs(compile_text(story), _one_space(story), curly(story)))
     text = f"# {smart_title(story)}\n\n{_byline_md(info)}{body}\n"
     Path(path).write_text(text, encoding="utf-8")
     return warnings

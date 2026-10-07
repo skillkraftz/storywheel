@@ -362,6 +362,16 @@ function M.map_global()
   map({ "n", "i" }, story.setting("key_sidebar", "<F9>"), function() sidebar.toggle() end, "scene sidebar")
   map({ "n", "i" }, story.setting("key_peek", "<F8>"), function() world.peek() end, "peek")
   map({ "n", "i" }, story.setting("key_overview", "<C-o>"), function() require("sw.overview").toggle() end, "story outline")
+  -- The same actions as the Space keys below, with keys that work while typing (notepad mode); Settings > Keys changes them.
+  local notepad_keys = {
+    key_new_scene = function() M.new_scene() end, key_invisibles = function() prose.toggle("invisibles") end,
+    key_typewriter = function() prose.toggle("typewriter") end, key_spell = function() prose.toggle("spell") end,
+    key_stats = function() M.show_stats() end, key_copy_manuscript = function() M.copy_manuscript() end,
+    key_export = function() M.export() end, key_writer_settings = function() M.edit_settings() end, key_keycheck = function() M.keycheck() end,
+  }
+  for name, fn in pairs(notepad_keys) do
+    map({ "n", "i", "x", "s" }, story.setting(name, require("sw.keys_default")[name]), fn, "Writer: " .. name)
+  end
   local leader = {
     n = function() sidebar.toggle() end, p = function() world.peek() end, a = function() M.new_scene() end,
     i = function() prose.toggle("invisibles") end, t = function() prose.toggle("typewriter") end,

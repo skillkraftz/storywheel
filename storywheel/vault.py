@@ -574,6 +574,12 @@ def join_hard_wraps(text):
     return "\n".join(out) + ("\n" if out else ""), joined
 
 
+def centered_text(line):
+    """'>text<' (Fountain's centered text, also used in prose) -> 'text'; any other line -> None."""
+    m = re.fullmatch(r"\s*>\s*(.*?)\s*<\s*", line or "")
+    return m.group(1) if m and m.group(1) else None
+
+
 def count_words(text):
     """Words in some prose: runs of non-space characters that hold a letter or digit. Scene marker lines (`* * *`,
     `* * * Title`) are not prose and are not counted. The Writer counts the same way."""

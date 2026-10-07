@@ -16,6 +16,17 @@ key_lookup: Dictionary and thesaurus card for the word under the cursor (Enter o
 key_lookup_word: Look up a word you type
 key_grammar_next: Jump to the next grammar problem
 key_grammar_list: List the grammar problems
+key_new_scene: Add a new scene (opens the sidebar's scene prompt)
+key_invisibles: Show or hide invisible characters (dots for spaces, a mark at paragraph ends)
+key_typewriter: Typewriter mode: keep the line you are on in the middle of the screen
+key_spell: Spellcheck on or off
+key_stats: Word counts: this scene, the story, today
+key_copy_manuscript: Copy the whole manuscript as plain text
+key_export: Export the manuscript (a script: as a PDF)
+key_writer_settings: Edit this story's settings
+key_keycheck: Check which keys your terminal sends (is Ctrl+I told apart from Tab?)
+key_center: Center the line, or the selected lines, or put them back at the left (stored as >text<)
+key_center2: The same as the center key above, on a second key
 key_flip_test: A screenplay's flip test: long action blocks and speeches, camera directions, CUT TO: overuse, the length against the target (a list that jumps to each)
 ### fixed | Fixed keys
 <C-c>: Copy
@@ -35,7 +46,7 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 <C-[>: Escape
 <F1>: Go to the Wheel
 <F2>: Go to the Builder
-<F3>: Open this help
+<F3>: Open this help (a tab bar: Tab, Shift+Tab, numbers or a click switch tabs)
 <F4>: Go to Settings
 <F5>: Go to Words, carrying the word under the cursor
 <A-m>: The Writer menu (always works)
@@ -47,7 +58,7 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 - Click places the cursor; drag selects; double-click selects a word. The wheel scrolls.
 - Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu.
 ## With Vim keys on
-In Settings > Writer you can turn notepad mode off to get Vim. In Normal mode, press Space first: n scene sidebar, p peek (also F8), a new scene, i show invisibles, t typewriter mode, s spellcheck, w word counts, c copy the manuscript as plain text, e export, S this story's settings, k check which keys your terminal sends, ]] and [[ next and previous scene, ? this help.
+In Settings > Writer you can turn notepad mode off to get Vim. Every action has a key that works while typing (the Keys tab, the first column); in Vim's Normal mode press Space first for the same actions (shown in [ ] on the Keys tab). Keys and the Space keys are listed only there: see the Keys tab (press 3, or Tab until it opens).
 ## Grammar (optional)
 Off by default. Install once with storywheel grammar install, then turn it on in the Writer menu or Settings > Grammar. A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline; right-click one for the message, fixes, Ignore this one and Turn off this rule.
 ## Leaving

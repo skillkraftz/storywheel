@@ -21,6 +21,17 @@ WRITER_KEYS = {
     "key_grammar_next": ("Next grammar problem", "<F10>"),
     "key_grammar_list": ("List of grammar problems", "<S-F10>"),
     "key_flip_test": ("Flip test (screenplays)", "<A-f>"),
+    "key_new_scene": ("New scene", "<A-n>"),
+    "key_invisibles": ("Show invisibles", "<A-v>"),
+    "key_typewriter": ("Typewriter mode", "<A-t>"),
+    "key_spell": ("Spellcheck on or off", "<A-l>"),
+    "key_stats": ("Word counts", "<A-w>"),
+    "key_copy_manuscript": ("Copy the manuscript as plain text", "<A-y>"),
+    "key_export": ("Export the manuscript", "<A-e>"),
+    "key_writer_settings": ("This story's settings", "<A-u>"),
+    "key_keycheck": ("Check which keys the terminal sends", "<A-k>"),
+    "key_center": ("Center the line (or selected lines)", "<A-c>"),
+    "key_center2": ("Center the line (second key)", "<C-e>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 

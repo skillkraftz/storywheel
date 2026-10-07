@@ -2,6 +2,15 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## Batch 20 (after 0.18.0)
+
+- Wheel: Past stories has a New button (a fresh draft, asking for a universe) instead of Open; Enter or a click on a story still opens it.
+- Every Writer action has a key that works while typing (Alt+N new scene, Alt+V invisibles, Alt+T typewriter, Alt+L spell, Alt+W word counts,
+  Alt+Y copy manuscript, Alt+E export, Alt+U story settings, Alt+K key check), all changeable in Settings > Keys. The Space keys stay for Vim mode.
+- The Writer help's Keys tab lists each action with its key and its Vim-mode Space key; Writing basics points to it.
+- Alt+C and Ctrl+E center the line (or selected lines), stored as >text< like Fountain; shown centered, exported centered (.docx/.odt/.pdf),
+  centered in plain .txt, a centered block in .md; the markers are not words.
+
 ## 0.18.0 — Batch 18: choosing formats properly, and help that knows the format
 
 - **A real story form.** The Builder's + Story (and `m` on a story, to change it later) is a form of pickers: format (short story, novel,

@@ -166,3 +166,13 @@ def test_a_click_on_a_tab_and_f3_again(script_story):
     assert "Fixed keys" in r["text"]
     r = run(script_story, "", "<F3><F3>", "R.float = vim.api.nvim_win_get_config(0).relative")
     assert r["float"] == ""                                                # (F3 toggles it)
+
+
+def test_the_writer_s_keys_tab_lists_every_action_with_its_vim_key_and_basics_point_to_it():
+    text = helpdoc.tab_text(dict(helpdoc.tabs("writer", "short-story"))["Keys"])[0]
+    flat = " ".join(text.split())
+    for needle in ("Alt+N Add a new scene", "[Vim mode: Space a]", "Alt+C Center the line", "Ctrl+E The same as the center key", "[Vim mode: Space e]",
+                   "Vim mode only", "Space ?", "F3 Open this help"):
+        assert needle in flat, needle
+    basics = " ".join(helpdoc.tab_text(dict(helpdoc.tabs("writer", "short-story"))["Writing basics"])[0].split())
+    assert "see the Keys tab" in basics and "Space a" not in basics and "Space n" not in basics

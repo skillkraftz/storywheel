@@ -368,7 +368,7 @@ def test_shift_end_copies_what_it_selected(home, story):
     assert r["reg"] == "line here"
 
 
-@pytest.mark.parametrize("key", ["<C-u>", "<C-w>", "<C-t>", "<C-d>", "<C-k>", "<C-e>", "<C-n>", "<C-p>", "<C-j>", "<C-l>", "<C-]>",
+@pytest.mark.parametrize("key", ["<C-u>", "<C-w>", "<C-t>", "<C-d>", "<C-k>", "<C-n>", "<C-p>", "<C-j>", "<C-l>", "<C-]>",
                                  "<C-r>x", "<C-^>", "<C-_>", "<C-@>", "<C-\\>"])
 def test_neovims_insert_mode_ctrl_keys_do_nothing_in_notepad_mode(home, story, key):
     setup = "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world', 'second line' })\nvim.api.nvim_win_set_cursor(0, { 1, 11 })"

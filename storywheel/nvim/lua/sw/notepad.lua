@@ -410,6 +410,11 @@ function M.map_buffer(buf)
   map({ "i", "s", "x", "n" }, story.setting("key_sidebar", "<F9>"), function() require("sw.sidebar").toggle() end)
   map({ "i", "s", "x", "n" }, story.setting("key_peek", "<F8>"), function() require("sw.world").peek() end)
   map({ "i", "s", "x", "n" }, story.setting("key_overview", "<C-o>"), function() require("sw.overview").toggle() end)
+  -- center the line (or the selected lines): Alt+C and Ctrl+E (a screenplay centers with > < in its own way: sw.script)
+  local defaults = require("sw.keys_default")
+  for _, name in ipairs({ "key_center", "key_center2" }) do
+    map({ "i", "s", "x", "n" }, story.setting(name, defaults[name]), function() require("sw.prose").center() end)
+  end
 end
 
 -- The right-click menu: only the everyday items, so it fits when lines are tall and the window is short. Everything else is in the Writer

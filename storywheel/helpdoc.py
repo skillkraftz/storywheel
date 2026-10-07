@@ -188,6 +188,13 @@ def binding_rows(mode):
     return rows
 
 
+# The Space keys of Vim mode (notepad mode off), by the setting whose action they repeat; the rest are Vim-only.
+VIM_KEYS = {"key_new_scene": "Space a", "key_invisibles": "Space i", "key_typewriter": "Space t", "key_spell": "Space s", "key_stats": "Space w",
+            "key_copy_manuscript": "Space c", "key_export": "Space e", "key_writer_settings": "Space S", "key_keycheck": "Space k",
+            "key_sidebar": "Space n", "key_peek": "Space p"}
+VIM_ONLY = [("Space ?", "Open this help"), ("]]  [[", "Next and previous scene")]
+
+
 def writer_rows():
     """The Writer's keys: the configurable shortcuts as you set them, then the fixed ones (keys.py), with the descriptions of writer.md."""
     from . import keys, settings
@@ -196,9 +203,16 @@ def writer_rows():
     descs = {}
     for grp in doc.groups:
         descs.update(grp["items"])
-    configurable = [(keys.label(g.get(name) or default), descs.get(name), name) for name, (_label, default) in keys.WRITER_KEYS.items()]
+    configurable = []
+    for name, (_label, default) in keys.WRITER_KEYS.items():
+        desc = descs.get(name)
+        if desc and name in VIM_KEYS:
+            desc += f"   [Vim mode: {VIM_KEYS[name]}]"
+        configurable.append((keys.label(g.get(name) or default), desc, name))
     fixed = [(keys.label(key), descs.get(key), key) for key in keys.RESERVED]
-    return [("Shortcuts you can change (Settings > Keys)", configurable), ("Fixed keys", fixed)]
+    vim = [(k, d, "vim:" + k) for k, d in VIM_ONLY]
+    return [("Shortcuts you can change (Settings > Keys)", configurable), ("Fixed keys", fixed),
+            ("Vim mode only (Settings > Writer > Notepad mode off): each action above also has its Space key, shown in [ ]", vim)]
 
 
 def key_groups(name):

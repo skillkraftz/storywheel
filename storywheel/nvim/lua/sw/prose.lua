@@ -81,6 +81,15 @@ function M.decorate(buf)
         virt_text = chunks,
         virt_text_win_col = math.max(0, math.floor((width - total) / 2)),
       })
+    elseif M.centered_text(line) then
+      -- a centered line (>text<, as in Fountain): shown centered, the markers hidden; display only
+      local inner = M.centered_text(line)
+      local pad = math.max(0, math.floor((width - vim.fn.strdisplaywidth(inner)) / 2))
+      local open_at = line:find(">", 1, true)
+      local close_at = #line - (line:reverse():find("<", 1, true) or 1) + 1
+      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, 0, { virt_text = { { string.rep(" ", pad), "Normal" } }, virt_text_pos = "inline" })
+      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, open_at - 1, { end_row = i - 1, end_col = open_at, conceal = "" })
+      vim.api.nvim_buf_set_extmark(buf, M.ns, i - 1, close_at - 1, { end_row = i - 1, end_col = close_at, conceal = "" })
     elseif line:match("%S") then
       -- every line is a paragraph: it gets the indent, and (if asked for) a visual gap before the next paragraph line
       if indent_on then
@@ -96,6 +105,40 @@ function M.decorate(buf)
       end
     end
   end
+end
+
+-- --- centered lines ---------------------------------------------------------------------------------------
+
+-- ">text<" (Fountain's centered text) -> "text"; anything else -> nil.
+function M.centered_text(line)
+  local inner = line:match("^%s*>%s*(.-)%s*<%s*$")
+  if inner and inner ~= "" then return inner end
+end
+
+-- Alt+C / Ctrl+E: toggle the current line, or every selected line, between centered (>text<) and left. Scene markers and blank lines are left alone.
+function M.center()
+  local notepad = require("sw.notepad")
+  local first = vim.api.nvim_win_get_cursor(0)[1]
+  local last = first
+  if notepad.has_selection() then
+    local r1, _, r2 = M.selection_bounds()
+    first, last = r1 + 1, r2 + 1
+  end
+  local lines = vim.api.nvim_buf_get_lines(0, first - 1, last, false)
+  local util = require("sw.util")
+  local todo, all_centered = {}, true
+  for i, l in ipairs(lines) do
+    if l:match("%S") and util.marker_label(l) == nil then
+      todo[#todo + 1] = i
+      if not M.centered_text(l) then all_centered = false end
+    end
+  end
+  for _, i in ipairs(todo) do
+    local l = lines[i]
+    lines[i] = all_centered and M.centered_text(l) or (M.centered_text(l) and l or (">" .. l:match("^%s*(.-)%s*$") .. "<"))
+  end
+  vim.api.nvim_buf_set_lines(0, first - 1, last, false, lines)
+  M.decorate(vim.api.nvim_get_current_buf())
 end
 
 -- --- italic and bold -----------------------------------------------------------------------------------
