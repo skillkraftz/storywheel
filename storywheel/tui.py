@@ -765,7 +765,7 @@ class MainScreen(KeptScreen, Screen):
                     box.border_title = "Past stories"
                     yield StoryList(id="stories")
                     with Horizontal(id="story-buttons"):
-                        yield _quiet(Button("Open", id="st-open"))
+                        yield _quiet(Button("New", id="st-new"))
                         yield _quiet(Button("Del", id="st-delete"))
                         yield _quiet(Button("Promote", id="st-promote"))
                     with Horizontal(id="story-buttons2"):
@@ -972,6 +972,8 @@ class MainScreen(KeptScreen, Screen):
 
     def story_act(self, action):
         """Open, delete, or send the protagonist / setting of the highlighted past story."""
+        if action == "new":
+            return self.action_new_draft()
         i = self.stories_list.highlighted
         option = self.stories_list.get_option_at_index(i) if i is not None else None
         if option is None or not option.id:

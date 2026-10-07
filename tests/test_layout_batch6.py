@@ -39,8 +39,8 @@ def test_the_wheels_left_column_is_three_boxes_each_with_a_title(home):
         boxes = [s.query_one(f"#{i}") for i in ("steps-box", "uni-box", "stories-box")]
         return ([b.border_title for b in boxes], [b.region.y for b in boxes], [b.region.height for b in boxes],
                 s.query_one("#uni-box").region.contains_region(s.query_one("#uni-mode").region),
-                s.query_one("#stories-box").region.contains_region(s.query_one("#st-open").region),
-                s.query_one("#st-open").region.y > s.query_one("#stories").region.y)
+                s.query_one("#stories-box").region.contains_region(s.query_one("#st-new").region),
+                s.query_one("#st-new").region.y > s.query_one("#stories").region.y)
     titles, ys, heights, mode_inside, buttons_inside, buttons_under = run_tui(store.new_story(), make_engine(home), script, size=(190, 50))
     assert titles[0] == "Steps" and titles[1].startswith("Universes to draw from") and titles[2] == "Past stories"
     assert ys == sorted(ys) and len(set(ys)) == 3 and all(h >= 4 for h in heights)

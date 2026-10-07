@@ -504,3 +504,28 @@ def test_new_draft_asks_for_a_universe_and_keeps_the_old_draft(home):
     assert first == "ChoiceScreen" and new_id != old["id"] and home_slug == "beta"
     ids = {s["id"] for s in store.all_stories()}
     assert old["id"] in ids and new_id in ids
+
+
+def test_past_stories_has_a_new_button_and_enter_still_opens(home):
+    from conftest import make_engine, run_tui
+    from storywheel import store, vault
+    vault.create_universe("Alpha", ["noir"])
+    old = store.new_story()
+    old["id"] = "20200101-000000"
+    old["kept"] = {"genre": {"genre": "noir", "mood": "grim"}}
+    store.save_draft(old)
+    async def script(app, pilot):
+        assert not list(app.screen.query("#st-open"))
+        await pilot.click("#st-new")
+        await pilot.pause()
+        asked = type(app.screen).__name__
+        await pilot.press("enter")
+        await pilot.pause()
+        fresh = app.session.story["id"]
+        app.screen.stories_list.focus()
+        app.screen.stories_list.highlighted = 0
+        await pilot.press("enter")
+        await pilot.pause()
+        return asked, fresh, app.session.story["id"]
+    asked, fresh, reopened = run_tui(old, make_engine(home), script)
+    assert asked == "ChoiceScreen" and fresh != old["id"] and reopened in {s["id"] for s in store.all_stories()}
