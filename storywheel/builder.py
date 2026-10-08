@@ -1809,20 +1809,35 @@ class BuilderHooks:
         return self.ratings.rate(f"universe:{universe.slug}", entity.type, key, str(text), value, frame, atoms,
                                  title=universe.name)
 
+    def story_or_ask(self, screen, verb, then):
+        """Write, Export and Copy act on the open story. With none open, never guess: ask which (a short list), or say there is none."""
+        if screen.story is not None:
+            return then(screen.story)
+        stories = screen.universe.stories() if screen.universe is not None else []
+        if not stories:
+            screen.say(f"Open a story first (left column): there is no story to {verb}" +
+                       (" in this universe yet. Promote one from the Wheel, or add one with +Story." if screen.universe is not None else " yet."))
+            return
+
+        def picked(slug):
+            if not slug:
+                return
+            story = next(s for s in stories if s.slug == slug)
+            screen.story = story
+            screen.refresh_all()
+            then(story)
+        self.push_screen(ChoiceScreen(f"No story is open. Which story do you want to {verb}?", [(s.title, s.slug) for s in stories]), picked)
+
     def open_writer(self, screen, scene=None):
         """Suspend this app, run Neovim on the story (at a scene, if one is given), and come back to exactly where we were."""
+        self.story_or_ask(screen, "write", lambda story: self._open_writer(screen, story, scene))
+
+    def _open_writer(self, screen, story, scene):
         from . import writer
-        story = screen.story
-        if story is None and screen.universe is not None and screen.universe.stories():
-            story = screen.universe.stories()[0]
-        if story is None:
-            screen.say("This universe has no story to write yet. Promote one from the Wheel (leave it with q).")
-            return
         problem = writer.check()
         if problem:
             screen.say(problem)
             return
-        screen.story = story
         story.manuscript_dir.mkdir(parents=True, exist_ok=True)
         note = writer.kitty_note(story)
         if self.state_store is not None:
@@ -1843,14 +1858,10 @@ class BuilderHooks:
 
     def export(self, screen, fmt=None):
         """Export the open story's manuscript (a format chosen from a list, unless given)."""
+        self.story_or_ask(screen, "export", lambda story: self._export(screen, story, fmt))
+
+    def _export(self, screen, story, fmt):
         from . import export as exporter
-        story = screen.story
-        if story is None and screen.universe is not None and screen.universe.stories():
-            story = screen.universe.stories()[0]
-        if story is None:
-            screen.say("This universe has no story to export yet.")
-            return
-        screen.story = story
         if fmt is None and story.is_screenplay():
             options = [("Script (.pdf): standard screenplay pages", "pdf"), ("Script (.pdf), anonymous: no name or contact", "pdf-anon"),
                        ("Final Draft (.fdx)", "fdx"), ("Fountain (.fountain): the script as plain text", "fountain")]
@@ -1878,13 +1889,10 @@ class BuilderHooks:
         screen.last_export = result
 
     def copy_manuscript(self, screen):
+        self.story_or_ask(screen, "copy", lambda story: self._copy_manuscript(screen, story))
+
+    def _copy_manuscript(self, screen, story):
         from . import clipboard, export as exporter
-        story = screen.story
-        if story is None and screen.universe is not None and screen.universe.stories():
-            story = screen.universe.stories()[0]
-        if story is None:
-            screen.say("This universe has no story to copy.")
-            return
         text = exporter.plain_text(story)
         if not text.strip():
             screen.say("The manuscript is empty, so there is nothing to copy.")

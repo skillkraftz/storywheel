@@ -925,3 +925,123 @@ def test_14_a_and_l_agree_in_lookup(index, world):
         return learn.MyWords().learning_words()
     got = words_run(script, {"universe": "thornwood", "story": s.slug})
     assert "puppy" in got and "tail" in got
+
+
+# --- 15. Builder: Write, Export and Copy never quietly take the first story -----------------------------------------------------
+
+def _two_stories(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    a = u.new_story("Alpha Story")
+    a.add_scene("Opening", "Alpha words here.")
+    b = u.new_story("Beta Story")
+    b.add_scene("Opening", "Beta words are different.")
+    return u, a, b
+
+
+def _overview_run(script):
+    async def go():
+        app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="thornwood", story=None)
+        async with app.run_test(size=(200, 50)) as pilot:
+            await pilot.pause()
+            s = app.screen_ref
+            await pilot.press("o")                                     # the universe overview: no story is open
+            await pilot.pause()
+            assert s.story is None
+            return await script(app, pilot)
+    return asyncio.run(go())
+
+
+def test_15_c_with_no_story_open_asks_which_and_copies_that_one(home, monkeypatch):
+    from storywheel import clipboard
+    copied = []
+    monkeypatch.setattr(clipboard, "copy", lambda text, app=None: copied.append(text) or "test clipboard")
+    _two_stories(home)
+
+    async def script(app, pilot):
+        await pilot.press("C")
+        await pilot.pause()
+        asked = type(app.screen).__name__, app.screen.title_text if hasattr(app.screen, "title_text") else ""
+        assert copied == []                                             # nothing was copied yet
+        await pilot.press("down", "enter")                              # the second story
+        await pilot.pause()
+        return asked
+    asked = _overview_run(script)
+    assert asked[0] == "ChoiceScreen" and "Which story" in asked[1]
+    assert len(copied) == 1 and "Beta words" in copied[0] and "Alpha words" not in copied[0]
+
+
+def test_15_escape_on_the_question_does_nothing(home, monkeypatch):
+    from storywheel import clipboard
+    copied = []
+    monkeypatch.setattr(clipboard, "copy", lambda text, app=None: copied.append(text) or "x")
+    _two_stories(home)
+
+    async def script(app, pilot):
+        await pilot.press("C")
+        await pilot.pause()
+        await pilot.press("escape")
+        await pilot.pause()
+        return type(app.screen).__name__, app.screen_ref.story
+    screen, story = _overview_run(script)
+    assert copied == [] and story is None and screen != "ChoiceScreen"
+
+
+def test_15_x_with_no_story_open_asks_which_before_offering_formats(home):
+    _two_stories(home)
+
+    async def script(app, pilot):
+        await pilot.press("x")
+        await pilot.pause()
+        first = app.screen.title_text
+        await pilot.press("enter")                                      # the first story
+        await pilot.pause()
+        second = app.screen.title_text if hasattr(app.screen, "title_text") else ""
+        return first, second, app.screen_ref.story.title
+    first, second, title = _overview_run(script)
+    assert "Which story" in first and "Export 'Alpha Story' as" in second and title == "Alpha Story"
+
+
+def test_15_w_with_no_story_open_asks_which_and_writes_that_one(home, monkeypatch):
+    _two_stories(home)
+    calls = []
+    monkeypatch.setattr(writer, "check", lambda: None)
+    monkeypatch.setattr(builder.BuilderHooks, "run_writer", lambda self, screen, story, scene, note: calls.append(story.slug))
+
+    async def script(app, pilot):
+        await pilot.press("w")
+        await pilot.pause()
+        assert calls == [] and type(app.screen).__name__ == "ChoiceScreen"
+        await pilot.press("down", "enter")
+        await pilot.pause()
+    _overview_run(script)
+    assert calls == ["beta-story"]
+
+
+def test_15_with_no_stories_at_all_it_says_so(home):
+    vault.create_universe("Empty", ["western"])
+
+    async def go():
+        app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="empty", story=None)
+        async with app.run_test(size=(200, 50)) as pilot:
+            await pilot.pause()
+            await pilot.press("C")
+            await pilot.pause()
+            return type(app.screen).__name__, " ".join(screen_text(app).split())
+    screen, text = asyncio.run(go())
+    assert screen != "ChoiceScreen" and "Open a story first" in text
+
+
+def test_15_with_a_story_open_nothing_is_asked(home, monkeypatch):
+    from storywheel import clipboard
+    copied = []
+    monkeypatch.setattr(clipboard, "copy", lambda text, app=None: copied.append(text) or "x")
+    _two_stories(home)
+
+    async def go():
+        app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="thornwood", story="alpha-story")
+        async with app.run_test(size=(200, 50)) as pilot:
+            await pilot.pause()
+            await pilot.press("C")
+            await pilot.pause()
+            return type(app.screen).__name__
+    assert asyncio.run(go()) != "ChoiceScreen" and "Alpha words" in copied[0]

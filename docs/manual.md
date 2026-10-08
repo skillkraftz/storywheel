@@ -286,7 +286,8 @@ own word lists in its `lists` folder; Words can add words to them.
 In the Outline, **`f` rolls the beat under the cursor again** (the way `A` rolls a new one), and **`e` or right-click edits** a row. The
 entity keys (Space, `R`, `+`/`-`, `n`, `d`, `r`, `c`) do nothing there except say so; they belong to the cards. (Fixed: ISSUES #3.)
 
-> With no story open, Write (`w`), Export (`x`) and Copy (`C`) quietly use the universe's first story. Open the story first. (ISSUES #15.)
+With no story open (the universe overview), Write (`w`), Export (`x`) and Copy (`C`) ask which story you mean (a short list; Esc
+cancels), or say "Open a story first" when the universe has none. (Fixed: ISSUES #15.)
 
 ### Writing, exporting, copying, backups
 

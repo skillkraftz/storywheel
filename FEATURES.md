@@ -133,8 +133,8 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Delete | button, `d` in the list | Delete a universe (asks; to .trash) | test_builder.py | works | P |
 | **Stories** list | Enter or click opens the story | The universe's stories (titles only) | test_builder_layout.py | works | P |
 | +Story | button, `T` | Story form: title, format, structure, genres, target | test_storyform.py, test_builder_layout.py | works | P |
-| Write | button, `w` | Open the story in the Writer | test_switching.py | works | R |
-| Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it silently uses the first story (ISSUES #15) | P |
+| Write | button, `w` | Open the story in the Writer | test_switching.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | R |
+| Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | P |
 | Backups… | button, `b` in the list | List and restore backups (asks; current version kept aside) | test_backups.py | works | P |
 | Format, structure… | `m` (in the list or anywhere) | Story form for the open story | test_storyform.py | works | P |
 | Delete story | `d` in the Stories list | Delete a story (asks; to .trash) | test_builder.py | works | R |
@@ -180,7 +180,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | `S` Story settings | Font, column width, daily goal, header keyword, indent, typewriter, invisibles, spellcheck, region (typed as text, "true/false") | test_builder.py | **duplicated** with Settings, and free text where Settings has switches (ISSUES #20) | P |
 | `G` Your details | Legal name, byline, address, email, phone | test_builder.py | **duplicated** with Settings > You (no surname field here) (ISSUES #20) | P |
 | `F` Fix names | Names in the wrong capitals, with a preview | test_names.py | works | P |
-| `C` Copy manuscript | Plain text to the clipboard | test_ui_pass.py | works; with no story open, copies the first story (ISSUES #15) | P |
+| `C` Copy manuscript | Plain text to the clipboard | test_ui_pass.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | P |
 | `P` Start the script | A screenplay's script.fountain from the outline | test_builder_layout.py, test_screenplay.py | works; the message for a prose story names the wrong key (ISSUES #19) | P |
 | Rename preview | Enter toggles, `a` all, `n` none, `p` replace, Esc rename only | test_builder.py | works | R |
 | Backups dialog | Up/Down, preview, `r` / Enter restore (asks), `q` close | test_backups.py | works | P |
