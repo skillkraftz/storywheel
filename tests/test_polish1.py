@@ -578,3 +578,35 @@ def test_8_confirming_the_quit_boxs_delete_moves_the_draft_to_the_trash(home):
     trash = home / "home" / ".trash"
     assert not (home / "home" / "stories" / f"{mine['id']}.json").exists() and (trash / f"{mine['id']}.json").exists()
     assert message and "Deleted" in message and ".trash" in message
+
+
+# --- 9. the status line counts the writing window, not the float you are in ----------------------------------------------------
+
+import re  # noqa: E402
+
+
+def _scene_words(t):
+    row = next(l for l in t.lines() if "in this scene" in l)
+    return int(re.search(r"in this scene (\d+)", row).group(1))
+
+
+@pty_only
+def test_9_real_terminal_floats_do_not_change_the_words_in_this_scene(home, term_story):
+    t = Term(term_story)
+    try:
+        base = _scene_words(t)
+        assert base == 4                                              # "The gate was shut."
+        for open_key, close_key in (("F3", "F3"), ("Ctrl+O", "Esc"), ("Ctrl+R", "Esc"), ("F12", "Esc")):
+            t.key(open_key, wait=0.8)
+            assert _scene_words(t) == base, open_key
+            t.key(close_key, wait=0.5)
+        t.send("x y z ")                                            # and it still counts what you type
+        assert _scene_words(t) == base + 3
+    finally:
+        t.close()
+
+
+def test_9_the_count_is_the_writing_windows_even_when_a_float_is_current(home, two):
+    r = drive(two, [keys("<F3>"), keys("<Cmd>lua vim.wait(300)<CR>")],
+              "R.line = require('sw.stats').line(); R.float_current = vim.api.nvim_win_get_config(0).relative ~= ''")
+    assert r["float_current"] is True and "in this scene 4 " in r["line"]

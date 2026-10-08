@@ -37,8 +37,15 @@ function M.manuscript()
 end
 
 -- Words in the scene the cursor is in (a scene runs from one marker line to the next).
+-- The buffer in the writing window, whatever window has the focus (a help, outline or find float must not be counted as "this scene").
+local function main_buf()
+  local layout = require("sw.layout")
+  if layout.main and vim.api.nvim_win_is_valid(layout.main) then return vim.api.nvim_win_get_buf(layout.main) end
+  return vim.api.nvim_get_current_buf()
+end
+
 function M.scene(buf)
-  buf = buf or vim.api.nvim_get_current_buf()
+  buf = buf or main_buf()
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local win = vim.fn.bufwinid(buf)
   local row = (win ~= -1) and vim.api.nvim_win_get_cursor(win)[1] or 1
@@ -149,7 +156,7 @@ end
 function M.refresh()
   M.scene_cached = M.scene()
   M.total_cached = M.manuscript()
-  local buf = vim.api.nvim_get_current_buf()
+  local buf = main_buf()
   local script = require("sw.script")
   M.pages_cached = script.is_script(buf) and script.status(buf) or nil
   vim.cmd("redrawstatus")
