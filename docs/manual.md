@@ -627,7 +627,7 @@ Most writers never need these; they are for scripts and for checking things.
 | `storywheel` | Opens where you left off |
 | `storywheel --plain` | The Wheel as a simple prompt |
 | `storywheel new` / `wheel` / `resume [N]` | The Wheel on a new draft / the last one / draft N |
-| `storywheel builder` / `settings` / `writer UNIVERSE STORY` | Open that mode |
+| `storywheel builder` / `settings` / `writer UNIVERSE STORY` | Open that mode (full screen: they refuse to start without a terminal) |
 | `storywheel list` / `show [N]` | Wheel drafts / one as plain text (`--json` for both) |
 | `storywheel export N --out DIR` | Copy a draft's markdown somewhere |
 | `storywheel promote N --new NAME` (or `--universe SLUG`, `--dry-run`) | Bring a draft into a universe |

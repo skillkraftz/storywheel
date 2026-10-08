@@ -451,3 +451,18 @@ def test_31_an_old_screenplay_default_shows_as_a_feature_film_and_a_new_story_in
     st = settings.load_story(story.path)
     assert st["format"] == "screenplay" and st["script_kind"] == "short-film"
     assert formats.from_setting(st["format"], st["script_kind"]) == "short-film"
+
+
+# --- 32. the full-screen commands refuse to start without a terminal ---------------------------------------------------------------------
+
+@pytest.mark.parametrize("args", [["builder"], ["settings"], ["writer"], ["writer", "thornwood", "the-last-clause"]])
+def test_32_full_screen_commands_without_a_terminal_say_so_and_print_no_escape_codes(home, ann, args):
+    import os
+    import subprocess
+    import sys
+    from test_notepad import ROOT
+    res = subprocess.run([sys.executable, "-m", "storywheel", *args], stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=60,
+                         env={**os.environ, "PYTHONPATH": str(ROOT)})
+    assert res.returncode != 0
+    assert "needs a terminal" in res.stderr and f"storywheel {args[0]}" in res.stderr
+    assert "\x1b" not in res.stdout and "\x1b" not in res.stderr and res.stdout.strip() == ""

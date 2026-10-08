@@ -347,8 +347,16 @@ def cmd_promote(args):
         print("\n".join("  " + l for l in report))
 
 
+def need_terminal(what, instead):
+    """Refuse to start a full-screen program when stdin or stdout is not a terminal: it would print escape codes and wait for keys."""
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        return
+    sys.exit(f"storywheel {what} is a full-screen program and needs a terminal. For scripts use {instead}.")
+
+
 def cmd_writer(args):
     from . import modes
+    need_terminal("writer", "`storywheel manuscript text UNIVERSE/STORY`, `story show UNIVERSE/STORY --json`")
     from .cli import get_engine, get_ratings
     modes.run(("writer", {"universe": args.universe, "story": args.story}), get_engine, get_ratings)
 
@@ -633,12 +641,14 @@ def cmd_migrate(args):
 
 def cmd_settings(args):
     from . import modes
+    need_terminal("settings", "`storywheel --version` and the files in ~/.storywheel (settings.toml)")
     from .cli import get_engine, get_ratings
     modes.run(("settings", {"back": "builder" if vault.list_universes() else "wheel"}), get_engine, get_ratings)
 
 
 def cmd_builder(args):
     from . import builder, state
+    need_terminal("builder", "`storywheel universes`, `entity list UNIVERSE --json` and `story list --json`")
     from .cli import get_ratings
     for line in migrate.migrate_universe_json() + migrate.migrate_manuscripts() + migrate.migrate_exports() + migrate.migrate_sync_links() + migrate.migrate_settings():
         print("  " + line)
