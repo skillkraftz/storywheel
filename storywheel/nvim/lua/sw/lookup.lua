@@ -59,8 +59,16 @@ function M.fetch(word)
   local out = vim.fn.system(util.cli({ "lookup", word, "--json" }))
   local ok, data = pcall(vim.json.decode, out)
   if not ok or type(data) ~= "table" then return nil, "The dictionary lookup failed (is storywheel installed for python3?)." end
+  if data.installed == false then return nil, "No dictionary yet: run  storywheel dictionary install" end
   if data.error then return nil, data.error end
   return data
+end
+
+-- A problem with a lookup, as one line that fits the screen (a longer message wraps mid-word and waits for Enter).
+function M.warn(err)
+  local room = math.max(20, vim.o.columns - 12)
+  if vim.fn.strdisplaywidth(err) > room then err = vim.fn.strcharpart(err, 0, room - 1) .. "…" end
+  vim.api.nvim_echo({ { err, "WarningMsg" } }, true, {})
 end
 
 local function nz(v)
@@ -416,7 +424,7 @@ end
 function M.lookup(word, from_history)
   local result, err = M.fetch(word)
   if not result then
-    vim.api.nvim_echo({ { err, "WarningMsg" } }, true, {})
+    M.warn(err)
     return false
   end
   ensure_window()
@@ -465,7 +473,7 @@ function M.show(word, target, origin_text)
   M.origin = nil
   local first, err = M.fetch(word)
   if not first then
-    vim.api.nvim_echo({ { err, "WarningMsg" } }, true, {})
+    M.warn(err)
     return false
   end
   -- what form the original is in (running = the -ing form of run), for putting a replacement in the same form

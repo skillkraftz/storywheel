@@ -295,3 +295,20 @@ def test_27_real_terminal_the_replace_forms_hints_are_not_cut(home, term_story, 
         assert hint in " ".join(bottom[0].split()), bottom
     finally:
         t.close()
+
+
+# --- 28. F7 without the dictionary: one short line, no wait for Enter ------------------------------------------------------------------
+
+@pty_only
+def test_28_real_terminal_f7_without_the_dictionary_says_so_on_one_line_and_does_not_wait(home, term_story, tmp_path):
+    t = Term(term_story, rows=30, cols=100, env_extra={"STORYWHEEL_DICTIONARY": str(tmp_path / "none.sqlite")})
+    try:
+        t.key("Ctrl+Home")
+        t.key("F7", wait=3.0)
+        text = t.text()
+        assert any("No dictionary yet: run  storywheel dictionary install" in l for l in t.lines()), text
+        assert "Press ENTER" not in text and "hit-enter" not in text
+        t.send("x", wait=0.5)                                          # nothing is waiting: typing goes into the story
+        assert any(l.strip().startswith("x") or " x" in l for l in t.lines() if "gate" in l or l.strip().startswith("x")), text
+    finally:
+        t.close()
