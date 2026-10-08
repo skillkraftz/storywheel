@@ -394,7 +394,7 @@ other float opens no menu. (Fixed: ISSUES #2.)
 
 ### Looking things up while you write
 
-- **Peek (F8):** a card with the character or place under the cursor; it closes when you move.
+- **Peek (F8):** a card with the character or place under the cursor; it closes when you move. F8 again lets you scroll a long card.
 - **Story outline (Ctrl+O):** the title, premise, every beat, the twist, the protagonist, the setting and the rumor in a floating
   window. Scroll it; Esc, `q` or Ctrl+O close it.
 - **Dictionary card (F7 on a word, F6 for a word you type):** meanings, similar words and opposites. Enter looks up the word under
@@ -415,8 +415,9 @@ The help's tab bar shows every tab's name (shortened to fit a narrow window, dow
 window's bottom border; headings are coloured, not underlined with dashes. The outline's wrapped beats hang under their text, its
 protagonist's values line up, the rumor starts with a capital, and the window is as tall as the wrapped text needs. (Fixed: ISSUES #7.)
 
-> **Watch out:** the peek card lists fields A to Z and cuts the last ones off. The text is all there; it is only laid out badly.
-> (ISSUES #12.)
+The peek card lists the fields in the card's own order (name, role, age, job, trait, want...), is as tall as its wrapped text needs, and,
+if that is taller than the window, **F8 a second time** takes the focus so you can scroll it (arrows, PageUp/PageDown or the wheel); Esc,
+`q` or F8 closes it and you are typing again. (Fixed: ISSUES #12.)
 
 ### Find and replace: Ctrl+R
 

@@ -70,9 +70,14 @@ end
 function M.card_lines(e)
   local lines = { string.format("%s  (%s)", e.name, e.type), string.rep("─", 40) }
   local labels = e.labels or {}
-  local order = {}
-  for k in pairs(e.fields or {}) do order[#order + 1] = k end
-  table.sort(order)
+  local order, seen = {}, {}
+  for _, k in ipairs(e.order or {}) do                       -- the schema's own order (name, role, age, job...); then anything else, A to Z
+    if (e.fields or {})[k] ~= nil then order[#order + 1] = k seen[k] = true end
+  end
+  local rest = {}
+  for k in pairs(e.fields or {}) do if not seen[k] then rest[#rest + 1] = k end end
+  table.sort(rest)
+  vim.list_extend(order, rest)
   for _, k in ipairs(order) do
     local v = (e.display or {})[k] or e.fields[k]
     if type(v) == "table" then v = table.concat(v, ", ") end
@@ -80,7 +85,9 @@ function M.card_lines(e)
       lines[#lines + 1] = string.format("%s: %s", labels[k] or k, v)
     end
   end
-  for k, v in pairs(e.custom or {}) do lines[#lines + 1] = string.format("%s: %s", k, v) end
+  local custom = vim.tbl_keys(e.custom or {})
+  table.sort(custom)
+  for _, k in ipairs(custom) do lines[#lines + 1] = string.format("%s: %s", k, e.custom[k]) end
   local notes = e.notes or ""
   if e.type == "note" then notes = (e.fields or {}).body or notes end
   if notes ~= "" then
@@ -93,8 +100,36 @@ function M.card_lines(e)
   return lines
 end
 
--- A read-only floating card for the name under the cursor.
+-- A read-only floating card for the name under the cursor. It closes when you move; F8 again takes the focus, so a long card can be
+-- scrolled (Esc, q or F8 closes it then).
+function M.peek_close()
+  local p = M.last_peek
+  if not p then return end
+  for _, id in ipairs(p.autocmds or {}) do pcall(vim.api.nvim_del_autocmd, id) end
+  local had_focus = p.focused or vim.api.nvim_get_current_win() == p.win
+  if vim.api.nvim_win_is_valid(p.win) then vim.api.nvim_win_close(p.win, true) end
+  M.last_peek = nil
+  local layout = require("sw.layout")
+  if had_focus and layout.main and vim.api.nvim_win_is_valid(layout.main) then            -- it had the focus: back to the writing window, typing
+    vim.api.nvim_set_current_win(layout.main)
+    require("sw.notepad").insert(true)
+  end
+end
+
 function M.peek()
+  local p = M.last_peek
+  if p and vim.api.nvim_win_is_valid(p.win) then                 -- F8 again: take the focus, to scroll
+    for _, id in ipairs(p.autocmds or {}) do pcall(vim.api.nvim_del_autocmd, id) end
+    p.autocmds = {}
+    vim.cmd("stopinsert")
+    vim.api.nvim_set_current_win(p.win)
+    p.focused = true
+    local function map(lhs) vim.keymap.set("n", lhs, function() M.peek_close() end, { buffer = p.buf, nowait = true, silent = true }) end
+    map("q")
+    map("<Esc>")
+    map(story.setting("key_peek", "<F8>"))
+    return p.entity
+  end
   local e = M.at_cursor()
   if not e then
     vim.api.nvim_echo({ { "No character, place or thing from this universe under the cursor.", "Normal" } }, false, {})
@@ -106,16 +141,21 @@ function M.peek()
   vim.bo[buf].modifiable = false
   local width = 10
   for _, l in ipairs(lines) do width = math.max(width, math.min(70, vim.fn.strdisplaywidth(l))) end
+  local most = math.max(5, math.floor(vim.o.lines * 0.6))
   local win = vim.api.nvim_open_win(buf, false, {
-    relative = "cursor", row = 1, col = 0, width = width + 2, height = math.min(#lines, 24),
-    style = "minimal", border = "rounded", focusable = false,
+    relative = "cursor", row = 1, col = 0, width = width + 2, height = most,
+    style = "minimal", border = "rounded", title = " F8 again to scroll ", title_pos = "right",
   })
   vim.wo[win].wrap = true
-  local function close()
-    if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
+  vim.wo[win].linebreak = true
+  local rows = vim.api.nvim_win_text_height(win, {}).all             -- screen rows, wrapped lines included
+  vim.api.nvim_win_set_height(win, math.min(math.max(rows, 1), most))
+  local group = vim.api.nvim_create_augroup("sw_peek", { clear = true })
+  local ids = {}
+  for _, ev in ipairs({ "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" }) do
+    ids[#ids + 1] = vim.api.nvim_create_autocmd(ev, { group = group, once = true, callback = function() M.peek_close() end })
   end
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter", "BufLeave" }, { once = true, callback = close })
-  M.last_peek = { win = win, buf = buf, lines = lines }
+  M.last_peek = { win = win, buf = buf, lines = lines, entity = e, autocmds = ids }
   return e
 end
 

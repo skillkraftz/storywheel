@@ -7,7 +7,7 @@ key_bold: Bold: wraps the selection or toggles at the cursor (Ctrl+B always work
 key_scene_break: Insert a scene break (a line holding only ***, shown centered)
 key_menu: Open the Writer menu: export, sidebar, toggles, settings, help
 key_sidebar: Show or hide the scenes sidebar (Enter jumps, a adds, r renames, J and K move)
-key_peek: Peek at the character or place under the cursor
+key_peek: Peek at the character or place under the cursor (again: scroll a long card)
 key_overview: Show the story outline (title, premise, beats, twist, protagonist, setting, rumor)
 key_builder: Save and go back to the Builder
 key_replace: Find and replace in this file

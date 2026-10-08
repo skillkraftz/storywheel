@@ -740,3 +740,80 @@ def test_11_real_terminal_a_marker_at_the_very_end_gets_an_empty_line_to_type_on
         t.close()
     lines = text.splitlines()
     assert "* * * The End" in lines and any(l.endswith("ok") for l in lines) and not any("ok" in l and "* *" in l for l in lines)
+
+
+# --- 12. peek (F8): the schema's field order, nothing cut off, and F8 again to scroll ------------------------------------------
+
+@pytest.fixture
+def peek_story(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    u.new_entity("character", "Ann Lowell", {
+        "role": "protagonist", "age": "52", "job": "teacher", "trait": "stubborn", "want": "the deed to the schoolhouse",
+        "need": "to trust her neighbours", "flaw": "pride",
+        "secret": "she forged her own father's signature on the deed in the year of the drought, and has kept the pen ever since in a drawer "
+                  "under the stove where nobody would ever think to look for it",
+        "rival": "the sheriff"})
+    s = u.new_story("The Last Clause")
+    s.add_scene("Opening", "Ann Lowell")
+    settings.save_story(s.path, {"spellcheck": False})
+    return s
+
+
+def _field_rows(t):
+    lines = t.lines()
+    out = {}
+    for label in ("Role", "Age", "Job", "Trait", "Want", "Need", "Flaw", "Secret", "Rival"):
+        for i, l in enumerate(lines):
+            if f"{label}:" in l and "Ann Lowell" not in l:
+                out[label] = i
+                break
+    return out
+
+
+def test_12_entity_list_json_carries_the_schema_order(home, peek_story):
+    import json
+    import subprocess
+    import sys
+    out = subprocess.run([sys.executable, "-m", "storywheel", "entity", "list", "thornwood", "--json"], capture_output=True, text=True,
+                         env={**os.environ, "PYTHONPATH": str(ROOT)}).stdout
+    ann = json.loads(out)[0]
+    assert ann["order"][:5] == ["name", "role", "age", "job", "trait"]
+
+
+@pty_only
+def test_12_real_terminal_peek_lists_fields_in_the_schema_order_and_shows_want(home, peek_story):
+    t = Term(peek_story, rows=40, cols=100)
+    try:
+        t.key("Ctrl+Home")
+        t.key("Down", wait=0.3)
+        t.key("Down", wait=0.3)
+        t.key("Right", wait=0.3)
+        t.key("F8", wait=0.8)
+        rows = _field_rows(t)
+        assert list(rows) == ["Role", "Age", "Job", "Trait", "Want", "Need", "Flaw", "Secret", "Rival"], rows       # all there, none cut off
+        assert list(rows.values()) == sorted(rows.values())                                                          # in the schema's order
+    finally:
+        t.close()
+
+
+@pty_only
+def test_12_real_terminal_a_card_taller_than_the_window_scrolls_after_a_second_f8(home, peek_story):
+    t = Term(peek_story, rows=16, cols=60)
+    try:
+        t.key("Ctrl+Home")
+        t.key("Down", wait=0.3)
+        t.key("Down", wait=0.3)
+        t.key("Right", wait=0.3)
+        t.key("F8", wait=0.8)
+        assert "Role:" in t.text() and "Rival:" not in t.text()          # too tall for the window: the end is cut off...
+        t.key("F8", wait=0.6)                                              # ...so F8 again takes the focus
+        for _ in range(12):
+            t.key("Down", wait=0.15)
+        assert "Rival:" in t.text()                                        # and scrolling reaches it
+        t.key("Esc", wait=0.5)
+        assert "Rival:" not in t.text()
+        t.send("x")
+        line = next(l for l in t.lines() if "Lowell" in l)
+        assert "x" in line and len(line.strip()) == len("Ann Lowell") + 1                                # typing goes on: x was typed, not a delete
+    finally:
+        t.close()

@@ -26,6 +26,7 @@ def entity_json(e, universe=None):
                 shown[f["key"]] = ", ".join((universe.resolve(x).name if universe.resolve(x) else x) for x in v)
         out["display"] = shown
         out["labels"] = {f["key"]: f["label"] for f in schemas.get(e.type)["fields"]}
+        out["order"] = [f["key"] for f in schemas.get(e.type)["fields"]]          # the schema's order, for the peek card
     if e.type == "note":
         out["notes"] = e.fields.get("body", "")
     return out
