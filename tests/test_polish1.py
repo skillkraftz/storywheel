@@ -383,3 +383,33 @@ def test_4_real_terminal_the_writer_shows_the_title_in_the_status_line(home, ter
         assert "The Last Clause" in title            # the terminal window title too
     finally:
         t.close()
+
+
+# --- 5. no paragraph indent in the Writer's floats ----------------------------------------------------------------------
+
+FLOAT_MARKS = """
+R.floats = {}
+R.main_marks = 0
+for _, w in ipairs(vim.api.nvim_list_wins()) do
+  local b = vim.api.nvim_win_get_buf(w)
+  local n = #vim.api.nvim_buf_get_extmarks(b, require('sw.prose').ns, 0, -1, {})
+  if w == require('sw.layout').main then R.main_marks = n
+  elseif vim.api.nvim_win_get_config(w).relative ~= '' then R.floats[#R.floats + 1] = { n = n, lines = #vim.api.nvim_buf_get_lines(b, 0, -1, false) } end
+end
+"""
+
+
+@pytest.mark.parametrize("key", ["<F3>", "<C-o>", "<F12>", "<C-r>", "<F8>"])
+def test_5_floats_get_no_paragraph_indent(home, two, key):
+    steps = [keys(key), keys("<Cmd>lua vim.wait(250)<CR>")]
+    r = drive(two, steps, FLOAT_MARKS)
+    if key != "<F8>":                                    # (peek needs a name under the cursor)
+        assert r["floats"], r
+    assert all(f["n"] == 0 for f in r["floats"]), r
+    assert r["main_marks"] > 0                           # while the manuscript still has its indent
+
+
+def test_5_the_help_float_has_no_indent_even_after_it_is_changed(home, two):
+    steps = [keys("<F3>"), keys("<Tab>"), keys("2"), keys("<Cmd>lua vim.wait(250)<CR>")]
+    r = drive(two, steps, FLOAT_MARKS)
+    assert r["floats"] and all(f["n"] == 0 for f in r["floats"]), r

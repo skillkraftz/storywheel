@@ -61,6 +61,7 @@ end
 function M.decorate(buf)
   buf = buf or vim.api.nvim_get_current_buf()
   if not vim.api.nvim_buf_is_valid(buf) then return end
+  if vim.bo[buf].filetype ~= "storywheel" then return end                       -- only the manuscript: never the help, menus, outline or other floats
   if require("sw.script").is_script(buf) then return require("sw.script").decorate(buf) end    -- (a screenplay: none of the prose rules)
   vim.api.nvim_buf_clear_namespace(buf, M.ns, 0, -1)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)

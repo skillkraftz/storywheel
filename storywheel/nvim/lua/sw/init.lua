@@ -481,7 +481,10 @@ function M.start()
   notepad.start_typing()
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     group = vim.api.nvim_create_augroup("sw_decorate", { clear = true }),
-    callback = function(ev) prose.decorate(ev.buf) if layout.sidebar_open then sidebar.render() end end,
+    callback = function(ev)
+      if vim.bo[ev.buf].filetype == "storywheel" then prose.decorate(ev.buf) end        -- (floats are drawn from column 0, no paragraph indent)
+      if layout.sidebar_open then sidebar.render() end
+    end,
   })
   vim.api.nvim_create_autocmd("VimLeavePre", { group = vim.api.nvim_create_augroup("sw_leave", { clear = true }),
     callback = function()

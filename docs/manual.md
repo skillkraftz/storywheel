@@ -403,9 +403,12 @@ other float opens no menu. (Fixed: ISSUES #2.)
 - **Help (F3):** this program's help in tabs (the guide for this story's format, Writing basics, Keys, Export). Tab / Shift+Tab, the
   number keys or a click switch tabs; `/` searches; F3, Esc or `q` close.
 
-> **Watch out:** the help, the story outline and the F12 menu are drawn with a stray indent on the left, so their lines wrap badly; the
-> outline repeats the Story Spine openers ("Once upon a time. Once upon a time, …") for stories promoted by older versions; and the
-> peek card lists fields A to Z and cuts the last ones off. The text is all there; it is only laid out badly. (ISSUES #5, #6, #7, #12.)
+The help, the outline, the F12 menu and the other floats are drawn from their own left edge: only the manuscript gets the paragraph
+indent. (Fixed: ISSUES #5.)
+
+> **Watch out:** the outline repeats the Story Spine openers ("Once upon a time. Once upon a time, …") for stories promoted by older
+> versions; the help's tab bar is wider than its window; and the peek card lists fields A to Z and cuts the last ones off. The text is
+> all there; it is only laid out badly. (ISSUES #6, #7, #12.)
 
 ### Find and replace: Ctrl+R
 
