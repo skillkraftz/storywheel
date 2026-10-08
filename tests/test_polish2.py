@@ -485,3 +485,22 @@ def test_33_help_names_draft_export_and_the_universe_command_is_gone(home):
     assert "  universe " not in out and "universe rm" not in out
     res = _cli(["universe"], home)
     assert res.returncode != 0 and "invalid choice" in res.stderr
+
+
+# --- 34. small command-line wording ------------------------------------------------------------------------------------------------------
+
+def test_34_counts_are_singular_when_there_is_one_and_post_update_is_not_listed(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    s = u.new_story("Tale")
+    s.add_scene("Opening", "Hello.")
+    u.new_entity("character", "Ann Lowell", {})
+    listed = _cli(["universes"], home).stdout
+    assert "(1 entity, 1 story)" in listed, listed
+    story_list = _cli(["story", "list"], home).stdout
+    assert "(1 word)" in story_list, story_list
+    u.new_entity("character", "Bo Lowell", {})
+    s.add_scene("Two", "Two words here.")
+    assert "(2 entities," in _cli(["universes"], home).stdout
+    helptext = _cli(["--help"], home).stdout
+    assert "post-update" not in helptext and "SUPPRESS" not in helptext
+    assert _cli(["post-update"], home).returncode == 0                      # (still runs, for `update`)

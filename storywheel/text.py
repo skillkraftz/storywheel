@@ -128,6 +128,7 @@ def implicit(text, first):
     return pronouns(first + " " + text, first)[len(first) + 1:]
 
 
-def plural_n(n, noun):
-    """'1 scene', '2 scenes' (regular nouns only: it is for the status lines)."""
-    return f"{n} {noun}" if n == 1 else f"{n} {noun}s"
+def plural_n(n, noun, plural=None, commas=False):
+    """'1 scene', '2 scenes'; give `plural` for an irregular noun ('entity', 'entities'); commas=True writes 1,200."""
+    shown = f"{n:,}" if commas else f"{n}"
+    return f"{shown} {noun}" if n == 1 else f"{shown} {plural or noun + 's'}"

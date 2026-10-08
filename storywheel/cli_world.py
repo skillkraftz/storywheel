@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from . import migrate, schemas, settings, tools, vault
+from .text import plural_n
 
 
 def emit(data):
@@ -90,7 +91,7 @@ def cmd_universes(args):
     if not unis:
         print("  No universes yet. Promote a story from the Wheel, or:  storywheel universes new NAME")
     for u in unis:
-        print(f"  {u.slug:<24} {u.name}   ({len(u.entities())} entities, {len(u.stories())} stories)")
+        print(f"  {u.slug:<24} {u.name}   ({plural_n(len(u.entities()), 'entity', 'entities')}, {plural_n(len(u.stories()), 'story', 'stories')})")
 
 
 def cmd_entity(args):
@@ -268,7 +269,7 @@ def cmd_story(args):
             emit([story_json(s) for s in stories])
         else:
             for s in stories:
-                print(f"  {s.universe.slug}/{s.slug:<28} {s.title}  ({s.word_count()} words)")
+                print(f"  {s.universe.slug}/{s.slug:<28} {s.title}  ({plural_n(s.word_count(), 'word')})")
         return
     uni, _, slug = (args.target or "").partition("/")
     u = _universe(uni)
@@ -379,7 +380,7 @@ def cmd_manuscript(args):
         else:
             print("  " + str(e))
         raise SystemExit(1)
-    emit(result) if args.json else print(f"  Wrote {result['path']}  ({result['words']:,} words)" +
+    emit(result) if args.json else print(f"  Wrote {result['path']}  ({plural_n(result['words'], 'word', commas=True)})" +
                                           "".join(f"\n  Note: {w}" for w in result["warnings"]))
 
 
@@ -583,7 +584,7 @@ def cmd_backups(args):
         print(backups.preview(entry, lines=args.lines))
         return
     result = backups.restore(story, args.id)
-    emit(result) if args.json else print(f"  Restored {result['restored']} ({result['words']:,} words)."
+    emit(result) if args.json else print(f"  Restored {result['restored']} ({plural_n(result['words'], 'word', commas=True)})."
                                          + (f" The version it replaced is in {result['kept']}." if result["kept"] else ""))
 
 
@@ -679,7 +680,6 @@ def add_parsers(sub):
     p = sub.add_parser("update", help="pull the newest storywheel from your git remote, reinstall if the version changed, migrate")
     p.add_argument("--check", action="store_true", help="only say whether there is something new")
     p.add_argument("--record", action="store_true", help="after installing by hand: remember which source commit is installed")
-    sub.add_parser("post-update", help=argparse.SUPPRESS)
     p = sub.add_parser("kitty", help="open storywheel in its own kitty window (normal spacing; the Writer opens its own tall-lined window from there)")
     p.add_argument("--font", default="", help="font family for storywheel's own window (default: your kitty font)")
     p.add_argument("--size", type=float, default=0, help="font size for storywheel's own window (default: your kitty size)")
@@ -759,4 +759,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update, "post-update": cmd_post_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update}

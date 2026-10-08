@@ -528,6 +528,9 @@ def main(argv=None):
     p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
     from . import cli_world
     world = cli_world.add_parsers(sub)
+    if (sys.argv[1:] if argv is None else list(argv))[:1] == ["post-update"]:           # (run by `update`; not a command to list or type)
+        cli_world.cmd_post_update(None)
+        return
     args = parser.parse_args(argv)
     if args.command in world:
         world[args.command](args)
