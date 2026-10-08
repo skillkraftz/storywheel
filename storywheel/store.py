@@ -275,12 +275,29 @@ def to_plain(story, width=72):
         blocks.append(f"{heading}\n{body}")
     return "\n\n".join(blocks)
 
+def _to_trash(path):
+    """Move a file into HOME/.trash (a clash gets a number). Returns the new path, or None if there was no such file."""
+    path = Path(path)
+    if not path.exists():
+        return None
+    trash = HOME / ".trash"
+    trash.mkdir(parents=True, exist_ok=True)
+    target, n = trash / path.name, 2
+    while target.exists():
+        target = trash / f"{path.stem}-{n}{path.suffix}"
+        n += 1
+    path.replace(target)
+    return target
+
+
 def delete(story):
-    """Remove a story: its JSON and its markdown file. (Your universe is untouched.)"""
-    (STORIES / f"{story['id']}.json").unlink(missing_ok=True)
+    """Take a story out of the list: its JSON and its markdown file move to HOME/.trash (nothing is destroyed). Returns the trash folder
+    if anything moved (else None). Your universe is untouched."""
+    moved = _to_trash(STORIES / f"{story['id']}.json")
     old = story.get("md_path")
-    if old:
-        Path(old).unlink(missing_ok=True)
+    if old and _to_trash(old):
+        moved = moved or True
+    return (HOME / ".trash") if moved else None
 
 def story_json(story, path=None):
     """Everything an outside program needs about a story, as plain data."""

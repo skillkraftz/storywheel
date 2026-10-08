@@ -1006,8 +1006,8 @@ class MainScreen(KeptScreen, Screen):
             if here:
                 self.say("That is the story you are in: quit (q) and choose Delete to remove it.")
                 return
-            self.app.push_screen(ConfirmScreen(f"Delete the story '{title}'?\n\nThis can't be undone "
-                                               "(your universe is not touched)."),
+            self.app.push_screen(ConfirmScreen(f"Delete the story '{title}'?\n\nIt moves to the .trash folder in your storywheel home, "
+                                               "where you can get it back (your universe is not touched)."),
                                  lambda yes: self._story_deleted(story, yes))
         else:
             piece = story["kept"].get(action)
@@ -1033,8 +1033,8 @@ class MainScreen(KeptScreen, Screen):
 
     def _story_deleted(self, story, yes):
         if yes:
-            store.delete(story)
-            self.say(f"Deleted '{store.title_of(story)}'.")
+            trash = store.delete(story)
+            self.say(f"Deleted '{store.title_of(story)}'" + (f" (moved to {trash})." if trash else "."))
         self.refresh_stories()
 
     def switch_story(self, story):
@@ -1626,9 +1626,17 @@ class MainScreen(KeptScreen, Screen):
             self._finish()
         elif choice in ("new", "existing", "home"):
             self.promote_flow(s.story, choice, "exit")
-        elif choice == "delete":
-            store.delete(s.story)
-            self.app.exit(f"Deleted '{store.title_of(s.story)}'. Nothing was kept.")
+        elif choice == "delete":                      # one key must not delete: ask, and go back to the choices on No
+            self.app.push_screen(ConfirmScreen(f"Delete '{store.title_of(s.story)}'?\n\nIt moves to the .trash folder in your storywheel home, "
+                                               "where you can get it back."), self._quit_delete_confirmed)
+
+    def _quit_delete_confirmed(self, yes):
+        s = self.session
+        if not yes:
+            self.action_quit_app()
+            return
+        trash = store.delete(s.story)
+        self.app.exit(f"Deleted '{store.title_of(s.story)}'" + (f" (moved to {trash})." if trash else ".") + " Nothing was kept.")
 
     def _finish(self, extra=None):
         """Save the story and leave, printing it as plain text, then where it went."""

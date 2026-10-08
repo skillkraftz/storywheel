@@ -505,3 +505,76 @@ def test_7_real_terminal_the_outline_fits_and_wrapped_beats_hang_under_their_tex
         assert "Rumor" in t.text()
     finally:
         t.close()
+
+
+# --- 8. deleting a Wheel draft goes to the trash, and the quit box asks first -------------------------------------------------
+
+from conftest import make_engine, run_tui  # noqa: E402
+from storywheel.sample import build_story  # noqa: E402
+
+
+def _two_drafts(home):
+    mine = build_story(make_engine(home), ["western"])
+    other = build_story(make_engine(home, seed=9), ["western"])
+    store.save(mine)
+    store.save(other)
+    return mine, other
+
+
+def test_8_deleting_a_past_story_moves_it_to_the_trash_and_says_where(home):
+    mine, other = _two_drafts(home)
+
+    async def script(app, pilot):
+        lst = app.main.query_one("#stories")
+        lst.focus()
+        await pilot.pause()
+        row = next(i for i in range(lst.option_count) if lst.get_option_at_index(i).id == other["id"] or other["id"] in str(lst.get_option_at_index(i).id))
+        lst.highlighted = row
+        await pilot.press("d")
+        await pilot.pause()
+        asked = " ".join(screen_text(app).split())
+        await pilot.press("y")
+        await pilot.pause()
+        return asked, " ".join(screen_text(app).split())
+    asked, after = run_tui(store.load(mine["id"]), make_engine(home), script)
+    trash = home / "home" / ".trash"
+    assert "Delete the story" in asked and "This can't be undone" not in asked and ".trash" in asked
+    assert not (home / "home" / "stories" / f"{other['id']}.json").exists() and (trash / f"{other['id']}.json").exists()
+    assert "Deleted" in after and ".trash" in after
+    assert (home / "home" / "stories" / f"{mine['id']}.json").exists()
+
+
+def test_8_the_quit_boxs_delete_asks_first_and_no_keeps_the_story(home):
+    mine, _other = _two_drafts(home)
+
+    async def script(app, pilot):
+        await pilot.press("Q")
+        await pilot.pause()
+        await pilot.press("d")
+        await pilot.pause()
+        screen = type(app.screen).__name__
+        asked = " ".join(screen_text(app).split())
+        still_there = (home / "home" / "stories" / f"{mine['id']}.json").exists()
+        await pilot.press("n")
+        await pilot.pause()
+        back = type(app.screen).__name__
+        return screen, asked, still_there, (home / "home" / "stories" / f"{mine['id']}.json").exists(), back
+    screen, asked, there1, there2, back = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert screen == "ConfirmScreen" and ".trash" in asked and there1 and there2 and back == "QuitScreen"
+
+
+def test_8_confirming_the_quit_boxs_delete_moves_the_draft_to_the_trash(home):
+    mine, _other = _two_drafts(home)
+
+    async def script(app, pilot):
+        await pilot.press("Q")
+        await pilot.pause()
+        await pilot.press("d")
+        await pilot.pause()
+        await pilot.press("y")
+        await pilot.pause()
+        return app.return_value
+    message = run_tui(store.load(mine["id"]), make_engine(home), script)
+    trash = home / "home" / ".trash"
+    assert not (home / "home" / "stories" / f"{mine['id']}.json").exists() and (trash / f"{mine['id']}.json").exists()
+    assert message and "Deleted" in message and ".trash" in message

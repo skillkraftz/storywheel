@@ -187,8 +187,8 @@ Enter (or a click) opens a draft; the one you leave is saved. **d** (or Del) del
 past draft into a universe. **p** and **s** (the "Use protagonist" and "Use setting" buttons) copy that draft's protagonist or setting
 **into a universe you choose** (not into the draft you are on).
 
-> **Watch out:** deleting a draft (Del, `d`, or "Delete the draft" when quitting) removes it for good; it does not go to a trash folder.
-> In the quit box a single `d` does it. (ISSUES #8.)
+Deleting a draft (Del, `d`, or `d` in the quit box) always asks first and moves it to `.trash` in your storywheel home (the message says
+where), so it can be got back by hand. (Fixed: ISSUES #8.)
 
 ### Leaving
 
@@ -610,7 +610,7 @@ since.
   Terminal: `storywheel backups list UNIVERSE/STORY`, then `restore`. A restore first copies the current version aside, so it can be
   undone.
 - **Deleting:** a universe, story, entity or extra file goes to the library's `.trash` folder after a confirm. A Wheel draft you delete
-  is gone for good (ISSUES #8).
+  goes to `.trash` in your storywheel home, also after a confirm.
 - **Undo:** in the Writer, Ctrl+Z goes back word by word.
 
 ---
@@ -662,8 +662,8 @@ where they drift. Each line: the page and section, what it says, and what actual
 3. **wheel › Keys:** `U` is "Remove the selected value from your universe". It only tells you to delete in the Builder.
 4. **wheel › Mouse:** the button row is listed as "Roll, Keep, Back, Skip, Flavor, +Beat, -Beat"; it also has Send to Builder and New
    draft.
-5. **backups › Deleted things:** "a draft with nothing kept goes to .trash. Nothing is destroyed." A draft you delete yourself is
-   destroyed (only empty drafts tidied at start go to .trash).
+5. **backups › Deleted things:** "a draft with nothing kept goes to .trash. Nothing is destroyed." (Now true for a draft you delete
+   yourself as well: ISSUES #8.)
 6. **genres-and-flavor › Genres:** "Heist, coming-of-age and adventure still run on general atoms until their lists are written." They
    were written in batch 14 and are full genres; the list of written genres also leaves them out.
 7. **writer › Leaving:** ":q works too". Only with Vim keys on; in notepad mode you can't type a `:` command.

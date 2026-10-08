@@ -55,7 +55,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Entry preview dialog | Enter or `u` use, Esc close | "Use in this story" (nothing kept until k) | test_universes_wheel.py | works | P |
 | **Past stories** list | Enter or click opens a draft | Every Wheel draft with date, "5/8" or "done", ⇢universe when promoted | test_promote_ui.py, test_drafts.py | works; titles cut at 22 characters, copies look identical (ISSUES #25) | P |
 | Past stories: New | button, or `N` anywhere | New draft; asks which universe it belongs to | test_drafts.py, test_universes_wheel.py | works | P |
-| Past stories: Del | button or `d` in the list | Delete a draft (asks; permanent, not to .trash) | test_ui_pass.py | works; permanence is **confusing** (ISSUES #8) | P |
+| Past stories: Del | button or `d` in the list | Delete a draft (asks; moves it to `<home>/.trash`, and says where) | test_ui_pass.py, test_polish1.py | works (was ISSUES #8) | P |
 | Past stories: Promote | button or `P` in the list | Bring a past draft into a universe | test_promote_ui.py | works | P |
 | Past stories: Use protagonist / Use setting | buttons, `p` / `s` in the list | Sends that draft's protagonist / setting **into a universe**, not into this story | test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`) | **confusing** (ISSUES #13) | P |
 
@@ -108,7 +108,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Send: new or existing | Enter, Esc | First question of promotion (skipped when "Belongs to" is set) | test_send_to_builder.py | works | P |
 | Name the new universe | Enter | Defaults to the story's title | test_promote_ui.py | works | P |
 | Promote preview | `p` Promote, Enter toggles merge on a yellow duplicate, Esc cancel | Shows every entity and the outline before anything is written | test_promote_ui.py | works | P |
-| Quit screen (Q) | `p` into its universe, `n` new, `e` existing, `k`/Enter not now, `d` delete, Esc cancel | Leave with or without promoting | test_promote_ui.py, test_navigation.py | works; `d` deletes the draft permanently with one key (ISSUES #8) | P |
+| Quit screen (Q) | `p` into its universe, `n` new, `e` existing, `k`/Enter not now, `d` delete, Esc cancel | Leave with or without promoting | test_promote_ui.py, test_navigation.py | works; `d` asks first, then moves the draft to `.trash` (was ISSUES #8) | P |
 | Done screen (last keep) | `Q`/Enter quit, `q`/Esc keep editing | Story finished | test_tui.py, test_navigation.py | works | R |
 | Help screen | Tab/Shift+Tab, 1-3, `/` search, Esc/`q`/`?` close | Wheel help | test_help*.py | works; layout **confusing** (ISSUES #21) | P |
 

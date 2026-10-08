@@ -5,4 +5,4 @@ Copies named HHMM-<scene>.md in <story>/.backups/<date>/, made when the manuscri
 ## Restoring
 Builder: select a story and press b (or the Backups… button). Writer: the menu's Backups item. Command line: storywheel backups list UNIVERSE/STORY, then restore. A restore first copies the version you have now to .backups/restore-<date>-<time>/, so a restore can itself be undone.
 ## Deleted things
-Deleting a universe, story or entity moves it to <library>/.trash/; a draft with nothing kept goes to <storywheel home>/.trash/. Nothing is destroyed.
+Deleting a universe, story or entity moves it to <library>/.trash/; a Wheel draft you delete (and one with nothing kept) goes to <storywheel home>/.trash/. Nothing is destroyed.

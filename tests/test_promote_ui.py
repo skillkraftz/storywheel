@@ -129,7 +129,7 @@ def test_delete_the_draft_from_the_promotion_message(home):
     story = store.new_story()
     async def script(app, pilot):
         await keep_to(app, pilot, "premise")
-        await press(pilot, "Q", "d")
+        await press(pilot, "Q", "d", "y")                         # (d asks first)
         return app.return_value
     assert "Deleted" in run_tui(story, make_engine(home), script)
     assert not (home / "home" / "stories" / f"{story['id']}.json").exists()

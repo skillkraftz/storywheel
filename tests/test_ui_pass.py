@@ -64,14 +64,15 @@ def test_plain_text_includes_the_body_with_its_labels(home):
     assert s.story["kept"]["spine"] and list(s.story["kept"]["spine"].values())[0][:20] in text.replace("\n  ", " ")
 
 
-def test_delete_removes_the_json_and_the_markdown(home):
+def test_delete_moves_the_json_and_the_markdown_to_the_trash(home):
     s = kept_session(home, "twist")
     s.save()
     path = Path(s.story["md_path"])
     assert path.exists() and (home / "home" / "stories" / f"{s.story['id']}.json").exists()
-    store.delete(s.story)
+    trash = store.delete(s.story)
     assert not path.exists() and not list((home / "home" / "stories").glob("*.json"))
-    store.delete(s.story)                                               # twice is fine
+    assert trash == home / "home" / ".trash" and (trash / f"{s.story['id']}.json").exists() and (trash / path.name).exists()
+    assert store.delete(s.story) is None                                # twice is fine (nothing left to move)
 
 
 # --- flags and issues --------------------------------------------------------------------------------------
@@ -266,11 +267,12 @@ def test_deleting_on_exit_removes_the_story_and_its_markdown(home):
         for _ in range(4):
             await press(pilot, "k")
         assert list((home / "out").glob("*.md"))
-        await press(pilot, "Q", "d")
+        await press(pilot, "Q", "d", "y")                         # (d asks first)
         return app.return_value
     message = run_tui(story, make_engine(home), script)
     assert "Deleted" in message and "PROTAGONIST" not in message
     assert not (home / "home" / "stories" / f"{story['id']}.json").exists() and not list((home / "out").glob("*.md"))
+    assert (home / "home" / ".trash" / f"{story['id']}.json").exists()
 
 
 def test_run_app_prints_what_the_app_returns(home, capsys, monkeypatch):
