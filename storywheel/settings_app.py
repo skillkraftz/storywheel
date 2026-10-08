@@ -14,7 +14,7 @@ from . import appearance, navigation
 from .footer import FitFooter
 from .keptscreen import KeptScreen
 from .header import QuietHeader
-from textual.widgets import DataTable, Footer, Header, Input, Label, OptionList, Select, Static, Switch, TabbedContent, TabPane, TextArea
+from textual.widgets import DataTable, Footer, Header, Input, Label, OptionList, Select, Static, Switch, TabbedContent, TabPane, Tabs, TextArea
 from textual.widgets.option_list import Option
 
 from . import keys, paths, settings, vault, writing_stats
@@ -253,7 +253,11 @@ class SettingsScreen(KeptScreen, Screen):
         self.app.title = "storywheel · Settings"
         self.app.sub_title = "saved as you go"
         self.refresh_stats()
+        self.call_after_refresh(self.focus_tab_bar)                 # the first Tab / arrow key must do something: Left and Right change tabs
         self.b.remember()
+
+    def focus_tab_bar(self):
+        self.set_focus(self.query_one("#tabs", TabbedContent).query_one(Tabs))
 
     def on_screen_resume(self):
         self.app.title = "storywheel · Settings"
@@ -265,7 +269,7 @@ class SettingsScreen(KeptScreen, Screen):
         tabs = self.query_one("#tabs", TabbedContent)
         if f"t-{name}" in [p.id for p in tabs.query(TabPane)]:
             tabs.active = f"t-{name}"
-        self.set_focus(tabs.query_one("Tabs"))
+        self.focus_tab_bar()
 
     def enter(self, payload=None):
         """Back in Settings from another mode: other modes may have changed settings, so show what is saved now."""
@@ -485,6 +489,7 @@ class SettingsScreen(KeptScreen, Screen):
             self.save(key, event.text_area.text)
 
     def on_tabbed_content_tab_activated(self, event):
+        self.say("")                                                # a message belongs to the tab it was about
         if event.pane.id == "t-stats":
             self.refresh_stats()
         elif event.pane.id == "t-help" and not self.help_hits:

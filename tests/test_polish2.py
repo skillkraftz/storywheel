@@ -1,4 +1,6 @@
 """Polish 2 (ISSUES #19-36): what a writer does, and what they see."""
+import asyncio
+
 import pytest
 
 from test_polish1 import ann, builder_run  # noqa: F401  (the fixture and helper of polish 1)
@@ -345,3 +347,55 @@ def test_29_a_wide_builder_keeps_the_tabs_and_has_no_summary(home, ann):
         return s.query_one("#story-summary").display, s.query_one("#rtabs").display, s.query_one("#outline").size.width
     summary, tabs, width = builder_run(script, size=(200, 50))
     assert not summary and tabs and width >= 30
+
+
+# --- 30. Settings opens with the tab bar focused, and a message stays with its tab --------------------------------------------------------
+
+def test_30_settings_opens_on_the_tab_bar_so_left_and_right_change_tabs(home):
+    from storywheel import settings_app
+
+    async def script(app, pilot):
+        await pilot.pause()
+        await pilot.pause()
+        s = app.screen
+        first = (type(s.focused).__name__, s.query_one("#tabs").active)
+        await pilot.press("right")
+        await pilot.pause()
+        second = s.query_one("#tabs").active
+        await pilot.press("tab")                                      # the first Tab goes on into the tab's own boxes
+        await pilot.pause()
+        return first, second, type(s.focused).__name__
+    import asyncio
+
+    async def go():
+        app = settings_app.SettingsApp(None, "builder")
+        async with app.run_test(size=(180, 60)) as pilot:
+            await pilot.pause()
+            return await script(app, pilot)
+    first, second, third = asyncio.run(go())
+    assert first[1] == "t-you" and first[0].endswith("Tabs") and second == "t-goals" and third != "Tabs"
+
+
+def test_30_a_message_is_cleared_when_you_change_tab(home):
+    from storywheel import settings_app
+
+    async def go():
+        app = settings_app.SettingsApp(None, "builder")
+        async with app.run_test(size=(180, 60)) as pilot:
+            await pilot.pause()
+            await pilot.pause()
+            s = app.screen
+            tabs = s.query_one("#tabs")
+            tabs.active = "t-goals"
+            await pilot.pause()
+            box = s.query_one("#f-daily_goal")
+            box.value = "lots"
+            await pilot.pause()
+            said = str(s.query_one("#status").content)
+            s.focus_tab_bar()
+            await pilot.pause()
+            await pilot.press("right")
+            await pilot.pause()
+            return said, tabs.active, str(s.query_one("#status").content)
+    said, active, after = asyncio.run(go())
+    assert "whole number" in said and active == "t-appearance" and after.strip() == ""
