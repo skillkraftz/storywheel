@@ -236,7 +236,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Alt+B | Bold | test_writer.py | works | N |
 | Alt+S | Scene break (the `scene_marker` setting, `***` by default) | test_writer.py, test_paragraphs.py | works | N |
 | F12 | Writer menu | test_menus.py | works (the stray indent is gone: was ISSUES #5) | T |
-| F9 | Scenes sidebar | test_writer.py | **broken**: opens, but its keys don't work after F9, and after a jump or closing it you are in Vim's Normal mode, where typing `dd` deleted a paragraph (ISSUES #1) | T |
+| F9 | Scenes sidebar | test_writer.py | works from the keyboard: F9 leaves typing, and a jump, add or close puts you back to typing (was ISSUES #1) | T |
 | F8 | Peek at the name under the cursor | test_writer.py | works; fields in the card's order, sized by wrapped rows, F8 again to scroll (was ISSUES #12); test_polish1.py | T |
 | Ctrl+O | Story outline overlay | test_overview_writer.py | works; layout and doubled openers fixed (was ISSUES #6, #7) | T |
 | Ctrl+Q | Save and back to the Builder | test_notepad.py | works (Ctrl+Q is flow control in some terminals) | N |
@@ -264,7 +264,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Writer menu (F12 / Alt+M / More…) | 1–9, Up/Down, Enter, click, Esc / `q` | Edit, Look up, Story, Leave, More groups (about 35 items) | test_menus.py, test_menu_keys.py | works; only items 1–9 have a number (ISSUES #26) | T |
 | Help float (F3) | Tab / Shift+Tab / 1–4 / click tab; `/` search; Space / Backspace page; F3, Esc, `q` close | Writer help in tabs | test_help_tabs.py | works; tab bar fits (was ISSUES #7) | T |
 | Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | works; layout and doubled openers fixed (was ISSUES #6, #7); test_polish1.py | T |
-| Scenes sidebar (F9) | Enter / double-click jump, `a` add, `r` rename, `J`/`K` move, `q`/Esc close | Scenes with first lines | test_writer.py (calls the Lua directly, never F9) | **broken** from the keyboard; can lose text (ISSUES #1) | T |
+| Scenes sidebar (F9) | Enter / double-click jump, `a` add, `r` rename, `J`/`K` move, `q`/Esc close | Scenes with first lines | test_polish1.py (real F9, Down, Enter, q from Insert mode), test_writer.py | works (was ISSUES #1) | T |
 | Peek card (F8) | closes when the cursor moves | An entity's fields and notes | test_writer.py | works; F8 again takes the focus to scroll (was ISSUES #12) | T |
 | Dictionary card (F7 / F6) | Enter look up, `b`/Backspace back, `n` forward, `r` replace, `i` insert, `c` copy, `/` filter, `w` word, Tab / arrows / hjkl, Esc / `q` | Meanings and similar words; replace in the same form | test_lookup_writer.py | works (without the dictionary: a wrapped message and "Press ENTER", ISSUES #28) | N T |
 | Find and replace (Ctrl+R) | Enter find next / replace, Tab switch line, Alt+R one, Alt+A all, Alt+C case, Alt+W whole word, Alt+N / Alt+P next / previous, Esc | Literal find and replace in the current file | test_replace.py | works (hint cut, ISSUES #27) | T |

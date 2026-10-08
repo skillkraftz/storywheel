@@ -2,7 +2,7 @@
 
 Every problem found while auditing version 0.20.0 (branch `audit-manual`, 2026-10-08), ranked by how much it gets in a writer's way:
 first what can change or lose writing, then what gets in the way while writing, then what misleads, then cosmetic and command-line
-problems. Nothing was fixed in this session. The remaining backlog, ranked the same way, is at the end.
+problems. Nothing was fixed in the audit session. Polish 1 (branch `polish-1`) then fixed issues 1 to 15; each is marked `[FIXED in <commit>]` in its title. The remaining backlog, ranked the same way, is at the end.
 
 Each issue says where it is (file and function), how to reproduce it, what was seen, and a suggested fix. "Verified" says how it was
 reproduced: **pilot** (Textual pilot in the real app, 200×50), **headless** (`nvim --headless` with the Writer's config), **terminal**
@@ -16,7 +16,7 @@ pointing into a temporary folder).
 
 ## A. Can change or lose your writing
 
-### 1. The scene sidebar leaves the Writer in the wrong mode: its keys fail after F9, and afterwards typing runs Vim commands
+### 1. [FIXED in 6be13f9] The scene sidebar leaves the Writer in the wrong mode: its keys fail after F9, and afterwards typing runs Vim commands
 
 - **Where:** `storywheel/nvim/lua/sw/sidebar.lua` `M.open`, `M.jump`, `M.close`; F9 is mapped in `sw/init.lua` `M.map_global` and
   `sw/notepad.lua` `M.map_buffer` (`key_sidebar`).
@@ -37,7 +37,7 @@ pointing into a temporary folder).
 - **Meanwhile:** after F9 press Esc; after using the sidebar press F12 then Esc. (Verified: text typed after that goes into the text.)
 - **Verified:** terminal (several runs), headless.
 
-### 2. Right-click menu: a second right-click, or letting go of the right button over an item, runs that item (reported)
+### 2. [FIXED in 52ef67f] Right-click menu: a second right-click, or letting go of the right button over an item, runs that item (reported)
 
 - **Where:** `storywheel/nvim/lua/sw/notepad.lua` `M.setup` (`mousemodel = "popup_setpos"`), `M.popup_menu`, `M.popup_watch`;
   `sw/grammar.lua` `M.map_buffer` (its `<RightMouse>` mapping feeds `<RightMouse>` back to Neovim for the ordinary menu).
@@ -56,7 +56,7 @@ pointing into a temporary folder).
 - **Meanwhile:** close the menu with Esc or a left click outside it; choose items with a left click.
 - **Verified:** terminal (release over an item runs it; menu inside the F12 float); owner's report for the second right-click.
 
-### 3. Builder: f, Space, R, + / -, n and d act on the entity card while you are in the Outline
+### 3. [FIXED in 6940b28] Builder: f, Space, R, + / -, n and d act on the entity card while you are in the Outline
 
 - **Where:** `storywheel/builder.py` `BuilderScreen.action_roll_field`, `action_roll_blank`, `action_reroll_all`, `action_rate`,
   `action_new_entity`, `action_delete_entity` (only `action_write_field` checks `self.focused is self.top`).
@@ -69,7 +69,7 @@ pointing into a temporary folder).
   edits a row". Test: focus the outline, press each key, assert the entity file is unchanged.
 - **Verified:** pilot.
 
-### 4. F3 from the Wheel opens an unrelated story
+### 4. [FIXED in 2ea7716] F3 from the Wheel opens an unrelated story
 
 - **Where:** `storywheel/tui.py` `MainScreen._leave` (sends only the first ticked universe), `storywheel/hub.py` `Hub.open_writer`,
   `storywheel/modes.py` `_resolve_story` (falls back to the last Builder story, then the universe's first story).
@@ -86,7 +86,7 @@ pointing into a temporary folder).
 
 ## B. Gets in the way while writing
 
-### 5. Every Writer float gets the paragraph indent: a stray gutter on the left and ragged wrapping (reported)
+### 5. [FIXED in e6880cd] Every Writer float gets the paragraph indent: a stray gutter on the left and ragged wrapping (reported)
 
 - **Where:** `storywheel/nvim/lua/sw/init.lua` `M.start`, the `sw_decorate` autocmd (`TextChanged`/`TextChangedI` →
   `prose.decorate(ev.buf)` for **any** buffer); `sw/prose.lua` `M.decorate` doesn't check what buffer it is given.
@@ -101,7 +101,7 @@ pointing into a temporary folder).
   open each float and assert no `sw_prose` extmarks in its buffer.
 - **Verified:** terminal (screens), headless (extmark counts).
 
-### 6. The outline overlay repeats Story Spine openers: "Once upon a time. Once upon a time, …" (reported)
+### 6. [FIXED in 822b22c] The outline overlay repeats Story Spine openers: "Once upon a time. Once upon a time, …" (reported)
 
 - **Where:** `storywheel/nvim/lua/sw/overview.lua` `M.lines` / `plain`: it strips `**` from each beat paragraph of `story.md`.
 - **Reproduce:** a story whose `## Story Spine` section stores labels, as stories promoted by older versions do:
@@ -115,7 +115,7 @@ pointing into a temporary folder).
   Add the legacy fixture to `tests/test_overview_writer.py`.
 - **Verified:** headless.
 
-### 7. The help float and the outline overlay are laid out poorly beyond the gutter (reported)
+### 7. [FIXED in 5c7cf6e] The help float and the outline overlay are laid out poorly beyond the gutter (reported)
 
 - **Where:** `storywheel/nvim/lua/sw/init.lua` `M.help`, `help_bar`; `sw/overview.lua` `M.open`, `M.lines`.
 - **Seen (120×36):** the help's tab bar is wider than the window, so the first tab is cut: `<se   2 Writing basics   3 Keys   4
@@ -129,7 +129,7 @@ pointing into a temporary folder).
   with a highlight instead of `-----`.
 - **Verified:** terminal.
 
-### 8. Deleting a Wheel draft is permanent, and the quit box deletes with one key
+### 8. [FIXED in 59a2101] Deleting a Wheel draft is permanent, and the quit box deletes with one key
 
 - **Where:** `storywheel/store.py` `delete` (unlinks the JSON and markdown); `storywheel/tui.py` `MainScreen._story_deleted`,
   `_quit_chosen` (QuitScreen `d`).
@@ -140,7 +140,7 @@ pointing into a temporary folder).
 - **Fix:** move deleted drafts to `<home>/.trash/` like the empty ones (and say where), and ask before the quit box's `d` deletes.
 - **Verified:** pilot, code.
 
-### 9. The Writer's status line counts the float you are in as "this scene"
+### 9. [FIXED in e498192] The Writer's status line counts the float you are in as "this scene"
 
 - **Where:** `storywheel/nvim/lua/sw/stats.lua` `M.scene` (`buf = buf or vim.api.nvim_get_current_buf()`).
 - **Reproduce:** open the help (F3), the outline (Ctrl+O) or find and replace (Ctrl+R).
@@ -148,7 +148,7 @@ pointing into a temporary folder).
 - **Fix:** always count the writing window's buffer (`layout.main`), whatever window is current.
 - **Verified:** terminal.
 
-### 10. Alt with an unmapped letter types the letter
+### 10. [FIXED in 08a12ae] Alt with an unmapped letter types the letter
 
 - **Where:** `storywheel/nvim/lua/sw/notepad.lua` `M.map_buffer` (disables unmapped Ctrl letters and F keys, not Alt letters).
 - **Reproduce:** in a prose story press Alt+F (the flip test key, which only exists in screenplays).
@@ -157,7 +157,7 @@ pointing into a temporary folder).
   "The flip test is for screenplays."
 - **Verified:** terminal.
 
-### 11. On a scene-break line the raw marker shows, and typing breaks the scene break
+### 11. [FIXED in d699348] On a scene-break line the raw marker shows, and typing breaks the scene break
 
 - **Where:** `storywheel/nvim/lua/sw/prose.lua` `M.prepare_window` (`concealcursor = "nvc"`, no `i`) and `M.decorate`.
 - **Reproduce:** put the cursor on a `* * * The Hall` line (the Writer can reopen there) and type.
@@ -167,7 +167,7 @@ pointing into a temporary folder).
   leaves you after the break), or conceal in Insert mode too and treat the line as read-only (edits go through the sidebar's rename).
 - **Verified:** terminal.
 
-### 12. Peek (F8) shows fields A to Z and cuts the last ones off
+### 12. [FIXED in e7ba35c] Peek (F8) shows fields A to Z and cuts the last ones off
 
 - **Where:** `storywheel/nvim/lua/sw/world.lua` `M.card_lines` (`table.sort(order)`), `M.peek` (`height = math.min(#lines, 24)`,
   `focusable = false`).
@@ -177,7 +177,7 @@ pointing into a temporary folder).
   `nvim_win_text_height`, and let F8 a second time focus it for scrolling.
 - **Verified:** terminal.
 
-### 13. Wheel "Use protagonist" / "Use setting" send to a universe, not to this story
+### 13. [FIXED in 7c8cb9d] Wheel "Use protagonist" / "Use setting" send to a universe, not to this story
 
 - **Where:** `storywheel/tui.py` `MainScreen.story_act` → `_sent_piece`; `StoryList.BINDINGS` (`+Protagonist`, `+Setting`); the buttons
   `st-protagonist`, `st-setting`; `data/help/wheel.md`.
@@ -188,7 +188,7 @@ pointing into a temporary folder).
   that already).
 - **Verified:** pilot.
 
-### 14. Words: `k` does nothing outside Vocabulary, and `a` learns the wrong word outside Lookup
+### 14. [FIXED in 31efb84] Words: `k` does nothing outside Vocabulary, and `a` learns the wrong word outside Lookup
 
 - **Where:** `storywheel/words_app.py` `WordsScreen.mark` (handles "known" only in Vocabulary), `action_add` → `current_word` (reads
   only the Lookup boxes).
@@ -198,7 +198,7 @@ pointing into a temporary folder).
   from the footer where it doesn't apply.
 - **Verified:** pilot.
 
-### 15. Builder: Write, Export and Copy quietly use the first story when none is open
+### 15. [FIXED in 65e7b7b] Builder: Write, Export and Copy quietly use the first story when none is open
 
 - **Where:** `storywheel/builder.py` `BuilderHooks.open_writer`, `export`, `copy_manuscript` (`story = screen.universe.stories()[0]`).
 - **Seen:** with the universe overview showing, `C` copied "Blood and March in Dunmarrow" and `x` offered to export it.
@@ -211,7 +211,7 @@ pointing into a temporary folder).
 
 ### 16. In-app help pages that say the wrong thing
 
-Seventeen places, listed in `docs/manual.md`, Appendix B. The worst: Past stories `p`/`s` (#13), the universe panel's `e`/`d`/`n` (#17),
+Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2, #3, #8, #13 and #14 were corrected with those fixes). The worst: Past stories `p`/`s` (#13), the universe panel's `e`/`d`/`n` (#17),
 "Nothing is destroyed" (#8), heist/adventure/coming-of-age "not written yet" in `genres-and-flavor.md`, `:q` in notepad mode, Words
 `k` and `a`. **Where:** `storywheel/data/help/*.md`. **Fix:** correct the free text; consider a test that every key named in free text
 (`` `x` ``, "press X") exists in that mode's bindings, which would have caught most of these.

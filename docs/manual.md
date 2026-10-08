@@ -388,10 +388,8 @@ other float opens no menu. (Fixed: ISSUES #2.)
 - **New scene:** Alt+N, or `a` in the sidebar.
 - **In the Builder:** the Scenes tab lists the same scenes; Enter on one opens the Writer there.
 
-> **Watch out, important:** the sidebar's keys don't work right after **F9** (you get "E21: Cannot make changes"), and after you jump
-> to a scene or close the sidebar, the next letters you type are taken as Vim commands: typing `dd` deleted a paragraph in testing.
-> Until it is fixed: after F9 press **Esc** once (then the sidebar's keys work), and after jumping or closing press **F12 then Esc**
-> to get back to typing. If text vanished, **Ctrl+Z** brings it back. (ISSUES #1.)
+F9 leaves typing so the sidebar's keys work at once, and jumping to a scene, adding one or closing the sidebar puts you back to typing
+in the writing window (it used to leave Vim's Normal mode, where typing `dd` deleted a paragraph). (Fixed: ISSUES #1.)
 
 ### Looking things up while you write
 
@@ -671,7 +669,7 @@ where they drift. Each line: the page and section, what it says, and what actual
    were written in batch 14 and are full genres; the list of written genres also leaves them out.
 7. **writer › Leaving:** ":q works too". Only with Vim keys on; in notepad mode you can't type a `:` command.
 8. **writer › Keys (key_sidebar)** and **writing-prose › The scene sidebar** and **screenplays › Writing Fountain:** "Enter jumps, a
-   adds, r renames, J and K move". These keys don't work straight after F9 (ISSUES #1).
+   adds, r renames, J and K move". These keys did not work straight after F9. (Fixed: ISSUES #1.)
 9. **writer › Mouse:** "Right-click opens the everyday menu". (Fixed with ISSUES #2: the menu is now our own, and the help says how it
    closes.)
 10. **words › Keys:** `k` "Mark the word ✓ Known" worked only in Vocabulary; `a` "Learn this word" and `l` are two keys for the same
@@ -683,7 +681,7 @@ where they drift. Each line: the page and section, what it says, and what actual
     story settings)"; the format is on the story form (`m`). And right-clicking the Structure row says "The structure was set in the
     Wheel", though `m` changes it.
 14. **builder › Mouse:** "In the Outline a click selects, the wheel scrolls and right-click edits". True, but `f`, Space, `R`, `+`/`-`,
-    `n` and `d` pressed in the Outline act on the entity card (ISSUES #3).
+    `n` and `d` pressed in the Outline acted on the entity card. (Fixed: ISSUES #3; the help now says what `f` does there.)
 15. **settings › Moving around:** "left and right on the tab bar switch tabs"; true once the tab bar has the focus, but nothing has it
     when Settings opens.
 16. **exports › Other formats:** doesn't mention the "Fountain (.fountain): the prose as action" export the Builder offers for prose.

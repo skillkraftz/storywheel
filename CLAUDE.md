@@ -1027,3 +1027,10 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
 
 - Batch 19 (exception to the stable rule, at the owner's request because usage was nearly out): after each item passes its related tests it is committed,
   tagged `b19-N` and `stable` is moved to it, without a full run in between. Item 1: `N` / the New draft button in the Wheel asks for a universe and starts a fresh draft.
+
+- Polish 1 (ISSUES.md 1-15): the Writer's right-click menu is our own float (`sw/context.lua`; `mousemodel=extend`), not Neovim's pop-up, which runs an
+  item when the right button is let go over it. The cursor never rests on a scene-marker line in notepad mode (`prose.guard_marker`; arriving moves it
+  on; renaming a scene is the sidebar's `r`). F3 in the Wheel opens only the draft's own promoted story, never the last one. A deleted Wheel draft goes to
+  `<home>/.trash`. Past stories' protagonist/setting buttons stay "send to a universe" and say so (offering them as a candidate on the current draft is
+  undecided). `tests/nvdrive.py` (keys and mouse into a headless Writer, step by step) and `tests/ptydrive.py` (a real terminal read through pyte) are the
+  drivers for tests that must press keys and click; a headless Neovim cannot fire CursorMoved while keys are queued, so cursor-movement behavior is tested on a pty.

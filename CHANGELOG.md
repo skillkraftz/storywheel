@@ -2,6 +2,18 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## Unreleased — Polish 1: ISSUES.md sections A and B (issues 1 to 15)
+
+- Writer: the scene sidebar (F9) works from the keyboard and returns you to typing; the right-click menu is storywheel's own float (only a left click
+  or Enter runs an item; a second right-click, Esc or q closes it; it scrolls in a short window; no menu inside floats); floats get no paragraph
+  indent; the outline overlay drops doubled Story Spine labels and is laid out properly; the help's tab bar fits, with its key hints on the border;
+  the status line starts with the story's title (and so does the window title) and counts the writing window even with a float open; unmapped Alt
+  letters type nothing; the cursor stays off scene-marker lines; the peek card follows the card's field order, shows every field and scrolls (F8 again).
+- Builder: in the Outline the entity keys leave the entity alone (`f` rolls the beat); Write, Export and Copy ask which story when none is open.
+- Wheel: F3 opens the draft's own story (or says it was never sent); deleting a draft moves it to `<home>/.trash` and the quit box's `d` asks first;
+  Past stories' protagonist/setting buttons say "→ universe".
+- Words: `a`, `l` and `k` act on the word you are on, on every tab.
+
 ## 0.20.0 — Batch 20: small Wheel and Writer fixes
 
 - Wheel: Past stories has a New button (a fresh draft, asking for a universe) instead of Open; Enter or a click on a story still opens it.
