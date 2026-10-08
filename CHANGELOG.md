@@ -2,6 +2,25 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## Unreleased — Polish 2: ISSUES.md sections C, D and E (issues 16 to 36)
+
+- Tests and tools: the two polish-1 terminal tests pass on Neovim 0.11 and 0.12 (the test pty gets its size before Neovim starts and pyte no longer
+  prints Neovim's XTGETTCAP questions over the text; a new test sends terminal replies late, in insert mode, and shows none is typed); the status
+  line shows the whole title unless the window is too narrow; the hanging spelling test no longer asks Neovim to download a German spell file;
+  `pytest-timeout` (10 minutes a test) is in the dev extra; `tools/fulltest.sh` uses `./.venv` and temporary `STORYWHEEL_HOME`/`STORYWHEEL_LIBRARY`.
+- Help and docs: the in-app help agrees with the program (wheel buttons, universe panel, `U`, written genres, `:q`, footers, structures, exports);
+  the help screen's hint line is whole, wrapped descriptions hang and `+/-` is one row; README rewritten (short, current); the generator-content
+  guide moved to `docs/generator.md`; the manual's Appendix B records the fixes.
+- Builder: S is a box of choices that says what follows your default and can clear a story's own value (`settings.clear_story`); G opens Settings > You;
+  a new card starts on its first row; under 150 columns the thin column shows a story summary and the outline shows at full width on request;
+  messages name `m` for format and structure.
+- Wheel: Past stories use the box's width and mark copies; clicks beside ▲ ▼ do nothing; Use protagonist / Use setting offer the piece to the draft
+  you are on (or a universe).
+- Writer: every F12 menu entry has its own key (1-9, letters); the find and replace hint line is whole; F7 without the dictionary gives one line.
+- Settings: opens on the tab bar; a message is cleared on a tab change; Default format offers the four formats.
+- Command line: `builder`, `settings` and `writer` refuse without a terminal; `draft-export` (alias `export`); `universe` retired; singular counts;
+  `post-update` not listed; `promote` at the end of input is a no.
+
 ## Unreleased — Polish 1: ISSUES.md sections A and B (issues 1 to 15)
 
 - Writer: the scene sidebar (F9) works from the keyboard and returns you to typing; the right-click menu is storywheel's own float (only a left click

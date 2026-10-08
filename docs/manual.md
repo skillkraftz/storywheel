@@ -14,9 +14,9 @@ format editors expect. This manual is for writing with it. It describes version 
 - [Chapter 6. Sending it out: exports](#chapter-6-sending-it-out-exports)
 - [Chapter 7. Keeping your work safe: saving, backups, the trash](#chapter-7-keeping-your-work-safe-saving-backups-the-trash)
 - [Appendix A. The command line](#appendix-a-the-command-line)
-- [Appendix B. Where the in-app help disagrees with this manual](#appendix-b-where-the-in-app-help-disagrees-with-this-manual)
+- [Appendix B. Where the in-app help disagreed with this manual](#appendix-b-where-the-in-app-help-disagreed-with-this-manual)
 
-Places where the program currently misbehaves are marked **Watch out**, with what to do meanwhile. The full list is in ISSUES.md.
+Everything found in the audit of this version has been fixed; ISSUES.md lists what was found and the commit that fixed it. If something misbehaves, it is a new problem worth writing down there.
 
 ---
 
@@ -250,9 +250,6 @@ Delete are buttons, or `r` and `d` with the Universes list focused. Deleting ask
 6. **R** rolls the whole entity again (asks first; what you wrote in ✎ fields stays). **c** adds a field of your own (write-only).
 7. Write free notes in the box under the card (**E** jumps there). They are saved as you type.
 
-> **Watch out:** a new card has no highlighted row, so `f` and `e` act on the Name; the first Down only highlights the Name row.
-> (ISSUES #23.)
-
 ### Renaming
 
 Press **r**, or write or roll a new name. If the old name appears in this universe's notes, outlines or manuscripts, a preview lists
@@ -279,8 +276,9 @@ own word lists in its `lists` folder; Words can add words to them.
   (one beat, one setting line, the premise...). The Settings row opens the story's settings.
 - **Repeatable beats:** on a beat, **A** adds another of it (rolled for this universe and protagonist), **X** removes one.
 - **Story settings:** **S** opens the story's own font, column width, daily goal, short title for page headers, paragraph indent,
-  typewriter mode, invisibles, spellcheck and US/UK spelling. Leave a box as it is to follow your Settings; type `true` or `false`
-  in the yes/no boxes.
+  typewriter mode, invisibles, spellcheck and US/UK spelling, as choices like Settings. The first choice of each is "your default
+  (X)", which stores nothing in the story, and a note beside each row says whether it follows your default or is this story's own;
+  pick "your default" (or empty a number) to clear a story's own value. Ctrl+S or Save keeps the changes, Esc drops them.
 - **Scenes:** the Scenes tab lists them; Enter or a click opens the Writer at that scene; **+Scene** adds one at the end.
 - **A screenplay:** **P** writes script.fountain from the outline (a title page; each beat as a section and a synopsis, which never
   print). An existing script with scenes is never replaced.
@@ -299,7 +297,7 @@ cancels), or say "Open a story first" when the universe has none. (Fixed: ISSUES
 - **C** copies the manuscript as plain text.
 - **b** (with the Stories list focused) or **Backups…** lists the story's backups with a preview; **r** or Enter restores one after
   asking, and the version it replaces is kept aside first.
-- **G** edits your name and address for manuscripts (the same as Settings > You, without the surname).
+- **G** opens Settings on the You tab (your name and address for manuscripts, with the surname).
 
 ### Files storywheel did not make
 
@@ -363,7 +361,7 @@ screenplays." (Fixed: ISSUES #10.)
 
 ### The status line
 
-`The Last Clause · words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. It starts with the story's title (cut at 30 characters), so you always know which story you are in. The target is the story's target
+`The Last Clause · words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. It starts with the story's title (the whole title, shortened only when the window is too narrow), so you always know which story you are in. The target is the story's target
 length (the story form, `m` in the Builder); the daily goal is in Settings > Goals. A screenplay shows `p. 12 of ~15` instead.
 
 ### The Writer menu: F12 or Alt+M
@@ -485,8 +483,8 @@ of the help lists every action with both keys.
 One place for who you are and how storywheel works. Everything is saved the moment you change it (a number only when it is a valid
 number; folders, keys and colors when you press Enter). Open with **F4**; **q** goes back.
 
-Move between tabs by clicking them, or Tab into the tab bar and use Left/Right. (When Settings opens nothing has the focus yet; press
-Tab.)
+Move between tabs by clicking them, or with Left/Right: the tab bar has the focus when Settings opens, and Tab goes on into the boxes
+of the tab. A message at the bottom is cleared when you change tab.
 
 ### The tabs
 
@@ -502,7 +500,7 @@ Tab.)
 - **Grammar:** grammar checking on or off, each category (grammar, punctuation, capitals, confused words, meaning, other on; spelling,
   typography, style, redundancy, plain English, colloquialisms, repeated words off), turned-off rules, the pause before checking, the
   memory limit. Java and LanguageTool status at the bottom.
-- **Export:** manuscript font (Times New Roman or Courier New), default format for new stories, default export type, title in bold,
+- **Export:** manuscript font (Times New Roman or Courier New), default format for new stories (short story, novel, screenplay (feature film) or screenplay (short film)), default export type, title in bold,
   page header (full title or keyword), always export anonymously, one space after periods, curly quotes, screenplays' automatic
   (CONT'D), and the manuscripts folder.
 - **Keys:** every Writer shortcut. Type a key like `Alt+I`, `Ctrl+B` or `F9` and press Enter; a key the Writer needs, or one already
@@ -654,41 +652,34 @@ Most writers never need these; they are for scripts and for checking things.
 
 ---
 
-## Appendix B. Where the in-app help disagrees with this manual
+## Appendix B. Where the in-app help disagreed with this manual
 
 The help pages are in `storywheel/data/help/`. Their key tables are made from the real key bindings and are correct; the free text is
-where they drift. Each line: the page and section, what it says, and what actually happens.
+where it drifted. In the audit of 0.20.0 seventeen places disagreed with the program; all are fixed now (polish 1 and 2), and
+`tests/test_help_text.py` keeps the sentences below true. Each line: the page and section, what it said, and what was done.
 
-1. **wheel › Past stories:** "p and s send its protagonist or setting to the current story". They send it **into a universe you
-   choose**. (Fixed with ISSUES #13: the buttons are now "Use protagonist" and "Use setting"; they offer the piece to the draft you are on, with "send it to a universe" as the second choice.)
-2. **wheel › The universe panel:** "e to edit it, d to delete it (with a confirm), n to add a new one". The preview has only Use and
-   Close; there is no e, d or n in the panel.
-3. **wheel › Keys:** `U` is "Remove the selected value from your universe". It only tells you to delete in the Builder.
-4. **wheel › Mouse:** the button row is listed as "Roll, Keep, Back, Skip, Flavor, +Beat, -Beat"; it also has Send to Builder and New
-   draft.
-5. **backups › Deleted things:** "a draft with nothing kept goes to .trash. Nothing is destroyed." (Now true for a draft you delete
-   yourself as well: ISSUES #8.)
-6. **genres-and-flavor › Genres:** "Heist, coming-of-age and adventure still run on general atoms until their lists are written." They
-   were written in batch 14 and are full genres; the list of written genres also leaves them out.
-7. **writer › Leaving:** ":q works too". Only with Vim keys on; in notepad mode you can't type a `:` command.
-8. **writer › Keys (key_sidebar)** and **writing-prose › The scene sidebar** and **screenplays › Writing Fountain:** "Enter jumps, a
-   adds, r renames, J and K move". These keys did not work straight after F9. (Fixed: ISSUES #1.)
-9. **writer › Mouse:** "Right-click opens the everyday menu". (Fixed with ISSUES #2: the menu is now our own, and the help says how it
-   closes.)
-10. **words › Keys:** `k` "Mark the word ✓ Known" worked only in Vocabulary; `a` "Learn this word" and `l` are two keys for the same
-    thing. (Fixed with ISSUES #14: both work on the word you are on, on every tab.)
-11. **words › Keys:** `a` "Learn this word" learned the word in the hidden Lookup tab outside Lookup. (Fixed with ISSUES #14; `a` is
-    no longer pinned to the footer.)
-12. **keys › Footers:** "at most three keys that matter most". A focused list adds its own keys (Past stories shows four more).
-13. **builder › Keys (start_script)** is right, but the program's own message for a prose story says "Set its format to screenplay (S,
-    story settings)"; the format is on the story form (`m`). And right-clicking the Structure row says "The structure was set in the
-    Wheel", though `m` changes it.
-14. **builder › Mouse:** "In the Outline a click selects, the wheel scrolls and right-click edits". True, but `f`, Space, `R`, `+`/`-`,
-    `n` and `d` pressed in the Outline acted on the entity card. (Fixed: ISSUES #3; the help now says what `f` does there.)
-15. **settings › Moving around:** "left and right on the tab bar switch tabs"; true once the tab bar has the focus, but nothing has it
-    when Settings opens.
-16. **exports › Other formats:** doesn't mention the "Fountain (.fountain): the prose as action" export the Builder offers for prose.
-17. **structures › About:** "Pick one in the Wheel's Structure step" leaves out the Builder's story form (`m`, +Story), where a story's
-    structure is also picked or changed.
+1. **wheel › Past stories:** said "p and s send its protagonist or setting to the current story", but they sent it into a universe.
+   Now the buttons are "Use protagonist" and "Use setting": they use the piece in the draft you are on (a new candidate) or send it to
+   a universe, and the help says so. (ISSUES #13.)
+2. **wheel › The universe panel:** promised "e to edit it, d to delete it, n to add a new one". Removed: editing, deleting and adding
+   are done in the Builder, and the help says so. (ISSUES #16, #17.)
+3. **wheel › Keys:** `U` was "Remove the selected value from your universe". It is now described as the pointer to the Builder it is.
+   (ISSUES #18.)
+4. **wheel › Mouse:** the button row left out Send to Builder and New draft. Listed. (ISSUES #16.)
+5. **backups › Deleted things:** "Nothing is destroyed" was false for a deleted draft. Now true: it goes to `.trash`. (ISSUES #8.)
+6. **genres-and-flavor › Genres:** said heist, coming-of-age and adventure were not written. They are full genres and are now listed.
+   (ISSUES #16.)
+7. **writer › Leaving:** ":q works too" is true only with Vim keys on; the help now says so. (ISSUES #16.)
+8. **writer › Keys (key_sidebar)**, **writing-prose › The scene sidebar**, **screenplays › Writing Fountain:** the sidebar keys did not
+   work straight after F9. Fixed in the program. (ISSUES #1.)
+9. **writer › Mouse:** "Right-click opens the everyday menu": the menu is now our own, and the help says how it closes. (ISSUES #2.)
+10. **words › Keys:** `k` worked only in Vocabulary. Now on every tab. (ISSUES #14.)
+11. **words › Keys:** `a` learned the word in the hidden Lookup tab. Now the word you are on. (ISSUES #14.)
+12. **keys › Footers:** said "at most three keys"; a focused list adds its own. The help now says so. (ISSUES #16.)
+13. **builder:** the program's own messages named the wrong key for the format and structure. Now "Change it with m". (ISSUES #19.)
+14. **builder › Mouse:** keys pressed in the Outline acted on the entity card. Fixed in the program. (ISSUES #3.)
+15. **settings › Moving around:** nothing had the focus when Settings opened. The tab bar has it now. (ISSUES #30.)
+16. **exports › Other formats:** left out the prose-as-Fountain export. Added. (ISSUES #16.)
+17. **structures › About:** left out the Builder's story form as a place to pick a structure. Added. (ISSUES #16.)
 
-The README, which is not an in-app page, is further out of date: ISSUES #22 lists it.
+The README was rewritten from this manual (ISSUES #22); the generator-content guide it used to hold is `docs/generator.md`.

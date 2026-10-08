@@ -2,7 +2,7 @@
 
 Every problem found while auditing version 0.20.0 (branch `audit-manual`, 2026-10-08), ranked by how much it gets in a writer's way:
 first what can change or lose writing, then what gets in the way while writing, then what misleads, then cosmetic and command-line
-problems. Nothing was fixed in the audit session. Polish 1 (branch `polish-1`) then fixed issues 1 to 15; each is marked `[FIXED in <commit>]` in its title. The remaining backlog, ranked the same way, is at the end.
+problems. Nothing was fixed in the audit session. Polish 1 (branch `polish-1`) then fixed issues 1 to 15, and polish 2 (branch `polish-2`) issues 16 to 36; each is marked `[FIXED in <commit>]` in its title. The remaining backlog, ranked the same way, is at the end.
 
 Each issue says where it is (file and function), how to reproduce it, what was seen, and a suggested fix. "Verified" says how it was
 reproduced: **pilot** (Textual pilot in the real app, 200×50), **headless** (`nvim --headless` with the Writer's config), **terminal**
@@ -177,7 +177,7 @@ pointing into a temporary folder).
   `nvim_win_text_height`, and let F8 a second time focus it for scrolling.
 - **Verified:** terminal.
 
-### 13. [FIXED in 7c8cb9d] Wheel "Use protagonist" / "Use setting" send to a universe, not to this story
+### 13. [FIXED in 7c8cb9d; polish 2 added "use it in this draft" in 85c344f] Wheel "Use protagonist" / "Use setting" send to a universe, not to this story
 
 - **Where:** `storywheel/tui.py` `MainScreen.story_act` → `_sent_piece`; `StoryList.BINDINGS` (`+Protagonist`, `+Setting`); the buttons
   `st-protagonist`, `st-setting`; `data/help/wheel.md`.
@@ -209,14 +209,14 @@ pointing into a temporary folder).
 
 ## C. Misleading text and help
 
-### 16. In-app help pages that say the wrong thing
+### 16. [FIXED in 9c073a0] In-app help pages that say the wrong thing
 
 Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2, #3, #8, #13 and #14 were corrected with those fixes). The worst: Past stories `p`/`s` (#13), the universe panel's `e`/`d`/`n` (#17),
 "Nothing is destroyed" (#8), heist/adventure/coming-of-age "not written yet" in `genres-and-flavor.md`, `:q` in notepad mode, Words
 `k` and `a`. **Where:** `storywheel/data/help/*.md`. **Fix:** correct the free text; consider a test that every key named in free text
 (`` `x` ``, "press X") exists in that mode's bindings, which would have caught most of these.
 
-### 17. Wheel help: the universe panel promises e, d and n
+### 17. [FIXED in 9c073a0 (with #16)] Wheel help: the universe panel promises e, d and n
 
 - **Where:** `data/help/wheel.md` "The universe panel"; `tui.UniverseEntryScreen` has only Use and Close; `UniverseTree` binds `t` and
   `u`.
@@ -224,12 +224,12 @@ Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2,
   one". None of e, d, n exist there (they were in the old single-universe panel).
 - **Fix:** remove them from the help, or add them (edit/delete in the Wheel would duplicate the Builder; the Builder is the place).
 
-### 18. `U` in the Wheel is described as removing; it only points to the Builder
+### 18. [FIXED in 9c073a0 (with #16)] `U` in the Wheel is described as removing; it only points to the Builder
 
 - **Where:** `tui.MainScreen.action_universe_remove`; its help description `universe_remove` in `data/help/wheel.md`.
 - **Fix:** describe it as "Where to remove a value from a universe (the Builder)", or drop the binding and the "u/U" footer label.
 
-### 19. Builder messages that name the wrong key
+### 19. [FIXED in bd26450] Builder messages that name the wrong key
 
 - **Where:** `builder.py` `BuilderScreen.edit_top` ("The structure was set in the Wheel."), `action_start_script` ("Set its format to
   screenplay (S, story settings) or give it a screen structure.").
@@ -237,7 +237,7 @@ Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2,
   changed on the story form, `m`.
 - **Fix:** "Change it with m (format, structure, genres, target)."
 
-### 20. Story settings (S) and Your details (G) duplicate Settings, with weaker controls
+### 20. [FIXED in 449e5cc] Story settings (S) and Your details (G) duplicate Settings, with weaker controls
 
 - **Where:** `builder.py` `SETTINGS_FIELDS`, `action_story_settings`, `GLOBAL_FIELDS`, `action_global_settings`.
 - **Seen:** `S` is a column of text boxes: font typed freely (Settings offers a choice), yes/no settings typed as `true`/`false` and shown
@@ -247,7 +247,7 @@ Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2,
 - **Fix:** `G` opens Settings on the You tab. `S` gets switches and choices like Settings, marks inherited values ("your default"), and
   a way to clear an override.
 
-### 21. The TUI help screen's layout
+### 21. [FIXED in b518821] The TUI help screen's layout
 
 - **Where:** `storywheel/helpscreen.py` `HelpScreen` (the hint line), `storywheel/helpdoc.py` (key tables).
 - **Seen (200×50):** the hint line is cut at "↑ ↓ PgUp PgDn scroll ·", losing how to close it; a key description that wraps continues
@@ -256,7 +256,7 @@ Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2,
 - **Fix:** wrap or shorten the hint line; hang wrapped descriptions; skip a binding whose key already appears in another row's
   `key_display`.
 
-### 22. README.md is out of date in many places
+### 22. [FIXED in 60b2400] README.md is out of date in many places
 
 - **Seen:** the Wheel key table ("q quit (asks)", "Mix", "v universe panel"; Q is quit now, the mix is Flavor); "Quitting: q asks Keep
   or delete"; the universe panel "grouped by kind (Protagonist, Setting…)" with "n or [+ New]" and "t or [Use: …]"; the library layout
@@ -269,50 +269,50 @@ Seventeen places, listed in `docs/manual.md`, Appendix B (the ones about #1, #2,
 
 ## D. Small and cosmetic
 
-### 23. Builder: a new card has no highlighted row
+### 23. [FIXED in ea8a149] Builder: a new card has no highlighted row
 
 `builder.py` `_build_card` keeps `highlighted = None`; `field_key` treats None as row 0. After `n`, `f`/`e` act on the Name with nothing
 highlighted, and the first Down only highlights the Name. **Fix:** highlight row 0 when the card is built for a new entity. (pilot)
 
-### 24. Wheel card: a near miss on ▲ ▼ rerolls the field
+### 24. [FIXED in 1dfb7ad] Wheel card: a near miss on ▲ ▼ rerolls the field
 
 `tui.CardList.on_click`: ▲ is 3 cells and ▼ 3 cells at the far right of the row; any other click on the row rerolls the field (x = 97
 rerolled; 98–103 rate, at 200 columns). The old value is still in the history, but it surprises. **Fix:** widen the target, or make
 clicks between the value's end and ▲ do nothing. (pilot)
 
-### 25. Wheel Past stories: titles cut at 22 characters; copies look identical
+### 25. [FIXED in 2e4c6b0] Wheel Past stories: titles cut at 22 characters; copies look identical
 
 `tui.MainScreen.refresh_stories` formats `title[:22]` though the box is 46 wide; a copy made with `C` has the same title as its
 original, so two rows read "Blood and March in Dun 10-08 done". **Fix:** use the box's width; mark copies ("(copy)"). (pilot)
 
-### 26. The F12 menu numbers only items 1–9
+### 26. [FIXED in c7242bb] The F12 menu numbers only items 1–9
 
 `sw/menu.lua` `M.open`: about 35 items, numbers only on the first nine (all in "Edit"). **Fix:** letters for the rest, or numbers per
 group. (terminal)
 
-### 27. Find and replace: the key hint on the bottom border is cut on the left
+### 27. [FIXED in 4d63ee9] Find and replace: the key hint on the bottom border is cut on the left
 
 `sw/replace.lua`: the border shows `╰< replace · Alt+A all · Alt+C case · Alt+W word · Esc close ╯`. **Fix:** shorten it, or widen the
 float to fit. (terminal)
 
-### 28. F7 without the dictionary: the message wraps mid-word and waits for Enter
+### 28. [FIXED in c196bfa] F7 without the dictionary: the message wraps mid-word and waits for Enter
 
 `sw/lookup.lua`: "…To fix it, run:  storywheel dict / ionary install … Press ENTER or type command to continue". **Fix:** a one-line
 message ("No dictionary yet: run storywheel dictionary install"), echoed without history so there is no hit-enter prompt. (terminal)
 
-### 29. Narrow Builder: the Story panel's outline is 16 columns wide
+### 29. [FIXED in 67b4453] Narrow Builder: the Story panel's outline is 16 columns wide
 
 `builder.py` CSS `-narrow #left { width: 34 }`: at 120 columns the outline's values wrap to 4–16 characters ("thri", "wond"). The
 full-width view needs 6/7/8 or backslash. **Fix:** at narrow widths, show the outline only in the full-width view and a one-line
 summary in the column. (pilot)
 
-### 30. Settings opens with nothing focused, and old messages stay
+### 30. [FIXED in 4fa950f] Settings opens with nothing focused, and old messages stay
 
 `settings_app.SettingsScreen.on_mount` focuses nothing: the first Tab focuses nothing visible, Left/Right do nothing until the tab bar
 has the focus. The status line keeps the last message across tabs (a color error stayed while on Stats). **Fix:** focus the tab bar on
 open; clear the status line on tab change. (pilot)
 
-### 31. Settings > Export > Default format offers "screenplay", not the two screenplay kinds
+### 31. [FIXED in de3eb06] Settings > Export > Default format offers "screenplay", not the two screenplay kinds
 
 `settings_app.SECTIONS` ("short-story", "novel", "screenplay") while the story form has four formats (`formats.py`: short-story, novel,
 feature-film, short-film); "screenplay" here means a feature film (`formats.global_default`). **Fix:** offer the four formats by label.
@@ -322,30 +322,30 @@ feature-film, short-film); "screenplay" here means a feature film (`formats.glob
 
 ## E. Command line and development
 
-### 32. `storywheel builder`, `settings` and `writer` start full-screen without a terminal
+### 32. [FIXED in d3d24ef] `storywheel builder`, `settings` and `writer` start full-screen without a terminal
 
 `cli_world.cmd_builder`, `cmd_settings`, `cmd_writer` call `modes.run` regardless; with stdin and stdout not a terminal they print escape
 codes and wait (`wheel` falls back to the plain prompt). `writer` with no story opens the Builder. **Fix:** refuse with a message when
 not a terminal. (CLI)
 
-### 33. Three commands called export, and a leftover `universe` command
+### 33. [FIXED in 6b91023] Three commands called export, and a leftover `universe` command
 
 `export N --out DIR` (copy a draft's markdown), `exports status|make` and `manuscript export` are different things with near-identical
 names. `universe [rm KEY N]` only says the single universe is gone and lists universes (`universes` does that). **Fix:** rename `export`
 to `draft-export` (keep the old name as an alias for a while); retire `universe`. (CLI)
 
-### 34. Small CLI wording
+### 34. [FIXED in fbf142e] Small CLI wording
 
 "(1 words)", "(2 entities, 1 stories)" in `story list` and `universes`; `post-update` is listed in `--help` as "==SUPPRESS==" (a hidden
 subparser still shows). **Fix:** plural helper (`text.plural_n` exists); drop `help=` for `post-update` and remove it from the choices
 listing. (CLI)
 
-### 35. `storywheel promote N` crashes at end of input
+### 35. [FIXED in 46aff8c] `storywheel promote N` crashes at end of input
 
 `cli_world.cmd_promote` calls `input("  Promote? [y/N] ")` without catching `EOFError`; with no input it ends in a traceback. **Fix:**
 treat EOF as "no". (CLI)
 
-### 36. Comments, docstrings and notes that drifted
+### 36. [FIXED in f409f6c] Comments, docstrings and notes that drifted
 
 `sw/replace.lua` header says Ctrl+H (it is Ctrl+R); `tests/test_replace.py` docstring says Ctrl+H; `builder.py`'s module docstring
 describes a right column that no longer exists; BACKLOG.md says "Nothing is broken that I know of" and still lists the `Space n`

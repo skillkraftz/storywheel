@@ -1034,3 +1034,12 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   `<home>/.trash`. Past stories' protagonist/setting buttons stay "send to a universe" and say so (offering them as a candidate on the current draft is
   undecided). `tests/nvdrive.py` (keys and mouse into a headless Writer, step by step) and `tests/ptydrive.py` (a real terminal read through pyte) are the
   drivers for tests that must press keys and click; a headless Neovim cannot fire CursorMoved while keys are queued, so cursor-movement behavior is tested on a pty.
+
+- Polish 2 (ISSUES.md 16-36): the test pty (`tests/ptydrive.py`) is sized before Neovim starts and drops DCS strings before pyte sees them (pyte prints them
+  as text); `STORYWHEEL_NVIM` picks the Neovim the tests use. Story settings (`S`) store only what the story sets (`settings.story_own`, `clear_story`; the
+  first choice of each row is "your default"). Settings keeps the default format as `format` + `script_kind` (shown as one of four choices; `script_kind`
+  is inherited by stories). Past stories' "Use protagonist / Use setting" use the piece in the current draft (`_src` "past") or send it to a universe, and
+  stay read-only for a promoted draft. The Builder's thin column (under 150 columns) shows a summary (`#story-summary`), not the Story panel's tabs. F12
+  menu keys are 1-9, then letters (not j, k, q), then capitals (`sw.menu.hotkeys`). `post-update` is dispatched before argparse so `--help` does not list
+  it; `export` is an alias of `draft-export`; `universe` is retired. The generator-content guide lives in `docs/generator.md` (checked in batch 18, not
+  re-checked); the README points at `docs/manual.md`.
