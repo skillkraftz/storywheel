@@ -1,5 +1,5 @@
 # Structures
-A structure is the shape of a story's body: an ordered list of beats, each filled from its own templates. Pick one in the Wheel's Structure step.
+A structure is the shape of a story's body: an ordered list of beats, each filled from its own templates. Pick one in the Wheel's Structure step, or on the Builder's story form (+ Story, or m on a story), where a story's structure is also changed.
 ## The ones that ship
 The Story Spine ("Once upon a time... Every day... Until one day... Because of that... Until finally..."), a Three-Act Outline, and Kishotenketsu (introduction, development, twist, conclusion).
 ## Repeatable beats

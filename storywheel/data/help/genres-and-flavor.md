@@ -1,7 +1,7 @@
 # Genres and flavor
 The generator draws from lists of short atoms (a job, a thing, a landmark), tagged by genre. The genres you pick give those tags their weights; the flavor tunes them for one story.
 ## Genres
-Written in full: western, fairy tale, comedy, fantasy, mystery, horror, sci-fi, romance, ghost story (grief, memory and a house that remembers: melancholy more than dread, horror's neighbor) and noir (money, cynicism and a city that always wins: mystery's and thriller's neighbor, where the truth comes out and nothing is fixed) and thriller (pressure, a clock, pursuit and someone who knows too much: neighbor of mystery, noir and heist). Heist, coming-of-age and adventure still run on general atoms until their lists are written. A story can blend several genres; the blend follows their profiles.
+Written in full: western, fairy tale, comedy, fantasy, mystery, horror, sci-fi, romance, ghost story (grief, memory and a house that remembers: melancholy more than dread, horror's neighbor) and noir (money, cynicism and a city that always wins: mystery's and thriller's neighbor, where the truth comes out and nothing is fixed) and thriller (pressure, a clock, pursuit and someone who knows too much: neighbor of mystery, noir and heist), heist (the plan and the crew), adventure (the road and the chart) and coming-of-age (the summer and the first time). A story can blend several genres; the blend follows their profiles.
 ## The wildcard floor
 A little off-genre material always gets in (12 percent of picks, about 4 for slots that repeat through a story such as the rival, job, place, names and landmark), mostly from neighbouring genres, so a story is never only the genre's cliches.
 ## Flavor

@@ -5,7 +5,7 @@ F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words, in every mode (also clic
 ## Fields
 f rolls the highlighted field, e writes it by hand, space rolls what is blank (or the step), k keeps, + and - like and dislike a value, ? help. Left-click a field rolls it, right-click writes it, the scroll wheel steps through its earlier values.
 ## Footers
-Every footer shows the five modes, Help, Back and at most three keys that matter most on that screen. Everything else is in the help for that mode.
+Every footer shows the five modes, Help, Back and at most three keys that matter most on that screen (a list that has the focus adds its own, so a few screens show more). Everything else is in the help for that mode.
 ## The Writer
 Shortcuts (italic, bold, scene break, menu...) can be changed in Settings > Keys; they are checked so none takes a key the Writer needs. Most terminals send Ctrl+I as Tab; Alt+I always works, and Ctrl+I works under kitty.
 ## Help

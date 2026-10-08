@@ -62,6 +62,6 @@ In Settings > Writer you can turn notepad mode off to get Vim. Every action has 
 ## Grammar (optional)
 Off by default. Install once with storywheel grammar install, then turn it on in the Writer menu or Settings > Grammar. A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline; right-click one for the message, fixes, Ignore this one and Turn off this rule.
 ## Leaving
-F2 or the Builder key saves everything and goes back to the Builder; F1 the Wheel; F4 Settings; :q works too.
+F2 or the Builder key saves everything and goes back to the Builder; F1 the Wheel; F4 Settings. With Vim keys on, :q works too; in notepad mode (the default) you cannot type a : command, so use F2.
 ## This help
 It has tabs: the guide to this story's format (Screenplay, or Writing prose for a short story or a novel), Writing basics, Keys and Export. It opens on the format's guide. Tab and Shift+Tab, the number keys or a click on a tab switch. Scroll with the arrow keys or PgUp/PgDn, search the tab with / (n for the next match), close with F3 again, Esc or q. The other mode keys (F1, F2, F4, F5) close it and switch as usual.

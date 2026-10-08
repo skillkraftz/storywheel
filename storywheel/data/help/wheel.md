@@ -23,7 +23,7 @@ copy_draft: Make an editable copy of a promoted draft (promoted drafts are read-
 back: Go back one step
 skip: Skip this step (later steps invent stand-ins, marked as such)
 universe_add: Save the selected value into a universe
-universe_remove: Remove the selected value from your universe
+universe_remove: Where to remove a value from a universe (it points you to the Builder, F2)
 editor: Edit the whole step in your $EDITOR
 focus_card: Back to the card from a list
 ### MixScreen | The flavor editor
@@ -48,7 +48,7 @@ use: Use the entry in this story (as a new candidate; nothing is kept until you 
 ## Mouse
 - Click a field: reroll just that field. Right-click a field: edit it. Scroll over a field: step through its earlier values.
 - ▲ ▼ at the end of a line: like or dislike it.
-- Buttons under the card: Roll, Keep, Back, Skip, Flavor, +Beat, -Beat. Click a step to jump to it, a history row to pick it.
+- Buttons under the card: Roll, Keep, Back, Skip, Flavor, +Beat, -Beat, Send to Builder (Open in Builder once sent) and New draft. Click a step to jump to it, a history row to pick it.
 - To select text with the mouse while this app has it, hold Shift and drag (some terminals: Alt, or Option on a Mac).
 ## Format and structure
 The structure step has two lines. The format (short story, novel, or a screenplay as a feature film or a short film) is picked from a list: click it, or f or e on it. The structure is rolled (f, a click) or picked (e, right-click) among the ones that fit the format: the screen structures only for a screenplay. Nothing here is typed, so a typo can't turn into the Story Spine; a structure typed at the plain prompt must be one of the list or it is refused with the list. A story promoted to the Builder keeps its format, with that format's usual target length.
@@ -59,7 +59,7 @@ If you roll a step before the ones it builds on are kept (say the story body bef
 ## Markers on the steps
 ✓ kept   – skipped   ▶ current   · to do.  A yellow ● means kept, but built on a stand-in or on something that changed. A red ✗ means it refers to something that no longer exists. The right-hand column says what is wrong.
 ## The universe panel
-Bottom left. Entries are grouped by kind; Enter opens or closes a group. "Belongs to" chooses the universe this draft will be promoted into. Tick universes the generator may draw characters, places and things from. Press Enter on an entry to preview it, then Enter or u to use it in this story (as a new candidate), e to edit it, d to delete it (with a confirm), n to add a new one. Press Esc to close.
+Bottom left. Entries are grouped by kind; Enter opens or closes a group. "Belongs to" chooses the universe this draft will be promoted into. Tick universes the generator may draw characters, places and things from. Press Enter on an entry to preview it, then Enter or u to use it in this story (as a new candidate; nothing is kept until you press k). Editing, deleting and adding entries is done in the Builder (F2). Press Esc to close.
 ## Past stories
 Bottom left: Enter opens one, d deletes it (asks first; it goes to the .trash folder in your storywheel home), p and s send its protagonist or setting to a universe you choose (it asks which; to use something in the draft you are on, open the universe panel instead), P promotes it. "5/8" means five steps kept, "done" a finished one.
 ## Leaving
