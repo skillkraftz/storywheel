@@ -177,3 +177,20 @@ def test_21_a_long_description_hangs_under_its_own_column(home, ann, start):
         assert all(l.startswith(("- ", " ")) for l in mouse), mouse    # a wrapped bullet hangs under its text
     longest = max(text.splitlines(), key=len)
     assert len(longest) <= 130 - 8
+
+
+# --- 23. a new card has a highlighted row ---------------------------------------------------------------------------------------
+
+def test_23_a_new_card_starts_on_its_first_row_and_down_moves_to_the_second(home, ann):
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.click("#card", offset=(5, 1))
+        await pilot.pause()
+        await pilot.press("n")
+        await pilot.pause()
+        first = (s.card.highlighted, s.field_key())
+        await pilot.press("down")
+        await pilot.pause()
+        return first, (s.card.highlighted, s.field_key())
+    first, second = builder_run(script)
+    assert first == (0, "name") and second[0] == 1 and second[1] != "name"

@@ -762,8 +762,7 @@ class BuilderScreen(KeptScreen, Screen):
             options.append(Option(_text_row(shown + " " * (width - cell_len(shown)), value, rated=rating), id=key))
 
         lst.add_options(options)
-        if keep is not None:
-            lst.highlighted = min(keep, len(options) - 1)
+        lst.highlighted = min(keep, len(options) - 1) if keep is not None else 0         # (a fresh card starts on its first row)
 
     def refresh_right(self, notes=True, appears=True):
         e = self.entity
@@ -1202,6 +1201,7 @@ class BuilderScreen(KeptScreen, Screen):
         self.entity = e
         self.refresh_all()
         self.say(f"A blank {self.type}. space rolls every blank field; f rolls one; e writes one.")
+        self.card.highlighted = 0                                      # the new card starts on its first row, whatever was highlighted before
         self.card.focus()
 
     def action_delete_entity(self):
