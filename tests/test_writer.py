@@ -390,7 +390,7 @@ def test_the_status_line_shows_scene_manuscript_and_today_against_the_goal(home,
         R.line = require("sw.stats").line()
         R.statusline = vim.o.statusline
     """)
-    assert r["line"] == "  words: in this scene 9 · in the story 14 · today 0 / 1,000 words · 0%"
+    assert r["line"] == "  The Last Clause  ·  words: in this scene 9 · in the story 14 · today 0 / 1,000 words · 0%"
     assert "sw.stats" in r["statusline"]
 
 

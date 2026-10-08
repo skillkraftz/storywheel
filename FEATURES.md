@@ -26,7 +26,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 
 | Control | Key / mouse | What it is for | Test | Status | Checked |
 |---|---|---|---|---|---|
-| Mode keys | F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words | Move between the five modes; everything is saved first | test_hub.py, test_navigation.py, test_switching.py | works | P |
+| Mode keys | F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words | Move between the five modes; everything is saved first. F3 in the Wheel opens the draft's own story (or says it was never sent); the Writer's status line and window title name the story (was ISSUES #4) | test_hub.py, test_navigation.py, test_switching.py | works | P |
 | Key of the mode you are in | e.g. F2 in the Builder | Opens that mode's help (and closes it again) | test_help_toggle.py | works | P |
 | Help | `?` | The mode's help in tabs (guide, Keys, Topics) with a search box | test_help.py, test_help_tabs.py | works; layout **confusing** (ISSUES #21) | P |
 | Back | `q` | Back to the mode you came from, or close the dialog | test_navigation.py | works | P |

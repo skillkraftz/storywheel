@@ -323,9 +323,10 @@ scenes, its outline and its universe's names. It is Neovim underneath, set up so
   (carrying the word under the cursor). **Alt+Q** quits storywheel after asking.
 - The Writer remembers the open scene, the cursor and your toggles for each story.
 
-> **Watch out:** F3 **from the Wheel** does not open the draft you are looking at (a draft has no manuscript until it is in the
-> Builder). It opens the story you last had in the Builder, or the first story of the ticked universe, and the Writer doesn't show
-> which story it is. Open stories from the Builder (`w`) until this is fixed. (ISSUES #4.)
+F3 **from the Wheel** opens the draft you are looking at, once it has been sent to the Builder. A draft that was never sent has no
+manuscript, so F3 says "This draft has no manuscript yet: send it to the Builder first (B)" and opens nothing; it never guesses another
+story. The Writer always shows the story's title: first on the status line ("The Last Clause · words: in this scene…") and in the
+terminal window title. (Fixed: ISSUES #4.)
 
 Inside kitty (Settings > Writer: "Open the Writer in its own kitty window"), the Writer opens in its own window with your writing font,
 size, line height, padding and opacity.
@@ -356,7 +357,7 @@ size, line height, padding and opacity.
 
 ### The status line
 
-`words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. The target is the story's target
+`The Last Clause · words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. It starts with the story's title (cut at 30 characters), so you always know which story you are in. The target is the story's target
 length (the story form, `m` in the Builder); the daily goal is in Settings > Goals. A screenplay shows `p. 12 of ~15` instead.
 
 ### The Writer menu: F12 or Alt+M

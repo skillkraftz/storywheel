@@ -342,7 +342,7 @@ local function global_options()
   o.hidden = true
   o.swapfile = false
   o.title = true
-  o.titlestring = "storywheel: writing"        -- (the terminal window title; short, so it never shows a long path)
+  o.titlestring = "storywheel: writing"        -- (the terminal window title; short, so it never shows a long path. start() adds the story's title)
   o.shortmess = "filmnrxoOtTWAIFcs"        -- short messages: a long file path must never wrap and scroll the status line
   o.scrolloff = 4
   o.timeoutlen = 600
@@ -424,6 +424,8 @@ end
 function M.start()
   if M.started or not story.dir then return end
   M.started = true
+  local title = vim.trim((story.info or {}).title or "")
+  if title ~= "" then vim.o.titlestring = "storywheel: " .. title end           -- (the window title says which story this is)
   story.ensure_first_scene()
   local saved = session.load()
   gui.setup()                                       -- (is this the Writer's own kitty window?)

@@ -291,3 +291,95 @@ def test_3_the_keys_still_work_on_the_card(home, ann):
         await pilot.pause()
         return len(s.universe.entities("character"))
     assert builder_run(script) == 2
+
+
+# --- 4. F3 from the Wheel, and the Writer always shows the story's title ------------------------------------------------
+
+import contextlib  # noqa: E402
+
+from storywheel import hub as hubmod, modes, promote, store  # noqa: E402
+from storywheel.engine import Engine  # noqa: E402
+from storywheel.ratings import Ratings  # noqa: E402
+from conftest import screen_text  # noqa: E402
+
+
+def _hub_run(script, start, size=(190, 50)):
+    async def go():
+        app = hubmod.Hub(start, lambda: Engine(seed=3), lambda: Ratings())
+        async with app.run_test(size=size) as pilot:
+            await pilot.pause()
+            return await script(app, pilot)
+    return asyncio.run(go())
+
+
+def _record_writer(monkeypatch):
+    calls = []
+
+    def fake_run(story, scene=None, replace=None):
+        calls.append((story.universe.slug, story.slug))
+        fake_run.handover = None
+        writer.run.handover = None
+        return "builder"
+    monkeypatch.setattr(writer, "run", fake_run)
+    monkeypatch.setattr(writer, "check", lambda: None)
+    monkeypatch.setattr(hubmod, "quiet_suspend", lambda app: contextlib.nullcontext())
+    return calls
+
+
+def _draft_promoted_into_its_own_universe(home):
+    """The audit's case: the last Builder story is in Thornwood; the draft was promoted into a universe of its own and has Thornwood ticked."""
+    from storywheel.sample import build_story
+    thorn = vault.create_universe("Thornwood", ["western"])
+    legacy = thorn.new_story("Legacy Labels", {"genre": "western"}, {"Premise": "Labels."})
+    legacy.add_scene("Opening", "Old labels.")
+    draft = build_story(Engine(seed=5), ["western"])
+    draft["universes"] = ["thornwood"]
+    store.save(draft)
+    return thorn, legacy, draft, None
+
+
+def test_4_f3_in_the_wheel_opens_the_drafts_own_story_not_the_last_builder_story(home, monkeypatch):
+    modes.TRAIL.clear()
+    thorn, legacy, draft, plan = _draft_promoted_into_its_own_universe(home)
+    own = vault.create_universe("A Curfew for Xavi", ["western"])
+    mine = own.new_story("A Curfew for Xavi", {"genre": "western"}, {"Premise": "Curfew."})
+    mine.add_scene("Opening", "Xavi.")
+    draft["promoted"] = {"universe": own.slug, "story": mine.slug}
+    store.save(draft)
+    state_mod = __import__("storywheel.state", fromlist=["State"])
+    state_mod.State().update(universe="thornwood", story="legacy-labels", mode="wheel")      # (where the Builder was last)
+    calls = _record_writer(monkeypatch)
+
+    async def script(app, pilot):
+        await pilot.press("f3")
+        await pilot.pause()
+        await pilot.pause()
+        return calls[:]
+    got = _hub_run(script, ("wheel", {"story_id": draft["id"]}))
+    assert got == [(own.slug, mine.slug)]
+
+
+def test_4_f3_on_a_draft_that_was_never_sent_says_so_and_opens_nothing(home, monkeypatch):
+    modes.TRAIL.clear()
+    thorn, legacy, draft, plan = _draft_promoted_into_its_own_universe(home)
+    calls = _record_writer(monkeypatch)
+
+    async def script(app, pilot):
+        await pilot.press("f3")
+        await pilot.pause()
+        await pilot.pause()
+        return calls[:], " ".join(screen_text(app).split()), app.mode_name
+    got, text, mode = _hub_run(script, ("wheel", {"story_id": draft["id"]}))
+    assert got == [] and mode == "wheel" and "This draft has no manuscript yet" in text
+
+
+@pytest.mark.skipif(not hasattr(os, "fork"), reason="needs a pseudo-terminal")
+def test_4_real_terminal_the_writer_shows_the_title_in_the_status_line(home, term_story):
+    t = Term(term_story)
+    try:
+        status = [l for l in t.lines() if "in this scene" in l]
+        assert status and "The Last Clause" in status[0]
+        title = t.screen.title if hasattr(t.screen, "title") else ""
+        assert "The Last Clause" in title            # the terminal window title too
+    finally:
+        t.close()

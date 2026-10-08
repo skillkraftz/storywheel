@@ -172,7 +172,10 @@ function M.line()
   if target and target > 0 then
     total = string.format("%s / %s words · %d%%", total, commas(target), math.floor(100 * M.total_cached / target + 0.5))
   end
-  return string.format("  %swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
+  local title = vim.trim((story.info or {}).title or "")                   -- always say which story this is: no writing into the wrong one
+  if vim.fn.strdisplaywidth(title) > 30 then title = vim.fn.strcharpart(title, 0, 29) .. "…" end
+  return string.format("  %s%swords: in this scene %s · in the story %s · %s%s", title ~= "" and (title .. "  ·  ") or "",
+                       M.pages_cached and (M.pages_cached .. "  ·  ") or "",
                        commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
 end
 

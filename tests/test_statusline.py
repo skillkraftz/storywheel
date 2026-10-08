@@ -35,7 +35,7 @@ def test_the_status_line_is_clean_on_a_real_terminal(home, notepad):
                 break
         status = [r for r in rows if "in this scene" in r]
         assert len(status) == 1, rows
-        assert status[0].strip() == "words: in this scene 11 · in the story 11 · today 0 / 1,000 words · 0%"
+        assert status[0].strip() == "Tale  ·  words: in this scene 11 · in the story 11 · today 0 / 1,000 words · 0%"
         assert rows.index(status[0]) == 28                      # the row above the (empty) command line
         assert not any("/tmp" in r or "pytest" in r for r in rows)     # no file path leaks anywhere on the screen
     finally:

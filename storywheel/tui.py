@@ -1304,6 +1304,8 @@ class MainScreen(KeptScreen, Screen):
     def action_mode(self, which):
         """F1 / F2 / F3: save this draft and leave for another mode. F2 from a draft with kept steps offers to send it first."""
         story = self.session.story
+        if which == "writer":                      # F3 opens THIS draft's story, never a guess
+            return self._open_writer_for_draft(story)
         if which == "builder" and story["kept"] and not story.get("promoted"):
             self.app.push_screen(ChoiceScreen("This draft has kept steps that are not in the Builder yet.",
                                               [("Send it to the Builder first (new or existing universe)", "send"),
@@ -1311,6 +1313,19 @@ class MainScreen(KeptScreen, Screen):
                                  lambda c: self.action_send() if c == "send" else (self._leave("builder") if c == "go" else None))
             return
         self._leave(which)
+
+    def _open_writer_for_draft(self, story):
+        promoted = story.get("promoted")
+        if not promoted:
+            self.say("This draft has no manuscript yet: send it to the Builder first (B), then open it in the Writer.")
+            return
+        from . import vault
+        u = vault.get_universe(promoted.get("universe") or "")
+        if u is None or u.story(promoted.get("story") or "") is None:
+            self.say("The story this draft became is no longer in its universe, so there is nothing to write. Open the Builder (F2) to see what is there.")
+            return
+        self.session.save()
+        self.app.go("writer", dict(promoted))
 
     def _leave(self, which):
         self.session.save()
