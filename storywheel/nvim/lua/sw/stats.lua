@@ -179,11 +179,13 @@ function M.line()
   if target and target > 0 then
     total = string.format("%s / %s words · %d%%", total, commas(target), math.floor(100 * M.total_cached / target + 0.5))
   end
-  local title = vim.trim((story.info or {}).title or "")                   -- always say which story this is: no writing into the wrong one
-  if vim.fn.strdisplaywidth(title) > 30 then title = vim.fn.strcharpart(title, 0, 29) .. "…" end
-  return string.format("  %s%swords: in this scene %s · in the story %s · %s%s", title ~= "" and (title .. "  ·  ") or "",
-                       M.pages_cached and (M.pages_cached .. "  ·  ") or "",
-                       commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
+  local rest = string.format("%swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
+                             commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
+  -- always say which story this is (no writing into the wrong one): the whole title when it fits, shortened only when the window is too narrow
+  local title = vim.trim((story.info or {}).title or "")
+  local room = vim.o.columns - vim.fn.strdisplaywidth(rest) - 8
+  if vim.fn.strdisplaywidth(title) > math.max(room, 12) then title = vim.fn.strcharpart(title, 0, math.max(room, 12) - 1) .. "…" end
+  return "  " .. (title ~= "" and (title .. "  ·  ") or "") .. rest
 end
 
 -- (a statusline expression is read as a statusline: its % signs must be doubled)

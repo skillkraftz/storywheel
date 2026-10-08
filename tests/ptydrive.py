@@ -25,6 +25,9 @@ class Term:
         self.rows, self.cols = rows, cols
         self.pid, self.fd = pty.fork()
         if self.pid == 0:
+            # the size is set before Neovim starts (a real terminal has one from the first byte); setting it afterwards made Neovim 0.11
+            # draw its first frame for 24x80 and paint the status line at the wrong place
+            fcntl.ioctl(0, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
             os.execvpe(argv[0], argv, env)
         fcntl.ioctl(self.fd, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
         self.alive = True
@@ -42,7 +45,28 @@ class Term:
                 if not chunk:
                     self.alive = False
                     return
-                self.stream.feed(chunk)
+                self.feed(chunk)
+
+    _dcs_open = b""
+
+    def feed(self, chunk):
+        """Feed pyte, without the DCS strings (`ESC P ... ESC \\`: Neovim's XTGETTCAP questions). A real terminal swallows them; pyte
+        would print their text on the screen, at the cursor, over the writing."""
+        data = self._dcs_open + chunk
+        self._dcs_open = b""
+        out = b""
+        while data:
+            i = data.find(b"\x1bP")
+            if i < 0:
+                out += data
+                break
+            out += data[:i]
+            j = data.find(b"\x1b\\", i)
+            if j < 0:                           # the string goes on in the next read
+                self._dcs_open = data[i:]
+                break
+            data = data[j + 2:]
+        self.stream.feed(out)
 
     def send(self, data, wait=0.4):
         os.write(self.fd, data.encode() if isinstance(data, str) else data)

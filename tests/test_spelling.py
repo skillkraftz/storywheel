@@ -232,12 +232,12 @@ def test_the_spell_language_is_set_on_the_writing_buffer_not_the_current_one(hom
         local mainbuf = vim.api.nvim_win_get_buf(main)
         vim.bo[mainbuf].spelllang = "en"
         vim.cmd("vsplit"); local other = vim.api.nvim_create_buf(false, true); vim.api.nvim_win_set_buf(0, other)   -- the current window is somewhere else
-        vim.bo[other].spelllang = "de"
+        vim.bo[other].spelllang = "en_gb"
         p.set_spell(false); p.set_spell(true)
         R.main = vim.bo[mainbuf].spelllang; R.other = vim.bo[other].spelllang
         R.file = vim.bo[mainbuf].spellfile
     """)
-    assert r["main"] == "en_us" and r["other"] == "de" and r["file"].endswith("en.utf-8.add,%s" % (Path(r["file"]).parent / "names.utf-8.add")) or "names.utf-8.add" in r["file"]
+    assert r["main"] == "en_us" and r["other"] == "en_gb" and r["file"].endswith("en.utf-8.add,%s" % (Path(r["file"]).parent / "names.utf-8.add")) or "names.utf-8.add" in r["file"]
 
 
 def test_spellcheck_is_on_by_default_and_the_setting_turns_it_off(home, story):

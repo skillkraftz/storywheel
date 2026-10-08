@@ -385,6 +385,16 @@ def test_4_real_terminal_the_writer_shows_the_title_in_the_status_line(home, ter
         t.close()
 
 
+def test_4_the_status_line_shows_the_whole_title_when_it_fits_and_shortens_only_in_a_narrow_window(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    s = u.new_story("The Last Clause of the Dry Years")           # 32 characters: over the old fixed limit of 30
+    s.add_scene("Opening", "The gate was shut.")
+    r = drive(s, [keys("<Cmd>set columns=140<CR>")], "R.wide = require('sw.stats').line()")
+    assert "The Last Clause of the Dry Years  ·  words:" in r["wide"]
+    r = drive(s, [keys("<Cmd>set columns=70<CR>")], "R.narrow = require('sw.stats').line()")
+    assert "…  ·  words:" in r["narrow"] and "The Last Clause of the Dry Years" not in r["narrow"]
+
+
 # --- 5. no paragraph indent in the Writer's floats ----------------------------------------------------------------------
 
 FLOAT_MARKS = """
@@ -815,6 +825,28 @@ def test_12_real_terminal_a_card_taller_than_the_window_scrolls_after_a_second_f
         t.send("x")
         line = next(l for l in t.lines() if "Lowell" in l)
         assert "x" in line and len(line.strip()) == len("Ann Lowell") + 1                                # typing goes on: x was typed, not a delete
+    finally:
+        t.close()
+
+
+@pty_only
+@pytest.mark.parametrize("reply", [
+    b"\x1bP1+r4D73=" + b"\x1b]52;%p1%s;%p2%s\x07".hex().upper().encode() + b"\x1b\\",                  # XTGETTCAP "Ms" (the clipboard query), answered
+    b"\x1bP0+r4D73\x1b\\",                                           # ...and refused
+    b"\x1b[?62;22c", b"\x1b]11;rgb:0000/0000/0000\x07", b"\x1b[?2026;2$y", b"\x1b[?1;2R",     # DA1, background colour, DECRPM, cursor report
+])
+def test_12b_real_terminal_a_late_terminal_reply_is_never_typed_into_the_text(home, term_story, reply):
+    """The terminal may answer Neovim's start-up questions late, while the Writer sits in insert mode (found on Neovim 0.11)."""
+    t = Term(term_story)
+    try:
+        t.send("abc ")
+        t.send(reply, wait=0.8)                                        # a reply arriving long after Neovim started
+        t.send("def")
+        t.key("Esc", wait=0.5)
+        t.send(reply, wait=0.8)
+        t.send("!")
+        text = t.text()
+        assert "abc def!" in text, [l for l in t.lines() if "abc" in l or "+r" in l or "52" in l]
     finally:
         t.close()
 

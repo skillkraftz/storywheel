@@ -840,9 +840,20 @@ neighbors.
 
 ## Development
 
-    pip install -e '.[dev]'
-    pytest -m "not slow" tests/test_<area>.py      # while working: the tests of what changed
-    tools/fulltest.sh                              # end of a batch: everything, in parallel, then the serial tests
+One-time setup (the folder `.venv/` is ignored by git; `--system-site-packages` is optional):
+
+    python3 -m venv .venv
+    ./.venv/bin/pip install -e '.[dev]'
+
+Then, from the repository root:
+
+    ./.venv/bin/python -m pytest -m "not slow" tests/test_<area>.py    # while working: the tests of what changed
+    tools/fulltest.sh                                                   # end of a batch: everything, in parallel, then the serial tests
+
+`tools/fulltest.sh` needs no set-up of its own: it uses `./.venv/bin/python` when that exists and points `STORYWHEEL_HOME` and
+`STORYWHEEL_LIBRARY` at fresh temporary folders unless you have set them, so it never touches `~/.storywheel` or `~/Writing`.
+Every test has a time limit (`pytest-timeout`, 10 minutes), so a hang is reported as a failure naming the test.
+Tests that start the Writer use the `nvim` on your path; `STORYWHEEL_NVIM=/path/to/nvim` picks another (the Writer supports 0.10 and newer).
 
 ### Building lists
 
