@@ -817,3 +817,36 @@ def test_12_real_terminal_a_card_taller_than_the_window_scrolls_after_a_second_f
         assert "x" in line and len(line.strip()) == len("Ann Lowell") + 1                                # typing goes on: x was typed, not a delete
     finally:
         t.close()
+
+
+# --- 13. Past stories: the protagonist and setting buttons say they go to a universe -------------------------------------------------
+
+def test_13_the_past_stories_buttons_and_footer_say_where_the_protagonist_goes(home):
+    mine, other = _two_drafts(home)
+    thorn = vault.create_universe("Thornwood", ["western"])
+
+    async def script(app, pilot):
+        s = app.main
+        labels = [str(s.query_one("#st-protagonist").label), str(s.query_one("#st-setting").label)]
+        lst = s.stories_list
+        lst.focus()
+        await pilot.pause()
+        lst.highlighted = [lst.get_option_at_index(i).id for i in range(lst.option_count)].index(other["id"])
+        footer = " ".join(screen_text(app).split())
+        await pilot.click("#st-protagonist")
+        await pilot.pause()
+        asked = app.screen.title_text if type(app.screen).__name__ == "ChoiceScreen" else "(no choice box)"
+        await pilot.press("enter")
+        await pilot.pause()
+        return labels, footer, asked, " ".join(screen_text(app).split())
+    labels, footer, asked, after = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert all("universe" in l for l in labels) and "Use protagonist" not in footer and "Use setting" not in footer
+    assert "to which universe" in asked
+    assert vault.get_universe("thornwood").find_by_name(other["kept"]["protagonist"]["name"], "character")
+
+
+def test_13_the_wheel_help_no_longer_promises_the_current_story(home):
+    from storywheel import helpdoc
+    text = " ".join(helpdoc.text("wheel", 120).split())
+    assert "Use its protagonist in the current story" not in text and "to the current story" not in text
+    assert "Send its protagonist to a universe you choose" in text and "protagonist or setting to a universe you choose" in text

@@ -57,7 +57,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Past stories: New | button, or `N` anywhere | New draft; asks which universe it belongs to | test_drafts.py, test_universes_wheel.py | works | P |
 | Past stories: Del | button or `d` in the list | Delete a draft (asks; moves it to `<home>/.trash`, and says where) | test_ui_pass.py, test_polish1.py | works (was ISSUES #8) | P |
 | Past stories: Promote | button or `P` in the list | Bring a past draft into a universe | test_promote_ui.py | works | P |
-| Past stories: Use protagonist / Use setting | buttons, `p` / `s` in the list | Sends that draft's protagonist / setting **into a universe**, not into this story | test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`) | **confusing** (ISSUES #13) | P |
+| Past stories: Prot. → universe / Setting → universe | buttons, `p` / `s` in the list | Sends that draft's protagonist / setting **into a universe you choose** (labels and help now say so) | test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`), test_polish1.py | works (was ISSUES #13: the labels said "Use"); test_polish1.py | P |
 
 ### Main screen: the card (middle)
 

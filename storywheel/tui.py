@@ -477,8 +477,8 @@ class ChoiceScreen(ModalScreen):
 class StoryList(OptionList):
     """Past stories: Enter opens one; d deletes (asks first); p / s send its protagonist / setting
     to your universe."""
-    BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "+Protagonist"),
-                Binding("s", "act('setting')", "+Setting"), Binding("P", "act('promote')", "Promote")]
+    BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "Prot. → universe"),
+                Binding("s", "act('setting')", "Setting → universe"), Binding("P", "act('promote')", "Promote")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -769,8 +769,8 @@ class MainScreen(KeptScreen, Screen):
                         yield _quiet(Button("Del", id="st-delete"))
                         yield _quiet(Button("Promote", id="st-promote"))
                     with Horizontal(id="story-buttons2"):
-                        yield _quiet(Button("Use protagonist", id="st-protagonist"))
-                        yield _quiet(Button("Use setting", id="st-setting"))
+                        yield _quiet(Button("Prot. → universe", id="st-protagonist"))
+                        yield _quiet(Button("Setting → universe", id="st-setting"))
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
                     yield Static("", id="hint", markup=False)
