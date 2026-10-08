@@ -5113,3 +5113,10 @@ Version numbers were not bumped in these two batches by mistake; 0.19.0 and 0.20
 - **Batch 19 (b19-1 to b19-6, b19-final):** New draft in the Wheel; midnight rollover and per-machine day counts; Stats editing and "don't count pasted text"; story target percentage; US/UK spelling; help-page check (BACKLOG.md).
 - **Batch 20 (b20-1 to b20-4):** Past stories "New" button; notepad keys for every Writer action (Settings > Keys); the Keys tab with Vim-mode keys; centered lines (Alt+C, Ctrl+E, stored `>text<`).
 - Not checked by hand: Alt+letter keys in VTE and kitty, the Settings > Stats key presses (`e`, `0`, `R`), and the UK/US marks with a real `en_us` / `en_gb` file.
+
+## Polish 2 (ISSUES 16-36, branch `polish-2`)
+
+All of ISSUES.md is fixed (16-36 in this pass), plus the optional "Use protagonist / Use setting" for #13. Full run (`tools/fulltest.sh`, Neovim 0.12.5):
+2795 + 121 tests passed, 4 skipped; parallel pass 797 s, serial pass 368 s, total 1165 s. The two polish-1 terminal tests and the Writer's late-reply
+test were also run on Neovim 0.11.4 and pass. Not checked by tests: split terminal replies (a reply cut in two reads with a long gap can still be typed),
+kitty, real LanguageTool, the real dictionary. Things to look at by hand are in the final message of the session.
