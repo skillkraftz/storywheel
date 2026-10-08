@@ -1,4 +1,11 @@
 # storywheel — project brief
+## Cloud sessions
+- Work on a new branch named for the task and push only that branch. Never
+ push to main and never move "stable": stable is only moved on xps after a
+ full local run.
+- Things the cloud can't check (real kitty, typewriter's Pi, real
+ LanguageTool, the real dictionary) go in the session's report for Andy to
+ check by hand.
 
 ## What this is
 
