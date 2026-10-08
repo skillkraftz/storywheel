@@ -1440,7 +1440,7 @@ class BuilderScreen(KeptScreen, Screen):
         if key == "settings":
             return self.action_story_settings()
         if key in ("words", "meta:structure", "u:counts"):
-            self.say({"words": "Words are counted from the manuscript files.", "meta:structure": "The structure was set in the Wheel.",
+            self.say({"words": "Words are counted from the manuscript files.", "meta:structure": "Change the structure with m (format, structure, genres, target).",
                       "u:counts": "Counts come from the tabs below."}[key])
             return
         if key == "u:genres" or key == "u:mix":
@@ -1720,7 +1720,7 @@ class BuilderScreen(KeptScreen, Screen):
         if self.story is None:
             return self.say("Open a story first.")
         if not self.story.is_screenplay():
-            return self.say("This story is not a screenplay. Set its format to screenplay (S, story settings) or give it a screen structure.")
+            return self.say("This story is not a screenplay. Change it with m (format, structure, genres, target).")
         try:
             path = screenplay.start_from_outline(self.story)
         except screenplay.ScriptExists as e:
