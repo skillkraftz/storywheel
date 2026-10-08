@@ -611,3 +611,36 @@ def test_9_the_count_is_the_writing_windows_even_when_a_float_is_current(home, t
     r = drive(two, [keys("<F3>"), keys("<Cmd>lua vim.wait(300)<CR>")],
               "R.line = require('sw.stats').line(); R.float_current = vim.api.nvim_win_get_config(0).relative ~= ''")
     assert r["float_current"] is True and "in this scene 4 " in r["line"]
+
+
+# --- 10. Alt with a letter that does nothing types nothing -----------------------------------------------------------------------
+
+def test_10_alt_f_in_a_prose_story_types_nothing_and_says_why(home, two):
+    r = drive(two, [keys("<A-f>")], LINES + "; R.msg = vim.fn.execute('messages'); R.mode = vim.fn.mode()")
+    assert r["mode"] == "i" and r["lines"] == ["* * * Opening", "", "The gate was shut.", "", "* * * The hall", "", "The guild hall was dark. Priya went in anyway."]
+    assert "The flip test is for screenplays." in r["msg"]
+
+
+def test_10_other_unmapped_alt_letters_type_nothing(home, two):
+    # (not a, which is... free; q quits and has its own test; these have no job)
+    unused = "".join(f"<A-{c}>" for c in "dhkoprxzDFGHJ")
+    r = drive(two, [keys(unused)], LINES)
+    assert r["lines"][0] == "* * * Opening" and r["lines"][2] == "The gate was shut."
+
+
+def test_10_alt_letters_that_have_a_job_still_work(home, two):
+    # Alt+I italic: typing around it wraps in marks; Alt+M opens the menu; Alt+N asks for a scene title (cancelled)
+    r = drive(two, [keys("<C-Home><A-i>word<A-i>")], LINES)
+    assert r["lines"][0].startswith("*word*")
+    r = drive(two, [keys("<A-m>")], "R.menu = require('sw.menu').last ~= nil and vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
+    assert r["menu"] is True
+
+
+def test_10_a_screenplay_still_flips(home):
+    u = vault.create_universe("Films", ["western"])
+    s = u.new_story("Short", {"format": "screenplay"})
+    settings.save_story(s.path, {"format": "screenplay", "script_kind": "short-film", "spellcheck": False})
+    (s.manuscript_dir).mkdir(parents=True, exist_ok=True)
+    (s.manuscript_dir / "script.fountain").write_text("INT. KITCHEN - DAY\n\nAnn pours coffee.\n")
+    r = drive(s, [keys("<A-f>"), keys("<Cmd>lua vim.wait(300)<CR>")], "R.msg = vim.fn.execute('messages'); R.lines = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(require('sw.layout').main), 0, -1, false)")
+    assert "The flip test is for screenplays" not in r["msg"] and r["lines"][0] == "INT. KITCHEN - DAY"       # (it ran the flip test; no stray f typed)

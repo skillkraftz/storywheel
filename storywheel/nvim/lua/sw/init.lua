@@ -512,7 +512,10 @@ function M.start()
   require("sw.spell").apply_all()
   require("sw.context").setup()                     -- our own right-click menu, not Neovim's pop-up
   notepad.setup()                                   -- (notepad mode is on unless the settings say otherwise)
-  if notepad.enabled then notepad.map_buffer(vim.api.nvim_get_current_buf()) end
+  if notepad.enabled then
+    notepad.map_buffer(vim.api.nvim_get_current_buf())
+    notepad.disable_alt_keys(vim.api.nvim_get_current_buf())          -- (after every real Alt key is mapped)
+  end
   vim.api.nvim_set_current_win(layout.main)
   if saved.sidebar then
     sidebar.open()

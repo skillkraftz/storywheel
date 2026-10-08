@@ -352,8 +352,9 @@ size, line height, padding and opacity.
 
 > **Watch out:** if the cursor is on a scene-break line, the raw `* * * Title` shows beside the centered one, and anything you type
 > goes into the break and turns it into a paragraph. Move off the line before typing. (ISSUES #11.)
->
-> Alt with a letter that has no job (Alt+F in a prose story, for example) types that letter. (ISSUES #10.)
+
+Alt with a letter that has no job types nothing (it used to type the letter). Alt+F in a prose story says "The flip test is for
+screenplays." (Fixed: ISSUES #10.)
 
 ### The status line
 

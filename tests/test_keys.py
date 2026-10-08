@@ -54,7 +54,7 @@ def test_the_keys_tab_lists_every_shortcut_and_saves_valid_ones_only(home):
 def test_the_writer_uses_the_configured_keys(home, story):
     settings.save_story(story.path, {"key_italic": "<A-z>", "key_scene_break": "<A-x>"})
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello' })\n" + AT % (1, 5), "<A-z>x<Esc><A-i>", LINES)
-    assert r["lines"] == ["Hello*xi*"]       # Alt+Z opened the italic pair and x went inside; the old Alt+I is no longer a shortcut (it typed an i)
+    assert r["lines"] == ["Hello*x*"]        # Alt+Z opened the italic pair and x went inside; the old Alt+I is no longer a shortcut and types nothing
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'End.' })\n" + AT % (1, 0), "<A-x>", LINES)
     assert r["lines"] == ["End.", "***", ""]
 

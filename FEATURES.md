@@ -226,7 +226,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | F3 | This help, in a float | test_help_tabs.py | works; tab bar fits (titles shorten), hints on the border (was ISSUES #7); test_polish1.py | T |
 | F5 | Words, carrying the word under the cursor | test_words_writer.py | works | R |
 | Unmapped Ctrl letters and F keys | Do nothing (no surprise edits) | test_notepad.py | works | N |
-| Unmapped Alt letters | Type the letter (Alt+F in prose typed "f") | — | **broken** (ISSUES #10) | T |
+| Unmapped Alt letters | Do nothing (every Alt+letter without a job is silenced; they used to type the letter) | test_polish1.py | works (was ISSUES #10) | T |
 
 ### Shortcuts you can change (Settings > Keys), with their defaults
 
@@ -245,7 +245,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | F7 | Dictionary card for the word under the cursor | test_lookup_writer.py | works | N |
 | F6 | Look up a typed word | test_lookup_writer.py | works | N |
 | F10 / Shift+F10 | Next grammar problem / list them | test_grammar_writer.py | works against a fake server | R |
-| Alt+F | Screenplay flip test | test_screenplay_writer.py | works in a script; types "f" in prose (ISSUES #10) | T |
+| Alt+F | Screenplay flip test | test_screenplay_writer.py | works in a script; in prose says it is for screenplays (was ISSUES #10) | T |
 | Alt+N | New scene | test_notepad_keys_center.py | works | R |
 | Alt+V / Alt+T / Alt+L | Invisibles / typewriter / spellcheck | test_writer.py, test_notepad_keys_center.py | works | R |
 | Alt+W | Word counts | test_notepad_keys_center.py | works | R |

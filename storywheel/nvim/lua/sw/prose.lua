@@ -336,6 +336,7 @@ function M.map_buffer(buf)
       map({ "x", "s" }, spec[1], function() M.wrap_visual(spec[2]) end)
     end
     script.map_buffer(buf)
+    require("sw.notepad").disable_alt_keys(buf)
     return
   end
   -- paragraphs
@@ -365,6 +366,11 @@ function M.map_buffer(buf)
     end
     return vim.api.nvim_replace_termcodes("<Tab>", true, false, true)
   end, { expr = true, replace_keycodes = false })
+  -- a screenplay's keys that mean nothing in prose say so, instead of typing a letter
+  map({ "i", "s", "n" }, story.setting("key_flip_test", "<A-f>"), function()
+    vim.api.nvim_echo({ { "The flip test is for screenplays.", "Normal" } }, true, {})
+  end)
+  require("sw.notepad").disable_alt_keys(buf)
 end
 
 return M

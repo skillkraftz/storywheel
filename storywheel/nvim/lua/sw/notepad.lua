@@ -366,6 +366,20 @@ function M.disable_keys(buf)
   end
 end
 
+-- An Alt+letter that does nothing must not type the letter (a terminal sends Alt+F as ESC f, which Insert mode reads as "f"). Called last,
+-- once every real Alt key is mapped (global or in this buffer): only the unmapped ones are silenced.
+function M.disable_alt_keys(buf)
+  if not M.enabled then return end
+  local function letters(first, last)
+    for c = string.byte(first), string.byte(last) do
+      local lhs = "<A-" .. string.char(c) .. ">"
+      if vim.fn.maparg(lhs, "i") == "" then pcall(vim.keymap.set, { "i", "s" }, lhs, "<Nop>", { buffer = buf, silent = true }) end
+    end
+  end
+  letters("a", "z")
+  letters("A", "Z")
+end
+
 function M.map_buffer(buf)
   if not M.enabled then return end
   local function map(mode, lhs, rhs, opts)
