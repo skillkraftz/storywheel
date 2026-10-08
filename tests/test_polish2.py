@@ -399,3 +399,55 @@ def test_30_a_message_is_cleared_when_you_change_tab(home):
             return said, tabs.active, str(s.query_one("#status").content)
     said, active, after = asyncio.run(go())
     assert "whole number" in said and active == "t-appearance" and after.strip() == ""
+
+
+# --- 31. Settings > Export > Default format offers the four formats --------------------------------------------------------------------
+
+def _settings_run(script, size=(180, 60)):
+    from storywheel import settings_app
+
+    async def go():
+        app = settings_app.SettingsApp(None, "builder")
+        async with app.run_test(size=size) as pilot:
+            await pilot.pause()
+            await pilot.pause()
+            return await script(app, pilot)
+    return asyncio.run(go())
+
+
+def test_31_the_default_format_offers_the_four_formats_by_label_and_saves_the_screenplay_kind(home):
+    from textual.widgets import Select
+    from storywheel import formats
+
+    async def script(app, pilot):
+        s = app.screen
+        s.query_one("#tabs").active = "t-export"
+        await pilot.pause()
+        sel = s.query_one("#f-format", Select)
+        labels = [str(p) for p, v in sel._options if v != Select.BLANK]
+        shown = sel.value
+        sel.focus()
+        await pilot.pause()
+        await pilot.press("enter", "down", "down", "down", "enter")          # short story -> ... -> Screenplay (short film)
+        await pilot.pause()
+        return labels, shown, sel.value, str(s.query_one("#status").content)
+    labels, shown, value, said = _settings_run(script)
+    assert labels == [f.label for f in formats.FORMATS]                                                    # the four, by label
+    assert shown == "short-story" and value == "short-film" and "Screenplay (short film)" in said
+    g = settings.load_global()
+    assert g["format"] == "screenplay" and g["script_kind"] == "short-film" and formats.global_default() == "short-film"
+
+
+def test_31_an_old_screenplay_default_shows_as_a_feature_film_and_a_new_story_inherits_the_kind(home, ann):
+    from textual.widgets import Select
+    from storywheel import formats
+    settings.save_global({**settings.load_global(), "format": "screenplay"})
+
+    async def script(app, pilot):
+        return app.screen.query_one("#f-format", Select).value
+    assert _settings_run(script) == "feature-film"
+    settings.save_global({**settings.load_global(), "format": "screenplay", "script_kind": "short-film"})
+    story = ann.story("the-last-clause")
+    st = settings.load_story(story.path)
+    assert st["format"] == "screenplay" and st["script_kind"] == "short-film"
+    assert formats.from_setting(st["format"], st["script_kind"]) == "short-film"

@@ -47,7 +47,7 @@ STORY_DEFAULTS = {
 GLOBAL_DEFAULTS.update(CATEGORY_DEFAULTS)
 STORY_DEFAULTS.update(CATEGORY_DEFAULTS)
 # story settings that fall back to your global settings
-INHERITED = ("format", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
+INHERITED = ("format", "script_kind", "font", "column_width", "daily_goal", "indent_display", "typewriter", "invisibles", "spellcheck",
              "notepad_mode", "writer_kitty", "writer_font", "writer_font_size", "writer_line_height", "writer_padding", "writer_opacity", "paragraph_spacing",
              "scene_marker", "export_title_bold", "export_header", "export_anonymous", "export_one_space", "export_curly_quotes", "script_contd", "stats_skip_paste", "autocorrect", "spell_dictionary", "spell_lenient", "spell_marks", "spell_region", "grammar", "grammar_off_rules", "grammar_pause_ms", "grammar_language", *CATEGORY_DEFAULTS, "transparent_background", "text_color", "accent_color",
              "key_italic", "key_bold", "key_scene_break", "key_menu", "key_sidebar", "key_peek", "key_overview", "key_builder", "key_replace", "key_quit", "key_lookup", "key_lookup_word", "key_grammar_next", "key_grammar_list", "key_flip_test", "key_new_scene", "key_invisibles", "key_typewriter", "key_spell", "key_stats", "key_copy_manuscript", "key_export", "key_writer_settings", "key_keycheck", "key_center", "key_center2")

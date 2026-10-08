@@ -82,6 +82,8 @@ def from_setting(fmt, kind="", structure_text=""):
     fmt = str(fmt or "").strip().lower()
     if fmt in ("short-story", "novel"):
         return fmt
+    if fmt in SCRIPT_KINDS:                                     # (a format key written where the setting belongs)
+        return fmt
     if fmt == "screenplay" or (structures.find(structure_text or "") is not None and structures.find(structure_text).screen):
         kind = str(kind or "").strip().lower()
         if kind in SCRIPT_KINDS:
@@ -95,7 +97,8 @@ def from_setting(fmt, kind="", structure_text=""):
 
 def global_default():
     """The format a new story starts as: your default in Settings (a screenplay there means a feature film)."""
-    return from_setting(settings.load_global().get("format", DEFAULT))
+    g = settings.load_global()
+    return from_setting(g.get("format", DEFAULT), g.get("script_kind", ""))
 
 
 def of_story(story):

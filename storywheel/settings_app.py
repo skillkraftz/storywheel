@@ -17,7 +17,7 @@ from .header import QuietHeader
 from textual.widgets import DataTable, Footer, Header, Input, Label, OptionList, Select, Static, Switch, TabbedContent, TabPane, Tabs, TextArea
 from textual.widgets.option_list import Option
 
-from . import keys, paths, settings, vault, writing_stats
+from . import formats, keys, paths, settings, vault, writing_stats
 
 
 # (tab title, [(key, label, kind, extra, hint)])   kinds: text, multiline, int, float, bool, choice, path
@@ -81,8 +81,8 @@ SECTIONS = [
     ]),
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
-        ("format", "Default format", "choice", ["short-story", "novel", "screenplay"],
-         "For new stories (a story can choose its own). short-story is complete; novel is partial (chapters start new pages); screenplay writes Fountain and exports script pages (PDF, .fdx)."),
+        ("format", "Default format", "choice", formats.choices(),
+         "For new stories (a story can choose its own). A short story is complete; a novel is partial (chapters start new pages); a screenplay is written in Fountain and exports script pages (PDF, .fdx)."),
         ("export_format", "Default export type", "choice", ["docx", "odt", "pdf", "md", "txt"], "The file type the one-key export makes; you can pick another each time."),
         ("export_title_bold", "Title in bold", "bool", None, "On the first page of the .docx."),
         ("export_header", "Page header shows", "choice", ["full", "keyword"],
@@ -181,9 +181,7 @@ class SettingsScreen(KeptScreen, Screen):
 
     def compose(self) -> ComposeResult:
         yield QuietHeader()
-        g = settings.load_global()
-        g["library"] = str(paths.library_root())
-        g["manuscripts_dir"] = str(paths.manuscripts_root())
+        g = self.load_values()
         self.values = g
         self.help_hits = []
         with TabbedContent(id="tabs"):
@@ -239,10 +237,11 @@ class SettingsScreen(KeptScreen, Screen):
         if kind == "bool":
             return [Switch(bool(value), id=wid)]
         if kind == "choice":
-            options = [(o, o) for o in extra]
-            if value and value not in extra:
+            options = [o if isinstance(o, tuple) else (o, o) for o in extra]            # (label, value) pairs, or plain values
+            values = [v for _l, v in options]
+            if value and value not in values:
                 options.append((str(value), str(value)))
-            return [Select(options, value=value if value else extra[0], allow_blank=False, id=wid)]
+            return [Select(options, value=value if value else values[0], allow_blank=False, id=wid)]
         if kind == "multiline":
             return [TextArea(str(value or ""), id=wid)]
         return [Input("" if value is None else str(value), id=wid)]
@@ -264,6 +263,15 @@ class SettingsScreen(KeptScreen, Screen):
         self.app.sub_title = "saved as you go"
         self.b.remember()
 
+    @staticmethod
+    def load_values():
+        """What the boxes show: the saved settings, the folders as they are now, and the default format as one of the four choices."""
+        g = settings.load_global()
+        g["library"] = str(paths.library_root())
+        g["manuscripts_dir"] = str(paths.manuscripts_root())
+        g["format"] = formats.from_setting(g.get("format"), g.get("script_kind"))
+        return g
+
     def show_tab(self, name):
         """Open a tab by name ('you', 'writer'...) and give the tab bar the focus, so Left and Right move between tabs."""
         tabs = self.query_one("#tabs", TabbedContent)
@@ -275,9 +283,7 @@ class SettingsScreen(KeptScreen, Screen):
         """Back in Settings from another mode: other modes may have changed settings, so show what is saved now."""
         if payload and payload.get("tab"):
             self.show_tab(payload["tab"])
-        g = settings.load_global()
-        g["library"] = str(paths.library_root())
-        g["manuscripts_dir"] = str(paths.manuscripts_root())
+        g = self.load_values()
         for key, value in g.items():
             if self.values.get(key) == value:
                 continue
@@ -314,6 +320,12 @@ class SettingsScreen(KeptScreen, Screen):
         if key == "manuscripts_dir":
             return self.save_manuscripts(value)
         g = settings.load_global()
+        if key == "format" and formats.known(value):                # one of the four choices: settings.toml keeps format + script_kind
+            g["format"] = formats.get(value).setting
+            g["script_kind"] = value if formats.is_script(value) else ""
+            settings.save_global(g)
+            self.say(f"Saved: default format = {formats.get(value).label}")
+            return
         g[key] = value
         settings.save_global(g)
         if key in ("transparent_background",):
