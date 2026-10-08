@@ -63,6 +63,7 @@ function M.jump(entry)
   if not entry then return end
   vim.api.nvim_set_current_win(layout.main)
   require("sw").open_scene(entry.path, { entry.body, 0 })
+  require("sw.notepad").insert(true)                        -- back to typing, not stranded in Normal mode
 end
 
 -- Work on a file through its buffer, so unsaved edits are never lost and the writing window shows the change at once.
@@ -166,6 +167,7 @@ function M.map(buf)
       local path, line = M.add(t)
       vim.api.nvim_set_current_win(layout.main)
       require("sw").open_scene(path, { line + 1, 0 })
+      require("sw.notepad").insert(true)
     end)
   end)
   map("r", function() local e = M.current_entry() if e then prompt("Rename scene: ", e.label ~= "" and e.label or e.title, function(t) M.rename(e, t) end) end end)
@@ -178,6 +180,7 @@ function M.map(buf)
 end
 
 function M.open()
+  vim.cmd("stopinsert")                                     -- F9 comes from Insert mode: the sidebar's keys are Normal-mode keys
   layout.sidebar_open = true
   layout.apply()
   local buf = vim.api.nvim_create_buf(false, true)
@@ -202,6 +205,7 @@ function M.close()
   vim.wo[layout.left].winhighlight = "Normal:SwPad,EndOfBuffer:SwPad,NormalNC:SwPad"
   layout.apply()
   if vim.api.nvim_win_is_valid(layout.main) then vim.api.nvim_set_current_win(layout.main) end
+  require("sw.notepad").insert(true)
 end
 
 function M.toggle()
