@@ -238,7 +238,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | F12 | Writer menu | test_menus.py | works (the stray indent is gone: was ISSUES #5) | T |
 | F9 | Scenes sidebar | test_writer.py | **broken**: opens, but its keys don't work after F9, and after a jump or closing it you are in Vim's Normal mode, where typing `dd` deleted a paragraph (ISSUES #1) | T |
 | F8 | Peek at the name under the cursor | test_writer.py | works; fields in A–Z order, last ones cut off (ISSUES #12) | T |
-| Ctrl+O | Story outline overlay | test_overview_writer.py | works; layout (ISSUES #7) and doubled openers on older stories (ISSUES #6) | T |
+| Ctrl+O | Story outline overlay | test_overview_writer.py | works; layout (ISSUES #7); doubled openers on older stories fixed (was ISSUES #6) | T |
 | Ctrl+Q | Save and back to the Builder | test_notepad.py | works (Ctrl+Q is flow control in some terminals) | N |
 | Ctrl+R | Find and replace | test_replace.py | works; bottom hint cut off (ISSUES #27) | T |
 | Alt+Q | Quit storywheel (asks) | test_navigation.py | works | R |
@@ -263,7 +263,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Right-click inside a float | right-click | Does nothing (no second menu on the F12 menu or help) | test_polish1.py | works (was ISSUES #2) | T |
 | Writer menu (F12 / Alt+M / More…) | 1–9, Up/Down, Enter, click, Esc / `q` | Edit, Look up, Story, Leave, More groups (about 35 items) | test_menus.py, test_menu_keys.py | works; only items 1–9 have a number (ISSUES #26) | T |
 | Help float (F3) | Tab / Shift+Tab / 1–4 / click tab; `/` search; Space / Backspace page; F3, Esc, `q` close | Writer help in tabs | test_help_tabs.py | tab bar too wide (ISSUES #7) | T |
-| Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | layout (ISSUES #7); doubled openers (ISSUES #6) | T |
+| Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | layout (ISSUES #7); doubled openers fixed (was ISSUES #6); test_polish1.py | T |
 | Scenes sidebar (F9) | Enter / double-click jump, `a` add, `r` rename, `J`/`K` move, `q`/Esc close | Scenes with first lines | test_writer.py (calls the Lua directly, never F9) | **broken** from the keyboard; can lose text (ISSUES #1) | T |
 | Peek card (F8) | closes when the cursor moves | An entity's fields and notes | test_writer.py | **confusing** (ISSUES #12) | T |
 | Dictionary card (F7 / F6) | Enter look up, `b`/Backspace back, `n` forward, `r` replace, `i` insert, `c` copy, `/` filter, `w` word, Tab / arrows / hjkl, Esc / `q` | Meanings and similar words; replace in the same form | test_lookup_writer.py | works (without the dictionary: a wrapped message and "Press ENTER", ISSUES #28) | N T |

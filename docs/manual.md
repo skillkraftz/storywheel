@@ -406,9 +406,11 @@ other float opens no menu. (Fixed: ISSUES #2.)
 The help, the outline, the F12 menu and the other floats are drawn from their own left edge: only the manuscript gets the paragraph
 indent. (Fixed: ISSUES #5.)
 
-> **Watch out:** the outline repeats the Story Spine openers ("Once upon a time. Once upon a time, …") for stories promoted by older
-> versions; the help's tab bar is wider than its window; and the peek card lists fields A to Z and cuts the last ones off. The text is
-> all there; it is only laid out badly. (ISSUES #6, #7, #12.)
+The outline no longer repeats a Story Spine opener ("Once upon a time. Once upon a time, …") for stories promoted by older versions: a
+stored label is dropped when the sentence already starts with it, as in the Builder's Outline. (Fixed: ISSUES #6.)
+
+> **Watch out:** the help's tab bar is wider than its window, and the peek card lists fields A to Z and cuts the last ones off. The
+> text is all there; it is only laid out badly. (ISSUES #7, #12.)
 
 ### Find and replace: Ctrl+R
 

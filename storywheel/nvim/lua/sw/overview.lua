@@ -8,11 +8,21 @@ local function plain(text)
   return ((text or ""):gsub("%*%*", ""):gsub("__", ""))
 end
 
+-- A beat stored as "**Label.** Body": the label stays unless the sentence already starts with it (older Story Spine outlines store
+-- "**Once upon a time.** Once upon a time, Ann ..."): the same rule as outline.beat_label in Python.
+local function without_doubled_label(para)
+  local label, body = para:match("^%*%*(.-)%*%*%s*(.*)$")
+  if not label then return para end
+  local bare = label:gsub("%.$", ""):lower()
+  if bare ~= "" and body:lower():sub(1, #bare) == bare then return body end
+  return para
+end
+
 local function paragraphs(text)
   local out = {}
   for _, para in ipairs(vim.split(text or "", "\n%s*\n")) do
     para = vim.trim(para:gsub("%s*\n%s*", " "))
-    if para ~= "" then out[#out + 1] = plain(para) end
+    if para ~= "" then out[#out + 1] = plain(without_doubled_label(para)) end
   end
   return out
 end

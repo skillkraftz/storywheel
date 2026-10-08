@@ -413,3 +413,28 @@ def test_5_the_help_float_has_no_indent_even_after_it_is_changed(home, two):
     steps = [keys("<F3>"), keys("<Tab>"), keys("2"), keys("<Cmd>lua vim.wait(250)<CR>")]
     r = drive(two, steps, FLOAT_MARKS)
     assert r["floats"] and all(f["n"] == 0 for f in r["floats"]), r
+
+
+# --- 6. the outline overlay and older Story Spine outlines (labels stored with the sentence) ----------------------------------
+
+def test_6_ctrl_o_does_not_repeat_the_story_spine_openers(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    legacy = ("**Once upon a time.** Once upon a time, Ann lived in Redwater.\n\n**Every day.** Every day, Ann swept the porch.\n\n"
+              "**One day.** One day, a stranger came.")
+    s = u.new_story("The Last Clause", {"genre": "western", "mood": "cozy", "structure": "Story Spine"}, {"Story Spine": legacy})
+    s.add_scene("Opening", "Hello")
+    r = drive(s, [keys("<C-o>")], "local ov = require('sw.overview'); R.lines = vim.api.nvim_buf_get_lines(ov.buf, 0, -1, false)")
+    text = "\n".join(r["lines"])
+    assert "1. Once upon a time, Ann lived in Redwater." in text
+    assert "2. Every day, Ann swept the porch." in text and "3. One day, a stranger came." in text
+    assert "Once upon a time. Once" not in text and "Every day. Every" not in text and "**" not in text
+
+
+def test_6_a_label_that_is_not_in_the_sentence_is_kept(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    s = u.new_story("Act Story", {"genre": "western", "structure": "Three-Act Outline"},
+                    {"Three-Act Outline": "**Act One.** Ann lived in Redwater.\n\n**Act Two.** She ran."})
+    s.add_scene("Opening", "Hello")
+    r = drive(s, [keys("<C-o>")], "local ov = require('sw.overview'); R.lines = vim.api.nvim_buf_get_lines(ov.buf, 0, -1, false)")
+    text = "\n".join(r["lines"])
+    assert "1. Act One. Ann lived in Redwater." in text and "2. Act Two. She ran." in text
