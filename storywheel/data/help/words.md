@@ -3,13 +3,13 @@ An offline dictionary and thesaurus, and tools for finding the word you want: Lo
 ## Keys
 ### WordsScreen | Everywhere in Words
 filter: Filter the lists in Lookup (or search, in the lists that have a search box)
-add: Learn this word (it becomes ★ in Vocabulary)
+add: Learn this word: the one you are on, on any tab (it becomes ★ in Vocabulary)
 use: Use in Writer: go back and replace the word you were on, in the same form (only when you came from the Writer)
 back: Back to the previous word you looked up
 forward: Forward to the next word you looked up
 copy: Copy the word
 wordlist: Use in this universe's stories: pick the slot (job, thing, place...) and the Wheel and Builder will use the word
-known: Mark the word ✓ Known (never offered again)
+known: Mark the word you are on ✓ Known (never offered again), on any tab
 learning: Mark the word ★ Learning
 remove: Remove a ★ word (or a word you added to a universe list)
 flashcards: Practise the ★ words with flashcards (space shows the meaning)

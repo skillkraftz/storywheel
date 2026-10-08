@@ -850,3 +850,78 @@ def test_13_the_wheel_help_no_longer_promises_the_current_story(home):
     text = " ".join(helpdoc.text("wheel", 120).split())
     assert "Use its protagonist in the current story" not in text and "to the current story" not in text
     assert "Send its protagonist to a universe you choose" in text and "protagonist or setting to a universe you choose" in text
+
+
+# --- 14. Words: a and k work on the word you are on, on every tab ------------------------------------------------------------------
+
+from test_words import index, fit, world, run as words_run, open_genre, select_word, type_word, show_tab  # noqa: E402,F401
+from storywheel import learn  # noqa: E402
+from textual.widgets import TabbedContent  # noqa: E402,F401
+from storywheel.virtuallist import VirtualList  # noqa: E402
+
+
+def test_14_k_in_lookup_marks_the_word_you_are_on_known(index, world):
+    u, s = world
+
+    async def script(app, pilot):
+        await type_word(app, pilot, "dog")
+        select_word(app, "w:puppy|")
+        await pilot.press("k")
+        await pilot.pause()
+        return flat_text(app), learn.MyWords().known
+    text, known = words_run(script, {"universe": "thornwood", "story": s.slug})
+    assert "puppy" in known and "Known" in text
+
+
+def flat_text(app):
+    return " ".join(screen_text(app).split())
+
+
+def test_14_a_in_genre_words_learns_the_genre_word_not_the_one_left_in_lookup(index, fit, world):
+    u, s = world
+
+    async def script(app, pilot):
+        await type_word(app, pilot, "dog")                        # a word is left highlighted in the (now hidden) Lookup tab
+        select_word(app, "w:puppy|")
+        await open_genre(app, pilot)
+        v = app.screen.query_one("#gwvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("a")
+        await pilot.pause()
+        return word, learn.MyWords().learning_words(), flat_text(app)
+    word, learning, text = words_run(script, {"universe": "thornwood", "story": s.slug})
+    assert word in learning and "puppy" not in learning                          # (the word you are on, not the one left in Lookup)
+    assert f"“{word}” is ★ Learning" in text
+
+
+def test_14_k_in_genre_words_marks_that_word_known(index, fit, world):
+    u, s = world
+
+    async def script(app, pilot):
+        await open_genre(app, pilot)
+        v = app.screen.query_one("#gwvlist", VirtualList)
+        v.focus()
+        await pilot.pause()
+        word = v.current()["word"]
+        await pilot.press("k")
+        await pilot.pause()
+        return word, learn.MyWords().known, flat_text(app)
+    word, known, text = words_run(script, {"universe": "thornwood", "story": s.slug})
+    assert word.lower() in known and "Known" in text
+
+
+def test_14_a_and_l_agree_in_lookup(index, world):
+    u, s = world
+
+    async def script(app, pilot):
+        out = []
+        for key, word in (("a", "puppy"), ("l", "tail")):
+            await type_word(app, pilot, "dog")
+            select_word(app, f"w:{word}|")
+            await pilot.press(key)
+            await pilot.pause()
+        return learn.MyWords().learning_words()
+    got = words_run(script, {"universe": "thornwood", "story": s.slug})
+    assert "puppy" in got and "tail" in got

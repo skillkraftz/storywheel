@@ -565,8 +565,8 @@ Every noun, verb, adjective or adverb in the dictionary, ranked by how well it f
 `l` learns it, `c` copies, `u` uses it in the Writer, `w` puts it on a generator list. Under "From the Wheel" are the generator's own
 names, jobs, places and things: **e** adds one to the universe, **m** invents more names in the genres' style.
 
-> **Watch out:** `k` (Known) only works in Vocabulary; elsewhere it silently does nothing. And `a` ("Learn this word" in the footer
-> of every tab) learns the word highlighted in the **Lookup** tab even when you are on another tab; use `l` outside Lookup. (ISSUES #14.)
+`l` and `a` (both "learn this word") and `k` (Known) act on **the word you are on**, whichever tab you are in: Lookup, Suggestions,
+Vocabulary or Genre words. In Story words they say they need a dictionary word. (Fixed: ISSUES #14.)
 
 ---
 
@@ -673,10 +673,10 @@ where they drift. Each line: the page and section, what it says, and what actual
    adds, r renames, J and K move". These keys don't work straight after F9 (ISSUES #1).
 9. **writer › Mouse:** "Right-click opens the everyday menu". (Fixed with ISSUES #2: the menu is now our own, and the help says how it
    closes.)
-10. **words › Keys:** `k` "Mark the word ✓ Known" is listed under "Everywhere in Words"; it works only in Vocabulary. `a` "Learn this
-    word" and `l` "Mark the word ★ Learning" are two keys for the same thing in Lookup.
-11. **words › Keys:** `a` "Learn this word (it becomes ★ in Vocabulary)" is listed under "Everywhere in Words" and shown in every tab's
-    footer, but outside Lookup it learns the word highlighted in the hidden Lookup tab, not the one you are on (ISSUES #14).
+10. **words › Keys:** `k` "Mark the word ✓ Known" worked only in Vocabulary; `a` "Learn this word" and `l` are two keys for the same
+    thing. (Fixed with ISSUES #14: both work on the word you are on, on every tab.)
+11. **words › Keys:** `a` "Learn this word" learned the word in the hidden Lookup tab outside Lookup. (Fixed with ISSUES #14; `a` is
+    no longer pinned to the footer.)
 12. **keys › Footers:** "at most three keys that matter most". A focused list adds its own keys (Past stories shows four more).
 13. **builder › Keys (start_script)** is right, but the program's own message for a prose story says "Set its format to screenplay (S,
     story settings)"; the format is on the story form (`m`). And right-clicking the Structure row says "The structure was set in the

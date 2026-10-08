@@ -292,7 +292,7 @@ class WordsScreen(KeptScreen, Screen):
         Binding("s", "spell", "Add to the spelling list", show=False),
         Binding("r", "rename", "Rename everywhere", show=False),
         Binding("m", "more", "More like these", show=False),
-    ], keep=('filter', 'add', 'use'))
+    ], keep=('filter', 'use'))
     DEFAULT_CSS = """
     WordsScreen TabbedContent { height: 1fr; }
     WordsScreen TabPane { height: 1fr; }
@@ -753,6 +753,10 @@ class WordsScreen(KeptScreen, Screen):
         self.say(f"Copied “{w}”." if how else tools.missing("clipboard", f"The word is: {w}"))
 
     def action_add(self):
+        """a: the same as l, on whichever tab you are in (the word you are on)."""
+        self.mark("learning")
+
+    def lookup_learn(self):
         """Add the highlighted Lookup word to the ★ Learning list, with its meaning."""
         w, pos = self.current_word()
         if not w:
@@ -899,10 +903,36 @@ class WordsScreen(KeptScreen, Screen):
                 self.say(f"“{w['word']}” is marked Known: it won't be offered again.")
             self.render_batch()
             self.refresh_mine()
-        elif tab in ("t-genre", "t-suggest") and status == "learning":
-            self.gw_learn()
-        elif tab == "t-lookup" and status == "learning":
-            self.action_add()
+        elif tab in ("t-genre", "t-suggest"):
+            if status == "learning":
+                self.gw_learn()
+            else:
+                self.gw_known()
+        elif tab == "t-lookup":
+            if status == "learning":
+                self.lookup_learn()
+            else:
+                self.lookup_known()
+        else:
+            self.say("l and k mark the word you are on: they work in Lookup, Suggestions, Vocabulary and Genre words.")
+
+    def lookup_known(self):
+        w, _pos = self.current_word()
+        if not w:
+            return self.say("Move to a word first.")
+        self.my.mark_known(w)
+        self.refresh_mine()
+        self.say(f"“{w}” is marked Known: it won't be offered again.")
+
+    def gw_known(self):
+        row = self.gw_row()
+        if not isinstance(row, dict) or row.get("head"):
+            return self.say("Only dictionary words can be marked Known (pick Nouns, Verbs, Adjectives or Adverbs).")
+        self.my.mark_known(row["word"])
+        self.refresh_mine()
+        self.query_one("#gwvlist", VirtualList).refresh()
+        self.query_one("#sgvlist", VirtualList).refresh()
+        self.say(f"“{row['word']}” is marked Known: it won't be offered again.")
 
     def action_known(self):
         self.mark("known")
