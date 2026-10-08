@@ -38,27 +38,6 @@ def __getattr__(name):
         return helpdoc.text("builder")
     raise AttributeError(name)
 
-SETTINGS_FIELDS = [("font", "font"),
-                   ("column_width", "column width (characters)"), ("daily_goal", "daily word goal"),
-                   ("title_keyword", "short title for page headers"), ("indent_display", "show paragraph indent (true/false)"),
-                   ("typewriter", "typewriter mode (true/false)"), ("invisibles", "show invisibles (true/false)"),
-                   ("spellcheck", "spellcheck (true/false)"), ("spell_region", "English spelling (US / UK)")]
-GLOBAL_FIELDS = [("legal_name", "legal name (first page, top left)"), ("author_name", "byline / pen name"),
-                 ("address", "address (use \\n for new lines)"), ("email", "email"), ("phone", "phone")]
-
-
-def _as_bool(text, default=False):
-    t = str(text).strip().lower()
-    return True if t in ("true", "yes", "1", "on") else False if t in ("false", "no", "0", "off") else default
-
-
-def _as_int(text, default):
-    try:
-        return int(str(text).strip())
-    except ValueError:
-        return default
-
-
 class RenamePreviewScreen(ModalScreen):
     """Every place the old name appears. Enter / click toggles one; a accepts all, n none; p replaces the accepted."""
     BINDINGS = [Binding("a", "all", "All"), Binding("n", "none", "None"), Binding("p", "go", "Replace"),
@@ -1512,45 +1491,23 @@ class BuilderScreen(KeptScreen, Screen):
         if not self.story:
             self.say("Open a story's outline first.")
             return
-        st = settings.load_story(self.story.path)
-        fields = {label: str(st.get(key, "")) for key, label in SETTINGS_FIELDS}
-        self.app.push_screen(EditScreen(f"Story settings: {self.story.title}   (the Writer reads them on its next start; "
-                                        "format, structure and target: m)", fields),
-                             self._story_settings_done)
+        from .storysettings import StorySettingsScreen
+        self.app.push_screen(StorySettingsScreen(self.story), self._story_settings_done)
 
     def _story_settings_done(self, out):
         if out is None:
             return
-        st = settings.load_story(self.story.path)
-        vals = dict(zip([k for k, _ in SETTINGS_FIELDS], out.values()))
-        st["font"] = vals["font"].strip() or st["font"]
-        st["column_width"] = _as_int(vals["column_width"], st["column_width"])
-        st["daily_goal"] = _as_int(vals["daily_goal"], st["daily_goal"])
-        st["title_keyword"] = vals["title_keyword"].strip()
-        region = vals["spell_region"].strip().upper()
-        if region in ("US", "UK"):
-            st["spell_region"] = region
-        for k in ("indent_display", "typewriter", "invisibles", "spellcheck"):
-            st[k] = _as_bool(vals[k], st[k])
-        before = settings.load_story(self.story.path)
-        settings.save_story(self.story.path, {k: v for k, v in st.items() if before.get(k) != v or k not in before})
+        values, clear = out
+        if clear:
+            settings.clear_story(self.story.path, clear)
+        if values:
+            settings.save_story(self.story.path, values)
         self.refresh_top()
-        self.say("Story settings saved.")
+        self.say("Story settings saved." if values or clear else "Story settings: nothing changed.")
 
     def action_global_settings(self):
-        g = settings.load_global()
-        fields = {label: str(g.get(key, "")).replace("\n", "\\n") for key, label in GLOBAL_FIELDS}
-        self.app.push_screen(EditScreen(f"Your details (settings.toml): used on the manuscript's first page", fields),
-                             self._global_done)
-
-    def _global_done(self, out):
-        if out is None:
-            return
-        g = settings.load_global()
-        for (key, _label), value in zip(GLOBAL_FIELDS, out.values()):
-            g[key] = value.replace("\\n", "\n").strip()
-        settings.save_global(g)
-        self.say("Saved to settings.toml.")
+        """G: your details live in Settings (F4) > You; open it there."""
+        self.b.go("settings", {"tab": "you"})
 
     def action_noop_builder(self):
         self.say("You are in the Universe Builder.")

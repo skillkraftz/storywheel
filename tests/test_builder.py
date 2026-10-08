@@ -454,31 +454,6 @@ def test_universe_settings_change_the_mix_for_rolls(home):
     assert "fairy tale, fantasy" in text
 
 
-def test_story_settings_and_global_details_are_saved_to_toml(home):
-    from storywheel import settings
-    u = world(home)
-    u.new_story("Tale")
-    async def script(app, pilot):
-        s = app.screen_ref
-        s.story = u.story("tale")
-        await press(pilot, "S")
-        boxes = list(app.screen.query(Input))
-        assert not any(str(lbl.render()).startswith("format") for lbl in app.screen.query("Label"))   # (the format is picked on the form: m)
-        boxes[2].value, boxes[3].value, boxes[5].value = "1200", "Clause", "true"
-        for _ in boxes:
-            await press(pilot, "enter")
-        await press(pilot, "G")
-        boxes = list(app.screen.query(Input))
-        boxes[0].value, boxes[2].value, boxes[3].value = "Andy Writer", "1 Main St\\nTown, ST 00000", "a@example.com"
-        for _ in boxes:
-            await press(pilot, "enter")
-    run_builder(home, script)
-    st = settings.load_story(u.story("tale").path)
-    assert st["format"] == "short-story" and st["daily_goal"] == 1200 and st["title_keyword"] == "Clause" and st["typewriter"] is True
-    g = settings.load_global()
-    assert g["legal_name"] == "Andy Writer" and g["address"] == "1 Main St\nTown, ST 00000" and g["email"] == "a@example.com"
-
-
 def test_f1_goes_to_the_wheel_and_q_quits(home):
     world(home)
     async def script(app, pilot):

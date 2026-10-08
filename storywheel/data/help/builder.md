@@ -22,8 +22,8 @@ rtab('scenes'): Story panel: the Scenes tab (Enter on a scene opens the Writer t
 rtab('notes'): Story panel: the story's own notes
 new_universe: New universe
 universe_settings: Universe settings: genre leanings, exclusions, boosts, its own word lists
-story_settings: Story settings: font, goals, how the Writer looks (the format is on the story form, m)
-global_settings: Your details (author, address...) in Settings
+story_settings: Story settings: what this story sets for itself (the rest follows Settings; the format is on the story form, m)
+global_settings: Your details (author, address...): opens Settings > You
 overview: Show the universe overview in the top box
 fix_names: Fix names written in the wrong capitals ("Locked box" to "a locked box"), with a preview
 writer: Write the open story in the Writer

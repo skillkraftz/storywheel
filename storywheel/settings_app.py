@@ -260,8 +260,17 @@ class SettingsScreen(KeptScreen, Screen):
         self.app.sub_title = "saved as you go"
         self.b.remember()
 
+    def show_tab(self, name):
+        """Open a tab by name ('you', 'writer'...) and give the tab bar the focus, so Left and Right move between tabs."""
+        tabs = self.query_one("#tabs", TabbedContent)
+        if f"t-{name}" in [p.id for p in tabs.query(TabPane)]:
+            tabs.active = f"t-{name}"
+        self.set_focus(tabs.query_one("Tabs"))
+
     def enter(self, payload=None):
         """Back in Settings from another mode: other modes may have changed settings, so show what is saved now."""
+        if payload and payload.get("tab"):
+            self.show_tab(payload["tab"])
         g = settings.load_global()
         g["library"] = str(paths.library_root())
         g["manuscripts_dir"] = str(paths.manuscripts_root())

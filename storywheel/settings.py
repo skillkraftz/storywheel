@@ -194,6 +194,29 @@ def save_story(story_dir, values):
     return path
 
 
+def story_own(story_dir):
+    """Only what the story sets itself (its settings.toml); everything else follows your defaults."""
+    return _load(Path(story_dir) / "settings.toml", {})
+
+
+def story_inherited():
+    """What a story gets when it sets nothing: your global defaults over the built-in ones."""
+    return load_story(paths.home() / ".no-such-story")
+
+
+def clear_story(story_dir, keys):
+    """Forget the story's own value for each key, so it follows your default again."""
+    path = Path(story_dir) / "settings.toml"
+    if not path.exists():
+        return path
+    own = _load(path, {})
+    for key in keys:
+        own.pop(key, None)
+    path.write_text(dump_toml(own, "this story's settings (anything missing follows your defaults in ~/.storywheel/settings.toml)"),
+                    encoding="utf-8")
+    return path
+
+
 def surname(settings):
     """For the manuscript header: an explicit `surname`, else the last word of the author name."""
     if settings.get("surname"):
