@@ -212,14 +212,50 @@ function _G.SwHelpTab(n)
   require("sw").help_show(tonumber(n))
 end
 
-local function help_bar(tabs, current)
-  local parts = {}
-  for i, tab in ipairs(tabs) do
-    local hl = i == current and "%#TabLineSel#" or "%#TabLine#"
-    parts[#parts + 1] = string.format("%s%%%d@v:lua.SwHelpTab@ %d %s %%X", hl, i, i, tab.title:gsub("%%", "%%%%"))
+-- The tab bar (the window's winbar). If the titles do not fit the window they are shortened, down to the numbers alone; the open tab's own
+-- name is the last to go. The key hints are in the window's footer, not here.
+local function help_bar(tabs, current, width)
+  local function build(limit)
+    local parts, total = {}, 0
+    for i, tab in ipairs(tabs) do
+      local title = tab.title
+      if limit and (i ~= current or limit < 4) and vim.fn.strdisplaywidth(title) > limit then
+        title = limit > 0 and (vim.fn.strcharpart(title, 0, math.max(1, limit - 1)) .. "…") or ""
+      end
+      local text = title ~= "" and string.format(" %d %s ", i, title) or string.format(" %d ", i)
+      total = total + vim.fn.strdisplaywidth(text) + 1
+      local hl = i == current and "%#TabLineSel#" or "%#TabLine#"
+      parts[#parts + 1] = string.format("%s%%%d@v:lua.SwHelpTab@%s%%X", hl, i, (text:gsub("%%", "%%%%")))
+    end
+    return parts, total
   end
-  return table.concat(parts, "%#TabLineFill# ") .. "%#TabLineFill#%=%#Comment# Tab / Shift+Tab / 1-" .. #tabs .. "  ·  / search  ·  F3, Esc, q close "
+  local limit = nil
+  local parts, total = build(limit)
+  limit = 0
+  for _, t in ipairs(tabs) do limit = math.max(limit, vim.fn.strdisplaywidth(t.title)) end
+  while total > (width or 1000) and limit > 0 do
+    limit = limit - 1
+    parts, total = build(limit)
+  end
+  return table.concat(parts, "%#TabLineFill# ") .. "%#TabLineFill#"
 end
+
+local HELP_HINT = " Tab / Shift+Tab / 1-%d  ·  / search  ·  F3, Esc, q close "
+
+-- A heading in the help text is a line followed by a line of dashes as long as it: show it in the Title colour and leave the dashes out.
+local function help_headings(lines)
+  local out, marks = {}, {}
+  for _, l in ipairs(lines) do
+    if l:match("^%-+$") and #out > 0 and out[#out] ~= "" and #l == #out[#out] then
+      marks[#marks + 1] = #out
+    else
+      out[#out + 1] = l
+    end
+  end
+  return out, marks
+end
+
+M.help_ns = vim.api.nvim_create_namespace("sw_help")
 
 -- Show tab n of the open help (wrapping round).
 function M.help_show(n)
@@ -227,10 +263,13 @@ function M.help_show(n)
   if not (h and M.help_win and vim.api.nvim_win_is_valid(M.help_win)) then return end
   n = ((n - 1) % #h.tabs) + 1
   h.current = n
+  local lines, marks = help_headings(h.tabs[n].lines)
   vim.bo[h.buf].modifiable = true
-  vim.api.nvim_buf_set_lines(h.buf, 0, -1, false, h.tabs[n].lines)
+  vim.api.nvim_buf_set_lines(h.buf, 0, -1, false, lines)
   vim.bo[h.buf].modifiable = false
-  vim.wo[M.help_win].winbar = help_bar(h.tabs, n)
+  vim.api.nvim_buf_clear_namespace(h.buf, M.help_ns, 0, -1)
+  for _, row in ipairs(marks) do vim.api.nvim_buf_add_highlight(h.buf, M.help_ns, "Title", row - 1, 0, -1) end
+  vim.wo[M.help_win].winbar = help_bar(h.tabs, n, vim.api.nvim_win_get_width(M.help_win))
   pcall(vim.api.nvim_win_set_cursor, M.help_win, { 1, 0 })
 end
 
@@ -243,11 +282,12 @@ function M.help(tab)
   local width = math.max(40, math.min(100, vim.o.columns - 6))
   local tabs = M.help_tabs(width - 2)
   local tallest = 5
-  for _, t in ipairs(tabs) do tallest = math.max(tallest, #t.lines + 1) end
+  for _, t in ipairs(tabs) do tallest = math.max(tallest, #(help_headings(t.lines)) + 1) end
   local buf = vim.api.nvim_create_buf(false, true)
   local height = math.max(5, math.min(tallest, vim.o.lines - 6))
   local win = vim.api.nvim_open_win(buf, true, { relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2),
-    width = width, height = height, style = "minimal", border = "rounded", title = " Help ", title_pos = "center" })
+    width = width, height = height, style = "minimal", border = "rounded", title = " Help ", title_pos = "center",
+    footer = string.format(HELP_HINT, #tabs), footer_pos = "center" })
   vim.wo[win].wrap = true
   vim.wo[win].linebreak = true
   vim.wo[win].cursorline = true

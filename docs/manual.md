@@ -409,8 +409,12 @@ indent. (Fixed: ISSUES #5.)
 The outline no longer repeats a Story Spine opener ("Once upon a time. Once upon a time, …") for stories promoted by older versions: a
 stored label is dropped when the sentence already starts with it, as in the Builder's Outline. (Fixed: ISSUES #6.)
 
-> **Watch out:** the help's tab bar is wider than its window, and the peek card lists fields A to Z and cuts the last ones off. The
-> text is all there; it is only laid out badly. (ISSUES #7, #12.)
+The help's tab bar shows every tab's name (shortened to fit a narrow window, down to the numbers) and its key hints are on the
+window's bottom border; headings are coloured, not underlined with dashes. The outline's wrapped beats hang under their text, its
+protagonist's values line up, the rumor starts with a capital, and the window is as tall as the wrapped text needs. (Fixed: ISSUES #7.)
+
+> **Watch out:** the peek card lists fields A to Z and cuts the last ones off. The text is all there; it is only laid out badly.
+> (ISSUES #12.)
 
 ### Find and replace: Ctrl+R
 

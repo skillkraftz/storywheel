@@ -62,11 +62,20 @@ function M.lines()
     if e.type == "character" and tostring(f.role or ""):lower() == "protagonist" then
       local rows = { e.name }
       local labels = e.labels or {}
+      local pairs_ = {}
+      local wide = 0
       for _, k in ipairs({ "age", "job", "trait", "want", "need", "flaw", "secret", "rival" }) do
         local v = f[k]
         if type(v) == "table" then v = table.concat(v, ", ") end
         v = (e.display or {})[k] or v
-        if v and v ~= "" then rows[#rows + 1] = string.format("%s: %s", labels[k] or (k:sub(1, 1):upper() .. k:sub(2)), v) end
+        if v and v ~= "" then
+          local label = labels[k] or (k:sub(1, 1):upper() .. k:sub(2))
+          pairs_[#pairs_ + 1] = { label .. ":", tostring(v) }
+          wide = math.max(wide, vim.fn.strdisplaywidth(label) + 1)
+        end
+      end
+      for _, p in ipairs(pairs_) do                                          -- the values line up; a long one wraps under itself
+        rows[#rows + 1] = p[1] .. string.rep(" ", wide + 2 - vim.fn.strdisplaywidth(p[1])) .. p[2]
       end
       section(lines, "Protagonist", table.concat(rows, "\n"))
       break
@@ -81,7 +90,8 @@ function M.lines()
     end
   end
   section(lines, "Setting", table.concat(setting, "\n"))
-  section(lines, "Rumor", rumor and plain(rumor) or nil)
+  if rumor then rumor = plain(rumor):gsub("^%l", string.upper) end                   -- (rumors are stored lowercase, to fit a sentence)
+  section(lines, "Rumor", rumor)
   if #lines <= 2 then lines[#lines + 1] = ""; lines[#lines + 1] = "This story has no outline yet: it was started without a Wheel draft." end
   return lines
 end
@@ -111,13 +121,19 @@ function M.open()
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.bo[buf].modifiable = false
   local width = math.min(92, math.max(30, vim.o.columns - 8))
-  local height = math.min(math.max(#lines, 3), math.max(5, vim.o.lines - 6))
+  local most = math.max(5, vim.o.lines - 6)
   local win = vim.api.nvim_open_win(buf, true, {
-    relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2), width = width, height = height,
+    relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2), width = width, height = most,
     style = "minimal", border = "rounded", title = " Story outline · Esc closes ", title_pos = "center",
   })
   vim.wo[win].wrap = true
   vim.wo[win].linebreak = true
+  vim.wo[win].breakindent = true                                  -- a wrapped beat hangs under its text, not under its number
+  vim.wo[win].breakindentopt = "list:-1"
+  vim.bo[buf].formatlistpat = [[^\s*\(\d\+\.\|\a[^:]\{1,24}:\)\s\+]]
+  vim.bo[buf].formatoptions = "n"
+  local rows = vim.api.nvim_win_text_height(win, {}).all          -- the height counts screen rows, wrapped lines included
+  vim.api.nvim_win_set_height(win, math.min(math.max(rows, 3), most))
   vim.cmd("stopinsert")
   for _, r in ipairs({ 1, 2 }) do
     pcall(vim.api.nvim_buf_add_highlight, buf, -1, r == 1 and "Title" or "Comment", r - 1, 0, -1)

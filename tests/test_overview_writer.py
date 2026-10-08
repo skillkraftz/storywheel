@@ -41,9 +41,11 @@ def test_ctrl_o_shows_the_outline_in_a_read_only_floating_window(home, story):
     assert r["open"] and not r["modifiable"] and r["cfg"]["relative"] == "editor"
     assert r["lines"][0] == "The Last Clause" and "western · cozy · Story Spine" in r["lines"][1]
     for needle in ("Premise", "locked box to Redwater", "Story Spine", "1. Once upon a time, Ann lived in Redwater.", "3. One day, a stranger came.",
-                   "Twist", "The stranger was Ann's brother.", "Protagonist", "Ann Lowell", "Job: teacher", "Want: the deed", "Setting", "Place: Redwater",
-                   "Era: the 1880s", "Rumor", "a pistol lies buried at the livery"):
+                   "Twist", "The stranger was Ann's brother.", "Protagonist", "Ann Lowell", "Setting", "Place: Redwater",
+                   "Era: the 1880s", "Rumor", "A pistol lies buried at the livery"):
         assert needle in text, needle
+    import re
+    assert re.search(r"Job:\s+teacher", text) and re.search(r"Want:\s+the deed", text)       # (the protagonist's values line up)
     assert "Bob Rivers" not in text and "Rumor: a pistol" not in text            # only the protagonist; the rumor has its own section
 
 

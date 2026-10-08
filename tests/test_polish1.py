@@ -438,3 +438,70 @@ def test_6_a_label_that_is_not_in_the_sentence_is_kept(home):
     r = drive(s, [keys("<C-o>")], "local ov = require('sw.overview'); R.lines = vim.api.nvim_buf_get_lines(ov.buf, 0, -1, false)")
     text = "\n".join(r["lines"])
     assert "1. Act One. Ann lived in Redwater." in text and "2. Act Two. She ran." in text
+
+
+# --- 7. the help's tab bar and the outline overlay ----------------------------------------------------------------------------
+
+LONG_SPINE = ("Once upon a time, Ann lived in Redwater, a town that had never once been in a hurry to be anywhere, and had never been "
+              "asked to be, either, by anyone who mattered to the people who lived there.\n\n"
+              "Every day, Ann swept the porch of the land office before anyone arrived, and every day somebody left a muddy print on it.\n\n"
+              "One day, a stranger came with a locked box and a story nobody in the town believed for a moment.")
+
+
+@pytest.fixture
+def long_story(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    u.new_entity("character", "Ann Lowell", {"role": "protagonist", "job": "teacher", "want": "the deed", "need": "to trust",
+                                             "secret": "she forged her own father's signature on the deed in the year of the drought"})
+    s = u.new_story("The Last Clause", {"genre": "western", "mood": "cozy", "structure": "Story Spine"},
+                    {"Premise": "When a stranger brings a locked box to Redwater, Ann must open it before the posse arrives, and before anyone learns "
+                                "what her father put inside it.",
+                     "Setting": "- **Place:** Redwater\n- **Era:** the 1880s\n- **Rumor:** a pistol lies buried at the livery",
+                     "Story Spine": LONG_SPINE, "Twist": "The stranger was Ann's brother."})
+    s.add_scene("Opening", "Hello")
+    settings.save_story(s.path, {"spellcheck": False})
+    return s
+
+
+@pty_only
+def test_7_real_terminal_the_help_tab_bar_fits_and_the_hints_are_on_the_border(home, long_story):
+    t = Term(long_story, rows=36, cols=120)
+    try:
+        t.key("F3")
+        text = t.text()
+        bar = next(l for l in t.lines() if "Writing prose" in l or "Writing basics" in l)
+        assert "Writing prose" in bar and "Writing basics" in bar and "Keys" in bar and "Export" in bar     # every tab name, the open one included
+        assert "Tab / Shift+Tab" in text and "F3, Esc, q close" in text
+        assert "-----" not in text                                          # headings are coloured, not underlined with dashes
+        assert "<se" not in text
+    finally:
+        t.close()
+
+
+@pty_only
+def test_7_real_terminal_a_narrow_help_keeps_the_open_tabs_name(home, long_story):
+    t = Term(long_story, rows=30, cols=70)
+    try:
+        t.key("F3")
+        bar = next(l for l in t.lines() if " 1 " in l and "2" in l)
+        assert "1" in bar and ("Writing prose" in bar or "Writing p…" in bar or "Writing" in bar)
+        assert "2" in bar and "3" in bar and "4" in bar
+    finally:
+        t.close()
+
+
+@pty_only
+def test_7_real_terminal_the_outline_fits_and_wrapped_beats_hang_under_their_text(home, long_story):
+    t = Term(long_story, rows=44, cols=100)
+    try:
+        t.key("Ctrl+O")
+        lines = t.lines()
+        r1 = next(i for i, l in enumerate(lines) if "1. Once upon a time" in l)
+        first, nxt = lines[r1], lines[r1 + 1]
+        inner = nxt[nxt.index("│") + 1:] if "│" in nxt else nxt
+        left = inner[:len(inner) - len(inner.lstrip())]
+        assert len(left) >= 3, nxt                                           # hangs under its text, not back at the left edge
+        assert "A pistol lies buried at the livery" in t.text()              # the last section is on screen without scrolling
+        assert "Rumor" in t.text()
+    finally:
+        t.close()
