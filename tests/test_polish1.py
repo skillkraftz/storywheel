@@ -516,6 +516,7 @@ from storywheel.sample import build_story  # noqa: E402
 def _two_drafts(home):
     mine = build_story(make_engine(home), ["western"])
     other = build_story(make_engine(home, seed=9), ["western"])
+    mine["id"], other["id"] = "20260101-000001-mine", "20260101-000002-other"           # (ids are made from the clock: two in one second would clash)
     store.save(mine)
     store.save(other)
     return mine, other
