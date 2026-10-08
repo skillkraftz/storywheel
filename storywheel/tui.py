@@ -684,7 +684,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("N", "new_draft", "New draft"),
         Binding("b", "back", "Back"),
         Binding("x", "skip", "Skip"),
-        Binding("u", "universe_add", "Univ", key_display="u/U"),
+        Binding("u", "universe_add", "Univ"),
         Binding("U", "universe_remove", "Remove", show=False),
         Binding("E", "editor", "$EDITOR"),
         Binding("escape", "focus_card", "", show=False),

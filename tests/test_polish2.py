@@ -1,4 +1,6 @@
 """Polish 2 (ISSUES #19-36): what a writer does, and what they see."""
+import pytest
+
 from test_polish1 import ann, builder_run  # noqa: F401  (the fixture and helper of polish 1)
 
 
@@ -126,3 +128,52 @@ def test_20_g_opens_settings_on_the_you_tab_with_the_tab_bar_focused(home, ann):
         scr = app.screen
         return app.mode_name, scr.query_one("#tabs").active, isinstance(scr.focused, Tabs)
     assert _hub_run(script, ("builder", {"universe": "thornwood", "story": "the-last-clause"})) == ("settings", "t-you", True)
+
+
+# --- 21. the help screen's layout ---------------------------------------------------------------------------------------------
+
+def _help_keys_text(start, mode, size=(200, 50)):
+    from conftest import screen_text
+    from textual.widgets import Static
+
+    async def script(app, pilot):
+        await pilot.press("question_mark")
+        await pilot.pause()
+        await pilot.pause()
+        head = " ".join(screen_text(app).split())
+        await pilot.press("2")                                           # the Keys tab
+        await pilot.pause()
+        await pilot.pause()
+        return head, str(app.screen.query_one("#help-text", Static).content)
+    return _hub_run(script, start, size)
+
+
+def test_21_the_help_hint_line_is_whole_and_says_how_to_close(home, ann):
+    head, _keys = _help_keys_text(("builder", {"universe": "thornwood", "story": "the-last-clause"}), "builder", size=(200, 50))
+    assert "Esc or q closes" in head
+
+
+def test_21_a_key_shown_in_another_rows_label_is_not_listed_again(home, ann):
+    _head, text = _help_keys_text(("wheel", {}), "wheel")
+    rows = [l.split("  ")[1].strip() if l.startswith("  ") and "  " in l[2:] else None for l in text.splitlines()]
+    assert "+/-" in rows and "-" not in rows                   # one row for liking and disliking
+    assert "u/U" not in rows and "u" in rows and "U" in rows   # u and U do different things: two rows, each under its own key
+    _head, text = _help_keys_text(("builder", {"universe": "thornwood", "story": "the-last-clause"}), "builder")
+    rows = [l.split("  ")[1].strip() if l.startswith("  ") and "  " in l[2:] else None for l in text.splitlines()]
+    assert "+/-" in rows and "-" not in rows
+
+
+@pytest.mark.parametrize("start", [("wheel", {}), ("builder", {"universe": "thornwood", "story": "the-last-clause"})])
+def test_21_a_long_description_hangs_under_its_own_column(home, ann, start):
+    from storywheel import helpdoc
+    _head, text = _help_keys_text(start, start[0], size=(130, 50))
+    titles = {t for t, _items in helpdoc.binding_rows(start[0])}
+    body = text.split("\nMouse\n")
+    keys_part = [l for l in body[0].splitlines()[2:]]                   # (after the 'Keys' heading and its underline)
+    stray = [l for l in keys_part if l.strip() and not l.startswith(" ") and l not in titles]
+    assert not stray, stray                                   # every wrapped line starts under the descriptions, none at the left edge
+    if len(body) > 1:
+        mouse = [l for l in body[1].splitlines()[1:] if l.strip()]
+        assert all(l.startswith(("- ", " ")) for l in mouse), mouse    # a wrapped bullet hangs under its text
+    longest = max(text.splitlines(), key=len)
+    assert len(longest) <= 130 - 8

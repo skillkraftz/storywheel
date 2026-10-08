@@ -52,7 +52,7 @@ class HelpScreen(ModalScreen):
     HelpScreen #help-search { margin: 0; }
     HelpScreen #help-scroll { height: 1fr; }
     """
-    HEAD = "Tab / Shift+Tab, 1-{n} or a click: tabs   ·   / searches every tab   ·   ↑ ↓ PgUp PgDn scroll   ·   Esc, q, ? or this mode's key closes"
+    HEAD = "Tab, Shift+Tab or 1-{n}: tabs  ·  / search  ·  ↑ ↓ PgUp PgDn scroll  ·  Esc or q closes"
 
     def __init__(self, name, section=None, fmt=None):
         super().__init__()
@@ -84,18 +84,27 @@ class HelpScreen(ModalScreen):
     def title_now(self):
         return self.tabs[self.current][0]
 
+    def text_width(self):
+        """Characters per line, so that a wrapped description hangs under its own column (the Static would wrap it back to the left edge)."""
+        w = self.query_one("#help-scroll").size.width
+        return max(40, (w or 100) - 2)
+
+    def on_resize(self, event):
+        if self.is_mounted and self.query("#help-text"):
+            self.render_page(self.query_one("#help-search", Input).value)
+
     def render_page(self, query):
         if query.strip():
             parts, found = [], 0
             for title, secs in self.tabs:
-                text, n = helpdoc.tab_text(secs, None, query)
+                text, n = helpdoc.tab_text(secs, self.text_width(), query)
                 if n:
                     found += n
                     parts += [f"[{title}]", text]
             text = "\n".join(parts) if found else f"Nothing on this page matches “{query}”. Settings > Help searches every page.\n"
             head = f"{found} section{'s' if found != 1 else ''} match “{query}” (in every tab)"
         else:
-            text = helpdoc.tab_text(self.tabs[self.current][1])[0]
+            text = helpdoc.tab_text(self.tabs[self.current][1], self.text_width())[0]
             head = self.HEAD.format(n=len(self.tabs))
         self.query_one("#help-text", Static).update(Text(text))
         self.query_one("#help-head", Static).update(head)

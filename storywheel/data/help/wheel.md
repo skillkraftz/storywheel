@@ -7,7 +7,7 @@ keep: Keep this step and move on
 edit: Edit the selected field by hand
 reroll_field: Reroll just the selected field (Enter does the same)
 write: Write the whole step yourself
-rate(1): Like the selected line (liked wording comes up more)
+rate(1): Like the selected line (liked wording comes up more); - dislikes it (disliked wording comes up less; press again to clear)
 rate(-1): Dislike the selected line (disliked wording comes up less); press again to clear
 history: Switch the history between every roll and the selected field's earlier values
 mix: Flavor: which kinds of material this story leans toward or avoids
@@ -29,7 +29,7 @@ focus_card: Back to the card from a list
 ### MixScreen | The flavor editor
 close: Close and keep the changes
 toggle: Exclude or include the highlighted tag or list
-boost(1): Boost the highlighted tag
+boost(1): Boost the highlighted tag; - boosts it less
 boost(-1): Boost it less
 boost_reset: Remove the boost
 switch: Switch between tags and lists

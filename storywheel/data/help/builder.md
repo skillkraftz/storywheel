@@ -10,7 +10,7 @@ delete_entity: Delete the entity (asks first; it goes to the library's .trash)
 rename: Rename the entity; shows every match in your notes, outlines and manuscripts first
 reroll_all: Roll the whole entity again (asks first)
 custom_field: Add your own field to this entity (write-only)
-rate(1): Like the value (liked wording is used more in later rolls)
+rate(1): Like the value (liked wording is used more in later rolls); - dislikes it (used less)
 rate(-1): Dislike the value (used less)
 tab(0): Show the Characters tab
 tab(1): Show the Places tab

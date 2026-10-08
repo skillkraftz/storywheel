@@ -183,6 +183,10 @@ def binding_rows(mode):
                 continue
             by_action[action] = len(items)
             items.append((key_text(b), _describe(mode, cls_name, action), action))
+        # a key another row already shows in its own label (+/- covers -) is not listed again
+        parts = {i: {p.strip() for p in it[0].split("/") if p.strip()} for i, it in enumerate(items) if "/" in it[0].replace(" / ", "/") and len(it[0]) > 1}
+        items = [it for i, it in enumerate(items)
+                 if not any(it[0] in ps for j, ps in parts.items() if j != i and it[0] not in parts.get(i, ()))]
         title = next((g["title"] for g in doc.groups if g["class"] == cls_name), cls_name)
         rows.append((title, items))
     return rows
@@ -325,7 +329,7 @@ def wrap(body, width):
             hang = len(m.group(1)) if m else len(line) - len(line.lstrip()) + 2
             out.extend(textwrap.wrap(line, width, subsequent_indent=" " * min(hang, 30), break_long_words=False))
         else:
-            out.extend(textwrap.wrap(line, width, break_long_words=False))
+            out.extend(textwrap.wrap(line, width, subsequent_indent="  " if line.startswith("- ") else "", break_long_words=False))
     return "\n".join(out)
 
 
