@@ -73,6 +73,8 @@ class CardList(OptionList):
     """The card's lines. A click is not 'select': left-click rerolls the field, right-click edits it,
     the wheel steps through its earlier values, and the ▲ ▼ rate it. (Enter still selects.)"""
 
+    DEAD_EDGE = 11            # cells at the right edge that rerolls nothing: the ▲ ▼ column (7), its gaps (2) and two cells of slack
+
     class Field(Message):
         def __init__(self, index, button, source=None):
             super().__init__()
@@ -98,6 +100,8 @@ class CardList(OptionList):
         self.highlighted = index
         if meta.get("rate"):
             self.post_message(self.Rate(index, meta["rate"], self))
+        elif event.x >= self.scrollable_content_region.width - self.DEAD_EDGE:
+            return                                    # a near miss on ▲ ▼ (the gaps around them) changes nothing
         else:
             self.post_message(self.Field(index, event.button, self))
 

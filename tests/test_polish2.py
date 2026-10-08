@@ -194,3 +194,28 @@ def test_23_a_new_card_starts_on_its_first_row_and_down_moves_to_the_second(home
         return first, (s.card.highlighted, s.field_key())
     first, second = builder_run(script)
     assert first == (0, "name") and second[0] == 1 and second[1] != "name"
+
+
+# --- 24. the Wheel card: a near miss on ▲ ▼ does not reroll ------------------------------------------------------------------------
+
+def test_24_clicks_next_to_the_arrows_change_nothing_and_the_arrows_still_rate(home):
+    from conftest import make_engine, run_tui
+    from test_mouse import arrow_at, click, go_to, new_story, row_of
+
+    async def script(app, pilot):
+        s = app.session
+        await go_to(app, pilot, "protagonist")
+        row = row_of(app, "job")
+        up_x, up_y = arrow_at(app, "job", 1)
+        before = (dict(s.fields), len(s.hist))
+        for dx in (-1, -2):                                           # just left of ▲ (the gap), and the cell before it
+            await click(pilot, (up_x + dx, up_y))
+        await click(pilot, (up_x + 6, up_y))                         # just right of ▼
+        unchanged = (dict(s.fields), len(s.hist)) == before
+        await click(pilot, (6, row))                                  # the value itself still rerolls
+        rerolled = s.fields["job"] != before[0]["job"]
+        up_x, up_y = arrow_at(app, "job", 1)
+        await click(pilot, (up_x + 1, up_y))                          # and the middle of ▲ still rates
+        return unchanged, rerolled, s.rating("job")
+    unchanged, rerolled, rated = run_tui(new_story(), make_engine(home), script)
+    assert unchanged and rerolled and rated == 1
