@@ -107,7 +107,7 @@ is about in the twist.
   "Whole characters/places from these" (no / sometimes / only), "Belongs to" (the universe this draft will go into), and "Open in the
   Builder". Under them, the ticked universes' characters, places and things.
 - **Left, bottom: Past stories.** Every draft, with its date and progress ("5/8", or "done"); ⇢ marks one already brought into a
-  universe. Buttons: New, Del, Promote, Prot. → universe, Setting → universe.
+  universe. Buttons: New, Del, Promote, Use protagonist, Use setting.
 - **Middle: the card.** A hint about the step, the candidate's fields (each with ▲ ▼), and buttons: Roll, Keep, Back, Skip, Flavor,
   +Beat and -Beat (on the story body), Send to Builder, New draft.
 - **Middle, below: History.** Every roll of this step and what changed in each.
@@ -184,8 +184,10 @@ A promoted draft stays in Past stories (marked ⇢) and becomes read-only in the
 ### Past stories
 
 Enter (or a click) opens a draft; the one you leave is saved. **d** (or Del) deletes a draft after asking. **P** (or Promote) brings a
-past draft into a universe. **p** and **s** (the "Prot. → universe" and "Setting → universe" buttons) copy that draft's protagonist or setting
-**into a universe you choose** (not into the draft you are on).
+past draft into a universe. **p** and **s** (the "Use protagonist" and "Use setting" buttons) take that draft's protagonist or setting and ask what to do with it:
+**use it in the draft you are on**, as a new candidate for that step (the card says "from a past story"; nothing is kept until you press
+`k`), or **send it to a universe you choose**, where it is kept as a character or a place. A draft that was promoted is read-only, so it
+only takes the second choice; so does the draft you are already on.
 
 Deleting a draft (Del, `d`, or `d` in the quit box) always asks first and moves it to `.trash` in your storywheel home (the message says
 where), so it can be got back by hand. (Fixed: ISSUES #8.)
@@ -658,7 +660,7 @@ The help pages are in `storywheel/data/help/`. Their key tables are made from th
 where they drift. Each line: the page and section, what it says, and what actually happens.
 
 1. **wheel › Past stories:** "p and s send its protagonist or setting to the current story". They send it **into a universe you
-   choose**. (Fixed with ISSUES #13: the help, the Keys tab, the buttons and the footer now all say "→ universe".)
+   choose**. (Fixed with ISSUES #13: the buttons are now "Use protagonist" and "Use setting"; they offer the piece to the draft you are on, with "send it to a universe" as the second choice.)
 2. **wheel › The universe panel:** "e to edit it, d to delete it (with a confirm), n to add a new one". The preview has only Use and
    Close; there is no e, d or n in the panel.
 3. **wheel › Keys:** `U` is "Remove the selected value from your universe". It only tells you to delete in the Builder.

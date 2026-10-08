@@ -451,6 +451,8 @@ def test_send_a_past_storys_protagonist_to_a_chosen_universe(home):
         lst.highlighted = [lst.get_option_at_index(i).id for i in range(lst.option_count)].index(d["id"])
         await press(pilot, "p")
         assert type(app.screen).__name__ == "ChoiceScreen"
+        await press(pilot, "down", "enter")                       # "Send it to a universe…" (the first choice uses it in this draft)
+        assert type(app.screen).__name__ == "ChoiceScreen"        # ...which asks which universe
         await press(pilot, "enter")
         return flat(screen_text(app))
     text = run_tui(store.new_story(), make_engine(home), script)

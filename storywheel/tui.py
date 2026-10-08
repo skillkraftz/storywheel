@@ -479,10 +479,10 @@ class ChoiceScreen(ModalScreen):
 
 
 class StoryList(OptionList):
-    """Past stories: Enter opens one; d deletes (asks first); p / s send its protagonist / setting
-    to your universe."""
-    BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "Prot. → universe"),
-                Binding("s", "act('setting')", "Setting → universe"), Binding("P", "act('promote')", "Promote")]
+    """Past stories: Enter opens one; d deletes (asks first); p / s use its protagonist / setting in this draft
+    (or send it to a universe)."""
+    BINDINGS = [Binding("d", "act('delete')", "Delete"), Binding("p", "act('protagonist')", "Use protagonist"),
+                Binding("s", "act('setting')", "Use setting"), Binding("P", "act('promote')", "Promote")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -773,8 +773,8 @@ class MainScreen(KeptScreen, Screen):
                         yield _quiet(Button("Del", id="st-delete"))
                         yield _quiet(Button("Promote", id="st-promote"))
                     with Horizontal(id="story-buttons2"):
-                        yield _quiet(Button("Prot. → universe", id="st-protagonist"))
-                        yield _quiet(Button("Setting → universe", id="st-setting"))
+                        yield _quiet(Button("Use protagonist", id="st-protagonist"))
+                        yield _quiet(Button("Use setting", id="st-setting"))
             with Vertical(id="main"):
                 with Vertical(id="card-box"):
                     yield Static("", id="hint", markup=False)
@@ -1026,6 +1026,26 @@ class MainScreen(KeptScreen, Screen):
             if not piece:
                 self.say(f"'{title}' has no kept {action}.")
                 return
+            options = [("Use it in this draft, as a new candidate for its step (nothing is kept until you press k)", "use"),
+                       ("Send it to a universe…", "send")]
+            if here:
+                options = options[1:]                                  # (it is already this draft's own)
+            self.app.push_screen(ChoiceScreen(f"The {action} of '{title}': what should it do?", options),
+                                 lambda what: self._past_piece(story, action, piece, what))
+
+    def _past_piece(self, story, action, piece, what):
+        title = store.title_of(story)
+        if what == "use":
+            if self.locked():
+                return
+            if self.session.use_universe_entry(action, public(piece), src="past"):
+                self.hist_mode = "rolls"
+                self.after()
+                self.card.focus()
+                self.say(f"The {action} of '{title}' is a new candidate here. Press k to keep it.")
+            else:
+                self.after()
+        elif what == "send":
             unis = self.session.available_universes()
             if not unis:
                 self.say("There is no universe yet. Promote a story or make one in the Builder (F2).")

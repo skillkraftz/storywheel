@@ -36,8 +36,8 @@ switch: Switch between tags and lists
 reset: Reset to the genre's defaults
 ### StoryList | Past stories (bottom left)
 act('delete'): Delete the story (asks first)
-act('protagonist'): Send its protagonist to a universe you choose (kept there as a character)
-act('setting'): Send its setting to a universe you choose (kept there as a place)
+act('protagonist'): Use its protagonist in the draft you are on (a new candidate), or send it to a universe you choose
+act('setting'): Use its setting in the draft you are on (a new candidate), or send it to a universe you choose
 act('promote'): Promote the draft into a universe
 ### UniverseChecklist | Universe panel: which universes the generator may draw from
 toggle: Tick or untick the universe
@@ -61,6 +61,6 @@ If you roll a step before the ones it builds on are kept (say the story body bef
 ## The universe panel
 Bottom left. Entries are grouped by kind; Enter opens or closes a group. "Belongs to" chooses the universe this draft will be promoted into. Tick universes the generator may draw characters, places and things from. Press Enter on an entry to preview it, then Enter or u to use it in this story (as a new candidate; nothing is kept until you press k). Editing, deleting and adding entries is done in the Builder (F2). Press Esc to close.
 ## Past stories
-Bottom left: Enter opens one, d deletes it (asks first; it goes to the .trash folder in your storywheel home), p and s send its protagonist or setting to a universe you choose (it asks which; to use something in the draft you are on, open the universe panel instead), P promotes it. "5/8" means five steps kept, "done" a finished one.
+Bottom left: Enter opens one, d deletes it (asks first; it goes to the .trash folder in your storywheel home), p and s (Use protagonist, Use setting) ask what to do with its protagonist or setting: use it in the draft you are on, as a new candidate for that step (press k to keep it), or send it to a universe you choose (kept there as a character or place), P promotes it. "5/8" means five steps kept, "done" a finished one.
 ## Leaving
 q goes back to the mode you came from (the draft is saved). Q quits storywheel: it asks whether to keep or delete the story and offers to send it to the Builder.

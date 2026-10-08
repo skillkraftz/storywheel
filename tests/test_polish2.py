@@ -504,3 +504,76 @@ def test_34_counts_are_singular_when_there_is_one_and_post_update_is_not_listed(
     helptext = _cli(["--help"], home).stdout
     assert "post-update" not in helptext and "SUPPRESS" not in helptext
     assert _cli(["post-update"], home).returncode == 0                      # (still runs, for `update`)
+
+
+# --- 13 (optional, polish 2): Use protagonist / Use setting offer the piece to the draft you are on ----------------------------------------
+
+from storywheel import store  # noqa: E402
+from storywheel.sample import build_story  # noqa: E402
+from conftest import make_engine, run_tui, screen_text  # noqa: E402
+
+
+def _drafts(home):
+    mine = build_story(make_engine(home), ["western"])
+    other = build_story(make_engine(home, seed=9), ["western"])
+    mine["id"], other["id"] = "20260101-000001-mine", "20260101-000002-other"
+    store.save(mine)
+    store.save(other)
+    return mine, other
+
+
+async def _pick_past(app, pilot, draft_id):
+    lst = app.main.stories_list
+    lst.focus()
+    await pilot.pause()
+    lst.highlighted = [lst.get_option_at_index(i).id for i in range(lst.option_count)].index(draft_id)
+
+
+@pytest.mark.parametrize("button,step,field", [("#st-protagonist", "protagonist", "name"), ("#st-setting", "setting", "place")])
+def test_13_use_offers_a_past_storys_piece_as_a_candidate_here_and_k_keeps_it(home, button, step, field):
+    mine, other = _drafts(home)
+
+    async def script(app, pilot):
+        await _pick_past(app, pilot, other["id"])
+        await pilot.click(button)
+        await pilot.pause()
+        await pilot.press("enter")                                         # the first choice: use it in this draft
+        await pilot.pause()
+        s = app.session
+        shown = (s.step.key, s.fields.get(field), s.source_tag(s.cur), dict(s.story["kept"].get(step) or {}).get(field))
+        text = " ".join(screen_text(app).split())
+        await pilot.press("k")
+        await pilot.pause()
+        return shown, text, dict(s.story["kept"][step]).get(field)
+    shown, text, kept = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert shown[0] == step and shown[1] == other["kept"][step][field] and shown[2] == " (from a past story)"
+    assert shown[3] != other["kept"][step][field]                          # nothing was kept by choosing it
+    assert kept == other["kept"][step][field]                              # k keeps it
+
+
+def test_13_the_story_you_are_in_offers_only_the_universe_choice(home):
+    mine, _other = _drafts(home)
+
+    async def script(app, pilot):
+        await _pick_past(app, pilot, mine["id"])
+        await pilot.press("p")
+        await pilot.pause()
+        return [str(o.prompt) for o in app.screen.query_one("#choices").options]
+    offered = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert len(offered) == 1 and offered[0].startswith("Send it to a universe")
+
+
+def test_13_a_promoted_draft_stays_read_only(home):
+    mine, other = _drafts(home)
+    mine["promoted"] = {"universe": "thornwood", "story": "x"}
+    store.save(mine)
+
+    async def script(app, pilot):
+        await _pick_past(app, pilot, other["id"])
+        await pilot.press("p")
+        await pilot.pause()
+        await pilot.press("enter")
+        await pilot.pause()
+        return dict(app.session.story["kept"]["protagonist"]), " ".join(screen_text(app).split())
+    kept, text = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert kept == mine["kept"]["protagonist"] and "Read-only" in text

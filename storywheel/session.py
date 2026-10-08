@@ -22,7 +22,7 @@ from .text import fix_articles, motif_from
 
 HEADLINE = ("name", "first", "last", "place", "title", "motif", "genre", "structure")     # what a banner names
 UNIVERSE_CHANCE = 0.35       # how often "mix" mode pulls from your universe
-SOURCE_TAGS = {"edited": " (your edit)", "universe": " (from your universe)", "kept": " (kept)"}
+SOURCE_TAGS = {"edited": " (your edit)", "universe": " (from your universe)", "past": " (from a past story)", "kept": " (kept)"}
 
 
 class Session:
@@ -665,7 +665,7 @@ class Session:
         self.story["universe_mode"] = order[(order.index(self.universe_mode) + 1) % 3]
         return self.story["universe_mode"]
 
-    def use_universe_entry(self, step_key, fields):
+    def use_universe_entry(self, step_key, fields, src="universe"):
         """Offer a universe entity as a candidate for its step in this story, jumping there if need be.
         Nothing is kept: the story's kept steps are untouched until you press k."""
         index = next((n for n, st in enumerate(self.steps) if st.key == step_key), None)
@@ -674,12 +674,13 @@ class Session:
             return False
         if index != self.i:
             self.jump(index)
-        cand = dict(public(fields), _src="universe")
+        cand = dict(public(fields), _src=src)
         for name in self.field_names:                      # an entity may leave fields blank
             if not cand.get(name):
                 cand[name] = self.cand.get(name, "")
         self._add(cand)
-        self.note("Added from your universe as a new candidate. Press k to keep it.")
+        self.note("Added from your universe as a new candidate. Press k to keep it." if src == "universe"
+                  else "Added from a past story as a new candidate. Press k to keep it.")
         return True
 
     def universe_label(self, step_key):

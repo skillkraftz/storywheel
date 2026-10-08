@@ -853,7 +853,8 @@ def test_12b_real_terminal_a_late_terminal_reply_is_never_typed_into_the_text(ho
 
 # --- 13. Past stories: the protagonist and setting buttons say they go to a universe -------------------------------------------------
 
-def test_13_the_past_stories_buttons_and_footer_say_where_the_protagonist_goes(home):
+def test_13_the_past_stories_buttons_offer_the_piece_to_this_draft_or_to_a_universe(home):
+    """(Polish 2 made "Use protagonist" a real use of the piece in this draft; sending it to a universe is the second choice.)"""
     mine, other = _two_drafts(home)
     thorn = vault.create_universe("Thornwood", ["western"])
 
@@ -864,24 +865,27 @@ def test_13_the_past_stories_buttons_and_footer_say_where_the_protagonist_goes(h
         lst.focus()
         await pilot.pause()
         lst.highlighted = [lst.get_option_at_index(i).id for i in range(lst.option_count)].index(other["id"])
-        footer = " ".join(screen_text(app).split())
         await pilot.click("#st-protagonist")
+        await pilot.pause()
+        offered = [str(o.prompt) for o in app.screen.query_one("#choices").options] if type(app.screen).__name__ == "ChoiceScreen" else []
+        await pilot.press("down", "enter")                                   # the second choice: send it to a universe
         await pilot.pause()
         asked = app.screen.title_text if type(app.screen).__name__ == "ChoiceScreen" else "(no choice box)"
         await pilot.press("enter")
         await pilot.pause()
-        return labels, footer, asked, " ".join(screen_text(app).split())
-    labels, footer, asked, after = run_tui(store.load(mine["id"]), make_engine(home), script)
-    assert all("universe" in l for l in labels) and "Use protagonist" not in footer and "Use setting" not in footer
+        return labels, offered, asked
+    labels, offered, asked = run_tui(store.load(mine["id"]), make_engine(home), script)
+    assert labels == ["Use protagonist", "Use setting"]
+    assert len(offered) == 2 and offered[0].startswith("Use it in this draft") and offered[1].startswith("Send it to a universe")
     assert "to which universe" in asked
     assert vault.get_universe("thornwood").find_by_name(other["kept"]["protagonist"]["name"], "character")
 
 
-def test_13_the_wheel_help_no_longer_promises_the_current_story(home):
+def test_13_the_wheel_help_says_use_in_this_draft_or_send_to_a_universe(home):
     from storywheel import helpdoc
     text = " ".join(helpdoc.text("wheel", 120).split())
     assert "Use its protagonist in the current story" not in text and "to the current story" not in text
-    assert "Send its protagonist to a universe you choose" in text and "protagonist or setting to a universe you choose" in text
+    assert "Use its protagonist in the draft you are on" in text and "send it to a universe you choose" in text
 
 
 # --- 14. Words: a and k work on the word you are on, on every tab ------------------------------------------------------------------
