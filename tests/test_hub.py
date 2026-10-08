@@ -157,7 +157,7 @@ def test_a_quit_ends_the_app_with_the_wheels_message(home, world):
     async def script(app, pilot):
         await press(pilot, "f1")
         await press(pilot, "Q")
-        await press(pilot, "d")                                          # nothing kept: delete the draft
+        await press(pilot, "d", "y")                                     # nothing kept: delete the draft (d asks first)
         return None
     async def go():
         app = hubmod.Hub(("builder", {"universe": "thornwood"}), lambda: Engine(seed=3), lambda: Ratings())

@@ -200,7 +200,11 @@ def test_f2_and_f3_in_the_wheel_ask_for_the_builder_and_the_writer(home, world):
                 await pilot.press("down", "enter")                    # offered to send the draft first: just go
                 await pilot.pause()
             return app.next
-        assert run_tui(story, make_engine(home), script) == (expect, {"universe": "thornwood"})
+        got = run_tui(story, make_engine(home), script)
+        if key == "f3":
+            assert got is None                                    # a draft never sent has no manuscript: F3 says so and stays
+        else:
+            assert got == (expect, {"universe": "thornwood"})
 
 
 def test_the_builder_opens_the_writer_and_refreshes_on_return(home, world, monkeypatch):
@@ -263,7 +267,7 @@ def test_the_builder_says_why_it_cannot_open_the_writer(home, world, monkeypatch
             await pilot.pause()
             return a, flat(screen_text(app))
     a, b = asyncio.run(go())
-    assert "Neovim isn't installed (test)." in a and "no story to write yet" in b
+    assert "Neovim isn't installed (test)." in a and "no story to write" in b
 
 
 def test_every_help_screen_lists_the_mode_keys(home, world):
@@ -395,4 +399,5 @@ def test_with_no_state_storywheel_opens_the_wheel(home):
     assert t.wait_for("Genre & mood")
     t.send(b"Q", 0.8)
     t.send(b"d", 0.8)
+    t.send(b"y", 0.8)                                   # (d asks first)
     assert t.finish() == 0
