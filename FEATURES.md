@@ -198,7 +198,7 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 |---|---|---|---|---|
 | Centered column, pad windows either side | Distraction-free text | test_writer.py | works | T |
 | Virtual paragraph indent | Every paragraph line shown indented; file has no spaces | test_paragraphs.py | works in the manuscript only; floats are drawn at column 0 (was ISSUES #5); test_polish1.py | T |
-| Scene markers shown centered `*  *  *  Title` | `***` / `* * *` / `#` lines, optionally named | test_manuscript.py | works; raw text also shows on the cursor line (ISSUES #11) | T |
+| Scene markers shown centered `*  *  *  Title` | `***` / `* * *` / `#` lines, optionally named | test_manuscript.py | works; the cursor never rests on a marker line (was ISSUES #11); test_polish1.py | T |
 | Centered lines `>text<` | Shown centered | test_notepad_keys_center.py | works | R |
 | Status line | words in this scene · in the story / target · today / goal | test_statusline.py, test_writer.py | works; always counts the writing window, even with a float open (was ISSUES #9); test_polish1.py | T |
 | Spelling marks | red wavy, blue, pink, cyan (Settings > Spelling) | test_spelling.py, test_spelldict.py | works | R |

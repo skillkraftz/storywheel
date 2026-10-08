@@ -644,3 +644,99 @@ def test_10_a_screenplay_still_flips(home):
     (s.manuscript_dir / "script.fountain").write_text("INT. KITCHEN - DAY\n\nAnn pours coffee.\n")
     r = drive(s, [keys("<A-f>"), keys("<Cmd>lua vim.wait(300)<CR>")], "R.msg = vim.fn.execute('messages'); R.lines = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(require('sw.layout').main), 0, -1, false)")
     assert "The flip test is for screenplays" not in r["msg"] and r["lines"][0] == "INT. KITCHEN - DAY"       # (it ran the flip test; no stray f typed)
+
+
+# --- 11. the cursor stays off scene-marker lines -------------------------------------------------------------------------------
+
+@pytest.fixture
+def marked(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    s = u.new_story("The Last Clause")
+    (s.manuscript_dir).mkdir(parents=True, exist_ok=True)
+    (s.manuscript_dir / "manuscript.md").write_text("* * * Opening\n\nThe gate was shut.\n\n* * * The Hall\n\nThe guild hall was dark.\n")
+    settings.save_story(s.path, {"spellcheck": False})
+    return s
+
+
+CURSOR = "R.row = vim.api.nvim_win_get_cursor(0)[1]; R.mode = vim.fn.mode()"
+
+
+def _saved_text(story):
+    return story.manuscript_path.read_text() if hasattr(story, "manuscript_path") else (story.manuscript_dir / "manuscript.md").read_text()
+
+
+def _leave_and_read(t, story):
+    t.key("F2", wait=2.0)
+    return (story.manuscript_dir / "manuscript.md").read_text()
+
+
+@pty_only
+def test_11_real_terminal_arrowing_down_onto_a_marker_moves_on_and_typing_leaves_it_alone(home, marked):
+    t = Term(marked)
+    try:
+        t.key("Ctrl+Home")
+        for _ in range(3):
+            t.key("Down", wait=0.25)                       # row 2 (blank), 3, 4 (blank); the next Down would land on the marker at row 5
+        t.key("Down", wait=0.25)
+        t.send("xyz")
+        text = _leave_and_read(t, marked)
+    finally:
+        t.close()
+    lines = text.splitlines()
+    assert "* * * The Hall" in lines and "* * * Opening" in lines
+    assert "xyz" in text and not any("xyz" in l and "* *" in l for l in lines)
+
+
+@pty_only
+def test_11_real_terminal_arrowing_up_onto_a_marker_moves_off_it(home, marked):
+    t = Term(marked)
+    try:
+        t.key("Ctrl+Home")
+        for _ in range(6):
+            t.key("Down", wait=0.2)
+        for _ in range(3):
+            t.key("Up", wait=0.25)
+        t.send("abc")
+        text = _leave_and_read(t, marked)
+    finally:
+        t.close()
+    lines = text.splitlines()
+    assert "* * * The Hall" in lines and "* * * Opening" in lines and not any("abc" in l and "* *" in l for l in lines)
+
+
+@pty_only
+def test_11_real_terminal_a_click_on_a_marker_line_moves_off_it(home, marked):
+    t = Term(marked)
+    try:
+        row, col = t.find("The Hall")
+        t.click("left", row, col + 2)
+        t.send("zz")
+        text = _leave_and_read(t, marked)
+    finally:
+        t.close()
+    assert "* * * The Hall" in text.splitlines() and not any("zz" in l and "* *" in l for l in text.splitlines())
+
+
+def test_11_typing_a_scene_break_still_works(home, marked):
+    r = drive(marked, [keys("<C-End>"), keys("<CR>***<CR>Next scene")], LINES)
+    assert "***" in r["lines"] and r["lines"][-1].endswith("Next scene")
+
+
+@pty_only
+def test_11_real_terminal_a_marker_at_the_very_end_gets_an_empty_line_to_type_on(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    s = u.new_story("The Last Clause")
+    (s.manuscript_dir).mkdir(parents=True, exist_ok=True)
+    (s.manuscript_dir / "manuscript.md").write_text("The gate was shut.\n\n* * * The End")
+    settings.save_story(s.path, {"spellcheck": False})
+    t = Term(s)
+    try:
+        t.key("Ctrl+Home")
+        for _ in range(3):
+            t.key("Down", wait=0.25)
+        t.send("ok")
+        text = _leave_and_read(t, s)
+    finally:
+        t.close()
+    lines = text.splitlines()
+    assert "* * * The End" in lines and any(l.endswith("ok") for l in lines) and not any("ok" in l and "* *" in l for l in lines)

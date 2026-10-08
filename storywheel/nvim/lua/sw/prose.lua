@@ -269,6 +269,42 @@ function M.scene_break()
   M.decorate(buf)
 end
 
+-- The cursor never rests on a scene-marker line (`* * *`, `* * * Title`) in notepad mode: typing there would turn the marker into a paragraph,
+-- and the raw marker shows beside the centered one. Arriving on one (arrows, a click, reopening there) moves on to the nearest line that is
+-- not a marker: the way you were going, else the other way; a marker at the very end gets an empty line after it. Typing a break
+-- (`***` then Enter) is not "arriving": the row has not changed. A scene is renamed from the sidebar (r).
+function M.guard_marker()
+  local np = require("sw.notepad")
+  local layout = require("sw.layout")
+  if not (np.enabled and layout.main and vim.api.nvim_get_current_win() == layout.main) then return end
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.bo[buf].filetype ~= "storywheel" or not vim.bo[buf].modifiable or require("sw.script").is_script(buf) then return end
+  local mode = vim.fn.mode()
+  if not (mode:sub(1, 1) == "i" or mode:sub(1, 1) == "n") then return end    -- (Insert, Normal, and Insert's one-command Normal "niI"; a selection may run over markers)
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local last = M.guard_last
+  M.guard_last = { buf = buf, row = row }
+  if last and last.buf == buf and last.row == row then return end             -- same line: typing, not arriving
+  local util = require("sw.util")
+  local line = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)[1] or ""
+  if util.marker_label(line) == nil then return end
+  local count = vim.api.nvim_buf_line_count(buf)
+  local function is_marker(r) return util.marker_label(vim.api.nvim_buf_get_lines(buf, r - 1, r, false)[1] or "") ~= nil end
+  local dir = (last and last.buf == buf and last.row > row) and -1 or 1
+  local target
+  for _, d in ipairs({ dir, -dir }) do
+    local r = row + d
+    while r >= 1 and r <= count and is_marker(r) do r = r + d end
+    if r >= 1 and r <= count then target = r break end
+  end
+  if not target then
+    vim.api.nvim_buf_set_lines(buf, count, count, false, { "" })
+    target = count + 1
+  end
+  vim.api.nvim_win_set_cursor(0, { target, 0 })
+  M.guard_last = { buf = buf, row = target }
+end
+
 -- --- toggles ----------------------------------------------------------------------------------------------
 
 function M.set_invisibles(on)

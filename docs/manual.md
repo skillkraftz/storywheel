@@ -350,8 +350,9 @@ size, line height, padding and opacity.
   one, Enter accepts it.
 - **Find:** Ctrl+F, then Ctrl+G (next) and Alt+G (previous). **Find and replace:** Ctrl+R (below).
 
-> **Watch out:** if the cursor is on a scene-break line, the raw `* * * Title` shows beside the centered one, and anything you type
-> goes into the break and turns it into a paragraph. Move off the line before typing. (ISSUES #11.)
+The cursor never rests on a scene-break line (`* * *` or `* * * Title`): arrowing or clicking onto one moves on to the nearest line that
+is not a break (the way you were going, else the other way; a break at the very end gets an empty line after it), so typing can't turn a
+break into a paragraph. Rename a scene from the sidebar (`r`). Typing `***` and Enter still makes a break. (Fixed: ISSUES #11.)
 
 Alt with a letter that has no job types nothing (it used to type the letter). Alt+F in a prose story says "The flip test is for
 screenplays." (Fixed: ISSUES #10.)

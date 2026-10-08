@@ -529,6 +529,10 @@ function M.start()
       if layout.sidebar_open then sidebar.render() end
     end,
   })
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "InsertEnter" }, {
+    group = vim.api.nvim_create_augroup("sw_marker_guard", { clear = true }), callback = function() prose.guard_marker() end,
+  })
+  prose.guard_marker()                                          -- (the session may have reopened the cursor on a marker)
   vim.api.nvim_create_autocmd("VimLeavePre", { group = vim.api.nvim_create_augroup("sw_leave", { clear = true }),
     callback = function()
       session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell,
