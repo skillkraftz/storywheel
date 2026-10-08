@@ -26,8 +26,9 @@ Places where the program currently misbehaves are marked **Watch out**, with wha
 
 - A Linux desktop terminal, full screen, with a mouse. kitty is the best choice (the Writer then gets a window of its own with your
   font and line height); any modern terminal works.
-- Python with pipx, Neovim 0.10 or newer, and pandoc. Everything else is optional and says so when missing: LibreOffice (for .odt and
-  .pdf exports), a clipboard tool such as xclip or wl-copy, Java (for grammar checking).
+- Python with pipx and Neovim 0.10 or newer (`install.sh` gets both). Everything else is optional and says so when missing: LibreOffice
+  (for .odt and .pdf exports), a clipboard tool such as xclip or wl-copy, Java (for grammar checking). pandoc is not needed: the
+  .docx is built directly.
 
 ### Installing
 
