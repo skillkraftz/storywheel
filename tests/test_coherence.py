@@ -33,9 +33,9 @@ def test_unknown_features_meet_anything():
 
 def test_the_vocabulary_is_documented_and_small():
     assert 20 <= len(VOCAB) <= 40
-    readme = open("README.md").read()
+    readme = open("docs/generator.md").read()
     for name in VOCAB:
-        assert f"`{name}`" in readme, f"{name} is not documented in the README"
+        assert f"`{name}`" in readme, f"{name} is not documented in docs/generator.md"
 
 
 def test_unknown_feature_names_are_reported(tmp_path):

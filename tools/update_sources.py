@@ -57,7 +57,7 @@ fetched). Check files like these individually before using anything else from co
 Original text. Atoms are short parts (a noun phrase, a verb, a deadline, a prize),
 templates are sentence frames with slots that assemble them, and structures
 (`data/structures/`: the Story Spine, a three-act outline, kishotenketsu) are ordered
-lists of beats that each draw on their own templates. See the README. Names, places and
+lists of beats that each draw on their own templates. See docs/generator.md. Names, places and
 objects are generic or drawn from folklore and the general stock of the genres; no
 passages were copied from any book, film or game. Names are also the training data for
 the Markov name maker. Fairy-tale material is written from the shared folklore tradition
