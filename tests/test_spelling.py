@@ -220,7 +220,7 @@ def test_add_to_dictionary_goes_to_the_universe_list_and_other_stories_see_it(ho
 
 def test_the_right_click_menu_adds_the_word_under_the_cursor(home, story):
     r = run(story, text("A flurbish day.") + AT % (1, 4),
-            "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Add\\ to\\ Dictionary<CR>",
+            __import__("nvdrive").context_keys("Add to Dictionary", misspelled=True),
             "R.after = vim.fn.spellbadword('flurbish')[1]; R.msgs = vim.fn.execute('messages')")
     assert r["after"] == "" and "Added “flurbish”" in r["msgs"]
 

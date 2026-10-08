@@ -99,7 +99,7 @@ def test_escape_leaves_a_selection_and_you_are_typing_again(home, story):
 def test_the_mouse_is_set_up_to_select_like_any_app(home, story):
     """(Dragging itself can't be done headlessly: see the manual test script.)"""
     r = run(story, "", "", "R.sm = vim.o.selectmode; R.km = vim.o.keymodel; R.sel = vim.o.selection; R.mouse = vim.o.mouse; R.mm = vim.o.mousemodel")
-    assert r == {"sm": "mouse,key", "km": "startsel,stopsel", "sel": "exclusive", "mouse": "a", "mm": "popup_setpos"}
+    assert r == {"sm": "mouse,key", "km": "startsel,stopsel", "sel": "exclusive", "mouse": "a", "mm": "extend"}
 
 
 # --- clipboard ------------------------------------------------------------------------------------------------------
@@ -190,12 +190,12 @@ def menu_labels(story):
 def test_right_click_menu_has_the_edit_entries(home, story):
     r = run(story, "", "", """
         R.names = {}
-        for _, m in ipairs(vim.fn.menu_get("PopUp")[1].submenus) do R.names[#R.names + 1] = m.name end
+        for _, it in ipairs(require("sw.context").items()) do R.names[#R.names + 1] = it[1] end
         R.mousemodel = vim.o.mousemodel
     """)
     names = [n for n in r["names"] if not n.startswith("-")]
     assert names == ["Undo", "Redo", "Cut", "Copy", "Paste", "Look Up", "Add to Dictionary", "More…"]
-    assert r["mousemodel"] == "popup_setpos"
+    assert r["mousemodel"] == "extend"
 
 
 def test_popup_entries_do_what_they_say(home, story):
@@ -422,17 +422,17 @@ def test_the_right_click_menu_shows_the_key_beside_each_entry_and_undo_redo_work
     settings.save_story(story.path, {"key_italic": "<A-u>"})
     r = run(story, "", "", """
         R.hints = {}
-        for _, m in ipairs(vim.fn.menu_get("PopUp")[1].submenus) do R.hints[m.name] = m.actext end
+        for _, it in ipairs(require("sw.context").items()) do R.hints[it[1]] = it[3] end
     """)
     h = r["hints"]
     assert h["Undo"] == "Ctrl+Z" and h["Redo"] == "Ctrl+Y" and h["Cut"] == "Ctrl+X" and h["Copy"] == "Ctrl+C" and h["Paste"] == "Ctrl+V"
     assert h["More…"] == "F12" and h["Look Up"] == "F7"
     # Undo and Redo through the menu do what Ctrl+Z / Ctrl+Y do
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'abc' })\nvim.cmd('let &undolevels = &undolevels')\nvim.api.nvim_win_set_cursor(0, { 1, 3 })",
-            "def<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Undo<CR>", LINES + "; R.mode = vim.fn.mode()")
+            "def" + __import__("nvdrive").context_keys("Undo"), LINES + "; R.mode = vim.fn.mode()")
     assert r["lines"] == ["abc"] and r["mode"] == "i"
     r = run(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'abc' })\nvim.cmd('let &undolevels = &undolevels')\nvim.api.nvim_win_set_cursor(0, { 1, 3 })",
-            "def<Cmd>emenu PopUp.Undo<CR><Cmd>emenu PopUp.Redo<CR>", LINES)
+            "def" + __import__("nvdrive").context_keys("Undo") + __import__("nvdrive").context_keys("Redo"), LINES)
     assert r["lines"] == ["abcdef"]
 
 

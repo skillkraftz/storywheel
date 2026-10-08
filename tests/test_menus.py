@@ -34,19 +34,20 @@ POPUP_ITEMS = ["Undo", "Redo", "Cut", "Copy", "Paste", "Add to Dictionary", "Loo
 
 def test_the_right_click_menu_opens_without_errors(home, story):
     """Opening is what Neovim's own MenuPopup handler reacts to (it once raised E329: No menu 'Go to definition')."""
-    errmsg, bad = problems(story, "", "", "vim.cmd('doautocmd <nomodeline> MenuPopup'); vim.cmd('doautocmd <nomodeline> MenuPopup')")
+    errmsg, bad = problems(story, "", "", "require('sw.context').open({4, 4}); require('sw.context').open({4, 4})")
     assert errmsg == "" and bad == []
 
 
-def test_no_default_popup_handler_is_left_to_fight_our_menu(home, story):
+def test_neovims_own_popup_menu_is_gone(home, story):
     from test_notepad import run as r
-    out = r(story, "", "", "R.groups = vim.tbl_filter(function(a) return a.group_name ~= 'sw_popup' end, vim.api.nvim_get_autocmds({ event = 'MenuPopup' })); R.n = #R.groups")
-    assert out["n"] == 0, out["groups"]
+    out = r(story, "", "", "local ok, m = pcall(vim.fn.menu_get, 'PopUp'); R.n = ok and #m or 0; R.mm = vim.o.mousemodel")
+    assert out["mm"] == "extend" and out["n"] == 0
 
 
 def choose(name):
-    """What a right-click does in Neovim: MenuPopup fires, then the chosen item runs (typed, as input, so prompts can be answered)."""
-    return "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp." + name.replace(" ", "\\ ") + "<CR>" + ("brave<CR>" if name == "Find" else "")
+    """What a right-click does: our menu opens and the chosen item runs by Down and Enter (typed, as input, so prompts can be answered)."""
+    from nvdrive import context_keys
+    return context_keys(name)
 
 
 @pytest.mark.parametrize("name", POPUP_ITEMS)
@@ -110,10 +111,8 @@ def test_help_from_the_menu_closes_with_q_and_you_are_typing_again(home, story):
 def popup_rows(story, setup="", lines=40):
     """The names in the right-click menu as it opens (MenuPopup fires first, as for a real click)."""
     r = run(story, setup, "", """
-        vim.cmd('doautocmd <nomodeline> MenuPopup')
         R.items = {}
-        for _, it in ipairs(require('sw.notepad').popup_items) do R.items[#R.items + 1] = it[1] end
-        R.entries = vim.fn.menu_get('', 'a')
+        for _, it in ipairs(require('sw.context').items(require('sw.spell').bad_word())) do R.items[#R.items + 1] = it[1] end
     """, lines=lines)
     return r["items"]
 

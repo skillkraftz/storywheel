@@ -487,7 +487,7 @@ function M.map_buffer(buf)
         return
       end
     end
-    vim.api.nvim_feedkeys(vim.keycode("<RightMouse>"), "n", false)          -- the ordinary right-click menu
+    require("sw.context").right_click()                                       -- the ordinary right-click menu (sw.context)
   end, { buffer = buf, silent = true })
 end
 

@@ -11,7 +11,7 @@ from test_notepad import run, story, ROOT  # noqa: F401
 
 pytestmark = pytest.mark.skipif(writer.check() is not None, reason="Neovim 0.10+ is not installed")
 
-POPUP_THEN_MENU = "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.More…<CR>"
+POPUP_THEN_MENU = "<Cmd>lua require('sw.context').open({4, 4})<CR>" + "<Down>" * 7 + "<CR>"          # right-click, then More… (the last item)
 SETUP = ("vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })\n"
          "local p = require('sw.prose'); p.set_invisibles(false); p.set_typewriter(false); p.set_spell(false)\n")     # (the last run's toggles are remembered)
 STATE = """

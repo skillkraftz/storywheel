@@ -56,7 +56,7 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 <C-Del>: Delete the next word
 ## Mouse
 - Click places the cursor; drag selects; double-click selects a word. The wheel scrolls.
-- Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu.
+- Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu. Only a left click or Enter runs an item; a second right-click, Esc or q closes it and runs nothing.
 ## With Vim keys on
 In Settings > Writer you can turn notepad mode off to get Vim. Every action has a key that works while typing (the Keys tab, the first column); in Vim's Normal mode press Space first for the same actions (shown in [ ] on the Keys tab). Keys and the Space keys are listed only there: see the Keys tab (press 3, or Tab until it opens).
 ## Grammar (optional)

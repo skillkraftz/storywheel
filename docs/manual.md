@@ -372,9 +372,10 @@ Esc or `q` closes.
 Right-click in the text: Undo, Redo, Cut, Copy, Paste, Fix Spelling… (on a misspelled word), Look Up, Add to Dictionary, and More…
 (the Writer menu). On a grammar problem, right-click shows that problem's message and fixes instead.
 
-> **Watch out:** this is Neovim's own pop-up menu. If you right-click again while it is open, or let go of the right button over an
-> item, that item runs (Cut, Paste or Undo can change your text). Close the menu with **Esc** or a left-click outside it, and choose
-> items with a **left-click**. Right-clicking inside the F12 menu or the help opens this pop-up on top of it. (ISSUES #2.)
+The menu is storywheel's own small floating list (not Neovim's pop-up), opened at the pointer. **Only a left-click or Enter runs an
+item.** A second right-click, Esc or `q` closes it and runs nothing, and so does letting go of the right button over an item. Up/Down
+(or `j`/`k`) move the highlight. In a short window it is cut to fit and scrolls. Right-clicking inside the F12 menu, the help or any
+other float opens no menu. (Fixed: ISSUES #2.)
 
 ### Scenes
 
@@ -658,8 +659,8 @@ where they drift. Each line: the page and section, what it says, and what actual
 7. **writer › Leaving:** ":q works too". Only with Vim keys on; in notepad mode you can't type a `:` command.
 8. **writer › Keys (key_sidebar)** and **writing-prose › The scene sidebar** and **screenplays › Writing Fountain:** "Enter jumps, a
    adds, r renames, J and K move". These keys don't work straight after F9 (ISSUES #1).
-9. **writer › Mouse:** "Right-click opens the everyday menu". It doesn't say that a second right-click or a right-button release runs
-   an item (ISSUES #2).
+9. **writer › Mouse:** "Right-click opens the everyday menu". (Fixed with ISSUES #2: the menu is now our own, and the help says how it
+   closes.)
 10. **words › Keys:** `k` "Mark the word ✓ Known" is listed under "Everywhere in Words"; it works only in Vocabulary. `a` "Learn this
     word" and `l` "Mark the word ★ Learning" are two keys for the same thing in Lookup.
 11. **words › Keys:** `a` "Learn this word (it becomes ★ in Vocabulary)" is listed under "Everywhere in Words" and shown in every tab's

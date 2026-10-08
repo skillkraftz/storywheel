@@ -228,7 +228,7 @@ def test_the_keys_are_configurable_and_in_the_menus(home, story):
 
 
 def test_the_right_click_menu_has_look_up(home, story):
-    r = run(story, text("A dog.") + AT % (1, 3), "<Cmd>doautocmd <nomodeline> MenuPopup<CR><Cmd>emenu PopUp.Look\\ Up<CR>", CARD)
+    r = run(story, text("A dog.") + AT % (1, 3), __import__("nvdrive").context_keys("Look Up"), CARD)
     assert r["open"] is True and "domestic dog" in "\n".join(r["card"])
 
 

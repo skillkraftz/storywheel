@@ -468,6 +468,7 @@ function M.start()
       if story.manuscript and name:find(story.manuscript, 1, true) then require("sw.spell").apply(ev.buf) end
     end })
   require("sw.spell").apply_all()
+  require("sw.context").setup()                     -- our own right-click menu, not Neovim's pop-up
   notepad.setup()                                   -- (notepad mode is on unless the settings say otherwise)
   if notepad.enabled then notepad.map_buffer(vim.api.nvim_get_current_buf()) end
   vim.api.nvim_set_current_win(layout.main)

@@ -259,8 +259,8 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 
 | Float | Keys / mouse | What it is for | Test | Status | Checked |
 |---|---|---|---|---|---|
-| Right-click menu | right-click; Undo, Redo, Cut, Copy, Paste, Fix Spelling…, Look Up, Add to Dictionary, More… | Everyday edits | test_menus.py | **broken**: Neovim's own popup; a right-button release over an item runs it (ISSUES #2) | T |
-| Right-click inside a float | right-click | Opens the everyday popup on top of the F12 menu or help | — | **broken** (ISSUES #2) | T |
+| Right-click menu | right-click; Undo, Redo, Cut, Copy, Paste, Fix Spelling…, Look Up, Add to Dictionary, More… | Everyday edits; storywheel's own float (`sw/context.lua`): only a left click or Enter runs an item; a second right-click, Esc or `q` closes it; scrolls in a short window | test_menus.py, test_polish1.py (pointer and keys, headless and on a pty) | works (was ISSUES #2) | T |
+| Right-click inside a float | right-click | Does nothing (no second menu on the F12 menu or help) | test_polish1.py | works (was ISSUES #2) | T |
 | Writer menu (F12 / Alt+M / More…) | 1–9, Up/Down, Enter, click, Esc / `q` | Edit, Look up, Story, Leave, More groups (about 35 items) | test_menus.py, test_menu_keys.py | works; only items 1–9 have a number (ISSUES #26) | T |
 | Help float (F3) | Tab / Shift+Tab / 1–4 / click tab; `/` search; Space / Backspace page; F3, Esc, `q` close | Writer help in tabs | test_help_tabs.py | **broken** layout (ISSUES #5, #7) | T |
 | Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | **broken** layout; doubled openers (ISSUES #5, #6) | T |
