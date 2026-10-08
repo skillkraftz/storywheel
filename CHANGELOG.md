@@ -2,7 +2,7 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
-## Unreleased — Polish 2: ISSUES.md sections C, D and E (issues 16 to 36)
+## 0.21.0 — Polish 2: ISSUES.md sections C, D and E (issues 16 to 36)
 
 - Tests and tools: the two polish-1 terminal tests pass on Neovim 0.11 and 0.12 (the test pty gets its size before Neovim starts and pyte no longer
   prints Neovim's XTGETTCAP questions over the text; a new test sends terminal replies late, in insert mode, and shows none is typed); the status
