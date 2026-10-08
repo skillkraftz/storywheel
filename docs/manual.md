@@ -368,7 +368,7 @@ length (the story form, `m` in the Builder); the daily goal is in Settings > Goa
 A list in groups: **Edit** (undo, redo, find, find and replace, join, spellcheck, add a word to the dictionary, grammar on/off, next
 and list of grammar problems, invisibles, typewriter), **Look up** (the word under the cursor, a typed word, peek, Words), **Story**
 (scenes sidebar, story outline, new scene, word counts, exports, copy as plain text, restore from a backup), **Leave** (Settings,
-Builder, Wheel, quit) and **More** (help; use Vim keys for now). Up/Down and Enter, a click, or the number keys 1–9 run an item;
+Builder, Wheel, quit) and **More** (help; use Vim keys for now). Up/Down and Enter, a click, or the key printed beside an item (1–9, then letters; never `j`, `k` or `q`) run an item;
 Esc or `q` closes.
 
 ### The right-click menu

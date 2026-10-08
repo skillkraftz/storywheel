@@ -68,15 +68,14 @@ def writer_menu_labels(story):
     return run(story, "", "", "R.labels = {}; for i, it in ipairs(require('sw.menu').items()) do R.labels[i] = it[1] end")["labels"]
 
 
-def test_every_writer_menu_item_runs_by_number_and_by_enter(home, story):
+def test_every_writer_menu_item_runs_by_its_own_key_and_by_enter(home, story):
     labels = writer_menu_labels(story)
     assert len(labels) >= 15
+    keys = run(story, "", "", "R.keys = require('sw.menu').hotkeys(#require('sw.menu').items())")["keys"]
     failures = []
     for i, label in enumerate(labels):
-        for how in ("number", "enter"):
-            if how == "number" and i >= 9:
-                continue
-            typed = f"<F12>{i + 1}" if how == "number" else "<F12>" + "<Down>" * i + "<CR>"
+        for how in ("key", "enter"):
+            typed = f"<F12>{keys[i]}" if how == "key" else "<F12>" + "<Down>" * i + "<CR>"
             errmsg, bad = problems(story, "vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'Hello brave world' })", typed, "vim.wait(100)")
             if errmsg or bad:
                 failures.append((label, how, errmsg, bad))

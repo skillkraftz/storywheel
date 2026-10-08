@@ -1,5 +1,5 @@
--- A menu of Writer actions (F12 / Alt+M): a small floating list. Arrow keys or a number choose, Enter runs, Esc closes;
--- a mouse click on an entry runs it too.
+-- A menu of Writer actions (F12 / Alt+M): a small floating list. Arrow keys choose and Enter runs; every entry also has a key of its own
+-- (1-9, then letters), shown beside it; Esc closes; a mouse click on an entry runs it too.
 local util = require("sw.util")
 local M = {}
 
@@ -95,16 +95,27 @@ end
 M.items = actions
 M.groups = groups
 
+-- One key for each entry: 1-9, then the letters (not j, k and q, which move and close), then capitals. The menu has about 35 entries.
+function M.hotkeys(count)
+  local out = {}
+  for i = 1, 9 do out[#out + 1] = tostring(i) end
+  for _, set in ipairs({ "abcdefghilmnoprstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }) do
+    for c in set:gmatch(".") do out[#out + 1] = c end
+  end
+  return vim.list_slice(out, 1, count)
+end
+
 function M.open()
   local items = actions()
   local lines, row_item, item_row = {}, {}, {}
   local n = 0
+  local keys = M.hotkeys(#items)
   for gi, g in ipairs(groups()) do
     if gi > 1 then lines[#lines + 1] = "" end
     lines[#lines + 1] = " ─ " .. g[1] .. " ─"
     for _, it in ipairs(g[2]) do
       n = n + 1
-      lines[#lines + 1] = string.format(" %s%s ", n <= 9 and (n .. "  ") or "   ", it[1])
+      lines[#lines + 1] = string.format(" %s  %s ", keys[n] or " ", it[1])
       row_item[#lines] = n
       item_row[n] = #lines
     end
@@ -155,12 +166,12 @@ function M.open()
     local i = row_item[pos.line]
     if i then run(i) end
   end)
-  for i = 1, math.min(9, #items) do map(tostring(i), function() run(i) end) end
+  for i, key in ipairs(keys) do map(key, function() run(i) end) end
   map("<Down>", function() move(1) end)
   map("j", function() move(1) end)
   map("<Up>", function() move(-1) end)
   map("k", function() move(-1) end)
-  M.last = { win = win, buf = buf, items = items }
+  M.last = { win = win, buf = buf, items = items, keys = keys }
   return win
 end
 

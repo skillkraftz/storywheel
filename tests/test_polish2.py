@@ -245,3 +245,32 @@ def test_25_past_stories_show_long_titles_and_mark_copies(home):
     copied = next(l for l in rows if "(copy)" in l)
     assert "Dry Summer of Ann Lowell 10-08" in " ".join(original.split()) or "Dry Summer of Ann Lowell " in original      # not cut at 22 characters
     assert "(copy)" in copied and "…" in copied.split("(copy)")[0]                                                       # the copy keeps its mark when the title is cut
+
+
+# --- 26. every entry of the F12 menu shows a key of its own ----------------------------------------------------------------------------
+
+from test_notepad import run as nvrun  # noqa: E402
+from test_polish1 import two  # noqa: E402,F401
+
+
+def test_26_every_writer_menu_entry_has_a_distinct_key_shown_beside_it_and_it_runs_the_entry(home, two):
+    r = nvrun(two, "", "<F12>", """
+        local m = require('sw.menu').last
+        R.keys = m.keys; R.n = #m.items
+        R.lines = vim.api.nvim_buf_get_lines(m.buf, 0, -1, false)
+        R.labels = {}; for i, it in ipairs(m.items) do R.labels[i] = it[1] end
+        R.mapped = 0
+        vim.api.nvim_buf_call(m.buf, function() for _, k in ipairs(m.keys) do if vim.fn.maparg(k, 'n', false, true).buffer == 1 then R.mapped = R.mapped + 1 end end end)""")
+    assert r["mapped"] == r["n"]                                                   # every shown key is really a key of the menu
+    assert len(r["keys"]) == r["n"] >= 30 and len(set(r["keys"])) == r["n"]
+    assert not {"j", "k", "q"} & set(r["keys"])                                   # (those move and close)
+    shown = {}
+    for line in r["lines"]:
+        parts = line.split()
+        if parts and parts[0] in r["keys"] and " ".join(parts[1:]) in r["labels"]:
+            shown[parts[0]] = " ".join(parts[1:])
+    assert list(shown) == r["keys"], (shown, r["keys"])                          # every entry has its key printed beside it
+    # a key past the ninth runs its entry: the last one, by its own key
+    last = r["labels"][-1]
+    r2 = nvrun(two, "", "<F12>" + r["keys"][-1], "R.closed = require('sw.menu').last == nil or not vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
+    assert r2["closed"] is True and last
