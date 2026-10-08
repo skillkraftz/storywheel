@@ -1,4 +1,4 @@
--- Find and replace (Ctrl+H, a setting): a small floating form over the writing window. Two lines to type in (Find, Replace);
+-- Find and replace (Ctrl+R, a setting): a small floating form over the writing window. Two lines to type in (Find, Replace);
 -- Enter finds the next match, Alt+R replaces the one you are on, Alt+A replaces all (one undo step), Alt+C match case, Alt+W whole
 -- word. The title says how many matches there are and what was replaced. Matching is literal text (no patterns).
 local M = {}
@@ -124,11 +124,14 @@ function M.open(prefill)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { find, M.replace_text or "" })
   vim.bo[buf].bufhidden = "wipe"
-  local width = 60
+  -- the key hints sit on the bottom border: widen the form to hold them, or use the short list in a narrow window
+  local footer = " Enter next · Alt+R replace · Alt+A all · Alt+C case · Alt+W word · Esc close "
+  if vim.fn.strdisplaywidth(footer) + 2 > vim.o.columns - 4 then footer = " Alt+A all · Alt+C case · Alt+W word · Esc " end
+  local width = math.min(math.max(60, vim.fn.strdisplaywidth(footer) + 2), math.max(20, vim.o.columns - 4))
   local fwin = vim.api.nvim_open_win(buf, true, {
     relative = "editor", row = 2, col = math.floor((vim.o.columns - width) / 2), width = width, height = 2,
     style = "minimal", border = "rounded", title = M.status(nil), title_pos = "center",
-    footer = " Enter next · Alt+R replace · Alt+A all · Alt+C case · Alt+W word · Esc close ", footer_pos = "center",
+    footer = footer, footer_pos = "center",
   })
   M.win, M.buf, M.main_buf, M.main = fwin, buf, mbuf, win
   local ns = vim.api.nvim_create_namespace("sw_replace_labels")

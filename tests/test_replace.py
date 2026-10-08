@@ -1,4 +1,4 @@
-"""Find and replace in the Writer (Ctrl+H): matching rules, replacing one and all (one undo step), the form driven by real keys."""
+"""Find and replace in the Writer (Ctrl+R): matching rules, replacing one and all (one undo step), the form driven by real keys."""
 import json
 
 import pytest

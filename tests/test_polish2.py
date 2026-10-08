@@ -274,3 +274,24 @@ def test_26_every_writer_menu_entry_has_a_distinct_key_shown_beside_it_and_it_ru
     last = r["labels"][-1]
     r2 = nvrun(two, "", "<F12>" + r["keys"][-1], "R.closed = require('sw.menu').last == nil or not vim.api.nvim_win_is_valid(require('sw.menu').last.win)")
     assert r2["closed"] is True and last
+
+
+# --- 27. find and replace: the key hints on the border are whole -------------------------------------------------------------------------
+
+import os  # noqa: E402
+from ptydrive import Term  # noqa: E402
+from test_polish1 import term_story, pty_only  # noqa: E402,F401
+
+
+@pty_only
+@pytest.mark.parametrize("cols,hint", [(120, "Enter next · Alt+R replace · Alt+A all · Alt+C case · Alt+W word · Esc close"),
+                                       (70, "Alt+A all · Alt+C case · Alt+W word · Esc")])
+def test_27_real_terminal_the_replace_forms_hints_are_not_cut(home, term_story, cols, hint):
+    t = Term(term_story, rows=30, cols=cols)
+    try:
+        t.key("Ctrl+R", wait=0.8)
+        bottom = [l for l in t.lines() if "╰" in l and "╯" in l]
+        assert bottom, t.text()
+        assert hint in " ".join(bottom[0].split()), bottom
+    finally:
+        t.close()
