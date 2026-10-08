@@ -1119,7 +1119,36 @@ class BuilderScreen(KeptScreen, Screen):
 
     # --- actions ------------------------------------------------------------------------------------------------------------
 
+    def in_story_panel(self):
+        """True while the focus is in the Story panel (Outline, Scenes, Notes): the entity keys don't belong to the card there."""
+        return any(getattr(w, "id", None) == "story-box" for w in (self.focused.ancestors_with_self if self.focused else ()))
+
+    def _not_for_the_outline(self, what="That key"):
+        self.say(f"{what} is for the entity cards. In the Outline, f rolls a beat; e or right-click edits a row. Click a card first.")
+
+    def roll_outline_beat(self):
+        """f in the Outline: roll the beat under the cursor again with the generator (the way A rolls a new one)."""
+        key = self._beat_key()
+        if key is None:
+            return
+        got = outline.beat_at(self.story, key)
+        if got is None:
+            return self.say("This story's beats don't match its structure, so this one can't be rolled. Edit it with e.")
+        text = outline.roll_beat(self.story, self.universe, self.get_filler(), got[0], [])
+        outline.save(self.story, key, text)
+        at = self.outline.highlighted
+        self.refresh_all()
+        self.outline.highlighted = at
+        self.say("Rolled that beat again. e or right-click edits it by hand.")
+        self.b.changed = True
+
     def action_roll_field(self):
+        if self.in_story_panel():
+            if self.focused is self.outline:
+                self.roll_outline_beat()
+            else:
+                self._not_for_the_outline("f")
+            return
         self.roll_field(self.field_key())
 
     def action_write_field(self):
@@ -1130,6 +1159,8 @@ class BuilderScreen(KeptScreen, Screen):
         self.write_field(self.field_key())
 
     def action_roll_blank(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("Space")
         e = self.entity
         if not e:
             self.say("No entity selected. Press n for a new one.")
@@ -1146,6 +1177,8 @@ class BuilderScreen(KeptScreen, Screen):
         self.say(f"Rolled {len(done)} blank field(s): {', '.join(done)}.")
 
     def action_reroll_all(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("R")
         e = self.entity
         if not e:
             return
@@ -1181,6 +1214,8 @@ class BuilderScreen(KeptScreen, Screen):
             self.say("Scene added. Press Enter on it to write.")
 
     def action_new_entity(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("n")
         if not self.universe:
             self.say("Make a universe first (N).")
             return
@@ -1191,6 +1226,8 @@ class BuilderScreen(KeptScreen, Screen):
         self.card.focus()
 
     def action_delete_entity(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("d")
         e = self.entity
         if e:
             self.app.push_screen(ConfirmScreen(f"Delete '{e.name or e.id}'?\n\nIt moves to the library's .trash folder, "
@@ -1205,6 +1242,8 @@ class BuilderScreen(KeptScreen, Screen):
             self.say(f"Deleted '{e.name or e.id}' (it is in .trash).")
 
     def action_rename(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("r")
         e = self.entity
         if e:
             self.app.push_screen(EditScreen(f"Rename {e.name or e.id}", {"name": e.name}),
@@ -1212,6 +1251,8 @@ class BuilderScreen(KeptScreen, Screen):
                                  if out and out["name"].strip() and out["name"].strip() != e.name else None)
 
     def action_custom_field(self):
+        if self.in_story_panel():
+            return self._not_for_the_outline("c")
         e = self.entity
         if e:
             self.app.push_screen(EditScreen("Add your own field to this entity", {"field name": "", "value": ""}),
@@ -1240,6 +1281,8 @@ class BuilderScreen(KeptScreen, Screen):
             self.say("Rating cleared.")
 
     def action_rate(self, value):
+        if self.in_story_panel():
+            return self._not_for_the_outline("+ and -")
         key = self.field_key()
         if self.entity and key:
             self._rate(key, int(value))

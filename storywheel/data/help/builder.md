@@ -50,7 +50,7 @@ act('delete'): Delete the universe and everything in it (asks first)
 ## Mouse
 - Click a field: roll it. Right-click: write it. Scroll over a field: step through its earlier values.
 - ▲ ▼ at the end of a value rate it; ✎ marks a field the generator can't fill, so write it yourself.
-- In the Outline (Story panel) a click selects, the wheel scrolls and right-click edits the selected row. A click on a scene (Scenes tab) opens the Writer there.
+- In the Outline (Story panel) a click selects, the wheel scrolls, right-click or e edits the selected row and f rolls the beat again. The entity keys (Space, R, + and -, n, d) do nothing there. A click on a scene (Scenes tab) opens the Writer there.
 ## Entities
 The tabs (keys 1 to 5) are Characters, Places, Things, Groups and Notes. Every field has a history; the wheel steps through it. Roll results use the universe's genre leanings, the entity's other fields and the existing entities (a rival, owner, parent place or leader can be a real entity). Links hold the other entity's id, so renaming never breaks them.
 ## Stories

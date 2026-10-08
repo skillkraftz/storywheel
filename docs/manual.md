@@ -283,9 +283,9 @@ own word lists in its `lists` folder; Words can add words to them.
   print). An existing script with scenes is never replaced.
 - **Delete a story:** `d` with the Stories list focused; asks, then moves it to `.trash`.
 
-> **Watch out:** `f`, Space, `R`, `+`/`-`, `n` and `d` always act on the **entity card**, even while you are in the Outline. Pressing
-> `f` on an outline row rolls (and renames) the selected character. Use right-click or `e` on the outline. (ISSUES #3.)
->
+In the Outline, **`f` rolls the beat under the cursor again** (the way `A` rolls a new one), and **`e` or right-click edits** a row. The
+entity keys (Space, `R`, `+`/`-`, `n`, `d`, `r`, `c`) do nothing there except say so; they belong to the cards. (Fixed: ISSUES #3.)
+
 > With no story open, Write (`w`), Export (`x`) and Copy (`C`) quietly use the universe's first story. Open the story first. (ISSUES #15.)
 
 ### Writing, exporting, copying, backups

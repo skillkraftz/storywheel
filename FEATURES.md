@@ -138,7 +138,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Backups… | button, `b` in the list | List and restore backups (asks; current version kept aside) | test_backups.py | works | P |
 | Format, structure… | `m` (in the list or anywhere) | Story form for the open story | test_storyform.py | works | P |
 | Delete story | `d` in the Stories list | Delete a story (asks; to .trash) | test_builder.py | works | R |
-| **Story** panel: Outline tab | `6`; click selects, wheel scrolls, right-click or `e` edits a row | Title, genre, structure, premise, setting lines, beats, twist, settings, word count | test_outline.py, test_builder_fixes.py | works; `f`/Space/`R`/`+`/`n`/`d` here act on the entity card (ISSUES #3) | P |
+| **Story** panel: Outline tab | `6`; click selects, wheel scrolls, right-click or `e` edits a row | Title, genre, structure, premise, setting lines, beats, twist, settings, word count | test_outline.py, test_builder_fixes.py, test_polish1.py | works; `f` rolls the beat under the cursor; Space/`R`/`+`/`-`/`n`/`d`/`r`/`c` do nothing here and say so (was ISSUES #3) | P |
 | Outline: add / remove beat | `A` / `X` on a beat | Repeatable beats, rolled with the generator | test_outline_beats.py | works | P |
 | Outline: Structure row | right-click / `e` | Says "set in the Wheel" (out of date) | — | **confusing** (ISSUES #19) | P |
 | Outline: Settings row | right-click / `e` | Opens Story settings | test_builder.py | works | P |

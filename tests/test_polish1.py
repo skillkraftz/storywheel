@@ -207,3 +207,87 @@ def test_2_real_terminal_menu_fits_a_short_window_and_scrolls(home, term_story):
         assert "More…" not in t.text()
     finally:
         t.close()
+
+
+# --- 3. the Builder: entity keys in the Outline ---------------------------------------------------------------------
+
+import asyncio  # noqa: E402
+
+from storywheel import builder, fill  # noqa: E402
+
+SPINE = ["Once upon a time, Ann lived in Redwater.", "Every day, Ann swept the porch.", "One day, a stranger came.", "Because of that, Ann hid the key.",
+         "Because of that, the stranger followed.", "Until finally, Ann ran.", "Ever since then, Ann sleeps lightly."]
+
+
+def builder_run(script, size=(200, 50)):
+    async def go():
+        app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="thornwood", story="the-last-clause")
+        async with app.run_test(size=size) as pilot:
+            await pilot.pause()
+            return await script(app, pilot)
+    return asyncio.run(go())
+
+
+@pytest.fixture
+def ann(home):
+    u = vault.create_universe("Thornwood", ["western"])
+    u.new_entity("character", "Ann Lowell", {"role": "protagonist", "job": "teacher", "trait": "stubborn"})
+    u.new_story("The Last Clause", {"structure": "Story Spine", "genre": "western", "mood": "cozy"}, {"Story Spine": "\n\n".join(SPINE)})
+    return u
+
+
+def _entity_files(u):
+    return {str(p): p.read_bytes() for p in sorted(u.path.rglob("*.md")) if "characters" in p.parts}
+
+
+def test_3_entity_keys_in_the_outline_leave_the_entity_alone(home, ann):
+    before = _entity_files(ann)
+
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.click("#outline", offset=(5, 2))                    # focus the outline with a click
+        await pilot.pause()
+        assert s.focused is s.outline
+        sent = {}
+        for key in ("space", "R", "plus", "minus", "n", "d", "r", "c"):
+            await pilot.press(key)
+            await pilot.pause()
+            sent[key] = (type(app.screen).__name__, s.query_one("#status").renderable.__str__() if hasattr(s.query_one("#status"), "renderable") else "")
+        return sent, type(app.screen).__name__, len(s.universe.entities("character"))
+    sent, screen_name, n = builder_run(script)
+    assert screen_name != "ConfirmScreen" and not any(v[0] in ("ConfirmScreen", "EditScreen") for v in sent.values()), sent       # (no 'delete?' or 'rename' box)
+    assert n == 1 and _entity_files(ann) == before
+
+
+def test_3_f_in_the_outline_rolls_the_beat_not_the_character(home, ann):
+    before = _entity_files(ann)
+
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.click("#outline", offset=(5, 2))
+        await pilot.pause()
+        for _ in range(40):                                              # arrow down to the first beat
+            if s.top_rows()[s.outline.highlighted or 0][0].startswith("beat:"):
+                break
+            await pilot.press("down")
+        key = s.top_rows()[s.outline.highlighted][0]
+        old = [t for k, _l, t in outline_rows(s.story) if k == key][0]
+        await pilot.press("f")
+        await pilot.pause()
+        new = [t for k, _l, t in outline_rows(s.story) if k == key][0]
+        return old, new, s.entity.name
+    from storywheel.outline import rows as outline_rows
+    old, new, name = builder_run(script)
+    assert new != old and name == "Ann Lowell"
+    assert _entity_files(ann) == before
+
+
+def test_3_the_keys_still_work_on_the_card(home, ann):
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.click("#card", offset=(5, 1))
+        await pilot.pause()
+        await pilot.press("n")
+        await pilot.pause()
+        return len(s.universe.entities("character"))
+    assert builder_run(script) == 2
