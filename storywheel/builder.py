@@ -1,10 +1,11 @@
 """
 The Universe Builder (Textual): grow a kept idea into a world.
 
-    left     universes (create, rename, delete) and the open universe's stories
-    middle   the universe overview, or a story's outline, in boxes; below, tabs for Characters, Places,
+    left     universes (create, rename, delete), the open universe's stories, and the large Story panel
+             (Outline, Scenes, Notes of the open story; a summary only, under 150 columns)
+    middle   a writing-stats box (today against the goal, streaks, totals), then tabs for Characters, Places,
              Things, Groups, Notes with a list and the selected entity as a card of fields
-    right    the selected entity's notes (editable), its links, and the stories it appears in
+             (the selected entity's free notes, links and "appears in" are on the card and under it)
 
 The card works like the Wheel's: left-click (or f) rolls a field, right-click (or e) writes it, the wheel
 steps through that field's history, space rolls every blank field, R rolls the whole entity again (asks).
@@ -518,7 +519,7 @@ class BuilderScreen(KeptScreen, Screen):
 
     def refresh_all(self, lists=True, light=False):
         """Show everything again. With lists=False the entity list and the left column are left exactly as they are
-        (only the card, the top box and the right column change): rolling a field must not move the list.
+        (only the card, the top box, and the notes, links and "appears in" under the card, change): rolling a field must not move the list.
         With light=True (one field of the selected entity changed) only the card and its links are redrawn: the stats
         box, the outline and the notes cannot have changed."""
         self._busy = True

@@ -3,12 +3,12 @@
 A short roadmap. CLAUDE.md describes the design, REPORT.md the state of the last batch, CHANGELOG.md what each version added. When an item is
 finished, move it into **Done** with the tag that finished it. Status words: **Bug**, **Stub**, **Partial**, **Missing**, **Verify**, **Idea**.
 
-Last updated after batch 18.
+Last updated after polish 2 (ISSUES 1-36 fixed; ISSUES.md lists what is left).
 
 
 ## Now
 
-Nothing is broken that I know of (no open bugs). What is worth doing first, from real use:
+Nothing is broken that I know of; ISSUES.md is the list of what was found and fixed. What is worth doing first, from real use:
 
 - **Check the kitty Writer window on your machine.** *Verify.* kitty is not installed on the development machine, so the launch command
   (`font_size`, `modify_font cell_height N%`, `window_padding_width`, `background_opacity`, `--start-as=maximized`) is tested only against fakes.
@@ -129,5 +129,5 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 ## Help pages that may name keys that no longer exist (batch 19, item 6: a quick search, not an audit)
 
 - Searched the help pages for removed things (Neovide, "Wheel draft" started from the Builder, the right column, sync, Ctrl+H find): nothing found.
-- `writing-prose.md` mentions "Space n" for the sidebar; that only works with Vim keys on (notepad mode off). The F9 key is the real one.
+- `writing-prose.md` now says "The sidebar key (see the Keys tab)", not "Space n" (fixed in batch 19).
 - Not checked: every key named in free text (as opposed to the key tables, which are made from the real bindings and tested).
