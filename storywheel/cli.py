@@ -473,14 +473,6 @@ def cmd_show(args):
     else:
         print(store.to_plain(story) or "  (nothing kept in that story yet)")
 
-def cmd_universe(args):
-    """The old single universe. Its contents live in the library now, as universes of entities."""
-    from . import cli_world, migrate
-    for line in migrate.migrate_universe_json():
-        print("  " + line)
-    print(dim("  The single universe is gone: universes are folders of characters, places and things now."))
-    cli_world.cmd_universes(argparse.Namespace(action="list", json=False, name=None, genres=None))
-
 def cmd_sample(args):
     from .sample import build_story, sample
     if args.structure and not structures.find(args.structure):
@@ -518,7 +510,7 @@ def main(argv=None):
     p.add_argument("--json", action="store_true", help="print the stories as JSON")
     p = sub.add_parser("resume", parents=[plain_parent], help="pick up a story")
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
-    p = sub.add_parser("export", help="write a story's markdown somewhere else")
+    p = sub.add_parser("draft-export", aliases=["export"], help="write a Wheel draft's markdown somewhere else (not the manuscript: see 'manuscript export')")
     p.add_argument("target", help="number from 'list' or a story id")
     p.add_argument("--out", help="folder to write into (e.g. your Obsidian vault)")
     p.add_argument("--json", action="store_true", help="print the story (with its markdown path) as JSON")
@@ -532,9 +524,6 @@ def main(argv=None):
     p.add_argument("--json", action="store_true", help="print the stories as a JSON list")
     p.add_argument("--structure", help="force a story structure (story-spine, three-act, kishotenketsu); "
                                        "by default each story gets one at random")
-    p = sub.add_parser("universe", help="show your universe, or: universe rm KEY NUMBER")
-    p.add_argument("action", nargs="?", choices=["rm"])
-    p.add_argument("rest", nargs="*")
     p = sub.add_parser("report", help="the worst-rated lines and the frames that produced them")
     p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
     from . import cli_world
@@ -543,7 +532,7 @@ def main(argv=None):
     if args.command in world:
         world[args.command](args)
         return
-    {"list": cmd_list, "resume": cmd_resume, "export": cmd_export, "show": cmd_show, "universe": cmd_universe,
+    {"list": cmd_list, "resume": cmd_resume, "draft-export": cmd_export, "export": cmd_export, "show": cmd_show,
      "sample": cmd_sample, "report": cmd_report, "new": cmd_new, "wheel": cmd_wheel}.get(args.command, cmd_open)(args)
 
 

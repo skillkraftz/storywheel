@@ -362,7 +362,9 @@ def test_list_show_and_export_json(home):
     assert shown["title"] == listed[0]["title"] and shown["text"] and shown["resume"].endswith(s.story["id"])
     plain = cli(["show", "1"], home).stdout
     assert plain.startswith(shown["title"].upper())
-    exported = json.loads(cli(["export", "1", "--json", "--out", str(home / "vault")], home).stdout)
+    exported = json.loads(cli(["draft-export", "1", "--json", "--out", str(home / "vault")], home).stdout)
     assert exported["path"].startswith(str(home / "vault")) and Path(exported["path"]).exists()
+    old_name = json.loads(cli(["export", "1", "--json", "--out", str(home / "vault")], home).stdout)           # (the old name still works)
+    assert old_name["path"] == exported["path"]
     missing = cli(["show", "nope", "--json"], home)
     assert missing.returncode == 1 and json.loads(missing.stdout)["error"]

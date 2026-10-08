@@ -629,7 +629,7 @@ Most writers never need these; they are for scripts and for checking things.
 | `storywheel new` / `wheel` / `resume [N]` | The Wheel on a new draft / the last one / draft N |
 | `storywheel builder` / `settings` / `writer UNIVERSE STORY` | Open that mode (full screen: they refuse to start without a terminal) |
 | `storywheel list` / `show [N]` | Wheel drafts / one as plain text (`--json` for both) |
-| `storywheel export N --out DIR` | Copy a draft's markdown somewhere |
+| `storywheel draft-export N --out DIR` (also `export N`) | Copy a Wheel draft's markdown somewhere (not the manuscript) |
 | `storywheel promote N --new NAME` (or `--universe SLUG`, `--dry-run`) | Bring a draft into a universe |
 | `storywheel sample western "fairy tale" -n 5 [--seed 1]` | Sample ideas; nothing is saved |
 | `storywheel report` | The lines you rated down most, and why |

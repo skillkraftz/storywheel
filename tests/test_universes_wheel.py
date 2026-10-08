@@ -476,10 +476,10 @@ def test_the_plain_prompt_asks_which_universes_to_draw_from(home):
     assert saved["universes"] == ["thornwood"] and saved["universe_mode"] == "o"
 
 
-def test_the_old_universe_command_migrates_and_points_to_the_new_world(home):
+def test_the_old_universe_file_is_migrated_into_a_universe_by_migrate(home):
     (home / "home").mkdir(parents=True, exist_ok=True)
     (home / "home" / "universe.json").write_text(json.dumps({"protagonist": [{"name": "Wade Hollis", "job": "drover"}]}))
-    res = cli(["universe"], home)
+    res = cli(["migrate"], home)
     assert "Loose Ends" in res.stdout and vault.get_universe("loose-ends").entity("wade-hollis")
 
 
