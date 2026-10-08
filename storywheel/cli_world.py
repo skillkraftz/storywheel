@@ -340,7 +340,13 @@ def cmd_promote(args):
         return
     if not args.yes:
         print("\n".join("  " + l for l in plan.lines()))
-        if input("  Promote? [y/N] ").strip().lower() != "y":
+        try:
+            answer = input("  Promote? [y/N] ")
+        except EOFError:                                    # no input (a pipe, /dev/null): that is a no
+            print()
+            answer = ""
+        if answer.strip().lower() != "y":
+            print("  Nothing promoted. (Add --yes to promote without asking, or --dry-run to only look.)")
             return
     story, report = promote.apply_plan(plan, universe, draft)
     store.save_draft(draft)

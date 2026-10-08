@@ -169,3 +169,16 @@ def test_the_plain_prompt_offers_promotion_on_leaving(home):
     assert [u.slug for u in vault.list_universes()] == ["thornwood"]
     again = cli(["--plain"], home, "k\nq\nl\n")                  # "later": nothing happens
     assert "Created universe" not in again.stdout
+
+
+def test_promote_at_the_end_of_input_is_a_no_not_a_traceback(home):
+    d = draft(home)
+    store.save(d)
+    res = cli(["promote", d["id"], "--new", "Thornwood"], home, "")                  # nothing to read: input() hits the end
+    assert res.returncode == 0 and "Traceback" not in res.stderr and "EOFError" not in res.stderr, res.stderr
+    assert "Promote? [y/N]" in res.stdout and "Nothing promoted" in res.stdout
+    assert vault.list_universes() == [] and "promoted" not in store.load(d["id"])
+    said_no = cli(["promote", d["id"], "--new", "Thornwood"], home, "n\n")
+    assert said_no.returncode == 0 and vault.list_universes() == []
+    said_yes = cli(["promote", d["id"], "--new", "Thornwood"], home, "y\n")
+    assert [u.slug for u in vault.list_universes()] == ["thornwood"] and said_yes.returncode == 0
