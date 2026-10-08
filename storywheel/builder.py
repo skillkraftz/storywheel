@@ -293,6 +293,13 @@ class BuilderScreen(KeptScreen, Screen):
        column, when you ask for it (keys 6 7 8, backslash) */
     BuilderScreen.-narrow #left { width: 34; min-width: 34; max-width: 34; }
     BuilderScreen.-narrow.-show-story #left { width: 1fr; max-width: 100%; }
+    /* ...and in the thin column the Story panel is one summary line group; its tabs are too narrow to read (the outline's values wrapped to a few
+       letters), so they show only in the full-width view */
+    BuilderScreen #story-summary { display: none; }
+    BuilderScreen.-narrow #story-summary { display: block; height: auto; padding: 0 0; }
+    BuilderScreen.-narrow #rtabs { display: none; }
+    BuilderScreen.-narrow.-show-story #rtabs { display: block; }
+    BuilderScreen.-narrow.-show-story #story-summary { display: none; }
     BuilderScreen.-narrow.-show-story #mid { display: none; }
     BuilderScreen #legend { height: 1; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis; }
     BuilderScreen #mid { width: 1fr; }
@@ -369,6 +376,7 @@ class BuilderScreen(KeptScreen, Screen):
                         yield _quiet(Button("Backups…", id="s-backups"))
                 with Vertical(id="story-box", classes="box") as box:
                     box.border_title = "Story"
+                    yield Static("", id="story-summary", markup=False)
                     with TabbedContent(id="rtabs", initial=self.start_rtab):
                         with TabPane("Outline", id="r-outline"):
                             yield Static("", id="outline-title", markup=False)
@@ -596,8 +604,20 @@ class BuilderScreen(KeptScreen, Screen):
                 self._busy = False
         box.read_only = self.story is None
 
+    def refresh_story_summary(self):
+        """What the thin column shows in place of the Story panel's tabs (narrow terminals): the story in a few short lines."""
+        box = self.query_one("#story-summary", Static)
+        if self.story is None:
+            box.update("Open a story (above) to see its outline, scenes and notes here.")
+            return
+        beats = len([r for r in outline.rows(self.story) if r[0].startswith("beat:")])
+        scenes = len(self.story.scene_list())
+        box.update(f"{self.story.title}\n{beats} beat{'s' if beats != 1 else ''} · {scenes} scene{'s' if scenes != 1 else ''} · "
+                   f"{self.story.word_count():,} words\n6 outline · 7 scenes · 8 notes\n\\ shows the cards again")
+
     def refresh_top(self):
         self.refresh_story_notes()
+        self.refresh_story_summary()
         self.refresh_stats()
         self._keep_view(self.outline, self._build_top)
         self.refresh_scenes()

@@ -312,3 +312,36 @@ def test_28_real_terminal_f7_without_the_dictionary_says_so_on_one_line_and_does
         assert any(l.strip().startswith("x") or " x" in l for l in t.lines() if "gate" in l or l.strip().startswith("x")), text
     finally:
         t.close()
+
+
+# --- 29. narrow Builder: no 16-column outline -----------------------------------------------------------------------------------------
+
+def test_29_a_narrow_builder_shows_a_summary_in_the_column_and_the_outline_at_full_width_on_request(home, ann):
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.pause()
+        summary = s.query_one("#story-summary")
+        before = (summary.display, s.query_one("#rtabs").display, str(summary.content))
+        await pilot.press("6")
+        await pilot.pause()
+        await pilot.pause()
+        outline_width = s.query_one("#outline").size.width
+        after = (summary.display, s.query_one("#rtabs").display)
+        await pilot.press("backslash")
+        await pilot.pause()
+        back = (summary.display, s.query_one("#rtabs").display)
+        return before, outline_width, after, back
+    before, width, after, back = builder_run(script, size=(120, 40))
+    assert before[0] and not before[1], before                               # the column holds the summary, not the tabs
+    assert "The Last Clause" in before[2] and "7 beats" in before[2] and "6 outline" in before[2]
+    assert width >= 60 and not after[0] and after[1]                         # the outline is readable in the full-width view
+    assert back[0] and not back[1]
+
+
+def test_29_a_wide_builder_keeps_the_tabs_and_has_no_summary(home, ann):
+    async def script(app, pilot):
+        s = app.screen_ref
+        await pilot.pause()
+        return s.query_one("#story-summary").display, s.query_one("#rtabs").display, s.query_one("#outline").size.width
+    summary, tabs, width = builder_run(script, size=(200, 50))
+    assert not summary and tabs and width >= 30

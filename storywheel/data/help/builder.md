@@ -54,7 +54,7 @@ act('delete'): Delete the universe and everything in it (asks first)
 ## Entities
 The tabs (keys 1 to 5) are Characters, Places, Things, Groups and Notes. Every field has a history; the wheel steps through it. Roll results use the universe's genre leanings, the entity's other fields and the existing entities (a rival, owner, parent place or leader can be a real entity). Links hold the other entity's id, so renaming never breaks them.
 ## Stories
-The left column lists the universe's stories. +Story makes a blank one; a Wheel story arrives from the Wheel (Send to Builder). The large Story panel under the list has the outline (title, premise, structure, beats, twist, settings), the scenes (with their first lines and word counts) and the story's own notes. On a narrow terminal (under 150 columns) the Story panel takes turns with the cards: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back.
+The left column lists the universe's stories. +Story makes a blank one; a Wheel story arrives from the Wheel (Send to Builder). The large Story panel under the list has the outline (title, premise, structure, beats, twist, settings), the scenes (with their first lines and word counts) and the story's own notes. On a narrow terminal (under 150 columns) the left column shows only a short summary of the story, and the Story panel takes turns with the cards, at full width: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back.
 ## Extra files
 A file in a story's manuscript folder that storywheel did not make (a copy from another tool) is never part of the manuscript. The Scenes tab shows it with Open, Delete (to .trash) and Ignore.
 ## Leaving

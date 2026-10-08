@@ -226,8 +226,9 @@ it. It is meant to feel like a desk of index cards that the generator helps you 
   Roll blanks and Del, and the selected entity's **card**. Under the card: its own notes, its links both ways, and the stories it
   appears in.
 
-On a terminal narrower than 150 columns the Story panel takes the place of the cards when you press 6, 7, 8 or backslash; Esc or 1–5
-bring the cards back.
+On a terminal narrower than 150 columns the thin left column shows only a short summary of the open story (title, beats, scenes,
+words); the Story panel itself (outline, scenes, notes) takes the place of the cards, at full width, when you press 6, 7, 8 or
+backslash; Esc or 1–5 bring the cards back.
 
 ### Making a universe
 
