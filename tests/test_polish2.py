@@ -219,3 +219,29 @@ def test_24_clicks_next_to_the_arrows_change_nothing_and_the_arrows_still_rate(h
         return unchanged, rerolled, s.rating("job")
     unchanged, rerolled, rated = run_tui(new_story(), make_engine(home), script)
     assert unchanged and rerolled and rated == 1
+
+
+# --- 25. Past stories: long titles, and copies that say so ------------------------------------------------------------------------
+
+def test_25_past_stories_show_long_titles_and_mark_copies(home):
+    import time
+    from conftest import make_engine, run_tui, screen_text
+    from storywheel import store
+    first = store.new_story()
+    first["kept"]["title"] = {"title": "Dry Summer of Ann Lowell"}
+    store.save(first)
+    time.sleep(1.1)
+    copy = store.copy_as_new(first)
+    store.save(copy)
+
+    async def script(app, pilot):
+        await pilot.pause()
+        await pilot.pause()
+        return screen_text(app)
+    text = run_tui(copy, make_engine(home), script, size=(200, 50))
+    rows = [l for l in text.splitlines() if "10-08" in l and "Dry Summer" in l]
+    assert len(rows) == 2, rows
+    original = next(l for l in rows if "(copy)" not in l)
+    copied = next(l for l in rows if "(copy)" in l)
+    assert "Dry Summer of Ann Lowell 10-08" in " ".join(original.split()) or "Dry Summer of Ann Lowell " in original      # not cut at 22 characters
+    assert "(copy)" in copied and "…" in copied.split("(copy)")[0]                                                       # the copy keeps its mark when the title is cut

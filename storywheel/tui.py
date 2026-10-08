@@ -910,6 +910,7 @@ class MainScreen(KeptScreen, Screen):
 
     def on_resize(self, event):
         self.set_class(event.size.width < 150, "-narrow")             # a narrow terminal: the side columns get thinner
+        self.call_after_refresh(self.refresh_stories)                 # (the Past stories list cuts titles to its width)
 
     def on_screen_resume(self):
         """Coming back from another mode: the draft is as it was; only the title bar needs doing again."""
@@ -957,12 +958,19 @@ class MainScreen(KeptScreen, Screen):
         for story in store.all_stories():
             t = Text()
             here = story["id"] == s.story["id"]
-            t.append("▶ " if here else "  ", style="bold cyan")
-            t.append(f"{store.title_of(story)[:22]:<22}", style="bold" if here else "")
             kept, total, done = store.progress(story)
-            t.append(f" {story['created'][5:10]} " + ("done" if done else f"{kept}/{total}"), style="dim")
-            if story.get("promoted"):
-                t.append(f" ⇢{story['promoted']['universe'][:10]}", style="green")
+            tail = f" {story['created'][5:10]} " + ("done" if done else f"{kept}/{total}")
+            home = f" ⇢{story['promoted']['universe'][:10]}" if story.get("promoted") else ""
+            title = store.title_of(story)
+            suffix = " (copy)" if story.get("copied_from") else ""         # a copy made with C has its original's title: say so
+            room = max(12, (lst.scrollable_content_region.width or 46) - 2 - len(tail) - len(home) - 2) - len(suffix)      # (the box's width, not a fixed 22)
+            if len(title) > room:
+                title = title[:room - 1].rstrip() + "…"
+            t.append("▶ " if here else "  ", style="bold cyan")
+            t.append(f"{title + suffix:<{room + len(suffix)}}", style="bold" if here else "")
+            t.append(tail, style="dim")
+            if home:
+                t.append(home, style="green")
             rows.append(Option(t, id=story["id"]))
         if not rows:
             rows.append(Option(Text("(no saved stories yet)", style="dim"), id="", disabled=True))
