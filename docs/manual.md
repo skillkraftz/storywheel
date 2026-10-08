@@ -247,7 +247,7 @@ Delete are buttons, or `r` and `d` with the Universes list focused. Deleting ask
 7. Write free notes in the box under the card (**E** jumps there). They are saved as you type.
 
 > **Watch out:** a new card has no highlighted row, so `f` and `e` act on the Name; the first Down only highlights the Name row.
-> (ISSUES #24.)
+> (ISSUES #23.)
 
 ### Renaming
 
@@ -283,9 +283,9 @@ own word lists in its `lists` folder; Words can add words to them.
 - **Delete a story:** `d` with the Stories list focused; asks, then moves it to `.trash`.
 
 > **Watch out:** `f`, Space, `R`, `+`/`-`, `n` and `d` always act on the **entity card**, even while you are in the Outline. Pressing
-> `f` on an outline row rolls (and renames) the selected character. Use right-click or `e` on the outline. (ISSUES #4.)
+> `f` on an outline row rolls (and renames) the selected character. Use right-click or `e` on the outline. (ISSUES #3.)
 >
-> With no story open, Write (`w`), Export (`x`) and Copy (`C`) quietly use the universe's first story. Open the story first. (ISSUES #18.)
+> With no story open, Write (`w`), Export (`x`) and Copy (`C`) quietly use the universe's first story. Open the story first. (ISSUES #15.)
 
 ### Writing, exporting, copying, backups
 
@@ -322,6 +322,10 @@ scenes, its outline and its universe's names. It is Neovim underneath, set up so
   (carrying the word under the cursor). **Alt+Q** quits storywheel after asking.
 - The Writer remembers the open scene, the cursor and your toggles for each story.
 
+> **Watch out:** F3 **from the Wheel** does not open the draft you are looking at (a draft has no manuscript until it is in the
+> Builder). It opens the story you last had in the Builder, or the first story of the ticked universe, and the Writer doesn't show
+> which story it is. Open stories from the Builder (`w`) until this is fixed. (ISSUES #4.)
+
 Inside kitty (Settings > Writer: "Open the Writer in its own kitty window"), the Writer opens in its own window with your writing font,
 size, line height, padding and opacity.
 
@@ -345,9 +349,9 @@ size, line height, padding and opacity.
 - **Find:** Ctrl+F, then Ctrl+G (next) and Alt+G (previous). **Find and replace:** Ctrl+R (below).
 
 > **Watch out:** if the cursor is on a scene-break line, the raw `* * * Title` shows beside the centered one, and anything you type
-> goes into the break and turns it into a paragraph. Move off the line before typing. (ISSUES #27.)
+> goes into the break and turns it into a paragraph. Move off the line before typing. (ISSUES #11.)
 >
-> Alt with a letter that has no job (Alt+F in a prose story, for example) types that letter. (ISSUES #11.)
+> Alt with a letter that has no job (Alt+F in a prose story, for example) types that letter. (ISSUES #10.)
 
 ### The status line
 
@@ -398,7 +402,7 @@ Right-click in the text: Undo, Redo, Cut, Copy, Paste, Fix Spelling… (on a mis
 
 > **Watch out:** the help, the story outline and the F12 menu are drawn with a stray indent on the left, so their lines wrap badly; the
 > outline repeats the Story Spine openers ("Once upon a time. Once upon a time, …") for stories promoted by older versions; and the
-> peek card lists fields A to Z and cuts the last ones off. The text is all there; it is only laid out badly. (ISSUES #3, #5, #6, #7.)
+> peek card lists fields A to Z and cuts the last ones off. The text is all there; it is only laid out badly. (ISSUES #5, #6, #7, #12.)
 
 ### Find and replace: Ctrl+R
 
@@ -547,7 +551,7 @@ Every noun, verb, adjective or adverb in the dictionary, ranked by how well it f
 names, jobs, places and things: **e** adds one to the universe, **m** invents more names in the genres' style.
 
 > **Watch out:** `k` (Known) only works in Vocabulary; elsewhere it silently does nothing. And `a` ("Learn this word" in the footer
-> of every tab) learns the word highlighted in the **Lookup** tab even when you are on another tab; use `l` outside Lookup. (ISSUES #20.)
+> of every tab) learns the word highlighted in the **Lookup** tab even when you are on another tab; use `l` outside Lookup. (ISSUES #14.)
 
 ---
 
@@ -658,17 +662,17 @@ where they drift. Each line: the page and section, what it says, and what actual
 10. **words › Keys:** `k` "Mark the word ✓ Known" is listed under "Everywhere in Words"; it works only in Vocabulary. `a` "Learn this
     word" and `l` "Mark the word ★ Learning" are two keys for the same thing in Lookup.
 11. **words › Keys:** `a` "Learn this word (it becomes ★ in Vocabulary)" is listed under "Everywhere in Words" and shown in every tab's
-    footer, but outside Lookup it learns the word highlighted in the hidden Lookup tab, not the one you are on (ISSUES #20).
+    footer, but outside Lookup it learns the word highlighted in the hidden Lookup tab, not the one you are on (ISSUES #14).
 12. **keys › Footers:** "at most three keys that matter most". A focused list adds its own keys (Past stories shows four more).
 13. **builder › Keys (start_script)** is right, but the program's own message for a prose story says "Set its format to screenplay (S,
     story settings)"; the format is on the story form (`m`). And right-clicking the Structure row says "The structure was set in the
     Wheel", though `m` changes it.
 14. **builder › Mouse:** "In the Outline a click selects, the wheel scrolls and right-click edits". True, but `f`, Space, `R`, `+`/`-`,
-    `n` and `d` pressed in the Outline act on the entity card (ISSUES #4).
+    `n` and `d` pressed in the Outline act on the entity card (ISSUES #3).
 15. **settings › Moving around:** "left and right on the tab bar switch tabs"; true once the tab bar has the focus, but nothing has it
     when Settings opens.
 16. **exports › Other formats:** doesn't mention the "Fountain (.fountain): the prose as action" export the Builder offers for prose.
 17. **structures › About:** "Pick one in the Wheel's Structure step" leaves out the Builder's story form (`m`, +Story), where a story's
     structure is also picked or changed.
 
-The README, which is not an in-app page, is further out of date: ISSUES #21 lists it.
+The README, which is not an in-app page, is further out of date: ISSUES #22 lists it.

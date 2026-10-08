@@ -28,7 +28,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 |---|---|---|---|---|---|
 | Mode keys | F1 Wheel, F2 Builder, F3 Writer, F4 Settings, F5 Words | Move between the five modes; everything is saved first | test_hub.py, test_navigation.py, test_switching.py | works | P |
 | Key of the mode you are in | e.g. F2 in the Builder | Opens that mode's help (and closes it again) | test_help_toggle.py | works | P |
-| Help | `?` | The mode's help in tabs (guide, Keys, Topics) with a search box | test_help.py, test_help_tabs.py | works; layout **confusing** (ISSUES #14) | P |
+| Help | `?` | The mode's help in tabs (guide, Keys, Topics) with a search box | test_help.py, test_help_tabs.py | works; layout **confusing** (ISSUES #21) | P |
 | Back | `q` | Back to the mode you came from, or close the dialog | test_navigation.py | works | P |
 | Quit | `Q` (Alt+Q in the Writer) | Quit storywheel, after asking | test_navigation.py | works | P |
 | Footer | click a key | Every footer: the five modes, ? Help, q Back and up to three keys | test_layout_batch6.py | works (a focused list adds its own keys, so the "three keys" rule is broken in Past stories) | P |
@@ -36,7 +36,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Status line (bottom) | — | One-line messages; at start, the kitty note when not in kitty | — | works | P |
 | Remember where you were | plain `storywheel` | Reopens the last mode, universe, story, tab, entity, draft, step | test_switching.py | works | R |
 | Transparent background | Settings > Appearance | Terminal background shows through every mode | test_appearance.py | works | R |
-| Narrow layout | under 150 columns | Thinner side columns; Builder's Story panel takes turns with the cards | test_layout_batch6.py | works; outline is 16 columns wide at 120 (ISSUES #28) | P |
+| Narrow layout | under 150 columns | Thinner side columns; Builder's Story panel takes turns with the cards | test_layout_batch6.py | works; outline is 16 columns wide at 120 (ISSUES #29) | P |
 
 ---
 
@@ -51,13 +51,13 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | "Whole characters/places from these" button | click, or `t` in the panel | no / sometimes / only: whether a whole protagonist or setting can be a universe entity | test_universes_wheel.py | works | P |
 | "Belongs to" button | click | The universe this draft will be promoted into | test_promote_ui.py | works | P |
 | "Open in the Builder" button | click | Same as F2 (offers to send the draft first) | test_send_to_builder.py | works | P |
-| Universe tree (Characters / Places / Things) | Enter opens a group; Enter or click on an entry previews it; `u` uses it | Preview a universe entity and use it as a new candidate | test_universes_wheel.py | works; help promises e/d/n there that don't exist (ISSUES #12) | P |
+| Universe tree (Characters / Places / Things) | Enter opens a group; Enter or click on an entry previews it; `u` uses it | Preview a universe entity and use it as a new candidate | test_universes_wheel.py | works; help promises e/d/n there that don't exist (ISSUES #17) | P |
 | Entry preview dialog | Enter or `u` use, Esc close | "Use in this story" (nothing kept until k) | test_universes_wheel.py | works | P |
-| **Past stories** list | Enter or click opens a draft | Every Wheel draft with date, "5/8" or "done", ⇢universe when promoted | test_promote_ui.py, test_drafts.py | works; titles cut at 22 characters, copies look identical (ISSUES #22) | P |
+| **Past stories** list | Enter or click opens a draft | Every Wheel draft with date, "5/8" or "done", ⇢universe when promoted | test_promote_ui.py, test_drafts.py | works; titles cut at 22 characters, copies look identical (ISSUES #25) | P |
 | Past stories: New | button, or `N` anywhere | New draft; asks which universe it belongs to | test_drafts.py, test_universes_wheel.py | works | P |
 | Past stories: Del | button or `d` in the list | Delete a draft (asks; permanent, not to .trash) | test_ui_pass.py | works; permanence is **confusing** (ISSUES #8) | P |
 | Past stories: Promote | button or `P` in the list | Bring a past draft into a universe | test_promote_ui.py | works | P |
-| Past stories: Use protagonist / Use setting | buttons, `p` / `s` in the list | Sends that draft's protagonist / setting **into a universe**, not into this story | test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`) | **confusing** (ISSUES #9) | P |
+| Past stories: Use protagonist / Use setting | buttons, `p` / `s` in the list | Sends that draft's protagonist / setting **into a universe**, not into this story | test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`) | **confusing** (ISSUES #13) | P |
 
 ### Main screen: the card (middle)
 
@@ -69,7 +69,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Card rows | Up/Down | The candidate's fields | test_tui.py | works | P |
 | Roll the step | Space, Roll button | A new candidate (fields locked by a keep stay) | test_tui.py, test_mouse.py | works | P |
 | Keep | `k`, Keep button | Keep the step and move on | test_tui.py | works | P |
-| Reroll one field | `f`, Enter, left-click on a row | Reroll only that field | test_mouse.py | works; a near-miss on ▲▼ rerolls (ISSUES #23) | P |
+| Reroll one field | `f`, Enter, left-click on a row | Reroll only that field | test_mouse.py | works; a near-miss on ▲▼ rerolls (ISSUES #24) | P |
 | Edit one field | `e`, right-click on a row | Edit that field in a box | test_tui.py, test_mouse.py | works | P |
 | Write your own | `w` | One box per field, starting from what is there | test_tui.py | works | P |
 | $EDITOR | `E` | Edit the whole step in your editor | test_tui.py | works | R |
@@ -86,7 +86,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Copy story | `c` | The story so far as plain text to the clipboard | test_ui_pass.py | works | P |
 | Copy as new | `C` | Editable copy of a promoted (read-only) draft | test_drafts.py | works | P |
 | Save to universe | `u` | Save the showing candidate into the ticked universe (or ask which) | test_universes_wheel.py | works (saves without a preview) | P |
-| Remove from universe | `U` | Only says deleting happens in the Builder | test_universes_wheel.py | **confusing** (help says it removes; ISSUES #13) | P |
+| Remove from universe | `U` | Only says deleting happens in the Builder | test_universes_wheel.py | **confusing** (help says it removes; ISSUES #18) | P |
 | Back to the card | Esc | Focus the card from a list | test_tui.py | works | P |
 | Promoted draft is read-only | any edit key | Says so and offers `C` | test_drafts.py | works | P |
 
@@ -110,7 +110,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Promote preview | `p` Promote, Enter toggles merge on a yellow duplicate, Esc cancel | Shows every entity and the outline before anything is written | test_promote_ui.py | works | P |
 | Quit screen (Q) | `p` into its universe, `n` new, `e` existing, `k`/Enter not now, `d` delete, Esc cancel | Leave with or without promoting | test_promote_ui.py, test_navigation.py | works; `d` deletes the draft permanently with one key (ISSUES #8) | P |
 | Done screen (last keep) | `Q`/Enter quit, `q`/Esc keep editing | Story finished | test_tui.py, test_navigation.py | works | R |
-| Help screen | Tab/Shift+Tab, 1-3, `/` search, Esc/`q`/`?` close | Wheel help | test_help*.py | works; layout **confusing** (ISSUES #14) | P |
+| Help screen | Tab/Shift+Tab, 1-3, `/` search, Esc/`q`/`?` close | Wheel help | test_help*.py | works; layout **confusing** (ISSUES #21) | P |
 
 ### The plain prompt (`storywheel --plain`, or no terminal)
 
@@ -134,13 +134,13 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | **Stories** list | Enter or click opens the story | The universe's stories (titles only) | test_builder_layout.py | works | P |
 | +Story | button, `T` | Story form: title, format, structure, genres, target | test_storyform.py, test_builder_layout.py | works | P |
 | Write | button, `w` | Open the story in the Writer | test_switching.py | works | R |
-| Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it silently uses the first story (ISSUES #18) | P |
+| Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it silently uses the first story (ISSUES #15) | P |
 | Backups… | button, `b` in the list | List and restore backups (asks; current version kept aside) | test_backups.py | works | P |
 | Format, structure… | `m` (in the list or anywhere) | Story form for the open story | test_storyform.py | works | P |
 | Delete story | `d` in the Stories list | Delete a story (asks; to .trash) | test_builder.py | works | R |
-| **Story** panel: Outline tab | `6`; click selects, wheel scrolls, right-click or `e` edits a row | Title, genre, structure, premise, setting lines, beats, twist, settings, word count | test_outline.py, test_builder_fixes.py | works; `f`/Space/`R`/`+`/`n`/`d` here act on the entity card (ISSUES #4) | P |
+| **Story** panel: Outline tab | `6`; click selects, wheel scrolls, right-click or `e` edits a row | Title, genre, structure, premise, setting lines, beats, twist, settings, word count | test_outline.py, test_builder_fixes.py | works; `f`/Space/`R`/`+`/`n`/`d` here act on the entity card (ISSUES #3) | P |
 | Outline: add / remove beat | `A` / `X` on a beat | Repeatable beats, rolled with the generator | test_outline_beats.py | works | P |
-| Outline: Structure row | right-click / `e` | Says "set in the Wheel" (out of date) | — | **confusing** (ISSUES #16) | P |
+| Outline: Structure row | right-click / `e` | Says "set in the Wheel" (out of date) | — | **confusing** (ISSUES #19) | P |
 | Outline: Settings row | right-click / `e` | Opens Story settings | test_builder.py | works | P |
 | Universe overview | `o` | Shows the universe's name, genre leanings, mix changes, notes, contents in the Outline tab | test_builder_layout.py | works | P |
 | Scenes tab | `7`; Enter or click opens the Writer at a scene | Scenes with first lines and word counts | test_builder_layout.py | works | P |
@@ -159,7 +159,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | +Character (+Place…) | button, `n` | New blank entity | test_builder.py | works | P |
 | Roll blanks | button, Space | Roll every blank field | test_builder.py | works | P |
 | Del | button, `d` | Delete the entity (asks; to .trash; links cleared) | test_builder.py | works | P |
-| Card | Up/Down | The entity's fields; ✎ marks write-only | test_builder.py | works; opens with no row highlighted (ISSUES #24) | P |
+| Card | Up/Down | The entity's fields; ✎ marks write-only | test_builder.py | works; opens with no row highlighted (ISSUES #23) | P |
 | Roll a field | `f`, left-click | Generator fills it, using the universe | test_builder.py, test_fill_rename.py | works | P |
 | Write a field | `e`, right-click | Type it, or pick a link / choice from a list | test_builder.py | works | P |
 | Field history | scroll over a row | Step through the field's earlier values (kept on disk) | test_field_history.py | works | R |
@@ -177,11 +177,11 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Key | What it is for | Test | Status | Checked |
 |---|---|---|---|---|
 | `s` Universe settings | Genre leanings, excluded tags and lists, boosts, the universe's own name boost (typed in boxes) | test_builder.py | works | P |
-| `S` Story settings | Font, column width, daily goal, header keyword, indent, typewriter, invisibles, spellcheck, region (typed as text, "true/false") | test_builder.py | **duplicated** with Settings, and free text where Settings has switches (ISSUES #17) | P |
-| `G` Your details | Legal name, byline, address, email, phone | test_builder.py | **duplicated** with Settings > You (no surname field here) (ISSUES #17) | P |
+| `S` Story settings | Font, column width, daily goal, header keyword, indent, typewriter, invisibles, spellcheck, region (typed as text, "true/false") | test_builder.py | **duplicated** with Settings, and free text where Settings has switches (ISSUES #20) | P |
+| `G` Your details | Legal name, byline, address, email, phone | test_builder.py | **duplicated** with Settings > You (no surname field here) (ISSUES #20) | P |
 | `F` Fix names | Names in the wrong capitals, with a preview | test_names.py | works | P |
-| `C` Copy manuscript | Plain text to the clipboard | test_ui_pass.py | works; with no story open, copies the first story (ISSUES #18) | P |
-| `P` Start the script | A screenplay's script.fountain from the outline | test_builder_layout.py, test_screenplay.py | works; the message for a prose story names the wrong key (ISSUES #16) | P |
+| `C` Copy manuscript | Plain text to the clipboard | test_ui_pass.py | works; with no story open, copies the first story (ISSUES #15) | P |
+| `P` Start the script | A screenplay's script.fountain from the outline | test_builder_layout.py, test_screenplay.py | works; the message for a prose story names the wrong key (ISSUES #19) | P |
 | Rename preview | Enter toggles, `a` all, `n` none, `p` replace, Esc rename only | test_builder.py | works | R |
 | Backups dialog | Up/Down, preview, `r` / Enter restore (asks), `q` close | test_backups.py | works | P |
 | Story form | Title, Format / Structure / Genres pickers, target; Ctrl+S save, Esc cancel | test_storyform.py | works | P |
@@ -197,10 +197,10 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Part | What it is for | Test | Status | Checked |
 |---|---|---|---|---|
 | Centered column, pad windows either side | Distraction-free text | test_writer.py | works | T |
-| Virtual paragraph indent | Every paragraph line shown indented; file has no spaces | test_paragraphs.py | works in the manuscript; **broken** in every float (ISSUES #3) | T |
-| Scene markers shown centered `*  *  *  Title` | `***` / `* * *` / `#` lines, optionally named | test_manuscript.py | works; raw text also shows on the cursor line (ISSUES #27) | T |
+| Virtual paragraph indent | Every paragraph line shown indented; file has no spaces | test_paragraphs.py | works in the manuscript; **broken** in every float (ISSUES #5) | T |
+| Scene markers shown centered `*  *  *  Title` | `***` / `* * *` / `#` lines, optionally named | test_manuscript.py | works; raw text also shows on the cursor line (ISSUES #11) | T |
 | Centered lines `>text<` | Shown centered | test_notepad_keys_center.py | works | R |
-| Status line | words in this scene · in the story / target · today / goal | test_statusline.py, test_writer.py | works; counts the float's text while a float is open (ISSUES #10) | T |
+| Status line | words in this scene · in the story / target · today / goal | test_statusline.py, test_writer.py | works; counts the float's text while a float is open (ISSUES #9) | T |
 | Spelling marks | red wavy, blue, pink, cyan (Settings > Spelling) | test_spelling.py, test_spelldict.py | works | R |
 | Name completion | 3 letters of any word of a name | test_writer.py | works | R |
 | Autosave and backups | On leaving insert, focus loss, idle; HHMM copies in .backups | test_writer.py | works | R |
@@ -223,10 +223,10 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Enter | New paragraph on the next line | test_writer.py | works | N |
 | Tab at a paragraph start | Nothing (says so once) | test_paragraphs.py | works | N |
 | F1 / F2 / F4 | Save and go to the Wheel / Builder / Settings | test_writer.py | works | R |
-| F3 | This help, in a float | test_help_tabs.py | works; layout **broken** (ISSUES #3, #6) | T |
+| F3 | This help, in a float | test_help_tabs.py | works; layout **broken** (ISSUES #5, #7) | T |
 | F5 | Words, carrying the word under the cursor | test_words_writer.py | works | R |
 | Unmapped Ctrl letters and F keys | Do nothing (no surprise edits) | test_notepad.py | works | N |
-| Unmapped Alt letters | Type the letter (Alt+F in prose typed "f") | — | **broken** (ISSUES #11) | T |
+| Unmapped Alt letters | Type the letter (Alt+F in prose typed "f") | — | **broken** (ISSUES #10) | T |
 
 ### Shortcuts you can change (Settings > Keys), with their defaults
 
@@ -235,17 +235,17 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 | Alt+I (Ctrl+I under kitty) | Italic: wraps the selection or toggles at the cursor | test_writer.py, test_kitty_keys.py | works | N |
 | Alt+B | Bold | test_writer.py | works | N |
 | Alt+S | Scene break (the `scene_marker` setting, `***` by default) | test_writer.py, test_paragraphs.py | works | N |
-| F12 | Writer menu | test_menus.py | works; float gets the stray indent and a long item wraps mid-word (ISSUES #3) | T |
+| F12 | Writer menu | test_menus.py | works; float gets the stray indent and a long item wraps mid-word (ISSUES #5) | T |
 | F9 | Scenes sidebar | test_writer.py | **broken**: opens, but its keys don't work after F9, and after a jump or closing it you are in Vim's Normal mode, where typing `dd` deleted a paragraph (ISSUES #1) | T |
-| F8 | Peek at the name under the cursor | test_writer.py | works; fields in A–Z order, last ones cut off (ISSUES #7) | T |
-| Ctrl+O | Story outline overlay | test_overview_writer.py | works; **broken** layout and doubled openers on older stories (ISSUES #3, #5) | T |
+| F8 | Peek at the name under the cursor | test_writer.py | works; fields in A–Z order, last ones cut off (ISSUES #12) | T |
+| Ctrl+O | Story outline overlay | test_overview_writer.py | works; **broken** layout and doubled openers on older stories (ISSUES #5, #6) | T |
 | Ctrl+Q | Save and back to the Builder | test_notepad.py | works (Ctrl+Q is flow control in some terminals) | N |
-| Ctrl+R | Find and replace | test_replace.py | works; bottom hint cut off (ISSUES #26) | T |
+| Ctrl+R | Find and replace | test_replace.py | works; bottom hint cut off (ISSUES #27) | T |
 | Alt+Q | Quit storywheel (asks) | test_navigation.py | works | R |
 | F7 | Dictionary card for the word under the cursor | test_lookup_writer.py | works | N |
 | F6 | Look up a typed word | test_lookup_writer.py | works | N |
 | F10 / Shift+F10 | Next grammar problem / list them | test_grammar_writer.py | works against a fake server | R |
-| Alt+F | Screenplay flip test | test_screenplay_writer.py | works in a script; types "f" in prose (ISSUES #11) | T |
+| Alt+F | Screenplay flip test | test_screenplay_writer.py | works in a script; types "f" in prose (ISSUES #10) | T |
 | Alt+N | New scene | test_notepad_keys_center.py | works | R |
 | Alt+V / Alt+T / Alt+L | Invisibles / typewriter / spellcheck | test_writer.py, test_notepad_keys_center.py | works | R |
 | Alt+W | Word counts | test_notepad_keys_center.py | works | R |
@@ -261,13 +261,13 @@ Neovim with storywheel's own config. Notepad mode is on by default (always typin
 |---|---|---|---|---|---|
 | Right-click menu | right-click; Undo, Redo, Cut, Copy, Paste, Fix Spelling…, Look Up, Add to Dictionary, More… | Everyday edits | test_menus.py | **broken**: Neovim's own popup; a right-button release over an item runs it (ISSUES #2) | T |
 | Right-click inside a float | right-click | Opens the everyday popup on top of the F12 menu or help | — | **broken** (ISSUES #2) | T |
-| Writer menu (F12 / Alt+M / More…) | 1–9, Up/Down, Enter, click, Esc / `q` | Edit, Look up, Story, Leave, More groups (about 35 items) | test_menus.py, test_menu_keys.py | works; only items 1–9 have a number (ISSUES #25) | T |
-| Help float (F3) | Tab / Shift+Tab / 1–4 / click tab; `/` search; Space / Backspace page; F3, Esc, `q` close | Writer help in tabs | test_help_tabs.py | **broken** layout (ISSUES #3, #6) | T |
-| Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | **broken** layout; doubled openers (ISSUES #3, #5) | T |
+| Writer menu (F12 / Alt+M / More…) | 1–9, Up/Down, Enter, click, Esc / `q` | Edit, Look up, Story, Leave, More groups (about 35 items) | test_menus.py, test_menu_keys.py | works; only items 1–9 have a number (ISSUES #26) | T |
+| Help float (F3) | Tab / Shift+Tab / 1–4 / click tab; `/` search; Space / Backspace page; F3, Esc, `q` close | Writer help in tabs | test_help_tabs.py | **broken** layout (ISSUES #5, #7) | T |
+| Outline overlay (Ctrl+O) | scroll; Esc, `q`, Ctrl+O close | Title, premise, beats, twist, protagonist, setting, rumor | test_overview_writer.py | **broken** layout; doubled openers (ISSUES #5, #6) | T |
 | Scenes sidebar (F9) | Enter / double-click jump, `a` add, `r` rename, `J`/`K` move, `q`/Esc close | Scenes with first lines | test_writer.py (calls the Lua directly, never F9) | **broken** from the keyboard; can lose text (ISSUES #1) | T |
-| Peek card (F8) | closes when the cursor moves | An entity's fields and notes | test_writer.py | **confusing** (ISSUES #7) | T |
-| Dictionary card (F7 / F6) | Enter look up, `b`/Backspace back, `n` forward, `r` replace, `i` insert, `c` copy, `/` filter, `w` word, Tab / arrows / hjkl, Esc / `q` | Meanings and similar words; replace in the same form | test_lookup_writer.py | works (without the dictionary: a wrapped message and "Press ENTER", ISSUES #29) | N T |
-| Find and replace (Ctrl+R) | Enter find next / replace, Tab switch line, Alt+R one, Alt+A all, Alt+C case, Alt+W whole word, Alt+N / Alt+P next / previous, Esc | Literal find and replace in the current file | test_replace.py | works (hint cut, ISSUES #26) | T |
+| Peek card (F8) | closes when the cursor moves | An entity's fields and notes | test_writer.py | **confusing** (ISSUES #12) | T |
+| Dictionary card (F7 / F6) | Enter look up, `b`/Backspace back, `n` forward, `r` replace, `i` insert, `c` copy, `/` filter, `w` word, Tab / arrows / hjkl, Esc / `q` | Meanings and similar words; replace in the same form | test_lookup_writer.py | works (without the dictionary: a wrapped message and "Press ENTER", ISSUES #28) | N T |
+| Find and replace (Ctrl+R) | Enter find next / replace, Tab switch line, Alt+R one, Alt+A all, Alt+C case, Alt+W whole word, Alt+N / Alt+P next / previous, Esc | Literal find and replace in the current file | test_replace.py | works (hint cut, ISSUES #27) | T |
 | Restore from a backup (menu) | Up/Down, Enter / double-click restore (asks), Esc / `q` | Backups with a preview | test_restore_writer.py | works | R |
 | Grammar list (Shift+F10) and grammar right-click menu | Enter / click jump; right-click a problem: message, fixes, ignore, turn off rule | LanguageTool problems | test_grammar_writer.py | works against a fake server | R |
 | Key check (Alt+K) | press Ctrl+I | Whether Ctrl+I is told apart from Tab | test_writer.py | works | R |
@@ -305,14 +305,14 @@ Every box saves as you type (numbers when valid; paths, keys and colours on Ente
 | Writer | Don't count pasted text, Notepad mode, Open the Writer in its own kitty window, Writer font / font size / line height / padding / window opacity, Space between paragraphs, Scene break in the file, Column width, Show a paragraph indent, Typewriter mode, Show invisibles; kitty and Neovim status line | The writing room | test_settings_mode.py, test_kitty_writer.py | works (kitty items unverified here) | P |
 | Spelling | Spellcheck, knows the dictionary's words, accept words built from known words, English spelling (US/UK), Spelling marks, Autocorrect | The spellchecker | test_spelling.py, test_spelldict.py | works | P |
 | Grammar | Check grammar, 13 category switches, Turned-off rules, pause (ms), memory limit (MB); Java/LanguageTool status | LanguageTool | test_grammar_server.py | works against a fake server | R |
-| Export | Manuscript font, Default format, Default export type, Title in bold, Page header shows, Always anonymous, One space after periods, Curly quotes, Screenplays: automatic (CONT'D), Manuscripts folder | How exports are made | test_paragraph_export.py, test_export_location.py | works; "Default format" offers only `screenplay`, not feature / short film (ISSUES #30) | P |
+| Export | Manuscript font, Default format, Default export type, Title in bold, Page header shows, Always anonymous, One space after periods, Curly quotes, Screenplays: automatic (CONT'D), Manuscripts folder | How exports are made | test_paragraph_export.py, test_export_location.py | works; "Default format" offers only `screenplay`, not feature / short film (ISSUES #31) | P |
 | Keys | One box per Writer shortcut (25), checked for conflicts | Change the Writer's keys | test_keys.py | works | P |
 | Universes | Preference for your own names (atom boost) | Default boost for every universe | test_settings_mode.py | works | P |
 | Library | Library folder (Enter); app storage and settings file shown | Where universes live (nothing is moved) | test_settings_mode.py | works | P |
 | Updates | Git remote to update from | Only used if the install folder is gone | test_setup_update.py | works | R |
 | Stats | Summary; Words per day table (`e` edit, `0` reset, with confirms); Per story table (`R` forget, with confirm) | Your writing record | test_settings_mode.py | works | P |
 | Help | Search box; results; text | Search every help page | test_help.py | works | P |
-| Opening focus | — | Nothing is focused when Settings opens; Tab twice to reach a box | — | **confusing** (ISSUES #31) | P |
+| Opening focus | — | Nothing is focused when Settings opens; Tab twice to reach a box | — | **confusing** (ISSUES #30) | P |
 
 ---
 
@@ -322,7 +322,7 @@ Works offline from the dictionary index. Opened from the Writer it carries the w
 
 | Tab | Controls | What it is for | Test | Status | Checked |
 |---|---|---|---|---|---|
-| Lookup | Word box (Enter), Look up, ◀ Back / Forward ▶ (`b` / `n`), filter (`/`); five boxes Meanings, Similar, Opposites, Rhymes (syllables, names and rare words), Related (tabs under 150 columns); Use in Writer (`u`), Learn this word (`a` or `l`), Use in this universe's stories (`w`), Copy (`c`) | Look any word up and pick a better one | test_words.py, test_rhymes.py | works; `k` does nothing here (ISSUES #20) | P |
+| Lookup | Word box (Enter), Look up, ◀ Back / Forward ▶ (`b` / `n`), filter (`/`); five boxes Meanings, Similar, Opposites, Rhymes (syllables, names and rare words), Related (tabs under 150 columns); Use in Writer (`u`), Learn this word (`a` or `l`), Use in this universe's stories (`w`), Copy (`c`) | Look any word up and pick a better one | test_words.py, test_rhymes.py | works; `k` does nothing here (ISSUES #14) | P |
 | Suggestions | List (For this story / For your characters and places / Fresh alternatives), part of speech, Refresh; Look up, ★ Learn (`l`), Copy, Use in Writer, Add to generator list (`w`) | Words to try | test_suggest.py, test_words.py | works | P |
 | Vocabulary | View (New words / ★ Learning / ✓ Known), how rare, part of speech, subject, New batch, Start over, your own word + Add; ★ Learning (`l`), ✓ Known (`k`), Open in Lookup (Enter), Flashcards (`f`), Remove (`d`), Use in this universe's stories (`w`) | Words worth learning | test_learn.py, test_words.py | works | P |
 | Flashcards | Space / Enter show meaning, `k` known, `n` / Right next, Esc / `q` stop | Practise ★ words | test_words.py | works | R |
