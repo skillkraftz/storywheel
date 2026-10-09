@@ -1,23 +1,31 @@
 {
-  "_note": "Act III: the climax. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
+  "_note": "Act III: the climax. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before. An entry's \"ending\" (a name or a list of triumph, bittersweet, tragic, open) is for those endings only; an untagged entry fits any (endings.py).",
   "slot": "act_climax",
   "tags": ["general"],
   "entries": [
     "{first} {ACT_PERSON} {SOMEONE} at {landmark} {MANNER}, and chose {VALUE}.",
-    "{first} stood before the {rival} with {THING:portable} and finally told the truth about {TOPIC}.",
+    {"text": "{first} stood before the {rival} with {THING:portable} and finally told the truth about {TOPIC}.", "ending": ["triumph", "bittersweet"]},
     "With {THING:portable} in hand, {first} {ACT_PLACE} {landmark} and faced {SOMEONE}.",
-    "{first} gave up {PRIZE:!inner} to save {CLOSE:human}, and {SOMEONE} watched.",
-    "{first} used {THING:!living} against {SOMEONE} {MANNER}.",
+    {"text": "{first} gave up {PRIZE:!inner} to save {CLOSE:human}, and {SOMEONE} watched.", "ending": ["bittersweet"]},
+    {"text": "{first} used {THING:!living} against {SOMEONE} {MANNER}.", "ending": ["triumph"]},
     "{first} {ACT_PERSON} {the_someone} with {the_thing:portable} in hand.",
     "{first} {ACT_MESSAGE} {the_message} in front of the {rival}.",
-    "{first} walked into {the_disaster:strikes} to save {CLOSE:human}.",
-    {
-      "text": "{first} walked out to meet the {rival:human} {MANNER}, with {THING:portable} and nothing else.",
-      "tags": ["western", "historical"]
-    },
-    {
-      "text": "{first} outwitted {SOMEONE} and broke the hold of {VICE}.",
-      "tags": ["fairy tale"]
-    }
+    {"text": "{first} walked into {the_disaster:strikes} to save {CLOSE:human}.", "ending": ["bittersweet", "tragic"]},
+    {"text": "{first} walked out to meet the {rival:human} {MANNER}, with {THING:portable} and nothing else.", "tags": ["western", "historical"], "ending": ["open"]},
+    {"text": "{first} outwitted {SOMEONE} and broke the hold of {VICE}.", "tags": ["fairy tale"], "ending": ["triumph"]},
+    {"text": "{first} {ACT_PERSON} {SOMEONE} before {CLOSE:human}, and nobody doubted {first} again.", "ending": ["triumph"]},
+    {"text": "{first} {ACT_THING:!stows} {THING:portable} at {landmark}, and {VICE} lost its hold.", "ending": ["triumph"]},
+    {"text": "At {landmark}, {first} beat the {rival:human} {MANNER} and walked home with {PRIZE:!inner}.", "ending": ["triumph"]},
+    {"text": "{first} stood up to {SOMEONE:threatening} {MANNER} and did not flinch.", "ending": ["triumph"]},
+    {"text": "{first} {ACT_PERSON} {SOMEONE} at {landmark}, and lost {LOSS}.", "ending": ["tragic"]},
+    {"text": "{first} chose {PRIZE:!inner} over {VALUE}, and {CLOSE:human} paid for it.", "ending": ["tragic"]},
+    {"text": "{DISASTER:strikes} took {CLOSE:human}, and {first} could only watch from {landmark}.", "ending": ["tragic"]},
+    {"text": "{first} {ACT_PERSON} the {rival} too late, and {SOMEONE} was already gone.", "ending": ["tragic"]},
+    {"text": "{first} kept {VALUE} and let {PRIZE:!inner} go.", "ending": ["bittersweet"]},
+    {"text": "{first} saved {CLOSE:human} and lost {LOSS}.", "ending": ["bittersweet"]},
+    {"text": "{first} forgave the {rival:human} {MANNER}, and it was not enough.", "ending": ["bittersweet"]},
+    {"text": "{first} {ACT_PLACE} {landmark} {MANNER}, and {SOMEONE} was waiting.", "ending": ["open"]},
+    {"text": "{first} stood at {landmark} with {THING:portable} and did not know which way to turn.", "ending": ["open"]},
+    {"text": "{first} {ACT_MESSAGE} {MESSAGE} {MANNER}, and the answer was not what anyone expected.", "ending": ["open"]}
   ]
 }

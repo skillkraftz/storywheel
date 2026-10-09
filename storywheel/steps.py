@@ -12,6 +12,8 @@ import json
 import re
 from pathlib import Path
 
+from . import endings as endings_mod
+from . import focus as focus_mod
 from . import frames, structures
 from . import threads as T
 from .library import Entry
@@ -108,9 +110,12 @@ class Ctx(dict):
         self.mix = engine.mix_for(story)
         self.seeds = story.get("seeds", {})
         self.fresh = fresh
+        self.focus = focus_mod.of_draft(story)
+        self.ending = endings_mod.of_draft(story)                  # the ending the story was asked to have ("any": no filter)
+        self.personless = not focus_mod.is_person(self.focus)       # a place or no one: no protagonist, the fallback subject stands in
         self.kept = {}
         for key, fields in story["kept"].items():
-            if key != exclude:
+            if key != exclude and not (self.personless and key == "protagonist"):
                 self.kept.update(filled(fields))
         self.update(self.kept)
         self.update(filled(current))
@@ -134,7 +139,7 @@ class Ctx(dict):
         self.drawn = {tuple(a) for lst in (atoms or {}).values() for a in lst}
         # a universe character who is the protagonist is not also drawn as a passing stranger
         pro = (story.get("kept", {}).get("protagonist") or {}).get("name")
-        if pro and exclude != "protagonist":
+        if pro and exclude != "protagonist" and not self.personless:
             self.used |= {(slot, pro) for slot in ("someone", "close", "rival")}
         self.atom_log = []                      # (field, slot, text) in the order drawn
         self._motif_offered = False
@@ -176,6 +181,9 @@ class Ctx(dict):
         if slot == "era":
             return self.era_accept(accept)
         accept = self.tech_accept(accept)
+        if self.personless:                     # (an atom that says "{first}'s sister" would say "everyone in Dunmore's sister")
+            inner_atom = accept
+            accept = lambda e: "{first}" not in e.text and (inner_atom is None or inner_atom(e))
         if slot in PEOPLE_SLOTS:
             bands = self.age_bands()
             inner = accept
@@ -274,13 +282,33 @@ class Ctx(dict):
                                       "features": list(entry.features or ())}
         return text
 
+    def template_accept(self, slot=""):
+        """What a frame must satisfy in this story, or None. With no protagonist, templates that read the protagonist's own fields (job,
+        trait, want, need...) are set aside, and so are those the fallback subject can't carry: a possessive ("{first}'s") and a title that
+        names the character. With an ending picked, a template written for other endings is set aside (an untagged one fits any)."""
+        banned = [PERSONAL, POSSESSIVE] + ([NAMED] if slot == "title" else []) if self.personless else []
+        ending = None if self.ending == endings_mod.DEFAULT else self.ending
+        if not banned and not ending:
+            return None
+        return lambda e: (not any(rx.search(e.text) for rx in banned)) and (not ending or not e.ending or ending in e.ending)
+
     def sentence(self, slot, opening="", closing="."):
         """A template from `slot`, with its atoms chosen to fit (see frames.py). A template
-        the story can't satisfy is set aside and another drawn."""
+        the story can't satisfy is set aside and another drawn. With an ending picked, most draws for a slot that has frames written for it
+        come from those alone (the genre frames are untagged, and would drown them out)."""
         skip = set()
+        accept = self.template_accept(slot)
+        for_ending = self.ending_frames(slot, accept)
         for _ in range(frames.MAX_ATTEMPTS):
-            wl, entry = self.engine.pick_item(slot, self.mix, self.adjuster(slot),
-                                              self.used | self.drawn | skip, commit=False)
+            picked = None
+            if for_ending is not None:
+                picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn | skip, accept=for_ending, commit=False)
+            if picked is None:
+                picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn | skip, accept=accept, commit=False)
+            if picked is None:                  # nothing without the protagonist's fields: say so, and take any
+                self.engine.notify(f"No '{slot}' frame fits a story with no protagonist; one that mentions the protagonist was used.")
+                picked = self.engine.pick_item(slot, self.mix, self.adjuster(slot), self.used | self.drawn | skip, commit=False)
+            wl, entry = picked
             body = entry.text
             end = "" if body.rstrip().endswith((".", "!", "?")) else closing
             try:
@@ -290,7 +318,8 @@ class Ctx(dict):
                 continue
             self.finish_atom(slot, wl, entry)
             return text
-        wl, entry = self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn, commit=False)
+        wl, entry = (self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn, accept=accept, commit=False)
+                     or self.engine.pick_item(slot, self.mix, self.thread_weight, self.used | self.drawn, commit=False))
         body = entry.text
         self.engine.notify(f"Could not fit every restriction in a '{slot}' frame; one was relaxed.")
         text = frames.solve(self, opening + body + ("" if body.rstrip().endswith((".", "!", "?")) else closing),
@@ -298,12 +327,32 @@ class Ctx(dict):
         self.finish_atom(slot, wl, entry)
         return text
 
+    def ending_frames(self, slot, accept=None):
+        """For this beat, an acceptance test that takes only the frames written for the picked ending (None: draw from everything). Decided once
+        per beat, ENDING_SHARE of the time, and only for a slot that has such frames."""
+        if self.ending == endings_mod.DEFAULT:
+            return None
+        if not any(self.ending in e.ending for wl in self.engine.library.by_slot.get(slot, []) if wl.is_template for e in wl.entries):
+            return None
+        if self.engine.rng.random() >= ENDING_SHARE:
+            return None
+        return lambda e: self.ending in e.ending and (accept is None or accept(e))
+
     def can_resolve(self, name):
         return frames.is_known(self.engine.library, name)
+
+    def subject(self):
+        """(text, features) of what stands where the protagonist would, for a story with none. A story about a place: "everyone in Dunmore".
+        A mood piece about no one: "someone". Both are singular and take a person's verbs; neither is ever blank."""
+        if self.focus == "none":
+            return "someone", {"human"}
+        return f"everyone in {self['place']}", {"human"}
 
     def field_features(self, name):
         """What the story's own field is, for frames: the character, a rival, a landmark, a thread."""
         e = self.engine
+        if self.personless and name in ("first", "name", "job"):
+            return self.subject()[1]
         if name in ("first", "name", "job"):
             feats = {"human"}
             job = dict.get(self, "job")
@@ -330,6 +379,8 @@ class Ctx(dict):
 
     def is_kept(self, key):
         """Is this earlier-step value one the writer has kept (as opposed to a stand-in)?"""
+        if key in ("first", "last", "name") and self.personless:
+            return True                         # (the subject is the story's choice, not a stand-in)
         if key in ("first", "last"):
             key = "name"
         return key in self.kept
@@ -358,6 +409,8 @@ class Ctx(dict):
         if key.startswith("the_"):              # a thread (or the motif) again, definite
             value = self[key] = self.reference(key[4:])
             return value
+        if self.personless and key in ("first", "name"):
+            return self.subject()[0]
         if key == "first" and "name" in self:
             return self["name"].split()[0]
         if key == "last" and "name" in self:
@@ -464,6 +517,12 @@ class Ctx(dict):
         return f"{first} {plural(e.word('nouns', letter))}"
 
 
+ENDING_SHARE = 0.6      # with an ending picked, how often a beat with frames written for it draws from those frames alone (genre frames carry none)
+PERSONAL = re.compile(r"\{(?:name|last|age|job|trait|want|need|flaw|secret|rival)\b")      # the protagonist's own fields
+POSSESSIVE = re.compile(r"\{first\}'s")
+NAMED = re.compile(r"\{first\}")
+
+
 def atoms_by_field(c):
     """{field: [[slot, text], ...]}: the atoms each field of this roll drew."""
     out = {}
@@ -528,6 +587,30 @@ def era_field(c):
             break
         era = c.invent("era")
     return era
+
+
+def focus_field(c):
+    """The Genre step's focus: the one chosen for the draft (it is picked, never rolled)."""
+    return focus_mod.get(focus_mod.of_draft(c._story)).label
+
+
+def companion(c):
+    """A second person for a story with two leads or an ensemble: 'Lena Okafor, a cartographer'."""
+    name = f"{c.draw('first_name')} {c.draw('last_name')}"
+    return f"{name}, {fill(c, c.draw('job', c.job_accept()))}"
+
+
+def partner_field(c):
+    return companion(c)
+
+
+def company_field(c):
+    return "; ".join(companion(c) for _ in range(3))
+
+
+def ending_field(c):
+    """The Genre step's ending: the one chosen for the draft (it is picked, never rolled)."""
+    return endings_mod.get(endings_mod.of_draft(c._story)).label
 
 
 def mood_field(c):
@@ -671,6 +754,29 @@ def format_field(c):
     return formats.get(c.format_key).label
 
 
+PROTAGONIST_FIELDS = ("name", "age", "job", "trait", "want", "need", "flaw", "secret", "rival")
+PROTAGONIST_HINT = ("Want is what they chase. Need is what they actually have to learn. "
+                    "The story lives in the gap between the two.")
+
+
+def protagonist_step(story):
+    """The Protagonist step, shaped by the story's focus: two leads add a partner, an ensemble a company; a place or no one has no
+    protagonist (the step says so, and is skipped)."""
+    key = focus_mod.of_draft(story)
+    fields = {k: field(k) for k in PROTAGONIST_FIELDS}
+    hint = PROTAGONIST_HINT
+    if key == "two":
+        fields["partner"] = partner_field
+        hint += " A second lead shares the story: the partner is made here too."
+    elif key == "ensemble":
+        fields["company"] = company_field
+        hint += " An ensemble: the company are the people around the lead, each with a job."
+    elif not focus_mod.is_person(key):
+        hint = (f"No protagonist: this story's focus is {focus_mod.get(key).label.lower()}. Skip this step (x). "
+                "Roll it only if you change the focus back to a person; what you keep here is set aside while the focus is not one.")
+    return Step("protagonist", "Protagonist", hint, fields)
+
+
 def steps_for(story, repeats=None):
     """The steps for one story: the same seven, with the body shaped by its structure and, for the beats that can repeat, by how many
     times the story has them (`repeats`, else the story's own `repeats`)."""
@@ -680,7 +786,7 @@ def steps_for(story, repeats=None):
         Step("genre", "Genre & mood",
              "Two genres rubbing together is a shortcut to something fresh. "
              "Later steps lean toward ideas that fit what you keep here.",
-             {"genre": field("genre"), "mood": mood_field}),
+             {"genre": field("genre"), "mood": mood_field, "focus": focus_field, "ending": ending_field}),
 
         Step("structure", "Structure", structure_hint(), {"format": format_field, "structure": field("structure")}),
 
@@ -691,11 +797,7 @@ def steps_for(story, repeats=None):
               "motif": lambda c: c.hints.get("motif") or motif_from(c["title"], lambda: c.draw("title_noun"))},
              reroll={"motif": lambda c: c.draw("title_noun")}),
 
-        Step("protagonist", "Protagonist",
-             "Want is what they chase. Need is what they actually have to learn. "
-             "The story lives in the gap between the two.",
-             {k: field(k) for k in ("name", "age", "job", "trait", "want", "need",
-                                    "flaw", "secret", "rival")}),
+        protagonist_step(story),
 
         Step("setting", "Setting",
              "A good setting puts pressure on the character. Ask what this place "

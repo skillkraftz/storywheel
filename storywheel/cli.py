@@ -478,6 +478,13 @@ def cmd_sample(args):
     if args.structure and not structures.find(args.structure):
         names = ", ".join(s.name for s in structures.registry().values())
         sys.exit(f"  No structure called '{args.structure}'. Choose one of: {names}")
+    from . import endings, focus, formats
+    if args.ending and not endings.find(args.ending):
+        sys.exit(f"  No ending called '{args.ending}'. Choose one of: " + ", ".join(e.key for e in endings.ENDINGS))
+    if args.focus and not focus.find(args.focus):
+        sys.exit(f"  No focus called '{args.focus}'. Choose one of: " + ", ".join(f.key for f in focus.FOCUSES))
+    if args.format and not formats.find(args.format):
+        sys.exit(f"  No format called '{args.format}'. Choose one of: " + ", ".join(f.key for f in formats.FORMATS))
     if getattr(args, "json", False):
         engine = Engine(seed=args.seed, user_dir=paths.HOME)
         unknown = [g for g in args.genres if g.lower() not in engine.library.profiles]
@@ -485,12 +492,12 @@ def cmd_sample(args):
             print(f"(No profile for {', '.join(unknown)}: treated as a plain tag.)", file=sys.stderr)
         stories = []
         for _ in range(args.n):
-            story = build_story(engine, [g.lower() for g in args.genres], structure=args.structure)
+            story = build_story(engine, [g.lower() for g in args.genres], structure=args.structure, focus=args.focus, format=args.format, ending=args.ending)
             story["id"], story["created"] = None, story["created"][:10]     # (a sample is not saved)
             stories.append(store.story_json(story))
         emit(stories)
         return
-    sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n, structure=args.structure)
+    sample(Engine(seed=args.seed, user_dir=paths.HOME), args.genres, args.n, structure=args.structure, focus=args.focus, format=args.format, ending=args.ending)
 
 def cmd_report(args):
     print(ratings_mod.format_report(get_ratings(), args.n))
@@ -522,8 +529,11 @@ def main(argv=None):
     p.add_argument("-n", type=int, default=5, help="how many stories (default 5)")
     p.add_argument("--seed", type=int, help="make the run repeatable")
     p.add_argument("--json", action="store_true", help="print the stories as a JSON list")
-    p.add_argument("--structure", help="force a story structure (story-spine, three-act, kishotenketsu); "
-                                       "by default each story gets one at random")
+    p.add_argument("--structure", help="force a story structure (story-spine, three-act, kishotenketsu, save-the-cat, heros-journey, seven-point, "
+                                       "freytag, single-moment, circular, in-medias-res...); by default each story gets one at random")
+    p.add_argument("--focus", help="who or what the story is about: one (default), two, ensemble, place or none")
+    p.add_argument("--ending", help="how the story should end: any (default), triumph, bittersweet, tragic or open")
+    p.add_argument("--format", help="flash, short-story, novel, feature-film or short-film (a random structure is one that fits it)")
     p = sub.add_parser("report", help="the worst-rated lines and the frames that produced them")
     p.add_argument("-n", type=int, default=10, help="how many of each (default 10)")
     from . import cli_world

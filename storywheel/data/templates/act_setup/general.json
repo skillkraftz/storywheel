@@ -19,6 +19,13 @@
     {
       "text": "In {place}, {first}, a {trait} {job}, kept {THING} {HIDING} and wished for {PRIZE:!inner}.",
       "tags": ["fairy tale"]
-    }
+    },
+    "In {place}, {THING} lay {HIDING}, and nobody spoke of {TOPIC}.",
+    "{place} kept its secrets: {TOPIC}, and {THING} {HIDING}.",
+    "The {season} came to {place}, and {SOMEONE} {ACT_PLACE:mundane} {landmark} {MANNER}.",
+    "Everyone in {place} knew about {TOPIC}, and nobody mentioned {THING}.",
+    "At {landmark}, {SOMEONE} waited {MANNER}, and {place} held its breath.",
+    "{CLOSE} {ACT_PLACE:mundane} {landmark} {MANNER} while {place} slept.",
+    "{place} in {season}: {landmark}, {THING} {HIDING}, and {FEELING} everywhere."
   ]
 }

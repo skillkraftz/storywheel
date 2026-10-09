@@ -13,7 +13,7 @@ import copy
 import random
 import re
 
-from . import formats, promote, store, structures, universe_atoms, vault
+from . import endings, focus, formats, promote, store, structures, universe_atoms, vault
 from . import ratings as R
 from . import threads as T
 from .refs import carry_threads, inherit, reroll_field, substitute, with_field
@@ -114,10 +114,22 @@ class Session:
         return True
 
     def _advance(self):
-        if self.i + 1 >= len(self.steps):
+        nxt = self.i + 1
+        if nxt >= len(self.steps):
             self.done = True
+        elif self._no_protagonist(nxt):
+            self.note(f"This story's focus is {focus.get(focus.of_draft(self.story)).label.lower()}: it has no protagonist, so that step was skipped "
+                      "(b goes back to it, and F or the focus field changes the focus).")
+            self.story["step"] = max(self.story["step"], nxt + 1)
+            self.i = nxt
+            self._advance()
         else:
-            self.enter(self.i + 1)
+            self.enter(nxt)
+
+    def _no_protagonist(self, i):
+        """Is step i the Protagonist step of a story whose focus is not a person (and which has nothing kept there)?"""
+        return (self.steps[i].key == "protagonist" and not focus.is_person(focus.of_draft(self.story))
+                and not self.story["kept"].get("protagonist"))
 
     def skip(self):
         step, story = self.step, self.story
@@ -172,6 +184,9 @@ class Session:
 
     def reroll_field(self, field):
         step, cand = self.step, self.cand
+        if step.key == "genre" and field in ("focus", "ending"):
+            self.note(f"The {field} is picked, not rolled: choose it from the list (e, or a click on it).")
+            return
         self._add(self._fresh(lambda: reroll_field(step, self.engine, self.story, cand, field)))
 
     # --- repeatable beats (a Story Spine's "Because of that", the Three-Act's rising action) --------------------------------------------------
@@ -302,6 +317,44 @@ class Session:
         """A brand-new draft that has not been asked its format yet (the Wheel asks first, before anything is rolled or kept)."""
         return "format" not in self.story and not self.story["kept"] and not self.story.get("step")
 
+    def set_focus(self, key):
+        """Choose what the story is about (focus.py). A place or no one means no protagonist: the step is skipped and the fallback subject
+        stands in; what was kept on the Protagonist step is set aside, not deleted."""
+        key = focus.find(key)
+        if key is None:
+            return False
+        self.story["focus"] = key
+        label = focus.get(key).label
+        if self.step.key == "genre":
+            self._add(with_field(self.cand, "focus", label, src="edited"))
+        kept = self.story["kept"].get("genre")
+        if kept is not None:
+            kept["focus"] = label
+        pro = self.story["kept"].get("protagonist")
+        if not focus.is_person(key):
+            self.note(f"Focus: {label.lower()}. There is no protagonist: the Protagonist step is skipped" +
+                      (", and what you kept there is set aside (it comes back if the focus does)." if pro else "."))
+        elif key in ("two", "ensemble") and pro and not (pro.get("partner") or pro.get("company")):
+            self.note(f"Focus: {label.lower()}. Roll the Protagonist step again to make the {'partner' if key == 'two' else 'company'}.")
+        return True
+
+    def set_ending(self, key):
+        """Choose how the story should end (endings.py). It only steers climax and resolution frames that carry an ending, so a body already
+        kept keeps its beats: the note says which to reroll."""
+        key = endings.find(key)
+        if key is None:
+            return False
+        self.story["ending"] = key
+        label = endings.get(key).label
+        if self.step.key == "genre":
+            self._add(with_field(self.cand, "ending", label, src="edited"))
+        kept = self.story["kept"].get("genre")
+        if kept is not None:
+            kept["ending"] = label
+        if self.story["kept"].get("spine") and key != endings.DEFAULT:
+            self.note(f"Ending: {label.lower()}. The story body you kept was written before this; reroll its climax and resolution beats (f) to match.")
+        return True
+
     def set_format(self, key):
         """Choose the draft's format. On the structure step the structure is rolled again among those that fit when the one showing doesn't;
         on any other step the draft's kept structure is swapped for the format's default when it no longer fits (said plainly)."""
@@ -343,6 +396,18 @@ class Session:
 
     def edit_field(self, field, text):
         text = text.strip()
+        if text and self.step.key == "genre" and field == "ending":
+            key = endings.find(text)
+            if key is None:
+                self.note(f"'{text}' is not an ending. Choose one: " + ", ".join(e.label for e in endings.ENDINGS) + ".")
+                return False
+            return self.set_ending(key)
+        if text and self.step.key == "genre" and field == "focus":
+            key = focus.find(text)
+            if key is None:
+                self.note(f"'{text}' is not a focus. Choose one: " + ", ".join(f.label for f in focus.FOCUSES) + ".")
+                return False
+            return self.set_focus(key)
         if text and self.step.key == "structure":
             fixed = self.structure_fields(dict(self.fields, **{field: text}))
             if fixed is None:
@@ -361,6 +426,20 @@ class Session:
 
     def replace_fields(self, new):
         """The whole item rewritten (in $EDITOR, or by hand): it joins the history."""
+        if self.step.key == "genre" and new.get("ending") is not None:
+            key = endings.find(new["ending"])
+            if key is None:
+                self.note(f"'{new['ending']}' is not an ending. Choose one: " + ", ".join(e.label for e in endings.ENDINGS) + ".")
+                return False
+            new = dict(new, ending=endings.get(key).label)
+            self.story["ending"] = key
+        if self.step.key == "genre" and new.get("focus") is not None:
+            key = focus.find(new["focus"])
+            if key is None:
+                self.note(f"'{new['focus']}' is not a focus. Choose one: " + ", ".join(f.label for f in focus.FOCUSES) + ".")
+                return False
+            new = dict(new, focus=focus.get(key).label)
+            self.story["focus"] = key
         if self.step.key == "structure":
             new = self.structure_fields(new)
             if new is None:
@@ -443,6 +522,11 @@ class Session:
         story, step, i, cand = self.story, self.step, self.i, self.cand
         old = story["kept"].get(step.key)
         new = public(cand)
+        if step.key == "genre":                                           # (the focus is the draft's; an older candidate may lack it)
+            story["focus"] = focus.find(new.get("focus")) or focus.of_draft(story)
+            new["focus"] = focus.get(story["focus"]).label
+            story["ending"] = endings.find(new.get("ending")) or endings.of_draft(story)
+            new["ending"] = endings.get(story["ending"]).label
         if step.key == "structure":
             fixed = self.structure_fields(new)
             if fixed is None:

@@ -1,6 +1,28 @@
 {
-  "_note": "Act III: the resolution. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
+  "_note": "Act III: the resolution. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before. An entry's \"ending\" (a name or a list of triumph, bittersweet, tragic, open) is for those endings only; an untagged entry fits any (endings.py).",
   "slot": "act_resolution",
   "tags": ["general"],
-  "entries": ["In the end, {first} had {PRIZE:!inner} but kept {VALUE}.", "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.", "{first} learned {need}, and {place} forgot {TOPIC}.", "The {rival:human} {HABIT_PERSON} {first} now, and {THING} {stays|stay} {HIDING}.", "{first} {HABIT_THING:stows} {the_thing} {HIDING}, and {HABIT_PERSON} {the_someone}.", "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "{first} has never found {PRIZE:!inner}, but {HABIT_PERSON} {CLOSE:human} every {season}."]
+  "entries": [
+    {"text": "In the end, {first} had {PRIZE:!inner} but kept {VALUE}.", "ending": ["triumph", "bittersweet"]},
+    "{place} changed: {first} {HABIT_PLACE} {landmark} and {HABIT_PERSON} {CLOSE}.",
+    {"text": "{first} learned {need}, and {place} forgot {TOPIC}.", "ending": ["triumph", "bittersweet"]},
+    "The {rival:human} {HABIT_PERSON} {first} now, and {THING} {stays|stay} {HIDING}.",
+    "{first} {HABIT_THING:stows} {the_thing} {HIDING}, and {HABIT_PERSON} {the_someone}.",
+    {"text": "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "ending": ["bittersweet", "tragic"]},
+    {"text": "{first} has never found {PRIZE:!inner}, but {HABIT_PERSON} {CLOSE:human} every {season}.", "ending": ["bittersweet", "tragic"]},
+    {"text": "{first} had {PRIZE:!inner} and {VALUE} too, and {place} knew it.", "ending": ["triumph"]},
+    {"text": "{place} threw {first} a feast, and {CLOSE:human} sat beside {first}.", "ending": ["triumph"]},
+    {"text": "Nobody in {place} doubted {first} again.", "ending": ["triumph"]},
+    {"text": "{place} never forgave {first}, and {first} {HABIT_PLACE} {landmark} alone.", "ending": ["tragic"]},
+    {"text": "{first} left {place} for good, and {CLOSE:human} did not write.", "ending": ["tragic"]},
+    {"text": "{VALUE} was never spoken of in {place} again, and {first} {HABIT_THING:stows} {THING} {HIDING}.", "ending": ["tragic"]},
+    {"text": "{place} remembered {first} for {VICE}, and {CLOSE:human} never visited.", "ending": ["tragic"]},
+    {"text": "{first} had {PRIZE:!inner}, and {HABIT_PERSON} {CLOSE:human} every {season} to remember {LOSS}.", "ending": ["bittersweet"]},
+    {"text": "{first} {HABIT_PLACE} {landmark} every {season}, and {place} was the poorer for {LOSS}.", "ending": ["bittersweet"]},
+    {"text": "{first} kept {VALUE}, and {place} never forgot what it cost.", "ending": ["bittersweet"]},
+    {"text": "{first} {HABIT_PLACE} {landmark} to see if {SOMEONE} will come.", "ending": ["open"]},
+    {"text": "Nobody in {place} knew what became of {THING}, and {first} was not saying.", "ending": ["open"]},
+    {"text": "{first} kept {THING} {HIDING}, and {place} still asked about {TOPIC}.", "ending": ["open"]},
+    {"text": "{place} was still asking about {TOPIC}, and {first} still {HABIT_PLACE} {landmark}.", "ending": ["open"]}
+  ]
 }

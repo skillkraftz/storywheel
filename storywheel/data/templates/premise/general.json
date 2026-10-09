@@ -30,6 +30,12 @@
     {
       "text": "{SOMEONE:magic,!plural} offers {first}, a {trait} {job}, {PRIZE:!inner} in exchange for {THING}.",
       "tags": ["fairy tale"]
-    }
+    },
+    "When {SOMEONE:!plural} arrives in {place} with {THING}, nothing stays hidden for long.",
+    "{place} has kept {TOPIC} quiet for years, until {THING} turns up {HIDING}.",
+    "After {DISASTER:strikes} hit {place}, {SOMEONE} {ACT_THING:stows} {THING} {HIDING}.",
+    "In {place}, {landmark} holds {THING} {HIDING}, and {SOMEONE} wants it.",
+    "{place} waits through the {season} for {SOMEONE:!plural}, who is bringing {THING}.",
+    "Everything in {place} turns on {THING}, and {TOPIC} is the least of it."
   ]
 }

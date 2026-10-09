@@ -51,10 +51,11 @@ SLOT_FEATURES = {
 
 
 class Entry:
-    __slots__ = ("text", "tags", "kind", "features", "subject", "object")
+    __slots__ = ("text", "tags", "kind", "features", "subject", "object", "ending")
 
-    def __init__(self, text, tags=(), kind=None, features=None, subject=(), object=()):
+    def __init__(self, text, tags=(), kind=None, features=None, subject=(), object=(), ending=()):
         self.text = text
+        self.ending = tuple(norm_tag(x) for x in ending)       # a template for these endings only (endings.py); empty: fits any
         self.tags = tuple(norm_tag(t) for t in tags)
         self.kind = kind                      # object, person, place, creature or idea; None if unsaid
         self.features = None if features is None else tuple(features)   # what it is; None = unknown (generated)
@@ -108,10 +109,17 @@ def _read_list(path, root, is_template=False):
             kind = raw.get("kind", list_kind)
             if kind is not None and kind not in KINDS:
                 raise DataError(f'{path}: entry {raw["text"]!r} has kind {kind!r}; use one of {", ".join(KINDS)}')
+            ending = raw.get("ending", [])
+            ending = [ending] if isinstance(ending, str) else list(ending)
+            from . import endings
+            unknown = [x for x in ending if str(x).strip().lower() not in endings.NAMES]
+            if unknown:
+                raise DataError(f'{path}: entry {raw["text"]!r} has ending {unknown[0]!r}; use one of {", ".join(endings.NAMES)}')
             entries.append(Entry(raw["text"], raw.get("tags", []), kind,
                                  raw.get("features", list_features),
                                  list(list_subject) + list(raw.get("subject", [])),     # a list's requirements
-                                 list(list_object) + list(raw.get("object", []))))      # add to the entry's own
+                                 list(list_object) + list(raw.get("object", [])),       # add to the entry's own
+                                 ending))
         else:
             raise DataError(f'{path}: bad entry {raw!r} (use "text" or {{"text": ..., "tags": [...]}})')
     if not entries and not generator:

@@ -29,6 +29,12 @@
     {
       "text": "beyond the wood, in {place}, lived a {trait} {job} named {first}, who carried {FEELING}",
       "tags": ["fairy tale"]
-    }
+    },
+    "{landmark} stood in {place}, and {THING} lay {HIDING}",
+    "{place} had {landmark} and a secret: {TOPIC}",
+    "in {place}, {landmark} stood quiet, and {THING} lay {HIDING}",
+    "the {season} came slowly to {place}, and {THING} lay {HIDING}",
+    "in {place}, {SOMEONE} watched {landmark} {MANNER}, and nobody asked about {TOPIC}",
+    "{place} lay quiet under the {season}, with {THING} {HIDING} and {FEELING} in every house"
   ]
 }

@@ -1449,8 +1449,8 @@ class MainScreen(KeptScreen, Screen):
         return None if self.session.step.single else names[min(index, len(names) - 1)]
 
     def on_card_list_field(self, event):
-        if event.button == 3 or (self.session.step.key == "structure" and self.card_field() == "format"):
-            self.action_edit()                      # (a format is picked, never rolled: a click on it opens the list)
+        if event.button == 3 or self.picked_field():
+            self.action_edit()                      # (a format or a focus is picked, never rolled: a click on it opens the list)
         else:
             self.action_reroll_field()
 
@@ -1549,7 +1549,7 @@ class MainScreen(KeptScreen, Screen):
         if field is None:
             self.session.roll()
             self.after("This step has one field, so f rolls the whole thing.")
-        elif self.session.step.key == "structure" and field == "format":
+        elif self.picked_field():
             self.action_edit()
         else:
             self.session.reroll_field(field)
@@ -1565,6 +1565,16 @@ class MainScreen(KeptScreen, Screen):
         field = self.card_field() or s.field_names[0]
         if s.step.key == "structure":
             return self.pick_structure_field(field)
+        if s.step.key == "genre" and field == "ending":
+            from . import endings
+            self.app.push_screen(ChoiceScreen("How should it end?  " + endings.get(endings.of_draft(s.story)).hint, endings.choices(),
+                                              start=endings.of_draft(s.story)), self._ending_picked)
+            return
+        if s.step.key == "genre" and field == "focus":
+            from . import focus
+            self.app.push_screen(ChoiceScreen("What is the story about?  " + focus.get(focus.of_draft(s.story)).hint, focus.choices(),
+                                              start=focus.of_draft(s.story)), self._focus_picked)
+            return
         self.app.push_screen(EditScreen(f"Edit {field.replace('_', ' ')}", {field: s.cand[field]}),
                              lambda out: self._edited(field, out))
 
@@ -1579,6 +1589,22 @@ class MainScreen(KeptScreen, Screen):
             options = [(f"{st.label}: {st.blurb}", st.label) for st in formats.structures_for(key)]
             self.app.push_screen(ChoiceScreen(f"Structure for a {formats.get(key).label.lower()}", options),
                                  lambda label: self._edited("structure", {"structure": label}) if label else None)
+
+    def picked_field(self):
+        """Is the field under the cursor one that is picked from a list rather than rolled (the format, the focus)?"""
+        s = self.session
+        field = self.card_field()
+        return (s.step.key == "structure" and field == "format") or (s.step.key == "genre" and field in ("focus", "ending"))
+
+    def _ending_picked(self, key):
+        if key and self.session.set_ending(key):
+            self.after()
+            self.card.highlighted = self.session.field_names.index("ending")
+
+    def _focus_picked(self, key):
+        if key and self.session.set_focus(key):
+            self.after()
+            self.card.highlighted = self.session.field_names.index("focus")
 
     def _format_picked(self, key):
         if key and self.session.set_format(key):

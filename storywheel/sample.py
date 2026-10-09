@@ -13,12 +13,30 @@ from .text import fix_articles
 from .threads import describe
 
 
-def build_story(engine, genres, exclude_tags=(), structure=None):
+def build_story(engine, genres, exclude_tags=(), structure=None, focus=None, format=None, ending=None):
     """A complete story for the given genres, every step rolled and kept once.
-    The structure is picked at random unless one is given (by name or label)."""
+    The structure is picked at random unless one is given (by name or label); a `focus` (focus.py: one, two, ensemble, place, none) and a
+    `format` (formats.py) may be given too. A story with no protagonist has no Protagonist step."""
+    from . import endings as endings_mod, focus as focus_mod, formats as formats_mod
     story = store.new_story()
+    if ending:
+        key = endings_mod.find(ending)
+        if key is None:
+            raise ValueError(f"No ending called '{ending}'. Known: " + ", ".join(e.key for e in endings_mod.ENDINGS))
+        story["ending"] = key
+    if focus:
+        key = focus_mod.find(focus)
+        if key is None:
+            raise ValueError(f"No focus called '{focus}'. Known: " + ", ".join(f.key for f in focus_mod.FOCUSES))
+        story["focus"] = key
+    if format:
+        key = formats_mod.find(format)
+        if key is None:
+            raise ValueError(f"No format called '{format}'. Known: " + ", ".join(f.key for f in formats_mod.FORMATS))
+        story["format"] = key
     steps = steps_for(story)
-    story["kept"]["genre"] = {"genre": " / ".join(genres), "mood": ""}
+    story["kept"]["genre"] = {"genre": " / ".join(genres), "mood": "", "focus": focus_mod.get(focus_mod.of_draft(story)).label,
+                              "ending": endings_mod.get(endings_mod.of_draft(story)).label}
     sync_base(story)
     story["mix"]["exclude_tags"] = [t.lower() for t in exclude_tags]
     story["kept"]["genre"]["mood"] = roll_mood(engine, story, genres)
@@ -31,6 +49,8 @@ def build_story(engine, genres, exclude_tags=(), structure=None):
     else:
         story["kept"]["structure"] = {"structure": steps[1].roll(engine, story, fresh=False)["structure"]}
     for step in steps_for(story)[2:]:
+        if step.key == "protagonist" and not focus_mod.is_person(focus_mod.of_draft(story)):
+            continue
         cand = step.roll(engine, story, fresh=False)
         for k, v in cand.get("_made", {}).items():      # what keeping does
             story["seeds"].setdefault(k, v)
@@ -52,7 +72,7 @@ def render(story, number=None, width=78):
     def wrap(text, indent="    "):
         return textwrap.fill(text, width, initial_indent=indent, subsequent_indent=" " * len(indent))
 
-    p, s = k["protagonist"], k["setting"]
+    p, s = k.get("protagonist"), k["setting"]
     shape = structures.get((k.get("structure") or {}).get("structure"))
     head = f"{number}. " if number else ""
     out = [f"{head}{k['title']['title'].upper()}   (motif: {k['title']['motif']})",
@@ -60,7 +80,9 @@ def render(story, number=None, width=78):
            "",
            wrap(fix_articles(f"{p['name']}, {p['age']}, a {p['trait']} {p['job']}. ")
                 + f"Wants {p['want']}. Needs {p['need']}. Flaw: {p['flaw']}. "
-                f"Secret: {p['secret']}. Rival: {_with_article(p['rival'])}.", "  * "),
+                f"Secret: {p['secret']}. Rival: {_with_article(p['rival'])}." + (f" Partner: {p['partner']}." if p.get("partner") else "")
+                + (f" Company: {p['company']}." if p.get("company") else ""), "  * ") if p else
+           wrap(f"No protagonist: {k['genre'].get('focus', 'a story about a place').lower()}.", "  * "),
            wrap(f"{s['place']} · {s['era']} · {s['season']}. Landmark: {s['landmark']}. "
                 f"Rumor: {s['rumor']}.", "  * "),
            "",
@@ -75,13 +97,13 @@ def render(story, number=None, width=78):
     return "\n".join(out)
 
 
-def sample(engine, genres, n, out=print, structure=None):
+def sample(engine, genres, n, out=print, structure=None, focus=None, format=None, ending=None):
     unknown = [g for g in genres if g.lower() not in engine.library.profiles]
     if unknown:
         out(f"(No profile for {', '.join(unknown)}: treated as a plain tag. "
             f"Known genres: {', '.join(engine.library.genre_names)})\n")
     for i in range(1, n + 1):
-        out(render(build_story(engine, [g.lower() for g in genres], structure=structure), i))
+        out(render(build_story(engine, [g.lower() for g in genres], structure=structure, focus=focus, format=format, ending=ending), i))
         out("")
     for note in engine.take_notices():
         out(f"Note: {note}")

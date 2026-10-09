@@ -1,6 +1,24 @@
 {
-  "_note": "Ketsu: reconcile and show what it all meant. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before.",
+  "_note": "Ketsu: reconcile and show what it all meant. Frames. Templates. {UPPERCASE} slots draw a fresh atom each time; {lowercase} slots are the story's own fields ({first}, {place}, {want}...). {the_thing}, {the_someone}, {the_message}, {the_disaster} reuse something an earlier beat introduced: favored when it exists, never used when it doesn't. Tagged entries are favored in those genres. {SLOT:feature} requires a feature (see frames.py); verbs bind to the subject and object around them; {was}/{is} agree with the noun before. An entry's \"ending\" (a name or a list of triumph, bittersweet, tragic, open) is for those endings only; an untagged entry fits any (endings.py).",
   "slot": "ketsu",
   "tags": ["general"],
-  "entries": ["So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.", "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.", "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.", "By {season}, {first} {HABIT_PERSON} {CLOSE} and {HABIT_THING:stows} {THING} {HIDING}.", "{first} {HABIT_THING:stows} {the_thing} {HIDING}, and {HABIT_PERSON} {the_someone}.", "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "{first} wanted {want}, and found {VALUE} instead."]
+  "entries": [
+    {"text": "So {first} {ACT_PERSON:gentle} {SOMEONE:!threatening} and {ACT_PLACE:mundane} {landmark}, and {place} felt new.", "ending": ["triumph", "bittersweet"]},
+    {"text": "In the end, {first} understood {TOPIC}, and {VALUE} mattered more than {PRIZE:!inner}.", "ending": ["triumph", "bittersweet"]},
+    "{first} and {SOMEONE:!threatening} {ACT_THING} {THING} together {MANNER}, and the {season} went on.",
+    "By {season}, {first} {HABIT_PERSON} {CLOSE} and {HABIT_THING:stows} {THING} {HIDING}.",
+    "{first} {HABIT_THING:stows} {the_thing} {HIDING}, and {HABIT_PERSON} {the_someone}.",
+    {"text": "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "ending": ["bittersweet"]},
+    {"text": "{first} wanted {want}, and found {VALUE} instead.", "ending": ["bittersweet"]},
+    {"text": "{first} and {CLOSE:human} laughed about {TOPIC} at {landmark}, and the {season} felt long and kind.", "ending": ["triumph"]},
+    {"text": "{place} welcomed {first} back, and {VALUE} was enough.", "ending": ["triumph"]},
+    {"text": "{first} learned to live with {LOSS}, and {HABIT_PERSON} {CLOSE:human} every {season}.", "ending": ["bittersweet"]},
+    {"text": "{first} understood {TOPIC} too late to change it, and was glad to know.", "ending": ["bittersweet"]},
+    {"text": "{first} understood {TOPIC} at last, and there was no one left to tell.", "ending": ["tragic"]},
+    {"text": "{place} went on without {first}, and {landmark} grew quiet.", "ending": ["tragic"]},
+    {"text": "The {season} came again, and {first} sat at {landmark} alone, remembering {LOSS}.", "ending": ["tragic"]},
+    {"text": "{first} looked at {landmark} a long while, and did not say what {first} had decided.", "ending": ["open"]},
+    {"text": "The {season} went on in {place}, and {TOPIC} was left unsaid.", "ending": ["open"]},
+    {"text": "{first} {HABIT_PLACE} {landmark} and waits for {SOMEONE}.", "ending": ["open"]}
+  ]
 }

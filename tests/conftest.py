@@ -144,6 +144,12 @@ SLOW_TESTS = (                                   # (parts of node ids) each take
     "test_layout_stability.py::test_focusing_any",
     "test_settings_mode.py::test_the_mode_keys_leave_settings",
     "test_words.py::test_the_part_of_speech",
+    "test_shapes.py::test_the_new_slots_have_general_frames_only",                  # (batch 21: hundreds of stories across genres, structures and focuses)
+    "test_shapes.py::test_the_circular_story_comes_back",
+    "test_focus.py::test_a_story_with_no_protagonist_has_a_subject",
+    "test_focus.py::test_the_titles_of_a_story_with_no_protagonist",
+    "test_focus.py::test_a_possessive_of_the_subject",
+    "test_endings.py::test_every_ending_reads",
 )
 
 

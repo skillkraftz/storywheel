@@ -131,7 +131,9 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
         items.append(item)
         return item
 
-    pro = kept.get("protagonist")
+    from . import focus
+    person = focus.is_person(focus.of_draft(draft))
+    pro = kept.get("protagonist") if person else None                 # (a story about a place or no one makes no protagonist)
     if pro:
         rival_key = None
         if pro.get("rival"):
@@ -140,8 +142,13 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
         fields = {k: v for k, v in public(pro).items()}
         fields["role"] = "protagonist"
         fields.pop("rival", None)
+        partner, company = fields.pop("partner", ""), fields.pop("company", "")
         add(Item("protagonist", "character", pro.get("name", ""), fields, why="protagonist",
                  links={"rival": rival_key} if rival_key else {}))
+        for text, role, why in ((partner, "protagonist", "second lead"),) + tuple((c, "ally", "ensemble") for c in company.split(";")):
+            name, _comma, job = (text or "").partition(",")
+            if name.strip():
+                add(Item(f"{why}:{name.strip()}", "character", name.strip(), {"role": role, "job": job.strip()}, why=why))
     setting = kept.get("setting")
     if setting:
         town = add(Item("town", "place", setting.get("place", ""),
