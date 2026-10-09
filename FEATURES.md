@@ -58,6 +58,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | Past stories: New | button, or `N` anywhere | New draft; asks which universe it belongs to | test_drafts.py, test_universes_wheel.py | works | P |
 | Past stories: Del | button or `d` in the list | Delete a draft (asks; moves it to `<home>/.trash`, and says where) | test_ui_pass.py, test_polish1.py | works (was ISSUES #8) | P |
 | Past stories: Promote | button or `P` in the list | Bring a past draft into a universe | test_promote_ui.py | works | P |
+| Promotion preview: Also start as | Enter or click on a format row | Tick other formats; each makes a sibling version in the same family; entities are made once | test_versions_wheel.py | works | P |
 | Past stories: Use protagonist / Use setting | buttons, `p` / `s` in the list | Ask: use that draft's protagonist / setting in the draft you are on (a new candidate, tagged "from a past story"; `k` keeps it), or send it into a universe you choose | test_polish2.py, test_polish1.py, test_universes_wheel.py (`test_send_a_past_storys_protagonist_to_a_chosen_universe`) | works (was ISSUES #13) | P |
 
 ### Main screen: the card (middle)
@@ -136,6 +137,9 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | +Story | button, `T` | Story form: title, format, structure, genres, target | test_storyform.py, test_builder_layout.py | works | P |
 | Write | button, `w` | Open the story in the Writer | test_switching.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | R |
 | Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | P |
+| New version | button, `v` (in the list or anywhere) | Form: title, format, target and a checklist of what to copy; makes a sibling story in the same universe and family | test_versions_builder.py | works | P |
+| A family in the Stories list | list | One title row, then a row per format with its words or pages (a story with no versions is one plain row) | test_versions_builder.py | works | P |
+| Next / previous version | `]` / `[` | Move between the versions of the open story | test_versions_builder.py | works | P |
 | Backups… | button, `b` in the list | List and restore backups (asks; current version kept aside) | test_backups.py | works | P |
 | Format, structure… | `m` (in the list or anywhere) | Story form for the open story | test_storyform.py | works | P |
 | Delete story | `d` in the Stories list | Delete a story (asks; to .trash) | test_builder.py | works | R |
@@ -339,6 +343,9 @@ All run in the scratch library unless marked R.
 
 | Command | What it is for | Test | Status | Checked |
 |---|---|---|---|---|
+| `story version UNIVERSE/STORY --format KEY [--title T] [--copy outline,notes,seed,genres,structure,manuscript\|none]` | Make another version of a story in another format | test_versions.py | works | C |
+| `story show UNIVERSE/STORY --json` | Includes `family`, `siblings` (slugs) and `versions` | test_versions.py | works | C |
+| `promote N --also short-film,novel` | Promote a draft and also start it in other formats | test_versions.py | works | C |
 | `storywheel` | Reopen where you left off (Wheel if new) | test_switching.py | works | R |
 | `storywheel --plain` | The plain prompt Wheel | test_tui.py | works | C |
 | `--version` | The version | test_setup_update.py | works | C |

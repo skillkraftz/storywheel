@@ -421,3 +421,21 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   menu keys are 1-9, then letters (not j, k, q), then capitals (`sw.menu.hotkeys`). `post-update` is dispatched before argparse so `--help` does not list
   it; `export` is an alias of `draft-export`; `universe` is retired. The generator-content guide lives in `docs/generator.md` (checked in batch 18, not
   re-checked); the README points at `docs/manual.md`.
+
+- Versions (branch batch-20-versions, 0.22.0): a version is a separate story folder in the same universe. Siblings share a `family` id in
+  story.md (the first story's slug, written into the source story when its first version is made) and a `version` number (the first story is 1; each
+  new one the next). Content is COPIED, never synced. Stories with no `family` have no siblings and behave exactly as before; a family is only an id,
+  so renaming or deleting one version never touches another (a delete goes to .trash; the family survives the first story's deletion).
+  `Story` now compares and hashes by its path. The copy choices are `outline` (non-beat sections), `notes`, `seed`, `genres`, `structure` (the beat
+  sections and `structure`/`repeats` in the meta) and `manuscript`; all but the manuscript are on by default. When the copied structure doesn't fit the
+  new format, its sections are copied as they are AND the new format's default structure is added with blank beats and becomes the active `structure`,
+  so nothing is lost and the writer maps beats by hand. The slug is the title's slug, with the format key added when taken (then numbered). Manuscript
+  copies are always a "rough start", said in the status line, in a note at the top of a new script.fountain and in the CLI notes: prose to prose copies
+  the files; prose to script writes every paragraph as Fountain action with a forced heading (`.NEW SCENE`, or the break's title in capitals) for each
+  scene break (`versions.prose_to_fountain`, which the prose `.fountain` export now uses too, so paragraphs are separated by blank lines); script to
+  prose makes each heading a named scene marker, action a paragraph and a speech `"Words," Name said.` (transitions, parentheticals, sections and
+  synopses dropped). In the Builder's list a family is a disabled title row with one row per format (short labels "Short story", "Novel",
+  "Feature film", "Short film"; "N words" or "~N pages"); `v` opens the form (title, format, target, copy checklist), `]`/`[` move between versions.
+  Wheel promotion's preview lists the other formats as ticks (`plan.also`); entities are created once and each tick calls `versions.new_version` on
+  the new story. The Writer's status line and window title read "Title (format)"; a long title is shortened before the format is. (The "Batch 20"
+  entries above are the earlier numbering; this is a later piece of work on the branch of that name.)

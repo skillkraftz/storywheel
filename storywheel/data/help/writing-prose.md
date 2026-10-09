@@ -15,4 +15,4 @@ Red wavy means not a word; blue a lowercase letter where a capital belongs; pink
 ## The scene sidebar
 The sidebar key (see the Keys tab): Enter jumps, a adds a scene, r renames, J and K move it down and up, q closes.
 ## Words and goals
-The status line shows the words in this scene, in the story against its target length (set on the story form: m in the Builder), and written today against your daily goal.
+The status line starts with the story's title and its format, such as "Cold Coffee (short story)", so you always know which version of a story you are in. It shows the words in this scene, in the story against its target length (set on the story form: m in the Builder), and written today against your daily goal.

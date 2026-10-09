@@ -2,6 +2,22 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.22.0 — Versions: the same story in several formats
+
+- A story can have versions: separate stories in the same universe, in different formats (a short story AND a screenplay), sharing a `family` id
+  in story.md. Content is copied, not synced. New module `versions.py`; the design is in docs/decisions.md.
+- Builder: **v** (and the New version button) opens the story form, prefilled, with a checklist of what to copy (outline sections, notes, seed.json,
+  genres, structure; the manuscript is off by default) and a note that characters, places, things, groups and notes are the universe's and already
+  shared. The stories list shows a family under one title with a row per format and its words or pages; **]** and **[** move between versions.
+- A structure that doesn't fit the new format is copied as it is, and the new format's structure is added with blank beats.
+- The manuscript can be copied as a rough start: prose to prose copies the files; prose to a screenplay writes the paragraphs as Fountain action
+  (shared with the prose `.fountain` export); a screenplay to prose turns headings into named scenes and action and dialogue into paragraphs.
+- Wheel promotion: the preview offers "Also start as" for the other formats; each ticked format makes a sibling version, and the entities are made once.
+- Writer: the status line and the window title show the title and the format ("Cold Coffee (feature film)").
+- Command line: `story version UNIVERSE/STORY --format KEY [--title T] [--copy ...]`; `story show --json` has `family`, `siblings` and `versions`;
+  `promote --also FORMATS`.
+- Housekeeping: CLAUDE.md's decisions log moved to docs/decisions.md.
+
 ## 0.21.0 — Polish 2: ISSUES.md sections C, D and E (issues 16 to 36)
 
 - Tests and tools: the two polish-1 terminal tests pass on Neovim 0.11 and 0.12 (the test pty gets its size before Neovim starts and pyte no longer

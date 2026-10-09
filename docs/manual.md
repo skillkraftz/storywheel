@@ -178,6 +178,9 @@ When the idea is worth growing, bring it into a universe:
    (blank fields filled in, nothing overwritten) and making another. **p** promotes; Esc cancels and nothing is written.
 4. You land in the Builder with the new story open.
 
+The preview also has **Also start as**: tick other formats (short story, novel, screenplay as a feature film or a short film) and each one
+makes a second version of the story in the same universe, from the same outline. The characters, places and things are made once.
+
 A promoted draft stays in Past stories (marked ⇢) and becomes read-only in the Wheel, because the Builder now holds the real story.
 **C** makes an editable copy as a new draft.
 
@@ -279,6 +282,16 @@ own word lists in its `lists` folder; Words can add words to them.
   typewriter mode, invisibles, spellcheck and US/UK spelling, as choices like Settings. The first choice of each is "your default
   (X)", which stores nothing in the story, and a note beside each row says whether it follows your default or is this story's own;
   pick "your default" (or empty a number) to clear a story's own value. Ctrl+S or Save keeps the changes, Esc drops them.
+- **Versions:** **v** (or the New version button) makes the same story again in another format, say a screenplay of a short story. The form
+  has the title, the format, a target and a checklist of what to copy: outline sections, story notes, the Wheel draft it came from, genres,
+  structure and beats (all ticked) and the manuscript (not ticked). Characters, places, things, groups and notes belong to the universe, so
+  every version already shares them. What is ticked is copied once; after that the versions are separate, and editing one outline changes
+  nothing in the other. If the structure doesn't fit the new format its beats are copied as they are and the new format's structure is added
+  with blank beats, so you map the beats by hand. Copying the manuscript is always a **rough start**: prose to prose copies the files; prose to
+  a screenplay writes the paragraphs into script.fountain as action; a screenplay to prose makes each scene heading a named scene and the
+  action and dialogue paragraphs. The Stories list shows the versions of one story together under one title, a row for each format with its
+  words or pages; **]** and **[** move between them. `storywheel story version UNIVERSE/STORY --format KEY` does the same from the command line.
+  Renaming or deleting one version never touches the others.
 - **Scenes:** the Scenes tab lists them; Enter or a click opens the Writer at that scene; **+Scene** adds one at the end.
 - **A screenplay:** **P** writes script.fountain from the outline (a title page; each beat as a section and a synopsis, which never
   print). An existing script with scenes is never replaced.
@@ -361,7 +374,7 @@ screenplays." (Fixed: ISSUES #10.)
 
 ### The status line
 
-`The Last Clause · words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. It starts with the story's title (the whole title, shortened only when the window is too narrow), so you always know which story you are in. The target is the story's target
+`The Last Clause · words: in this scene 312 · in the story 4,120 / 5,000 words · 82% · today 640 / 500 words · 128%`. It starts with the story's title and its format, `The Last Clause (short story)` (the whole title, shortened only when the window is too narrow; the format stays), so you always know which story, and which version of it, you are in. The target is the story's target
 length (the story form, `m` in the Builder); the daily goal is in Settings > Goals. A screenplay shows `p. 12 of ~15` instead.
 
 ### The Writer menu: F12 or Alt+M

@@ -30,12 +30,15 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
   - The story form for the universe too (genre leanings, exclusions and boosts are still typed in a box with `s`).
   - Per-format default targets in Settings (today: 5,000 words, 80,000 words, 110 pages, 12 pages, in `formats.py`).
   - A help tab for the Wheel's current step (the step hint is on the card today).
+- **Versions from real use.** *Verify.* Try a short story and its screenplay side by side. Held back: a key in the Writer to jump to another
+  version; mapping beats between structures by hand in the Builder (today you copy text between the sections); "Also start as" in the plain prompt's
+  promotion (only the full-screen preview and `promote --also` have it); a "sync this outline into the other version" action (versions are copies on purpose).
 - **Screenplays from real use.** *Verify.* Batch 17 built a first usable version (Fountain in the Writer, the flip test, PDF/.fdx/.fountain
   export). Write a few pages and report what needs polish. Ideas held back from batch 17 to keep to its checklist:
   - Scene numbers on the page (Fountain `#12#` is parsed but not printed) for shooting scripts; revision colours, revision marks (`*` in the margin), locked pages.
   - Move scenes from the sidebar (today: cut and paste); a scene's synopsis shown in the sidebar.
   - Story words and Overused that understand Fountain (skip cues and headings); character speech counts per scene.
-  - A "screenplay" format profile for novels' adaptation: turn a prose story into Fountain action as a start (today the prose `.fountain` export does a rough version).
+  - Smarter prose-to-script conversion (versions copy prose as Fountain action with forced headings; recognising dialogue is not attempted).
   - Dual dialogue that breaks across pages (today the pair moves to the next page whole).
   - A tighter page estimate in the Writer (it uses the PDF's wrap widths but adds a flat 4% for the keep-together rules instead of applying them).
   - Title page fields beyond Title/Credit/Author/Source/Draft date/Contact (Notes, Copyright, WGA registration).
@@ -87,6 +90,9 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
 
 
 ## Done
+
+- **Versions (0.22.0):** the same story in several formats as sibling stories in one universe (New version, grouped list, `]`/`[`, Wheel promotion's
+  "Also start as", `story version`, rough manuscript conversions, the Writer showing title and format).
 
 Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 
