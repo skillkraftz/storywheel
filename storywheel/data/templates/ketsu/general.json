@@ -11,14 +11,14 @@
     {"text": "{place} still remembers {the_disaster}, and {first} {HABIT_PLACE} {landmark}.", "ending": ["bittersweet"]},
     {"text": "{first} wanted {want}, and found {VALUE} instead.", "ending": ["bittersweet"]},
     {"text": "{first} and {CLOSE:human} laughed about {TOPIC} at {landmark}, and the {season} felt long and kind.", "ending": ["triumph"]},
-    {"text": "{place} welcomed {first} back, and {VALUE} was enough.", "ending": ["triumph"]},
+    {"text": "{place} welcomed {first} back, and {VALUE} {was} enough.", "ending": ["triumph"]},
     {"text": "{first} learned to live with {LOSS}, and {HABIT_PERSON} {CLOSE:human} every {season}.", "ending": ["bittersweet"]},
     {"text": "{first} understood {TOPIC} too late, and was glad of {VALUE} anyway.", "ending": ["bittersweet"]},
-    {"text": "{first} understood {TOPIC} at last, but {CLOSE:human} was gone by then.", "ending": ["tragic"]},
-    {"text": "{place} went on without {first}, and {landmark} grew quiet.", "ending": ["tragic"]},
+    {"text": "{first} understood {TOPIC} at last, but {CLOSE:human} {was} gone by then.", "ending": ["tragic"]},
+    {"text": "{place} went on without {first}, and {SOMEONE} {ACT_PLACE:mundane} {landmark} {MANNER}.", "ending": ["tragic"]},
     {"text": "The {season} came again, and {first} sat at {landmark} alone, remembering {LOSS}.", "ending": ["tragic"]},
     {"text": "{first} watched {landmark} for hours, and told no one {TOPIC}.", "ending": ["open"]},
-    {"text": "The {season} went on in {place}, and {TOPIC} was left unsaid.", "ending": ["open"]},
+    {"text": "The {season} went on in {place}, and {TOPIC} {was} left unsaid.", "ending": ["open"]},
     {"text": "{first} {HABIT_PLACE} {landmark} and waits for {SOMEONE}.", "ending": ["open"]}
   ]
 }

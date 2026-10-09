@@ -880,7 +880,7 @@ class MainScreen(KeptScreen, Screen):
     def ask_format_first(self):
         """A brand-new draft asks what it is (Flash, Short story, Novel, Screenplay), starting on your default; Esc takes the default."""
         from . import formats
-        if not self.session.needs_format():
+        if not self.session.needs_format() or not formats.asks():
             return
         default = formats.global_default()
         self.app.push_screen(ChoiceScreen("What are you writing? (Esc takes " + formats.get(default).label.lower() + ")", formats.choices(), start=default),

@@ -108,7 +108,7 @@ def test_a_single_genre_draws_about_four_fifths_from_its_own_material(genre):
 
 @pytest.mark.parametrize("genre", GENRES)
 def test_the_voice_follows_in_verbs_and_abstractions(genre):
-    seen, flavor, trace = shares([genre])
+    seen, flavor, trace = shares([genre], stories=260)         # (batch 21: ten structures to roll among, so a slot like deadline is drawn less often per story)
     for slot in ("act_thing", "manner", "prize", "deadline", "vice", "value", "trait"):
         picks = [t for t in trace if t[0] == slot]
         assert len(picks) >= 60, (genre, slot)

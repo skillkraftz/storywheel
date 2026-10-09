@@ -210,7 +210,7 @@ have an `"opening"` ("Once upon a time, ") and a `"closing"` (default `"."`).
 
 **Reuse a slot before you write one.** The `act_*` slots are whole sentences with no opener (`act_setup`, `act_incident`, `act_turn`,
 `act_trials`, `act_midpoint`, `act_crisis`, `act_climax`, `act_resolution`), `ki`, `ketsu` and `ten` are quiet ones, and `theme`, `debate`,
-`reward`, `opening_image`, `echo` and `in_the_thick` came with batch 21. Name them in the beats of the new structure, as `feature-film.json`
+`reward`, `mentor`, `opening_image`, `echo` and `in_the_thick` came with batch 21. Name them in the beats of the new structure, as `feature-film.json`
 and `save-the-cat.json` do. Beat keys must be unique across every structure (prefix them: `stc_`, `hj_`). Write a new slot only when nothing
 fits, and give it a `general.json` (`"tags": ["general"]`): a genre with no file of its own for a slot falls back to the general frames, so
 every genre renders. Add genre files later, as for any slot.

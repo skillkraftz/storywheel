@@ -36,6 +36,7 @@
     "After {DISASTER:strikes} hit {place}, {SOMEONE} {ACT_THING:stows} {THING} {HIDING}.",
     "In {place}, {landmark} holds {THING} {HIDING}, and {SOMEONE} wants it.",
     "{place} waits through the {season} for {SOMEONE:!plural}, who is bringing {THING}.",
-    "Everything in {place} turns on {THING}, and {TOPIC} is the least of it."
+    "Everything in {place} turns on {THING}, and {TOPIC} is the least of it.",
+    "In {place}, {SOMEONE} must {DO_THING} {THING} {DEADLINE}, and nobody else knows."
   ]
 }

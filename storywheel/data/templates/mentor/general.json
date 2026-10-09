@@ -1,0 +1,15 @@
+{
+  "_note": "The mentor beat: someone teaches or equips the protagonist, or says what the protagonist cannot yet hear. (Save the Cat's B story; the Hero's Journey's Meeting the Mentor.) Frames, as everywhere: see act_turn's note.",
+  "slot": "mentor",
+  "tags": ["general"],
+  "entries": [
+    "{SOMEONE:!threatening} took {first} aside at {landmark} and taught {first} to {DO_THING} {THING}.",
+    "At {landmark}, {SOMEONE:human,!threatening} gave {first} {THING:portable} and one piece of advice about {TOPIC}.",
+    "{CLOSE:human} introduced {first} to {SOMEONE:!threatening}, who knew all about {TOPIC}.",
+    "{SOMEONE:!threatening} saw what {first} could do and told {CLOSE:human}.",
+    "{first} found {SOMEONE:!threatening} at {landmark}, who asked nothing and spoke of {TOPIC}.",
+    "{SOMEONE:human,!threatening} lent {first} {THING:portable} and warned {first} about the {rival:human}.",
+    "{SOMEONE:!threatening} listened to {first} talk about {TOPIC}, and said little.",
+    "{SOMEONE:!threatening} showed {first} where {VALUE} and {VICE} part ways."
+  ]
+}

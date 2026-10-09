@@ -38,7 +38,7 @@ def test_the_five_focuses_and_how_they_are_found():
 def test_the_genre_step_has_a_picked_focus_field_that_defaults_to_one():
     s = session.Session(store.new_story(), Engine(seed=1))
     s.enter(0)
-    assert list(s.fields) == ["genre", "mood", "focus"] and s.fields["focus"] == "One protagonist"
+    assert list(s.fields) == ["genre", "mood", "focus", "ending"] and s.fields["focus"] == "One protagonist"
     s.roll()
     assert s.fields["focus"] == "One protagonist"                                    # (rolling the step never changes it)
     s.reroll_field("focus")

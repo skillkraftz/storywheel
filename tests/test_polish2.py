@@ -139,6 +139,10 @@ def _help_keys_text(start, mode, size=(200, 50)):
     from textual.widgets import Static
 
     async def script(app, pilot):
+        await pilot.pause()
+        if type(app.screen).__name__ == "ChoiceScreen":                  # (a new Wheel draft asks its format first: Esc takes the default)
+            await pilot.press("escape")
+            await pilot.pause()
         await pilot.press("question_mark")
         await pilot.pause()
         await pilot.pause()

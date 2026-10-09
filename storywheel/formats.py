@@ -102,6 +102,12 @@ def from_setting(fmt, kind="", structure_text=""):
     return DEFAULT
 
 
+def asks():
+    """Does a new Wheel draft ask its format first? Yes, unless STORYWHEEL_ASK_FORMAT=0 (for tests and scripts that drive the Wheel by keys)."""
+    import os
+    return os.environ.get("STORYWHEEL_ASK_FORMAT", "1") != "0"
+
+
 def global_default():
     """The format a new story starts as: your default in Settings (a screenplay there means a feature film)."""
     g = settings.load_global()

@@ -5164,3 +5164,76 @@ today is 10-09. It was left alone (outside the checklist); it needs a date taken
 - The status line shortens a long title before the format; at 100 columns a typical title now shortens (the format adds about 14 columns), so tests that expect the whole title use 140+ columns.
 - Open: should "Also start as" remember the last ticks? Should a version also copy story settings (font, goal)? Today it follows your defaults.
 - "Batch 20" in earlier notes means an older piece of work; this branch reuses the name.
+
+# Shapes (branch `batch-21-shapes`, 0.23.0)
+
+The Wheel beyond one arc: Flash fiction, the format asked first, seven new structures, story focus and endings, plus the five corrections from the
+versions batch. The branch starts from `claude/gallant-knuth-qu093q` because `main` did not yet hold the versions work (see docs/decisions.md,
+"Shapes"). Full run (`tools/fulltest.sh`): @@FULLRUN@@
+
+## Part A: corrections from the versions batch (one commit each, except A4 and A5 together)
+| # | Item | Status | What's missing |
+|---|---|---|---|
+| A1 | `formats.Format.short`; `versions.SHORT_LABELS` removed; test: a family with every format renders the Builder's story list | Works | |
+| A2 | `versions.size_text` caches the page estimate with `vault.memo`, keyed by the script file's stamp; tests: hits, invalidates on change | Works | |
+| A3 | The flip test (`kind: placeholder`, with the line, so Alt+F jumps to it) and the PDF and .fdx exports warn about `NEW SCENE` headings | Works | the .fountain export does not warn (it is the source text) |
+| A4 | `test_25_...` builds the date from the clock; a grep found no other test that depends on today's date (the others write their own fixed dates) | Works | |
+| A5 | The versions section said +93; the real number is +64 net (2,920 to 2,984 collected), 75 in the three new files | Works | |
+
+## Checklist: Part B
+| # | Item | Status | What's missing |
+|---|---|---|---|
+| 1 | Format up front: a quick pick on a new draft (starts on your Settings default, Esc takes it); the card's frame always shows the format; **F** changes it any time (a kept structure that no longer fits is swapped, the body dropped, the screen says so); the promote screen's "Also start as" lists every format | Works | the plain prompt (`--plain`) does not ask; the structure step's own format picker does not start on the current format |
+| 2 | Flash fiction: `formats.py` (1,000 words; a short story to the Writer and Shunn export, told apart by `script_kind = "flash"`); Settings > Export > Default format, the story form, the version form, `story version --format flash`, the Writer's status line | Works | |
+| 3 | Seven structures as data: Save the Cat (15), Hero's Journey (12), Seven-Point (novel); Freytag (short story, novel); Single Moment (3), Circular, In Medias Res (flash, short story). Reuse the `act_*` frames; seven new slots with general frames only (`theme`, `debate`, `reward`, `mentor`, `opening_image`, `echo`, `in_the_thick`); the Story Spine and Kishotenketsu also fit flash. Genres with no file for a slot fall back to general (tested for all 14 genres). The "structure doesn't fit" path of a new version is tested for every structure and format (35 cases) | Works | the new slots have no genre files, so a genre story reads in the general voice there (the atoms still carry the genre) |
+| 4 | Story focus: picked on the Genre step (one, two leads, ensemble, a place, no one). A place or no one skips the Protagonist step; "everyone in {place}" / "someone" stands where `{first}` would; frames that read the protagonist's own fields are set aside; promotion makes no character for it; two leads and an ensemble add a partner or a company (promoted as characters) | Partial | the engine investigation said a real ensemble or mood piece needs frames written for it; the write-up is in BACKLOG.md ("Shapes left over") |
+| 5 | Ending: picked on the Genre step (any, triumph, bittersweet, tragic, open); climax and resolution frames carry an `"ending"` (about 30 of 180 climax frames, 5 slots, at least 3 per ending in each); untagged frames fit any | Partial | only the general frames are tagged; the genre files carry none, so six draws in ten (`ENDING_SHARE`) come from the tagged ones |
+| - | Help (wheel, structures), manual, docs/generator.md, FEATURES, BACKLOG, CHANGELOG, decisions, SOURCES (regenerated), version 0.23.0 | Works | |
+
+## Tests added
+@@TESTS@@
+
+## Manual test script: roll five drafts of each, and tell me what reads badly
+Use a throwaway folder so nothing touches `~/.storywheel` or `~/Writing`:
+
+    export STORYWHEEL_HOME=$(mktemp -d) STORYWHEEL_LIBRARY=$(mktemp -d)
+
+1. **Each new structure** (five drafts each; try a genre you know well and "western" or "fairy tale", which have no frame files of their own):
+
+       for s in save-the-cat heros-journey seven-point freytag single-moment circular in-medias-res; do
+         storywheel sample -n 5 --seed 1 --structure $s noir; done
+
+   Look at: the **theme**, **debate**, **mentor** (Save the Cat's B story and the Hero's Journey's mentor), **reward** and the beats that reuse the
+   three-act frames (do "Fun and games" and "Bad guys close in" read differently from "Rising action"?); the **circular** story's last beat (does it
+   come back to the opening place, season and thing?); the **in medias res** opening and its "Back to the moment"; **Single Moment** (three beats:
+   is it enough for flash?); Freytag's catastrophe and denouement.
+2. **Each focus** (five drafts each):
+
+       for f in place none two ensemble; do storywheel sample -n 5 --seed 1 --focus $f --structure three-act noir; done
+
+   Look at: "everyone in Dunmore ..." and "someone ..." as the subject (how many beats before it grates?), titles, the premise, whether anything
+   still mentions a job, trait, want or need; that two leads and an ensemble print a Partner or Company line and that the body still tells one lead's story.
+3. **Each ending** (five drafts each): `storywheel sample -n 5 --seed 1 --ending tragic --structure story-spine western` (also triumph, bittersweet,
+   open; and `fairy tale`, `romance`). Does the climax and resolution of a tragic story ever read as a win, or a triumph as a loss? The genre frames
+   carry no ending, so that is where a mismatch would come from.
+4. **In the app** (`storywheel new`): the format question appears first, starting on your Settings default; Esc takes it. Keep the genre, then press
+   **F**: is the list readable? Pick Novel and check the Structure step offers Save the Cat. Pick a structure, then press **F** and choose Flash fiction:
+   the screen should say the structure no longer fits and what replaced it. On the Genre step, click Focus and pick "A place": keep it, and check the
+   Protagonist step is skipped with a note (b goes back to it). Click Ending and pick Tragic.
+5. **Flash in the Builder and the Writer:** + Story with Flash fiction (target 1,000), F3: the status line says "(flash fiction)"; export (x) gives the
+   same Shunn .docx as a short story. Settings > Export > Default format has Flash fiction. `storywheel story version UNIVERSE/STORY --format flash`.
+6. **Promote** a place-focus draft (Q, new universe): no protagonist character should be made; a two-leads draft makes a second protagonist-role
+   character; an ensemble makes three allies. The Past stories list and the preview should read well.
+7. **The corrections:** a script made from prose still says `NEW SCENE` in the flip test (Alt+F lists it with its line) and the PDF/.fdx export warns.
+   In the Builder, a story family with all five formats lists as five rows.
+
+## Known issues, decisions, questions
+- Not checkable here: how it looks in a real terminal and in kitty; the real LanguageTool and dictionary. Nothing in this batch needed them.
+- **What reads badly, as I saw it** (five or six samples of each, not a proper read): a place story's "everyone in Dunmore" as a subject on every beat gets
+  heavy; a mood piece's "someone" is better but also repeats; both set aside about a third of the body frames, and the setup, "once" and premise slots
+  had almost nothing person-free until this batch added seven, seven and six. "Meeting the mentor" reads as a mentor only because it has its own
+  frames (it did not when it borrowed the trials). Save the Cat's "Fun and games" and "Bad guys close in" borrow `act_trials`, so they sound alike.
+- The structure picker order is by `order` then name; Circular Story and In Medias Res both have order 9.
+- Open: should "Any" be the default ending, or should a new draft start on one? (It starts on Any so older drafts and seeded samples are unchanged.)
+  Should two leads and an ensemble change the frames, or is a partner line enough for now? (BACKLOG.md.)
+- `main` is still behind the versions work; this branch needs the versions branch merged first (or together).

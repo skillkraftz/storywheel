@@ -59,6 +59,7 @@ def home(tmp_path, monkeypatch):
     monkeypatch.setenv("STORYWHEEL_HOME", str(tmp_path / "home"))
     monkeypatch.setenv("STORYWHEEL_LIBRARY", str(tmp_path / "library"))
     monkeypatch.setenv("STORYWHEEL_MANUSCRIPTS", str(tmp_path / "manuscripts"))
+    monkeypatch.setenv("STORYWHEEL_ASK_FORMAT", "0")        # (a new Wheel draft asks its format first; tests that drive it by keys opt in: test_wheel_format.py)
     return tmp_path
 
 

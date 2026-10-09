@@ -1,5 +1,5 @@
 {
- "_note": "Save the Cat (Blake Snyder's beat sheet) for a novel: 15 beats. Beats reuse the three-act frames (act_*); the theme and the debate have frames of their own.",
+ "_note": "Save the Cat (Blake Snyder's beat sheet) for a novel: 15 beats. Beats reuse the three-act frames (act_*); the theme, the debate and the B story (the mentor frames) have frames of their own.",
  "name": "save-the-cat",
  "label": "Save the Cat",
  "blurb": "Fifteen beats for a novel: opening image, theme, set-up, catalyst, debate, break into two, B story, fun and games, midpoint, bad guys close in, all is lost, dark night, break into three, finale, final image.",
@@ -13,7 +13,7 @@
   {"key": "stc_catalyst", "slot": "act_incident", "label": "Catalyst"},
   {"key": "stc_debate", "slot": "debate", "label": "Debate"},
   {"key": "stc_break2", "slot": "act_turn", "label": "Break into two"},
-  {"key": "stc_bstory", "slot": "act_trials", "label": "B story"},
+  {"key": "stc_bstory", "slot": "mentor", "label": "B story"},
   {"key": "stc_fun", "slot": "act_trials", "label": "Fun and games", "repeat": {"min": 1, "max": 3}},
   {"key": "stc_midpoint", "slot": "act_midpoint", "label": "Midpoint"},
   {"key": "stc_closein", "slot": "act_trials", "label": "Bad guys close in"},

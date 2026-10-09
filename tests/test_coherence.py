@@ -348,7 +348,7 @@ def test_routines_use_everyday_verbs_only(corpus):
             assert m.group(2) and "mundane" in m.group(2), entry.text
     engine, _batch = corpus
     routines = [f for f in engine.frame_log if f[0].startswith("Every day, ")]
-    assert len(routines) >= 100
+    assert len(routines) >= 60                                     # (a third of the stories used the Story Spine until batch 21; now about a seventh)
     verbs = Counter()
     for _text, slots, bindings, chosen, _values in routines:
         for i in bindings:

@@ -6,13 +6,13 @@
   ],
   "entries": [
     "{CLOSE:human} told {first} that {VALUE} mattered more than {PRIZE:!inner}, and {first} did not listen.",
-    "In {place}, everyone said {VALUE} was worth more than {PRIZE:!inner}, and {first} wondered if it was true.",
+    "In {place}, everyone said {VALUE} {was} worth more than {PRIZE:!inner}, and {first} wondered if it was true.",
     "{SOMEONE:human} warned {first} that {VICE} would cost {VALUE}, and {first} shrugged.",
-    "{first} had never asked what {VALUE} cost, only what {PRIZE:!inner} was worth.",
+    "{first} had never asked what {VALUE} cost, only what {PRIZE:!inner} {was} worth.",
     "At {landmark}, {CLOSE:human} spoke of {VALUE}, and {first} thought only of {PRIZE:!inner}.",
     "{place} had a saying about {VALUE}, and {first} {ACT_THING:mundane} {THING} {MANNER} without hearing it.",
     "Nobody in {place} spoke of {TOPIC}, only of {VALUE} and {PRIZE:!inner}.",
     "{CLOSE:human} said {VICE} would take {VALUE} from {first}, and {first} laughed.",
-    "{SOMEONE:human} asked {first} what {VALUE} was for, and {first} had no answer."
+    "{SOMEONE:human} asked {first} what {VALUE} {was} for, and {first} had no answer."
   ]
 }

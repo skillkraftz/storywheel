@@ -8,7 +8,7 @@
   "At {landmark}, {first} met {SOMEONE:!threatening}, who offered help {MANNER}.",
   "{first} {ACT_PERSON} {SOMEONE:human}, but the {rival} {ACT_PERSON} {CLOSE:human} first.",
   "Each time {first} neared {PRIZE:!inner}, {VICE} pulled the other way.",
-  "{first} bargained away {LOSS} to cross {landmark}.",
+  "{first} bargained away {LOSS} to cross {landmark} {MANNER}.",
   "{DISASTER:strikes} fell on {place} again, and {first} marched {MANNER}.",
   "{first} tracked {THING} to {landmark} and fought for it {MANNER}.",
   "{the_someone:human} offered {first} a bargain, and {first} refused {MANNER}."

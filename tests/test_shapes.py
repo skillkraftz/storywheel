@@ -19,7 +19,7 @@ NEW = {
     "circular": (6, ["flash", "short-story"]),
     "in-medias-res": (6, ["flash", "short-story"]),
 }
-NEW_SLOTS = ["theme", "debate", "reward", "opening_image", "echo", "in_the_thick"]
+NEW_SLOTS = ["theme", "debate", "reward", "mentor", "opening_image", "echo", "in_the_thick"]
 GENRES = ["western", "fairy tale", "comedy", "fantasy", "mystery", "horror", "sci-fi", "romance", "ghost story", "noir", "thriller", "heist",
           "adventure", "coming-of-age"]
 

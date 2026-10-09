@@ -508,6 +508,7 @@ medias res shapes. The ending tags on climax and resolution frames are original.
 - `manner/romance`
 - `manner/sci-fi`
 - `manner/thriller`
+- `mentor/general`
 - `message/adventure`
 - `message/comedy`
 - `message/coming-of-age`

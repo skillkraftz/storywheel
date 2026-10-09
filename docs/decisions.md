@@ -426,7 +426,8 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   batch-21-shapes starts from that branch. *Flash fiction* is a short story to the Writer and the export (`format = "short-story"`), told apart by
   `script_kind = "flash"` (the setting a screenplay already uses for its kind; it is inherited like the format, so a default of flash works).
   `Format.short` is the list label. *The format is asked first* only when a person starts the draft (`ask_format` on the screen, set by
-  `cli.run`, `modes.run_wheel` and the hub); tests and reopened drafts are never asked, and the plain prompt doesn't ask. A draft is "new" while it has no
+  `cli.run`, `modes.run_wheel` and the hub); tests and reopened drafts are never asked, and the plain prompt doesn't ask. `STORYWHEEL_ASK_FORMAT=0` turns the
+  question off (the shared `home` test fixture sets it, because dozens of tests drive the Wheel by keys; tests of the question set it back to 1). A draft is "new" while it has no
   `format`, nothing kept and step 0. *Structures:* new ones reuse the `act_*` frames (as the screen structures do), so the old test that prose
   structures share no slots now covers only the original three; beat keys are prefixed (`stc_`, `hj_`, `sp_`, `fr_`, `sm_`, `ci_`, `im_`) because thread labels
   are keyed by beat; only the Story Spine and Kishotenketsu were added to flash among the old ones. *Focus:* the investigation found that nearly

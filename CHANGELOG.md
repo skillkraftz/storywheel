@@ -13,7 +13,7 @@ One entry per batch of work, newest first. The version is in `storywheel/__init_
   **F** changes it at any time, swapping a kept structure that no longer fits (and saying so). The plain prompt does not ask.
 - **Seven new structures**, as data: Save the Cat (15 beats), Hero's Journey (12) and Seven-Point for novels; Freytag's Pyramid for short stories and
   novels; Single Moment (3), Circular Story and In Medias Res for flash and short stories. The Story Spine and Kishotenketsu also fit flash. They reuse
-  the Three-Act frames wherever a beat means the same, with six new slots (`theme`, `debate`, `reward`, `opening_image`, `echo`, `in_the_thick`),
+  the Three-Act frames wherever a beat means the same, with seven new slots (`theme`, `debate`, `reward`, `mentor`, `opening_image`, `echo`, `in_the_thick`),
   each with general frames that every genre falls back to.
 - **Story focus**, a picked field on the Genre step: one protagonist, two leads (a partner), an ensemble (a company of three), a place, or no one.
   A place or no one skips the Protagonist step; "everyone in {place}" or "someone" stands where `{first}` would; frames that read the protagonist's own

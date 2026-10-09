@@ -20,12 +20,16 @@
     {"text": "{first} {ACT_PERSON} {SOMEONE} at {landmark}, and lost {LOSS}.", "ending": ["tragic"]},
     {"text": "{first} chose {PRIZE:!inner} over {VALUE}, and {CLOSE:human} paid for it.", "ending": ["tragic"]},
     {"text": "{DISASTER:strikes} took {CLOSE:human}, and {first} could only watch from {landmark}.", "ending": ["tragic"]},
-    {"text": "{first} {ACT_PERSON} the {rival} too late, and {SOMEONE} was already gone.", "ending": ["tragic"]},
+    {"text": "{first} {ACT_PERSON} the {rival} too late, and {SOMEONE} {was} already gone.", "ending": ["tragic"]},
     {"text": "{first} kept {VALUE} and let {PRIZE:!inner} go.", "ending": ["bittersweet"]},
     {"text": "{first} saved {CLOSE:human} and lost {LOSS}.", "ending": ["bittersweet"]},
     {"text": "{first} forgave the {rival:human} {MANNER}, and it was not enough.", "ending": ["bittersweet"]},
-    {"text": "{first} {ACT_PLACE} {landmark} {MANNER}, and {SOMEONE} was waiting.", "ending": ["open"]},
+    {"text": "{first} {ACT_PLACE} {landmark} {MANNER}, and {SOMEONE} {was} waiting.", "ending": ["open"]},
     {"text": "{first} stood at {landmark} with {THING:portable}, torn between {PRIZE:!inner} and {VALUE}.", "ending": ["open"]},
-    {"text": "{first} {ACT_MESSAGE} {MESSAGE} {MANNER}, and {SOMEONE} answered in a way nobody expected.", "ending": ["open"]}
+    {"text": "{first} {ACT_MESSAGE} {MESSAGE} {MANNER}, and {SOMEONE} answered in a way nobody expected.", "ending": ["open"]},
+    {"text": "{first} turned {the_thing:portable} on the {rival:human}, and won.", "ending": ["triumph"]},
+    {"text": "{SOMEONE:human} took {the_thing}, and {first} could do nothing.", "ending": ["tragic"]},
+    {"text": "{first} gave {the_thing} to {CLOSE:human}, and it was enough.", "ending": ["bittersweet"]},
+    {"text": "{first} held {the_thing:portable} out to {SOMEONE}, and waited.", "ending": ["open"]}
   ]
 }

@@ -524,9 +524,6 @@ def test_past_stories_has_a_new_button_and_enter_still_opens(home):
         await pilot.press("enter")
         await pilot.pause()
         await pilot.pause()
-        assert type(app.screen).__name__ == "ChoiceScreen"                 # (a new draft asks its format first: batch 21)
-        await pilot.press("escape")
-        await pilot.pause()
         fresh = app.session.story["id"]
         app.screen.stories_list.focus()
         app.screen.stories_list.highlighted = 0

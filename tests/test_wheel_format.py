@@ -1,10 +1,17 @@
 """Batch 21, item 1: the Wheel asks a new draft its format first, always shows it on the card, and lets you change it any time (F)."""
 import asyncio
 
+import pytest
+
 from storywheel import formats, session, settings, store, structures
 from storywheel.engine import Engine
 from storywheel.tui import ChoiceScreen, StorywheelApp
 from conftest import make_engine, screen_text
+
+
+@pytest.fixture(autouse=True)
+def _the_question_is_on(home, monkeypatch):
+    monkeypatch.setenv("STORYWHEEL_ASK_FORMAT", "1")        # (the shared `home` fixture turns it off for the tests that press keys)
 
 
 def run_ask(home, story, script, size=(200, 50)):
@@ -128,3 +135,27 @@ def test_the_promote_screen_offers_every_other_format_including_flash(home):
     for f in formats.FORMATS:
         assert f.label.lower() in text
     assert "flash fiction" in text and "(this story)" in text
+
+
+def test_the_question_can_be_turned_off_for_scripts(home, monkeypatch):
+    monkeypatch.setenv("STORYWHEEL_ASK_FORMAT", "0")
+
+    async def script(app, pilot):
+        return type(app.screen).__name__, "format" in app.session.story
+    assert run_ask(home, store.new_story(), script) == ("MainScreen", False)
+
+
+def test_the_hub_asks_when_the_wheel_opens_on_a_new_draft(home):
+    from storywheel import hub
+    from storywheel.ratings import Ratings
+
+    async def go():
+        app = hub.Hub(("wheel", {"new": True}), lambda: Engine(seed=3), lambda: Ratings())
+        async with app.run_test(size=(190, 50)) as pilot:
+            for _ in range(4):
+                await pilot.pause()
+            asked = type(app.screen).__name__
+            await pilot.press("escape")
+            await pilot.pause()
+            return asked, type(app.screen).__name__, app.session.story.get("format")
+    assert asyncio.run(go()) == ("ChoiceScreen", "MainScreen", "short-story")

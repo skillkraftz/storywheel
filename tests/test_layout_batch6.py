@@ -223,6 +223,10 @@ def test_no_footer_entry_is_cut_off_in_any_mode(home, width):
                     await pilot.press(key)
                 for _ in range(4):
                     await pilot.pause()
+                if type(app.screen).__name__ == "ChoiceScreen":          # (a new Wheel draft asks its format first: Esc takes the default)
+                    await pilot.press("escape")
+                    for _ in range(4):
+                        await pilot.pause()
                 keys = list(app.screen.query("FooterKey"))
                 out[name] = [(k.action, k.region.right, k.region.width, len(k.key_display) + len(k.description)) for k in keys]
                 out[name + "_width"] = app.screen.size.width
