@@ -381,6 +381,7 @@ def test_a_story_without_a_family_exports_and_lists_as_before(home):
 
 def test_a_family_with_every_format_renders_the_story_list(home):
     import asyncio
+    from conftest import screen_text
     from storywheel import builder, fill
     s = make(home, "short-story")
     for key in FORMAT_KEYS:
@@ -391,8 +392,7 @@ def test_a_family_with_every_format_renders_the_story_list(home):
         app = builder.BuilderApp(engine_factory=lambda x: fill.make_engine(x, seed=1), universe="noirville", story="cold-coffee")
         async with app.run_test(size=(200, 50)) as pilot:
             await pilot.pause()
-            lst = app.screen_ref.query_one("#stories")
-            return " ".join(str(lst.get_option_at_index(i).prompt) for i in range(lst.option_count))
+            return " ".join(screen_text(app).split())
     text = asyncio.run(go())
     for f in formats.FORMATS:
         assert f.short in text

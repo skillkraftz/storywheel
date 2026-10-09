@@ -31,5 +31,10 @@
    "slot": "ketsu",
    "label": "Ketsu (reconciliation)"
   }
+ ],
+ "formats": [
+  "short-story",
+  "novel",
+  "flash"
  ]
 }

@@ -1,0 +1,14 @@
+{
+ "_note": "A single-moment turn, for flash and very short stories: a quiet before, one moment that changes it, and what is left after. Beats reuse existing frames (ki, act_midpoint, ketsu).",
+ "name": "single-moment",
+ "label": "Single Moment",
+ "blurb": "Three beats for flash fiction: how things were, the one moment that turned them, what was left after.",
+ "order": 8,
+ "show_labels": true,
+ "formats": ["flash", "short-story"],
+ "beats": [
+  {"key": "sm_before", "slot": "ki", "label": "Before"},
+  {"key": "sm_moment", "slot": "act_midpoint", "label": "The moment"},
+  {"key": "sm_after", "slot": "ketsu", "label": "After"}
+ ]
+}

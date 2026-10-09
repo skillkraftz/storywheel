@@ -1,0 +1,17 @@
+{
+ "_note": "In medias res: begin at the worst moment, go back to how it started, and return to the moment. The opening has frames of its own; the rest reuses the three-act frames.",
+ "name": "in-medias-res",
+ "label": "In Medias Res",
+ "blurb": "Start in the thick of it, go back to how it began, build to the same moment again, and live through it.",
+ "order": 9,
+ "show_labels": true,
+ "formats": ["flash", "short-story"],
+ "beats": [
+  {"key": "im_thick", "slot": "in_the_thick", "label": "In the middle of it"},
+  {"key": "im_before", "slot": "act_setup", "label": "How it began"},
+  {"key": "im_cause", "slot": "act_incident", "label": "What went wrong"},
+  {"key": "im_closing", "slot": "act_trials", "label": "Closing in"},
+  {"key": "im_moment", "slot": "act_climax", "label": "Back to the moment"},
+  {"key": "im_after", "slot": "act_resolution", "label": "Aftermath"}
+ ]
+}

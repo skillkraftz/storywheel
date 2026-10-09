@@ -439,10 +439,11 @@ class ChoiceScreen(ModalScreen):
     ChoiceScreen #dlg Button { height: 1 !important; border: none !important; min-width: 8; margin-right: 2; }
     """
 
-    def __init__(self, title, options, multi=False, selected=()):
+    def __init__(self, title, options, multi=False, selected=(), start=None):
         super().__init__()
         self.title_text, self.options, self.multi = title, list(options), multi
         self.selected = list(selected)
+        self.start = start                    # the value to highlight first (the default or the current one)
 
     def compose(self) -> ComposeResult:
         with Vertical(id="dlg"):
@@ -466,6 +467,8 @@ class ChoiceScreen(ModalScreen):
             mark = ("[x] " if value in self.selected else "[ ] ") if self.multi else ""
             rows.append(Option(Text(mark + label), id=str(n)))
         lst.add_options(rows)
+        if keep is None and self.start is not None:
+            keep = next((n for n, (_label, value) in enumerate(self.options) if value == self.start), None)
         lst.highlighted = min(keep, len(rows) - 1) if keep is not None else 0
 
     def on_option_list_option_selected(self, event):
@@ -702,6 +705,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("i", "ignore", "Ignore", show=False),
         Binding("C", "copy_draft", "Copy as new", show=False),
         Binding("N", "new_draft", "New draft"),
+        Binding("F", "pick_format", "Format"),
         Binding("b", "back", "Back"),
         Binding("x", "skip", "Skip"),
         Binding("u", "universe_add", "Univ"),
@@ -754,9 +758,10 @@ class MainScreen(KeptScreen, Screen):
     MainScreen OptionList:focus { border: none; }
     """
 
-    def __init__(self, session):
+    def __init__(self, session, ask_format=False):
         super().__init__()
         self.session = session
+        self.ask_format = ask_format      # a new draft started by the person (not a test or a reopened one): ask its format first
         self.hist_mode = "rolls"          # or "field": the selected field's own history
         self._busy = False
 
@@ -825,6 +830,8 @@ class MainScreen(KeptScreen, Screen):
         self.refresh_all()
         self.query_one("#card", OptionList).focus()
         self.say(self.app.notice or self.opening_note())
+        if self.ask_format:
+            self.call_after_refresh(self.ask_format_first)
 
     def opening_note(self):
         story = self.session.story
@@ -866,6 +873,35 @@ class MainScreen(KeptScreen, Screen):
         store.save_draft(new)
         self.switch_story(new)
         self.say("Started a new draft" + (f" in {slug}" if slug else "") + ". The one you left is saved (Past stories).")
+        self.ask_format_first()
+
+    # --- the draft's format: asked first, shown on the card, changeable any time (F) ----------------------------------
+
+    def ask_format_first(self):
+        """A brand-new draft asks what it is (Flash, Short story, Novel, Screenplay), starting on your default; Esc takes the default."""
+        from . import formats
+        if not self.session.needs_format():
+            return
+        default = formats.global_default()
+        self.app.push_screen(ChoiceScreen("What are you writing? (Esc takes " + formats.get(default).label.lower() + ")", formats.choices(), start=default),
+                             lambda key: self._format_asked(key or default))
+
+    def _format_asked(self, key):
+        self.session.set_format(key)
+        self.after()
+        self.say(f"A {self.session.format_label().lower()}. F changes the format at any time.")
+
+    def action_pick_format(self):
+        """Change the draft's format at any time (a structure that no longer fits is swapped, and the screen says so)."""
+        from . import formats
+        if self.locked():
+            return
+        current = formats.of_draft(self.session.story)
+        self.app.push_screen(ChoiceScreen("Format", formats.choices(), start=current), self._format_changed)
+
+    def _format_changed(self, key):
+        if key and self.session.set_format(key):
+            self.after()
 
     def action_copy_draft(self):
         story = self.session.story
@@ -1102,6 +1138,7 @@ class MainScreen(KeptScreen, Screen):
         previous = self.card.highlighted if keep_field else 0
         step, fields = s.step, s.fields
         self.query_one("#hint", Static).update(step.hint)
+        self.query_one("#card-box").border_title = f"{step.label} · {s.format_label()} (F: format)"
         self.query_one("#meta", Static).update(
             f"#{s.cur + 1} of {len(s.hist)}{s.source_tag(s.cur)}")
         rows = []
@@ -1798,13 +1835,13 @@ class StorywheelApp(App):
     ENABLE_COMMAND_PALETTE = False
     BINDINGS = []
 
-    def __init__(self, story, engine, state_store=None, notice=""):
+    def __init__(self, story, engine, state_store=None, notice="", ask_format=False):
         super().__init__()
         appearance.apply(self)
         self.story, self.engine = story, engine
         self.state_store = state_store
         self.session = Session(story, engine, ratings=engine.ratings)
-        self.main = MainScreen(self.session)
+        self.main = MainScreen(self.session, ask_format=ask_format)
         self.next = None                  # where to go after the app closes: ("builder", {...}) or None
         self.notice = notice              # said once, on the status line, when the Wheel opens
 
@@ -1825,10 +1862,10 @@ class StorywheelApp(App):
         self.push_screen(self.main)
 
 
-def run_app(story, engine, state_store=None, notice=""):
+def run_app(story, engine, state_store=None, notice="", ask_format=False):
     """Run the app on a story; prints where it was saved when you quit. Returns where to go next, if the writer
     asked for another mode: ("builder", {...}), ("writer", {...}) or None."""
-    app = StorywheelApp(story, engine, state_store, notice)
+    app = StorywheelApp(story, engine, state_store, notice, ask_format)
     message = app.run()
     if message:
         print("\n  " + str(message).replace("\n", "\n  "))

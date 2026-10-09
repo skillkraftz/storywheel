@@ -36,7 +36,7 @@ def test_new_wheel_draft_for_a_universe_starts_with_it_ticked_and_as_its_home(ho
     seen = {}
     import storywheel.tui as tui
     real = tui.run_app
-    tui.run_app = lambda story, engine, st, notice="": seen.update(story=story)
+    tui.run_app = lambda story, engine, st, notice="", **_: seen.update(story=story)
     try:
         modes.run_wheel(State(), nxt[1], lambda: fill.make_engine(u, seed=1))
     finally:

@@ -1,0 +1,17 @@
+{
+  "_note": "An opening in the middle of the action: the story begins at the worst moment and goes back for the rest. (The in medias res story.)",
+  "slot": "in_the_thick",
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    "{SOMEONE:threatening} had {first} cornered at {landmark}, and {THING:portable} was all {first} had.",
+    "{DISASTER:strikes} had already hit {place}, and {first} was running {MANNER} with {THING:portable}.",
+    "{first} {ACT_PERSON} {SOMEONE} {MANNER} at {landmark}, and there was no going back.",
+    "Halfway across {landmark}, {first} dropped {THING:portable}, and {SOMEONE:threatening} saw.",
+    "With {SOMEONE:threatening} closing in, {first} {ACT_THING:!stows} {THING} {MANNER} at {landmark}.",
+    "{CLOSE:human} was already gone, {THING:!living} lay {HIDING}, and {first} had one chance.",
+    "{first} stood at {landmark} with {THING:portable} and {FEELING}, and {SOMEONE:threatening} was coming.",
+    "At {landmark}, {first} gave up {VALUE} for a single breath, and {SOMEONE:threatening} noticed."
+  ]
+}

@@ -16,9 +16,15 @@ async def settle(pilot):
 
 async def into(app, pilot, key, screen):
     """Be in the mode (its help closed)."""
+    if type(app.screen).__name__ == "ChoiceScreen":                        # (a new draft asks its format first: Esc takes the default)
+        await pilot.press("escape")
+        await settle(pilot)
     if type(app.screen).__name__ != screen:
         await pilot.press(key)
         await settle(pilot)
+        if type(app.screen).__name__ == "ChoiceScreen":                    # (a new draft asks its format first: Esc takes the default)
+            await pilot.press("escape")
+            await settle(pilot)
     assert type(app.screen).__name__ == screen, (key, type(app.screen).__name__)
 
 

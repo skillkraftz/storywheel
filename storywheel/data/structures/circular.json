@@ -1,0 +1,17 @@
+{
+ "_note": "A circular story: it ends where it began, at the opening image, changed. The opening and the echo have frames of their own; the middle reuses the three-act frames.",
+ "name": "circular",
+ "label": "Circular Story",
+ "blurb": "The story returns to its opening image: a place and a thing, a leaving, a turn, and the same place again, changed.",
+ "order": 9,
+ "show_labels": true,
+ "formats": ["flash", "short-story"],
+ "beats": [
+  {"key": "ci_opening", "slot": "opening_image", "label": "Opening image"},
+  {"key": "ci_leaving", "slot": "act_incident", "label": "The leaving"},
+  {"key": "ci_away", "slot": "act_trials", "label": "Away", "repeat": {"min": 1, "max": 2}},
+  {"key": "ci_turn", "slot": "act_crisis", "label": "The turning point"},
+  {"key": "ci_way_back", "slot": "act_turn", "label": "The way back"},
+  {"key": "ci_echo", "slot": "echo", "label": "The same place, changed"}
+ ]
+}

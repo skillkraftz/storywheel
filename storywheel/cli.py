@@ -374,7 +374,7 @@ def run(story, plain=False):
             from . import modes, state as state_mod
             st = state_mod.State()
             st.update(mode="wheel", draft=story["id"])
-            nxt = run_app(story, get_engine(), st)
+            nxt = run_app(story, get_engine(), st, ask_format=not story["kept"] and "format" not in story)
             if nxt:                                  # F2 / F3, or a promotion: carry on into the next mode
                 modes.run(nxt, get_engine, get_ratings)
             return

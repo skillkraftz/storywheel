@@ -1,0 +1,18 @@
+{
+  "_note": "The debate beat: the protagonist hesitates over the choice that is coming. (Save the Cat's Debate; the Hero's Journey's Refusal of the Call.)",
+  "slot": "debate",
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    "{first} weighed {PRIZE:!inner} against {VALUE} and told {CLOSE:human} nothing.",
+    "Night after night, {first} turned {THING:portable} over and thought of {SOMEONE}.",
+    "{CLOSE:human} begged {first} to stay, and {first} stood at {landmark} until dark.",
+    "{first} {ACT_PLACE:mundane} {landmark} {MANNER}, wondering whether {PRIZE:!inner} was worth {VALUE}.",
+    "{first} spoke to {CLOSE:human} about {TOPIC} and was no closer to deciding.",
+    "For days, {first} {ACT_PERSON} {CLOSE} {MANNER}, and nothing was decided.",
+    "{first} said no to {SOMEONE:human} and meant it, until {FEELING} said otherwise.",
+    "{first} wanted {PRIZE:!inner} and was torn by {FEELING}, and {place} offered no advice.",
+    "Every road out of {place} led toward {SOMEONE}, and {first} stayed where {first} was."
+  ]
+}

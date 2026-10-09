@@ -52,5 +52,10 @@
    "label": "Ever since then",
    "opening": "Ever since then, "
   }
+ ],
+ "formats": [
+  "short-story",
+  "novel",
+  "flash"
  ]
 }

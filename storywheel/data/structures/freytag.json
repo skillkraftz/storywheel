@@ -1,0 +1,18 @@
+{
+ "_note": "Freytag's pyramid, the tragic shape: exposition, rising action to a climax at the middle, falling action, catastrophe, denouement. Beats reuse the three-act frames (act_*).",
+ "name": "freytag",
+ "label": "Freytag's Pyramid",
+ "blurb": "The tragic shape: exposition, an inciting moment, rising action, the climax at the top, falling action, a catastrophe and the quiet after.",
+ "order": 7,
+ "show_labels": true,
+ "formats": ["short-story", "novel"],
+ "beats": [
+  {"key": "fr_exposition", "slot": "act_setup", "label": "Exposition"},
+  {"key": "fr_inciting", "slot": "act_incident", "label": "Inciting moment"},
+  {"key": "fr_rising", "slot": "act_trials", "label": "Rising action", "repeat": {"min": 1, "max": 3}},
+  {"key": "fr_climax", "slot": "act_midpoint", "label": "Climax"},
+  {"key": "fr_falling", "slot": "act_crisis", "label": "Falling action", "repeat": {"min": 1, "max": 2}},
+  {"key": "fr_catastrophe", "slot": "act_climax", "label": "Catastrophe"},
+  {"key": "fr_denouement", "slot": "act_resolution", "label": "Denouement"}
+ ]
+}

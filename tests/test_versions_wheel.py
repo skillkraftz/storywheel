@@ -30,7 +30,7 @@ def test_the_preview_offers_the_other_formats_and_a_tick_makes_a_second_version(
         return ids, own, shown, ticked, app.return_value
 
     ids, own, shown, ticked, message = run_tui(story, make_engine(home), script)
-    assert own == "short-story" and ids == ["fmt:novel", "fmt:feature-film", "fmt:short-film"]       # (the story's own format is not offered)
+    assert own == "short-story" and ids == ["fmt:flash", "fmt:novel", "fmt:feature-film", "fmt:short-film"]       # (the story's own format is not offered)
     assert "Also start as" in shown and "(this story)" in shown and "screenplay (feature film)" in shown
     assert ticked == ["feature-film"]
     u = vault.get_universe("thornwood")

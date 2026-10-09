@@ -1,0 +1,17 @@
+{
+  "_note": "The reward beat: the protagonist gets something they came for, and it is not free. (The Hero's Journey's Reward.)",
+  "slot": "reward",
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    "{first} took {PRIZE:!inner} at last, and {SOMEONE:human} did not try to stop it.",
+    "With {THING:portable} in hand, {first} {ACT_PLACE} {landmark} and held {PRIZE:!inner} for one night.",
+    "{first} won {WINDFALL}, and for a while {FEELING} was gone.",
+    "{first} claimed {THING:!living,!bulky}, and {CLOSE:human} saw what it had cost.",
+    "{first} got what {first} came for, and {SOMEONE:human} was the first to notice.",
+    "{first} and {CLOSE:human} shared {WINDFALL} at {landmark}, and it felt like enough.",
+    "At {landmark}, {first} {ACT_THING} {THING} {MANNER}, and {PRIZE:!inner} was close enough to touch.",
+    "{first} carried {THING:portable} out of {landmark}, and {VALUE} weighed more than it did."
+  ]
+}

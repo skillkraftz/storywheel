@@ -1,0 +1,17 @@
+{
+  "_note": "An opening image for a story that comes back to it: a place, an object and a time of year, which the echo beat repeats. (The circular story.)",
+  "slot": "opening_image",
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    "{first} {ACT_PLACE:mundane} {landmark} in {place}, with {THING} {HIDING}, as the {season} began.",
+    "In {place}, {landmark} stood quiet in the {season}, and {THING} lay {HIDING}.",
+    "The {season} light fell on {landmark}, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+    "{first} {ACT_THING:mundane} {THING} {MANNER} at {landmark}, as every {season}.",
+    "It was {season} in {place}, and {first} {ACT_PLACE:mundane} {landmark} {MANNER}.",
+    "{CLOSE} watched {MANNER} while {first} {ACT_THING:mundane} {THING} at {landmark} in {place}.",
+    "{place} in the {season}: {landmark}, {THING} {HIDING}, and {first} with nowhere to be.",
+    "At {landmark}, {first} {ACT_THING:mundane} {THING} {MANNER}, and the {season} went slowly by."
+  ]
+}

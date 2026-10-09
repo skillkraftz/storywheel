@@ -1,0 +1,23 @@
+{
+ "_note": "The Hero's Journey in twelve stages (Vogler's version of Campbell) for a novel. Beats reuse the three-act frames (act_*); the refusal reuses the debate frames and the reward has frames of its own.",
+ "name": "heros-journey",
+ "label": "Hero's Journey",
+ "blurb": "Twelve stages for a novel: the ordinary world, the call, a refusal, a mentor, the threshold, tests and allies, the approach, the ordeal, the reward, the road back, a resurrection, and the return with something new.",
+ "order": 5,
+ "show_labels": true,
+ "formats": ["novel"],
+ "beats": [
+  {"key": "hj_ordinary", "slot": "act_setup", "label": "The ordinary world"},
+  {"key": "hj_call", "slot": "act_incident", "label": "The call to adventure"},
+  {"key": "hj_refusal", "slot": "debate", "label": "Refusal of the call"},
+  {"key": "hj_mentor", "slot": "act_trials", "label": "Meeting the mentor"},
+  {"key": "hj_threshold", "slot": "act_turn", "label": "Crossing the threshold"},
+  {"key": "hj_tests", "slot": "act_trials", "label": "Tests, allies and enemies", "repeat": {"min": 1, "max": 3}},
+  {"key": "hj_approach", "slot": "act_midpoint", "label": "The approach"},
+  {"key": "hj_ordeal", "slot": "act_crisis", "label": "The ordeal"},
+  {"key": "hj_reward", "slot": "reward", "label": "The reward"},
+  {"key": "hj_road_back", "slot": "act_turn", "label": "The road back"},
+  {"key": "hj_resurrection", "slot": "act_climax", "label": "The resurrection"},
+  {"key": "hj_return", "slot": "act_resolution", "label": "Return with the elixir"}
+ ]
+}

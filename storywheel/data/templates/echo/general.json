@@ -1,0 +1,17 @@
+{
+  "_note": "The echo beat of a circular story: the opening image again, changed. Frames that name the thing or person the story began with use the story's threads (favored when they exist, never used when they don't).",
+  "slot": "echo",
+  "tags": [
+    "general"
+  ],
+  "entries": [
+    "{first} {ACT_PLACE:mundane} {landmark} in {place} again, as every {season}, but nothing was the same.",
+    "In {season}, {landmark} looked as it always had, and {first} {ACT_THING:mundane} {THING} {MANNER}.",
+    "{first} {ACT_PLACE:mundane} {landmark} {MANNER}, and {the_someone} was still there.",
+    "{the_thing} {was} {HIDING} where {first} had left it, and {landmark} was quiet.",
+    "At {landmark}, {first} {ACT_THING:mundane} {the_thing} {MANNER}, and the {season} went on.",
+    "{place} had not changed, but {first} {ACT_PLACE:mundane} {landmark} {MANNER}.",
+    "The {season} came to {place} again, and {first} {ACT_THING:mundane} {THING} at {landmark}, alone.",
+    "{first} sat at {landmark} with {the_thing} {HIDING}, as in the first {season}, and knew {VALUE}."
+  ]
+}

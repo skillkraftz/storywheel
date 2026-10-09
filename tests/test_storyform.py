@@ -15,9 +15,10 @@ from conftest import make_engine, run_tui
 
 def test_each_format_offers_only_the_structures_that_fit_it():
     labels = lambda key: [s.label for s in formats.structures_for(key)]
-    assert labels("short-story") == labels("novel") == ["Story Spine", "Three-Act Outline", "Kishōtenketsu"]
+    assert labels("short-story")[:3] == labels("novel")[:3] == ["Story Spine", "Three-Act Outline", "Kishōtenketsu"]
+    assert "Save the Cat" in labels("novel") and "Save the Cat" not in labels("short-story") and "Single Moment" in labels("flash")
     assert labels("feature-film") == ["Feature Film"] and labels("short-film") == ["Short Film"]
-    assert [f.label for f in formats.FORMATS] == ["Short story", "Novel", "Screenplay (feature film)", "Screenplay (short film)"]
+    assert [f.label for f in formats.FORMATS] == ["Flash fiction", "Short story", "Novel", "Screenplay (feature film)", "Screenplay (short film)"]
 
 
 def test_names_are_found_from_keys_and_labels_and_nothing_else():
@@ -85,7 +86,7 @@ def test_plus_story_is_a_form_of_pickers(forms):
         form.query_one("#title", Input).value = "Night Shift"
         await choose_row(app, pilot, "format")
         assert isinstance(app.screen, ChoiceScreen) and options(app) == [f.label for f in formats.FORMATS]
-        await press(pilot, "down", "down", "down", "enter")                                      # Screenplay (short film)
+        await press(pilot, "down", "down", "down", "down", "enter")                              # Screenplay (short film)
         assert form.structure == "Short Film" and form.query_one("#target", Input).value == "12"
         await choose_row(app, pilot, "structure")
         seen = options(app)
@@ -151,7 +152,7 @@ def test_m_changes_a_story_and_warns_when_writing_would_move(forms):
         form = app.screen
         before = str(form.query_one("#note").render())
         await choose_row(app, pilot, "format")
-        await press(pilot, "down", "down", "enter")                 # Screenplay (feature film)
+        await press(pilot, "down", "down", "down", "enter")         # Screenplay (feature film)
         warning = str(form.query_one("#note").render())
         await press(pilot, "ctrl+s")
         return before, warning, form.structure
@@ -174,7 +175,7 @@ def test_the_wheel_picks_a_format_then_a_structure_that_fits(home):
         app.main.card.highlighted = 0                                # the format line
         await press(pilot, "f")                                      # (a format is picked, never rolled)
         formats_offered = options(app)
-        await press(pilot, "down", "down", "down", "enter")
+        await press(pilot, "down", "down", "down", "down", "enter")
         after_format = dict(s.fields)
         app.main.card.highlighted = 1
         await press(pilot, "e")
@@ -202,7 +203,7 @@ def test_rolling_the_structure_step_stays_inside_the_format(home):
         s.roll()
         seen.add(s.fields["structure"])
         assert s.fields["format"] == "Novel"
-    assert seen == {"Story Spine", "Three-Act Outline", "Kishōtenketsu"}
+    assert seen == {s.label for s in formats.structures_for("novel")}
 
 
 def test_a_wheel_draft_promotes_into_its_format(home):

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from storywheel import store, structures
+from storywheel import formats, store, structures
 from storywheel.engine import Engine
 from storywheel.library import Library
 from storywheel.report import lint
@@ -18,7 +18,9 @@ from storywheel import threads as T
 from conftest import write_json
 
 ROOT = Path(__file__).resolve().parent.parent
-NAMES = ["story-spine", "three-act", "kishotenketsu"]      # the order they are offered in
+ORIGINAL = ["story-spine", "three-act", "kishotenketsu"]
+SHAPES = ["save-the-cat", "heros-journey", "seven-point", "freytag", "single-moment", "circular", "in-medias-res"]     # (batch 21)
+NAMES = ORIGINAL + SHAPES                                   # the order they are offered in
 SCREEN = ["feature-film", "short-film"]                 # (batch 17: screen structures, offered after the prose ones, never rolled at random)
 ALL = NAMES + SCREEN
 
@@ -31,7 +33,7 @@ def run_cli(args, stdin, home, out):
 
 # --- the data ------------------------------------------------------------------------------------
 
-def test_three_structures_ship_with_the_story_spine_first():
+def test_ten_structures_ship_with_the_story_spine_first():
     reg = structures.registry()
     assert list(reg) == ALL and all(reg[n].screen for n in SCREEN) and not any(reg[n].screen for n in NAMES)
     assert reg["story-spine"].label == "Story Spine" and not reg["story-spine"].show_labels
@@ -57,8 +59,8 @@ def test_every_beat_has_templates_and_they_pass_the_lint():
 
 
 def test_beats_have_their_own_templates_and_share_no_slots():
-    slots = [b.slot for s in structures.prose() for b in s.beats]
-    assert len(slots) == len(set(slots))
+    slots = [b.slot for s in structures.prose() if s.name in ORIGINAL for b in s.beats]
+    assert len(slots) == len(set(slots))                    # (the original three; the batch 21 shapes reuse frames: see the next test)
     act = {b.slot for b in structures.registry()["three-act"].beats}
     assert all(b.slot in act for n in SCREEN for b in structures.registry()[n].beats)          # (screen structures reuse the three-act frames)
     keys = [b.key for s in structures.registry().values() for b in s.beats]
@@ -111,8 +113,8 @@ def test_steps_follow_the_chosen_structure():
 def test_the_structure_step_rolls_every_structure():
     engine = Engine(seed=3)
     step = step_by_key("structure")
-    seen = {step.roll(engine, {"kept": {}, "seeds": {}, "atoms": {}})["structure"] for _ in range(80)}
-    assert seen == {s.label for s in structures.prose()}
+    seen = {step.roll(engine, {"kept": {}, "seeds": {}, "atoms": {}})["structure"] for _ in range(150)}
+    assert seen == {s.label for s in formats.structures_for("short-story")}             # (a draft's format decides which are rolled)
 
 
 def test_an_unknown_structure_falls_back_to_the_story_spine():
@@ -124,8 +126,8 @@ def test_an_unknown_structure_falls_back_to_the_story_spine():
 
 def test_sample_picks_a_structure_at_random_per_story():
     engine = Engine(seed=5)
-    seen = {build_story(engine, ["western"])["kept"]["structure"]["structure"] for _ in range(60)}
-    assert seen == {s.label for s in structures.prose()}
+    seen = {build_story(engine, ["western"])["kept"]["structure"]["structure"] for _ in range(150)}
+    assert seen == {s.label for s in formats.structures_for("short-story")}
 
 
 @pytest.mark.parametrize("name", NAMES)
@@ -253,5 +255,5 @@ def test_pick_a_structure_finish_then_go_back_and_change_it(home):
 def test_an_unrecognized_structure_is_refused_with_the_ones_that_fit(home):
     """A typed structure must be one of the list (batch 18): a typo is said, never silently turned into the Story Spine."""
     res = run_cli([], "\n".join(["k", "e structure", "zigzag", "k", "q"]) + "\n", home / "h", home / "o")
-    assert "'zigzag' is not one of the structures for a short story. Choose one of: Story Spine, Three-Act Outline, Kishōtenketsu." in res.stdout
+    assert "'zigzag' is not one of the structures for a short story. Choose one of: Story Spine, Three-Act Outline, Kishōtenketsu, Freytag's Pyramid, Single Moment, Circular Story, In Medias Res." in res.stdout
     assert "STRUCTURE" in res.stdout.split("Choose one of")[-1]                 # (k did not keep it: still on the structure step)

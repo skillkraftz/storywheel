@@ -294,18 +294,52 @@ class Session:
         out.update(format=formats.get(key).label, structure=shape.label)
         return out
 
+    def format_label(self):
+        """The draft's format as the pickers name it (Short story, Flash fiction...), for the card's header."""
+        return formats.get(formats.of_draft(self.story)).label
+
+    def needs_format(self):
+        """A brand-new draft that has not been asked its format yet (the Wheel asks first, before anything is rolled or kept)."""
+        return "format" not in self.story and not self.story["kept"] and not self.story.get("step")
+
     def set_format(self, key):
-        """Choose the draft's format: the structure is rolled again among those that fit when the one showing doesn't."""
+        """Choose the draft's format. On the structure step the structure is rolled again among those that fit when the one showing doesn't;
+        on any other step the draft's kept structure is swapped for the format's default when it no longer fits (said plainly)."""
         key = formats.find(key)
         if key is None:
             return False
         self.story["format"] = key
-        cand = with_field(self.cand, "format", formats.get(key).label, src="edited")
-        self._add(cand)
-        if not formats.fits(structures.find(cand.get("structure", "")), key):
-            self.reroll_field("structure")
-            self.note(f"A {formats.get(key).label.lower()}: the structure was rolled again among the ones that fit it.")
+        label = formats.get(key).label
+        if self.step.key == "structure":
+            cand = with_field(self.cand, "format", label, src="edited")
+            self._add(cand)
+            if not formats.fits(structures.find(cand.get("structure", "")), key):
+                self.reroll_field("structure")
+                self.note(f"A {label.lower()}: the structure was rolled again among the ones that fit it.")
+            return True
+        kept = self.story["kept"].get("structure")
+        if kept:
+            shape = structures.find(kept.get("structure", ""))
+            kept["format"] = label
+            if not formats.fits(shape, key):
+                fit = formats.default_structure(key)
+                if fit is not None:
+                    kept["structure"] = fit.label
+                    self._drop_body()
+                    self.note(f"A {label.lower()}: {shape.label if shape else 'the structure'} doesn't fit it, so the structure is now {fit.label} "
+                              "and the story body will be rolled again when you get to it.")
+                    if self.step.key == "spine":
+                        self.enter(self.i)                  # (the body on show was the old structure's: roll it again)
         return True
+
+    def _drop_body(self):
+        """Forget the kept story body (its beats belong to the old structure)."""
+        story = self.story
+        story.pop("repeats", None)
+        story["kept"].pop("spine", None)
+        story["history"].pop("spine", None)
+        story["atoms"].pop("spine", None)
+        story["threads"] = {}
 
     def edit_field(self, field, text):
         text = text.strip()
@@ -419,12 +453,7 @@ class Session:
             story["seeds"].setdefault(k, v)
         story["kept"][step.key] = new
         if step.key == "structure" and old and structures.get(old["structure"]) is not structures.get(new["structure"]):
-            story.pop("repeats", None)
-            for gone in ("spine",):                 # the old body doesn't fit the new shape
-                story["kept"].pop(gone, None)
-                story["history"].pop(gone, None)
-                story["atoms"].pop(gone, None)
-            story["threads"] = {}
+            self._drop_body()                       # (the old body doesn't fit the new shape)
             self.note("New structure: the story body will be rolled again when you get to it.")
         if old and old != new:
             n = substitute(story, i, old, new)

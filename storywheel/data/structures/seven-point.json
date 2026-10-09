@@ -1,0 +1,18 @@
+{
+ "_note": "Dan Wells's seven-point structure for a novel: hook, two plot turns, two pinches, a midpoint and a resolution. Beats reuse the three-act frames (act_*).",
+ "name": "seven-point",
+ "label": "Seven-Point",
+ "blurb": "Seven points for a novel, plotted backward from the end: hook, first plot turn, first pinch, midpoint, second pinch, second plot turn, resolution.",
+ "order": 6,
+ "show_labels": true,
+ "formats": ["novel"],
+ "beats": [
+  {"key": "sp_hook", "slot": "act_setup", "label": "Hook"},
+  {"key": "sp_turn1", "slot": "act_incident", "label": "Plot turn one"},
+  {"key": "sp_pinch1", "slot": "act_trials", "label": "Pinch one"},
+  {"key": "sp_midpoint", "slot": "act_midpoint", "label": "Midpoint"},
+  {"key": "sp_pinch2", "slot": "act_crisis", "label": "Pinch two"},
+  {"key": "sp_turn2", "slot": "act_turn", "label": "Plot turn two"},
+  {"key": "sp_resolution", "slot": "act_climax", "label": "Resolution"}
+ ]
+}

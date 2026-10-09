@@ -56,7 +56,7 @@ def test_the_wheel_says_how_many_were_tidied(home):
     (store.STORIES / "x.json").write_text(json.dumps(store.new_story()))
     from storywheel import tui
     seen = {}
-    def fake_run_app(story, engine, st, notice=""):
+    def fake_run_app(story, engine, st, notice="", **_):
         seen["notice"] = notice
     import storywheel.tui
     real = storywheel.tui.run_app

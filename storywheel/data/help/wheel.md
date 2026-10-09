@@ -18,6 +18,7 @@ remove_beat: On the story body: remove one of the repeated beat under the cursor
 copy_story: Copy the story so far to the clipboard as plain text
 update_inputs: Update a stale candidate to what you have kept since
 ignore: Dismiss a stale-candidate warning (the candidate stays as it is)
+pick_format: Change the draft's format (flash fiction, short story, novel, screenplay); a structure that no longer fits is swapped, and the screen says so
 new_draft: Start a new draft (asks which universe it belongs to; the one you leave is saved)
 copy_draft: Make an editable copy of a promoted draft (promoted drafts are read-only)
 back: Go back one step

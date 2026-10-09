@@ -162,7 +162,7 @@ class Hub(App):
         self.notice = self.notice or self._tidy_notice() or self.take_start_message()
         self.session = Session(story, self.engine, ratings=self.engine.ratings)
         self.st.update(mode="wheel", draft=story["id"])
-        return MainScreen(self.session)
+        return MainScreen(self.session, ask_format=not story["kept"] and "format" not in story)
 
     def _tidy_notice(self):
         cleaned = store.cleanup_empty_drafts()

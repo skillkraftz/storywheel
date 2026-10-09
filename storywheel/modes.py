@@ -63,7 +63,7 @@ def run_wheel(st, payload, get_engine, plain=False):
             story["universes"] = [payload["universe"]]
             story["home"] = payload["universe"]
     st.update(mode="wheel", draft=story["id"])
-    return run_app(story, get_engine(), st, notice)
+    return run_app(story, get_engine(), st, notice, ask_format=not story["kept"] and "format" not in story)
 
 
 def run_builder(st, payload, get_ratings):
