@@ -5141,10 +5141,10 @@ today is 10-09. It was left alone (outside the checklist); it needs a date taken
 | 7 | Stories without `family` unchanged; rename/delete of one version leaves siblings (delete to .trash) | Works | |
 | 8 | Help pages, manual, FEATURES, BACKLOG, CHANGELOG | Works | |
 
-## Tests added (+93)
-- `test_versions.py` (68): families and rows, slug suffix, each copy option, separate copies, structure that doesn't fit, all 16 format pairs with and without the manuscript, the conversions, delete/rename isolation, CLI, promotion with two formats.
+## Tests added (+64 net: the suite went from 2,920 to 2,984 collected; 75 in the three new files, corrected in batch 21 from "+93")
+- `test_versions.py` (59): families and rows, slug suffix, each copy option, separate copies, structure that doesn't fit, all 16 format pairs with and without the manuscript, the conversions, delete/rename isolation, CLI, promotion with two formats.
 - `test_versions_builder.py` (8): the form by key, cancel, the button and list key, grouped list, plain row for a story without versions, `]`/`[`, the thin layout (200x50 and 120x40).
-- `test_versions_wheel.py` (9): promotion ticks and the no-tick case; headless Neovim checks of the status line and window title for each format, two versions told apart, a long title.
+- `test_versions_wheel.py` (8): promotion ticks and the no-tick case; headless Neovim checks of the status line and window title for each format, two versions told apart, a long title.
 - Updated for the new status line text: `test_statusline.py`, `test_writer.py`, `test_polish1.py`.
 
 ## Manual test script (what the cloud can't check)

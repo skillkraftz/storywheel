@@ -241,11 +241,13 @@ def test_25_past_stories_show_long_titles_and_mark_copies(home):
         await pilot.pause()
         return screen_text(app)
     text = run_tui(copy, make_engine(home), script, size=(200, 50))
-    rows = [l for l in text.splitlines() if "10-08" in l and "Dry Summer" in l]
+    import datetime
+    today = datetime.date.today().strftime("%m-%d")                 # (the list shows the draft's date; the test must not hard-code a day)
+    rows = [l for l in text.splitlines() if today in l and "Dry Summer" in l]
     assert len(rows) == 2, rows
     original = next(l for l in rows if "(copy)" not in l)
     copied = next(l for l in rows if "(copy)" in l)
-    assert "Dry Summer of Ann Lowell 10-08" in " ".join(original.split()) or "Dry Summer of Ann Lowell " in original      # not cut at 22 characters
+    assert f"Dry Summer of Ann Lowell {today}" in " ".join(original.split()) or "Dry Summer of Ann Lowell " in original      # not cut at 22 characters
     assert "(copy)" in copied and "…" in copied.split("(copy)")[0]                                                       # the copy keeps its mark when the title is cut
 
 
