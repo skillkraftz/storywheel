@@ -208,6 +208,12 @@ class Story:
         self.universe, self.slug = universe, slug
         self.path = universe.path / "stories" / slug
 
+    def __eq__(self, other):
+        return isinstance(other, Story) and self.path == other.path
+
+    def __hash__(self):
+        return hash(self.path)
+
     # outline
     @property
     def outline_path(self):
@@ -859,9 +865,9 @@ class Universe:
         s = Story(self, slug)
         return s if s.path.is_dir() else None
 
-    def new_story(self, title, meta=None, sections=None, seed=None):
+    def new_story(self, title, meta=None, sections=None, seed=None, slug=None):
         taken = {s.slug for s in self.stories()}
-        slug = _unique(slugify(title, "story"), taken)
+        slug = slug if slug and slug not in taken else _unique(slugify(title, "story"), taken)
         s = Story(self, slug)
         s.path.mkdir(parents=True, exist_ok=True)
         m = {"id": slug, "title": title, "universe": self.slug, "created": datetime.date.today().isoformat()}

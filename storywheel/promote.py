@@ -83,10 +83,14 @@ class Plan:
         self.genres = []
         self.story_title = "Untitled"
         self.meta, self.sections = {}, {}
+        self.also = []                          # format keys to also start as: one more version of the story each (see versions.py)
 
     def lines(self):
         out = [f"Story: '{self.story_title}' (outline, settings, an empty manuscript)"]
         out += [i.line() for i in self.items]
+        from . import formats
+        out += [f"Also start as {formats.get(k).label.lower()}: a second version of the story, from the same outline (the entities are shared)"
+                for k in self.also]
         if self.new_universe_name:
             out.insert(0, f"New universe '{self.new_universe_name}'"
                        + (f" leaning {' / '.join(self.genres)}" if self.genres else ""))
@@ -240,6 +244,13 @@ def apply_plan(plan, universe=None, draft=None):
     meta = dict(plan.meta, cast=cast)
     story = universe.new_story(plan.story_title, meta, plan.sections, seed=plan.draft)
     report.append(f"Created story '{story.title}'.")
+    if plan.also:
+        from . import formats, versions
+        for key in plan.also:
+            if key == formats.of_story(story):
+                continue
+            extra, _notes = versions.new_version(story, key)
+            report.append(f"Created {formats.get(key).label.lower()} version '{extra.slug}' of the story (same outline, same entities).")
     if draft is not None:
         draft["promoted"] = {"universe": universe.slug, "story": story.slug}
     return story, report

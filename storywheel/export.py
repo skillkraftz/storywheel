@@ -349,7 +349,8 @@ def build_fountain(story, path, anonymous=None):
     text = compile_text(story)
     if not story.is_screenplay():
         info, warnings = author_info(story, anonymous=bool(anonymous))
-        Path(path).write_text(f"Title: {story.title}\nAuthor: {info['byline']}\n\n{text}\n", encoding="utf-8")
+        from . import versions
+        Path(path).write_text(f"Title: {story.title}\nAuthor: {info['byline']}\n\n{versions.prose_to_fountain(text)}", encoding="utf-8")
         return warnings + ["This story is prose: written out as Fountain action, unformatted (set its format to screenplay to write a script)."]
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
     head = [f"Title: {' '.join(tp['title'])}"]

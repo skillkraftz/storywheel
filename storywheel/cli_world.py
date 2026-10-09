@@ -41,12 +41,21 @@ def story_json(s):
             "author": {k: v for k, v in settings.load_global().items()
                        if k in ("author_name", "legal_name", "address", "email", "phone")},
             "screenplay": s.is_screenplay(), "script": str(s.script_path),
-            "target_pages": _target_pages(s), "format_key": _formats().of_story(s), "target_words": _target_words(s)}
+            "target_pages": _target_pages(s), "format_key": _formats().of_story(s), "target_words": _target_words(s),
+            "family": _versions().family_of(s),
+            "siblings": [x.slug for x in _versions().siblings(s)],
+            "versions": [{"id": x.slug, "title": x.title, "format_key": _formats().of_story(x)} for x in _versions().versions(s)]
+            if _versions().family_of(s) else []}
 
 
 def _formats():
     from . import formats
     return formats
+
+
+def _versions():
+    from . import versions
+    return versions
 
 
 def _target_words(s):
@@ -276,7 +285,28 @@ def cmd_story(args):
     s = u.story(slug)
     if not s:
         sys.exit(f"No story '{slug}' in {u.slug}")
+    if args.action == "version":
+        return _make_version(s, args)
     emit(story_json(s)) if args.json else print(json.dumps(story_json(s), indent=2, ensure_ascii=False))
+
+
+def _make_version(story, args):
+    from . import formats, versions
+    key = formats.find(args.format) if args.format else None
+    if key is None:
+        sys.exit("Give the new version's format:  --format " + "|".join(f.key for f in formats.FORMATS))
+    copy = versions.DEFAULT_COPY if args.copy is None else tuple(c.strip() for c in args.copy.split(",") if c.strip() and c.strip() != "none")
+    try:
+        new, notes = versions.new_version(story, key, args.title, copy)
+    except versions.VersionError as e:
+        sys.exit(str(e))
+    result = {"universe": new.universe.slug, "story": new.slug, "title": new.title, "format": key, "family": versions.family_of(new),
+              "copied": list(copy), "notes": notes, "path": str(new.path)}
+    if args.json:
+        emit(result)
+    else:
+        print(f"  Made {new.universe.slug}/{new.slug}: \"{new.title}\", a {formats.get(key).label.lower()} in the family of {result['family']}.")
+        print("\n".join("  " + n for n in notes))
 
 
 def _story_of(target):
@@ -335,6 +365,14 @@ def cmd_promote(args):
         sys.exit("No such draft, or nothing kept in it.")
     universe = _universe(args.universe) if args.universe else None
     plan = promote.build_plan(draft, universe, Engine(user_dir=paths.home()), args.new)
+    if args.also:
+        from . import formats
+        for text in args.also.split(","):
+            key = formats.find(text)
+            if key is None:
+                sys.exit(f"Unknown format '{text}'. Choose from: {', '.join(f.key for f in formats.FORMATS)}")
+            if key not in plan.also:
+                plan.also.append(key)
     if args.dry_run:
         emit({"lines": plan.lines()}) if args.json else print("\n".join("  " + l for l in plan.lines()))
         return
@@ -697,9 +735,14 @@ def add_parsers(sub):
     p.add_argument("--from", dest="from_file", help="install: unpack this LanguageTool .zip instead of downloading")
     p.add_argument("--clear", action="store_true")
     p.add_argument("--json", action="store_true")
-    p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY")
-    p.add_argument("action", choices=["list", "show"])
-    p.add_argument("target", nargs="?", help="for show: universe/story")
+    p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY | "
+                                     "story version UNIVERSE/STORY --format KEY")
+    p.add_argument("action", choices=["list", "show", "version"])
+    p.add_argument("target", nargs="?", help="for show and version: universe/story")
+    p.add_argument("--format", help="version: the new version's format: short-story, novel, feature-film or short-film")
+    p.add_argument("--title", help="version: its title (default: the same title)")
+    p.add_argument("--copy", help="version: what to copy, a comma list of outline,notes,seed,genres,structure,manuscript (default: all but "
+                                  "manuscript; 'none' copies nothing)")
     p.add_argument("--universe")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("script", help="screenplays:  script ensure|start UNIVERSE/STORY [--replace] | script check|pages|scenes FILE [--target-pages N]")
@@ -712,6 +755,7 @@ def add_parsers(sub):
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
     p.add_argument("--universe", help="an existing universe (default: make a new one)")
     p.add_argument("--new", help="name for the new universe (default: the story's title)")
+    p.add_argument("--also", help="also start the story as these formats (comma list of short-story, novel, feature-film, short-film)")
     p.add_argument("--dry-run", action="store_true", help="show what would be created")
     p.add_argument("--yes", action="store_true", help="don't ask")
     p.add_argument("--json", action="store_true")
