@@ -22,6 +22,18 @@ function M.reload()
   if data then M.info = data end
 end
 
+-- What this story is written as, in words ("short story", "feature film"): the status line and the window title say which version you are in.
+local FORMAT_NAMES = { ["short-story"] = "short story", ["novel"] = "novel", ["feature-film"] = "feature film", ["short-film"] = "short film" }
+function M.format_name()
+  return FORMAT_NAMES[(M.info or {}).format_key or "short-story"] or "short story"
+end
+
+-- "Title (format)": the title with its format, as the status line and the window title show it.
+function M.title_with_format(title)
+  title = vim.trim(title or "")
+  return title ~= "" and (title .. " (" .. M.format_name() .. ")") or ""
+end
+
 function M.settings()
   return M.info.settings or {}
 end

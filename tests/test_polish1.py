@@ -390,9 +390,9 @@ def test_4_the_status_line_shows_the_whole_title_when_it_fits_and_shortens_only_
     s = u.new_story("The Last Clause of the Dry Years")           # 32 characters: over the old fixed limit of 30
     s.add_scene("Opening", "The gate was shut.")
     r = drive(s, [keys("<Cmd>set columns=140<CR>")], "R.wide = require('sw.stats').line()")
-    assert "The Last Clause of the Dry Years  ·  words:" in r["wide"]
+    assert "The Last Clause of the Dry Years (short story)  ·  words:" in r["wide"]
     r = drive(s, [keys("<Cmd>set columns=70<CR>")], "R.narrow = require('sw.stats').line()")
-    assert "…  ·  words:" in r["narrow"] and "The Last Clause of the Dry Years" not in r["narrow"]
+    assert "…  ·  words:" in r["narrow"].replace(" (short story)", "") and "The Last Clause of the Dry Years" not in r["narrow"]
 
 
 # --- 5. no paragraph indent in the Writer's floats ----------------------------------------------------------------------

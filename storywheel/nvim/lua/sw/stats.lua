@@ -182,9 +182,14 @@ function M.line()
   local rest = string.format("%swords: in this scene %s · in the story %s · %s%s", M.pages_cached and (M.pages_cached .. "  ·  ") or "",
                              commas(M.scene_cached), total, today_text, g ~= "" and ("  ·  " .. g) or "")
   -- always say which story this is (no writing into the wrong one): the whole title when it fits, shortened only when the window is too narrow
+  -- and which version of it: the title with its format, "Cold Coffee (feature film)"
   local title = vim.trim((story.info or {}).title or "")
   local room = vim.o.columns - vim.fn.strdisplaywidth(rest) - 8
-  if vim.fn.strdisplaywidth(title) > math.max(room, 12) then title = vim.fn.strcharpart(title, 0, math.max(room, 12) - 1) .. "…" end
+  local fmt = " (" .. story.format_name() .. ")"
+  if vim.fn.strdisplaywidth(title) + #fmt > math.max(room, 12) then
+    title = vim.fn.strcharpart(title, 0, math.max(room - #fmt, 12) - 1) .. "…"
+  end
+  if title ~= "" then title = title .. fmt end
   return "  " .. (title ~= "" and (title .. "  ·  ") or "") .. rest
 end
 

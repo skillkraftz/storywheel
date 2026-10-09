@@ -465,7 +465,7 @@ function M.start()
   if M.started or not story.dir then return end
   M.started = true
   local title = vim.trim((story.info or {}).title or "")
-  if title ~= "" then vim.o.titlestring = "storywheel: " .. title end           -- (the window title says which story this is)
+  if title ~= "" then vim.o.titlestring = "storywheel: " .. story.title_with_format(title) end           -- (the window title says which story this is)
   story.ensure_first_scene()
   local saved = session.load()
   gui.setup()                                       -- (is this the Writer's own kitty window?)

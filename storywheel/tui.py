@@ -363,7 +363,8 @@ class PromotePreviewScreen(ModalScreen):
 
     def compose(self) -> ComposeResult:
         with Vertical(id="dlg"):
-            yield Static("Here is what will be created. Nothing is written until you press Promote.", markup=False)
+            yield Static("Here is what will be created. Nothing is written until you press Promote. Enter or a click ticks a format to "
+                         "also start (a second version of the story, same outline).", markup=False)
             yield OptionList(id="plan")
             yield Static("", id="plan-note", markup=False)
             with Horizontal():
@@ -388,6 +389,16 @@ class PromotePreviewScreen(ModalScreen):
         for n, item in enumerate(self.plan.items):
             style = "yellow" if item.existing else ""
             rows.append(Option(Text(("  ↔ " if item.existing else "  + ") + item.line(), style=style), id=str(n)))
+        from . import formats
+        own = formats.of_draft(self.plan.draft)
+        rows.append(Option(Text("Also start as (another version of the story from the same outline; the entities above are created once):",
+                                style="bold"), disabled=True))
+        for f in formats.FORMATS:
+            if f.key == own:
+                rows.append(Option(Text(f"  [x] {f.label.lower()}  (this story)", style="dim"), disabled=True))
+                continue
+            on = f.key in self.plan.also
+            rows.append(Option(Text(("  [x] " if on else "  [ ] ") + f.label.lower(), style="green" if on else ""), id="fmt:" + f.key))
         lst.add_options(rows)
         if keep is not None:
             lst.highlighted = min(keep, len(rows) - 1)
@@ -395,6 +406,11 @@ class PromotePreviewScreen(ModalScreen):
         self.query_one("#plan-note", Static).update(note)
 
     def on_option_list_option_selected(self, event):
+        if str(event.option.id).startswith("fmt:"):
+            key = event.option.id[4:]
+            self.plan.also = [k for k in self.plan.also if k != key] if key in self.plan.also else self.plan.also + [key]
+            self.rebuild()
+            return
         item = self.plan.items[int(event.option.id)]
         if item.existing:
             item.merge = not item.merge

@@ -374,3 +374,4 @@ def test_a_story_without_a_family_exports_and_lists_as_before(home):
     assert export.compile_text(s) and export.plain_text(s)
     assert [r["family"] for r in versions.rows(s.universe)] == [""]
     assert "family" not in (s.path / "story.md").read_text(encoding="utf-8")
+
