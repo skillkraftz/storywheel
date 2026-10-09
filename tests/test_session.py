@@ -23,7 +23,7 @@ def to_step(sess, key):
 
 def test_a_new_session_shows_the_first_step_with_one_roll(sess):
     assert sess.i == 0 and sess.step.key == "genre" and len(sess.hist) == 1 and sess.cur == 0
-    assert set(sess.field_names) == {"genre", "mood"}
+    assert set(sess.field_names) == {"genre", "mood", "focus", "ending"}
 
 
 def test_roll_adds_a_new_candidate_and_shows_it(sess):

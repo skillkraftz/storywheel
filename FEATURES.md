@@ -65,6 +65,10 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 
 | Control | Key / mouse | What it is for | Test | Status | Checked |
 |---|---|---|---|---|---|
+| Format question | appears on a new draft; Enter picks, Esc takes your default | What you are writing: Flash fiction, Short story, Novel, Screenplay (feature film or short film) | test_wheel_format.py | works (the plain prompt does not ask) | P |
+| Card frame | `F` changes the format | The frame always names the step and the draft's format; a kept structure that no longer fits is swapped, the body dropped, and the screen says so | test_wheel_format.py | works | P |
+| Focus line (Genre step) | click, `f` or `e`; Enter picks | One protagonist, two leads, an ensemble, a place, no one; a place or no one skips the Protagonist step | test_focus.py | works (two leads and an ensemble only add a partner or company: BACKLOG.md) | P |
+| Ending line (Genre step) | click, `f` or `e`; Enter picks | Any, triumph, bittersweet, tragic, open: steers climax and resolution frames | test_endings.py | works (only general frames carry an ending: BACKLOG.md) | P |
 | Hint line | — | One line about the step | test_tui.py | works | P |
 | Stale banner + Update / Reroll / Ignore | `a` update, `i` ignore, buttons | A candidate built on a stand-in or on something that changed since | test_inputs.py, test_ui_pass.py | works | P |
 | "#N of M" line | — | Which roll of this step you are looking at | test_tui.py | works | P |

@@ -80,6 +80,17 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
 
 ## Ideas (not decided)
 
+- **Shapes (batch 21) left over.** *Partial.* (1) *Two leads and an ensemble* only add a partner or a company to the Protagonist step; every beat still
+  tells the lead's story in the singular. A real version needs frames with a plural or dual subject (agreement for habit verbs, "they"), beats that
+  alternate between the leads, and a Builder view of the cast. (2) *A place* and *no one* use "everyone in {place}" and "someone" as the subject of
+  frames written for a person, and set aside the frames that read the protagonist's job, traits, want or need (about a third of the body frames,
+  and all but 7 of the setup, 7 of the "once" and 8 of the premise frames until batch 21 added person-free ones). A mood piece would read better with
+  frames written for it (images, weather, objects as the subject), and a place story with frames where the place acts (the town "remembers", the
+  river "rises"). (3) *Endings:* only the general climax and resolution frames carry an ending (about 30 of 180 climax frames); the genre files
+  carry none, so `steps.ENDING_SHARE` makes six in ten draws come from the tagged ones. Tagging the genre files, by hand, would make the endings
+  read in the genre's own voice. (4) The structure step's format picker does not start on the current format (the new ones do). (5) The plain
+  prompt does not ask the format first. (6) Flash fiction has no structure of its own beyond Single Moment, and no shorter Story Spine.
+
 - Writing sprints: a timer with a word target in the status line.
 - Show curly quotes while writing without changing the file (a concealed overlay).
 - Richer repeated-word checks: sentence openings, -ly adverbs, "filter" words (felt, saw, noticed), a per-scene view.
@@ -91,6 +102,8 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
 
 ## Done
 
+- **Shapes (0.23.0):** Flash fiction; the format asked first and changeable (F); Save the Cat, Hero's Journey, Seven-Point, Freytag, Single Moment,
+  Circular Story and In Medias Res; story focus (one, two leads, ensemble, a place, no one); ending (any, triumph, bittersweet, tragic, open).
 - **Versions (0.22.0):** the same story in several formats as sibling stories in one universe (New version, grouped list, `]`/`[`, Wheel promotion's
   "Also start as", `story version`, rough manuscript conversions, the Writer showing title and format).
 

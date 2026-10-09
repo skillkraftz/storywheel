@@ -196,7 +196,13 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
     plan.meta = {"genre": genre.get("genre", ""), "mood": genre.get("mood", ""),
                  "structure": shape.label if kept.get("structure") else "", "motif": motif or "",
                  "promoted_from": draft.get("id", "")}
-    from . import formats
+    from . import endings, formats
+    if not person:
+        plan.meta["focus"] = focus.get(focus.of_draft(draft)).label           # (the story's own record that it has no protagonist)
+    elif focus.of_draft(draft) != focus.DEFAULT:
+        plan.meta["focus"] = focus.get(focus.of_draft(draft)).label
+    if endings.of_draft(draft) != endings.DEFAULT:
+        plan.meta["ending"] = endings.get(endings.of_draft(draft)).label
     plan.meta["format"] = formats.of_draft(draft)               # (vault.new_story makes it a setting, with the format's usual target)
     if draft.get("repeats"):                                    # repeatable beats the story has more than once (see structures.py)
         plan.meta["repeats"] = ",".join(f"{k}={n}" for k, n in sorted(draft["repeats"].items()))

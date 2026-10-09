@@ -46,8 +46,8 @@ def test_no_field_reroll_repeats_itself_forever(home, step_key):
         for field in s.field_names:
             if field == "season" and steps.season_of(s.fields.get("era")):
                 continue                      # (an era that names a season fixes it: batch 8)
-            if field == "format":
-                continue                      # (the format is picked from a list, never rolled: batch 18)
+            if field in ("format", "focus", "ending"):
+                continue                      # (the format, focus and ending are picked from a list, never rolled: batches 18 and 21)
             seen = {s.fields[field]}
             for _ in range(10):
                 s.reroll_field(field)

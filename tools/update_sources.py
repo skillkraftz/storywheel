@@ -64,7 +64,10 @@ the Markov name maker. Fairy-tale material is written from the shared folklore t
 (Grimm, Perrault, Andersen and the like are public domain), but not from their text.
 The Story Spine is Kenn Adams' teaching format; only its well-known openers are used
 here, as the fixed text of one structure. The three-act outline and kishotenketsu are
-general, unowned descriptions of story shape.
+general, unowned descriptions of story shape. So are the beat sheets added in batch 21: Save the Cat (the beat
+names are the book's; only the names are used, and every frame is original), the Hero's Journey (Campbell's and
+Vogler's stages, named in general terms), Seven-Point, Freytag's pyramid, and the single-moment, circular and in
+medias res shapes. The ending tags on climax and resolution frames are original.
 
 @@written@@
 

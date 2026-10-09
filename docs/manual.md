@@ -115,9 +115,13 @@ is about in the twist.
 
 ### Rolling a story, step by step
 
-1. Press **N** (or the New draft button) and choose the universe the draft belongs to, or start from where you are.
-2. Press **Space** until a genre and mood appeal to you. Press **k** to keep them.
-3. **Structure.** The first line is the format: short story, novel, screenplay (feature film) or screenplay (short film). Click it (or
+1. Press **N** (or the New draft button) and choose the universe the draft belongs to, or start from where you are. A new draft then asks
+   **what you are writing**: Flash fiction, Short story, Novel, Screenplay (feature film) or (short film), starting on your default
+   (Esc takes it). The frame around the card always names the format, and **F** changes it at any time.
+2. Press **Space** until a genre and mood appeal to you. Two more lines on this step are picked from a list (click, **f** or **e**), not
+   rolled: the **focus** (one protagonist, two leads, an ensemble, a place, no one) and the **ending** (any, triumph, bittersweet, tragic,
+   open). A place or no one skips the Protagonist step. Press **k** to keep.
+3. **Structure.** The first line is the format: flash fiction, short story, novel, screenplay (feature film) or screenplay (short film). Click it (or
    `f` / `e`) to pick one from a list. The second line is the structure: `f` or a click rolls one that fits the format, `e` or a
    right-click picks one. Keep with **k**.
 4. Carry on the same way through title, protagonist, setting, premise, the story body and the twist.
@@ -178,7 +182,7 @@ When the idea is worth growing, bring it into a universe:
    (blank fields filled in, nothing overwritten) and making another. **p** promotes; Esc cancels and nothing is written.
 4. You land in the Builder with the new story open.
 
-The preview also has **Also start as**: tick other formats (short story, novel, screenplay as a feature film or a short film) and each one
+The preview also has **Also start as**: tick other formats (flash fiction, short story, novel, screenplay as a feature film or a short film) and each one
 makes a second version of the story in the same universe, from the same outline. The characters, places and things are made once.
 
 A promoted draft stays in Past stories (marked ⇢) and becomes read-only in the Wheel, because the Builder now holds the real story.
@@ -513,7 +517,7 @@ of the tab. A message at the bottom is cleared when you change tab.
 - **Grammar:** grammar checking on or off, each category (grammar, punctuation, capitals, confused words, meaning, other on; spelling,
   typography, style, redundancy, plain English, colloquialisms, repeated words off), turned-off rules, the pause before checking, the
   memory limit. Java and LanguageTool status at the bottom.
-- **Export:** manuscript font (Times New Roman or Courier New), default format for new stories (short story, novel, screenplay (feature film) or screenplay (short film)), default export type, title in bold,
+- **Export:** manuscript font (Times New Roman or Courier New), default format for new stories (flash fiction, short story, novel, screenplay (feature film) or screenplay (short film)), default export type, title in bold,
   page header (full title or keyword), always export anonymously, one space after periods, curly quotes, screenplays' automatic
   (CONT'D), and the manuscripts folder.
 - **Keys:** every Writer shortcut. Type a key like `Alt+I`, `Ctrl+B` or `F9` and press Enter; a key the Writer needs, or one already

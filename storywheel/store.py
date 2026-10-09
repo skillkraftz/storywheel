@@ -192,6 +192,17 @@ def remove_universe_entry(step_key, index):
 def _slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:50] or "untitled"
 
+def _picks(story):
+    """The Genre step's picked fields that differ from the defaults, as ['Focus: A place', 'Ending: Tragic'] (none for the usual story)."""
+    from . import endings, focus
+    out = []
+    if focus.of_draft(story) != focus.DEFAULT:
+        out.append("Focus: " + focus.get(focus.of_draft(story)).label)
+    if endings.of_draft(story) != endings.DEFAULT:
+        out.append("Ending: " + endings.get(endings.of_draft(story)).label)
+    return out
+
+
 def to_markdown(story):
     kept = story["kept"]
     title = title_of(story)
@@ -204,6 +215,8 @@ def to_markdown(story):
         front += [f'genre: "{genre.get("genre", "")}"', f'mood: "{genre.get("mood", "")}"']
     if kept.get("structure"):
         front.append(f'structure: "{shape.label}"')
+    for pick in _picks(story):
+        front.append(f'{pick.split(":")[0].lower()}: "{pick.split(": ", 1)[1]}"')
     if motif:
         front.append(f'motif: "{motif}"')
     front += [f"created: {story['created'][:10]}", "tags: [storywheel]", "---", ""]
@@ -211,6 +224,8 @@ def to_markdown(story):
     head = [f"# {title}", ""]
     if genre:
         head.append(f"*{genre.get('genre', '')} · {genre.get('mood', '')}*")
+    if _picks(story):
+        head.append(f"*{' · '.join(_picks(story))}*")
     if motif:
         head.append(f"*Motif: {motif}*")
 
@@ -250,6 +265,8 @@ def to_plain(story, width=72):
                                   shape.label if kept.get("structure") else None) if x)
     if line:
         out.append(line)
+    if _picks(story):
+        out.append(" · ".join(_picks(story)))
     if motif:
         out.append(f"Motif: {motif}")
     blocks = ["\n".join(out)] if out else []
@@ -299,6 +316,16 @@ def delete(story):
         moved = moved or True
     return (HOME / ".trash") if moved else None
 
+def _focus_key(story):
+    from . import focus
+    return focus.of_draft(story)
+
+
+def _ending_key(story):
+    from . import endings
+    return endings.of_draft(story)
+
+
 def story_json(story, path=None):
     """Everything an outside program needs about a story, as plain data."""
     kept = story["kept"]
@@ -308,6 +335,7 @@ def story_json(story, path=None):
             "step": story.get("step", 0), "steps": len(steps_for(story)),
             "done": story.get("step", 0) >= len(steps_for(story)),
             "genre": genre.get("genre"), "mood": genre.get("mood"),
+            "focus": _focus_key(story), "ending": _ending_key(story),
             "structure": shape.label if kept.get("structure") else None,
             "motif": (kept.get("title") or {}).get("motif"),
             "kept": {k: public(v) for k, v in kept.items()},

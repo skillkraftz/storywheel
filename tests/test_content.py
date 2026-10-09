@@ -66,7 +66,7 @@ def test_whole_sentence_steps_start_with_a_capital():
 
 def test_sample_prints_complete_stories_and_saves_nothing(home):
     lines = []
-    sample(Engine(seed=1), ["western", "fairy tale"], 3, out=lines.append)
+    sample(Engine(seed=1), ["western", "fairy tale"], 3, out=lines.append, structure="story-spine")
     text = "\n".join(lines)
     for needle in ("1. ", "2. ", "3. ", "Once upon a time", "Every day", "One day", "Because of that",
                    "Until finally", "Ever since then", "Twist:"):

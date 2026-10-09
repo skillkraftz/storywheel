@@ -422,6 +422,24 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   it; `export` is an alias of `draft-export`; `universe` is retired. The generator-content guide lives in `docs/generator.md` (checked in batch 18, not
   re-checked); the README points at `docs/manual.md`.
 
+- Shapes (branch batch-21-shapes, 0.23.0). *Branches:* `main` did not yet hold the versions work (0.22.0, on `claude/gallant-knuth-qu093q`), so
+  batch-21-shapes starts from that branch. *Flash fiction* is a short story to the Writer and the export (`format = "short-story"`), told apart by
+  `script_kind = "flash"` (the setting a screenplay already uses for its kind; it is inherited like the format, so a default of flash works).
+  `Format.short` is the list label. *The format is asked first* only when a person starts the draft (`ask_format` on the screen, set by
+  `cli.run`, `modes.run_wheel` and the hub); tests and reopened drafts are never asked, and the plain prompt doesn't ask. A draft is "new" while it has no
+  `format`, nothing kept and step 0. *Structures:* new ones reuse the `act_*` frames (as the screen structures do), so the old test that prose
+  structures share no slots now covers only the original three; beat keys are prefixed (`stc_`, `hj_`, `sp_`, `fr_`, `sm_`, `ci_`, `im_`) because thread labels
+  are keyed by beat; only the Story Spine and Kishotenketsu were added to flash among the old ones. *Focus:* the investigation found that nearly
+  every body frame says `{first}` and about a third read the protagonist's own fields (`name last age job trait want need flaw secret rival`).
+  With no protagonist, `{first}` and `{name}` become "everyone in {place}" (a place) or "someone" (no one), those frames, `{first}'s`, atoms that
+  say `{first}`, and titles that name the character are set aside (`steps.Ctx.template_accept`, `slot_accept`), and the Protagonist step is skipped
+  at the move from the step before it (`Session._advance`). Rejected: "they" (object and possessive forms), the place or the motif as the subject
+  (personification, and abstract motifs such as "call"). A protagonist already kept stays in the draft but is ignored (and not promoted) while the
+  focus is not a person. Two leads and an ensemble add a `partner` or a `company` (three people) to the Protagonist step; promotion makes them
+  characters (role protagonist and ally). *Ending:* a template's optional `"ending"` (string or list); the genre files carry none, so with an
+  ending picked a beat draws six times in ten (`ENDING_SHARE`) only from frames tagged for it, else from everything that is untagged or tagged for
+  it. "Any" is the default and filters nothing, so older drafts and seeded samples are unchanged.
+
 - Versions (branch batch-20-versions, 0.22.0): a version is a separate story folder in the same universe. Siblings share a `family` id in
   story.md (the first story's slug, written into the source story when its first version is made) and a `version` number (the first story is 1; each
   new one the next). Content is COPIED, never synced. Stories with no `family` have no siblings and behave exactly as before; a family is only an id,

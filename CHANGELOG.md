@@ -2,7 +2,26 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
-## 0.22.0 — Versions: the same story in several formats
+## 0.23.0 — Shapes: the Wheel beyond one arc
+
+- Corrections from 0.22.0: a format has a short label (`formats.Format.short`), so a new format can't break the story list (`SHORT_LABELS` is gone);
+  the story list caches a script's page estimate by the file's stamp; the flip test and the script export (PDF, .fdx) warn about `NEW SCENE`
+  placeholder headings, with their lines; a past-stories test no longer hard-codes a date; the 0.22.0 test count in REPORT.md is corrected.
+- **Flash fiction** is a fifth format (1,000 words). To the Writer and the export it is a short story (`format = "short-story"`); `script_kind = "flash"`
+  tells it apart. It is in Settings > Export > Default format, the story form, the version form, `story version --format flash`, and "Also start as".
+- **The Wheel asks a new draft its format first** (a quick pick starting on your default; Esc takes it). The card's frame always names the format;
+  **F** changes it at any time, swapping a kept structure that no longer fits (and saying so). The plain prompt does not ask.
+- **Seven new structures**, as data: Save the Cat (15 beats), Hero's Journey (12) and Seven-Point for novels; Freytag's Pyramid for short stories and
+  novels; Single Moment (3), Circular Story and In Medias Res for flash and short stories. The Story Spine and Kishotenketsu also fit flash. They reuse
+  the Three-Act frames wherever a beat means the same, with six new slots (`theme`, `debate`, `reward`, `opening_image`, `echo`, `in_the_thick`),
+  each with general frames that every genre falls back to.
+- **Story focus**, a picked field on the Genre step: one protagonist, two leads (a partner), an ensemble (a company of three), a place, or no one.
+  A place or no one skips the Protagonist step; "everyone in {place}" or "someone" stands where `{first}` would; frames that read the protagonist's own
+  fields are set aside. Promotion makes no character for such a story, and makes characters for a partner or a company.
+- **Ending**, a picked field on the Genre step: any, triumph, bittersweet, tragic, open. Climax and resolution frames may carry an `"ending"`; others are
+  never drawn once an ending is picked, and about six draws in ten come from frames written for it.
+- `storywheel sample` takes `--focus`, `--format` and `--ending`. The markdown and plain text of a draft name a focus or ending that isn't the usual.
+
 
 - A story can have versions: separate stories in the same universe, in different formats (a short story AND a screenplay), sharing a `family` id
   in story.md. Content is copied, not synced. New module `versions.py`; the design is in docs/decisions.md.

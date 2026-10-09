@@ -28,7 +28,7 @@ def manuscript_label(src_fmt, dst_fmt):
 
 
 def next_format(story):
-    """The format a new version starts as: the first of the four the family doesn't have yet (else the story's own)."""
+    """The format a new version starts as: the first of the formats (flash last) the family doesn't have yet (else the story's own)."""
     have = {formats.of_story(s) for s in versions.versions(story)}
     return next((f.key for f in sorted(formats.FORMATS, key=lambda f: f.key == "flash") if f.key not in have), formats.of_story(story))
 

@@ -41,7 +41,10 @@ the Markov name maker. Fairy-tale material is written from the shared folklore t
 (Grimm, Perrault, Andersen and the like are public domain), but not from their text.
 The Story Spine is Kenn Adams' teaching format; only its well-known openers are used
 here, as the fixed text of one structure. The three-act outline and kishotenketsu are
-general, unowned descriptions of story shape.
+general, unowned descriptions of story shape. So are the beat sheets added in batch 21: Save the Cat (the beat
+names are the book's; only the names are used, and every frame is original), the Hero's Journey (Campbell's and
+Vogler's stages, named in general terms), Seven-Point, Freytag's pyramid, and the single-moment, circular and in
+medias res shapes. The ending tags on climax and resolution frames are original.
 
 - `act_climax/adventure`
 - `act_climax/comedy`
@@ -212,10 +215,12 @@ general, unowned descriptions of story shape.
 - `act_turn/romance`
 - `act_turn/sci-fi`
 - `act_turn/thriller`
+- `betrayal/general`
 - `climax/adventure`
 - `climax/comedy`
 - `climax/coming-of-age`
 - `climax/fantasy`
+- `climax/general`
 - `climax/ghost-story`
 - `climax/heist`
 - `climax/horror`
@@ -224,6 +229,8 @@ general, unowned descriptions of story shape.
 - `climax/romance`
 - `climax/sci-fi`
 - `climax/thriller`
+- `close/general`
+- `crime/general`
 - `deadline/adventure`
 - `deadline/comedy`
 - `deadline/coming-of-age`
@@ -237,11 +244,13 @@ general, unowned descriptions of story shape.
 - `deadline/romance`
 - `deadline/sci-fi`
 - `deadline/thriller`
+- `debate/general`
 - `disaster/adventure`
 - `disaster/comedy`
 - `disaster/coming-of-age`
 - `disaster/fairy-tale`
 - `disaster/fantasy`
+- `disaster/general`
 - `disaster/ghost-story`
 - `disaster/heist`
 - `disaster/horror`
@@ -279,6 +288,7 @@ general, unowned descriptions of story shape.
 - `do_thing/romance`
 - `do_thing/sci-fi`
 - `do_thing/thriller`
+- `echo/general`
 - `era/adventure`
 - `era/comedy`
 - `era/coming-of-age`
@@ -300,6 +310,7 @@ general, unowned descriptions of story shape.
 - `escalation/comedy`
 - `escalation/coming-of-age`
 - `escalation/fantasy`
+- `escalation/general`
 - `escalation/ghost-story`
 - `escalation/heist`
 - `escalation/horror`
@@ -329,6 +340,7 @@ general, unowned descriptions of story shape.
 - `flaw/comedy`
 - `flaw/coming-of-age`
 - `flaw/fantasy`
+- `flaw/general`
 - `flaw/ghost-story`
 - `flaw/heist`
 - `flaw/horror`
@@ -381,6 +393,7 @@ general, unowned descriptions of story shape.
 - `hiding/coming-of-age`
 - `hiding/fairy-tale`
 - `hiding/fantasy`
+- `hiding/general`
 - `hiding/ghost-story`
 - `hiding/heist`
 - `hiding/horror`
@@ -390,10 +403,12 @@ general, unowned descriptions of story shape.
 - `hiding/sci-fi`
 - `hiding/thriller`
 - `hiding/western`
+- `in_the_thick/general`
 - `inciting/adventure`
 - `inciting/comedy`
 - `inciting/coming-of-age`
 - `inciting/fantasy`
+- `inciting/general`
 - `inciting/ghost-story`
 - `inciting/heist`
 - `inciting/horror`
@@ -405,6 +420,7 @@ general, unowned descriptions of story shape.
 - `job/adventure-trades`
 - `job/comic-trades`
 - `job/coming-of-age-trades`
+- `job/everyday`
 - `job/fairy-tale-trades`
 - `job/fantasy-trades`
 - `job/frontier-trades`
@@ -449,6 +465,7 @@ general, unowned descriptions of story shape.
 - `landmark/coming-of-age`
 - `landmark/fairy-tale`
 - `landmark/fantasy`
+- `landmark/general`
 - `landmark/ghost-story`
 - `landmark/heist`
 - `landmark/horror`
@@ -477,6 +494,7 @@ general, unowned descriptions of story shape.
 - `last_name/thriller`
 - `last_name/western`
 - `loss/fantasy`
+- `loss/general`
 - `manner/adventure`
 - `manner/comedy`
 - `manner/coming-of-age`
@@ -495,6 +513,7 @@ general, unowned descriptions of story shape.
 - `message/coming-of-age`
 - `message/fairy-tale`
 - `message/fantasy`
+- `message/general`
 - `message/ghost-story`
 - `message/heist`
 - `message/horror`
@@ -504,6 +523,7 @@ general, unowned descriptions of story shape.
 - `message/sci-fi`
 - `message/thriller`
 - `message/western`
+- `mood/general`
 - `motive/adventure`
 - `motive/comedy`
 - `motive/coming-of-age`
@@ -521,6 +541,7 @@ general, unowned descriptions of story shape.
 - `need/comedy`
 - `need/coming-of-age`
 - `need/fantasy`
+- `need/general`
 - `need/ghost-story`
 - `need/heist`
 - `need/horror`
@@ -533,6 +554,7 @@ general, unowned descriptions of story shape.
 - `once/comedy`
 - `once/coming-of-age`
 - `once/fantasy`
+- `once/general`
 - `once/ghost-story`
 - `once/heist`
 - `once/horror`
@@ -541,6 +563,7 @@ general, unowned descriptions of story shape.
 - `once/romance`
 - `once/sci-fi`
 - `once/thriller`
+- `opening_image/general`
 - `place/adventure-ports`
 - `place/comic-towns`
 - `place/coming-of-age-towns`
@@ -591,6 +614,7 @@ general, unowned descriptions of story shape.
 - `premise/comedy`
 - `premise/coming-of-age`
 - `premise/fantasy`
+- `premise/general`
 - `premise/ghost-story`
 - `premise/heist`
 - `premise/horror`
@@ -618,6 +642,7 @@ general, unowned descriptions of story shape.
 - `reaction/comedy`
 - `reaction/coming-of-age`
 - `reaction/fantasy`
+- `reaction/general`
 - `reaction/ghost-story`
 - `reaction/heist`
 - `reaction/horror`
@@ -630,6 +655,7 @@ general, unowned descriptions of story shape.
 - `resolution/comedy`
 - `resolution/coming-of-age`
 - `resolution/fantasy`
+- `resolution/general`
 - `resolution/ghost-story`
 - `resolution/heist`
 - `resolution/horror`
@@ -638,11 +664,13 @@ general, unowned descriptions of story shape.
 - `resolution/romance`
 - `resolution/sci-fi`
 - `resolution/thriller`
+- `reward/general`
 - `rival/adventure`
 - `rival/comedy`
 - `rival/coming-of-age`
 - `rival/fairy-tale`
 - `rival/fantasy`
+- `rival/general`
 - `rival/ghost-story`
 - `rival/heist`
 - `rival/horror`
@@ -656,6 +684,7 @@ general, unowned descriptions of story shape.
 - `routine/comedy`
 - `routine/coming-of-age`
 - `routine/fantasy`
+- `routine/general`
 - `routine/ghost-story`
 - `routine/heist`
 - `routine/horror`
@@ -668,6 +697,7 @@ general, unowned descriptions of story shape.
 - `rumor/comedy`
 - `rumor/coming-of-age`
 - `rumor/fantasy`
+- `rumor/general`
 - `rumor/ghost-story`
 - `rumor/heist`
 - `rumor/horror`
@@ -676,10 +706,12 @@ general, unowned descriptions of story shape.
 - `rumor/romance`
 - `rumor/sci-fi`
 - `rumor/thriller`
+- `season/general`
 - `secret/adventure`
 - `secret/comedy`
 - `secret/coming-of-age`
 - `secret/fantasy`
+- `secret/general`
 - `secret/ghost-story`
 - `secret/heist`
 - `secret/horror`
@@ -706,6 +738,7 @@ general, unowned descriptions of story shape.
 - `someone/coming-of-age`
 - `someone/fairy-tale`
 - `someone/fantasy`
+- `someone/general`
 - `someone/ghost-story`
 - `someone/heist`
 - `someone/horror`
@@ -743,11 +776,13 @@ general, unowned descriptions of story shape.
 - `ten/romance`
 - `ten/sci-fi`
 - `ten/thriller`
+- `theme/general`
 - `thing/adventure`
 - `thing/comedy`
 - `thing/coming-of-age`
 - `thing/fairy-tale`
 - `thing/fantasy`
+- `thing/general`
 - `thing/ghost-story`
 - `thing/heist`
 - `thing/horror`
@@ -763,6 +798,7 @@ general, unowned descriptions of story shape.
 - `title/comedy`
 - `title/coming-of-age`
 - `title/fantasy`
+- `title/general`
 - `title/ghost-story`
 - `title/heist`
 - `title/horror`
@@ -804,6 +840,7 @@ general, unowned descriptions of story shape.
 - `title_noun/western`
 - `topic/adventure`
 - `topic/coming-of-age`
+- `topic/general`
 - `topic/ghost-story`
 - `topic/heist`
 - `topic/noir`
@@ -812,6 +849,7 @@ general, unowned descriptions of story shape.
 - `trait/comedy-traits`
 - `trait/coming-of-age-traits`
 - `trait/fantasy-traits`
+- `trait/general`
 - `trait/ghost-story-traits`
 - `trait/heist-traits`
 - `trait/horror-traits`
@@ -824,6 +862,7 @@ general, unowned descriptions of story shape.
 - `twist/comedy`
 - `twist/coming-of-age`
 - `twist/fantasy`
+- `twist/general`
 - `twist/ghost-story`
 - `twist/heist`
 - `twist/horror`
@@ -862,6 +901,7 @@ general, unowned descriptions of story shape.
 - `want/comedy`
 - `want/coming-of-age`
 - `want/fantasy`
+- `want/general`
 - `want/ghost-story`
 - `want/heist`
 - `want/horror`
@@ -870,6 +910,7 @@ general, unowned descriptions of story shape.
 - `want/romance`
 - `want/sci-fi`
 - `want/thriller`
+- `windfall/general`
 
 Of these, `job/fairy-tale-trades` includes nine jobs picked from corpora's
 obsolete-occupations list (charcoal burner, town crier, chapman, lamplighter, water
@@ -891,4 +932,4 @@ suggested by corpora's monsters list. Both are CC0.
 
 Hand-written by the project owner for v1, moved into JSON in Stage 1, and since
 shortened and retagged where they were too long or too specific. Grouped by slot:
-`betrayal/*`, `climax/*`, `close/*`, `crime/*`, `disaster/*`, `escalation/*`, `flaw/*`, `hiding/*`, `inciting/*`, `job/*`, `landmark/*`, `loss/*`, `message/*`, `mood/*`, `need/*`, `once/*`, `premise/*`, `reaction/*`, `resolution/*`, `rival/*`, `routine/*`, `rumor/*`, `season/*`, `secret/*`, `someone/*`, `thing/*`, `title/*`, `topic/*`, `trait/*`, `twist/*`, `want/*`, `windfall/*`.
+.

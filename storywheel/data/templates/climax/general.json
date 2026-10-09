@@ -37,8 +37,8 @@
     {"text": "{first} saved {CLOSE:human} and lost {LOSS}", "ending": ["bittersweet"]},
     {"text": "{first} forgave the {rival:human} {MANNER}, and it was not enough", "ending": ["bittersweet"]},
     {"text": "{first} {ACT_PLACE} {landmark} {MANNER}, and {SOMEONE} was waiting", "ending": ["open"]},
-    {"text": "{first} stood at {landmark} with {THING:portable} and did not know which way to turn", "ending": ["open"]},
-    {"text": "{first} {ACT_MESSAGE} {MESSAGE} {MANNER}, and the answer was not what anyone expected", "ending": ["open"]},
+    {"text": "{first} stood at {landmark} with {THING:portable}, torn between {PRIZE:!inner} and {VALUE}", "ending": ["open"]},
+    {"text": "{first} {ACT_MESSAGE} {MESSAGE} {MANNER}, and {SOMEONE} answered in a way nobody expected", "ending": ["open"]},
     {"text": "{first} chose, and {place} went quiet", "ending": ["open"]}
   ]
 }

@@ -178,7 +178,7 @@ person, object or event.
 ### Structures
 
 A story's body is shaped by a **structure**: an ordered list of beats, each with its own
-templates, built from the same atoms. Three ship in `storywheel/data/structures/`:
+templates, built from the same atoms. Ten prose structures ship in `storywheel/data/structures/` (and two screen ones):
 
 * **Story Spine**: Once upon a time, Every day, One day, Because of that (twice), Until
   finally, Ever since then. The fixed openers are the only frozen text anywhere.
@@ -186,6 +186,13 @@ templates, built from the same atoms. Three ship in `storywheel/data/structures/
   crisis; climax, resolution.
 * **Kishōtenketsu**: introduction, development, a surprising turn, reconciliation. No
   conflict required.
+* **Save the Cat** (15 beats), **Hero's Journey** (12), **Seven-Point** (7): for a novel.
+* **Freytag's Pyramid**: the tragic shape, for a short story or a novel.
+* **Single Moment** (3 beats), **Circular Story** (it returns to its opening image) and **In Medias Res**: for flash fiction and
+  short stories.
+
+`"formats"` in the file says which formats offer a structure (`flash`, `short-story`, `novel`, `feature-film`, `short-film`); without it a
+structure fits the short story and the novel. The pickers and a random roll offer only the ones that fit the draft's format.
 
 In a session, the **Structure** step comes right after Genre & mood; roll to see another,
 `k` to keep. Changing it later rolls the story body again. `storywheel sample` picks one
@@ -200,6 +207,24 @@ A structure is a small file, so you can add your own:
 
 Each beat's `slot` names a template list (`templates/five_hook/*.json`). A beat may also
 have an `"opening"` ("Once upon a time, ") and a `"closing"` (default `"."`).
+
+**Reuse a slot before you write one.** The `act_*` slots are whole sentences with no opener (`act_setup`, `act_incident`, `act_turn`,
+`act_trials`, `act_midpoint`, `act_crisis`, `act_climax`, `act_resolution`), `ki`, `ketsu` and `ten` are quiet ones, and `theme`, `debate`,
+`reward`, `opening_image`, `echo` and `in_the_thick` came with batch 21. Name them in the beats of the new structure, as `feature-film.json`
+and `save-the-cat.json` do. Beat keys must be unique across every structure (prefix them: `stc_`, `hj_`). Write a new slot only when nothing
+fits, and give it a `general.json` (`"tags": ["general"]`): a genre with no file of its own for a slot falls back to the general frames, so
+every genre renders. Add genre files later, as for any slot.
+
+**Endings.** A climax or resolution frame may say which endings it is for: `{"text": "...", "ending": ["tragic", "open"]}` (names from
+triumph, bittersweet, tragic, open; a string works for one). An untagged frame fits any ending. With an ending picked on the Genre step, a
+frame for other endings is never drawn, and a beat whose slot has frames for the picked ending draws from those alone six times in ten
+(`steps.ENDING_SHARE`), because the genre files carry no ending and would drown them out. Tag more frames, and write more of them, to give an
+ending more variety; `tests/test_endings.py` asks for at least three frames of each ending in each of the five climax and resolution slots.
+
+**Focus.** A story whose focus is a place or no one has no protagonist (`storywheel/focus.py`). Frames that read `{name}`, `{last}`, `{age}`,
+`{job}`, `{trait}`, `{want}`, `{need}`, `{flaw}`, `{secret}` or `{rival}` are set aside for it, and so are `{first}'s` and any title that says
+`{first}`; `{first}` becomes "everyone in {place}" (a place) or "someone" (no one). A frame meant to work for such a story should use only
+`{first}`, `{place}`, `{landmark}`, `{season}` and the atoms.
 
 **Repeatable beats.** A beat can say it may occur several times in a row, with a minimum (at least 1) and a maximum:
 `{"key": "because_2", "slot": "escalation", "label": "Because of that", "repeat": {"min": 1, "max": 4}}`. The Story Spine's

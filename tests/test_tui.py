@@ -66,7 +66,7 @@ def test_space_rolls_and_k_keeps(home):
         await press(pilot, "k")
         return s.step.key, dict(s.story["kept"]["genre"]), len(s.hist)
     step, kept, n = run_tui(new_story(), make_engine(home), script)
-    assert step == "structure" and set(kept) == {"genre", "mood"}
+    assert step == "structure" and set(kept) == {"genre", "mood", "focus", "ending"}
 
 
 def test_enter_on_the_card_also_rolls(home):

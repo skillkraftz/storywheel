@@ -3,7 +3,7 @@
     StoryFormScreen(title, values, new=True, has_writing=False)
 
 `values` is {"title", "format", "structure", "genres", "target"}; the screen returns the same dict (or None when cancelled). The format
-row offers the four formats (formats.FORMATS); the structure row only the structures that fit the format (and, for a story, "None");
+row offers the five formats (formats.FORMATS); the structure row only the structures that fit the format (and, for a story, "None");
 the genres row is a multiple choice; the target is a number in words for prose and pages for a script. Changing the format moves the
 structure and target to ones that fit. Used by the Builder's + Story and its "Format, structure, genres…" (both new and existing stories).
 """

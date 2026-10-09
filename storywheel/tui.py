@@ -1579,7 +1579,7 @@ class MainScreen(KeptScreen, Screen):
                              lambda out: self._edited(field, out))
 
     def pick_structure_field(self, field):
-        """The structure step's fields come from lists: the format from the four formats, the structure from those that fit it."""
+        """The structure step's fields come from lists: the format from the formats, the structure from those that fit it."""
         from . import formats
         s = self.session
         if field == "format":

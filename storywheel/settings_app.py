@@ -82,7 +82,7 @@ SECTIONS = [
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
         ("format", "Default format", "choice", formats.choices(),
-         "For new stories (a story can choose its own). A short story is complete; a novel is partial (chapters start new pages); a screenplay is written in Fountain and exports script pages (PDF, .fdx)."),
+         "For new stories (a story can choose its own). Flash fiction is a short story with a 1,000-word target. A short story is complete; a novel is partial (chapters start new pages); a screenplay is written in Fountain and exports script pages (PDF, .fdx)."),
         ("export_format", "Default export type", "choice", ["docx", "odt", "pdf", "md", "txt"], "The file type the one-key export makes; you can pick another each time."),
         ("export_title_bold", "Title in bold", "bool", None, "On the first page of the .docx."),
         ("export_header", "Page header shows", "choice", ["full", "keyword"],
@@ -265,7 +265,7 @@ class SettingsScreen(KeptScreen, Screen):
 
     @staticmethod
     def load_values():
-        """What the boxes show: the saved settings, the folders as they are now, and the default format as one of the four choices."""
+        """What the boxes show: the saved settings, the folders as they are now, and the default format as one of the five choices."""
         g = settings.load_global()
         g["library"] = str(paths.library_root())
         g["manuscripts_dir"] = str(paths.manuscripts_root())
@@ -320,7 +320,7 @@ class SettingsScreen(KeptScreen, Screen):
         if key == "manuscripts_dir":
             return self.save_manuscripts(value)
         g = settings.load_global()
-        if key == "format" and formats.known(value):                # one of the four choices: settings.toml keeps format + script_kind
+        if key == "format" and formats.known(value):                # one of the five choices (flash is a short story with script_kind = "flash"): settings.toml keeps format + script_kind
             g["format"] = formats.get(value).setting
             g["script_kind"] = value if (formats.is_script(value) or value == "flash") else ""
             settings.save_global(g)
