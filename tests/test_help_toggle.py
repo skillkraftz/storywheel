@@ -22,6 +22,7 @@ async def into(app, pilot, key, screen):
     if type(app.screen).__name__ != screen:
         await pilot.press(key)
         await settle(pilot)
+        await settle(pilot)
         if type(app.screen).__name__ == "ChoiceScreen":                    # (a new draft asks its format first: Esc takes the default)
             await pilot.press("escape")
             await settle(pilot)
@@ -71,6 +72,10 @@ def test_another_modes_key_closes_the_help_and_goes_there(world, key, mode, scre
         assert type(app.screen).__name__ == "HelpScreen"
         await pilot.press(other)
         await settle(pilot)
+        await settle(pilot)
+        if type(app.screen).__name__ == "ChoiceScreen":                    # (the Wheel's new draft asks its format first: Esc takes the default)
+            await pilot.press("escape")
+            await settle(pilot)
         return type(app.screen).__name__, app.mode_name, len([s for s in app.screen_stack if type(s).__name__ == "HelpScreen"])
     assert run_hub(script) == (other_screen, other_mode, 0)
 
