@@ -576,7 +576,7 @@ class BuilderScreen(KeptScreen, Screen):
                 rows.append(Option(Text(entry["title"], style="bold"), id="", disabled=True))     # one title, then a row per format
                 for s in entry["members"]:
                     here = bool(self.story and s.slug == self.story.slug)
-                    rows.append(Option(_name_and_count("  " + versions.SHORT_LABELS[formats.of_story(s)], versions.size_text(s), here), id=s.slug))
+                    rows.append(Option(_name_and_count("  " + formats.get(formats.of_story(s)).short, versions.size_text(s), here), id=s.slug))
         if not rows:
             rows.append(Option(Text("(none yet: +Story, or promote one from the Wheel)", style="dim"), id="", disabled=True))
         lst.add_options(rows)

@@ -322,7 +322,7 @@ class SettingsScreen(KeptScreen, Screen):
         g = settings.load_global()
         if key == "format" and formats.known(value):                # one of the four choices: settings.toml keeps format + script_kind
             g["format"] = formats.get(value).setting
-            g["script_kind"] = value if formats.is_script(value) else ""
+            g["script_kind"] = value if (formats.is_script(value) or value == "flash") else ""
             settings.save_global(g)
             self.say(f"Saved: default format = {formats.get(value).label}")
             return

@@ -1,6 +1,6 @@
 """What a story is written as: its format, chosen from a list (never typed), and what follows from it.
 
-    FORMATS                   the four choices: short story, novel, screenplay (feature film), screenplay (short film)
+    FORMATS                   the five choices: flash fiction, short story, novel, screenplay (feature film), screenplay (short film)
     structures_for(key)       the structures that fit a format (a screen structure names its formats; the others fit prose)
     of_story(story)           a promoted story's format key, from its settings (and its structure, for older scripts)
     of_draft(draft)           a Wheel draft's format key
@@ -8,7 +8,8 @@
     target(story)             (number, unit): the length the story aims at, in words for prose and pages for a script
 
 A story's settings.toml keeps `format` as short-story, novel or screenplay (what the Writer and the export read); a screenplay also keeps
-`script_kind` (feature-film or short-film) and `target_pages`, prose keeps `target_words`. A Wheel draft keeps the key itself (`format`)."""
+`script_kind` (feature-film or short-film) and `target_pages`, prose keeps `target_words`. Flash fiction is a short story to the Writer and the export
+(`format = "short-story"`) and is told apart by `script_kind = "flash"`. A Wheel draft keeps the key itself (`format`)."""
 from dataclasses import dataclass
 
 from . import settings, structures
@@ -16,18 +17,20 @@ from . import settings, structures
 
 @dataclass(frozen=True)
 class Format:
-    key: str              # short-story, novel, feature-film, short-film
+    key: str              # flash, short-story, novel, feature-film, short-film
     label: str            # what the pickers show
+    short: str            # the short label for lists ("Feature film")
     setting: str          # what settings.toml's `format` holds: short-story, novel or screenplay
     unit: str             # "words" or "pages"
     target: int           # the usual length, the target a new story starts with
 
 
 FORMATS = (
-    Format("short-story", "Short story", "short-story", "words", 5000),
-    Format("novel", "Novel", "novel", "words", 80000),
-    Format("feature-film", "Screenplay (feature film)", "screenplay", "pages", 110),
-    Format("short-film", "Screenplay (short film)", "screenplay", "pages", 12),
+    Format("flash", "Flash fiction", "Flash", "short-story", "words", 1000),
+    Format("short-story", "Short story", "Short story", "short-story", "words", 5000),
+    Format("novel", "Novel", "Novel", "novel", "words", 80000),
+    Format("feature-film", "Screenplay (feature film)", "Feature film", "screenplay", "pages", 110),
+    Format("short-film", "Screenplay (short film)", "Short film", "screenplay", "pages", 12),
 )
 BY_KEY = {f.key: f for f in FORMATS}
 DEFAULT = "short-story"
@@ -80,7 +83,11 @@ def from_setting(fmt, kind="", structure_text=""):
     """A format key from what settings.toml says (format, script_kind) and the story's structure: a script with no kind recorded is a short
     film when its structure is the short film's, else a feature."""
     fmt = str(fmt or "").strip().lower()
-    if fmt in ("short-story", "novel"):
+    if fmt == "flash":                                          # (a format key written where the setting belongs)
+        return fmt
+    if fmt == "short-story":
+        return "flash" if str(kind or "").strip().lower() == "flash" else fmt
+    if fmt == "novel":
         return fmt
     if fmt in SCRIPT_KINDS:                                     # (a format key written where the setting belongs)
         return fmt
@@ -130,7 +137,7 @@ def apply(story, key, target=None):
     if f.unit == "pages":
         values.update(script_kind=f.key, target_pages=max(1, target))
     else:
-        values.update(target_words=max(0, target))
+        values.update(target_words=max(0, target), script_kind="flash" if f.key == "flash" else "")
     settings.save_story(story.path, values)
 
 

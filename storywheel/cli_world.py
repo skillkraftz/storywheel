@@ -739,7 +739,7 @@ def add_parsers(sub):
                                      "story version UNIVERSE/STORY --format KEY")
     p.add_argument("action", choices=["list", "show", "version"])
     p.add_argument("target", nargs="?", help="for show and version: universe/story")
-    p.add_argument("--format", help="version: the new version's format: short-story, novel, feature-film or short-film")
+    p.add_argument("--format", help="version: the new version's format: flash, short-story, novel, feature-film or short-film")
     p.add_argument("--title", help="version: its title (default: the same title)")
     p.add_argument("--copy", help="version: what to copy, a comma list of outline,notes,seed,genres,structure,manuscript (default: all but "
                                   "manuscript; 'none' copies nothing)")
@@ -755,7 +755,7 @@ def add_parsers(sub):
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")
     p.add_argument("--universe", help="an existing universe (default: make a new one)")
     p.add_argument("--new", help="name for the new universe (default: the story's title)")
-    p.add_argument("--also", help="also start the story as these formats (comma list of short-story, novel, feature-film, short-film)")
+    p.add_argument("--also", help="also start the story as these formats (comma list of flash, short-story, novel, feature-film, short-film)")
     p.add_argument("--dry-run", action="store_true", help="show what would be created")
     p.add_argument("--yes", action="store_true", help="don't ask")
     p.add_argument("--json", action="store_true")

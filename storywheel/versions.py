@@ -87,9 +87,6 @@ def size_text(story):
     return f"{story.word_count():,} words"
 
 
-SHORT_LABELS = {"short-story": "Short story", "novel": "Novel", "feature-film": "Feature film", "short-film": "Short film"}
-
-
 def other_version(story, step=1):
     """The next (step 1) or previous (step -1) version of the story, wrapping round; None when it has no siblings."""
     family = versions(story)
