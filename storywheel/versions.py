@@ -75,7 +75,7 @@ def rows(universe):
 
 
 def size_text(story):
-    """'1,240 words' or 'about 12 pages': how big a version is, in its own unit."""
+    """'1,240 words' or '~12 pages': how big a version is, in its own unit."""
     if story.is_screenplay():
         pages = 0
         try:
@@ -83,8 +83,11 @@ def size_text(story):
             pages = screenplay_pdf.estimate_pages(story.manuscript_text()) if story.script_path.exists() else 0
         except Exception:                                  # (no reportlab: the words will do)
             pass
-        return f"about {pages:g} pages" if pages else f"{story.word_count():,} words"
+        return f"~{pages:g} pages" if pages else f"{story.word_count():,} words"
     return f"{story.word_count():,} words"
+
+
+SHORT_LABELS = {"short-story": "Short story", "novel": "Novel", "feature-film": "Feature film", "short-film": "Short film"}
 
 
 def other_version(story, step=1):

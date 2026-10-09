@@ -27,7 +27,7 @@ from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
-from . import fill, outline, paths, promote, rename, schemas, settings, state, structures, vault, writing_stats
+from . import fill, formats, outline, paths, promote, rename, schemas, settings, state, structures, vault, versions, writing_stats
 from .text import motif_from, plural_n
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
@@ -238,7 +238,7 @@ class BackupsScreen(ModalScreen):
 class StoryOptions(OptionList):
     BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
                 Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups"),
-                Binding("m", "act('form')", "Format, structure…")]
+                Binding("m", "act('form')", "Format, structure…"), Binding("v", "act('version')", "New version")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -277,6 +277,9 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("A", "add_beat", "Add a beat", show=False),
         Binding("X", "remove_beat", "Remove a beat", show=False),
         Binding("P", "start_script", "Start the script from the outline", show=False),
+        Binding("v", "new_version", "New version of the story", show=False),
+        Binding("right_square_bracket", "version(1)", "Next version", show=False, key_display="]"),
+        Binding("left_square_bracket", "version(-1)", "Previous version", show=False, key_display="["),
         navigation.back_binding(),
         navigation.quit_binding(),
         Binding("question_mark", "help", "Help", key_display="?"),
@@ -375,6 +378,7 @@ class BuilderScreen(KeptScreen, Screen):
                         yield _quiet(Button("Export", id="s-export"))
                     with Horizontal(classes="btns"):
                         yield _quiet(Button("Backups…", id="s-backups"))
+                        yield _quiet(Button("New version", id="s-version"))
                 with Vertical(id="story-box", classes="box") as box:
                     box.border_title = "Story"
                     yield Static("", id="story-summary", markup=False)
@@ -564,8 +568,15 @@ class BuilderScreen(KeptScreen, Screen):
         lst.clear_options()
         rows = []
         if self.universe:
-            for s in self.universe.stories():
-                rows.append(Option(_name_and_count(s.title, "", bool(self.story and s.slug == self.story.slug)), id=s.slug))
+            for entry in versions.rows(self.universe):
+                if not entry["family"]:                                     # (a story with no versions: one row, as always)
+                    s = entry["members"][0]
+                    rows.append(Option(_name_and_count(s.title, "", bool(self.story and s.slug == self.story.slug)), id=s.slug))
+                    continue
+                rows.append(Option(Text(entry["title"], style="bold"), id="", disabled=True))     # one title, then a row per format
+                for s in entry["members"]:
+                    here = bool(self.story and s.slug == self.story.slug)
+                    rows.append(Option(_name_and_count("  " + versions.SHORT_LABELS[formats.of_story(s)], versions.size_text(s), here), id=s.slug))
         if not rows:
             rows.append(Option(Text("(none yet: +Story, or promote one from the Wheel)", style="dim"), id="", disabled=True))
         lst.add_options(rows)
@@ -613,7 +624,9 @@ class BuilderScreen(KeptScreen, Screen):
             return
         beats = len([r for r in outline.rows(self.story) if r[0].startswith("beat:")])
         scenes = len(self.story.scene_list())
-        box.update(f"{self.story.title}\n{beats} beat{'s' if beats != 1 else ''} · {scenes} scene{'s' if scenes != 1 else ''} · "
+        fam = versions.siblings(self.story)
+        head = self.story.title + (f" ({formats.get(formats.of_story(self.story)).label.lower()}; {len(fam) + 1} versions, ] next)" if fam else "")
+        box.update(f"{head}\n{beats} beat{'s' if beats != 1 else ''} · {scenes} scene{'s' if scenes != 1 else ''} · "
                    f"{self.story.word_count():,} words\n6 outline · 7 scenes · 8 notes\n\\ shows the cards again")
 
     def refresh_top(self):
@@ -902,7 +915,7 @@ class BuilderScreen(KeptScreen, Screen):
         {"u-new": self.action_new_universe, "u-rename": lambda: self.universe_act("rename"),
          "u-delete": lambda: self.universe_act("delete"), "s-new": self.action_new_story,
          "s-write": self.action_writer, "s-export": self.action_export,
-         "s-backups": lambda: self.story_act("backups"),
+         "s-backups": lambda: self.story_act("backups"), "s-version": self.action_new_version,
          "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
          "ex-open": lambda: self.extra_act("open"), "ex-delete": lambda: self.extra_act("delete"), "ex-ignore": lambda: self.extra_act("ignore"),
          "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
@@ -1413,6 +1426,9 @@ class BuilderScreen(KeptScreen, Screen):
         elif what == "form":
             self.story = s
             self.action_story_form()
+        elif what == "version":
+            self.story = s
+            self.action_new_version()
         elif what == "delete":
             self.app.push_screen(ConfirmScreen(f"Delete the story '{s.title}' and its manuscript?\n\n"
                                                "It moves to the library's .trash folder."),
@@ -1650,6 +1666,37 @@ class BuilderScreen(KeptScreen, Screen):
         self.say(f"Started '{story.title}': a blank {f.label.lower()} ({shaped}). Press w to write it, or edit its outline rows (right-click or e)."
                  + (" P starts the script from the outline." if kind == "screenplay" else ""))
         self.b.changed = True
+
+    def action_new_version(self):
+        """Another version of the open story in another format: the story form, prefilled, plus what to copy."""
+        if not self.story:
+            return self.say("Open a story first.")
+        from .versionform import VersionFormScreen
+        self.app.push_screen(VersionFormScreen(self.story), self._version_made)
+
+    def _version_made(self, out):
+        if not out or not out.get("title"):
+            return
+        try:
+            new, notes = versions.new_version(self.story, out["format"], out["title"], out["copy"], out["target"])
+        except versions.VersionError as e:
+            return self.say(str(e))
+        self.story = new
+        self.refresh_all()
+        self.say(f"Made the {formats.get(out['format']).label.lower()} version '{new.title}' of the same story. Press ] and [ to move between its "
+                 "versions. " + " ".join(notes))
+        self.b.changed = True
+
+    def action_version(self, step):
+        """Move to the next (1) or previous (-1) version of the open story."""
+        if not self.story:
+            return self.say("Open a story first.")
+        other = versions.other_version(self.story, int(step))
+        if other is None:
+            return self.say("This story has no other versions. v makes one (another format, from the same outline).")
+        self.story = other
+        self.refresh_all()
+        self.say(f"Version: {formats.get(formats.of_story(other)).label} ({versions.size_text(other)}).")
 
     def action_story_form(self):
         """Change the open story's format, structure, genres and target length (the same form as a new story)."""
