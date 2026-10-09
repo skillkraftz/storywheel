@@ -5120,3 +5120,47 @@ All of ISSUES.md is fixed (16-36 in this pass), plus the optional "Use protagoni
 2795 + 121 tests passed, 4 skipped; parallel pass 797 s, serial pass 368 s, total 1165 s. The two polish-1 terminal tests and the Writer's late-reply
 test were also run on Neovim 0.11.4 and pass. Not checked by tests: split terminal replies (a reply cut in two reads with a long gap can still be typed),
 kitty, real LanguageTool, the real dictionary. Things to look at by hand are in the final message of the session.
+
+# Versions (branch `batch-20-versions`, 0.22.0)
+
+The same story as several stories in different formats, in one universe. Design: docs/decisions.md ("Versions"). Full run (`tools/fulltest.sh`, Neovim 0.12.5):
+parallel pass 2,858 passed, 1 failed, 4 skipped in 779 s; serial pass 121 passed in 366 s; total 1,145 s. The one failure,
+`test_polish2.py::test_25_past_stories_show_long_titles_and_mark_copies`, is not caused by this work: it looks for the literal date "10-08" on screen and
+today is 10-09. It was left alone (outside the checklist); it needs a date taken from the clock.
+
+## Checklist
+| # | Item | Status | What's missing |
+|---|---|---|---|
+| 0 | Decisions log moved to docs/decisions.md; CLAUDE.md pointer and the "don't read in full" line | Works | |
+| 1 | `versions.new_version`: title, format, copy choices (outline, notes, seed, genres, structure; manuscript off by default); slug suffix; rough manuscript conversions in every direction | Works | the conversions are deliberately crude (see below) |
+| 2 | Builder: `v` and New version button, prefilled form, copy checklist, "universe-wide, already shared" note | Works | |
+| 3 | Grouped story list (one title, a row per format with words or pages); `]` / `[` between versions | Works | a version row is shown by format only, so two versions of one format look alike (the title row above them is shared) |
+| 4 | Wheel promotion: "Also start as" ticks; entities created once; linked stories | Works | the plain prompt (`--plain`) has no such question; `promote --also` covers scripts |
+| 5 | Writer status line and window title show "Title (format)" | Works | |
+| 6 | CLI `story version ... --format --title --copy`; `story show --json` has `family`, `siblings`, `versions`; `promote --also` | Works | |
+| 7 | Stories without `family` unchanged; rename/delete of one version leaves siblings (delete to .trash) | Works | |
+| 8 | Help pages, manual, FEATURES, BACKLOG, CHANGELOG | Works | |
+
+## Tests added (+93)
+- `test_versions.py` (68): families and rows, slug suffix, each copy option, separate copies, structure that doesn't fit, all 16 format pairs with and without the manuscript, the conversions, delete/rename isolation, CLI, promotion with two formats.
+- `test_versions_builder.py` (8): the form by key, cancel, the button and list key, grouped list, plain row for a story without versions, `]`/`[`, the thin layout (200x50 and 120x40).
+- `test_versions_wheel.py` (9): promotion ticks and the no-tick case; headless Neovim checks of the status line and window title for each format, two versions told apart, a long title.
+- Updated for the new status line text: `test_statusline.py`, `test_writer.py`, `test_polish1.py`.
+
+## Manual test script (what the cloud can't check)
+1. In the Builder, open a short story with some manuscript. Press `v`. Check the dialog reads clearly at your terminal size, the explanation is whole, and Tab moves title > format > copy list > target > buttons.
+2. Choose Screenplay (feature film), tick the manuscript, make it. Press F3: in the real Writer in kitty, check the status line ("Title (feature film)") and the window title, and that script.fountain opens with the "Rough start" note (a Fountain note, not printed) and your prose as action with `.NEW SCENE` headings.
+3. Back in the Builder press `]` and `[`: the Story panel and F3 should follow the version. Check the Stories list reads well with two families.
+4. Make a screenplay version of a story, write a few lines of dialogue, then make a short-story version of the screenplay with the manuscript ticked: read the `"Words," Name said.` paragraphs. Decide if the rough conversion is worth keeping or should be simpler.
+5. Wheel: keep a story, leave with Q, choose a new universe, and in the preview tick "screenplay (feature film)". Check both stories exist and the characters were made once.
+6. Delete one version (d in the Stories list): the other must be untouched and the deleted one in `<library>/.trash`.
+7. On the Pi (typewriter): `storywheel story version UNIVERSE/STORY --format short-film --copy none` and `story show ... --json`. Not run there.
+8. Export each version (x) and confirm each uses its own manuscript (docx for prose, PDF for the script).
+
+## Known issues, decisions, questions
+- The family's first story gets `family` and `version` written into its story.md when its first version is made (the one change to the source).
+- Version order is by the `version` number; a family whose members were edited by hand to lack it sorts by slug.
+- The prose `.fountain` export now separates paragraphs with blank lines (it shared the new conversion); before, it wrote the lines together.
+- The status line shortens a long title before the format; at 100 columns a typical title now shortens (the format adds about 14 columns), so tests that expect the whole title use 140+ columns.
+- Open: should "Also start as" remember the last ticks? Should a version also copy story settings (font, goal)? Today it follows your defaults.
+- "Batch 20" in earlier notes means an older piece of work; this branch reuses the name.
