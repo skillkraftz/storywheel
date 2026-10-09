@@ -74,15 +74,21 @@ def rows(universe):
     return out
 
 
+def _script_pages(path, text_of):
+    """A script's page estimate, worked out once per state of its file (a full paginate is not cheap: the story list asks on every refresh)."""
+    def compute():
+        try:
+            from . import screenplay_pdf
+            return screenplay_pdf.estimate_pages(text_of())
+        except Exception:                                  # (no reportlab: the words will do)
+            return 0
+    return vault.memo((str(path), "pages"), vault.stamp(path), compute)
+
+
 def size_text(story):
     """'1,240 words' or '~12 pages': how big a version is, in its own unit."""
     if story.is_screenplay():
-        pages = 0
-        try:
-            from . import screenplay_pdf
-            pages = screenplay_pdf.estimate_pages(story.manuscript_text()) if story.script_path.exists() else 0
-        except Exception:                                  # (no reportlab: the words will do)
-            pass
+        pages = _script_pages(story.script_path, story.manuscript_text) if story.script_path.exists() else 0
         return f"~{pages:g} pages" if pages else f"{story.word_count():,} words"
     return f"{story.word_count():,} words"
 

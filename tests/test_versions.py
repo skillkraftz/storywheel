@@ -397,3 +397,16 @@ def test_a_family_with_every_format_renders_the_story_list(home):
     for f in formats.FORMATS:
         assert f.short in text
     assert len({f.short for f in formats.FORMATS}) == len(formats.FORMATS)
+
+
+def test_the_page_estimate_is_cached_until_the_script_changes(home, monkeypatch):
+    from storywheel import screenplay_pdf
+    s = make(home, "feature-film")
+    calls = []
+    real = screenplay_pdf.estimate_pages
+    monkeypatch.setattr(screenplay_pdf, "estimate_pages", lambda text: calls.append(1) or real(text))
+    first = versions.size_text(s)
+    assert versions.size_text(s) == first and versions.size_text(s) == first and len(calls) == 1
+    vault._write(s.script_path, SCRIPT + "\nCUT TO:\n\nINT. ROOM - DAY\n\n" + "A long action line. " * 400 + "\n")
+    changed = versions.size_text(s)
+    assert len(calls) == 2 and changed != first
