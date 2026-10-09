@@ -5169,7 +5169,16 @@ today is 10-09. It was left alone (outside the checklist); it needs a date taken
 
 The Wheel beyond one arc: Flash fiction, the format asked first, seven new structures, story focus and endings, plus the five corrections from the
 versions batch. The branch starts from `claude/gallant-knuth-qu093q` because `main` did not yet hold the versions work (see docs/decisions.md,
-"Shapes"). Full run (`tools/fulltest.sh`): @@FULLRUN@@
+"Shapes"). Full run (`tools/fulltest.sh`): one `tools/fulltest.sh` run (Neovim 0.12.5): parallel pass 2,969 passed and 12 failed, 4 skipped, 984 s; serial pass 110 passed and 11 failed, 972 s
+(total 1,956 s; the serial pass was slow because a test left a Wheel waiting at the new format question and I killed that terminal by hand, there being
+no per-test timeout installed here). All 23 failures were caused by this batch and fixed: the format question blocking tests that drive the Wheel by
+keys (the shared `home` fixture now sets `STORYWHEEL_ASK_FORMAT=0`), test lists that named the Genre step's fields, a footer test, a help heading, four
+statistical thresholds that the wider structure pool moved (routine frames 100 to 60 in a 760-story corpus; deadline picks per 200 stories, now 260
+stories), and real template faults found by the corpus checks ("brothers was" after a plural: `{was}`; two frames with too little variety to pass the
+repetition check; the live-thread share). After the fixes I did NOT rerun everything: I reran the 11 serial tests (all pass) and, in parallel, every
+file that reads generator data (genre content, coherence, leaks, batch 14-16, fidelity, atoms, sentence lint, eras, floors, threads, content, data
+correctness, structures, the new files, inputs): 1,373 passed. `tools/genre_check.py --stories 100`: no lint, repeats or watch items in any of the 14 genres.
+The suite is 3,108 tests collected (2,984 before).
 
 ## Part A: corrections from the versions batch (one commit each, except A4 and A5 together)
 | # | Item | Status | What's missing |
@@ -5191,7 +5200,12 @@ versions batch. The branch starts from `claude/gallant-knuth-qu093q` because `ma
 | - | Help (wheel, structures), manual, docs/generator.md, FEATURES, BACKLOG, CHANGELOG, decisions, SOURCES (regenerated), version 0.23.0 | Works | |
 
 ## Tests added
-@@TESTS@@
++124 net collected (2,984 to 3,108). New files:
+- `test_shapes.py` (52): flash (format, settings, default, CLI, Writer export); each new structure (beats, formats, frames; unique beat keys; what each format offers); every genre fills the new slots (general frames only); western and fairy tale fall back to general; the circular story returns to its place; a new version of a story on each of the 7 structures in each of the 5 formats (35).
+- `test_wheel_format.py` (9): the question on a new draft starting on your default, Esc, picks, not asked when kept or already asked or switched off, F changes the format and swaps a structure that doesn't fit, the hub asks, "Also start as" lists every format.
+- `test_focus.py` (18): the five focuses; the picked field; the Protagonist step skipped for a place and for no one and not otherwise; partner and company; a kept protagonist set aside and back; no blanks, leaks or stand-in protagonist in a story with none (8 genres x 7 structures x 3 seeds x 2 focuses); no "everyone in Dunmore's"; titles that don't name a protagonist; promotion makes no empty character, ignores a stale protagonist, promotes a partner and a company; the screen.
+- `test_endings.py` (16): the module and the data (a bad ending name is refused); at least 3 frames of each ending in each of 5 slots; the default changes nothing; a story with an ending never draws a frame written for another and draws its own about 35%+ of the time; the four endings read differently; picked field checks, notes and the screen; (slow) every ending reads over 6 genres x 6 structures.
+- Added to existing files: `test_versions.py` (the story list with all five formats, the page-estimate cache), `test_screenplay_pdf.py` (NEW SCENE in the flip test and the exports, 4), `test_versions_wheel.py` (flash in the Writer's status line). Updated for the wider structure pool, the new Genre step lines and the format question: `test_structures.py`, `test_storyform.py`, `test_session.py`, `test_tui.py`, `test_inputs.py`, `test_content.py`, `test_coherence.py`, `test_genre_content.py`, `test_help*.py`, `test_polish2.py`, `test_layout_batch6.py`, `test_universes_wheel.py`, `test_drafts.py`, `test_audit.py`.
 
 ## Manual test script: roll five drafts of each, and tell me what reads badly
 Use a throwaway folder so nothing touches `~/.storywheel` or `~/Writing`:
