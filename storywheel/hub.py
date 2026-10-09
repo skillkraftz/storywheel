@@ -317,6 +317,8 @@ class Hub(App):
         """Back in the Wheel: the draft is as it was. A new draft (from the Builder) or a named one replaces it, the old one saved."""
         if payload.get("new") or payload.get("story_id"):
             screen.switch_story(self._wheel_story(payload))
+            if payload.get("new"):
+                screen.call_after_refresh(screen.ask_format_first)         # (a new draft asks its format first)
         elif payload.get("universe"):
             pass                                              # (F1 from the Builder names a universe only to start a draft in it: not needed here)
 

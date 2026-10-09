@@ -156,3 +156,13 @@ def test_a_new_version_of_a_story_on_each_structure_in_each_format(home, name, f
         assert meta["structure"] == fit.label and any("doesn't fit" in n for n in notes)
         assert {shape.label, fit.label} <= set(sections)                       # (the old beats stay; the new format's blank ones are added)
         assert sections[fit.label] == outline.blank_beats(fit)
+
+
+def test_a_flash_story_exports_as_a_short_story(home):
+    from storywheel import export
+    from test_versions import make
+    s = make(home, "flash")
+    r = export.export(s, "docx")
+    assert r["format"] == "docx" and r["words"] > 0 and not [w for w in r["warnings"] if "novel" in w.lower()]
+    from pathlib import Path
+    assert Path(r["path"]).exists()

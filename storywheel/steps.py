@@ -785,7 +785,8 @@ def steps_for(story, repeats=None):
     return [
         Step("genre", "Genre & mood",
              "Two genres rubbing together is a shortcut to something fresh. "
-             "Later steps lean toward ideas that fit what you keep here.",
+             "Later steps lean toward ideas that fit what you keep here. "
+             "Focus (who or what it is about) and ending are picked from a list, not rolled: click, or e.",
              {"genre": field("genre"), "mood": mood_field, "focus": focus_field, "ending": ending_field}),
 
         Step("structure", "Structure", structure_hint(), {"format": format_field, "structure": field("structure")}),

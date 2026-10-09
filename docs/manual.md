@@ -648,7 +648,7 @@ Most writers never need these; they are for scripts and for checking things.
 | `storywheel list` / `show [N]` | Wheel drafts / one as plain text (`--json` for both) |
 | `storywheel draft-export N --out DIR` (also `export N`) | Copy a Wheel draft's markdown somewhere (not the manuscript) |
 | `storywheel promote N --new NAME` (or `--universe SLUG`, `--dry-run`) | Bring a draft into a universe |
-| `storywheel sample western "fairy tale" -n 5 [--seed 1]` | Sample ideas; nothing is saved |
+| `storywheel sample western "fairy tale" -n 5 [--seed 1] [--structure NAME] [--focus one\|two\|ensemble\|place\|none] [--format KEY] [--ending any\|triumph\|bittersweet\|tragic\|open]` | Sample ideas; nothing is saved |
 | `storywheel report` | The lines you rated down most, and why |
 | `storywheel universes [new NAME]` | List or make universes |
 | `storywheel entity list UNIVERSE [--type character]` | A universe's entities |

@@ -68,7 +68,7 @@ from test_versions import make
 from test_writer import run_lua
 
 
-@pytest.mark.parametrize("fmt,label", [("short-story", "short story"), ("novel", "novel"), ("feature-film", "feature film"),
+@pytest.mark.parametrize("fmt,label", [("flash", "flash fiction"), ("short-story", "short story"), ("novel", "novel"), ("feature-film", "feature film"),
                                        ("short-film", "short film")])
 def test_the_writer_status_line_and_window_title_say_the_title_and_the_format(home, fmt, label):
     s = make(home, fmt, title="Cold Coffee")

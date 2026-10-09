@@ -23,7 +23,7 @@ function M.reload()
 end
 
 -- What this story is written as, in words ("short story", "feature film"): the status line and the window title say which version you are in.
-local FORMAT_NAMES = { ["short-story"] = "short story", ["novel"] = "novel", ["feature-film"] = "feature film", ["short-film"] = "short film" }
+local FORMAT_NAMES = { ["flash"] = "flash fiction", ["short-story"] = "short story", ["novel"] = "novel", ["feature-film"] = "feature film", ["short-film"] = "short film" }
 function M.format_name()
   return FORMAT_NAMES[(M.info or {}).format_key or "short-story"] or "short story"
 end
