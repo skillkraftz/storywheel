@@ -264,3 +264,24 @@ def test_the_page_breaks_sample_shows_both_rules(tmp_path):
     assert body(pages[0])[-1]["text"] == "(MORE)" and body(pages[1])[0]["text"] == "EDIE (CONT'D)"
     assert body(pages[2])[0]["text"] == "EXT. TOWN HALL - CONTINUOUS"
     assert body(pages[1])[-1]["top"] < 1.0 + 54 / 6 - 0.1                       # (page 2 ends early rather than strand the heading)
+
+
+# --- NEW SCENE placeholders (batch 21) --------------------------------------------------------------------------------------------
+
+PLACEHOLDER_SCRIPT = "Title: Rough\n\nFADE IN:\n\nINT. HALL - DAY\n\nShe waits.\n\n.NEW SCENE\n\nHe comes.\n"
+
+
+def test_the_flip_test_flags_a_new_scene_placeholder_with_its_line():
+    from storywheel import screenplay
+    found = [d for d in screenplay.flip_test(PLACEHOLDER_SCRIPT) if d["kind"] == "placeholder"]
+    assert [d["line"] for d in found] == [9] and "NEW SCENE" in found[0]["message"]
+    assert not [d for d in screenplay.flip_test(PLACEHOLDER_SCRIPT.replace(".NEW SCENE", "EXT. ROAD - DAY")) if d["kind"] == "placeholder"]
+
+
+@pytest.mark.parametrize("fmt", ["pdf", "fdx"])
+def test_script_export_warns_about_a_placeholder_heading(lamp_story, fmt):
+    lamp_story.script_path.write_text(PLACEHOLDER_SCRIPT, encoding="utf-8")
+    warnings = export.export(lamp_story, fmt)["warnings"]
+    assert any("Line 9" in w and "NEW SCENE" in w for w in warnings)
+    lamp_story.script_path.write_text(PLACEHOLDER_SCRIPT.replace(".NEW SCENE", "EXT. ROAD - DAY"), encoding="utf-8")
+    assert not any("NEW SCENE" in w for w in export.export(lamp_story, fmt)["warnings"])

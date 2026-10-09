@@ -378,9 +378,16 @@ def fountain_or_prose_words(story):
     return vault.count_words(compile_text(story))
 
 
+def _placeholder_warnings(text):
+    """One warning per scene heading still reading NEW SCENE (it prints as it is), each with its line."""
+    from . import screenplay
+    return [f"Line {d['line']}: {d['message']}" for d in screenplay.placeholders(text)]
+
+
 def build_script_pdf(story, path, anonymous=None):
     from . import screenplay, screenplay_pdf
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
+    warnings += _placeholder_warnings(compile_text(story))
     pages = screenplay_pdf.render(compile_text(story), path, tp, contd=bool(settings.load_story(story.path).get("script_contd", True)))
     target = screenplay.target_pages(story)
     if target and abs(pages - target) > 0.15 * target:
@@ -392,7 +399,7 @@ def build_fdx(story, path, anonymous=None):
     from . import screenplay, screenplay_fdx
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
     screenplay_fdx.write(compile_text(story), path, tp)
-    return warnings
+    return warnings + _placeholder_warnings(compile_text(story))
 
 
 MARKER = ".storywheel-story"

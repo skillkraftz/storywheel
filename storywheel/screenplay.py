@@ -122,13 +122,25 @@ def append_scene(story, heading=""):
 
 # --- the flip test --------------------------------------------------------------------------------------------------------------
 
+PLACEHOLDER = re.compile(r"\bNEW SCENE\b", re.I)
+
+
+def placeholders(text):
+    """[{line, kind: 'placeholder', message}]: scene headings still reading NEW SCENE (a rough start from prose, or a scene added in the
+    sidebar), which would print in the PDF exactly as they are."""
+    return [{"line": e.line, "kind": "placeholder",
+             "message": f"Scene heading '{e.text.strip()}' is still a placeholder: write a real heading (INT. or EXT., place, time)."}
+            for e in fountain.parse(text).elements if e.type == "heading" and PLACEHOLDER.search(e.text)]
+
+
 def flip_test(text, target=None):
     """[{line, kind, message}] in script order: what a reader flipping through notices.
        long-action  an action block of more than ACTION_LINES printed lines
        long-speech  a speech of more than SPEECH_LINES printed lines
        camera       camera directions in a spec script ("we see", "CAMERA", "ANGLE ON"...)
        cut-to       CUT TO: used often (more than once in every five scenes): each one is listed
-       length       the page estimate against the target (more than 15% off)"""
+       length       the page estimate against the target (more than 15% off)
+       placeholder  a scene heading still reading NEW SCENE"""
     from . import screenplay_pdf as sp
     script = fountain.parse(text)
     out = []
@@ -157,6 +169,7 @@ def flip_test(text, target=None):
             if m:
                 out.append({"line": e.line, "kind": "camera", "message": f"Camera direction ('{m.group(0)}') in a scene heading."})
         i += 1
+    out += placeholders(text)
     cuts = [e for e in els if e.type == "transition" and e.text.upper().startswith("CUT TO")]
     scenes = len(script.headings())
     if cuts and len(cuts) > max(1, scenes // 5):
