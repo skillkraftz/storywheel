@@ -159,6 +159,33 @@ function M.peek()
   return e
 end
 
+-- Words added to the universe's own dictionary ("Add to Dictionary", zg): they complete after the names. Read from the spell file again whenever
+-- it changes (a word added a moment ago is offered at once). A line is a word, optionally followed by /flags; "/!" marks a word as wrong.
+function M.added_words()
+  local path = require("sw.spell").mine
+  local st = path and vim.uv.fs_stat(path)
+  if not st then
+    M._added, M._added_stamp = nil, nil
+    return {}
+  end
+  local stamp = st.mtime.sec .. "." .. st.mtime.nsec .. ":" .. st.size
+  if M._added and M._added_stamp == stamp then return M._added end
+  local words, seen = {}, {}
+  local f = io.open(path, "r")
+  if f then
+    for line in f:lines() do
+      local w, flags = line:match("^%s*([^/%s#][^/%s]*)(/?.*)$")
+      if w and not flags:find("!", 1, true) and #w >= 3 and w:match("^%a[%a'’-]*$") and not seen[w] then
+        seen[w] = true
+        words[#words + 1] = w
+      end
+    end
+    f:close()
+  end
+  M._added, M._added_stamp = words, stamp
+  return words
+end
+
 -- Completions for what has been typed of a word: any word of a proper name that starts with it (case does not matter), and the whole
 -- name when it is the first word. Accepting inserts the name's own capitals. Needs 3 letters.
 function M.matches(prefix)
@@ -181,6 +208,15 @@ function M.matches(prefix)
       end
     end
   end
+  for _, w in ipairs(M.added_words()) do                             -- then the words you added; a capital typed first is kept
+    if #w > #prefix and w:lower():sub(1, #prefix) == lp then
+      local word = prefix:match("^%u") and (w:sub(1, 1):upper() .. w:sub(2)) or w
+      if not seen[word] and not seen[w] then
+        seen[word] = true
+        items[#items + 1] = { word = word, menu = "[added]" }
+      end
+    end
+  end
   return items
 end
 
@@ -188,7 +224,7 @@ end
 function M.complete()
   local script = require("sw.script")
   if script.is_script(0) and script.complete() then return end            -- a cue or a heading: names and locations from the script too
-  if vim.fn.pumvisible() == 1 or #M.entities == 0 then return end
+  if vim.fn.pumvisible() == 1 or (#M.entities == 0 and #M.added_words() == 0) then return end
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local before = line:sub(1, col)

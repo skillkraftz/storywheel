@@ -59,6 +59,8 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 - Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu. Only a left click or Enter runs an item; a second right-click, Esc or q closes it and runs nothing.
 ## With Vim keys on
 In Settings > Writer you can turn notepad mode off to get Vim. Every action has a key that works while typing (the Keys tab, the first column); in Vim's Normal mode press Space first for the same actions (shown in [ ] on the Keys tab). Keys and the Space keys are listed only there: see the Keys tab (press 3, or Tab until it opens).
+## Completion
+While you type a word of three letters or more, the Writer offers matching names from your universe (characters and places, with the name's own capitals) and, after them, the words you added to the universe's dictionary (Add to dictionary in the right-click menu, marked [added]). The same keys pick and accept them; a capital you typed first is kept.
 ## Grammar (optional)
 Off by default. Install once with storywheel grammar install, then turn it on in the Writer menu or Settings > Grammar. A local LanguageTool checks each paragraph you changed, a moment after you stop typing. Problems have an orange wavy underline; right-click one for the message, fixes, Ignore this one and Turn off this rule.
 ## Leaving
