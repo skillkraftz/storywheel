@@ -14,16 +14,19 @@ mix: Flavor: which kinds of material this story leans toward or avoids
 focus_universe: Go to the universe panel (bottom left)
 send: Send this story to the Universe Builder (the "Belongs to" universe, or a new one)
 send_idea: Send the draft's title and premise to a collection as a new idea story (no promotion screen; the draft stays as it is)
+roll_all: Roll the whole draft: roll and keep every step that is not kept yet, in order, so each builds on the ones before it (kept steps stay; steps you skipped stay skipped; the twist is rolled too)
+reroll_later: Reroll from here: on a kept step, reroll and keep every later step (this one stays); asks first if that replaces a step you edited by hand
+fix_changed: Fix what changed: swap a changed name, title or motif into every flagged step, and reroll a step that can't be fixed that way (or roll the step it was built on); a step you edited by hand is left alone
 add_beat: On the story body: add another of the beat under the cursor, where the structure lets it repeat
 remove_beat: On the story body: remove one of the repeated beat under the cursor
 copy_story: Copy the story so far to the clipboard as plain text
 update_inputs: Update a stale candidate to what you have kept since
-ignore: Dismiss a stale-candidate warning (the candidate stays as it is)
+ignore: Dismiss a stale-candidate warning, or the flags on the kept step you are on (it stays as it is; flagged again only if that changes)
 pick_format: Change the draft's format (flash fiction, short story, novel, screenplay); a structure that no longer fits is swapped, and the screen says so
 new_draft: Start a new draft (asks which universe it belongs to; the one you leave is saved)
 copy_draft: Make an editable copy of a promoted draft (promoted drafts are read-only)
 back: Go back one step
-skip: Skip this step (later steps invent stand-ins, marked as such)
+skip: Skip this step on purpose (R leaves it alone, and later steps that invent a stand-in for it are not flagged)
 universe_add: Save the selected value into a universe
 universe_remove: Where to remove a value from a universe (it points you to the Builder, F2)
 editor: Edit the whole step in your $EDITOR
@@ -61,8 +64,10 @@ Focus and ending are two more lines on the Genre step, picked from lists (click,
 up and down move within a list; Tab goes to the next list (steps, card, history); Enter on the card rerolls the field, in the history picks that roll, on a step jumps there; Esc goes back to the card.
 ## Stand-ins and stale candidates
 If you roll a step before the ones it builds on are kept (say the story body before the protagonist), it invents stand-ins and the card says so. When you later keep those steps, a candidate built on a stand-in shows a banner, "Built for Mark; your protagonist is now Stacie Anderson", with Update (swap the kept values into a copy), Reroll and Ignore (dismiss the banner; the candidate stays as it is). Rerolling one field always uses what you have kept.
+## Whole-draft keys
+**R** rolls the whole draft: every step that is not kept yet is rolled and kept in order, so an empty draft goes from nothing to complete in one key. Each roll goes into its step's history. **L** (reroll from here) does the same for every step after a kept one. **S** fixes what changed: after you change the protagonist or the title, S brings every step built on the old one up to date.
 ## Markers on the steps
-✓ kept   – skipped   ▶ current   · to do.  A yellow ● means kept, but built on a stand-in or on something that changed. A red ✗ means it refers to something that no longer exists. The right-hand column says what is wrong.
+✓ kept   – skipped   ▶ current   · to do.  A yellow ● means kept, but built on a stand-in or on something that changed. A red ✗ means it refers to something that no longer exists. The right-hand column says what is wrong and which key clears it: **S** fixes it (a changed value is swapped in; otherwise the step is rerolled), keeping the step it leans on replaces a stand-in, and **i** on the flagged step dismisses the flag (it stays dismissed until that value changes again). A step you skipped on purpose (x, or the Protagonist step of a story about a place or no one) is never flagged for what it would have supplied.
 ## The universe panel
 Bottom left. Entries are grouped by kind; Enter opens or closes a group. "Belongs to" chooses the universe this draft will be promoted into. Tick universes the generator may draw characters, places and things from. Press Enter on an entry to preview it, then Enter or u to use it in this story (as a new candidate; nothing is kept until you press k). Editing, deleting and adding entries is done in the Builder (F2). Press Esc to close.
 ## Past stories

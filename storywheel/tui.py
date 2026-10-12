@@ -714,6 +714,9 @@ class MainScreen(KeptScreen, Screen):
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
         Binding("I", "send_idea", "Send as an idea", show=False),
+        Binding("R", "roll_all", "Roll all"),
+        Binding("L", "reroll_later", "Reroll later", show=False),
+        Binding("S", "fix_changed", "Fix", show=False),
         Binding("A", "add_beat", "+Beat", show=False),
         Binding("X", "remove_beat", "-Beat", show=False),
         Binding("c", "copy_story", "Copy story"),
@@ -728,7 +731,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("U", "universe_remove", "Remove", show=False),
         Binding("E", "editor", "$EDITOR"),
         Binding("escape", "focus_card", "", show=False),
-    ], keep=('roll', 'keep', 'edit'))
+    ], keep=('roll', 'keep', 'edit', 'roll_all', 'fix_changed'))
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
     MainScreen #left { width: 46; }
@@ -819,6 +822,7 @@ class MainScreen(KeptScreen, Screen):
                     with Horizontal(id="banner-buttons"):
                         yield _quiet(Button("Update", id="ban-update", variant="warning"))
                         yield _quiet(Button("Reroll", id="ban-reroll"))
+                        yield _quiet(Button("Fix all (S)", id="ban-fix", variant="success"))
                         yield _quiet(Button("Ignore", id="ban-ignore"))
                     yield Static("", id="meta", markup=False)
                     yield CardList(id="card")
@@ -1168,7 +1172,11 @@ class MainScreen(KeptScreen, Screen):
         self.card.add_options(rows)
         self.card.highlighted = min(previous or 0, len(rows) - 1)
         banner = s.stale_banner()
-        self.query_one("#banner", Static).update(banner + "   (a: update, or choose below)" if banner else "")
+        if banner:
+            banner += "   (a: update this candidate; S: fix every flagged step; i: ignore)"
+        else:
+            banner = s.step_banner()
+        self.query_one("#banner", Static).update(banner)
         self.query_one("#banner", Static).display = bool(banner)
         self.query_one("#banner-buttons").display = bool(banner)
         extra = []
@@ -1333,6 +1341,41 @@ class MainScreen(KeptScreen, Screen):
         self.session.update_inputs()
         self.after()
 
+    def action_roll_all(self):
+        """R: roll and keep every step that isn't kept yet, in order."""
+        if self.locked():
+            return
+        self.session.roll_all()
+        self.hist_mode = "rolls"
+        self.after()
+        self.card.highlighted = 0
+
+    def action_reroll_later(self):
+        """L: reroll and keep every step after this one (asks first when that would replace a step you edited by hand)."""
+        if self.locked():
+            return
+        s = self.session
+        if not s.story["kept"].get(s.step.key):
+            return self.after("Keep this step first (k): L rerolls the steps after a kept one.")
+        hand = s.edited_after()
+
+        def go(ok=True):
+            if ok:
+                s.reroll_from_here()
+            self.after()
+        if hand:
+            self.app.push_screen(ConfirmScreen(f"Rerolling the later steps would replace {', '.join(hand)}, which you edited by hand "
+                                               "(the old versions stay in each step's history, h). Go ahead?"), go)
+        else:
+            go()
+
+    def action_fix_changed(self):
+        """S: swap new values into, or reroll, every flagged step."""
+        if self.locked():
+            return
+        self.session.fix_changed()
+        self.after()
+
     def action_focus_universe(self):
         self.query_one("#uni-check", OptionList).focus()
 
@@ -1473,7 +1516,7 @@ class MainScreen(KeptScreen, Screen):
             self.action_mode("builder")
             return
         if name.startswith("ban-"):
-            {"ban-update": self.action_update_inputs, "ban-reroll": self.action_roll,
+            {"ban-update": self.action_update_inputs, "ban-reroll": self.action_roll, "ban-fix": self.action_fix_changed,
              "ban-ignore": self.action_ignore}[name]()
             self.card.focus()
             return

@@ -99,7 +99,8 @@ class Session:
     def jump(self, i):
         self.save()
         self.enter(i)
-        before = [st.label for n, st in enumerate(self.steps[:i]) if not self.story["kept"].get(st.key)]
+        before = [st.label for n, st in enumerate(self.steps[:i])
+                  if not self.story["kept"].get(st.key) and not self.skipped_on_purpose(st.key)]
         if before:
             self.note(f"Jumped ahead: {', '.join(before)} {'is' if len(before) == 1 else 'are'} not kept yet, "
                       "so this uses stand-ins for what it needs from "
@@ -138,9 +139,22 @@ class Session:
         if step.threads:
             story["threads"] = {}
         story["atoms"].pop(step.key, None)
+        story.setdefault("edited", [])
+        if step.key in story["edited"]:
+            story["edited"].remove(step.key)
+        if step.key not in story.setdefault("skipped", []):
+            story["skipped"].append(step.key)                       # (on purpose: R leaves it alone and nothing is flagged for it)
         story["step"] = max(story["step"], self.i + 1)
         self.save()
         self._advance()
+
+    def skipped_on_purpose(self, key):
+        """Was this step left out by choice: skipped with x, or the Protagonist step of a story about a place or no one?
+        (Nothing kept stands in its place, but nothing is wrong either.)"""
+        kept = self.story["kept"]
+        if kept.get(key):
+            return False
+        return key in self.story.get("skipped", ()) or (key == "protagonist" and not focus.is_person(focus.of_draft(self.story)))
 
     # --- rolling -----------------------------------------------------------------------------------
 
@@ -517,8 +531,9 @@ class Session:
 
     # --- keeping ----------------------------------------------------------------------------------
 
-    def keep(self):
-        """Keep the showing candidate and move on. (Updates later steps that mention what changed.)"""
+    def keep(self, advance=True):
+        """Keep the showing candidate and move on. (Updates later steps that mention what changed.) `advance=False` stays on the step
+        (R and the other whole-draft rolls move about themselves)."""
         story, step, i, cand = self.story, self.step, self.i, self.cand
         old = story["kept"].get(step.key)
         new = public(cand)
@@ -536,6 +551,16 @@ class Session:
         for k, v in cand.get("_made", {}).items():
             story["seeds"].setdefault(k, v)
         story["kept"][step.key] = new
+        story.setdefault("edited", [])
+        story.setdefault("skipped", [])
+        if cand.get("_src") == "edited":                                   # (a hand edit: A2 and S ask before they replace it)
+            if step.key not in story["edited"]:
+                story["edited"].append(step.key)
+        elif cand.get("_src") != "kept" and step.key in story["edited"]:
+            story["edited"].remove(step.key)
+        if step.key in story["skipped"]:
+            story["skipped"].remove(step.key)
+        story.get("acks", {}).pop(step.key, None)                          # (a fresh keep: the flags dismissed for the old one are over)
         if step.key == "structure" and old and structures.get(old["structure"]) is not structures.get(new["structure"]):
             self._drop_body()                       # (the old body doesn't fit the new shape)
             self.note("New structure: the story body will be rolled again when you get to it.")
@@ -554,7 +579,8 @@ class Session:
         self._swap_standins(i, new)
         story["step"] = max(story["step"], i + 1)
         self.save()
-        self._advance()
+        if advance:
+            self._advance()
 
     # --- what a candidate was built from -----------------------------------------------------------------
     #
@@ -585,17 +611,19 @@ class Session:
         """Dismiss the banner for this candidate: it stays as it is, and is not flagged again for
         these values (a different kept value brings the banner back)."""
         changes = self.input_changes()
-        if not changes:
-            return False
-        self.cand["_ack"] = dict(self.cand.get("_ack", {}), **{k: now for k, _s, _o, now in changes})
-        self.note("Ignoring the change. This candidate stays as it is.")
-        return True
+        if changes:
+            self.cand["_ack"] = dict(self.cand.get("_ack", {}), **{k: now for k, _s, _o, now in changes})
+            self.note("Ignoring the change. This candidate stays as it is.")
+        flagged = self.ignore_step()
+        if flagged:
+            self.note(f"Ignoring what is flagged on the kept {self.step.label.lower()}. It stays as it is, and is flagged again only if that changes.")
+        return bool(changes or flagged)
 
     def standins(self, cand=None):
         """{step key: [stand-in values]} for steps this candidate used stand-ins for that are still not kept."""
         out = {}
         for key, inp in (cand if cand is not None else self.cand).get("_inputs", {}).items():
-            if inp["standin"] and self.current_value(key) is None:
+            if inp["standin"] and self.current_value(key) is None and not self.skipped_on_purpose(inp["step"]):
                 out.setdefault(inp["step"], []).append(inp["value"])
         return out
 
@@ -675,24 +703,42 @@ class Session:
         if count:
             self.note(f"Swapped the kept {self.steps[i].label.lower()} into {count} line(s) built on a stand-in.")
 
-    def step_problems(self, i):
-        """[(severity, message)] for a KEPT step: 'changed' when it was built on a stand-in or on a
-        value that has since changed, 'broken' when it refers to something that is no longer kept."""
+    NO_VALUE = "(none)"          # what an ignored flag remembers when the thing it refers to isn't kept
+
+    def problems(self, i):
+        """[{kind, key, step (the owner), value (what it was built with), now, message}] for each flag on KEPT step i, minus the ones
+        dismissed with i. kind: 'standin' (built on a stand-in for a step that is still not kept), 'broken' (refers to something no
+        longer kept) or 'changed' (built for a value that has since changed). A stand-in for a step skipped on purpose is no flag."""
         step = self.steps[i]
         if not self.story["kept"].get(step.key):
             return []
+        acks = self.story.get("acks", {}).get(step.key, {})
         out = []
         for key, inp in self.story.get("inputs", {}).get(step.key, {}).items():
             now = self.current_value(key)
             owner = next((st.label for st in self.steps if st.key == inp["step"]), inp["step"]).lower()
+            if now is None and self.skipped_on_purpose(inp["step"]) and (inp["standin"] or not focus.is_person(focus.of_draft(self.story))):
+                continue                                    # (a stand-in for a step left out on purpose; "everyone in" a place has no protagonist)
             if now is None and inp["standin"]:
-                out.append(("changed", f"{step.label} was built on a stand-in {owner} ({inp['value']}). "
-                                       f"Keep your {owner} to replace it."))
+                kind, message = "standin", (f"{step.label} was built on a stand-in {owner} ({inp['value']}). "
+                                            f"Keep your {owner} (k) to replace it, or S to roll it now; i dismisses this.")
             elif now is None:
-                out.append(("broken", f"{step.label} refers to {inp['value']}, but there is no longer a kept {owner}."))
+                kind, message = "broken", (f"{step.label} refers to {inp['value']}, but there is no longer a kept {owner}. "
+                                           f"Keep the {owner} again, or S to reroll {step.label.lower()}; i dismisses this.")
             elif now != inp["value"]:
-                out.append(("changed", f"{step.label} was built for {inp['value']}; your {owner} is now {now}."))
+                kind, message = "changed", (f"{step.label} was built for {inp['value']}; your {owner} is now {now}. "
+                                            "S swaps the new one in; i dismisses this.")
+            else:
+                continue
+            if acks.get(key) == (self.NO_VALUE if now is None else now):
+                continue
+            out.append({"kind": kind, "key": key, "step": inp["step"], "value": inp["value"], "now": now, "message": message})
         return out
+
+    def step_problems(self, i):
+        """[(severity, message)] for a KEPT step: 'changed' (yellow) for a stand-in or a changed value, 'broken' (red) for something
+        that is no longer kept."""
+        return [("broken" if p["kind"] == "broken" else "changed", p["message"]) for p in self.problems(i)]
 
     def flag(self, i):
         """None, 'changed' (yellow) or 'broken' (red), for the step list."""
@@ -706,6 +752,145 @@ class Session:
         found = [(sev, m) for i in range(len(self.steps)) for sev, m in self.step_problems(i)]
         found.sort(key=lambda p: p[0] != "broken")
         return found
+
+    def step_banner(self):
+        """The flags on the kept step being shown (the card shows the kept copy), for the banner; '' when there are none."""
+        if not self.story["kept"].get(self.step.key) or self.cand.get("_src") != "kept":
+            return ""
+        return " ".join(m for _sev, m in self.step_problems(self.i))
+
+    def ignore_step(self, i=None):
+        """Dismiss the flags on kept step i (this one by default): they stay dismissed for these values, and come back if the thing
+        they refer to changes again."""
+        i = self.i if i is None else i
+        found = self.problems(i)
+        if not found:
+            return False
+        acks = self.story.setdefault("acks", {}).setdefault(self.steps[i].key, {})
+        for p in found:
+            acks[p["key"]] = self.NO_VALUE if p["now"] is None else p["now"]
+        self.save()
+        return True
+
+    # --- whole-draft rolls: R, L and S ---------------------------------------------------------------------------------------
+
+    def _roll_step(self, i):
+        """Roll step i afresh (a new entry in its history, the first roll when it has none) and keep it. False when it can't be kept."""
+        had = bool(self.story["history"].get(self.steps[i].key))
+        self.enter(i)
+        if had:
+            self.roll()
+        return self.keep(advance=False) is not False
+
+    def _roll_missing(self, start=0):
+        """Roll and keep, in order from `start`, every step not kept and not skipped on purpose. Returns the labels rolled."""
+        rolled, i = [], start
+        while i < len(self.steps):
+            step = self.steps[i]
+            if not self.story["kept"].get(step.key) and not self.skipped_on_purpose(step.key):
+                label = step.label
+                if not self._roll_step(i):
+                    break
+                rolled.append(label)
+            i += 1
+        return rolled
+
+    def roll_all(self):
+        """R: roll and keep every step that isn't kept yet, in order, so each builds on the ones before it. Kept steps stay, steps
+        skipped on purpose stay skipped. Returns how many steps were rolled."""
+        here = self.i
+        rolled = self._roll_missing()
+        self.done = False
+        self.enter(len(self.steps) - 1 if rolled else here)
+        self.note(f"Rolled and kept {len(rolled)} step(s): {', '.join(rolled)}. Each is in its step's history (h, b)." if rolled else
+                  "Every step is already kept or skipped. Nothing to roll.")
+        return len(rolled)
+
+    def edited_after(self, i=None):
+        """Labels of the kept steps after step i (this one by default) that you wrote or edited by hand."""
+        i = self.i if i is None else i
+        edited = self.story.get("edited", ())
+        return [st.label for st in self.steps[i + 1:] if st.key in edited and self.story["kept"].get(st.key)]
+
+    def reroll_from_here(self):
+        """L: reroll and keep every step after this kept one; this step stays. (The screen asks first when edited_after() isn't empty.)
+        Returns how many kept steps were replaced, or None when this step isn't kept."""
+        story, i = self.story, self.i
+        if not story["kept"].get(self.step.key):
+            self.note("Keep this step first: L rerolls the steps after a kept one.")
+            return None
+        replaced = [st.label for st in self.steps[i + 1:] if story["kept"].get(st.key)]
+        for st in self.steps[i + 1:]:
+            self._unkeep(st)
+        self._roll_missing(i + 1)
+        self.done = False
+        self.enter(i)
+        self.note(f"Rerolled the steps after {self.step.label.lower()}: replaced {len(replaced)} kept step(s)"
+                  + (f" ({', '.join(replaced)})" if replaced else "") + ". Each old version is in its history (h).")
+        return len(replaced)
+
+    def _unkeep(self, step):
+        """Forget what step `step` kept (its history stays), without marking it skipped."""
+        story = self.story
+        if not story["kept"].pop(step.key, None):
+            return
+        story.get("inputs", {}).pop(step.key, None)
+        story["atoms"].pop(step.key, None)
+        if step.key in story.get("edited", ()):
+            story["edited"].remove(step.key)
+        if step.threads:
+            story["threads"] = {}
+        if step.key == "spine":
+            story.pop("repeats", None)
+
+    def fix_changed(self):
+        """S: deal with every flagged step at once. A changed value (a new name, title, motif...) is swapped into the step; a step that
+        can't be fixed by a swap (the genre or structure changed, or nothing usable to swap) is rerolled; a step built on something
+        that was never kept gets that step rolled and kept first. A step you edited by hand is left alone (and said so).
+        Returns True when anything was done."""
+        story, here = self.story, self.i
+        swapped, rerolled, rolled, left = [], [], [], []
+        # 1. the steps these flags lean on, if they are still not kept (and not skipped on purpose)
+        needed = {p["step"] for i in range(len(self.steps)) for p in self.problems(i) if p["kind"] in ("standin", "broken")}
+        for n, st in enumerate(self.steps):
+            if st.key in needed and not story["kept"].get(st.key) and not self.skipped_on_purpose(st.key):
+                if self._roll_step(n):
+                    rolled.append(st.label)
+        # 2. each flagged step, in order (a reroll changes what the later ones lean on, so they are looked at after it)
+        for n in range(len(self.steps)):
+            step = self.steps[n]
+            found = self.problems(n)
+            if not found:
+                continue
+            by_hand = step.key in story.get("edited", ())
+            changes = [(p["key"], p["step"], p["value"], p["now"]) for p in found if p["kind"] == "changed"]
+            swappable = [c for c in changes if c[1] not in ("genre", "structure") and c[2] and c[3] and len(c[2]) >= 2]
+            if swappable:
+                recorded = story["inputs"][step.key]
+                fixed = self.update_candidate(dict(story["kept"][step.key], _inputs=recorded), swappable)
+                story["kept"][step.key] = public(fixed)
+                story["inputs"][step.key] = {k: (fixed["_inputs"][k] if any(c[0] == k for c in swappable) else v)    # (only what was swapped is up to date)
+                                             for k, v in recorded.items()}
+                swapped.append(step.label)
+            if any(p["kind"] != "standin" for p in self.problems(n)):            # (a stand-in whose step couldn't be rolled stays: a reroll wouldn't help)
+                if by_hand:
+                    left.append(f"{step.label} (you edited it; i keeps it as it is)")
+                elif self._roll_step(n):
+                    rerolled.append(step.label)
+        self.save()
+        self.done = False
+        self.enter(here)
+        parts = []
+        if rolled:
+            parts.append("rolled and kept " + ", ".join(rolled))
+        if swapped:
+            parts.append("swapped the new values into " + ", ".join(swapped))
+        if rerolled:
+            parts.append("rerolled " + ", ".join(rerolled))
+        if left:
+            parts.append("left " + ", ".join(left))
+        self.note("Fixed what changed: " + "; ".join(parts) + "." if parts else "Nothing to fix: no step is flagged.")
+        return bool(rolled or swapped or rerolled)
 
     def stale_tag(self, n):
         return " (stale)" if self.is_stale(n) else ""
