@@ -303,3 +303,99 @@ def test_r_s_and_l_work_from_the_keyboard_and_show_in_the_footer(home):
     footer, done, flagged_before, flagged_after = run_tui(store.new_story(), make_engine(home), script)
     assert "Roll all" in footer and "Fix" in footer
     assert len(done) == 8 and flagged_before and flagged_after == []
+
+
+# --- A5: I (send as an idea) -----------------------------------------------------------------------------------------
+
+def sent_draft(home, seed=2):
+    from storywheel.sample import build_story
+    d = build_story(make_engine(home, seed=seed), ["western"], structure="story-spine")
+    d["id"] = "20260101-000000"
+    store.save_draft(d)
+    return d
+
+
+def test_i_records_the_idea_on_the_draft_and_opens_the_builder_on_it(home):
+    from storywheel import ideas, vault
+    vault.create_universe("Shelf", kind="collection")
+    d = sent_draft(home)
+
+    async def script(app, pilot):
+        await press(pilot, "I")
+        return app.next
+    nxt = run_tui(d, make_engine(home), script)
+    idea = vault.get_universe("shelf").stories()[0]
+    assert nxt == ("builder", {"universe": "shelf", "story": idea.slug})
+    assert store.load(d["id"])["ideas"] == [{"universe": "shelf", "story": idea.slug}]
+    assert ideas.sent(store.load(d["id"])) == {"universe": "shelf", "story": idea.slug}
+
+
+def test_i_again_offers_to_open_the_idea_and_never_makes_a_silent_duplicate(home):
+    from storywheel import vault
+    u = vault.create_universe("Shelf", kind="collection")
+    d = sent_draft(home)
+    from storywheel import ideas
+    idea = ideas.send_draft(d, u)
+    store.save_draft(d)
+
+    async def script(app, pilot):
+        await press(pilot, "I")
+        screen = type(app.screen).__name__
+        text = " ".join(screen_text(app).split())
+        await press(pilot, "enter")                                       # the default: open that idea
+        return screen, text, app.next
+    screen, text, nxt = run_tui(d, make_engine(home), script)
+    assert screen == "ChoiceScreen" and "already sent" in text and "Send another copy anyway" in text and "Cancel" in text
+    assert nxt == ("builder", {"universe": "shelf", "story": idea.slug})
+    assert len(u.stories()) == 1
+
+
+def test_i_again_can_send_another_copy_or_cancel(home):
+    from storywheel import ideas, vault
+    u = vault.create_universe("Shelf", kind="collection")
+    d = sent_draft(home)
+    ideas.send_draft(d, u)
+    store.save_draft(d)
+
+    async def cancel(app, pilot):
+        await press(pilot, "I", "down", "down", "enter")
+        return app.next
+    assert not run_tui(d, make_engine(home), cancel)                      # (cancel: nowhere to go)
+    assert len(u.stories()) == 1
+
+    async def again(app, pilot):
+        await press(pilot, "I", "down", "enter")
+        return app.next
+    nxt = run_tui(d, make_engine(home), again)
+    assert len(u.stories()) == 2 and nxt[0] == "builder" and nxt[1]["story"] != d["ideas"][0]["story"]
+
+
+def test_a_deleted_idea_means_i_acts_as_for_a_fresh_draft(home):
+    import shutil
+    from storywheel import ideas, vault
+    u = vault.create_universe("Shelf", kind="collection")
+    d = sent_draft(home)
+    idea = ideas.send_draft(d, u)
+    store.save_draft(d)
+    shutil.rmtree(idea.path)
+    assert ideas.sent(d) is None
+
+    async def script(app, pilot):
+        await press(pilot, "I")
+        return type(app.screen).__name__, app.next
+    screen, nxt = run_tui(d, make_engine(home), script)
+    assert nxt[0] == "builder" and len(u.stories()) == 1 and u.stories()[0].slug == nxt[1]["story"]
+
+
+def test_f3_on_a_sent_draft_opens_its_idea_in_the_writer(home):
+    from storywheel import ideas, vault
+    u = vault.create_universe("Shelf", kind="collection")
+    d = sent_draft(home)
+    idea = ideas.send_draft(d, u)
+    store.save_draft(d)
+
+    async def script(app, pilot):
+        await press(pilot, "f3")
+        return app.next
+    nxt = run_tui(d, make_engine(home), script)
+    assert nxt == ("writer", {"universe": "shelf", "story": idea.slug})

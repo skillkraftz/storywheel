@@ -13,7 +13,7 @@ history: Switch the history between every roll and the selected field's earlier 
 mix: Flavor: which kinds of material this story leans toward or avoids
 focus_universe: Go to the universe panel (bottom left)
 send: Send this story to the Universe Builder (the "Belongs to" universe, or a new one)
-send_idea: Send the draft's title and premise to a collection as a new idea story (no promotion screen; the draft stays as it is)
+send_idea: Send the draft's title and premise to a collection as a new idea story and open it in the Builder (no promotion screen; the draft stays as it is). On a draft already sent it asks: open that idea, send another copy anyway, or cancel
 roll_all: Roll the whole draft: roll and keep every step that is not kept yet, in order, so each builds on the ones before it (kept steps stay; steps you skipped stay skipped; the twist is rolled too)
 reroll_later: Reroll from here: on a kept step, reroll and keep every later step (this one stays); asks first if that replaces a step you edited by hand
 fix_changed: Fix what changed: swap a changed name, title or motif into every flagged step, and reroll a step that can't be fixed that way (or roll the step it was built on); a step you edited by hand is left alone
@@ -75,6 +75,6 @@ Bottom left: Enter opens one, d deletes it (asks first; it goes to the .trash fo
 ## Promotion and versions
 The preview you see before a story is brought into a universe ends with "Also start as": the other formats (flash fiction, short story, novel, screenplay as a feature film or a short film). Enter or a click ticks one. Each tick makes another version of the story in the same universe, from the same outline, with its own manuscript; the characters, places and things are made once and shared. The story's own format is not offered. More about versions is in the Builder's help.
 ## Collections and ideas
-A universe can be a collection: a shelf of short story ideas. I sends the draft's title and premise to a collection as an idea story (you choose the collection if there is more than one), and the draft is unchanged. Promoting a draft into a collection (B) brings the outline, premise and draft over as usual, but characters, places and things are not created unless you tick them in the preview; the preview says so.
+A universe can be a collection: a shelf of short story ideas. I sends the draft's title and premise to a collection as an idea story (you choose the collection if there is more than one) and opens the Builder on it; the draft is unchanged but remembers where it went. Press I again on a sent draft and it offers to open that idea (the default), send another copy anyway, or cancel, so a duplicate is never made silently; if the idea was deleted, I acts as for a fresh draft. F3 on a sent draft opens its idea in the Writer. Promoting a draft into a collection (B) brings the outline, premise and draft over as usual, but characters, places and things are not created unless you tick them in the preview; the preview says so.
 ## Leaving
 q goes back to the mode you came from (the draft is saved). Q quits storywheel: it asks whether to keep or delete the story and offers to send it to the Builder.

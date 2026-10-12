@@ -53,3 +53,13 @@ def send_draft(draft, universe):
         story.set_section("Premise", premise)
     draft.setdefault("ideas", []).append({"universe": universe.slug, "story": story.slug})
     return story
+
+
+def sent(draft):
+    """{"universe": slug, "story": slug} of the idea this draft was last sent as, or None: never sent, or that idea is gone (deleted, or in the
+    .trash). The draft's `ideas` list keeps every send, newest last."""
+    for rec in reversed(draft.get("ideas") or []):
+        u = vault.get_universe(rec.get("universe") or "")
+        if u is not None and u.story(rec.get("story") or "") is not None:
+            return {"universe": rec["universe"], "story": rec["story"]}
+    return None

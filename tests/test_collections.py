@@ -589,10 +589,10 @@ def test_I_sends_the_draft_to_the_only_collection_as_an_idea(home):
     async def script(app, pilot):
         await pilot.press("I")
         await pilot.pause()
-        return type(app.screen).__name__, flat(screen_text(app))
-    name, text = run_tui(d, make_engine(home), script)
-    assert name == "MainScreen" and "Sent" in text and "to the collection 'Shelf' as an idea" in text
+        return app.next
+    nxt = run_tui(d, make_engine(home), script)
     idea = vault.get_universe("shelf").stories()[0]
+    assert nxt == ("builder", {"universe": "shelf", "story": idea.slug})          # (batch 23: the Builder opens on the idea, as after a promotion)
     assert idea.title == store.title_of(d) and idea.status == "idea"
     saved = store.load("20260101-000000")
     assert saved["ideas"] and not saved.get("promoted")

@@ -1446,8 +1446,9 @@ class MainScreen(KeptScreen, Screen):
                              lambda c: self.promote_flow(story, c, "exit") if c else None)
 
     def action_send_idea(self):
-        """Put the draft's title and premise on a collection's shelf as a new idea story: no promotion screen, the draft stays as it is."""
-        from . import vault
+        """Put the draft's title and premise on a collection's shelf as a new idea story: no promotion screen, the draft stays as it is. Then the
+        Builder opens on the idea. A draft already sent says so and asks: open that idea, send another copy, or cancel."""
+        from . import ideas, vault
         story = self.session.story
         if not (story["kept"].get("premise") or story["kept"].get("title")):
             return self.say("Nothing to send yet: keep a title or a premise first (k).")
@@ -1455,6 +1456,25 @@ class MainScreen(KeptScreen, Screen):
         if not shelves:
             return self.say("There is no collection yet. In the Builder (F2) press N and choose Collection, then send the idea here.")
         self.session.save()
+        already = ideas.sent(story)
+        if already:
+            u = vault.get_universe(already["universe"])
+            title = u.story(already["story"]).title
+            self.app.push_screen(
+                ChoiceScreen(f"This draft was already sent as the idea '{title}' in '{u.name}'.",
+                             [("Open that idea in the Builder", "open"), ("Send another copy anyway", "again"), ("Cancel", "cancel")]),
+                lambda c: self._sent_again(c, already, shelves))
+            return
+        self._pick_shelf(story, shelves)
+
+    def _sent_again(self, choice, already, shelves):
+        if choice == "open":
+            self.session.save()
+            self.app.go("builder", dict(already))
+        elif choice == "again":
+            self._pick_shelf(self.session.story, shelves)
+
+    def _pick_shelf(self, story, shelves):
         if len(shelves) == 1:
             return self._idea_sent(story, shelves[0].slug)
         self.app.push_screen(PickUniverseScreen(shelves, "Send it as an idea to which collection?  (enter picks, esc cancels)"),
@@ -1467,7 +1487,7 @@ class MainScreen(KeptScreen, Screen):
             return
         idea = ideas.send_draft(draft, u)
         store.save_draft(draft)
-        self.say(f"Sent '{idea.title}' to the collection '{u.name}' as an idea. The draft is as it was (B still promotes it).")
+        self.app.go("builder", {"universe": u.slug, "story": idea.slug})      # (as after a promotion: the Builder opens on what was made)
 
     def action_mode(self, which):
         """F1 / F2 / F3: save this draft and leave for another mode. F2 from a draft with kept steps offers to send it first."""
@@ -1483,9 +1503,10 @@ class MainScreen(KeptScreen, Screen):
         self._leave(which)
 
     def _open_writer_for_draft(self, story):
-        promoted = story.get("promoted")
+        from . import ideas
+        promoted = story.get("promoted") or ideas.sent(story)                 # (an idea it was sent as has a manuscript too)
         if not promoted:
-            self.say("This draft has no manuscript yet: send it to the Builder first (B), then open it in the Writer.")
+            self.say("This draft has no manuscript yet: send it to the Builder first (B, or I for an idea), then open it in the Writer.")
             return
         from . import vault
         u = vault.get_universe(promoted.get("universe") or "")
