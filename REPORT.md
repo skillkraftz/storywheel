@@ -5257,7 +5257,7 @@ Use a throwaway folder so nothing touches `~/.storywheel` or `~/Writing`:
 A universe can be a **collection** (a shelf of short story ideas), every story has a **status**, and one list shows every story. **Not run:** `tools/fulltest.sh`
 (your instruction for this batch). Run instead, with `-m "not slow"`: the new file (40 passed) and the existing files that cover what was touched
 (Builder, layout, promotion, versions, storage, help, Wheel, navigation, mouse, drafts, outline, rename, exports, backups, manuscript, names, screenplay;
-730 passed, 4 skipped, 0 failed after the fixes below). Not run at all: the slow and serial files (`test_hub`, `test_switching`, `test_performance`,
+three runs: 564 passed and 4 skipped, 166 passed, and the outline files with the new one; the only failure, a new test of mine that read the focus before it moved, was fixed and rerun). Not run at all: the slow and serial files (`test_hub`, `test_switching`, `test_performance`,
 `test_layout_batch6`, `test_builder_ratings`, ...).
 
 ## Checklist
