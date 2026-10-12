@@ -773,7 +773,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("U", "universe_remove", "Remove", show=False),
         Binding("E", "editor", "$EDITOR"),
         Binding("escape", "focus_card", "", show=False),
-    ], keep=('roll', 'keep', 'edit', 'roll_all', 'fix_changed'))
+    ], keep=('roll', 'keep', 'roll_all'))
     DEFAULT_CSS = """
     MainScreen #body { height: 1fr; }
     MainScreen #left { width: 46; }
