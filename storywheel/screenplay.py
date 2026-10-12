@@ -187,17 +187,38 @@ def flip_test(text, target=None):
 
 # --- the title page ---------------------------------------------------------------------------------------------------------------
 
+def _lines_of(value):
+    return [ln.strip() for ln in str(value or "").replace("\r", "").split("\n") if ln.strip()]
+
+
 def title_page(story, anonymous=False):
-    """({title, credit, author, source, contact, date}, warnings) for the PDF: the title centered with "Written by" and your name under it, your
-    contact block bottom left (Settings > You), the draft date bottom right. Anonymous (asked for, or no name in Settings): no name, no contact."""
+    """({title, credit, author, source, contact, date, notes, copyright, wga}, warnings) for the PDF: the title centered with "Written by" and
+    your name under it, the contact block bottom left (Settings > You) with the WGA registration and the copyright line above it, the draft
+    date bottom right with the notes above it. Notes, Copyright and WGA registration are optional and left off when blank: they come from the
+    script's own title page (`Notes:`, `Copyright:`, `WGA registration:`) or else from the story's settings (S in the Builder).
+    Anonymous (asked for, or no name in Settings): no name, no contact, and no copyright or WGA number either (they say who wrote it)."""
     from .export import author_info
+    from . import settings
     script = fountain.parse(story.script_path.read_text(encoding="utf-8")) if story.script_path.exists() else None
     tp = script.title if script else {}
+    st = settings.load_story(story.path)
     who, warnings = author_info(story, anonymous=anonymous)
+
+    def optional(*keys, setting):
+        for k in keys:
+            if any(v.strip() for v in tp.get(k, [])):
+                return [fountain.strip_markup(v) for v in tp[k] if v.strip()]
+        return _lines_of(st.get(setting))
     out = {"title": [fountain.strip_markup(t) for t in (tp.get("title") or [story.title])], "credit": "", "author": [],
-           "source": [fountain.strip_markup(s) for s in tp.get("source", [])], "contact": [], "date": tp.get("draft date", [])}
+           "source": [fountain.strip_markup(s) for s in tp.get("source", [])], "contact": [], "date": tp.get("draft date", []),
+           "notes": optional("notes", setting="script_notes"), "copyright": [], "wga": []}
     if not who["anonymous"]:
         out["credit"] = (tp.get("credit") or ["Written by"])[0] or "Written by"
         out["author"] = [who["byline"]]
         out["contact"] = who["lines"]
+        out["copyright"] = optional("copyright", setting="script_copyright")
+        wga = optional("wga registration", "wga registered", "wga", setting="script_wga")
+        if wga and not any("wga" in ln.lower() for ln in wga):
+            wga[0] = "WGA Registration # " + wga[0].lstrip("#").strip()
+        out["wga"] = wga
     return out, warnings

@@ -365,6 +365,10 @@ def build_fountain(story, path, anonymous=None):
     if tp["contact"]:
         head.append("Contact:")
         head += [f"    {c}" for c in tp["contact"]]
+    for key, lines in (("Copyright", tp["copyright"]), ("WGA registration", tp["wga"]), ("Notes", tp["notes"])):
+        if lines:
+            head.append(f"{key}: {lines[0]}")
+            head += [f"    {ln}" for ln in lines[1:]]
     script = fountain.parse(text)
     body = "\n".join(text.split("\n")[script.body_start - 1:]) if script.title else text
     Path(path).write_text("\n".join(head) + "\n\n" + body.lstrip("\n").rstrip("\n") + "\n", encoding="utf-8")
@@ -388,7 +392,8 @@ def build_script_pdf(story, path, anonymous=None):
     from . import screenplay, screenplay_pdf
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
     warnings += _placeholder_warnings(compile_text(story))
-    pages = screenplay_pdf.render(compile_text(story), path, tp, contd=bool(settings.load_story(story.path).get("script_contd", True)))
+    st = settings.load_story(story.path)
+    pages = screenplay_pdf.render(compile_text(story), path, tp, contd=bool(st.get("script_contd", True)), numbers=bool(st.get("script_scene_numbers")))
     target = screenplay.target_pages(story)
     if target and abs(pages - target) > 0.15 * target:
         warnings.append(f"{pages} pages against a target of {target}.")
@@ -398,7 +403,7 @@ def build_script_pdf(story, path, anonymous=None):
 def build_fdx(story, path, anonymous=None):
     from . import screenplay, screenplay_fdx
     tp, warnings = screenplay.title_page(story, anonymous=bool(anonymous))
-    screenplay_fdx.write(compile_text(story), path, tp)
+    screenplay_fdx.write(compile_text(story), path, tp, numbers=bool(settings.load_story(story.path).get("script_scene_numbers")))
     return warnings + _placeholder_warnings(compile_text(story))
 
 

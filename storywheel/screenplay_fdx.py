@@ -1,6 +1,6 @@
 """A screenplay as a Final Draft file (.fdx: Final Draft's XML), for anyone who wants the script in Final Draft, Fade In or WriterDuet.
 
-    write(text, path, title_page) -> path
+    write(text, path, title_page, numbers=False) -> path
 
 Each Fountain element becomes a Paragraph of the matching type (Scene Heading, Action, Character, Parenthetical, Dialogue, Transition;
 centered text is a centered Action, lyrics are Lyrics). Two speeches side by side sit in a DualDialogue. *Italic*, **bold** and _underline_
@@ -9,7 +9,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from . import fountain
-from .screenplay_pdf import runs_of
+from .screenplay_pdf import runs_of, scene_numbers
 
 TYPES = {"heading": "Scene Heading", "action": "Action", "character": "Character", "parenthetical": "Parenthetical",
          "dialogue": "Dialogue", "transition": "Transition", "centered": "Action", "lyrics": "Lyrics"}
@@ -28,10 +28,11 @@ def _paragraph(kind, text, extra=""):
     return f'    <Paragraph Type="{kind}"{extra}>\n      {_texts(text)}\n    </Paragraph>'
 
 
-def write(text, path, title_page=None):
+def write(text, path, title_page=None, numbers=False):
     script = fountain.parse(text)
     paras = []
     els = [e for e in script.elements if e.type not in ("section", "synopsis")]
+    nums = scene_numbers(els) if numbers else {}
     page_break = False
     i = 0
     while i < len(els):
@@ -60,7 +61,10 @@ def write(text, path, title_page=None):
                 paras += block
                 i = j
             continue
-        if e.type in ("heading", "transition"):
+        if e.type == "heading":
+            number = f' Number="{escape(nums[id(e)])}"' if id(e) in nums else ""
+            paras.append(_paragraph(TYPES[e.type], e.text.upper(), extra + number))
+        elif e.type == "transition":
             paras.append(_paragraph(TYPES[e.type], e.text.upper(), extra))
         elif e.type == "centered":
             paras.append(_paragraph("Action", e.text, extra + ' Alignment="Center"'))
@@ -76,7 +80,7 @@ def write(text, path, title_page=None):
         title_paras.append(f'    <Paragraph Alignment="Center"><Text>{escape(tp["credit"])}</Text></Paragraph>')
     for a in tp.get("author") or []:
         title_paras.append(f'    <Paragraph Alignment="Center"><Text>{escape(a)}</Text></Paragraph>')
-    for c in tp.get("contact") or []:
+    for c in [*(tp.get("wga") or []), *(tp.get("copyright") or []), *(tp.get("contact") or []), *(tp.get("notes") or [])]:
         title_paras.append(f'    <Paragraph Alignment="Left"><Text>{escape(c)}</Text></Paragraph>')
     xml = ('<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n'
            '<FinalDraft DocumentType="Script" Template="No" Version="5">\n'

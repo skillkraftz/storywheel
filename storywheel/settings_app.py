@@ -101,6 +101,10 @@ SECTIONS = [
         ("script_contd", "Screenplays: automatic (CONT'D)", "bool", None,
          "A character who speaks again after action in the same scene gets (CONT'D) after the name in the PDF (and, dimmed, on screen in the Writer). "
          "Final Draft and Fade In do this by default; turn it off if you prefer the cleaner page. Across a page break (CONT'D) is always added."),
+        ("script_scene_numbers", "Screenplays: scene numbers", "bool", None,
+         "Print each scene's number in both margins of the PDF (and in the .fdx). Off by default: a spec script sent to a producer, agent or contest "
+         "is unnumbered, and numbers are added only when a script goes into production (a shooting script). A number written in the script "
+         "(INT. ROOM - DAY #12#) is used; the other scenes are numbered in order. A story can choose for itself (S in the Builder)."),
         ("manuscripts_dir", "Manuscripts folder", "path", None,
          "Exports go here, one folder per story: <folder>/<Story Title>/<Story Title> <date>.docx. Default ~/Writing."),
     ]),

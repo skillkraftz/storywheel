@@ -152,6 +152,7 @@ class Line:
     align: str = "left"          # left, right (to 7.5"), center (between the margins)
     side: str = ""               # dual dialogue: "" or "left"/"right" sharing one row with the other side
     pair: object = None          # dual dialogue: the Line printed beside this one on the same row
+    number: str = ""             # a scene heading's number, printed in both margins when scene numbers are on
 
     @property
     def text(self):
@@ -203,13 +204,35 @@ def _speech(elements, i, dual_side=None):
     return lines, splits, j
 
 
-def blocks(text, contd=False):
-    """The script as Blocks. `contd`: add an automatic (CONT'D) where a character speaks again after action in the same scene."""
+NUMBER_LEFT, NUMBER_RIGHT = 1.4, 7.6          # inches: a scene number ends here on the left, and starts here on the right
+
+
+def scene_numbers(elements):
+    """{id of each heading element: its number as printed}. A number written in the script (`INT. ROOM - DAY #12#`, or #12A#) is used as it is;
+    the other scenes are numbered in order, carrying on from the last whole number written (so 1, 2, #5#, 6, 7)."""
+    out, counter = {}, 0
+    for e in elements:
+        if e.type != "heading":
+            continue
+        if e.number:
+            out[id(e)] = e.number
+            if e.number.isdigit():
+                counter = int(e.number)
+        else:
+            counter += 1
+            out[id(e)] = str(counter)
+    return out
+
+
+def blocks(text, contd=False, numbers=False):
+    """The script as Blocks. `contd`: add an automatic (CONT'D) where a character speaks again after action in the same scene.
+    `numbers`: scene headings carry their scene numbers (printed in both margins)."""
     script = fountain.parse(text)
     els = [e for e in script.elements if e.type not in ("section", "synopsis")]
     if contd:
         for cue in fountain.auto_contd(els):
             cue.ext = (cue.ext + " " + CONTD).strip()
+    nums = scene_numbers(els) if numbers else {}
     out = []
     i = 0
     while i < len(els):
@@ -218,8 +241,9 @@ def blocks(text, contd=False):
             out.append(Block("page_break", [], 0, force_page=True))
             i += 1
         elif e.type == "heading":
-            text_ = e.text + (f" #{e.number}#" if False else "")
-            out.append(Block("heading", _lines("heading", text_, WIDTH["heading"], X["heading"]), SPACE_BEFORE["heading"], keep_next=True))
+            lines = _lines("heading", e.text, WIDTH["heading"], X["heading"])
+            lines[0].number = nums.get(id(e), "")
+            out.append(Block("heading", lines, SPACE_BEFORE["heading"], keep_next=True))
             i += 1
         elif e.type == "character":
             # dual dialogue: this speech and the next one marked ^ print side by side
@@ -272,9 +296,10 @@ class Page:
         return len(self.lines)
 
 
-def paginate(text, contd=False):
-    """The script's pages: each page a list of lines (None = a blank line), at most LINES_PER_PAGE long."""
-    bl = blocks(text, contd)
+def paginate(text, contd=False, numbers=False):
+    """The script's pages: each page a list of lines (None = a blank line), at most LINES_PER_PAGE long. Scene numbers take no room, so
+    `numbers` only decides whether the headings carry theirs."""
+    bl = blocks(text, contd, numbers)
     pages = [Page()]
 
     def room():
@@ -397,6 +422,10 @@ def _draw_line(c, ln, row):
     else:
         x = ln.x * INCH
     _draw_runs(c, ln.runs, x, baseline)
+    if ln.number:                                                  # the scene number, in both margins
+        c.setFont(FONTS[(False, False)], 12)
+        c.drawString(NUMBER_LEFT * INCH - len(ln.number) * CHAR * INCH, baseline, ln.number)
+        c.drawString(NUMBER_RIGHT * INCH, baseline, ln.number)
 
 
 def _title_page(c, tp):
@@ -422,18 +451,40 @@ def _title_page(c, tp):
         for s in tp["source"]:
             centered(s, row)
             row += 1
+    # bottom left, reading down: the WGA registration and copyright lines, a blank line, then the contact block; bottom right: the notes, a blank
+    # line, then the draft date. Whatever is blank is simply not there.
+    left = [*(tp.get("wga") or []), *(tp.get("copyright") or [])]
     contact = tp.get("contact") or []
+    if left and contact:
+        left.append("")
+    left += contact
+    right = [*_wrapped(tp.get("notes") or [], NOTES_WIDTH)]
+    date = tp.get("date") or []
+    if right and date:
+        right.append("")
+    right += date
     c.setFont(FONTS[(False, False)], 12)
-    for k, line in enumerate(contact):
-        c.drawString(LEFT * INCH, TOP * INCH + (len(contact) - 1 - k) * LINE + 3, line)
-    for k, line in enumerate(tp.get("date") or []):
+    for k, line in enumerate(left):
+        c.drawString(LEFT * INCH, TOP * INCH + (len(left) - 1 - k) * LINE + 3, line)
+    for k, line in enumerate(right):
         w = len(line) * CHAR * INCH
-        c.drawString(RIGHT * INCH - w, TOP * INCH + 3 + k * LINE, line)
+        c.drawString(RIGHT * INCH - w, TOP * INCH + 3 + (len(right) - 1 - k) * LINE, line)
 
 
-def render(text, path, title_page=None, contd=False):
-    """Write the script as a PDF. `title_page` = {title: [lines], credit: str, author: [lines], source: [lines], contact: [lines], date: [lines]}
-    or None for no title page. Returns the number of script pages."""
+NOTES_WIDTH = 30                    # characters: the notes sit in a column on the right, not across the whole page
+
+
+def _wrapped(lines, width):
+    out = []
+    for ln in lines:
+        out += ["".join(r.text for r in runs) for runs in wrap_runs(runs_of(ln), width)] if ln.strip() else [""]
+    return out
+
+
+def render(text, path, title_page=None, contd=False, numbers=False):
+    """Write the script as a PDF. `title_page` = {title: [lines], credit: str, author: [lines], source: [lines], contact: [lines], date: [lines],
+    notes: [lines], copyright: [lines], wga: [lines]} (the last three optional)
+    or None for no title page. `numbers` prints scene numbers in both margins. Returns the number of script pages."""
     from reportlab.pdfgen import canvas
     _register_fonts()
     path = Path(path)
@@ -446,7 +497,7 @@ def render(text, path, title_page=None, contd=False):
     if title_page:
         _title_page(c, title_page)
         c.showPage()
-    pages = paginate(text, contd)
+    pages = paginate(text, contd, numbers)
     for n, page in enumerate(pages, start=1):
         if n > 1:
             label = f"{n}."

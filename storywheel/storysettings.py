@@ -9,6 +9,7 @@ from textual.widgets import Button, Input, Label, Select, Static
 from . import settings
 
 DEFAULT = "__default__"
+TEXT_EMPTY = {"title_keyword": "no short title", "script_wga": "left off the page", "script_copyright": "left off the page", "script_notes": "left off the page"}
 FONTS = ["Times New Roman", "Courier New"]
 # (key, label, kind, choices)   kinds: choice, bool, int, text
 FIELDS = [
@@ -21,6 +22,13 @@ FIELDS = [
     ("invisibles", "Show invisibles", "bool", None),
     ("spellcheck", "Spellcheck", "bool", None),
     ("spell_region", "English spelling", "choice", ["US", "UK"]),
+]
+# a screenplay's own: scene numbers (off unless you want a shooting script) and the optional title page lines (blank = left off the page)
+SCRIPT_FIELDS = [
+    ("script_scene_numbers", "Scene numbers in the margins", "bool", None),
+    ("script_wga", "Title page: WGA registration", "text", None),
+    ("script_copyright", "Title page: copyright line", "text", None),
+    ("script_notes", "Title page: notes (bottom right)", "text", None),
 ]
 ON, OFF = "on", "off"
 
@@ -46,6 +54,7 @@ class StorySettingsScreen(ModalScreen):
     def __init__(self, story):
         super().__init__()
         self.story = story
+        self.fields = FIELDS + (SCRIPT_FIELDS if story.is_screenplay() else [])
         self.own = settings.story_own(story.path)
         self.inherited = settings.story_inherited()
 
@@ -54,8 +63,11 @@ class StorySettingsScreen(ModalScreen):
             yield Label(f"Story settings: {self.story.title}")
             yield Static("Leave a box on “your default” to follow Settings (F4). The Writer reads these on its next start. "
                          "Format, structure and target length: m.", markup=False)
+            if self.story.is_screenplay():
+                yield Static("Scene numbers belong on shooting scripts. Leave them off for a spec script you send to a producer, agent or contest.",
+                             markup=False)
             with VerticalScroll():
-                for key, label, kind, choices in FIELDS:
+                for key, label, kind, choices in self.fields:
                     with Horizontal(classes="line"):
                         yield Label(label, classes="name")
                         yield from self.control(key, kind, choices)
@@ -65,7 +77,7 @@ class StorySettingsScreen(ModalScreen):
                 yield Button("Cancel (esc)", id="cancel")
 
     def default_text(self, key, kind):
-        return f"your default ({shown(self.inherited.get(key, ''), kind)})" if kind != "text" else "no short title"
+        return f"your default ({shown(self.inherited.get(key, ''), kind)})" if kind != "text" else TEXT_EMPTY.get(key, "no short title")
 
     def control(self, key, kind, choices):
         mine = key in self.own and (self.own[key] != "" or kind == "text")
@@ -84,7 +96,7 @@ class StorySettingsScreen(ModalScreen):
                       type="integer" if kind == "int" else "text")]
 
     def on_mount(self):
-        for key, _l, kind, _c in FIELDS:
+        for key, _l, kind, _c in self.fields:
             self.note(key, kind)
         self.query(Select).first().focus()
 
@@ -104,13 +116,13 @@ class StorySettingsScreen(ModalScreen):
 
     def on_select_changed(self, event):
         key = (event.select.id or "")[2:]
-        kind = next((k for n, _l, k, _c in FIELDS if n == key), None)
+        kind = next((k for n, _l, k, _c in self.fields if n == key), None)
         if kind:
             self.note(key, kind)
 
     def on_input_changed(self, event):
         key = (event.input.id or "")[2:]
-        kind = next((k for n, _l, k, _c in FIELDS if n == key), None)
+        kind = next((k for n, _l, k, _c in self.fields if n == key), None)
         if kind:
             self.note(key, kind)
 
@@ -124,7 +136,7 @@ class StorySettingsScreen(ModalScreen):
 
     def action_save(self):
         out, clear = {}, []
-        for key, _l, kind, _c in FIELDS:
+        for key, _l, kind, _c in self.fields:
             v = self.raw(key, kind)
             if v is None:
                 if key in self.own:
