@@ -4,6 +4,8 @@ Writing statistics, read from each story's stats.json (the Writer keeps them) an
     days()                 {date: words} across every story in the library
     streak(days, today)    (current streak, best streak) in days
     summary(universe, story)   everything the Builder's stats box and the Settings stats tab show
+    sprints(...)           the writing sprints the Writer recorded (per story, per universe, or the whole library)
+    sprint_summary(rows)   this week, totals, average and best words a minute, recent sprints and a weekly trend
 """
 import datetime
 import json
@@ -120,7 +122,7 @@ def set_day(date, words, universes=None):
 
 
 def reset_story(story):
-    """Forget a story's recorded history (its days and sessions). The manuscript is not touched. Returns the words that were recorded."""
+    """Forget a story's recorded history (its days, sessions and sprints). The manuscript is not touched. Returns the words that were recorded."""
     before = sum(story_days(story).values())
     story.stats_path.write_text(json.dumps({"days": {}, "sessions": [], "sprints": []}, indent=2), encoding="utf-8")
     return before
@@ -140,3 +142,103 @@ def per_story():
         for s in u.stories():
             rows.append((u.name, s.title, s.word_count(), story_days(s).get(today, 0)))
     return rows
+
+
+# --- writing sprints (the Writer adds one to stats.json's "sprints" when it ends, is stopped, or the Writer is closed) -------------------------
+
+def _num(value, default=0.0):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def story_sprints(story):
+    """The sprints recorded for one story, oldest first: each a dict with date, universe, story (id), title, planned_minutes, actual_minutes,
+    words, wpm, target (or None), hit (True/False when a target was set, else None) and how it ended: reason "done", "stopped" or "left"."""
+    try:
+        data = json.loads(story.stats_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    out = []
+    for rec in data.get("sprints") or []:
+        if not isinstance(rec, dict):
+            continue
+        start = str(rec.get("start") or "")
+        try:
+            date = datetime.date.fromisoformat(start[:10]).isoformat()
+        except ValueError:
+            continue                                                    # (a record with no usable date can't be placed in a week)
+        planned = _num(rec.get("minutes"))
+        actual = _num(rec.get("actual_minutes"), planned)
+        words = int(_num(rec.get("words")))
+        target = int(_num(rec.get("target"))) or None
+        reason = rec.get("reason") or ("stopped" if rec.get("early") else "done")
+        out.append({"date": date, "start": start, "universe": story.universe.slug, "story": f"{story.universe.slug}/{story.slug}",
+                    "title": story.title, "planned_minutes": planned, "actual_minutes": actual, "words": words,
+                    "wpm": round(_num(rec.get("wpm"), words / actual if actual else 0.0), 1), "target": target,
+                    "hit": bool(rec.get("hit")) if target else None, "reason": reason, "early": reason != "done"})
+    return out
+
+
+def sprints(universe=None, story=None, weeks=None, today=None):
+    """Sprints newest first: one story's, one universe's, or the whole library's; `weeks` keeps only the last N weeks (7 days each)."""
+    today = today or datetime.date.today()
+    if story is not None:
+        stories = [story]
+    elif universe is not None:
+        stories = universe.stories()
+    else:
+        stories = [s for u in vault.list_universes() for s in u.stories()]
+    rows = [r for s in stories for r in story_sprints(s)]
+    if weeks:
+        rows = [r for r in rows if 0 <= (today - _date(r["date"])).days < 7 * int(weeks)]
+    return sorted(rows, key=lambda r: r["start"], reverse=True)
+
+
+def _week_start(date):
+    return date - datetime.timedelta(days=date.weekday())
+
+
+def sprint_trend(rows, weeks=8, today=None):
+    """[(Monday of the week, sprints, average words a minute)] for the last `weeks` weeks, oldest first, weeks with no sprint included
+    (average 0). The average is total words over total minutes, so a long sprint counts for more than a short one."""
+    today = today or datetime.date.today()
+    first = _week_start(today) - datetime.timedelta(weeks=int(weeks) - 1)
+    buckets = {first + datetime.timedelta(weeks=i): [0, 0, 0.0] for i in range(int(weeks))}
+    for r in rows:
+        b = buckets.get(_week_start(_date(r["date"])))
+        if b is not None:
+            b[0] += 1
+            b[1] += r["words"]
+            b[2] += r["actual_minutes"]
+    return [(wk, n, round(w / m, 1) if m else 0.0) for wk, (n, w, m) in sorted(buckets.items())]
+
+
+def trend_lines(trend, width=20):
+    """The trend as plain text, one line a week: "2026-10-05  ██████░░░░  12.4 wpm  (3 sprints)"."""
+    top = max((avg for _, _, avg in trend), default=0)
+    return [f"{wk.isoformat()}  {bar(avg, top, width) if n else '·' * width}  "
+            + (f"{avg:.1f} wpm  ({n} sprint{'s' if n != 1 else ''})" if n else "no sprints") for wk, n, avg in trend]
+
+
+def sprint_summary(rows, weeks=8, recent=8, today=None):
+    """Figures for the stats views: sprints this week, total sprint words, average and best words a minute, the target score, the most recent
+    sprints and the weekly trend."""
+    today = today or datetime.date.today()
+    minutes = sum(r["actual_minutes"] for r in rows)
+    words = sum(r["words"] for r in rows)
+    with_target = [r for r in rows if r["target"]]
+    return {"count": len(rows), "week": sum(1 for r in rows if 0 <= (today - _date(r["date"])).days < 7),
+            "words": words, "minutes": round(minutes, 1), "avg_wpm": round(words / minutes, 1) if minutes else 0.0,
+            "best_wpm": max((r["wpm"] for r in rows), default=0.0), "targets_set": len(with_target),
+            "targets_hit": sum(1 for r in with_target if r["hit"]), "recent": rows[:recent],
+            "trend": [{"week": wk.isoformat(), "sprints": n, "avg_wpm": avg} for wk, n, avg in sprint_trend(rows, weeks, today)]}
+
+
+def sprint_line(r):
+    """One sprint on one line: "2026-10-12  the-thornwood/the-last-clause  25 min planned, 18.5 done  412 words  22.3 wpm  target 500: short"."""
+    target = f"  target {r['target']:,}: {'met' if r['hit'] else 'short'}" if r["target"] else ""
+    ended = {"done": "", "stopped": "  (stopped early)", "left": "  (Writer closed)"}.get(r["reason"], "")
+    return (f"{r['date']}  {r['story']}  {r['planned_minutes']:g} min planned, {r['actual_minutes']:g} done  {r['words']:,} words  "
+            f"{r['wpm']:g} wpm{target}{ended}")

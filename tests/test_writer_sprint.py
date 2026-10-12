@@ -69,7 +69,7 @@ def test_stopping_early_is_fine_and_is_recorded_as_early(home, story):
         R.rec = sprint.last
         R.active = sprint.active == nil
     """)
-    assert r["active"] and r["rec"]["early"] is True and r["rec"]["words"] == 4 and r["rec"]["actual_minutes"] == 2.0 and r["rec"]["wpm"] == 2.0
+    assert r["active"] and r["rec"]["early"] is True and r["rec"]["reason"] == "stopped" and r["rec"]["words"] == 4 and r["rec"]["actual_minutes"] == 2.0 and r["rec"]["wpm"] == 2.0
     assert "Sprint stopped: 4 words in 2.0 minutes (2.0 a minute)" in r["msg"]
     assert len(json.loads((story.path / "stats.json").read_text())["sprints"]) == 1
 
@@ -142,3 +142,4 @@ def test_leaving_the_writer_ends_the_sprint_and_keeps_it(home, story):
     run_typed(story, "local now = 1000; require('sw.sprint').clock = function() return now end; function TICK(n) now = now + n end", typed, "", quits=True)
     data = json.loads((story.path / "stats.json").read_text())
     assert len(data["sprints"]) == 1 and data["sprints"][0]["early"] is True and data["sprints"][0]["words"] == 6
+    assert data["sprints"][0]["reason"] == "left" and data["days"] and data["sessions"]          # (leaving saves the day after the sprint: both kept)

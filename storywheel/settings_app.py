@@ -174,6 +174,8 @@ class SettingsScreen(KeptScreen, Screen):
     SettingsScreen TextArea { width: 70; height: 5; }
     SettingsScreen #status { height: 1; padding: 0 1; background: $boost; }
     SettingsScreen DataTable { height: 1fr; min-height: 8; }
+    SettingsScreen #stats-scroll DataTable { height: 12; }
+    SettingsScreen #sprint-summary { padding: 0 1; height: auto; }
     SettingsScreen #summary { padding: 0 1; height: auto; }
     SettingsScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
     """
@@ -228,11 +230,15 @@ class SettingsScreen(KeptScreen, Screen):
                         if title == "Library":
                             yield Static(f"App storage: {paths.home()}\nSettings file: {settings.global_path()}", markup=False)
             with TabPane("Stats", id="t-stats"):
-                yield Static("", id="summary", markup=False)
-                yield Static("Words per day (newest first)   e edits the day's total, 0 resets it", classes="title")
-                yield StatsTable(id="days")
-                yield Static("Per story   R forgets the story's recorded history (its manuscript is untouched)", classes="title")
-                yield StatsTable(id="stories")
+                with VerticalScroll(id="stats-scroll"):
+                    yield Static("", id="summary", markup=False)
+                    yield Static("Words per day (newest first)   e edits the day's total, 0 resets it", classes="title")
+                    yield StatsTable(id="days")
+                    yield Static("Per story   R forgets the story's recorded history (its days, sessions and sprints; its manuscript is untouched)", classes="title")
+                    yield StatsTable(id="stories")
+                    yield Static("Writing sprints (from the Writer's F12 menu)   words a minute by week, then the latest sprints", classes="title")
+                    yield Static("", id="sprint-summary", markup=False)
+                    yield StatsTable(id="sprints")
             with TabPane("Help", id="t-help"):
                 yield Static("Search every help page: modes, keys, exports, backups, the dictionary, grammar... Pick a result to read it.", classes="hint", markup=False)
                 yield Input(placeholder="search the help (empty lists the pages)", id="helpsearch")
@@ -546,6 +552,28 @@ class SettingsScreen(KeptScreen, Screen):
             stories.add_column(head, width=max([len(head)] + [len(c[i]) for c in cells]) + 1)
         for c in cells:
             stories.add_row(*c)
+        self.refresh_sprints()
+
+    def refresh_sprints(self):
+        sp = writing_stats.sprint_summary(writing_stats.sprints())
+        if not sp["count"]:
+            text = "No sprints yet. In the Writer, F12 > Start a writing sprint (or Alt+D) times you and counts the words."
+        else:
+            text = "\n".join([f"{sp['week']} this week · {sp['count']} in all · {sp['words']:,} words · {sp['avg_wpm']:g} words a minute on average, best {sp['best_wpm']:g}"
+                              + (f" · word targets met {sp['targets_hit']} of {sp['targets_set']}" if sp["targets_set"] else ""),
+                              "Average words a minute, week by week (Monday):", *["  " + ln for ln in writing_stats.trend_lines(
+                                  [(writing_stats._date(t["week"]), t["sprints"], t["avg_wpm"]) for t in sp["trend"]])]])
+        self.query_one("#sprint-summary", Static).update(text)
+        table = self.query_one("#sprints", DataTable)
+        table.clear(columns=True)
+        heads = ("Date", "Story", "Planned", "Done", "Words", "Wpm", "Target", "Ended")
+        cells = [(r["date"], r["story"], f"{r['planned_minutes']:g} min", f"{r['actual_minutes']:g} min", f"{r['words']:,}", f"{r['wpm']:g}",
+                  ("met" if r["hit"] else "short") + f" ({r['target']:,})" if r["target"] else "", {"done": "finished", "stopped": "stopped early", "left": "Writer closed"}.get(r["reason"], r["reason"]))
+                 for r in sp["recent"]]
+        for i, head in enumerate(heads):
+            table.add_column(head, width=max([len(head)] + [len(c[i]) for c in cells]) + 1)
+        for c in cells:
+            table.add_row(*c)
 
     def _row_key(self, table):
         try:
@@ -589,7 +617,7 @@ class SettingsScreen(KeptScreen, Screen):
         story = found[idx][1]
         recorded = sum(writing_stats.story_days(story).values())
         self.app.push_screen(ConfirmScreen(f"Forget the recorded writing history of '{story.title}' ({recorded:,} words over its days)?\n"
-                                           "Its manuscript is not touched."), lambda yes: self._forget(story) if yes else None)
+                                           "Its sessions and writing sprints are forgotten too. Its manuscript is not touched."), lambda yes: self._forget(story) if yes else None)
 
     def _forget(self, story):
         n = writing_stats.reset_story(story)

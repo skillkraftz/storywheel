@@ -100,7 +100,8 @@ function M.finish(reason)
   end
   local minutes = elapsed / 60
   local rec = { start = a.started, ["end"] = os.date("%Y-%m-%dT%H:%M:%S"), minutes = a.minutes, actual_minutes = math.floor(minutes * 10 + 0.5) / 10,
-                words = words, wpm = minutes > 0 and math.floor(words / minutes * 10 + 0.5) / 10 or 0, early = reason ~= "done" or nil }
+                words = words, wpm = minutes > 0 and math.floor(words / minutes * 10 + 0.5) / 10 or 0, early = reason ~= "done" or nil,
+                reason = reason }
   if a.target then
     rec.target, rec.hit = a.target, words >= a.target
   end

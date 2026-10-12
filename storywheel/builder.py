@@ -717,6 +717,10 @@ class BuilderScreen(KeptScreen, Screen):
             lines.append(f"Story    {sm['story_words']:,} words in {plural_n(sm['story_scenes'], 'scene')}: {sm['story_title']}")
         lines.append(f"Universe {sm['universe_words']:,} words across {sm['universe_stories']} stor"
                      f"{'y' if sm['universe_stories'] == 1 else 'ies'}: {sm['universe_name']}")
+        sp = writing_stats.sprint_summary(writing_stats.sprints(self.universe, self.story), recent=1)
+        if sp["count"]:
+            lines.append(f"Sprints  {sp['week']} this week · {sp['words']:,} words in {sp['count']} · {sp['avg_wpm']:g} wpm average, best {sp['best_wpm']:g}"
+                         f"      Latest  {writing_stats.sprint_line(sp['recent'][0]).split('  ', 2)[2]}")
         self.query_one("#stats", Static).update("\n".join(lines))
         self.query_one("#top-title", Static).update("Writing")
 

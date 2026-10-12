@@ -673,6 +673,32 @@ def cmd_exports(args):
             print(f"  Note: {w}", file=sys.stderr)
 
 
+def cmd_stats(args):
+    """stats sprints: the writing sprints the Writer recorded, with this week, totals, words a minute, a weekly trend and the latest ones."""
+    from . import writing_stats
+    story = find_story(args.story) if args.story else None
+    universe = _universe(args.universe) if args.universe and not story else None
+    weeks = args.weeks if args.weeks and args.weeks > 0 else 8
+    rows = writing_stats.sprints(universe, story, weeks=weeks)
+    sp = writing_stats.sprint_summary(rows, weeks=weeks, recent=len(rows))
+    scope = f"story {args.story}" if story else (f"universe {args.universe}" if universe else "the whole library")
+    if args.json:
+        emit({"scope": scope, "weeks": weeks, **sp})
+        return
+    if not rows:
+        print(f"  No sprints in {scope} in the last {weeks} week{'s' if weeks != 1 else ''}. In the Writer: F12 > Start a writing sprint.")
+        return
+    print(f"  Sprints in {scope}, last {weeks} week{'s' if weeks != 1 else ''}: {sp['count']} ({sp['week']} this week), {sp['words']:,} words in "
+          f"{sp['minutes']:g} minutes, {sp['avg_wpm']:g} words a minute on average, best {sp['best_wpm']:g}"
+          + (f", word targets met {sp['targets_hit']} of {sp['targets_set']}" if sp["targets_set"] else ""))
+    print("  Average words a minute by week (Monday):")
+    for line in writing_stats.trend_lines([(writing_stats._date(t["week"]), t["sprints"], t["avg_wpm"]) for t in sp["trend"]]):
+        print("    " + line)
+    print("  Sprints, newest first:")
+    for r in rows:
+        print("    " + writing_stats.sprint_line(r))
+
+
 def cmd_lookup(args):
     """define / thesaurus / lookup WORD [--json]: meanings, similar words and opposite words, from the offline dictionary."""
     from . import dictionary
@@ -904,6 +930,12 @@ def add_parsers(sub):
     p.add_argument("--tabs", action="store_true", help="the page as the help screens show it: in tabs (the Writer: --format picks the guide)")
     p.add_argument("--format", help="with --tabs on writer: the story's format (short-story, novel, screenplay, feature-film, short-film)")
     p.add_argument("--json", action="store_true")
+    p = sub.add_parser("stats", help="writing statistics:  stats sprints [--universe U] [--story UNIVERSE/STORY] [--weeks N] [--json]")
+    p.add_argument("action", choices=["sprints"])
+    p.add_argument("--universe", help="only this universe's stories")
+    p.add_argument("--story", help="only this story (universe/story)")
+    p.add_argument("--weeks", type=int, default=8, help="how many weeks back (default 8)")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("exports", help="exports:  exports status [--json] | exports make UNIVERSE/STORY [--format F] [--json]")
     p.add_argument("action", choices=["status", "make"])
     p.add_argument("target", nargs="?", help="universe/story (or a story slug that is in one universe only)")
@@ -940,4 +972,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "stories": cmd_stories, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "stats": cmd_stats, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "stories": cmd_stories, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update}
