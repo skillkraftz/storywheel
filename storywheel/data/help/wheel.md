@@ -14,6 +14,7 @@ mix: Flavor: which kinds of material this story leans toward or avoids
 focus_universe: Go to the universe panel (bottom left)
 send: Send this story to the Universe Builder (the "Belongs to" universe, or a new one)
 send_idea: Send the draft's title and premise to a collection as a new idea story and open it in the Builder (no promotion screen; the draft stays as it is). On a draft already sent it asks: open that idea, send another copy anyway, or cancel
+look_up: Look up a word of the selected field in Words (F5) on its Lookup tab: the word itself, or a short list when the field has several (q comes back). Ctrl+L does the same inside the write dialog that a right-click opens
 roll_all: Roll the whole draft: roll and keep every step that is not kept yet, in order, so each builds on the ones before it (kept steps stay; steps you skipped stay skipped; the twist is rolled too)
 reroll_later: Reroll from here: on a kept step, reroll and keep every later step (this one stays); asks first if that replaces a step you edited by hand
 fix_changed: Fix what changed: swap a changed name, title or motif into every flagged step, and reroll a step that can't be fixed that way (or roll the step it was built on); a step you edited by hand is left alone

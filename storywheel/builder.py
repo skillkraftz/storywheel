@@ -29,7 +29,7 @@ from textual.widgets.option_list import Option
 
 from . import fill, formats, outline, paths, promote, rename, schemas, settings, shelf, state, structures, vault, versions, writing_stats
 from .text import motif_from, plural_n
-from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
+from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet, look_up
 
 TYPE_ORDER = ["character", "place", "thing", "group", "note"]
 
@@ -251,6 +251,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("space", "roll_blank", "Roll blanks"),
         Binding("f", "roll_field", "Roll"),
         Binding("e", "write_field", "Write"),
+        Binding("l", "look_up", "Look up", show=False),
         Binding("n", "new_entity", "New"),
         Binding("d", "delete_entity", "Delete"),
         Binding("r", "rename", "Rename"),
@@ -1111,7 +1112,7 @@ class BuilderScreen(KeptScreen, Screen):
             return self.app.push_screen(ChoiceScreen(f"{spec['label']}:", options),
                                         lambda v: self._written_value(key, v) if v is not None else None)
         current = e.fields.get(key, "")
-        self.app.push_screen(EditScreen(f"Write {spec['label'].lower()}", {key: current}),
+        self.app.push_screen(EditScreen(f"Write {spec['label'].lower()}", {key: current}, lookup=self.look_up_text),
                              lambda out: self._written_text(key, out))
 
     def _written_text(self, key, out):
@@ -1230,6 +1231,21 @@ class BuilderScreen(KeptScreen, Screen):
                 self._not_for_the_outline("f")
             return
         self.roll_field(self.field_key())
+
+    def look_up_text(self, text):
+        look_up(self, text, {"universe": self.universe.slug if self.universe else None, "story": self.story.slug if self.story else None})
+
+    def action_look_up(self):
+        """l: look up a word of the highlighted field (an entity card row, or an outline row) in Words (F5), on its Lookup tab."""
+        if self.focused is self.top and self.top.highlighted is not None:
+            rows = self.top_rows()
+            if rows:
+                return self.look_up_text(rows[min(self.top.highlighted, len(rows) - 1)][2])
+        if not self.entity:
+            return self.say("Nothing to look up: select an entity field first.")
+        key = self.field_key()
+        row = next((r for r in self.rows() if r[0] == key), None)
+        self.look_up_text(row[2] if row else "")
 
     def action_write_field(self):
         if self.focused is self.top:

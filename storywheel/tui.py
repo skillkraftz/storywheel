@@ -128,6 +128,38 @@ class CardList(OptionList):
 
 # --- dialogs ----------------------------------------------------------------------------------------
 
+# --- look a word up (B2): the field's word, or a short picker when it is several -----------------------------------------------
+
+WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’-]*[A-Za-z]|[A-Za-z]")
+
+
+def words_in(text):
+    """The distinct words of a field's text, in order (a name's parts, a phrase's words)."""
+    seen = []
+    for w in WORD_RE.findall(str(text or "")):
+        w = w.strip("'’-")
+        if len(w) >= 2 and w.lower() not in [x.lower() for x in seen]:
+            seen.append(w)
+    return seen
+
+
+def look_up(screen, text, payload=None):
+    """Open Words (F5) on its Lookup tab with a word from `text`: the word itself when there is one, else a short picker. Coming back
+    from Words works as always (q). `payload` says which universe / story Words should know about."""
+    words = words_in(text)
+    if not words:
+        screen.say("There is no word in that field to look up.")
+        return
+
+    def go(word):
+        if word:
+            screen.app.go("words", dict(payload or {}, handover={"word": word}))
+    if len(words) == 1:
+        go(words[0])
+    else:
+        screen.app.push_screen(ChoiceScreen("Look up which word?", [(w, w) for w in words]), go)
+
+
 class EditScreen(ModalScreen):
     """Edit one or more fields, each in its own box, starting from what is there now."""
     BINDINGS = [Binding("escape", "cancel", "Cancel")]
@@ -138,9 +170,10 @@ class EditScreen(ModalScreen):
     EditScreen Label { margin-top: 1; color: $text-muted; }
     """
 
-    def __init__(self, title, fields):
+    def __init__(self, title, fields, lookup=None):
         super().__init__()
         self.title_text, self.fields = title, fields
+        self.lookup = lookup                    # a callable(text): look the word up in Words (the dialog closes first, nothing is changed)
         # widget ids may not hold spaces or brackets, so name the boxes from the field names, made safe
         self.ids = {name: "in-" + re.sub(r"[^A-Za-z0-9_-]+", "-", name).strip("-") for name in fields}
 
@@ -151,10 +184,18 @@ class EditScreen(ModalScreen):
                 for name, value in self.fields.items():
                     yield Label(name.replace("_", " "))
                     yield Input(value, id=self.ids[name])
-            yield Label("enter: next / done     esc: cancel")
+            yield Label("enter: next / done     esc: cancel" + ("     ctrl+l: look a word up" if self.lookup else ""))
 
     def on_mount(self):
         self.query(Input).first().focus()
+
+    def on_key(self, event):
+        if event.key == "ctrl+l" and self.lookup:
+            event.stop()
+            focused = self.focused
+            text = focused.value if isinstance(focused, Input) else " ".join(i.value for i in self.query(Input))
+            self.dismiss(None)
+            self.lookup(text)
 
     def on_input_submitted(self, event):
         inputs = list(self.query(Input))
@@ -714,6 +755,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
         Binding("I", "send_idea", "Send as an idea", show=False),
+        Binding("l", "look_up", "Look up", show=False),
         Binding("R", "roll_all", "Roll all"),
         Binding("L", "reroll_later", "Reroll later", show=False),
         Binding("S", "fix_changed", "Fix", show=False),
@@ -1341,6 +1383,20 @@ class MainScreen(KeptScreen, Screen):
         self.session.update_inputs()
         self.after()
 
+    def _words_payload(self):
+        story = self.session.story
+        return {"universe": (story.get("promoted") or {}).get("universe") or (story.get("universes") or [None])[0]}
+
+    def action_look_up(self):
+        """l: look up a word of the selected field in Words (F5), on its Lookup tab."""
+        s = self.session
+        field = self.card_field() or s.field_names[0]
+        self.look_up_text(s.fields.get(field, ""))
+
+    def look_up_text(self, text):
+        self.session.save()
+        look_up(self, text, self._words_payload())
+
     def action_roll_all(self):
         """R: roll and keep every step that isn't kept yet, in order."""
         if self.locked():
@@ -1679,7 +1735,7 @@ class MainScreen(KeptScreen, Screen):
             self.app.push_screen(ChoiceScreen("What is the story about?  " + focus.get(focus.of_draft(s.story)).hint, focus.choices(),
                                               start=focus.of_draft(s.story)), self._focus_picked)
             return
-        self.app.push_screen(EditScreen(f"Edit {field.replace('_', ' ')}", {field: s.cand[field]}),
+        self.app.push_screen(EditScreen(f"Edit {field.replace('_', ' ')}", {field: s.cand[field]}, lookup=self.look_up_text),
                              lambda out: self._edited(field, out))
 
     def pick_structure_field(self, field):

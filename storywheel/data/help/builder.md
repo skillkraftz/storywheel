@@ -5,6 +5,7 @@ The Builder is where a kept idea grows into a world: characters, places, things,
 roll_blank: Roll every blank field of the selected entity (never changes what you wrote)
 roll_field: Roll the highlighted field with the generator
 write_field: Write the highlighted field by hand
+look_up: Look up a word of the highlighted field in Words (F5) on its Lookup tab: the word itself, or a short list when the field has several (q comes back). Ctrl+L does the same inside the write dialog that a right-click opens
 new_entity: New entity of the type on the current tab (starts blank)
 delete_entity: Delete the entity (asks first; it goes to the library's .trash)
 rename: Rename the entity; shows every match in your notes, outlines and manuscripts first
