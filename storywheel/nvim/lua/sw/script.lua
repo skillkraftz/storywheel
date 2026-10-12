@@ -126,10 +126,14 @@ function M.types(lines, live_row)
   return t
 end
 
--- Scenes: { n=, title=, start=, finish=, body=, section=, first_line=, label=, marked=true }
+-- Scenes: { n=, title=, start=, finish=, block_finish=, body=, section=, synopsis=, first_line=, label=, marked=true }
+-- `finish` is the line before the next heading; `block_finish` stops short of any section line (# Act Two) that sits before the next heading,
+-- because a section belongs to the scenes after it, not to the scene before. `synopsis` is the first "= ..." line under the heading, unless a
+-- section line comes first (then it belongs to the section). The Python reader (fountain.scenes) follows the same rules.
 function M.scenes(lines)
   local t = M.types(lines)
   local out, sections = {}, {}
+  local after_section = false
   local function section_text()
     local keys = vim.tbl_keys(sections)
     table.sort(keys)
@@ -142,20 +146,76 @@ function M.scenes(lines)
       local level = #(lines[i]:match("^%s*(#+)") or "#")
       sections[level] = trim(lines[i]:gsub("^%s*#+", ""))
       for k in pairs(sections) do if k > level then sections[k] = nil end end
+      after_section = true
+      local cur = out[#out]
+      if cur and cur.block_finish == nil then cur.block_finish = i - 1 end
     elseif kind == "heading" then
-      if #out > 0 then out[#out].finish = i - 1 end
+      if #out > 0 then
+        out[#out].finish = i - 1
+        out[#out].block_finish = out[#out].block_finish or (i - 1)
+      end
+      after_section = false
       local title = trim(lines[i]):gsub("^%.", ""):upper()
       out[#out + 1] = { n = #out + 1, title = title, label = title, start = i, finish = #lines, body = math.min(i + 2, #lines),
-                        section = section_text(), first_line = "", marked = true, words = 0 }
+                        section = section_text(), first_line = "", synopsis = "", marked = true, words = 0 }
+    elseif #out > 0 and kind == "synopsis" and not after_section and out[#out].synopsis == "" then
+      out[#out].synopsis = trim((lines[i]:gsub("^%s*=", "")))
     elseif #out > 0 and out[#out].first_line == "" and (kind == "action" or kind == "dialogue") then
       out[#out].first_line = trim(lines[i])
     end
   end
   for _, sc in ipairs(out) do
+    sc.block_finish = sc.block_finish or sc.finish
     local text = table.concat(vim.list_slice(lines, sc.start, sc.finish), "\n")
     sc.words = require("sw.util").count_words(text)
   end
   return out
+end
+
+-- Move the scene that starts at line `start` of `buf` one place up (-1) or down (1), with its whole block (its heading to the line before the
+-- next heading, not counting a section line such as "# Act Two", which stays where it is). The two blocks swap places in one buffer change,
+-- so one undo puts them back. Returns true and a function mapping an old row to its new row, or false and a plain reason.
+function M.move_scene(buf, start, direction)
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  local scenes = M.scenes(lines)
+  local idx
+  for i, sc in ipairs(scenes) do if sc.start == start then idx = i end end
+  if not idx then return false, "There is no scene there." end
+  local other = scenes[idx + direction]
+  if not other then return false, direction < 0 and "That is the first scene." or "That is the last scene." end
+  local upper, lower = scenes[math.min(idx, idx + direction)], scenes[math.max(idx, idx + direction)]
+  local function cut(sc)                                       -- a block without its trailing blank lines, and how many there were
+    local first, last = sc.start, sc.block_finish
+    local blanks = 0
+    while last > first and not lines[last]:match("%S") do last = last - 1 blanks = blanks + 1 end
+    return vim.list_slice(lines, first, last), blanks
+  end
+  local up_core, up_blank = cut(upper)
+  local low_core, low_blank = cut(lower)
+  local gap = vim.list_slice(lines, upper.block_finish + 1, lower.start - 1)
+  local merged = {}
+  vim.list_extend(merged, low_core)
+  for _ = 1, math.max(1, up_blank) do merged[#merged + 1] = "" end
+  vim.list_extend(merged, gap)
+  local moved_start = upper.start + #merged                      -- (where the upper block begins again)
+  vim.list_extend(merged, up_core)
+  for _ = 1, low_blank do merged[#merged + 1] = "" end
+  local region = vim.list_slice(lines, upper.start, lower.block_finish)
+  local function words_of(list)                                  -- the same lines in a new order: nothing lost, nothing added
+    local keep = {}
+    for _, l in ipairs(list) do if l:match("%S") then keep[#keep + 1] = l end end
+    table.sort(keep)
+    return table.concat(keep, "\n")
+  end
+  if words_of(region) ~= words_of(merged) then return false, "The scenes were not moved: the text did not match up." end
+  vim.api.nvim_buf_set_lines(buf, upper.start - 1, lower.block_finish, false, merged)
+  local function map(row)
+    if row >= upper.start and row < upper.start + #up_core then return moved_start + (row - upper.start) end
+    if row >= lower.start and row < lower.start + #low_core then return upper.start + (row - lower.start) end
+    return row
+  end
+  local new_start = idx > idx + direction and upper.start or moved_start        -- (the moved scene's new first line)
+  return true, map, new_start
 end
 
 -- The characters (from the cues) and locations (from the headings) of a script, in order of first use.

@@ -17,6 +17,8 @@ local function groups()
       { "Export anonymous script (.pdf)", function() sw.export("pdf", true) end },
       { "Export for Final Draft (.fdx)", function() sw.export("fdx") end },
       { "Export Fountain (.fountain)", function() sw.export("fountain") end },
+      { "Move this scene up", function() require("sw.sidebar").move_here(-1) end },
+      { "Move this scene down", function() require("sw.sidebar").move_here(1) end },
       { "Flip test (" .. util.key_label(story_mod.setting("key_flip_test", "<A-f>")) .. ")", function() require("sw.script").flip_test() end },
     }
   else

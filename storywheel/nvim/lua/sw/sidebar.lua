@@ -1,11 +1,13 @@
 -- The scene sidebar: every scene of the manuscript, found by its marker line (`* * *` or `* * * Title`), in order, with
 -- its first line. Enter jumps there; a adds a scene; r renames it (edits its marker); J / K move it down / up; q closes.
+-- A screenplay's scenes are its headings, grouped under its sections, each with its "= synopsis" dimmed beneath; J / K move a scene with its whole block.
 local util = require("sw.util")
 local story = require("sw.story")
 local layout = require("sw.layout")
 local M = {}
 
-M.entries = {}     -- buffer line (1-based) -> a scene from story.scene_list()
+M.entries = {}     -- buffer line (1-based) -> a scene from story.scene_list() (a synopsis line belongs to its scene)
+M.ns = vim.api.nvim_create_namespace("sw_sidebar")
 
 local function main_path()
   return vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(layout.main))
@@ -23,7 +25,7 @@ end
 
 -- The lines and the jump table.
 function M.build()
-  local lines, entries = {}, {}
+  local lines, entries, dim = {}, {}, {}
   local path = main_path()
   local row = vim.api.nvim_win_is_valid(layout.main) and vim.api.nvim_win_get_cursor(layout.main)[1] or 0
   local section = nil
@@ -36,19 +38,26 @@ function M.build()
     local line = string.format("%s%02d %s — %s", here and "▶ " or "  ", sc.n, sc.title, sc.first_line)
     lines[#lines + 1] = truncate(line, M.width() - 1)
     entries[#lines] = sc
+    if sc.synopsis and sc.synopsis ~= "" then                              -- a screenplay's "= ..." line, dimmed under its heading
+      lines[#lines + 1] = truncate("      = " .. sc.synopsis, M.width() - 1)
+      entries[#lines] = sc
+      dim[#lines] = true
+    end
   end
   if #lines == 0 then lines = { "  (no scenes yet: press a)" } end
-  return lines, entries
+  return lines, entries, dim
 end
 
 function M.render()
   if not layout.sidebar_open then return end
   local buf = vim.api.nvim_win_get_buf(layout.left)
-  local lines, entries = M.build()
-  M.entries = entries
+  local lines, entries, dim = M.build()
+  M.entries, M.dim = entries, dim
   vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.bo[buf].modifiable = false
+  vim.api.nvim_buf_clear_namespace(buf, M.ns, 0, -1)
+  for i in pairs(dim) do vim.api.nvim_buf_add_highlight(buf, M.ns, "Comment", i - 1, 0, -1) end
   for i, e in pairs(entries) do
     if lines[i]:sub(1, 3) == "▶ " then pcall(vim.api.nvim_win_set_cursor, layout.left, { i, 0 }) break end
   end
@@ -102,10 +111,7 @@ end
 function M.move(entry, direction)
   entry = entry or M.current_entry()
   if not entry then return false end
-  if story.is_screenplay() then
-    vim.api.nvim_echo({ { "In a screenplay, move a scene by cutting and pasting it (its heading and everything up to the next).", "Normal" } }, false, {})
-    return false
-  end
+  if story.is_screenplay() then return M.move_script(entry, direction) end
   local all = story.scene_list()
   local idx
   for i, sc in ipairs(all) do if sc.path == entry.path and sc.start == entry.start then idx = i end end
@@ -146,6 +152,46 @@ function M.move(entry, direction)
   end
   M.render()
   return true
+end
+
+-- A screenplay's scene one place up or down, with its whole block (see script.move_scene). The cursor stays on the same text; one undo
+-- (Ctrl+Z in the writing window) puts the scenes back.
+function M.move_script(entry, direction)
+  local b = buffer_of(entry.path)
+  local in_main = layout.main and vim.api.nvim_win_is_valid(layout.main) and vim.api.nvim_win_get_buf(layout.main) == b
+  local cur = in_main and vim.api.nvim_win_get_cursor(layout.main) or nil              -- (read before the change moves it)
+  local ok, map, new_start = require("sw.script").move_scene(b, entry.start, direction)
+  if not ok then
+    vim.api.nvim_echo({ { map, "Normal" } }, true, {})
+    return false
+  end
+  save(b)
+  if cur then
+    pcall(vim.api.nvim_win_set_cursor, layout.main, { math.min(map(cur[1]), vim.api.nvim_buf_line_count(b)), cur[2] })
+  end
+  M.render()
+  if layout.sidebar_open and layout.left and vim.api.nvim_win_is_valid(layout.left) then       -- the sidebar's cursor follows the moved scene
+    for i, e in pairs(M.entries) do
+      if e.start == new_start and not M.dim[i] then pcall(vim.api.nvim_win_set_cursor, layout.left, { i, 0 }) break end
+    end
+  end
+  require("sw.stats").refresh()
+  return true
+end
+
+-- The F12 menu: move the scene the cursor is in.
+function M.move_here(direction)
+  if not story.is_screenplay() then
+    vim.api.nvim_echo({ { "Moving scenes from the menu is for screenplays; in the sidebar J and K move a scene.", "Normal" } }, false, {})
+    return false
+  end
+  local row = vim.api.nvim_win_get_cursor(layout.main)[1]
+  local sc = story.scene_at(main_path(), row)
+  if not sc then
+    vim.api.nvim_echo({ { "The cursor is not in a scene yet.", "Normal" } }, false, {})
+    return false
+  end
+  return M.move_script(sc, direction)
 end
 
 function M.add(title)

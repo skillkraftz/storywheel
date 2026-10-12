@@ -268,17 +268,19 @@ def scenes(text):
     """[{n, title, line, section, synopsis, first_line}]: a scene for each heading, with the section it sits under."""
     script = parse(text)
     out, section, sections = [], "", {}
-    pending_syn = ""
+    after_section = False
     for e in script.elements:
         if e.type == "section":
+            after_section = True
             sections[e.level] = e.text
             for k in list(sections):
                 if k > e.level:
                     del sections[k]
             section = " / ".join(sections[k] for k in sorted(sections))
-        elif e.type == "synopsis" and out and not out[-1]["synopsis"]:
+        elif e.type == "synopsis" and out and not after_section and not out[-1]["synopsis"]:
             out[-1]["synopsis"] = e.text
         elif e.type == "heading":
+            after_section = False
             out.append({"n": len(out) + 1, "title": e.text, "line": e.line, "section": section, "synopsis": "", "first_line": ""})
         elif out and not out[-1]["first_line"] and e.type in ("action", "dialogue"):
             out[-1]["first_line"] = e.text.split("\n")[0][:80]
