@@ -488,7 +488,8 @@ class WordsScreen(KeptScreen, Screen):
         handed = payload.get("handover")
         old = self.universe.slug if self.universe else None
         new = payload.get("universe") or old
-        if handed or new != old:
+        other_story = bool(payload.get("story")) and payload.get("story") != (self.story.slug if self.story else None)
+        if handed or new != old or other_story:                  # (a different story: Genre words and Story words start on it)
             self.payload = payload
             self.handover = handed
             self.start(keep_view=not handed)
