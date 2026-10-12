@@ -3,6 +3,7 @@
 -- gives the Writer its screenplay keys: Tab cycles the line's element, Enter knows what comes next, headings and cues are capitalized,
 -- names and locations complete, the page is approximated with display-only indents, and the flip test lists what a reader would notice.
 local story = require("sw.story")
+local util = require("sw.util")
 local M = {}
 
 M.ns = vim.api.nvim_create_namespace("sw_script")
@@ -293,21 +294,74 @@ function M.layout(lines)
   return total, at
 end
 
+-- A quick local estimate, used until the real paginator has answered (and when it cannot run): close, a little short on long speeches.
 function M.estimate_pages(lines)
   local total = M.layout(lines)
-  return math.floor(total / M.LINES_PER_PAGE * 1.04 * 10 + 0.5) / 10       -- (1.04: what moving speeches and keeping headings adds)
+  return math.floor(total / M.LINES_PER_PAGE * 1.04 * 10 + 0.5) / 10
 end
 
 function M.target()
   return tonumber(story.info.target_pages) or tonumber(story.setting("target_pages", 0)) or 0
 end
 
--- "p. 12 of ~15": the script's estimated length against its target.
+-- The page count comes from the same code as the PDF (storywheel/screenplay_pdf.py, through `storywheel script pages -`), so the status line
+-- and the exported script agree: a heading is never left at a page foot, speeches break with (MORE) and (CONT'D). It runs in the background a
+-- moment after you stop typing; until it answers, the quick estimate above shows.
+M.cli_pages = nil        -- { count = pages the PDF would have, pages = the same with the last page as a fraction }
+M.requested = nil        -- the text the last request was made for
+M.delay_ms = 600
+
+local function pages_args()
+  local args = { "script", "pages", "-", "--json" }
+  if story.setting("script_contd", true) then args[#args + 1] = "--contd" end
+  return util.cli(args)
+end
+
+local function read_answer(out)
+  local ok, data = pcall(vim.json.decode, out or "")
+  if ok and type(data) == "table" and tonumber(data.count) then return { count = tonumber(data.count), pages = tonumber(data.pages) or 0 } end
+end
+
+-- The answer for `lines`, waiting for it (tests, scripts). Returns { count=, pages= } or nil.
+function M.pages_now(lines)
+  local text = table.concat(lines, "\n")
+  local out = vim.fn.system(pages_args(), text)
+  if vim.v.shell_error ~= 0 then return nil end
+  local answer = read_answer(out)
+  if answer then M.cli_pages, M.requested = answer, text end
+  return answer
+end
+
+-- Ask for the pages of the buffer in the background, once it has been quiet for a moment and only if its text changed.
+function M.request_pages(buf)
+  local text = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
+  if text == M.requested then return end
+  if M.timer then M.timer:stop() if not M.timer:is_closing() then M.timer:close() end M.timer = nil end
+  M.timer = vim.uv.new_timer()
+  M.timer:start(M.delay_ms, 0, vim.schedule_wrap(function()
+    if M.timer then if not M.timer:is_closing() then M.timer:close() end M.timer = nil end
+    if text == M.requested then return end
+    M.requested = text
+    local ok = pcall(vim.system, pages_args(), { stdin = text, text = true }, vim.schedule_wrap(function(res)
+      local answer = res.code == 0 and read_answer(res.stdout) or nil
+      if answer then
+        M.cli_pages = answer
+        local stats = require("sw.stats")
+        stats.pages_cached = M.status(buf)
+        vim.cmd("redrawstatus")
+      end
+    end))
+    if not ok then M.requested = nil end
+  end))
+end
+
+-- "p. 12 of ~15": the script's length in pages against its target.
 function M.status(buf)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-  local pages = M.estimate_pages(lines)
+  pcall(M.request_pages, buf)                              -- (never let a failed request break the status line)
+  local count = M.cli_pages and M.cli_pages.count or math.ceil(M.estimate_pages(lines))
   local target = M.target()
-  local p = math.max(1, math.ceil(pages))
+  local p = math.max(1, count)
   if target and target > 0 then return string.format("p. %d of ~%d", p, target) end
   return string.format("p. %d", p)
 end

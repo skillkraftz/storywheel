@@ -450,6 +450,11 @@ def cmd_script(args):
             sys.exit(str(e))
         emit({"path": str(path)}) if args.json else print(f"  Started {path} from the outline.")
         return
+    if args.action == "pages" and args.target == "-":                       # the Writer sends the buffer on stdin
+        text = sys.stdin.buffer.read().decode("utf-8", "replace")
+        count, pages = screenplay_pdf.page_count(text, args.contd), screenplay_pdf.estimate_pages(text, args.contd)
+        emit({"pages": pages, "count": count}) if args.json else print(pages)
+        return
     path = Path(args.target or "")
     if not path.is_file():
         sys.exit(f"No file {path}")
@@ -464,8 +469,8 @@ def cmd_script(args):
             if not found:
                 print("  Nothing to flag.")
     elif args.action == "pages":
-        pages = screenplay_pdf.estimate_pages(text)
-        emit({"pages": pages}) if args.json else print(pages)
+        pages = screenplay_pdf.estimate_pages(text, args.contd)
+        emit({"pages": pages, "count": screenplay_pdf.page_count(text, args.contd)}) if args.json else print(pages)
     else:
         emit(fountain.scenes(text)) if args.json else print("\n".join(f"  {d['line']:5d}  {d['title']}" for d in fountain.scenes(text)))
 
@@ -903,9 +908,10 @@ def add_parsers(sub):
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("script", help="screenplays:  script ensure|start UNIVERSE/STORY [--replace] | script check|pages|scenes FILE [--target-pages N]")
     p.add_argument("action", choices=["ensure", "start", "check", "pages", "scenes"])
-    p.add_argument("target", help="universe/story (ensure, start) or a .fountain file (check, pages, scenes)")
+    p.add_argument("target", help="universe/story (ensure, start) or a .fountain file (check, pages, scenes); for pages, - reads the script from stdin")
     p.add_argument("--replace", action="store_true", help="start: replace a script that already has scenes (it is backed up first)")
     p.add_argument("--target-pages", dest="target_pages", type=int, help="check: the length the script aims at")
+    p.add_argument("--contd", action="store_true", help="pages: count with automatic (CONT'D) cues, as the PDF does when script_contd is on")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("promote", help="bring a Wheel draft into a universe:  promote N --new NAME | --universe SLUG")
     p.add_argument("target", nargs="?", help="number from 'list' or a story id (default: newest)")

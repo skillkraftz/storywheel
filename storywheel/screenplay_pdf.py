@@ -334,8 +334,15 @@ def paginate(text, contd=False):
     return pages
 
 
-def estimate_pages(text):
-    pages = paginate(text)
+def page_count(text, contd=False):
+    """How many script pages the PDF would have (0 for an empty script): the length of the pagination render() draws, the title page not counted."""
+    pages = paginate(text, contd)
+    return 0 if len(pages) == 1 and not pages[0].lines else len(pages)
+
+
+def estimate_pages(text, contd=False):
+    """The script's length in pages, the last one as a fraction of a page. Made by the same pagination as the PDF, so it agrees with it."""
+    pages = paginate(text, contd)
     if len(pages) == 1 and not pages[0].lines:
         return 0
     full = len(pages) - 1
