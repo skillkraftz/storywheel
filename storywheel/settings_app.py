@@ -78,6 +78,9 @@ SECTIONS = [
          "Rule ids, separated by commas. Right-click a problem in the Writer > Turn off this rule adds one here."),
         ("grammar_pause_ms", "Check after a pause of (ms)", "int", None, "How long you stop typing before changed paragraphs are checked."),
         ("grammar_memory_mb", "Memory limit (MB)", "int", None, "The most memory LanguageTool's Java may use (this computer only). 512 is plenty for a short story; a Raspberry Pi 4 can spare it."),
+        ("grammar_ngrams_dir", "N-gram data folder (this computer only)", "path", None,
+         "Optional, about 8 GB, wants an SSD. The folder that contains en/. With it LanguageTool adds the confused-word rules that use word-frequency data "
+         "(their/there, your/you're, then/than), and the Confused words switch above stays on. Install it with:  storywheel grammar ngrams install   (or  --from ZIP)."),
     ]),
     ("Export", [
         ("font", "Manuscript font", "choice", ["Times New Roman", "Courier New"], "Shunn allows either."),
@@ -213,6 +216,10 @@ class SettingsScreen(KeptScreen, Screen):
                                      f"Java: {st['java_version'] or 'not found'}   LanguageTool: {st['version'] or 'not installed'}   "
                                      f"Memory: wants about {st['memory_needed_mb']} MB" + (f", {st['memory_available_mb']} MB free" if st['memory_available_mb'] else ""),
                                      "Ignored items are kept per story (grammar-ignore.json): list or forget them with  storywheel grammar ignored UNIVERSE/STORY [--clear]"]
+                            ng = st["ngrams"]
+                            lines.append("N-gram data: " + (f"in use ({ng['size_bytes'] / 1024 ** 3:.1f} GB, {ng['root']})" if ng["in_use"] else
+                                                            "set but not usable (see below)" if ng["configured"] else
+                                                            "not installed (optional, about 8 GB: storywheel grammar ngrams install). It adds " + _grammar.NGRAMS_WHAT + "."))
                             lines += st["problems"]
                             yield Static("\n".join(lines), id="grammar-tools", markup=False)
                         if title == "Library":

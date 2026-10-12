@@ -239,9 +239,14 @@ def cmd_grammar(args):
             print(f"  Server: {'running at ' + st['url'] if st['running'] else 'not running (the Writer starts it when grammar checking is on)'}")
             mem = f"{st['memory_available_mb']} MB free of {st['memory_total_mb']} MB" if st["memory_total_mb"] else "unknown"
             print(f"  Memory: wants about {st['memory_needed_mb']} MB ({st['memory_limit_mb']} MB heap + Java); this machine has {mem}")
+            ng = st["ngrams"]
+            print("  N-gram data: " + (f"in use from {paths.tilde(ng['root'])} ({ng['size_bytes'] / 1024 ** 3:.1f} GB)" if ng["in_use"] else
+                                      ("set but not usable" if ng["configured"] else "not installed (optional: storywheel grammar ngrams install)")))
             print(f"  {grammar.HELP_NOTE}")
             for p in st["problems"]:
                 print("  ! " + p)
+        elif act == "ngrams":
+            _grammar_ngrams(args, grammar)
         elif act == "start":
             url = grammar.start()
             print(json.dumps({"ok": True, "url": url}) if args.json else f"  Running at {url}")
@@ -270,6 +275,45 @@ def cmd_grammar(args):
     except grammar.GrammarError as e:
         print("  " + str(e))
         raise SystemExit(1)
+
+
+def _grammar_ngrams(args, grammar):
+    """storywheel grammar ngrams install [--from ZIP] [--dir FOLDER] | status | remove [--yes]"""
+    from . import paths
+    what = args.target
+    if what not in ("install", "status", "remove"):
+        sys.exit("Say what to do:  storywheel grammar ngrams install [--from ZIP] [--dir FOLDER] | status | remove [--yes]")
+    if what == "install":
+        done = grammar.ngrams_install(args.from_file, args.dir, lambda m: print("  " + m))
+        print(f"  The n-gram data is installed in {paths.tilde(done)} and grammar_ngrams_dir is set (this machine only).")
+        for p in grammar.ngrams_status()["problems"]:
+            print("  ! " + p)
+        print("  LanguageTool starts with it the next time the Writer turns grammar checking on. It adds " + grammar.NGRAMS_WHAT + ".")
+    elif what == "status":
+        st = grammar.ngrams_status()
+        if args.json:
+            return emit(st)
+        if not st["configured"]:
+            print("  No n-gram data is set. It is optional and about 8 GB:  storywheel grammar ngrams install   (needs an SSD)")
+        else:
+            print(f"  Folder: {paths.tilde(st['dir'])}")
+            print(f"  In use: {'yes, ' + format(st['size_bytes'] / 1024 ** 3, '.1f') + ' GB, the server starts with --languageModel ' + paths.tilde(st['root']) if st['in_use'] else 'no'}")
+            print(f"  Adds: {st['what']}")
+        for p in st["problems"]:
+            print("  ! " + p)
+    else:
+        st = grammar.ngrams_status()
+        if not st["configured"]:
+            print("  No n-gram data is set. Nothing to remove.")
+            return
+        if not args.yes:
+            if not sys.stdin.isatty():
+                sys.exit("This deletes the n-gram data in " + paths.tilde(st["dir"]) + ". Run it again with --yes to confirm.")
+            if input(f"  Delete the n-gram data in {paths.tilde(st['dir'])} ({st['size_bytes'] / 1024 ** 3:.1f} GB)? [y/N] ").strip().lower() not in ("y", "yes"):
+                print("  Kept.")
+                return
+        freed = grammar.ngrams_remove()
+        print(f"  Removed the n-gram data ({freed / 1024 ** 3:.1f} GB freed) and cleared grammar_ngrams_dir.")
 
 
 def _status_arg(text):
@@ -803,10 +847,13 @@ def add_parsers(sub):
     p.add_argument("--size", type=float, default=0, help="font size for storywheel's own window (default: your kitty size)")
     p.add_argument("--probe", action="store_true", help="say what the installed kitty could do for switching windows in place (kitty remote control); changes nothing")
     p.add_argument("--print", action="store_true", help="only show the command")
-    p = sub.add_parser("grammar", help="optional grammar checking with a local LanguageTool:  grammar install [--from FILE.zip] | status | start | stop | rule-off ID | ignored STORY [--clear]")
-    p.add_argument("action", choices=["install", "status", "start", "stop", "config", "rule-off", "ignored"])
+    p = sub.add_parser("grammar", help="optional grammar checking with a local LanguageTool:  grammar install [--from FILE.zip] | status | start | stop | rule-off ID | ignored STORY [--clear] | "
+                                       "ngrams install [--from ZIP] [--dir FOLDER] | ngrams status | ngrams remove [--yes]  (the optional n-gram data, about 8 GB)")
+    p.add_argument("action", choices=["install", "status", "start", "stop", "config", "rule-off", "ignored", "ngrams"])
     p.add_argument("target", nargs="?")
-    p.add_argument("--from", dest="from_file", help="install: unpack this LanguageTool .zip instead of downloading")
+    p.add_argument("--from", dest="from_file", help="install, ngrams install: unpack this .zip instead of downloading")
+    p.add_argument("--dir", help="ngrams install: the folder to put the n-gram data in (default ~/.storywheel/ngrams)")
+    p.add_argument("--yes", action="store_true", help="ngrams remove: don't ask")
     p.add_argument("--clear", action="store_true")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("story", help="stories in your universes:  story list [--status S] | story show UNIVERSE/STORY | "

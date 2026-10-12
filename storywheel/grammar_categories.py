@@ -6,7 +6,7 @@ CATEGORIES = [
     ("grammar_cat_grammar", "GRAMMAR", "Grammar", True, "agreement, verb forms, articles, word order"),
     ("grammar_cat_punctuation", "PUNCTUATION", "Punctuation", True, "commas, missing or doubled marks"),
     ("grammar_cat_casing", "CASING", "Capital letters", True, "sentence starts, names"),
-    ("grammar_cat_confused", "CONFUSED_WORDS", "Confused words", True, "their/there, its/it's, effect/affect"),
+    ("grammar_cat_confused", "CONFUSED_WORDS", "Confused words", True, "their/there, its/it's, effect/affect (with the n-gram data installed, this switch stays on: its rules live here)"),
     ("grammar_cat_semantics", "SEMANTICS", "Meaning", True, "words that contradict or don't fit"),
     ("grammar_cat_misc", "MISC", "Other", True, "everything LanguageTool files elsewhere"),
     ("grammar_cat_typos", "TYPOS", "Spelling (LanguageTool's)", False, "Neovim's spellcheck does this already, with your universe's names"),

@@ -1,5 +1,5 @@
 """A stand-in for the LanguageTool HTTP server: python fake_lt.py PORT. Environment: FAKE_LT_LOG (append every text it is asked about),
-FAKE_LT_DELAY (seconds to wait before answering), FAKE_LT_BROKEN (answer with junk)."""
+FAKE_LT_DELAY (seconds to wait before answering), FAKE_LT_BROKEN (answer with junk), FAKE_LT_ARGS (write the command line it was started with here)."""
 import json
 import os
 import sys
@@ -60,4 +60,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    if os.environ.get("FAKE_LT_ARGS"):
+        with open(os.environ["FAKE_LT_ARGS"], "w", encoding="utf-8") as f:
+            f.write(json.dumps(sys.argv[1:]))
     HTTPServer(("127.0.0.1", int(sys.argv[1])), Handler).serve_forever()
