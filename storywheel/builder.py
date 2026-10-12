@@ -2087,6 +2087,10 @@ class BuilderHooks:
             self.state_store.update(mode="builder")
         screen.refresh_all()
         screen.say(f"Back from the Writer ({story.word_count()} words in {story.title})." + (f"  {note}" if note else ""))
+        handover = getattr(writer.run, "handover", None) or {}
+        other = screen.universe.story(handover.get("story")) if where == "writer" and handover.get("story") else None
+        if other is not None and other.slug != story.slug:                       # the versions key: another version of this story, in the Writer
+            return self._open_writer(screen, other, None)
         if where == "wheel":
             self.go("wheel", {})
 

@@ -88,6 +88,9 @@ def run_writer(st, payload):
     if note:
         print("  " + note)
     where = writer.run(story, payload.get("scene"), payload.get("replace"))
+    handover = getattr(writer.run, "handover", None) or {}
+    if where == "writer" and handover.get("story") and handover["story"] != story.slug and u.story(handover["story"]):
+        return ("writer", {"universe": u.slug, "story": handover["story"]})            # the versions key: another version, in the Writer
     st.update(mode="builder" if where not in ("wheel", "words") else where)
     if where == "words":                                   # F5 in the Writer: the word under the cursor goes along
         return ("words", {"universe": u.slug, "story": story.slug, "handover": writer.run.handover, "back": "writer"})

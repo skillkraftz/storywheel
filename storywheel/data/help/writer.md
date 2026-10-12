@@ -28,6 +28,7 @@ key_keycheck: Check which keys your terminal sends (is Ctrl+I told apart from Ta
 key_center: Center the line, or the selected lines, or put them back at the left (stored as >text<)
 key_center2: The same as the center key above, on a second key
 key_sprint: Start a writing sprint (asks how long, and for an optional word target), or stop the one running
+key_versions: Versions of this story: a list of its versions (title, format, status); Enter opens the chosen one in the Writer
 key_flip_test: A screenplay's flip test: long action blocks and speeches, camera directions, CUT TO: overuse, the length against the target (a list that jumps to each)
 ### fixed | Fixed keys
 <C-c>: Copy
@@ -60,6 +61,9 @@ key_flip_test: A screenplay's flip test: long action blocks and speeches, camera
 - Right-click opens the everyday menu (Undo, Redo, Cut, Copy, Paste, Look up, fixes on a marked word, Add to dictionary) and More… for the full Writer menu. Only a left click or Enter runs an item; a second right-click, Esc or q closes it and runs nothing.
 ## With Vim keys on
 In Settings > Writer you can turn notepad mode off to get Vim. Every action has a key that works while typing (the Keys tab, the first column); in Vim's Normal mode press Space first for the same actions (shown in [ ] on the Keys tab). Keys and the Space keys are listed only there: see the Keys tab (press 3, or Tab until it opens).
+## Versions
+If this story has other versions (the same story as a short story and as a screenplay, made in the Builder with V), F12 > Versions of this story, or the versions key (Alt+O; change it in Settings > Keys), lists them with their format and status. Enter saves everything here and opens the chosen one in the Writer. With no other versions it only says so. Space o does the same in Vim mode.
+
 ## Writing sprints
 F12 menu > Start a writing sprint, or the sprint key (Alt+D; change it in Settings > Keys), asks how long (the default is Settings > Goals > Writing sprint length, 25 minutes) and for a word target if you want one. The status line shows the time left and the words written since it began, with a tick when the target is reached; pasted text does not count. Nothing sounds or pops up. When the time is up one quiet line says how many words, in how long, and the words a minute; the sprint is added to the story's stats.json (a "sprints" list). Press the key again to stop early; leaving the Writer ends a running sprint the same way. SWSprint 25 500 starts one from the command line of Vim mode, and SWSprint stop stops it.
 ## Completion

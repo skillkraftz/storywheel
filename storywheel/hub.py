@@ -322,6 +322,12 @@ class Hub(App):
         elif payload.get("universe"):
             pass                                              # (F1 from the Builder names a universe only to start a draft in it: not needed here)
 
+    @staticmethod
+    def other_version(universe, story, handover):
+        """The story the Writer asked to move to (the versions key), when it is another story of this universe."""
+        slug = (handover or {}).get("story")
+        return bool(slug) and slug != story.slug and universe.story(slug) is not None
+
     # --- the Writer -------------------------------------------------------------------------------------------------------------------------
 
     def open_writer(self, payload):
@@ -345,6 +351,9 @@ class Hub(App):
         handover = getattr(writer.run, "handover", None)
         if where == "words":                                   # F5 in the Writer: the word under the cursor goes along
             self.go("words", {"universe": u.slug, "story": story.slug, "handover": handover, "back": "writer"})
+            return
+        if where == "writer" and self.other_version(u, story, handover):       # the versions key: another version of this story, in the Writer
+            self.open_writer({"universe": u.slug, "story": handover["story"]})
             return
         if where in ("wheel", "settings", "quit"):
             self.go(where, {"universe": u.slug, "story": story.slug})

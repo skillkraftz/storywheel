@@ -45,7 +45,7 @@ def story_json(s):
             "target_pages": _target_pages(s), "format_key": _formats().of_story(s), "target_words": _target_words(s),
             "family": _versions().family_of(s),
             "siblings": [x.slug for x in _versions().siblings(s)],
-            "versions": [{"id": x.slug, "title": x.title, "format_key": _formats().of_story(x)} for x in _versions().versions(s)]
+            "versions": [{"id": x.slug, "title": x.title, "format_key": _formats().of_story(x), "status": x.status} for x in _versions().versions(s)]
             if _versions().family_of(s) else []}
 
 

@@ -30,6 +30,7 @@ local function groups()
     { "Story outline (" .. util.key_label(story_mod.setting("key_overview", "<C-o>")) .. ")", function() require("sw.overview").toggle() end },
     { "New scene", function() sw.new_scene() end },
     { "Word counts", function() sw.show_stats() end },
+    { "Versions of this story… (" .. util.key_label(story_mod.setting("key_versions", "<A-o>")) .. ")", function() require("sw.versions").open() end },
     { require("sw.sprint").menu_label(), function() require("sw.sprint").ask() end },
   }
   vim.list_extend(story_items, exports)

@@ -33,6 +33,7 @@ WRITER_KEYS = {
     "key_center": ("Center the line (or selected lines)", "<A-c>"),
     "key_center2": ("Center the line (second key)", "<C-e>"),
     "key_sprint": ("Writing sprint: start, or stop the one running", "<A-d>"),
+    "key_versions": ("Versions of this story: open another in the Writer", "<A-o>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 
