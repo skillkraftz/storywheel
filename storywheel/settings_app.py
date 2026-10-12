@@ -32,6 +32,9 @@ SECTIONS = [
     ]),
     ("Goals", [
         ("daily_goal", "Daily word goal", "int", None, "Shown in the Writer's status line and the Builder's stats box. 0 turns it off."),
+        ("sprint_minutes", "Writing sprint length (minutes)", "int", None,
+         "The Writer's sprint (F12 menu > Start a writing sprint, or the sprint key in Settings > Keys, Alt+D) asks how long and starts here. "
+         "The status line shows the time left and the words written; a one-line summary and the sprint go into the story's stats at the end."),
     ]),
     ("Appearance", [
         ("transparent_background", "Transparent background", "bool", None,

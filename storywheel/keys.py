@@ -32,6 +32,7 @@ WRITER_KEYS = {
     "key_keycheck": ("Check which keys the terminal sends", "<A-k>"),
     "key_center": ("Center the line (or selected lines)", "<A-c>"),
     "key_center2": ("Center the line (second key)", "<C-e>"),
+    "key_sprint": ("Writing sprint: start, or stop the one running", "<A-d>"),
 }
 DEFAULTS = {k: v[1] for k, v in WRITER_KEYS.items()}
 

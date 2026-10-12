@@ -86,6 +86,7 @@ function M.leave(where, extra)
     end
   end
   backup.snapshot(false)
+  require("sw.sprint").finish("left")                    -- (a running sprint ends here, and is kept in the stats)
   stats.save()
   session.save({ sidebar = layout.sidebar_open, invisibles = prose.invisibles, typewriter = prose.typewriter, spell = prose.spell,
                  grammar = require("sw.grammar").enabled })
@@ -407,6 +408,7 @@ function M.map_global()
     key_new_scene = function() M.new_scene() end, key_invisibles = function() prose.toggle("invisibles") end,
     key_typewriter = function() prose.toggle("typewriter") end, key_spell = function() prose.toggle("spell") end,
     key_stats = function() M.show_stats() end, key_copy_manuscript = function() M.copy_manuscript() end,
+    key_sprint = function() require("sw.sprint").ask() end,
     key_export = function() M.export() end, key_writer_settings = function() M.edit_settings() end, key_keycheck = function() M.keycheck() end,
   }
   for name, fn in pairs(notepad_keys) do
@@ -417,7 +419,7 @@ function M.map_global()
     i = function() prose.toggle("invisibles") end, t = function() prose.toggle("typewriter") end,
     s = function() prose.toggle("spell") end, w = function() M.show_stats() end,
     c = function() M.copy_manuscript() end, e = function() M.export("docx") end,
-    S = function() M.edit_settings() end, k = function() M.keycheck() end, ["?"] = function() M.help() end,
+    S = function() M.edit_settings() end, k = function() M.keycheck() end, d = function() require("sw.sprint").ask() end, ["?"] = function() M.help() end,
   }
   for key, fn in pairs(leader) do map("n", "<Space>" .. key, fn, "Writer: " .. key) end
   map("n", "]]", function() M.step_scene(1) end, "next scene")
@@ -434,6 +436,13 @@ function M.commands()
   c("SWExport", function(a) M.export(a.args ~= "" and a.args or "docx") end, { nargs = "?" })
   c("SWCopy", function() M.copy_manuscript() end)
   c("SWStats", function() M.show_stats() end)
+  c("SWSprint", function(a)
+    local sprint = require("sw.sprint")
+    if a.args == "stop" then sprint.finish("stopped") elseif a.args ~= "" then
+      local minutes, target = a.args:match("^(%d+)%s*(%d*)$")
+      sprint.start(minutes, target ~= "" and target or nil)
+    else sprint.ask() end
+  end, { nargs = "?" })
   c("SWHelp", function() M.help() end)
   c("SWSettings", function() M.edit_settings() end)
   c("SWKeyCheck", function() M.keycheck() end)

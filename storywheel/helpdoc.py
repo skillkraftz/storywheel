@@ -195,7 +195,7 @@ def binding_rows(mode):
 # The Space keys of Vim mode (notepad mode off), by the setting whose action they repeat; the rest are Vim-only.
 VIM_KEYS = {"key_new_scene": "Space a", "key_invisibles": "Space i", "key_typewriter": "Space t", "key_spell": "Space s", "key_stats": "Space w",
             "key_copy_manuscript": "Space c", "key_export": "Space e", "key_writer_settings": "Space S", "key_keycheck": "Space k",
-            "key_sidebar": "Space n", "key_peek": "Space p"}
+            "key_sidebar": "Space n", "key_peek": "Space p", "key_sprint": "Space d"}
 VIM_ONLY = [("Space ?", "Open this help"), ("]]  [[", "Next and previous scene")]
 
 

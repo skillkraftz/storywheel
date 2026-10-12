@@ -67,7 +67,9 @@ function M.skip_pasted(lines)
   local v = story.setting("stats_skip_paste", true)
   if v == false or v == "false" or not story.dir then return end
   M.check_day()
-  M.start_total = M.start_total + util.count_words(table.concat(lines, "\n"))
+  local n = util.count_words(table.concat(lines, "\n"))
+  M.start_total = M.start_total + n
+  require("sw.sprint").adjust(n)                                 -- (a running sprint doesn't count it either)
 end
 
 function M.mine()
@@ -174,6 +176,8 @@ function M.line()
     today_text = string.format("today %s words", commas(today))
   end
   local g = require("sw.grammar").status_text()
+  local sprint = require("sw.sprint").status_text()
+  if sprint ~= "" then g = g ~= "" and (sprint .. "  ·  " .. g) or sprint end
   local target = M.pages_cached == nil and tonumber((story.info or {}).target_words) or 0       -- (prose: the story's target length, from the story form)
   local total = commas(M.total_cached)
   if target and target > 0 then

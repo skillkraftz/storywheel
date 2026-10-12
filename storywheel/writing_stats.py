@@ -122,7 +122,7 @@ def set_day(date, words, universes=None):
 def reset_story(story):
     """Forget a story's recorded history (its days and sessions). The manuscript is not touched. Returns the words that were recorded."""
     before = sum(story_days(story).values())
-    story.stats_path.write_text(json.dumps({"days": {}, "sessions": []}, indent=2), encoding="utf-8")
+    story.stats_path.write_text(json.dumps({"days": {}, "sessions": [], "sprints": []}, indent=2), encoding="utf-8")
     return before
 
 
