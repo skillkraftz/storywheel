@@ -5304,3 +5304,67 @@ New: `shelf.py`, `ideas.py`, `ideaform.py`, `allstories.py`. The hub itself and 
 - "Last edited" is the newest of story.md, settings.toml, notes.md and the manuscript files, so changing a story's settings counts as an edit.
 - A story's status is computed until set; once set it stays, even if the manuscript later empties.
 - The Wheel's plain prompt has no "send as an idea".
+
+
+# Batch 23: the Wheel's workflow, and everyday writing (branch `batch-23-wheel-and-writing`, 0.25.0)
+
+Based on origin/main (the Collections commit; no `b22-collections` tag exists in this checkout, so I branched from `origin/main` after fetching).
+
+## Checklist
+| # | Item | Status | Missing / note |
+|---|---|---|---|
+| A1 | `R` rolls and keeps every step not kept yet, in order; kept and skipped-on-purpose steps stay; twist rolled; history kept | Works | |
+| A2 | `L` rerolls every later step of a kept one; confirms before replacing hand edits; says how many it replaced | Works | |
+| A3 | `S` (+ **Fix all** on the banner): swap or reroll every flagged step, says which | Works | a step built on a never-kept step gets that step rolled first (my reading of "reroll"); hand-edited steps are never rerolled |
+| A4 | No stuck dots: skipped stand-ins aren't flags, messages name their key, `i` dismisses a kept step's flags per value | Works | found and fixed a real stuck red ✗ (a place-focus story's body) |
+| A5 | `I`: recorded on the draft, opens the Builder on the idea, second `I` offers open / another copy / cancel, deleted idea = fresh, F3 opens it in the Writer | Works | the record already existed (`ideas` list); added `ideas.sent()` |
+| B1 | n-gram data: `grammar_ngrams_dir` (local), `grammar ngrams install/status/remove`, `--languageModel`, space checks, SD warning, Settings, help | Works | the real 8 GB download and a real LanguageTool are untested here |
+| B2 | Look up a word from a Builder field / Wheel card | Partial | right-click writes (no menu exists there), so it is `l` plus Ctrl+L in the right-click write dialog; the word under the mouse is not taken (a picker is) |
+| B3 | Writer completes the universe's added words | Works | |
+| B4 | Writing sprints (F12 menu, Alt+D, `SWSprint`), status line, summary, stats.json | Works | not seen in a real terminal; the stats `sprints` aren't shown in any screen yet |
+| B5 | Words follows the open story | Works | the bug was real: re-entering Words for another story of the same universe stayed on the old one |
+| B6 | Help pages, manual, FEATURES, BACKLOG, CHANGELOG, decisions | Works | |
+
+## Tests added (70 functions, 72 cases)
+`test_wheel_workflow.py` (27 + 3 parametrized: R, L, S, the no-stuck-dots cases, I and F3, and the keys on the real screen); `test_grammar_ngrams.py` (18);
+`test_lookup_everywhere.py` (8); `test_writer_added_words.py` (4, headless Neovim); `test_writer_sprint.py` (9, headless Neovim); `test_words_story.py` (4).
+Changed: `test_collections.py` (`I` now leaves for the Builder, so it checks `app.next` instead of a status message). `tests/fake_lt.py` can record its command line.
+
+## What was run (all with `-m "not slow"`; `tools/fulltest.sh` NOT run)
+The six new files; `test_help.py`, `test_help_text.py`, `test_help_toggle.py`, `test_keys.py`, `test_notepad_keys_center.py`, `test_statusline.py`, `test_menus.py`,
+`test_ui_pass.py`, `test_packaging.py`, `test_builder.py`, `test_collections.py`, `test_send_to_builder.py`, `test_words.py`, `test_words_writer.py`,
+`test_genre_words.py`, `test_wordbank_overused.py`, `test_download.py`, `test_settings_split_migration.py`, `test_settings_mode.py`, `test_grammar_server.py` (slow-marked: run once without the filter, 18 passed).
+Run at the end as one group: `test_tui`, `test_mouse`, `test_drafts`, `test_promote_ui`, `test_universes_wheel`, `test_wheel_format`, `test_focus`, `test_endings`, `test_session`, `test_inputs`, `test_builder_fixes`, `test_navigation`, `test_send_to_builder`, `test_settings_mode`, `test_versions_wheel`, `test_writer`: 326 passed, 11 deselected (slow), 5 min 45 s. Earlier groups passed as they were run (the last, `test_help`/`test_ui_pass`/`test_packaging`/`test_help_text`/`test_help_toggle`: 60 passed, 4 skipped).
+Not run: everything else, including all slow and serial files except `test_grammar_server.py`. Neovim 0.12.5 is installed here, so the Lua tests ran.
+
+## Shared code touched (look here first if your full run fails)
+`session.py` (`keep(advance=)`, flags now come from `problems()`, new `skipped`/`edited`/`acks` in the draft, `skip`, `jump`); `tui.py` (Wheel bindings R L S l, the banner,
+`EditScreen(lookup=)`, `action_send_idea`, `_open_writer_for_draft`, `words_in`/`look_up`); `builder.py` (`l`, write dialog); `grammar.py` (`config`, `status`, `server_command`);
+`settings.py` (`LOCAL_KEYS`, `GLOBAL_DEFAULTS`, `INHERITED`: grammar_ngrams_dir, sprint_minutes, key_sprint); `keys.py`, `helpdoc.py` (Vim key map); `words_app.py` (`enter`);
+`writing_stats.py` (reset keeps `sprints`); Lua: `sw/world.lua`, `sw/stats.lua`, `sw/menu.lua`, `sw/init.lua`, `sw/keys_default.lua`, new `sw/sprint.lua`; help `wheel.md`, `builder.md`, `writer.md`, `words.md`, `grammar.md`.
+
+## Manual test script (throwaway `STORYWHEEL_HOME` and `STORYWHEEL_LIBRARY`)
+1. Wheel, new draft, pick a format, press **R** on the empty draft: all eight steps are kept at once; `h` on a step shows its roll; no yellow dot.
+2. Go to Protagonist (click it), press **Space** then **k** to change it: later steps follow. Then edit the Title step by hand (e) and keep it.
+3. If any dot shows, press **S**: the status line says what was swapped and what was rerolled, and the dots go. (Try a title built on a stand-in: jump to Title before Setting, keep both.)
+4. On Title (kept) press **L**: the steps after it are replaced; with Premise edited by hand it asks first and names it.
+5. Press **F**, set the focus to a place: the Protagonist is skipped and no dot appears; **R** again leaves it skipped.
+6. On Twist press **x**, then look at the steps column: no dot. Press **R**: the twist stays skipped.
+7. With a collection made (Builder, N), keep a title and premise and press **I**: the Builder opens on the new idea. F1 back to the draft, press **I** again: the choice appears, Enter opens that idea; again, "Send another copy" makes a second one.
+8. Delete that idea in the Builder, press **I** on the draft: it sends as new. Send once more, F3: the Writer opens that idea.
+9. Builder: `l` on a character's job: Words opens on Lookup with it; `q` returns. On a multi-word field a list asks which word. Right-click a field, type a word, Ctrl+L.
+10. Writer: type the first letters of a word you added with right-click > Add to Dictionary: it is offered after the character names.
+11. Writer: F12 > Start a writing sprint (2 minutes, 20 words). Type; the status line counts down and counts words. Press Alt+D to stop it: one line, no pop-up. Check `stats.json` has a `sprints` entry. Let one run out.
+12. Settings (F4) > Goals: the sprint length; Settings > Keys: the sprint key (Alt+D) can be changed.
+13. Builder or Writer with two stories open in turn, F5 each time: Genre words starts on that story's genres, Story words on that story.
+14. Settings > Grammar: the n-gram line says "not installed". On the XPS: `storywheel grammar ngrams install --dir /path/on/the/SSD` (about 8 GB: check it refuses with too little space, then lets it run). `grammar ngrams status` says in use; Settings > Grammar agrees; start grammar in the Writer and type "their is a dog": a confused-word check appears (and the Confused words switch can't be turned off).
+15. `storywheel grammar ngrams remove` asks, then frees the space.
+16. On the Pi (SD card): point `grammar_ngrams_dir` at a folder on the SD card: status warns but allows it.
+
+## Known issues and questions
+- The plain prompt (`--plain`) has no R, L or S.
+- The Look up "right-click menu" in the spec doesn't exist in the Builder or Wheel (right-click writes a field); I did not turn right-click into a menu. Say if you want one.
+- Keeping a later step does not swap an earlier step's stand-in (the title built on a stand-in place stays flagged until **S**); this was already so.
+- Alt+D is the sprint key (Alt+P is taken inside the replace box); change it in Settings > Keys.
+- The free-space check before an n-gram download uses estimates (8 GB zipped + 15 GB unpacked); `--from` reads the real size.
+- The old branch name in the task (`b22-collections`) isn't a tag here; I used `origin/main`.
