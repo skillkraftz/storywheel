@@ -20,12 +20,21 @@ within without would yes yet you your yours yourself yourselves
 WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*[A-Za-z]|[A-Za-z]")
 
 
+def _scenes_and_text(path, text):
+    """A prose file as it is; a screenplay's script read as words only (its dialogue and action: no headings, cues, transitions,
+    parentheticals, notes, boneyard or synopses), with its scenes found by heading."""
+    if str(path).endswith(".fountain"):
+        from . import fountain
+        return fountain.scene_spans(text), fountain.words_view(text)
+    return vault.parse_scenes(text), text
+
+
 def tokens(story):
     """[(word lowercased, scene title, file, line number (1-based), column, the line)] for every word of the manuscript, in order."""
     out = []
     for path in story.files():
         text = vault.Story._read(story, path)
-        scenes = vault.parse_scenes(text)
+        scenes, text = _scenes_and_text(path, text)
         lines = text.split("\n")
         for i, line in enumerate(lines, 1):
             if vault.marker_label(line.strip()) is not None:

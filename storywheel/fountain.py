@@ -264,6 +264,75 @@ def prose_lines(text):
     return sorted(k for k, t in line_types(text).items() if t not in NOT_PROSE)
 
 
+# What a reader of the words (Story words, Overused words) sees in a script: the action, the dialogue and sung lyrics. Scene headings, character
+# cues, transitions, parentheticals, sections, synopses, centered text, the title page, notes ([[ ]]) and the boneyard (/* */) are left out.
+WORD_TYPES = ("action", "dialogue", "lyrics")
+
+
+FADE = re.compile(r"^\s*(?:FADE (?:IN|OUT)\b[:.]?|THE END\.?)\s*$")
+
+
+def words_view(text):
+    """The script's text with everything that is not a word of the story blanked, keeping every line and column where it was, so a word
+    found in it can be shown and opened at its own line. Only action, dialogue and lyrics are left."""
+    text = (text or "").replace("\r\n", "\n")
+    blank_chars = lambda m: re.sub(r"[^\n]", " ", m.group(0))
+    seen = NOTE.sub(blank_chars, BONEYARD.sub(blank_chars, text))
+    types = line_types(text)
+    out = []
+    for n, line in enumerate(seen.split("\n"), 1):
+        if types.get(n) not in WORD_TYPES or (types[n] == "action" and FADE.match(line)):          # (FADE IN: is a direction, not a word of the story)
+            out.append("")
+        elif types[n] == "action" and line.lstrip().startswith("!"):
+            out.append(line.replace("!", " ", 1))                    # (a forced action line: the ! is not a word)
+        else:
+            out.append(line)
+    return "\n".join(out)
+
+
+def scene_spans(text):
+    """[{start, end, label}] for each scene (1-based lines, a heading to the line before the next one), shaped like vault.parse_scenes."""
+    found = scenes(text)
+    total = len((text or "").split("\n"))
+    return [{"start": sc["line"], "end": (found[k + 1]["line"] - 1) if k + 1 < len(found) else total, "label": sc["title"]}
+            for k, sc in enumerate(found)]
+
+
+def speech_by_scene(text):
+    """Who speaks how much: {"scenes": [{n, title, line, speakers: [{name, lines, words}]}], "totals": [{name, lines, words}]}.
+    A "line" is one speech (the dialogue under one cue; a parenthetical splitting it does not make a second); words are the dialogue's own
+    (parentheticals and the cue are not counted). Speakers are listed most words first."""
+    from .vault import count_words
+    script = parse(text)
+    scene_rows, current, speaker, last_cue = [], None, None, None
+    for e in script.elements:
+        if e.type == "heading":
+            current = {"n": len(scene_rows) + 1, "title": e.text, "line": e.line, "speakers": {}}
+            scene_rows.append(current)
+            speaker, last_cue = None, None
+        elif e.type == "character":
+            speaker, last_cue = e.name.upper(), e
+        elif e.type == "dialogue" and speaker:
+            if current is None:                                     # (speech before any heading: kept under a scene of its own)
+                current = {"n": 1, "title": "(before the first scene)", "line": e.line, "speakers": {}}
+                scene_rows.append(current)
+            row = current["speakers"].setdefault(speaker, {"name": speaker, "lines": 0, "words": 0})
+            if last_cue is not None:
+                row["lines"] += 1
+                last_cue = None                                     # (the next dialogue block under the same cue is the same speech)
+            row["words"] += count_words(e.text)
+        elif e.type in ("action", "heading", "transition", "page_break", "section"):
+            speaker = None
+    totals = {}
+    for sc in scene_rows:
+        sc["speakers"] = sorted(sc["speakers"].values(), key=lambda r: (-r["words"], r["name"]))
+        for r in sc["speakers"]:
+            t = totals.setdefault(r["name"], {"name": r["name"], "lines": 0, "words": 0})
+            t["lines"] += r["lines"]
+            t["words"] += r["words"]
+    return {"scenes": scene_rows, "totals": sorted(totals.values(), key=lambda r: (-r["words"], r["name"]))}
+
+
 def scenes(text):
     """[{n, title, line, section, synopsis, first_line}]: a scene for each heading, with the section it sits under."""
     script = parse(text)

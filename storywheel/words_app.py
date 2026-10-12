@@ -432,7 +432,7 @@ class WordsScreen(KeptScreen, Screen):
                 yield Static(TAB_HELP["story"], classes="note", markup=False)
                 with Horizontal(classes="bar"):
                     yield Select([("(no story yet)", "none")], id="swscope", allow_blank=False)
-                    yield Select([("Names and odd words", "words"), ("Often used", "often")], value="words", id="swview", allow_blank=False)
+                    yield Select([("Names and odd words", "words"), ("Often used", "often"), ("Who speaks (screenplays)", "speech")], value="words", id="swview", allow_blank=False)
                     yield Button("Read again", id="swread")
                 yield Static("", id="swnote", classes="note", markup=False)
                 yield OptionList(id="swlist")
@@ -736,7 +736,7 @@ class WordsScreen(KeptScreen, Screen):
         if tab in ("t-genre", "t-suggest"):
             w = self.gw_word()
         elif tab == "t-story":
-            if self.query_one("#swview", Select).value == "often":
+            if self.query_one("#swview", Select).value in ("often", "speech"):
                 w = self.sw_often_word()
             else:
                 item = self.sw_item()
@@ -1533,7 +1533,7 @@ class WordsScreen(KeptScreen, Screen):
             self.often = overused.report(story) if story is not None else None
         except OSError:
             self.often = None
-        self.sw_fill_often()
+        (self.sw_fill_speech if self.query_one("#swview", Select).value == "speech" else self.sw_fill_often)()
         items = self.sw_report["items"]
         self.sw_items = items
         lst = self.query_one("#swlist", OptionList)
@@ -1552,14 +1552,31 @@ class WordsScreen(KeptScreen, Screen):
             self.sw_show_where()
 
     def sw_set_view(self):
-        often = self.query_one("#swview", Select).value == "often"
+        view = self.query_one("#swview", Select).value
+        often = view in ("often", "speech")
+        if view == "speech":
+            self.sw_fill_speech()
+        elif view == "often":
+            self.sw_fill_often()
         self.query_one("#swlist").display = not often
         self.query_one("#swoften").display = often
         for bid in ("swspell", "swentity", "swrename"):
             self.query_one("#" + bid).display = not often
         self.query_one("#swwhere", OptionList).clear_options()
         if often and self.often is None and self.sw_story() is None:
-            self.query_one("#swnote", Static).update("Often used words are counted for one story: pick a story in the first box.")
+            self.query_one("#swnote", Static).update("Often used words and who speaks are counted for one story: pick a story in the first box.")
+
+    def sw_fill_speech(self):
+        """'Who speaks': each character's lines (speeches) and words in the script, then scene by scene. Only a screenplay has any."""
+        lst = self.query_one("#swoften", OptionList)
+        lst.clear_options()
+        speech = (self.sw_report or {}).get("speech")
+        lines = storywords.speech_lines(speech)
+        if not lines:
+            lst.add_options([_opt("Who speaks is counted for a screenplay: pick one in the first box (a character's speeches and words, in all and scene by scene)."
+                                  if not speech else "No one speaks in this script yet.", None, style="dim")])
+            return
+        lst.add_options([_opt(ln, None, style="bold" if not ln.startswith("  ") else "") for ln in lines])
 
     def sw_fill_often(self):
         """The 'Often used' list: the story's most frequent words (everyday words left out), then words repeated close together."""

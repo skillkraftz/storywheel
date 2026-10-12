@@ -11,7 +11,7 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from . import dictionary, overused, vault
+from . import dictionary, fountain, overused, vault
 
 WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*[A-Za-z]|[A-Za-z]")
 MAX_WHERE = 12
@@ -94,7 +94,7 @@ def scan(universe, story=None):
     for st in _stories(universe, story):
         for path in st.files():
             text = vault.Story._read(st, path)
-            scenes = vault.parse_scenes(text)
+            scenes, text = overused._scenes_and_text(path, text)
             for n, line in enumerate(text.split("\n"), 1):
                 if vault.marker_label(line.strip()) is not None:
                     continue
@@ -272,7 +272,23 @@ def analyze(universe, story=None, db=None):
             items.append(Item("variant", f.text, f.count, f.where, note=f"looks like {rel}", related=rel))
     order = {"variant": 0, "name": 1, "unknown": 2}
     items.sort(key=lambda i: (order[i.kind], -i.count, i.text.lower()))
-    return {"items": items, "words": total, "dictionary": db is not None}
+    report = {"items": items, "words": total, "dictionary": db is not None}
+    if story is not None and story.is_screenplay() and story.script_path.exists():
+        report["speech"] = fountain.speech_by_scene(vault.Story._read(story, story.script_path))
+    return report
+
+
+def speech_lines(speech, width=20):
+    """The character speech counts of a screenplay as text: totals first, then each scene's speakers. [] without any speech."""
+    if not speech or not speech["totals"]:
+        return []
+    out = ["Who speaks (a line is one speech)"]
+    out += [f"  {r['name']:<{width}} {r['lines']:>4} line{'s' if r['lines'] != 1 else ' '}  {r['words']:>6,} words" for r in speech["totals"]]
+    for sc in speech["scenes"]:
+        if sc["speakers"]:
+            out.append(f"{sc['n']:02d} {sc['title']}")
+            out += [f"  {r['name']:<{width}} {r['lines']:>4} line{'s' if r['lines'] != 1 else ' '}  {r['words']:>6,} words" for r in sc["speakers"]]
+    return out
 
 
 def describe(item):
