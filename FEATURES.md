@@ -389,6 +389,20 @@ All run in the scratch library unless marked R.
 
 ---
 
+## Added in 0.26.0 (batch 24; checked by the tests named, not re-audited)
+
+| Feature | How | What it does | Tests | Status |
+|---|---|---|---|---|
+| Wheel footer | F1 | Roll, Keep, Roll all, then Help and Back | test_hub.py | works |
+| Sprint history | Settings > Stats; Builder stats box; `stats sprints` | This week, words, words a minute, weekly trend, latest | test_sprint_stats.py | works |
+| Versions in the Writer | `Alt+O`, F12 menu, `SWVersions` | List the story's versions, open one after saving | test_writer_versions.py | works |
+| Move a scene | `J` / `K` in the sidebar, F12 menu | Whole block, one undo, sections stay | test_script_scenes.py | works |
+| Synopsis in the sidebar | F9 on a script | `= ...` dimmed under the heading | test_script_scenes.py | works |
+| Fountain-aware Story words | F5 | Dialogue and action only; Who speaks counts | test_script_words.py | works |
+| Scene numbers | Settings > Export, S per story | Both margins of the PDF, `.fdx` Number | test_script_numbers_title.py | works |
+| Page count from the PDF's pagination | status line, `script pages -` | Agrees with the PDF | test_script_pages.py | works |
+| Notes, Copyright, WGA on the title page | S per story, or the script's title page | Optional, blank = off | test_script_numbers_title.py | works |
+
 ## Added in 0.25.0 (batch 23; checked by the tests named, not re-audited)
 
 | Control | Key / mouse | What it is for | Test | Status |

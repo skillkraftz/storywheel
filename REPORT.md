@@ -5368,3 +5368,66 @@ Not run: everything else, including all slow and serial files except `test_gramm
 - Alt+D is the sprint key (Alt+P is taken inside the replace box); change it in Settings > Keys.
 - The free-space check before an n-gram download uses estimates (8 GB zipped + 15 GB unpacked); `--from` reads the real size.
 - The old branch name in the task (`b22-collections`) isn't a tag here; I used `origin/main`.
+
+
+# Batch 24: sprints in the stats, versions in the Writer, and a better screenplay (branch `batch-24-screenplay`, 0.26.0)
+
+**Base:** `origin/main` has no batch 23 and shares no history with the branch this session started on, and the tag `b23-wheel-and-writing` is not in the
+clone. The branch was cut from the session's starting head (b2f93e5, batch 23). If you meant a different base, rebase.
+
+## Checklist
+| Item | Status | Note |
+|---|---|---|
+| A1 Wheel footer | **Works** | `keep=('roll','keep','roll_all')`; `test_hub.py` passes in full |
+| A2 Sprint recording | **Works** | done, stopped and left-by-quitting were already saved (tests exist/extended); now also `reason` |
+| A2 Sprint history, views, CLI, trend | **Works** | `writing_stats` functions, Builder line, Settings > Stats, `storywheel stats sprints` |
+| B1 Versions in the Writer | **Works** | Alt+O (`key_versions`), F12 item, `SWVersions`; hub, classic loop and standalone Builder reopen the chosen version |
+| B2 Move scenes, synopsis in the sidebar | **Works** | J/K and F12; whole block, one undo; sections stay put (a scene can change act) |
+| B3 Fountain-aware Story words / Overused, speech counts | **Works** | "Who speaks" view in Words; no CLI for it |
+| B4 Scene numbers | **Works** | off by default; both PDF margins, `.fdx` `Number`; not in the `.fountain` export |
+| B5 Page estimate from the PDF's pagination | **Works** | background `script pages -`; the old Lua estimate is only the fallback |
+| B6 Title page Notes / Copyright / WGA | **Works** | script title keys or story settings; blank = off |
+| B7 Docs | **Works** | help pages, manual, FEATURES, BACKLOG, CHANGELOG 0.26.0, decisions |
+
+## Tests added: 54 in 6 files, plus small changes
+`test_sprint_stats.py` 13 (functions, views at 200x50, CLI), `test_writer_versions.py` 6, `test_script_scenes.py` 7, `test_script_words.py` 7,
+`test_script_pages.py` 8 (5 tests, one parametrised over 4 scripts), `test_script_numbers_title.py` 13. `test_writer_sprint.py` gained assertions
+(`reason`, days and sessions kept after leaving). **Two existing tests were wrong, and I changed them:** `test_tui.py::test_the_screen_has_steps_a_card_a_history_and_a_footer_with_the_keys`
+(expected `e Edit` in the Wheel footer) and `test_wheel_workflow.py::test_r_s_and_l_work_from_the_keyboard_and_show_in_the_footer` (expected `Fix`);
+both predate the footer rule A1 enforces.
+
+## What was run (never `tools/fulltest.sh`)
+Parallel (`-n 4`): the six new files; `test_writer_sprint`, `test_navigation`, `test_tui`, `test_wheel_workflow`, `test_layout_batch6`, `test_menus`,
+`test_menu_keys`, `test_lookup_writer`, `test_builder_layout`, `test_settings_mode`, `test_words*`, `test_wordbank_overused`, `test_keys`, `test_help*`,
+`test_versions*`, `test_screenplay*`, `test_contd`, `test_storyform`, `test_polish2`, `test_manuscript`, `test_notepad_keys_center`, `test_statusline`,
+`test_collections`, `test_exports_cli`, `test_export` (no "not slow" filter on the slow-marked ones among them). Serial: `test_hub.py` (full, 25 passed
+after A1) and `test_switching.py`. Not run: everything else, including `test_kitty_keys` after the last edits, `test_performance`, `test_grammar_server`,
+`test_appearance`. Neovim 0.12.5 was installed, so the Lua tests ran. `test_export.py::test_odt_is_made_with_libreoffice` failed once under `-n 4`
+(LibreOffice profile shared by parallel runs, the reason it is in the serial list) and passed alone.
+
+## Shared code touched (look here first if your full run fails)
+`tui.py` (Wheel footer), `fountain.py` (`scenes` synopsis rule, `words_view`, `scene_spans`, `speech_by_scene`), `screenplay_pdf.py` (`paginate`/`blocks`/
+`render` take `numbers`; `page_count`; title page layout), `screenplay.py` (`title_page`), `screenplay_fdx.py`, `export.py`, `settings.py` (new keys,
+`INHERITED`), `settings_app.py` (Stats tab is now inside a scroll; new Export row), `storysettings.py`, `overused.py`/`storywords.py`, `words_app.py`, `keys.py`,
+`helpdoc.py`, `hub.py`/`modes.py`/`builder.py` (reopen the Writer on another version), `cli_world.py` (`stats`, `script pages -`), Lua `sw/script.lua`,
+`sw/sidebar.lua`, `sw/menu.lua`, `sw/init.lua`, `sw/sprint.lua`, new `sw/versions.lua`.
+
+## Manual test script (throwaway STORYWHEEL_HOME / STORYWHEEL_LIBRARY if you like)
+1. Builder, a story, w: in the Writer press Alt+D, 2 minutes, no target. Type for the two minutes; the status line counts down and the quiet "Sprint done" line appears.
+2. Alt+D again, 10 minutes; type a little; Alt+D to stop it early ("Sprint stopped").
+3. Alt+D once more and quit the Writer (F2) mid-sprint. Back in the Builder the stats box has a Sprints line.
+4. F4 > Stats: the sprint summary, the weekly bars and the three sprints (finished, stopped early, Writer closed). Try `storywheel stats sprints --weeks 4`.
+5. On a story with a screenplay version (v in the Builder): in the Writer press Alt+O (or F12 > Versions of this story), choose the other one: the Writer reopens on it.
+6. Screenplay: F9, put the cursor on the second scene, J: it moves down with its action and dialogue; Ctrl+Z puts it back. Check a `# Act` line did not move.
+7. Add `= a line` under a heading: it shows dimmed in the sidebar. F12 > Move this scene up works too.
+8. F5 > Story words > second box "Who speaks": per character and per scene counts; "Names and odd words" no longer lists cues or headings.
+9. S in the Builder on the screenplay: turn scene numbers on, give a WGA number, copyright and notes. Export the PDF.
+10. Open that PDF next to the PDF you exported from the previous version: numbers in both margins, the title page bottom left (WGA, copyright, contact) and bottom right (notes, date), the pages otherwise the same.
+11. Turn numbers off again, export once more: no numbers, no WGA lines (blank fields leave nothing). Export anonymous: no copyright or WGA, notes kept.
+12. In the Writer the status line "p. N of ~T" should equal the PDF's script page count (the title page is not counted) a second after you stop typing.
+
+## Known issues, questionable decisions, open questions
+- The base branch question above. Moving a scene lets it change act (sections stay where they are); a closing FADE OUT. moves with the last scene.
+- The page count needs `python -m storywheel` to start in the background (a fraction of a second); the first status line after opening shows the old quick estimate.
+- Anonymous scripts keep scene numbers and Notes but drop Copyright and WGA; say if you want it otherwise.
+- The sprint average is total words over total minutes, per Monday week.

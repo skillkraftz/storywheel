@@ -36,14 +36,11 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
   - The story form for the universe too (genre leanings, exclusions and boosts are still typed in a box with `s`).
   - Per-format default targets in Settings (today: 5,000 words, 80,000 words, 110 pages, 12 pages, in `formats.py`).
   - A help tab for the Wheel's current step (the step hint is on the card today).
-- **Versions from real use.** *Verify.* Try a short story and its screenplay side by side. Held back: a key in the Writer to jump to another
-  version; mapping beats between structures by hand in the Builder (today you copy text between the sections); "Also start as" in the plain prompt's
+- **Versions from real use.** *Verify.* Try a short story and its screenplay side by side. Held back (the key in the Writer to jump to another version was done in batch 24): mapping beats between structures by hand in the Builder (today you copy text between the sections); "Also start as" in the plain prompt's
   promotion (only the full-screen preview and `promote --also` have it); a "sync this outline into the other version" action (versions are copies on purpose).
 - **Screenplays from real use.** *Verify.* Batch 17 built a first usable version (Fountain in the Writer, the flip test, PDF/.fdx/.fountain
   export). Write a few pages and report what needs polish. Ideas held back from batch 17 to keep to its checklist:
-  - Scene numbers on the page (Fountain `#12#` is parsed but not printed) for shooting scripts; revision colours, revision marks (`*` in the margin), locked pages.
-  - Move scenes from the sidebar (today: cut and paste); a scene's synopsis shown in the sidebar.
-  - Story words and Overused that understand Fountain (skip cues and headings); character speech counts per scene.
+  - Revision colours, revision marks (`*` in the margin), locked pages. (Scene numbers, moving scenes, synopses in the sidebar, Fountain-aware Story words and speech counts were done in batch 24.)
   - Smarter prose-to-script conversion (versions copy prose as Fountain action with forced headings; recognising dialogue is not attempted).
   - Dual dialogue that breaks across pages (today the pair moves to the next page whole).
   - A tighter page estimate in the Writer (it uses the PDF's wrap widths but adds a flat 4% for the keep-together rules instead of applying them).
@@ -157,9 +154,17 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - `writing-prose.md` now says "The sidebar key (see the Keys tab)", not "Space n" (fixed in batch 19).
 - Not checked: every key named in free text (as opposed to the key tables, which are made from the real bindings and tested).
 
+## From batch 24
+
+- Sprints: a sprint goal across days, a sprint list per universe in the Builder (today the Builder shows the line for the open story or universe), and
+  a sound or a notification at the end (deliberately none now).
+- Scene numbers: omitted scenes, revision-lettered scenes added by the program (A-numbers are only read from the script), numbers in the .fountain export.
+- Moving a scene between chapter files; a closing FADE OUT. stays attached to the last scene instead of moving with it.
+- Fountain-aware `storywheel lookup` of cues; a CLI for Story words (Who speaks is only in Words, F5).
+- A global default for the title page Copyright line (today per story or in the script's title page).
+
 ## From batch 23
 
 - R, L and S in the plain prompt (`--plain`); today only the full-screen Wheel has them.
 - Look up the word *under the mouse* (needs the card's text laid out per word); today it is the field's words with a picker.
-- Show a story's sprints in the Builder's Writing box and in Settings > Stats (they are only in `stats.json`).
 - Auto-swap earlier steps' stand-ins when a later step is kept (keeping a setting leaves a title built on a stand-in place flagged until S).

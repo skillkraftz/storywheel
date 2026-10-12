@@ -454,7 +454,7 @@ other float opens no menu. (Fixed: ISSUES #2.)
 ### Scenes
 
 - **The sidebar:** F9 shows the scenes down the left with their first lines. Enter (or a double-click) jumps to a scene, `a` adds one,
-  `r` renames it, `J` / `K` move it down or up within the file, `q` or Esc closes. Also in the menu: Story > Scenes sidebar.
+  `r` renames it, `J` / `K` move it down or up within the file (a screenplay's scene moves with its whole block, in one undo step; also F12 > Move this scene up / down), `q` or Esc closes. A screenplay's scenes show their `= synopsis` dimmed under the heading. Also in the menu: Story > Scenes sidebar.
 - **New scene:** Alt+N, or `a` in the sidebar.
 - **In the Builder:** the Scenes tab lists the same scenes; Enter on one opens the Writer there.
 
@@ -466,7 +466,11 @@ in the writing window (it used to leave Vim's Normal mode, where typing `dd` del
 F12 > Start a writing sprint (or **Alt+D**, changeable in Settings > Keys) asks how long (Settings > Goals > Writing sprint length, 25 minutes) and for
 an optional word target. The status line shows the time left and the words written since it began (pasted text does not count). Nothing sounds or
 pops up. When the time is up one quiet line says how many words, in how long, and the words a minute; the sprint goes into the story's `stats.json`
-(a `sprints` list). The same key stops it early; leaving the Writer ends it the same way.
+(a `sprints` list). The same key stops it early; leaving the Writer ends it the same way (recorded as stopped, with the words so far). Sprints show up in the stats: the Builder's stats box (this week, words, words a minute), Settings > Stats (a weekly trend and the latest sprints) and `storywheel stats sprints [--universe U] [--story U/S] [--weeks N] [--json]`.
+
+### Versions in the Writer
+
+If the story has other versions (a short story and its script, made with **v** in the Builder), F12 > Versions of this story, or **Alt+O** (changeable in Settings > Keys; **Space o** in Vim mode), lists them with format and status. Enter saves everything and opens the chosen one in the Writer. With no other version it only says so.
 
 ### Completion
 
@@ -551,7 +555,9 @@ just open it in the Writer (you get a title page and FADE IN:).
 - The page is approximated on screen (cues, dialogue and transitions indented); the file stays plain Fountain.
 - **Alt+F** runs the flip test: long action blocks, long speeches, camera directions, too many CUT TO:, and the length against the
   target. Enter on a line jumps there.
-- Export makes a standard PDF (US Letter, Courier Prime 12), a Final Draft file (.fdx) or a .fountain file.
+- **Scenes** move with **J** / **K** in the sidebar or F12 > Move this scene up / down, with their whole block (a section line such as `# Act Two` stays put); one Ctrl+Z undoes it.
+- The status line's page count comes from the PDF's own layout, so it agrees with the exported pages.
+- Export makes a standard PDF (US Letter, Courier Prime 12), a Final Draft file (.fdx) or a .fountain file. **Scene numbers** (Settings > Export, or S per story) are off by default: a spec script sent to a producer, agent or contest is unnumbered; turn them on for a shooting script. **Notes**, **Copyright** and **WGA registration** are optional title page lines (S in the Builder, or on the script's own title page), left off when blank.
 
 ### Vim keys
 
@@ -596,8 +602,8 @@ of the tab. A message at the bottom is cleared when you change tab.
 - **Library:** the library folder (changing it moves nothing; your universes stay where they were).
 - **Updates:** a git remote, used by `storywheel update` only if the folder storywheel was installed from is gone.
 - **Stats:** today, your streak, days written, words recorded, words in all manuscripts; a table of words per day (**e** edits a
-  day's total, **0** resets it, each after a confirm) and a table per story (**R** forgets a story's recorded history; its manuscript
-  is untouched).
+  day's total, **0** resets it, each after a confirm) and a table per story (**R** forgets a story's recorded history, sprints included; its manuscript
+  is untouched). Below them: your writing sprints, with this week, total words, words a minute on average and at best, a bar for each week's average and the latest sprints.
 - **Help:** a search box over every help page; pick a result to read it.
 
 A story can override the Writer and Goals settings with **S** in the Builder (or Alt+U in the Writer).
@@ -642,7 +648,7 @@ Pick a story (or the whole universe) and see the names and odd words it uses, wi
 dictionary doesn't know (invented names, jargon, typos), ≈ a look-alike ("Glass Water" for "Glasswater"). Enter shows where each is;
 Enter on a place opens the Writer there. **s** adds the word to the spelling list, **e** makes it a character, place or thing, **r**
 renames it everywhere (with the usual preview). The second box switches to **Often used**: your most frequent words and words repeated
-close together. At the bottom: words you put on this universe's generator lists (`d` removes one).
+close together. For a screenplay only dialogue and action are read, and a third view, **Who speaks**, counts each character's lines and words. At the bottom: words you put on this universe's generator lists (`d` removes one).
 
 ### Genre words
 

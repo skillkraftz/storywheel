@@ -301,7 +301,9 @@ def test_r_s_and_l_work_from_the_keyboard_and_show_in_the_footer(home):
         await press(pilot, "S")
         return footer, done, flagged_before, flagged(s)
     footer, done, flagged_before, flagged_after = run_tui(store.new_story(), make_engine(home), script)
-    assert "Roll all" in footer and "Fix" in footer
+    assert "Roll all" in footer and "Fix" not in footer                  # (the footer keeps three action keys; S Fix is listed in the Wheel help)
+    from storywheel.tui import MainScreen
+    assert any("fix_changed" in str(b) for b in MainScreen.BINDINGS)
     assert len(done) == 8 and flagged_before and flagged_after == []
 
 

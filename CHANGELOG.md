@@ -2,6 +2,21 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.26.0 — Sprints in the stats, versions in the Writer, and a better screenplay
+
+- **Fix:** the Wheel's footer (F1) is Roll, Keep, Roll all (plus the five modes, Help and Back); every other Wheel key still works and is in the help.
+- **Sprints are read back.** Settings > Stats shows your writing sprints (this week, total words, words a minute on average and at best, a bar for each
+  week's average, the latest sprints); the Builder's stats box has a Sprints line; `storywheel stats sprints [--universe U] [--story U/S] [--weeks N] [--json]`.
+  A sprint now records how it ended (`reason`: done, stopped, left). Forgetting a story's history (R) forgets its sprints too, and says so.
+- **Versions in the Writer:** F12 > Versions of this story, or **Alt+O** (Settings > Keys; Space o in Vim mode), lists the story's versions with format
+  and status and opens the chosen one after saving. With no other versions it says so.
+- **Screenplay scenes:** J / K in the sidebar and F12 > Move this scene up / down move a scene with its whole block in one undo step (sections stay
+  put); a scene's `= synopsis` shows dimmed under its heading. A synopsis under a section line now belongs to the section, not the scene before it.
+- **Story words and Often used** read a script's dialogue and action only; a **Who speaks** view counts each character's lines and words per scene.
+- **Scene numbers** (off by default; Settings > Export, or per story with S): in both margins of the PDF and in the .fdx; `#12#` numbers in the script are used.
+- **Page count** in the Writer comes from the PDF's own pagination (`storywheel script pages - --json`), run in the background, so it agrees with the PDF.
+- **Title page:** optional Notes, Copyright and WGA registration, left off when blank (story settings, or the script's own title page).
+
 ## 0.25.0 — The Wheel's workflow, and everyday writing and word work
 
 - **R** rolls the whole draft: every step not kept yet, in order, so each builds on the ones before it. Kept and skipped-on-purpose steps stay; the twist

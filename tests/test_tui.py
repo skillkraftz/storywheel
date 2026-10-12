@@ -41,8 +41,8 @@ def test_the_screen_has_steps_a_card_a_history_and_a_footer_with_the_keys(home):
         assert step in text
     assert "▶ 1 Genre & mood" in text and "· 2 Structure" in text
     assert "History: every roll" in text and "#1 of 1" in text
-    for needle in ("space Roll", "k Keep", "q Back", "F1 Wheel", "F2 Builder", "F3 Writer", "F4 Settings", "F5 Words", "? Help", "e Edit"):
-        assert needle in text, needle
+    for needle in ("space Roll", "k Keep", "q Back", "F1 Wheel", "F2 Builder", "F3 Writer", "F4 Settings", "F5 Words", "? Help", "R Roll all"):
+        assert needle in text, needle                      # (the footer holds the modes, Help, Back and three keys; the rest are in the help)
 
 
 def test_the_sidebar_marks_kept_skipped_current_and_pending(home):

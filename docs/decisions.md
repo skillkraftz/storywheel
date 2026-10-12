@@ -505,3 +505,28 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   recorded. B5: Words restarted only on a new universe or a hand-over; it also restarts when the story differs (hub keeps it alive between visits).
 - Testing for batch 23 (the owner's instruction): only the tests for what changed and the existing files covering code touched, with `-m "not slow"`
   (test_grammar_server.py, which is slow-marked, was also run once); `tools/fulltest.sh` was not run. See REPORT.md for the list.
+
+## Batch 24 (screenplays, sprints, versions in the Writer)
+- Base: `origin/main` did not contain batch 23 and shared no history with the branch the session started on, so `batch-24-screenplay` was cut from that
+  branch's head (b2f93e5, batch 23). The tag `b23-wheel-and-writing` did not exist in the clone.
+- A1: the Wheel's footer `keep` list is (roll, keep, roll_all); nothing else changed: other bindings keep `show=False` and stay in the help.
+- A2: a sprint's average words a minute is total words over total minutes (a long sprint counts for more), per Monday-based week; a record with no
+  usable date is left out; a sprint from before `reason` existed reads as "stopped" when it has `early`, else "done". The Builder shows sprints for the
+  open story (else the universe); Settings > Stats shows the whole library.
+- B1: the Writer asks the program to open another version through the return file (`writer`) and its `.data` ({universe, story}); the hub, the classic
+  loop and the standalone Builder all re-run the Writer on it. The key is `key_versions`, Alt+O (Space o in Vim mode).
+- B2: a scene's block ends before any section line after its heading (`# Act Two` belongs to the scenes after it); a move swaps two neighbouring blocks
+  and leaves what lies between them (sections) in place, so a scene can change act. One `nvim_buf_set_lines` = one undo step; a check that the
+  non-blank lines are the same set before and after refuses a move that would lose text. A synopsis belongs to the scene only if no section line comes
+  between the heading and it (fountain.scenes and sw/script.lua agree).
+- B3: Words reads a script through `fountain.words_view` (action, dialogue and lyrics, columns kept; FADE IN:/FADE OUT./THE END are directions, not words).
+  A "line" in speech counts is one speech; words are the dialogue's own.
+- B4: scene numbers sit with their right edge at 1.4" (left) and start at 7.6" (right); explicit `#12#` numbers are used and carry the count on when they are
+  whole numbers. Anonymous scripts keep their numbers (they do not say who wrote it).
+- B5: the Writer shells out to `storywheel script pages - --json [--contd]` (stdin, background, 600 ms after typing stops, only when the text changed)
+  instead of porting the PDF's keep-together rules to Lua; the Lua layout stays as the display-only indent code and the fallback estimate.
+- B6: Notes, Copyright and WGA registration come from the script's title page keys first, else the story settings `script_notes`, `script_copyright`,
+  `script_wga`. Anonymous export drops Copyright and WGA (they say who wrote it) and keeps Notes. A bare WGA number is labelled "WGA Registration # n".
+  Layout: bottom left reading down WGA, Copyright, blank, contact; bottom right Notes (30 wide, right-aligned), blank, draft date.
+- Testing for batch 24: only the files for what changed, with the hub, navigation and menu files run without the "not slow" filter; `tools/fulltest.sh`
+  was not run (the owner runs it before merging).
