@@ -13,6 +13,7 @@ history: Switch the history between every roll and the selected field's earlier 
 mix: Flavor: which kinds of material this story leans toward or avoids
 focus_universe: Go to the universe panel (bottom left)
 send: Send this story to the Universe Builder (the "Belongs to" universe, or a new one)
+send_idea: Send the draft's title and premise to a collection as a new idea story (no promotion screen; the draft stays as it is)
 add_beat: On the story body: add another of the beat under the cursor, where the structure lets it repeat
 remove_beat: On the story body: remove one of the repeated beat under the cursor
 copy_story: Copy the story so far to the clipboard as plain text
@@ -68,5 +69,7 @@ Bottom left. Entries are grouped by kind; Enter opens or closes a group. "Belong
 Bottom left: Enter opens one, d deletes it (asks first; it goes to the .trash folder in your storywheel home), p and s (Use protagonist, Use setting) ask what to do with its protagonist or setting: use it in the draft you are on, as a new candidate for that step (press k to keep it), or send it to a universe you choose (kept there as a character or place), P promotes it. "5/8" means five steps kept, "done" a finished one.
 ## Promotion and versions
 The preview you see before a story is brought into a universe ends with "Also start as": the other formats (flash fiction, short story, novel, screenplay as a feature film or a short film). Enter or a click ticks one. Each tick makes another version of the story in the same universe, from the same outline, with its own manuscript; the characters, places and things are made once and shared. The story's own format is not offered. More about versions is in the Builder's help.
+## Collections and ideas
+A universe can be a collection: a shelf of short story ideas. I sends the draft's title and premise to a collection as an idea story (you choose the collection if there is more than one), and the draft is unchanged. Promoting a draft into a collection (B) brings the outline, premise and draft over as usual, but characters, places and things are not created unless you tick them in the preview; the preview says so.
 ## Leaving
 q goes back to the mode you came from (the draft is saved). Q quits storywheel: it asks whether to keep or delete the story and offers to send it to the Builder.

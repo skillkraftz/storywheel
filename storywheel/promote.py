@@ -66,6 +66,7 @@ class Item:
         self.proper = is_proper(name) if type_ != "note" else None       # a proper name or a description (see tidy)
         self.existing = None                    # an entity with the same name already in the universe
         self.merge = False                      # use that one (fill its blanks) instead of creating a new one
+        self.include = True                     # create it (a collection starts with this off: see Plan.collection)
 
     def line(self):
         if self.existing:
@@ -84,10 +85,23 @@ class Plan:
         self.story_title = "Untitled"
         self.meta, self.sections = {}, {}
         self.also = []                          # format keys to also start as: one more version of the story each (see versions.py)
+        self.collection = False                 # into a collection: entities are not created unless ticked (Item.include)
+
+    COLLECTION_NOTE = ("This universe is a collection (a shelf of story ideas), so no characters, places or things are created unless you "
+                       "tick them. The outline, premise and Wheel draft come over as usual.")
+
+    def note(self):
+        return self.COLLECTION_NOTE if self.collection else ""
+
+    def chosen(self):
+        return [i for i in self.items if i.include]
 
     def lines(self):
         out = [f"Story: '{self.story_title}' (outline, settings, an empty manuscript)"]
-        out += [i.line() for i in self.items]
+        out += [i.line() for i in self.items if i.include]
+        if self.collection:
+            skipped = len(self.items) - len(self.chosen())
+            out.append(self.COLLECTION_NOTE + (f" ({skipped} left out.)" if skipped else ""))
         from . import formats
         out += [f"Also start as {formats.get(k).label.lower()}: a second version of the story, from the same outline (the entities are shared)"
                 for k in self.also]
@@ -97,7 +111,7 @@ class Plan:
         return out
 
     def duplicates(self):
-        return [i for i in self.items if i.existing]
+        return [i for i in self.items if i.existing and i.include]
 
 
 def _beat_lines(structure, spine):
@@ -192,6 +206,11 @@ def build_plan(draft, universe=None, engine=None, new_universe_name=None):
             if found:
                 item.existing, item.merge = found[0], True
 
+    if universe is not None and universe.is_collection:      # a collection is a shelf of ideas: the story comes over, its cast stays in the outline
+        plan.collection = True
+        for item in items:
+            item.include = False
+
     shape = structures.get((kept.get("structure") or {}).get("structure"))
     plan.meta = {"genre": genre.get("genre", ""), "mood": genre.get("mood", ""),
                  "structure": shape.label if kept.get("structure") else "", "motif": motif or "",
@@ -230,6 +249,8 @@ def apply_plan(plan, universe=None, draft=None):
     ids = {}
     cast = []
     for item in plan.items:
+        if not item.include:
+            continue
         links = {field: ids[key] for field, key in item.links.items() if key in ids}
         if item.existing and item.merge:
             e = universe.entity(item.existing.id)

@@ -137,7 +137,11 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 | +Universe | button, `N`, or `n` in the list | New universe (name, optional genres) | test_builder.py | works | P |
 | Rename | button, `r` in the list | Rename a universe | test_builder.py | works | P |
 | Delete | button, `d` in the list | Delete a universe (asks; to .trash) | test_builder.py | works | P |
-| **Stories** list | Enter or click opens the story | The universe's stories (titles only) | test_builder_layout.py | works | P |
+| **Stories** list | Enter or click opens the story | The universe's stories with their status; a collection's list leads the layout, two lines a story (title and status, then format, size and logline) | test_builder_layout.py, test_collections.py | works | P |
+| +Idea | button, `i` | A title and a few lines (logline and notes), flash fiction or a short story, no structure; the idea is selected so `w` writes it | test_collections.py | works | P |
+| Status | button, `t` (also in the stories list), the outline's Status row | Idea, drafting, revising or done, picked from a list; each version has its own | test_collections.py | works | P |
+| All stories | button, `L` | Every story in every universe, newest edit first; `s` and `f` filter by status and format; Enter opens it, `w` writes it | test_collections.py | works | P |
+| Universe kind | `K`, the overview's Kind row, a list when making a universe | World or collection (collections fold the entity tabs away while empty) | test_collections.py | works | P |
 | +Story | button, `T` | Story form: title, format, structure, genres, target | test_storyform.py, test_builder_layout.py | works | P |
 | Write | button, `w` | Open the story in the Writer | test_switching.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | R |
 | Export | button, `x` | Export chooser (docx, anonymous docx, odt, pdf, md, txt, fountain; scripts: pdf, anonymous pdf, fdx, fountain) | test_export.py | works; with no story open it asks which story (was ISSUES #15); test_polish1.py | P |
@@ -185,6 +189,7 @@ Versions here: Python 3.13, Textual 8.2.8, Neovim 0.12.5, LibreOffice present, k
 
 | Key | What it is for | Test | Status | Checked |
 |---|---|---|---|---|
+| `K` Universe kind | World or collection, picked from a list | test_collections.py | works | P |
 | `s` Universe settings | Genre leanings, excluded tags and lists, boosts, the universe's own name boost (typed in boxes) | test_builder.py | works | P |
 | `S` Story settings | Font, column width, daily goal, header keyword, indent, typewriter, invisibles, spellcheck, region as choices ("your default (X)" first; on / off; fonts; US / UK), each row saying whether it is the story's own | test_polish2.py | works (was ISSUES #20) | P |
 | `G` Your details | Opens Settings on the You tab | test_polish2.py | works (was ISSUES #20) | P |
@@ -363,7 +368,10 @@ All run in the scratch library unless marked R.
 | `universes [new NAME --genres …] [--json]` | List or make universes | test_storage.py | works | C |
 | `entity list|show UNIVERSE [ID] [--type T] [--json]` | Entities | test_storage.py | works | C |
 | `names fix UNIVERSE [--apply]` | Fix capitals of names | test_names.py | works | C |
-| `story list [UNIVERSE]`, `story show UNIVERSE/STORY` | Stories (JSON for the Writer) | test_writer.py | works (was ISSUES #34) | C |
+| `story list [UNIVERSE]`, `story show UNIVERSE/STORY` | Stories (JSON for the Writer; list shows status, `--status S` filters) | test_writer.py, test_collections.py | works (was ISSUES #34) | C |
+| `stories [--status S] [--format F] [--universe U] [--json]` | Every story across all universes, newest edit first | test_collections.py | works | C |
+| `story idea UNIVERSE "Title" --text "..."`, `story set UNIVERSE/STORY --status S` | Put an idea on a shelf; set a status | test_collections.py | works | C |
+| `universes new NAME --kind collection` | Make a collection | test_collections.py | works | C |
 | `promote N --new NAME | --universe SLUG [--dry-run]` | Promote a draft | test_promote.py | works (end of input at the y/N question is a no: was ISSUES #35) | C |
 | `manuscript export UNIVERSE/STORY --format F [--out] [--anonymous] [--json]`, `manuscript text …` | Export or print a manuscript | test_export.py | works | C |
 | `exports status [--json]`, `exports make UNIVERSE/STORY [--format F] [--json]` | Export records; export in the story's default format | test_exports_cli.py | works | C |

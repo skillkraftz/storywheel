@@ -325,14 +325,16 @@ class PickUniverseScreen(ModalScreen):
     PickUniverseScreen OptionList { height: auto; max-height: 20; }
     """
 
-    def __init__(self, universes):
+    def __init__(self, universes, prompt="Bring it into which universe?  (enter picks, esc cancels)"):
         super().__init__()
         self.universes = universes
+        self.prompt = prompt
 
     def compose(self) -> ComposeResult:
         with Vertical():
-            yield Static("Bring it into which universe?  (enter picks, esc cancels)", markup=False)
-            yield OptionList(*[Option(f"{u.name}   ({len(u.entities())} entities)", id=u.slug) for u in self.universes])
+            yield Static(self.prompt, markup=False)
+            yield OptionList(*[Option(f"{u.name}   ({'collection' if u.is_collection else str(len(u.entities())) + ' entities'})", id=u.slug)
+                               for u in self.universes])
 
     def on_mount(self):
         self.query_one(OptionList).focus()
@@ -364,7 +366,8 @@ class PromotePreviewScreen(ModalScreen):
     def compose(self) -> ComposeResult:
         with Vertical(id="dlg"):
             yield Static("Here is what will be created. Nothing is written until you press Promote. Enter or a click ticks a format to "
-                         "also start (a second version of the story, same outline).", markup=False)
+                         "also start (a second version of the story, same outline)."
+                         + (" Enter on a character, place or thing ticks it." if self.plan.collection else ""), markup=False)
             yield OptionList(id="plan")
             yield Static("", id="plan-note", markup=False)
             with Horizontal():
@@ -387,8 +390,12 @@ class PromotePreviewScreen(ModalScreen):
         rows.append(Option(Text(f"Story '{self.plan.story_title}': outline, settings, empty manuscript", style="bold"),
                            disabled=True))
         for n, item in enumerate(self.plan.items):
+            if self.plan.collection and not item.include:
+                rows.append(Option(Text("  [ ] " + item.line(), style="dim"), id=str(n)))
+                continue
             style = "yellow" if item.existing else ""
-            rows.append(Option(Text(("  ↔ " if item.existing else "  + ") + item.line(), style=style), id=str(n)))
+            mark = "  [x] " if self.plan.collection else ("  ↔ " if item.existing else "  + ")
+            rows.append(Option(Text(mark + item.line(), style=style), id=str(n)))
         from . import formats
         own = formats.of_draft(self.plan.draft)
         rows.append(Option(Text("Also start as (another version of the story from the same outline; the entities above are created once):",
@@ -403,7 +410,7 @@ class PromotePreviewScreen(ModalScreen):
         if keep is not None:
             lst.highlighted = min(keep, len(rows) - 1)
         note = "Yellow rows are same-name duplicates: enter switches merge / create another." if self.plan.duplicates() else ""
-        self.query_one("#plan-note", Static).update(note)
+        self.query_one("#plan-note", Static).update((self.plan.note() + "\n" if self.plan.collection else "") + note)
 
     def on_option_list_option_selected(self, event):
         if str(event.option.id).startswith("fmt:"):
@@ -412,7 +419,15 @@ class PromotePreviewScreen(ModalScreen):
             self.rebuild()
             return
         item = self.plan.items[int(event.option.id)]
-        if item.existing:
+        if self.plan.collection:                    # off -> on -> (a duplicate: create another) -> off
+            if not item.include:
+                item.include = True
+            elif item.existing and item.merge:
+                item.merge = False
+            else:
+                item.include, item.merge = False, bool(item.existing)
+            self.rebuild()
+        elif item.existing:
             item.merge = not item.merge
             self.rebuild()
 
@@ -698,6 +713,7 @@ class MainScreen(KeptScreen, Screen):
         Binding("m", "mix", "Flavor"),
         Binding("v", "focus_universe", "Universe"),
         Binding("B", "send", "Send to Builder", key_display="B"),
+        Binding("I", "send_idea", "Send as an idea", show=False),
         Binding("A", "add_beat", "+Beat", show=False),
         Binding("X", "remove_beat", "-Beat", show=False),
         Binding("c", "copy_story", "Copy story"),
@@ -1385,6 +1401,30 @@ class MainScreen(KeptScreen, Screen):
         self.app.push_screen(ChoiceScreen("Send this story to the Universe Builder: into…",
                                           [("a new universe", "new"), ("an existing universe", "existing")]),
                              lambda c: self.promote_flow(story, c, "exit") if c else None)
+
+    def action_send_idea(self):
+        """Put the draft's title and premise on a collection's shelf as a new idea story: no promotion screen, the draft stays as it is."""
+        from . import vault
+        story = self.session.story
+        if not (story["kept"].get("premise") or story["kept"].get("title")):
+            return self.say("Nothing to send yet: keep a title or a premise first (k).")
+        shelves = [u for u in vault.list_universes() if u.is_collection]
+        if not shelves:
+            return self.say("There is no collection yet. In the Builder (F2) press N and choose Collection, then send the idea here.")
+        self.session.save()
+        if len(shelves) == 1:
+            return self._idea_sent(story, shelves[0].slug)
+        self.app.push_screen(PickUniverseScreen(shelves, "Send it as an idea to which collection?  (enter picks, esc cancels)"),
+                             lambda slug: self._idea_sent(story, slug))
+
+    def _idea_sent(self, draft, slug):
+        from . import ideas, vault
+        u = vault.get_universe(slug) if slug else None
+        if u is None:
+            return
+        idea = ideas.send_draft(draft, u)
+        store.save_draft(draft)
+        self.say(f"Sent '{idea.title}' to the collection '{u.name}' as an idea. The draft is as it was (B still promotes it).")
 
     def action_mode(self, which):
         """F1 / F2 / F3: save this draft and leave for another mode. F2 from a draft with kept steps offers to send it first."""

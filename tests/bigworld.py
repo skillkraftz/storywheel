@@ -48,3 +48,24 @@ def make_big_universe(seed=1, entities=160, stories=4, words=20000):
         (s.manuscript_dir / "manuscript.md").write_text("\n\n".join(text) + "\n", encoding="utf-8")
         out.append(s)
     return u, out, made
+
+
+def make_shelf(stories=200, universes=5, seed=2, words=120):
+    """A library of short story ideas, the size the all-stories list must stay quick at: `stories` ideas over `universes` collections, a few
+    with a manuscript of `words` words, with every status and format in use."""
+    from storywheel import formats, ideas
+    rng = random.Random(seed)
+    unis = [vault.create_universe(f"Shelf {k}", kind="collection") for k in range(universes)]
+    keys = [f.key for f in formats.FORMATS]
+    made = []
+    for n in range(stories):
+        u = unis[n % universes]
+        s = ideas.new_idea(u, f"Idea Number {n}", f"A logline for idea {n}.\nMore lines.", "flash" if n % 3 else "short-story",
+                           status=vault.STATUSES[n % 4] if n % 5 == 0 else None)
+        if n % 4 == 0:
+            s.manuscript_dir.mkdir(parents=True, exist_ok=True)
+            (s.manuscript_dir / "manuscript.md").write_text(paragraph(rng, words) + "\n", encoding="utf-8")
+        if n % 40 == 0:
+            formats.apply(s, rng.choice(keys))
+        made.append(s)
+    return unis, made

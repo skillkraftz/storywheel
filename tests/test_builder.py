@@ -388,6 +388,8 @@ def test_create_rename_and_delete_universes(home):
         boxes[0].value, boxes[1].value = "Dry Country", "western, noir"
         for _ in boxes:
             await press(pilot, "enter")
+        assert type(app.screen).__name__ == "ChoiceScreen"             # the kind of universe is picked from a list (World is highlighted)
+        await press(pilot, "enter")
         made = (s.universe.slug, s.universe.settings()["genres"])
         s.query_one("#universes").focus(); await pilot.pause()
         await press(pilot, "r")

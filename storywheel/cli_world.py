@@ -37,6 +37,7 @@ def story_json(s):
     meta, sections = s.load_outline()
     return {"id": s.slug, "universe": s.universe.slug, "universe_name": s.universe.name, "title": s.title,
             "meta": meta, "outline": sections, "scenes": [e["title"] for e in s.scene_list()], "files": [p.name for p in s.files()], "extra_files": [p.name for p in s.extra_files()], "words": s.word_count(),
+            "status": s.status, "logline": s.logline, "universe_kind": s.universe.kind,
             "path": str(s.path), "manuscript": str(s.manuscript_dir), "settings": settings.load_story(s.path),
             "author": {k: v for k, v in settings.load_global().items()
                        if k in ("author_name", "legal_name", "address", "email", "phone")},
@@ -72,7 +73,7 @@ def _target_pages(s):
 
 def universe_json(u):
     s = u.settings()
-    return {"slug": u.slug, "name": s["name"], "genres": s["genres"], "path": str(u.path),
+    return {"slug": u.slug, "name": s["name"], "kind": s["kind"], "genres": s["genres"], "path": str(u.path),
             "counts": {t: len(u.entities(t)) for t in schemas.load()},
             "stories": [x.slug for x in u.stories()]}
 
@@ -88,8 +89,8 @@ def _universe(slug):
 def cmd_universes(args):
     migrate_lines = migrate.migrate_universe_json()
     if args.action == "new":
-        u = vault.create_universe(args.name or "Untitled Universe", args.genres or ())
-        emit(universe_json(u)) if args.json else print(f"  Created {u.name} ({u.path})")
+        u = vault.create_universe(args.name or "Untitled Universe", args.genres or (), kind=args.kind or "world")
+        emit(universe_json(u)) if args.json else print(f"  Created {u.name}, a {u.kind} ({u.path})")
         return
     unis = vault.list_universes()
     if args.json:
@@ -100,7 +101,8 @@ def cmd_universes(args):
     if not unis:
         print("  No universes yet. Promote a story from the Wheel, or:  storywheel universes new NAME")
     for u in unis:
-        print(f"  {u.slug:<24} {u.name}   ({plural_n(len(u.entities()), 'entity', 'entities')}, {plural_n(len(u.stories()), 'story', 'stories')})")
+        kind = "  [collection]" if u.is_collection else ""
+        print(f"  {u.slug:<24} {u.name}{kind}   ({plural_n(len(u.entities()), 'entity', 'entities')}, {plural_n(len(u.stories()), 'story', 'stories')})")
 
 
 def cmd_entity(args):
@@ -270,27 +272,93 @@ def cmd_grammar(args):
         raise SystemExit(1)
 
 
+def _status_arg(text):
+    """A status typed on the command line (or None for none given); anything else stops with the choices."""
+    if text in (None, ""):
+        return None
+    found = str(text).strip().lower()
+    if found not in vault.STATUSES:
+        sys.exit(f"Unknown status '{text}'. Choose one of: {', '.join(vault.STATUSES)}")
+    return found
+
+
+def _format_arg(text):
+    if text in (None, ""):
+        return None
+    key = _formats().find(text)
+    if key is None:
+        sys.exit(f"Unknown format '{text}'. Choose one of: {', '.join(f.key for f in _formats().FORMATS)}")
+    return key
+
+
 def cmd_story(args):
+    status = _status_arg(args.status)
     if args.action == "list":
         unis = [_universe(args.universe)] if args.universe else vault.list_universes()
-        stories = [s for u in unis for s in u.stories()]
+        stories = [s for u in unis for s in u.stories() if status is None or s.status == status]
         if args.json:
             emit([story_json(s) for s in stories])
         else:
             for s in stories:
-                print(f"  {s.universe.slug}/{s.slug:<28} {s.title}  ({plural_n(s.word_count(), 'word')})")
+                print(f"  {s.universe.slug}/{s.slug:<28} {s.title}  ({plural_n(s.word_count(), 'word')})  [{s.status}]")
         return
+    if args.action == "idea":
+        return _make_idea(args, status)
     uni, _, slug = (args.target or "").partition("/")
     u = _universe(uni)
     s = u.story(slug)
     if not s:
         sys.exit(f"No story '{slug}' in {u.slug}")
     if args.action == "version":
-        return _make_version(s, args)
+        return _make_version(s, args, status)
+    if args.action == "set":
+        if status is None:
+            sys.exit("Say what to set:  story set UNIVERSE/STORY --status idea|drafting|revising|done")
+        s.set_status(status)
+        emit(story_json(s)) if args.json else print(f"  {u.slug}/{s.slug} is now {status}.")
+        return
     emit(story_json(s)) if args.json else print(json.dumps(story_json(s), indent=2, ensure_ascii=False))
 
 
-def _make_version(story, args):
+def _make_idea(args, status):
+    """story idea UNIVERSE "Title" --text "a few lines" [--format flash|short-story] [--status S]"""
+    from . import ideas
+    u = _universe(args.target)
+    title = (args.idea_title or args.title or "").strip()
+    if not title:
+        sys.exit('Give the idea a title:  story idea UNIVERSE "Title" --text "a few lines"')
+    key = _format_arg(args.format) or "flash"
+    if key not in ideas.IDEA_FORMATS:
+        sys.exit("An idea is flash fiction (the default) or a short story:  --format flash|short-story")
+    s = ideas.new_idea(u, title, args.text or "", key, status)
+    out = story_json(s)
+    emit(out) if args.json else print(f"  Made the idea {u.slug}/{s.slug}: \"{s.title}\" ({_formats().get(key).label.lower()}, {s.status}). "
+                                       f"Write it:  storywheel writer {u.slug} {s.slug}")
+
+
+def cmd_stories(args):
+    """Every story in the library, newest edit first."""
+    from . import shelf
+    status, fmt = _status_arg(args.status), _format_arg(args.format)
+    universe = _universe(args.universe) if args.universe else None
+    found = shelf.rows(status, fmt, universe)
+    if args.json:
+        emit([{"id": r["slug"], "universe": r["universe"], "universe_name": r["universe_name"], "title": r["title"], "logline": r["logline"],
+               "format": r["format"], "status": r["status"], "words": r["words"], "size": r["size"],
+               "edited": shelf.edited_text(r["edited"])} for r in found])
+        return
+    if not found:
+        print("  No stories" + (" with that status or format." if status or fmt else " yet. Promote one from the Wheel, or:  storywheel story idea UNIVERSE \"Title\""))
+        return
+    width = max(len(r["title"]) for r in found)
+    width = min(max(width, 5), 40)
+    print(f"  {'TITLE':<{width}}  {'UNIVERSE':<18} {'FORMAT':<13} {'STATUS':<9} {'SIZE':<12} EDITED")
+    for r in found:
+        print(f"  {r['title'][:width]:<{width}}  {r['universe_name'][:18]:<18} {r['format_label']:<13} {r['status']:<9} "
+              f"{r['size']:<12} {shelf.edited_text(r['edited'])}")
+
+
+def _make_version(story, args, status=None):
     from . import formats, versions
     key = formats.find(args.format) if args.format else None
     if key is None:
@@ -300,6 +368,8 @@ def _make_version(story, args):
         new, notes = versions.new_version(story, key, args.title, copy)
     except versions.VersionError as e:
         sys.exit(str(e))
+    if status:
+        new.set_status(status)
     result = {"universe": new.universe.slug, "story": new.slug, "title": new.title, "format": key, "family": versions.family_of(new),
               "copied": list(copy), "notes": notes, "path": str(new.path)}
     if args.json:
@@ -373,6 +443,9 @@ def cmd_promote(args):
                 sys.exit(f"Unknown format '{text}'. Choose from: {', '.join(f.key for f in formats.FORMATS)}")
             if key not in plan.also:
                 plan.also.append(key)
+    if args.entities:
+        for item in plan.items:
+            item.include = True
     if args.dry_run:
         emit({"lines": plan.lines()}) if args.json else print("\n".join("  " + l for l in plan.lines()))
         return
@@ -703,10 +776,11 @@ def cmd_builder(args):
 
 
 def add_parsers(sub):
-    p = sub.add_parser("universes", help="list your universes (or: universes new NAME)")
+    p = sub.add_parser("universes", help="list your universes (or: universes new NAME [--kind collection])")
     p.add_argument("action", nargs="?", choices=["list", "new"], default="list")
     p.add_argument("name", nargs="?")
     p.add_argument("--genres", nargs="*")
+    p.add_argument("--kind", choices=list(vault.KINDS), help="new: world (default) or collection (a shelf of short story ideas)")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("entity", help="entities in a universe:  entity list UNIVERSE [--type character] --json")
     p.add_argument("action", choices=["list", "show"])
@@ -735,15 +809,24 @@ def add_parsers(sub):
     p.add_argument("--from", dest="from_file", help="install: unpack this LanguageTool .zip instead of downloading")
     p.add_argument("--clear", action="store_true")
     p.add_argument("--json", action="store_true")
-    p = sub.add_parser("story", help="stories in your universes:  story list [UNIVERSE] | story show UNIVERSE/STORY | "
-                                     "story version UNIVERSE/STORY --format KEY")
-    p.add_argument("action", choices=["list", "show", "version"])
-    p.add_argument("target", nargs="?", help="for show and version: universe/story")
-    p.add_argument("--format", help="version: the new version's format: flash, short-story, novel, feature-film or short-film")
+    p = sub.add_parser("story", help="stories in your universes:  story list [--status S] | story show UNIVERSE/STORY | "
+                                     "story version UNIVERSE/STORY --format KEY | story idea UNIVERSE \"Title\" --text \"...\" | "
+                                     "story set UNIVERSE/STORY --status S")
+    p.add_argument("action", choices=["list", "show", "version", "idea", "set"])
+    p.add_argument("target", nargs="?", help="for show, version and set: universe/story; for idea: the universe")
+    p.add_argument("idea_title", nargs="?", metavar="TITLE", help="idea: the title")
+    p.add_argument("--text", help="idea: a few lines (the first is the logline; all of them are the story's notes)")
+    p.add_argument("--status", help="list: only this status; idea, version, set: the status to give (idea, drafting, revising, done)")
+    p.add_argument("--format", help="version, idea: the format: flash, short-story, novel, feature-film or short-film (an idea: flash, the default, or short-story)")
     p.add_argument("--title", help="version: its title (default: the same title)")
     p.add_argument("--copy", help="version: what to copy, a comma list of outline,notes,seed,genres,structure,manuscript (default: all but "
                                   "manuscript; 'none' copies nothing)")
     p.add_argument("--universe")
+    p.add_argument("--json", action="store_true")
+    p = sub.add_parser("stories", help="every story in all your universes, newest edit first:  stories [--status S] [--format F] [--json]")
+    p.add_argument("--status", help="only this status: idea, drafting, revising or done")
+    p.add_argument("--format", help="only this format: flash, short-story, novel, feature-film or short-film")
+    p.add_argument("--universe", help="only this universe")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("script", help="screenplays:  script ensure|start UNIVERSE/STORY [--replace] | script check|pages|scenes FILE [--target-pages N]")
     p.add_argument("action", choices=["ensure", "start", "check", "pages", "scenes"])
@@ -757,6 +840,7 @@ def add_parsers(sub):
     p.add_argument("--new", help="name for the new universe (default: the story's title)")
     p.add_argument("--also", help="also start the story as these formats (comma list of flash, short-story, novel, feature-film, short-film)")
     p.add_argument("--dry-run", action="store_true", help="show what would be created")
+    p.add_argument("--entities", action="store_true", help="into a collection: also create the characters, places and things (off by default there)")
     p.add_argument("--yes", action="store_true", help="don't ask")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("manuscript", help="manuscript export:  manuscript export UNIVERSE/STORY --format docx | manuscript text UNIVERSE/STORY")
@@ -809,4 +893,4 @@ def add_parsers(sub):
     p = sub.add_parser("writer", help="open a story in the Writer (Neovim)")
     p.add_argument("universe", nargs="?")
     p.add_argument("story", nargs="?")
-    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update}
+    return {"define": cmd_lookup, "thesaurus": cmd_lookup, "inflect": cmd_inflect, "backups": cmd_backups, "lookup": cmd_lookup, "dictionary": cmd_dictionary, "migrate": cmd_migrate, "settings": cmd_settings, "manuscript": cmd_manuscript, "exports": cmd_exports, "help": cmd_help, "writer": cmd_writer, "builder": cmd_builder, "universes": cmd_universes, "stories": cmd_stories, "entity": cmd_entity, "story": cmd_story, "script": cmd_script, "promote": cmd_promote, "names": cmd_names, "grammar": cmd_grammar, "kitty": cmd_kitty, "setup": cmd_setup, "update": cmd_update}

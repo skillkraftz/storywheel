@@ -29,6 +29,10 @@ fix_names: Fix names written in the wrong capitals ("Locked box" to "a locked bo
 writer: Write the open story in the Writer
 export: Export the open story (docx, odt, pdf, md, txt)
 copy_manuscript: Copy the manuscript to the clipboard as plain text
+new_idea: New idea: a title and a few lines (the first is its logline, all are its notes), flash fiction or a short story, no structure; w writes it at once
+story_status: Set the story's status: idea, drafting, revising or done (each version has its own)
+all_stories: Every story in every universe in one list, newest edit first (s and f filter by status and format; Enter opens it here, w writes it)
+universe_kind: Change the universe's kind, picked from a list: a world or a collection (a shelf of short story ideas)
 new_story: New story (no Wheel draft behind it): a form with its title, format, structure, genres and target length, all picked from lists
 story_form: Change the open story's format, structure, genres and target length (the same form; it warns when the Writer would open a different file)
 entity_notes: Edit the selected entity's own notes, under its card
@@ -47,6 +51,7 @@ act('export'): Export the story
 act('backups'): Look at the story's backups, and restore one
 act('form'): Format, structure, genres and target length of this story
 act('version'): New version of this story in another format
+act('status'): Set this story's status: idea, drafting, revising or done
 ### UniverseList | The universes list
 act('new'): New universe
 act('rename'): Rename the universe
@@ -59,6 +64,14 @@ act('delete'): Delete the universe and everything in it (asks first)
 The tabs (keys 1 to 5) are Characters, Places, Things, Groups and Notes. Every field has a history; the wheel steps through it. Roll results use the universe's genre leanings, the entity's other fields and the existing entities (a rival, owner, parent place or leader can be a real entity). Links hold the other entity's id, so renaming never breaks them.
 ## Stories
 The left column lists the universe's stories. +Story makes a blank one; a Wheel story arrives from the Wheel (Send to Builder). The large Story panel under the list has the outline (title, premise, structure, beats, twist, settings), the scenes (with their first lines and word counts) and the story's own notes. On a narrow terminal (under 150 columns) the left column shows only a short summary of the story, and the Story panel takes turns with the cards, at full width: 6 7 8 or backslash show it, Esc or 1-5 bring the cards back.
+## Collections
+A universe is a world (characters, places, things, groups, notes and stories) or a collection: a shelf of short story ideas. You pick which when you make the universe (N), and can change it with K or on the Kind row of the overview. A collection puts its story list first: a wide left column where each idea has its title and status on one line, then its format, word count and logline. The entity tabs fold away while the collection has no entities (1 to 5 or n bring them back); the line above says how many ideas are idea, drafting, revising and done.
+
+i (or +Idea) adds an idea: a title and a few lines, flash fiction by default (a short story can be picked), no structure and no questions. The first line is the logline and all the lines are the idea's notes. The idea is selected, so w writes it at once. Promoting a Wheel story into a collection brings the outline, premise and Wheel draft over as usual, but leaves the characters, places and things out unless you tick them on the promote screen. In the Wheel, I sends a draft's title and premise to a collection as an idea, with no promotion screen.
+## Status
+Every story, in any universe, has a status: idea, drafting, revising or done. t sets it from a list (or the Status button, or the Status row of the outline). A story you have not given one is an idea until it has manuscript text, and then a draft. Each version of a story has its own status. The stories list shows it beside the title, and `storywheel story list --status drafting` filters by it.
+## All stories
+L (or the All stories button) lists every story in every universe: title, universe, format, status, words or pages, and when it was last edited, newest first. s steps through the status filter and f through the format filter; Enter opens the story here, w opens it in the Writer. From the command line: `storywheel stories [--status S] [--format F] [--json]`.
 ## Versions
 The same story can exist in several formats: a short story AND a screenplay, say. A version is a separate story in the same universe, in its own folder with its own manuscript; the versions of one story share a family id in story.md. Press v (or the New version button under the stories list) for the form: a title, the format, a target length and a checklist of what to copy: the outline sections, the story notes, the Wheel draft it came from (seed.json), the genres and the structure with its beats (all ticked), and the manuscript (not ticked). Characters, places, things, groups and notes belong to the universe, so every version already shares them. What is ticked is copied once, and after that the versions are separate: editing one outline changes nothing in the other.
 

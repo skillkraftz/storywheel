@@ -64,6 +64,8 @@ def rows(story):
     out = [("meta:title", "Title", meta.get("title", "")),
            ("meta:genre", "Genre", " · ".join(x for x in (meta.get("genre"), meta.get("mood")) if x)),
            ("meta:structure", "Structure", meta.get("structure", ""))]
+    if meta.get("logline"):                              # (an idea's one line; a story with none shows no row)
+        out.insert(1, ("meta:logline", "Logline", meta["logline"]))
     for heading, text in sections.items():
         if heading == "Setting":
             for name, value in settings_lines(text):

@@ -241,8 +241,39 @@ backslash; Esc or 1–5 bring the cards back.
 
 ### Making a universe
 
-Either send a story from the Wheel (Chapter 1), or press **N** (or +Universe) and give it a name and, if you like, genres. Rename and
-Delete are buttons, or `r` and `d` with the Universes list focused. Deleting asks, then moves the universe to the library's `.trash`.
+Either send a story from the Wheel (Chapter 1), or press **N** (or +Universe) and give it a name and, if you like, genres, then pick what
+kind of universe it is (see Collections below). Rename and Delete are buttons, or `r` and `d` with the Universes list focused. Deleting
+asks, then moves the universe to the library's `.trash`.
+
+### Collections: a shelf of short story ideas
+
+A universe is a **world** (characters, places, things, groups, notes and the stories set among them) or a **collection**: a shelf of short story
+ideas that do not need a world. Pick the kind when you make the universe; change it later with **K** or on the Kind row of the overview.
+Every older universe is a world.
+
+A collection puts its stories first. The left column is wide, and each story is two lines: its title and status, then its format, word count
+and logline (one line, cut to fit). A family of versions still sits under one title. The entity tabs fold away while the collection has no
+entities (a line says how many stories are idea, drafting, revising and done); **1** to **5** or **n** bring them back, and they stay for as
+long as the collection has any.
+
+**i** (or +Idea) adds an idea: a title and a few lines, flash fiction unless you pick Short story, with no structure and no promotion. The first
+line is the logline and all the lines are the idea's notes. The idea is selected, so **w** writes it at once. `i` works in a world too.
+
+Promoting a Wheel story into a collection (Chapter 1) brings the outline, premise and draft over as usual, but characters, places and things
+are not created unless you tick them in the preview, which says so in one line. In the Wheel, **I** sends a draft's title and premise to a
+collection as a new idea, with no promotion screen (you choose the collection if there are several; the draft itself is left alone).
+
+### Status
+
+Every story, in any universe, is **idea**, **drafting**, **revising** or **done**. **t** (or the Status button, or the Status row of the
+outline) picks from the list. A story you have not given a status is an idea until it has manuscript text, and then a draft; each version of a
+story has its own. The story list shows it, and `storywheel story set UNIVERSE/STORY --status revising` sets it from the command line.
+
+### All stories
+
+**L** (or the All stories button) lists every story in every universe: title, universe, format, status, words (pages for a script) and when it
+was last edited, newest first. **s** steps through the status filter and **f** through the format filter. **Enter** opens the story in the
+Builder, **w** opens it in the Writer, **q** closes. From the command line: `storywheel stories [--status S] [--format F] [--json]`.
 
 ### Filling in a character, place or thing
 
@@ -652,7 +683,11 @@ Most writers never need these; they are for scripts and for checking things.
 | `storywheel report` | The lines you rated down most, and why |
 | `storywheel universes [new NAME]` | List or make universes |
 | `storywheel entity list UNIVERSE [--type character]` | A universe's entities |
-| `storywheel story list [UNIVERSE]` / `story show UNIVERSE/STORY` | Stories |
+| `storywheel story list [UNIVERSE] [--status S]` / `story show UNIVERSE/STORY` | Stories (with their status) |
+| `storywheel stories [--status S] [--format F] [--universe U] [--json]` | Every story in every universe, newest edit first |
+| `storywheel story idea UNIVERSE "Title" [--text "..."] [--format flash\|short-story] [--status S]` | Put an idea on a shelf |
+| `storywheel story set UNIVERSE/STORY --status S` | Set a story's status (idea, drafting, revising, done) |
+| `storywheel universes new NAME [--kind world\|collection]` | Make a universe |
 | `storywheel names fix UNIVERSE [--apply]` | Fix names written in the wrong capitals |
 | `storywheel manuscript export UNIVERSE/STORY --format docx` / `manuscript text …` | Export, or print the manuscript |
 | `storywheel exports status` / `exports make UNIVERSE/STORY [--format F]` | Export records / export one |

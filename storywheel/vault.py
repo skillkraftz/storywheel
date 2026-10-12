@@ -253,6 +253,28 @@ class Story:
         meta.update(changes)
         self.save_outline(meta, sections)
 
+    # status and logline (every story, in any universe)
+    @property
+    def status(self):
+        """idea, drafting, revising or done. A story that was never given one is a draft once it has manuscript text, an idea until then."""
+        stored = str(self.meta.get("status") or "").strip().lower()
+        if stored in STATUSES:
+            return stored
+        return "drafting" if self.word_count() > 0 else "idea"
+
+    def set_status(self, value):
+        value = str(value or "").strip().lower()
+        if value not in STATUSES:
+            raise ValueError(f"Unknown status '{value}'. Choose one of: {', '.join(STATUSES)}")
+        self.set_meta(status=value)
+
+    @property
+    def logline(self):
+        """One line about the story: the one written for it, else the first line of its premise, else of its notes."""
+        meta, sections = self.load_outline()
+        text = str(meta.get("logline") or "").strip() or (sections.get("Premise") or "").strip() or self.notes.strip()
+        return " ".join(text.split("\n", 1)[0].split())
+
     @property
     def notes_path(self):
         return self.path / "notes.md"
@@ -535,6 +557,16 @@ class Story:
         return trash(self.path)
 
 
+STATUSES = ("idea", "drafting", "revising", "done")
+KINDS = ("world", "collection")
+KIND_LABELS = {"world": "World: characters, places, things and stories",
+               "collection": "Collection: a shelf of short story ideas"}
+
+
+def kind_name(kind):
+    return {"world": "World", "collection": "Collection"}.get(kind, "World")
+
+
 MARKERS = ("***", "* * *", "#")             # the scene breaks that can be chosen in Settings (the first is the default)
 
 
@@ -655,9 +687,13 @@ class Universe:
         return self.path / "universe.md"
 
     def _meta(self):
-        if not self.file.exists():
-            return {}, ""
-        return frontmatter.loads(self.file.read_text(encoding="utf-8"))
+        """(meta, notes) of universe.md, read again only when the file changes (the story lists ask for every universe's name on each refresh)."""
+        def read():
+            if not self.file.exists():
+                return {}, ""
+            return frontmatter.loads(self.file.read_text(encoding="utf-8"))
+        meta, body = memo((str(self.file), "universe"), stamp(self.file), read)
+        return copy.deepcopy(meta), body
 
     @property
     def name(self):
@@ -667,10 +703,21 @@ class Universe:
     def notes(self):
         return self._meta()[1]
 
+    @property
+    def kind(self):
+        """'world' (the default, and what every older universe is) or 'collection' (a shelf of short story ideas)."""
+        kind = str(self._meta()[0].get("kind") or "").strip().lower()
+        return kind if kind in KINDS else "world"
+
+    @property
+    def is_collection(self):
+        return self.kind == "collection"
+
     def settings(self):
-        """genres, exclude_tags, exclude_lists, boost, atom_boost, notes."""
+        """kind, genres, exclude_tags, exclude_lists, boost, atom_boost, notes."""
         meta, body = self._meta()
-        return {"name": meta.get("name") or self.name, "genres": list(meta.get("genres") or []),
+        kind = str(meta.get("kind") or "").strip().lower()
+        return {"name": meta.get("name") or self.name, "kind": kind if kind in KINDS else "world", "genres": list(meta.get("genres") or []),
                 "exclude_tags": list(meta.get("exclude_tags") or []), "exclude_lists": list(meta.get("exclude_lists") or []),
                 "boost": {k: float(v) for k, v in (meta.get("boost") or {}).items()},
                 "atom_boost": float(meta.get("atom_boost") or _global_boost()), "atom_boost_own": bool(meta.get("atom_boost")),
@@ -684,7 +731,9 @@ class Universe:
             if changes["atom_boost"] is None:
                 changes = {k: v for k, v in changes.items() if k != "atom_boost"}
         s.update(changes)
-        meta = {"name": s["name"], "genres": s["genres"], "exclude_tags": s["exclude_tags"],
+        if s["kind"] not in KINDS:
+            raise ValueError(f"Unknown kind '{s['kind']}'. Choose one of: {', '.join(KINDS)}")
+        meta = {"name": s["name"], "kind": s["kind"], "genres": s["genres"], "exclude_tags": s["exclude_tags"],
                 "exclude_lists": s["exclude_lists"], "boost": s["boost"],
                 "created": s["created"] or datetime.date.today().isoformat()}
         if s["atom_boost_own"]:
@@ -723,6 +772,10 @@ class Universe:
 
     def entities(self, type_=None):
         return [e.clone() for e in self._entities_shared(type_)]
+
+    def has_entities(self):
+        """Is there at least one entity? (Looks at the folders only: nothing is read.)"""
+        return any(next(self._dir(t).glob("*.md"), None) is not None for t in schemas.load() if self._dir(t).is_dir())
 
     def entity(self, id_):
         for e in self._entities_shared():
@@ -904,11 +957,11 @@ def get_universe(slug):
     return u if u.path.is_dir() else None
 
 
-def create_universe(name, genres=(), notes=""):
+def create_universe(name, genres=(), notes="", kind="world"):
     taken = {u.slug for u in list_universes()}
     u = Universe(_unique(slugify(name, "universe"), taken))
     u.path.mkdir(parents=True, exist_ok=True)
-    u.save_settings(name=name, genres=[g.lower() for g in genres], notes=notes)
+    u.save_settings(name=name, genres=[g.lower() for g in genres], notes=notes, kind=kind)
     for t in schemas.load():
         u._dir(t).mkdir(exist_ok=True)
     (u.path / "stories").mkdir(exist_ok=True)

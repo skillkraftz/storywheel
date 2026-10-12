@@ -441,6 +441,29 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   ending picked a beat draws six times in ten (`ENDING_SHARE`) only from frames tagged for it, else from everything that is untagged or tagged for
   it. "Any" is the default and filters nothing, so older drafts and seeded samples are unchanged.
 
+- Collections (branch batch-22-collections, 0.24.0). *Kind:* `kind` in universe.md, `world` (the default; a missing or unknown value is a world) or `collection`;
+  `Universe.kind`/`is_collection`. A collection changes the Builder's layout only (CSS classes `-collection` and `-folded`) and the promotion defaults;
+  entities, links and the generator are untouched, so a collection can hold entities and nothing is lost by switching the kind back. The entity tabs
+  fold while a collection has no entity (`Universe.has_entities()` looks at the folders only), unfold on 1-5, n or any entity, and fold again when the
+  universe is opened again; focus is moved off the hidden widgets when they fold (keys had been typed into a hidden notes box). *Status:* `status` in
+  story.md; the allowed values are `vault.STATUSES`. A story that never had one is an idea until it has manuscript text, then drafting (computed, so
+  no migration and no file is touched); setting one stores it and it then stays. A version does not inherit its source's status
+  (`versions.new_version` leaves it out), so each version has its own. *Logline:* `logline` in story.md, else the first line of the Premise, else the
+  first line of the notes; one line always. *Ideas:* `ideas.new_idea` makes a story with the logline (the first typed line) and the notes (all the
+  lines), a format of flash (or short story), no structure and no sections; `ideas.send_draft` (the Wheel's `I`) makes one from a draft's title and
+  premise (also written as the Premise section), records `idea_from` in the story and `ideas` in the draft, and leaves the draft unpromoted.
+  `I` was free in the Wheel (`i` is Ignore; `B` is Send to Builder). *Promotion:* `Plan.collection` (an existing collection; a new universe is always
+  a world) sets every `Item.include` to False; `apply_plan` skips them, and the preview ticks them with Enter (off, on, on as a copy when a duplicate,
+  off). `promote --entities` ticks all. *The all-stories list:* `shelf.py` remembers each story's row with `vault.memo`, keyed by a stat-only
+  fingerprint (story.md, settings.toml, notes.md and the files in manuscript/; nothing is read) plus the global settings file; "last edited" is the newest
+  of those mtimes, so changing a story's settings counts as an edit. `Universe._meta` (universe.md) is memoized the same way. The list is a
+  `DataTable` in a modal; its keys `s` and `f` step through the filters. *CLI:* `universes new NAME --kind collection` (the singular `universe` stays
+  retired: batch 18's test checks it), `stories`, `story idea|set`, `--status` on `story list|idea|version|set`. The Builder's N asks the kind from a list
+  after the name box, so the existing test that made a universe now presses Enter once more (World is first). The stories box is one row taller (11)
+  because of a third button row. *Testing for this batch (the owner's instruction, overriding the end-of-batch full run in CLAUDE.md):* only the
+  tests for what changed and the existing files covering code it touched, with `-m "not slow"`; `tools/fulltest.sh` was not run. The shared code
+  touched is listed in REPORT.md so a failure in the owner's full run can be traced.
+
 - Versions (branch batch-20-versions, 0.22.0): a version is a separate story folder in the same universe. Siblings share a `family` id in
   story.md (the first story's slug, written into the source story when its first version is made) and a `version` number (the first story is 1; each
   new one the next). Content is COPIED, never synced. Stories with no `family` have no siblings and behave exactly as before; a family is only an id,

@@ -201,7 +201,7 @@ def new_version(story, fmt, title=None, copy=DEFAULT_COPY, target=None):
     family = family_of(story) or story.slug
     notes = []
 
-    new_meta = {k: v for k, v in meta.items() if k not in ("id", "title", "universe", "created", "family", "format", "target")}
+    new_meta = {k: v for k, v in meta.items() if k not in ("id", "title", "universe", "created", "family", "format", "target", "status")}   # (each version has its own status)
     if "genres" not in copy:
         new_meta.pop("genre", None)
     new_sections = {}

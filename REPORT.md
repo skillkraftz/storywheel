@@ -5251,3 +5251,56 @@ Use a throwaway folder so nothing touches `~/.storywheel` or `~/Writing`:
 - Open: should "Any" be the default ending, or should a new draft start on one? (It starts on Any so older drafts and seeded samples are unchanged.)
   Should two leads and an ensemble change the frames, or is a partner line enough for now? (BACKLOG.md.)
 - `main` is still behind the versions work; this branch needs the versions branch merged first (or together).
+
+# Collections (branch `batch-22-collections`, 0.24.0)
+
+A universe can be a **collection** (a shelf of short story ideas), every story has a **status**, and one list shows every story. **Not run:** `tools/fulltest.sh`
+(your instruction for this batch). Run instead, with `-m "not slow"`: the new file (40 passed) and the existing files that cover what was touched
+(Builder, layout, promotion, versions, storage, help, Wheel, navigation, mouse, drafts, outline, rename, exports, backups, manuscript, names, screenplay;
+730 passed, 4 skipped, 0 failed after the fixes below). Not run at all: the slow and serial files (`test_hub`, `test_switching`, `test_performance`,
+`test_layout_batch6`, `test_builder_ratings`, ...).
+
+## Checklist
+| # | Item | Status | What's missing |
+|---|---|---|---|
+| 1 | Kind (world/collection) in universe.md; picked from a list on N and with K / the overview's Kind row; older universes are worlds | Works | no entry in the `s` settings box itself (K is named in its title) |
+| 2 | Collection layout: wide story list first, two lines a story (title + status; format, size, logline), entity tabs folded while empty, families grouped | Works | not seen in a real terminal |
+| 3 | Status (idea/drafting/revising/done) for every story, per version, picked from a list (`t`, button, outline row), shown in the list and `story list` | Works | |
+| 4 | +Idea (`i`, button): title + lines (logline, notes), Flash by default, Short story selectable, no structure, `w` writes it | Works | `w` is tested with a stub for the Writer, not real Neovim |
+| 5 | Promote into a collection: items unticked, tickable, one-line reason on the screen | Works | the plain-prompt Wheel shows the reason but cannot tick (use `promote --entities`) |
+| 6 | Send as an idea: `I` in the Wheel (free; `i` is Ignore, `B` Send to Builder) | Works | |
+| 7 | All stories: `L`/button in the Builder, `storywheel stories [--status] [--format]`; columns, newest first, filters, Enter opens, `w` writes; memoized rows | Works | the Pi timing is unmeasured (200 stories: 0.42 s cold, 0.03 s warm here; the test allows 8 s / 0.5 s) |
+| 8 | CLI: `universes new NAME --kind collection`, `story idea`, `story set`, `--status` on story commands | Partial | the singular `universe` is still retired (batch 18's test), so it is `universes new`, not `universe new` |
+| 9 | Help pages, manual, FEATURES, BACKLOG, CHANGELOG, decisions | Works | |
+
+## Tests added
+`test_collections.py` (40): kind (round trip, old = world, bad value, has_entities), status (inferred, set, per version), logline, ideas, send as idea, promotion
+defaults per kind (plan, apply, ticked, world unchanged), the all-stories list (order, filters, counts, scripts, memo hit, 200-story timing with `bigworld.make_shelf`),
+CLI (7), Builder pilots at 200x50 and 120x40 (layout, fold/unfold and focus, N asks the kind, K, +Idea by key and button, status, versions in a collection, the list
+screen), Wheel (`I` with one, two and no collection, nothing kept; the promote preview ticks). Changed: `test_builder.py` (N now also asks the kind: one more Enter).
+
+## Shared code touched (look here first if your full run fails)
+`vault.py` (Story status/logline; Universe kind, `has_entities`, `_meta` now memoized, `create_universe(kind=)`); `versions.new_version` (leaves `status` out);
+`promote.py` (`Item.include`, `Plan.collection`); `tui.py` (Wheel `I`, `PromotePreviewScreen`, `PickUniverseScreen` prompt); `builder.py` (story list rows,
+layout CSS, the stories box is 11 tall not 10, focus handling, N flow); `outline.py` (a Logline row when set); `cli_world.py`; `tests/bigworld.py` (new helper).
+New: `shelf.py`, `ideas.py`, `ideaform.py`, `allstories.py`. The hub itself and the shared fixtures are untouched.
+
+## Manual test script (use a throwaway `STORYWHEEL_HOME` and `STORYWHEEL_LIBRARY`)
+1. `storywheel universes new Shelf --kind collection`, then `storywheel builder`: the stories list is wide and leads; the tabs are folded with a hint line.
+2. Press `i`: type a title and two lines, leave Flash, Ctrl+S. The idea is selected; `w` opens the Writer on it (real Neovim).
+3. Press `i` again, tick Short story. Both rows show format, words, logline and status; `t` sets a status from the list.
+4. Press `1`: the tabs appear. `n` adds a character. Press F2 away and back: they stay while the collection has an entity.
+5. `N`, name a world, pick World (first) then repeat picking Collection; `K` flips the kind of the open universe.
+6. In the Wheel: keep a title and premise, press `I`: the idea lands in the collection; the draft is unchanged (`B` still promotes it).
+7. `B` into the collection: the preview says why, rows read `[ ]`; Enter ticks one; `p`. Only that entity exists.
+8. `L` in the Builder: filter with `s` and `f`, Enter opens a story in the Builder, `w` opens one in the Writer.
+9. `storywheel stories --status idea`, and `storywheel stories --format flash --json`.
+10. On the Pi: with 200+ stories, press `L` twice; the second open should feel instant.
+11. Make a version (`v`) of a story with a status: the new version starts as an idea.
+12. At under 150 columns (kitty at a large font): the collection list stays readable.
+
+## Known issues and questions
+- `universe new` (singular) was in the request, but batch 18 retired the word and a test pins it; I kept `universes new`. Say if you want the alias back.
+- "Last edited" is the newest of story.md, settings.toml, notes.md and the manuscript files, so changing a story's settings counts as an edit.
+- A story's status is computed until set; once set it stays, even if the manuscript later empties.
+- The Wheel's plain prompt has no "send as an idea".

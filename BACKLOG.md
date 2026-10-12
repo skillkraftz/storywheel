@@ -22,6 +22,12 @@ Nothing is broken that I know of; ISSUES.md is the list of what was found and fi
 
 ## Next
 
+- **From batch 22 (collections).** *Idea.*
+  - Sort the all-stories list by other columns, search it by title or logline, and a "recently written" view.
+  - The kind and status in the Words, Settings and Writer screens (the Writer's status line could show the status).
+  - Move a story from one universe to another (a collection idea growing into a world); today it is a new promotion.
+  - `storywheel universe new` (singular) is still retired (batch 18); the command is `universes new`.
+
 - **Novel profile.** *Partial.* Shunn's novel title page (contact block, word count, title, byline), each chapter on a new page a third of the
   way down with its heading, chapters as the sidebar's top level with scenes inside, adding/renaming/reordering chapters.
 - **From batch 18 (held back to keep to the checklist).** *Idea.*

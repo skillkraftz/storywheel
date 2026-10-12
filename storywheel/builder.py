@@ -27,7 +27,7 @@ from .header import QuietHeader
 from textual.widgets import Button, Footer, Header, Input, Label, OptionList, Static, TabbedContent, TabPane, Tabs, Tab, TextArea
 from textual.widgets.option_list import Option
 
-from . import fill, formats, outline, paths, promote, rename, schemas, settings, state, structures, vault, versions, writing_stats
+from . import fill, formats, outline, paths, promote, rename, schemas, settings, shelf, state, structures, vault, versions, writing_stats
 from .text import motif_from, plural_n
 from .tui import CardList, ChoiceScreen, ConfirmScreen, EditScreen, _quiet
 
@@ -238,7 +238,8 @@ class BackupsScreen(ModalScreen):
 class StoryOptions(OptionList):
     BINDINGS = [Binding("w", "act('write')", "Write"), Binding("d", "act('delete')", "Delete"),
                 Binding("x", "act('export')", "Export"), Binding("b", "act('backups')", "Backups"),
-                Binding("m", "act('form')", "Format, structure…"), Binding("v", "act('version')", "New version")]
+                Binding("m", "act('form')", "Format, structure…"), Binding("v", "act('version')", "New version"),
+                Binding("t", "act('status')", "Status")]
 
     def action_act(self, what):
         self.screen.story_act(what)
@@ -264,6 +265,7 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("8", "rtab('notes')", "Story notes", show=False),
         Binding("N", "new_universe", "New universe", show=False),
         Binding("s", "universe_settings", "Universe settings", show=False),
+        Binding("K", "universe_kind", "Universe kind: world or collection", show=False),
         Binding("S", "story_settings", "Story settings", show=False),
         Binding("G", "global_settings", "Your details", show=False),
         Binding("o", "overview", "Universe overview"),
@@ -272,6 +274,9 @@ class BuilderScreen(KeptScreen, Screen):
         Binding("x", "export", "Export", show=False),
         Binding("C", "copy_manuscript", "Copy manuscript", show=False),
         Binding("T", "new_story", "New (blank) story", show=False),
+        Binding("i", "new_idea", "New idea (a title and a few lines)", show=False),
+        Binding("t", "story_status", "Story status", show=False),
+        Binding("L", "all_stories", "Every story in every universe", show=False),
         Binding("m", "story_form", "Format, structure, genres, target", show=False),
         Binding("E", "entity_notes", "Entity notes", show=False),
         Binding("A", "add_beat", "Add a beat", show=False),
@@ -291,7 +296,7 @@ class BuilderScreen(KeptScreen, Screen):
     BuilderScreen #left { width: 26%; min-width: 40; max-width: 58; }
     BuilderScreen .box { border: round $primary-darken-2; border-title-color: $accent; border-title-style: bold; padding: 0 1; }
     BuilderScreen #universes-box { height: auto; max-height: 30%; }
-    BuilderScreen #stories-box { height: 10; min-height: 6; }
+    BuilderScreen #stories-box { height: 11; min-height: 7; }
     BuilderScreen #story-box { height: 1fr; min-height: 8; }
     /* a narrow terminal (under 150 columns): the left column stays thin; the Story panel takes the whole width, in place of the middle
        column, when you ask for it (keys 6 7 8, backslash) */
@@ -305,6 +310,17 @@ class BuilderScreen(KeptScreen, Screen):
     BuilderScreen.-narrow.-show-story #rtabs { display: block; }
     BuilderScreen.-narrow.-show-story #story-summary { display: none; }
     BuilderScreen.-narrow.-show-story #mid { display: none; }
+    /* a collection (a shelf of story ideas): the story list leads, so the left column is wide and the list takes its height; the story panel
+       shrinks to a strip under it, and the entity tabs fold away while the collection has no entities (the #shelf line says so) */
+    BuilderScreen.-collection #left { width: 54%; min-width: 50; max-width: 100; }
+    BuilderScreen.-collection.-narrow #left { width: 56%; min-width: 44; max-width: 100; }
+    BuilderScreen.-collection.-narrow.-show-story #left { width: 1fr; max-width: 100%; }
+    BuilderScreen.-collection #stories-box { height: 1fr; min-height: 10; }
+    BuilderScreen.-collection #story-box { height: 14; min-height: 8; }
+    BuilderScreen.-collection.-narrow.-show-story #story-box { height: 1fr; }
+    BuilderScreen #shelf { display: none; height: auto; padding: 0 1; color: $text-muted; }
+    BuilderScreen.-collection #shelf { display: block; }
+    BuilderScreen.-folded #tabs, BuilderScreen.-folded #work { display: none; }
     BuilderScreen #legend { height: 1; padding: 0 1; color: $text-muted; text-wrap: nowrap; text-overflow: ellipsis; }
     BuilderScreen #mid { width: 1fr; }
     BuilderScreen .title { background: $boost; color: $accent; text-style: bold; padding: 0 1; height: 1; }
@@ -355,6 +371,7 @@ class BuilderScreen(KeptScreen, Screen):
         self._told_extra = None
         self.start_rtab = "r-outline"
         self._busy = False
+        self._shelf_open = False          # a collection with no entities folds the entity tabs away; asking for them (1-5, n) opens them
 
     # --- layout ---------------------------------------------------------------------------------------------
 
@@ -379,6 +396,10 @@ class BuilderScreen(KeptScreen, Screen):
                     with Horizontal(classes="btns"):
                         yield _quiet(Button("Backups…", id="s-backups"))
                         yield _quiet(Button("New version", id="s-version"))
+                    with Horizontal(classes="btns"):
+                        yield _quiet(Button("+Idea", id="s-idea"))
+                        yield _quiet(Button("Status", id="s-status"))
+                        yield _quiet(Button("All stories", id="s-all"))
                 with Vertical(id="story-box", classes="box") as box:
                     box.border_title = "Story"
                     yield Static("", id="story-summary", markup=False)
@@ -403,6 +424,7 @@ class BuilderScreen(KeptScreen, Screen):
                 with Vertical(id="top-box"):
                     yield Static("Writing", id="top-title", classes="title", markup=False)
                     yield Static("", id="stats", markup=False)
+                yield Static("", id="shelf", markup=False)
                 yield Tabs(*[Tab(schemas.get(t)["plural"], id=f"tab-{t}") for t in TYPE_ORDER], id="tabs",
                            active=f"tab-{self.type}")
                 with Horizontal(id="work"):
@@ -436,7 +458,7 @@ class BuilderScreen(KeptScreen, Screen):
             self.entity = self.universe.entity(self.start_entity)
         self.refresh_all()
         self.outline.history_wheel = False
-        self.query_one("#card", CardList).focus()
+        self.focus_cards()
 
     # --- small accessors ---------------------------------------------------------------------------------------
 
@@ -511,6 +533,7 @@ class BuilderScreen(KeptScreen, Screen):
             u = vault.get_universe(slug)
             if u is not None:
                 self.universe, self.story, self.entity = u, None, None
+                self._shelf_open = False
         if story and self.universe is not None:
             found = self.universe.story(story)
             if found is not None:
@@ -540,6 +563,7 @@ class BuilderScreen(KeptScreen, Screen):
                     self.refresh_entities()
                 self.refresh_card()
                 self.refresh_right()
+                self.apply_kind()
         finally:
             self._busy = False
         self.app.title = "storywheel · Universe Builder"
@@ -567,26 +591,67 @@ class BuilderScreen(KeptScreen, Screen):
         lst = self.query_one("#stories", OptionList)
         lst.clear_options()
         rows = []
+        coll = bool(self.universe and self.universe.is_collection)
         if self.universe:
             for entry in versions.rows(self.universe):
                 if not entry["family"]:                                     # (a story with no versions: one row, as always)
                     s = entry["members"][0]
-                    rows.append(Option(_name_and_count(s.title, "", bool(self.story and s.slug == self.story.slug)), id=s.slug))
+                    here = bool(self.story and s.slug == self.story.slug)
+                    if coll:
+                        rows.append(Option(_idea_row(s, here), id=s.slug))
+                    else:
+                        rows.append(Option(_name_and_count(s.title, s.status, here), id=s.slug))
                     continue
                 rows.append(Option(Text(entry["title"], style="bold"), id="", disabled=True))     # one title, then a row per format
                 for s in entry["members"]:
                     here = bool(self.story and s.slug == self.story.slug)
-                    rows.append(Option(_name_and_count("  " + formats.get(formats.of_story(s)).short, versions.size_text(s), here), id=s.slug))
+                    if coll:
+                        rows.append(Option(_idea_row(s, here, head=formats.get(formats.of_story(s)).short, indent="  "), id=s.slug))
+                    else:
+                        rows.append(Option(_name_and_count("  " + formats.get(formats.of_story(s)).short,
+                                                           f"{s.status} · {versions.size_text(s)}", here), id=s.slug))
         if not rows:
-            rows.append(Option(Text("(none yet: +Story, or promote one from the Wheel)", style="dim"), id="", disabled=True))
+            rows.append(Option(Text("(none yet: +Idea, +Story, or promote one from the Wheel)" if coll else
+                                    "(none yet: +Story, or promote one from the Wheel)", style="dim"), id="", disabled=True))
         lst.add_options(rows)
-        self.query_one("#stories-box").border_title = _fit_title("Stories in" if self.universe else "Stories", self.universe.name if self.universe else "", 30)
+        self.query_one("#stories-box").border_title = _fit_title("Ideas in" if coll else ("Stories in" if self.universe else "Stories"),
+                                                                   self.universe.name if self.universe else "", 40 if coll else 30)
+
+    def apply_kind(self):
+        """A collection leads with its story list and folds the entity tabs away while it has no entities; a world is laid out as it always was."""
+        coll = bool(self.universe and self.universe.is_collection)
+        self.set_class(coll, "-collection")
+        folded = coll and not self._shelf_open and not self.universe.has_entities()
+        self.set_class(folded, "-folded")
+        if folded and self.focused is not None and any(a.id in ("work", "tabs") for a in self.focused.ancestors_with_self):
+            self.query_one("#stories", OptionList).focus()           # (never leave the keyboard on something that was just folded away)
+        box = self.query_one("#shelf", Static)
+        if not coll:
+            box.update("")
+            return
+        counts = shelf.counts(self.universe)
+        total = sum(counts.values())
+        line = f"{total} stor{'y' if total == 1 else 'ies'}: " + " · ".join(f"{n} {k}" for k, n in counts.items())
+        if folded:
+            line += ("\ni adds an idea, w writes it, t sets its status, L lists every story. Characters, places and things are optional here: "
+                     "1-5 or n open them.")
+        box.update(line)
+
+    def focus_cards(self):
+        """Focus the cards, or the story list while a collection has folded them away."""
+        (self.query_one("#stories", OptionList) if self.has_class("-folded") else self.card).focus()
+
+    def open_entity_tabs(self):
+        if not self._shelf_open:
+            self._shelf_open = True
+            self.apply_kind()
 
     def top_rows(self):
         """The boxes at the top: the universe overview, or the open story's outline."""
         rows = []
         if self.story:
             rows.extend(outline.rows(self.story))              # plain text, one beat per row (see outline.py)
+            rows.append(("status", "Status", self.story.status))
             st = settings.load_story(self.story.path)
             rows.append(("settings", "Settings", f"{st['format']} · {st['font']} · goal {st['daily_goal']}/day · "
                                                  f"column {st['column_width']}"))
@@ -594,6 +659,7 @@ class BuilderScreen(KeptScreen, Screen):
         elif self.universe:
             s = self.universe.settings()
             rows.append(("u:name", "Name", s["name"]))
+            rows.append(("u:kind", "Kind", vault.KIND_LABELS[s["kind"]]))
             rows.append(("u:genres", "Genre leanings", ", ".join(s["genres"]) or "(none: the generator uses everything)"))
             rows.append(("u:mix", "Mix changes", "; ".join(
                 x for x in (("exclude " + ", ".join(s["exclude_tags"])) if s["exclude_tags"] else "",
@@ -881,6 +947,7 @@ class BuilderScreen(KeptScreen, Screen):
     def open_universe(self, slug):
         self.universe, self.story, self.entity = vault.get_universe(slug), None, None
         self.filler = None
+        self._shelf_open = False
         self.refresh_all()
 
     def on_card_list_field(self, event):
@@ -916,6 +983,7 @@ class BuilderScreen(KeptScreen, Screen):
          "u-delete": lambda: self.universe_act("delete"), "s-new": self.action_new_story,
          "s-write": self.action_writer, "s-export": self.action_export,
          "s-backups": lambda: self.story_act("backups"), "s-version": self.action_new_version,
+         "s-idea": self.action_new_idea, "s-status": self.action_story_status, "s-all": self.action_all_stories,
          "sc-write": lambda: self.write_scene(self.query_one("#scenes", OptionList).highlighted),
          "ex-open": lambda: self.extra_act("open"), "ex-delete": lambda: self.extra_act("delete"), "ex-ignore": lambda: self.extra_act("ignore"),
          "sc-add": self.add_scene, "e-new": self.action_new_entity, "e-blank": self.action_roll_blank,
@@ -1233,6 +1301,7 @@ class BuilderScreen(KeptScreen, Screen):
             return
         e = self.universe.new_entity(self.type)
         self.entity = e
+        self._shelf_open = True
         self.refresh_all()
         self.say(f"A blank {self.type}. space rolls every blank field; f rolls one; e writes one.")
         self.card.highlighted = 0                                      # the new card starts on its first row, whatever was highlighted before
@@ -1302,6 +1371,7 @@ class BuilderScreen(KeptScreen, Screen):
             self.refresh_card()
 
     def action_tab(self, i):
+        self.open_entity_tabs()
         self.remove_class("-show-story")
         self.query_one("#tabs", Tabs).active = f"tab-{TYPE_ORDER[int(i)]}"
 
@@ -1331,7 +1401,7 @@ class BuilderScreen(KeptScreen, Screen):
 
     def action_focus_card(self):
         self.remove_class("-show-story")
-        self.card.focus()
+        self.focus_cards()
 
     def action_help(self):
         from .helpscreen import HelpScreen
@@ -1367,9 +1437,16 @@ class BuilderScreen(KeptScreen, Screen):
     def _universe_made(self, out):
         if out and out["name"].strip():
             genres = [g.strip() for g in out["genres (comma separated, optional)"].split(",") if g.strip()]
-            u = vault.create_universe(out["name"].strip(), genres)
-            self.open_universe(u.slug)
-            self.say(f"Created '{u.name}'. Press n to add an entity.")
+            self.app.push_screen(ChoiceScreen("What kind of universe is this? (Enter picks the highlighted one)", kind_choices(), start="world"),
+                                 lambda kind: self._universe_kind_chosen(out["name"].strip(), genres, kind))
+
+    def _universe_kind_chosen(self, name, genres, kind):
+        if kind is None:
+            return self.say("No universe made.")
+        u = vault.create_universe(name, genres, kind=kind)
+        self.open_universe(u.slug)
+        self.say(f"Created the collection '{u.name}'. Press i to add an idea." if kind == "collection"
+                 else f"Created '{u.name}'. Press n to add an entity.")
 
     def universe_act(self, what):
         lst = self.query_one("#universes", OptionList)
@@ -1429,6 +1506,9 @@ class BuilderScreen(KeptScreen, Screen):
         elif what == "version":
             self.story = s
             self.action_new_version()
+        elif what == "status":
+            self.story = s
+            self.action_story_status()
         elif what == "delete":
             self.app.push_screen(ConfirmScreen(f"Delete the story '{s.title}' and its manuscript?\n\n"
                                                "It moves to the library's .trash folder."),
@@ -1461,6 +1541,10 @@ class BuilderScreen(KeptScreen, Screen):
             return
         if key == "u:genres" or key == "u:mix":
             return self.action_universe_settings()
+        if key == "u:kind":
+            return self.action_universe_kind()
+        if key == "status":
+            return self.action_story_status()
         if key.split(":")[0] in ("meta", "section", "setting", "beat"):
             return self.app.push_screen(EditScreen(f"Edit {label.lower().rstrip('.')}", {label: outline.raw(self.story, key)}),
                                         lambda out: self._top_written(key, label, out))
@@ -1486,6 +1570,22 @@ class BuilderScreen(KeptScreen, Screen):
             self.universe.save_settings(notes=text)
         self.refresh_all()
 
+    def action_universe_kind(self):
+        """Change what the universe is (a world or a collection), picked from a list."""
+        if not self.universe:
+            return self.say("Open or create a universe first.")
+        self.app.push_screen(ChoiceScreen(f"What kind of universe is {self.universe.name}?", kind_choices(), start=self.universe.kind),
+                             self._universe_kind_set)
+
+    def _universe_kind_set(self, kind):
+        if kind is None or not self.universe or kind == self.universe.kind:
+            return
+        self.universe.save_settings(kind=kind)
+        self._shelf_open = False
+        self.refresh_all()
+        self.say("This universe is a collection now: its stories lead, and promoting a Wheel story into it leaves the characters, places and "
+                 "things out unless you tick them." if kind == "collection" else "This universe is a world again.")
+
     def action_universe_settings(self):
         if not self.universe:
             return
@@ -1496,7 +1596,7 @@ class BuilderScreen(KeptScreen, Screen):
                   "boosts (tag=1.5, tag=2)": ", ".join(f"{k}={v}" for k, v in s["boost"].items()),
                   "universe atoms boost (blank = your default, " + f"{s['atom_boost'] if not s['atom_boost_own'] else 'now ' + str(s['atom_boost'])})":
                       str(s["atom_boost"]) if s["atom_boost_own"] else ""}
-        self.app.push_screen(EditScreen(f"Universe settings: {self.universe.name}   (own lists: {self.universe.lists_dir}"
+        self.app.push_screen(EditScreen(f"Universe settings: {self.universe.name}, a {self.universe.kind}   (K changes the kind; own lists: {self.universe.lists_dir}"
                                         "  - put atom files there)", fields), self._universe_settings_done)
 
     def _universe_settings_done(self, out):
@@ -1667,6 +1767,71 @@ class BuilderScreen(KeptScreen, Screen):
                  + (" P starts the script from the outline." if kind == "screenplay" else ""))
         self.b.changed = True
 
+    def action_story_status(self):
+        """Set the open story's status (idea, drafting, revising, done), picked from a list. Each version has its own."""
+        story = self._story_for_status()
+        if story is None:
+            return self.say("Open a story first.")
+        self.app.push_screen(ChoiceScreen(f"Status of '{story.title}'", [(k.capitalize(), k) for k in vault.STATUSES], start=story.status),
+                             lambda value: self._status_set(story, value))
+
+    def _story_for_status(self):
+        lst = self.query_one("#stories", OptionList)
+        if lst.has_focus and lst.highlighted is not None and self.universe:
+            opt = lst.get_option_at_index(lst.highlighted)
+            if opt.id:
+                return self.universe.story(opt.id)
+        return self.story
+
+    def _status_set(self, story, value):
+        if value is None:
+            return
+        story.set_status(value)
+        self.refresh_all()
+        self.say(f"'{story.title}' is now {value}.")
+        self.b.changed = True
+
+    def action_new_idea(self):
+        """A title and a few lines on the shelf (no structure, no promotion): flash fiction by default, a short story if picked."""
+        if not self.universe:
+            return self.say("Open or create a universe first (N).")
+        from .ideaform import IdeaFormScreen
+        self.app.push_screen(IdeaFormScreen(f"A new idea in {self.universe.name}"), self._idea_made)
+
+    def _idea_made(self, out):
+        if not out or not out.get("title"):
+            return
+        from . import ideas
+        story = ideas.new_idea(self.universe, out["title"], out["text"], out["format"])
+        self.story = story
+        self.refresh_all()
+        self.say(f"Added the idea '{story.title}' ({formats.get(out['format']).label.lower()}). Press w to write it, t to set its status.")
+        self.b.changed = True
+
+    def action_all_stories(self):
+        """Every story in every universe, newest edit first (filter with s and f; Enter opens it here, w in the Writer)."""
+        from .allstories import AllStoriesScreen
+        self.app.push_screen(AllStoriesScreen(), self._all_stories_done)
+
+    def _all_stories_done(self, result):
+        if not result:
+            return
+        what, uni, slug = result
+        u = vault.get_universe(uni)
+        story = u.story(slug) if u else None
+        if story is None:
+            return self.say("That story is not there any more.")
+        if self.universe is None or self.universe.slug != u.slug:
+            self.universe, self.entity, self.filler = u, None, None
+            self._shelf_open = False
+        self.story = story
+        self.refresh_all()
+        self.query_one("#stories", OptionList).focus()
+        if what == "write":
+            self.action_writer()
+        else:
+            self.say(f"Opened '{story.title}' in {u.name}.")
+
     def action_new_version(self):
         """Another version of the open story in another format: the story form, prefilled, plus what to copy."""
         if not self.story:
@@ -1780,6 +1945,30 @@ def _text_row(label, value, rated):
         stars.append(" ▼ ", style=Style(color="red" if rated < 0 else "grey50", bold=rated < 0, meta={"rate": -1}))
         cells.append(stars)
     grid.add_row(*cells)
+    return grid
+
+
+def kind_choices():
+    return [(vault.KIND_LABELS[k], k) for k in vault.KINDS]
+
+
+STATUS_STYLE = {"idea": "cyan", "drafting": "yellow", "revising": "magenta", "done": "green"}
+
+
+def _idea_row(story, here=False, head=None, indent=""):
+    """A story in a collection, two lines: its title and status, then its format, size and logline (all cut with an ellipsis, never wrapped).
+    `head` replaces the title (a version row shows its format)."""
+    from . import formats as fm
+    grid = Table.grid(padding=(0, 1), expand=True)
+    grid.add_column(ratio=1, no_wrap=True, overflow="ellipsis")
+    grid.add_column(no_wrap=True, justify="right")
+    mark = Text(indent + ("▶ " if here else "  "), style="bold cyan")
+    mark.append(head or story.title, style="bold" if here else "")
+    grid.add_row(mark, Text(story.status, style=STATUS_STYLE.get(story.status, "")))
+    bits = [versions.size_text(story)] if head else [fm.get(fm.of_story(story)).short, versions.size_text(story)]
+    if story.logline:
+        bits.append(story.logline)
+    grid.add_row(Text(indent + "    " + " · ".join(bits), style="dim"), Text(""))
     return grid
 
 

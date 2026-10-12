@@ -2,6 +2,26 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.24.0 — Collections: a shelf of short story ideas, and a status for every story
+
+- **Universe kind**: a universe is a **world** (everything as before; every older universe) or a **collection**, picked from a list when it is made (N)
+  and changed with **K** or the Kind row of the overview. Stored as `kind` in universe.md. `storywheel universes new NAME --kind collection`.
+- **A collection in the Builder**: the story list leads (a wide left column; each idea is two lines: title and status, then format, words and logline). The
+  entity tabs fold away while it has no entities (1-5 or n bring them back) and a line says how many ideas are idea, drafting, revising and done.
+  Version families still group under one title.
+- **Story status** for every story in every universe: idea, drafting, revising, done (`t`, the Status button, or the Outline's Status row; each version
+  has its own). An unset status is an idea until the story has manuscript text, then a draft. Shown in the story list and in `story list`.
+- **+Idea** (`i`, in any universe): a title and a few lines (the first is the logline, all are the story's notes), flash fiction by default or a short
+  story, no structure; the new idea is selected so `w` writes it at once. `storywheel story idea UNIVERSE "Title" --text "..."`.
+- **Promoting into a collection** brings the outline, premise and Wheel draft over as usual but leaves the characters, places and things unticked (tick
+  them in the preview, which says why). `promote --entities` ticks them all. **Send as an idea** (`I` in the Wheel) puts a draft's title and premise on a
+  collection's shelf with no promotion screen.
+- **All stories** (`L`, the All stories button; `storywheel stories [--status S] [--format F]`): one list across every universe, newest edit first, with
+  title, universe, format, status, words or pages and when it was edited; `s` and `f` filter, Enter opens the story in the Builder, `w` in the Writer.
+  Each row is remembered until the story's files change (`shelf.py`), so 200+ stories stay quick.
+- `story list --status S`, `story set UNIVERSE/STORY --status S`, `story idea ... --status S`, `story version ... --status S`.
+- Corrections: a collection that folds its entity tabs moves the keyboard off the hidden widgets; `universe.md` is read once per change.
+
 ## 0.23.0 — Shapes: the Wheel beyond one arc
 
 - Corrections from 0.22.0: a format has a short label (`formats.Format.short`), so a new format can't break the story list (`SHORT_LABELS` is gone);
