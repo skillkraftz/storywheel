@@ -2,6 +2,23 @@
 
 One entry per batch of work, newest first. The version is in `storywheel/__init__.py` (`storywheel --version`).
 
+## 0.25.0 — The Wheel's workflow, and everyday writing and word work
+
+- **R** rolls the whole draft: every step not kept yet, in order, so each builds on the ones before it. Kept and skipped-on-purpose steps stay; the twist
+  is rolled; every roll goes into its step's history. **L** rerolls every step after a kept one (asks before replacing a hand edit). **S** (and a
+  **Fix all** button on the banner) fixes every flagged step: a changed name, title or motif is swapped in, a step a swap can't fix is rerolled, a
+  step built on a step never kept gets that step rolled first.
+- Every flag can be cleared: a stand-in for a skipped step (x, or a place/no-one focus) is no flag; each message names its key; **i** dismisses a kept
+  step's flags, remembered per value. The right-hand column no longer shows a red ✗ nothing could clear for a story about a place.
+- **I** (send as an idea) opens the Builder on the new idea, and a second **I** offers to open the idea, send another copy, or cancel. F3 on a sent
+  draft opens its idea in the Writer. A deleted idea counts as never sent.
+- **LanguageTool n-gram data** (optional, per machine): `grammar ngrams install [--from ZIP] [--dir FOLDER] | status | remove`, `grammar_ngrams_dir` in
+  settings.local.toml, the server starts with `--languageModel`, the Confused words switch can't be turned off while it is in use, status warns about SD cards.
+- **l** on a Builder field or Wheel card looks a word up in Words (Ctrl+L in the write dialog).
+- The Writer completes the words added to the universe's dictionary, after character and place names.
+- **Writing sprints** in the Writer: F12 menu or Alt+D; time left and words in the status line; a one-line summary and a `sprints` entry in stats.json.
+- Words (F5) follows the story you are working on: coming back for another story of the same universe re-aims Genre words and Story words.
+
 ## 0.24.0 — Collections: a shelf of short story ideas, and a status for every story
 
 - **Universe kind**: a universe is a **world** (everything as before; every older universe) or a **collection**, picked from a list when it is made (N)

@@ -481,3 +481,27 @@ Decisions made so far that aren't obvious from the code. Add to this as you go.
   Wheel promotion's preview lists the other formats as ticks (`plan.also`); entities are created once and each tick calls `versions.new_version` on
   the new story. The Writer's status line and window title read "Title (format)"; a long title is shortened before the format is. (The "Batch 20"
   entries above are the earlier numbering; this is a later piece of work on the branch of that name.)
+
+- Batch 23 (branch batch-23-wheel-and-writing, 0.25.0). *Part A.* The draft records `skipped` (keys skipped with x) and `edited` (keys whose kept
+  value came from a hand-edited candidate) and `acks` (flags dismissed per step and value); the protagonist of a place or no-one story is skipped
+  on purpose without being recorded (so changing the focus back makes R roll it). `Session.problems(i)` is the one source of kept-step flags
+  (`step_problems`, `flag`, `issues` read it): kinds `standin`, `broken`, `changed`. A stand-in for a step skipped on purpose is no flag; so is a
+  value that refers to the protagonist of a place story. Nothing else changed in what is flagged. *R/L/S:* `keep(advance=False)` lets whole-draft
+  rolls keep without the walk-on roll `_advance` makes. `_roll_step` rolls fresh when the step has a history. S: swappable = a changed input whose
+  owner isn't genre or structure and whose values are 2+ characters (reuses `update_candidate`; only the swapped inputs are refreshed, so a flag a
+  swap can't clear stays until the step is rerolled); everything else is rerolled; a step built on a never-kept step gets that step rolled first
+  (S is "fix", and the message says "S or keep it"); a hand-edited step is never rerolled by S. L/R/S land on the last step, the current step, and the
+  current step. Keys: R roll all, L reroll later, S fix, free in the Wheel and not used by the hub; the plain prompt (`--plain`) does not get them.
+  I: the send was already recorded in the draft's `ideas` list (collection and story slug); `ideas.sent()` returns the newest that still exists.
+  *Part B.* B1: `grammar_ngrams_dir` is a LOCAL_KEY; the usable root is the folder that contains `en/` with 1grams, 2grams and 3grams (an `en`
+  folder itself is accepted, its parent is used); an unusable setting starts the server without it and shows a problem (grammar must not break over
+  optional data); the Confused words category is removed from the disabled list while the data is in use (rule ids typed in "Turned-off rules" are the
+  writer's own and stay); install replaces only `en/` of the folder; the free-space check before a download uses 8 GB + 15 GB estimates, `--from` reads
+  the real unpacked size; SD card = the mount source in /proc/mounts starts with /dev/mmcblk (warn, allow). B2: the Builder and Wheel have no
+  right-click menu (right-click writes, as everywhere), so the Look up item is `l` plus Ctrl+L in the write dialog right-click opens; the word under
+  the mouse is not taken (the field's words are, with a picker when several). B3: completion reads the universe's `spell/en.utf-8.add` again whenever
+  it changes; the typed capital is kept. B4: sprints are `sw/sprint.lua`; the key is Alt+D (Alt+P is Find previous in the replace box); `sprint_minutes`
+  is a global and story setting; pasted words move the sprint's base like the day's; under 10 s with no words an early stop is "cancelled" and not
+  recorded. B5: Words restarted only on a new universe or a hand-over; it also restarts when the story differs (hub keeps it alive between visits).
+- Testing for batch 23 (the owner's instruction): only the tests for what changed and the existing files covering code touched, with `-m "not slow"`
+  (test_grammar_server.py, which is slow-marked, was also run once); `tools/fulltest.sh` was not run. See REPORT.md for the list.

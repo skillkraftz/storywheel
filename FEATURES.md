@@ -386,3 +386,20 @@ All run in the scratch library unless marked R.
 | `setup [--again|--defaults]` | Questionnaire | test_setup_update.py | works | C |
 | `update [--check|--record]`, `post-update` | Update from the install folder | test_setup_update.py | not run (git); `post-update` is no longer listed in `--help` (was ISSUES #34) | R |
 | `kitty [--print|--probe|--font|--size]` | storywheel in its own kitty window | test_kitty_launcher.py | `--print` works; rest needs kitty | C R |
+
+---
+
+## Added in 0.25.0 (batch 23; checked by the tests named, not re-audited)
+
+| Control | Key / mouse | What it is for | Test | Status |
+|---|---|---|---|---|
+| Roll all | `R` (Wheel) | Roll and keep every step not kept yet, in order | test_wheel_workflow.py | works |
+| Reroll later | `L` (Wheel) | Reroll every step after the kept one you are on (asks before replacing a hand edit) | test_wheel_workflow.py | works |
+| Fix what changed | `S`, banner button Fix all | Swap changed values into flagged steps; reroll what a swap can't fix | test_wheel_workflow.py | works |
+| Dismiss a kept step's flags | `i` | Per value, like a candidate's banner | test_wheel_workflow.py | works |
+| Send as an idea | `I` (Wheel) | Opens the Builder on the idea; again: open / another copy / cancel | test_wheel_workflow.py | works |
+| N-gram data | `grammar ngrams install/status/remove`, Settings > Grammar | Confused-word rules from word-frequency data | test_grammar_ngrams.py | works (the real download is for the manual script) |
+| Look up a field | `l` (Wheel, Builder), Ctrl+L in the write dialog | Words on the Lookup tab | test_lookup_everywhere.py | works (not the word under the mouse) |
+| Added words complete | typing in the Writer | The universe's dictionary after names | test_writer_added_words.py | works |
+| Writing sprint | F12 menu, `Alt+D`, `SWSprint` | Timed sprint, status line, stats.json | test_writer_sprint.py | works (look and feel: manual script) |
+| Words follows the story | F5 | Genre words and Story words start on the open story | test_words_story.py | works |

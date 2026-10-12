@@ -156,3 +156,10 @@ Tags are in git (`git tag`); CHANGELOG.md says what each batch contained.
 - Searched the help pages for removed things (Neovide, "Wheel draft" started from the Builder, the right column, sync, Ctrl+H find): nothing found.
 - `writing-prose.md` now says "The sidebar key (see the Keys tab)", not "Space n" (fixed in batch 19).
 - Not checked: every key named in free text (as opposed to the key tables, which are made from the real bindings and tested).
+
+## From batch 23
+
+- R, L and S in the plain prompt (`--plain`); today only the full-screen Wheel has them.
+- Look up the word *under the mouse* (needs the card's text laid out per word); today it is the field's words with a picker.
+- Show a story's sprints in the Builder's Writing box and in Settings > Stats (they are only in `stats.json`).
+- Auto-swap earlier steps' stand-ins when a later step is kept (keeping a setting leaves a title built on a stand-in place flagged until S).

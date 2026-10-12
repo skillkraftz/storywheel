@@ -135,6 +135,12 @@ is about in the twist.
      protagonist), it invents stand-ins and says so on the card.
 6. When you keep the last step, a Done box appears: **Q** or Enter quits storywheel, **q** or Esc keeps editing.
 
+**The whole draft in one key.** **R** rolls and keeps every step that is not kept yet, in order, so each builds on the ones before it (no
+stand-ins): an empty draft goes from nothing to complete. Steps already kept stay; a step you skipped on purpose (**x**, or the Protagonist step of a
+place or no-one story) stays skipped; the twist is rolled too. Every roll goes into its step's history, so **h** and **b** work as usual. **L**
+(reroll from here) does the same for every step after the kept one you are on; it asks first when that would replace a step you edited by hand, and
+says how many steps it replaced. **S** fixes what changed (below).
+
 ### The story body and repeatable beats
 
 On the story body, some beats can repeat (the Story Spine's "Because of that" up to four times; the Three-Act rising action; the
@@ -146,6 +152,13 @@ one. Things, people, messages and disasters introduced in one beat come back in 
 A candidate built on something you have since changed shows a yellow banner, for example "Built for Mark; your protagonist is now
 Stacie Anderson", with three buttons: **Update** (`a`) swaps what you kept into a copy, **Reroll** rolls again, **Ignore** (`i`) hides
 the banner and leaves the candidate as it is.
+
+A *kept* step can be flagged too: a yellow ● (built on a stand-in, or on a name, title or motif that has since changed) or a red ✗ (it refers to
+something no longer kept). The right-hand column says what is wrong and which key clears it. **S** (the **Fix all** button on the banner) deals
+with every flagged step at once: a changed value is swapped in the way **Update** does, a step a swap cannot fix is rerolled, a step built on a
+step that was never kept gets that step rolled and kept first, and a step you edited by hand is left alone; the status line says what was swapped
+and what was rerolled. So: press **R**, change the protagonist or the title, press **S**, and every step that depended on it is up to date.
+**i** on a flagged step dismisses its flags (they come back only if the value changes again). A stand-in for a step you skipped on purpose is no flag.
 
 ### Flavor: what this story leans toward
 
@@ -261,7 +274,10 @@ line is the logline and all the lines are the idea's notes. The idea is selected
 
 Promoting a Wheel story into a collection (Chapter 1) brings the outline, premise and draft over as usual, but characters, places and things
 are not created unless you tick them in the preview, which says so in one line. In the Wheel, **I** sends a draft's title and premise to a
-collection as a new idea, with no promotion screen (you choose the collection if there are several; the draft itself is left alone).
+collection as a new idea, with no promotion screen (you choose the collection if there are several; the draft itself is left alone), and the
+Builder opens on the new idea. The draft remembers where it went: press **I** again and it offers to open that idea (the default), send another
+copy anyway, or cancel, so a duplicate is never made silently (if the idea was deleted, **I** acts as for a fresh draft). **F3** on a sent draft
+opens its idea in the Writer.
 
 ### Status
 
@@ -274,6 +290,11 @@ story has its own. The story list shows it, and `storywheel story set UNIVERSE/S
 **L** (or the All stories button) lists every story in every universe: title, universe, format, status, words (pages for a script) and when it
 was last edited, newest first. **s** steps through the status filter and **f** through the format filter. **Enter** opens the story in the
 Builder, **w** opens it in the Writer, **q** closes. From the command line: `storywheel stories [--status S] [--format F] [--json]`.
+
+### Looking a word up from a field
+
+**l** on a Builder field (or on a Wheel card) opens Words (F5) on its Lookup tab with the field's word, or a short list of its words when it has
+several; **q** comes back. Right-click still writes a field; inside the write dialog it opens, **Ctrl+L** looks up what you have typed.
 
 ### Filling in a character, place or thing
 
@@ -440,6 +461,18 @@ other float opens no menu. (Fixed: ISSUES #2.)
 F9 leaves typing so the sidebar's keys work at once, and jumping to a scene, adding one or closing the sidebar puts you back to typing
 in the writing window (it used to leave Vim's Normal mode, where typing `dd` deleted a paragraph). (Fixed: ISSUES #1.)
 
+### Writing sprints
+
+F12 > Start a writing sprint (or **Alt+D**, changeable in Settings > Keys) asks how long (Settings > Goals > Writing sprint length, 25 minutes) and for
+an optional word target. The status line shows the time left and the words written since it began (pasted text does not count). Nothing sounds or
+pops up. When the time is up one quiet line says how many words, in how long, and the words a minute; the sprint goes into the story's `stats.json`
+(a `sprints` list). The same key stops it early; leaving the Writer ends it the same way.
+
+### Completion
+
+Typing three letters of a name offers matching characters and places from the universe; after them it offers the words you added with Add to
+Dictionary (marked [added]). The same keys pick and accept them.
+
 ### Looking things up while you write
 
 - **Peek (F8):** a card with the character or place under the cursor; it closes when you move. F8 again lets you scroll a long card.
@@ -483,6 +516,11 @@ and previous; Esc closes. It matches plain text in the current file.
 - **Grammar** (optional, off): install LanguageTool once with `storywheel grammar install`, then turn it on in the menu or Settings >
   Grammar. Changed paragraphs are checked a moment after you stop; problems get an orange underline; right-click one for the message,
   fixes, Ignore this one, Turn off this rule. **F10** jumps to the next problem; **Shift+F10** lists them.
+- **N-gram data** (optional, about 8 GB, wants an SSD): `storywheel grammar ngrams install` downloads LanguageTool's word-frequency data (or
+  `--from ZIP` unpacks a copy; `--dir FOLDER` chooses where) after checking the free disk space, and sets `grammar_ngrams_dir` for this computer only.
+  The server then starts with `--languageModel`, and LanguageTool adds the confused-word rules that use it (their/there, your/you're, then/than);
+  the Confused words switch stays on. `grammar ngrams status` says whether it is in use and warns about an SD card; `grammar ngrams remove` deletes it
+  after asking.
 
 ### The other toggles
 

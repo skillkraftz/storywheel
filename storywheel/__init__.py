@@ -1,2 +1,2 @@
 """storywheel - roll a story one piece at a time."""
-__version__ = "0.24.0"        # bumped every batch (see CHANGELOG.md)
+__version__ = "0.25.0"        # bumped every batch (see CHANGELOG.md)
